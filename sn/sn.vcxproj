@@ -1,0 +1,398 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{23B35B77-0EAC-4FEE-BB6F-70B589A30719}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>sn</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
+    <IncludePath>$(SolutionDir)inc;$(SolutionDir)pgc\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)bin\$(Platform)\$(Configuration);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
+    <IntDir>inter\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)inc;$(SolutionDir)pgc\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(SolutionDir)bin\$(Platform)\$(Configuration);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
+    <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>inter\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
+    <IncludePath>$(SolutionDir)inc;$(SolutionDir)pgc\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)bin\$(Platform)\$(Configuration);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
+    <IntDir>inter\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir)inc;$(SolutionDir)pgc\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(SolutionDir)bin\$(Platform)\$(Configuration);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
+    <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>inter\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SN_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpp14</LanguageStandard>
+      <PrecompiledHeaderFile>sn_pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>pgc.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;SN_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>sn_pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>pgc.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SN_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpp14</LanguageStandard>
+      <PrecompiledHeaderFile>sn_pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>pgc.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;_USRDLL;SN_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>sn_pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>pgc.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\inc\exp_ctrl_sn.h" />
+    <ClInclude Include="..\inc\exp_ctrl_sn_lib.h" />
+    <ClInclude Include="..\inc\log.h" />
+    <ClInclude Include="..\inc\logcontext.h" />
+    <ClInclude Include="..\inc\parser.h" />
+    <ClInclude Include="..\inc\sn.h" />
+    <ClInclude Include="..\inc\sni_base.h" />
+    <ClInclude Include="..\inc\sn_base.h" />
+    <ClInclude Include="..\inc\sn_bool.h" />
+    <ClInclude Include="..\inc\sn_cartesian.h" />
+    <ClInclude Include="..\inc\sn_char.h" />
+    <ClInclude Include="..\inc\sn_debug.h" />
+    <ClInclude Include="..\inc\sn_define.h" />
+    <ClInclude Include="..\inc\sn_error.h" />
+    <ClInclude Include="..\inc\sn_expression.h" />
+    <ClInclude Include="..\inc\sn_function.h" />
+    <ClInclude Include="..\inc\sn_functiondef.h" />
+    <ClInclude Include="..\inc\sn_lambda.h" />
+    <ClInclude Include="..\inc\sn_let.h" />
+    <ClInclude Include="..\inc\sn_local.h" />
+    <ClInclude Include="..\inc\sn_macros.h" />
+    <ClInclude Include="..\inc\sn_manager.h" />
+    <ClInclude Include="..\inc\sn_meta.h" />
+    <ClInclude Include="..\inc\sn_null.h" />
+    <ClInclude Include="..\inc\sn_number.h" />
+    <ClInclude Include="..\inc\sn_object.h" />
+    <ClInclude Include="..\inc\sn_operators.h" />
+    <ClInclude Include="..\inc\sn_parameter.h" />
+    <ClInclude Include="..\inc\sn_real.h" />
+    <ClInclude Include="..\inc\sn_set.h" />
+    <ClInclude Include="..\inc\sn_string.h" />
+    <ClInclude Include="..\inc\sn_stringref.h" />
+    <ClInclude Include="..\inc\sn_value.h" />
+    <ClInclude Include="..\inc\sn_valueset.h" />
+    <ClInclude Include="..\inc\sn_variable.h" />
+    <ClInclude Include="sni_add.h" />
+    <ClInclude Include="sni_and.h" />
+    <ClInclude Include="sni_binary.h" />
+    <ClInclude Include="sni_bool.h" />
+    <ClInclude Include="sni_buildset.h" />
+    <ClInclude Include="sni_cart.h" />
+    <ClInclude Include="sni_cartesian.h" />
+    <ClInclude Include="sni_char.h" />
+    <ClInclude Include="sni_collapse.h" />
+    <ClInclude Include="sni_comparison.h" />
+    <ClInclude Include="sni_concat.h" />
+    <ClInclude Include="sni_debug.h" />
+    <ClInclude Include="sni_define.h" />
+    <ClInclude Include="sni_delayedcall.h" />
+    <ClInclude Include="sni_delayedprocessor.h" />
+    <ClInclude Include="sni_divide.h" />
+    <ClInclude Include="sni_doubletostring.h" />
+    <ClInclude Include="sni_equals.h" />
+    <ClInclude Include="sni_error.h" />
+    <ClInclude Include="sni_expression.h" />
+    <ClInclude Include="sni_file.h" />
+    <ClInclude Include="sni_function.h" />
+    <ClInclude Include="sni_functiondef.h" />
+    <ClInclude Include="sni_greaterequals.h" />
+    <ClInclude Include="sni_greaterthan.h" />
+    <ClInclude Include="sni_helpers.h" />
+    <ClInclude Include="sni_if.h" />
+    <ClInclude Include="sni_implies.h" />
+    <ClInclude Include="sni_revand.h" />
+    <ClInclude Include="sni_hasmember.h" />
+    <ClInclude Include="sni_inttostring.h" />
+    <ClInclude Include="sni_lambda.h" />
+    <ClInclude Include="sni_lessequals.h" />
+    <ClInclude Include="sni_lessgreater.h" />
+    <ClInclude Include="sni_lessthan.h" />
+    <ClInclude Include="sni_let.h" />
+    <ClInclude Include="sni_local.h" />
+    <ClInclude Include="sni_lookaheadleft.h" />
+    <ClInclude Include="sni_lookaheadright.h" />
+    <ClInclude Include="sni_manager.h" />
+    <ClInclude Include="sni_meta.h" />
+    <ClInclude Include="sni_multiply.h" />
+    <ClInclude Include="sni_namable.h" />
+    <ClInclude Include="sni_negative.h" />
+    <ClInclude Include="sni_not.h" />
+    <ClInclude Include="sni_revor.h" />
+    <ClInclude Include="sni_null.h" />
+    <ClInclude Include="sni_number.h" />
+    <ClInclude Include="sni_object.h" />
+    <ClInclude Include="sni_or.h" />
+    <ClInclude Include="sni_real.h" />
+    <ClInclude Include="sni_replacement.h" />
+    <ClInclude Include="sni_result.h" />
+    <ClInclude Include="sni_same.h" />
+    <ClInclude Include="sni_selectleftchar.h" />
+    <ClInclude Include="sni_selectrightchar.h" />
+    <ClInclude Include="sni_set.h" />
+    <ClInclude Include="sni_splitter.h" />
+    <ClInclude Include="sni_square.h" />
+    <ClInclude Include="sni_squareroot.h" />
+    <ClInclude Include="sni_string.h" />
+    <ClInclude Include="sni_stringref.h" />
+    <ClInclude Include="sni_stringtodouble.h" />
+    <ClInclude Include="sni_stringtoint.h" />
+    <ClInclude Include="sni_subtract.h" />
+    <ClInclude Include="sni_subtractleft.h" />
+    <ClInclude Include="sni_subtractleftchar.h" />
+    <ClInclude Include="sni_subtractright.h" />
+    <ClInclude Include="sni_subtractrightchar.h" />
+    <ClInclude Include="sni_taggedvalue.h" />
+    <ClInclude Include="sni_unary.h" />
+    <ClInclude Include="sni_unaryrevand.h" />
+    <ClInclude Include="sni_unaryrevor.h" />
+    <ClInclude Include="sni_value.h" />
+    <ClInclude Include="sni_valueset.h" />
+    <ClInclude Include="sni_vardef.h" />
+    <ClInclude Include="sni_variable.h" />
+    <ClInclude Include="sni_world.h" />
+    <ClInclude Include="sni_worldset.h" />
+    <ClInclude Include="sn_pch.h" />
+    <ClInclude Include="utility.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="log.cpp" />
+    <ClCompile Include="logcontext.cpp" />
+    <ClCompile Include="sn.cpp" />
+    <ClCompile Include="sni_add.cpp" />
+    <ClCompile Include="sni_and.cpp" />
+    <ClCompile Include="sni_binary.cpp" />
+    <ClCompile Include="sni_bool.cpp" />
+    <ClCompile Include="sni_buildset.cpp" />
+    <ClCompile Include="sni_cart.cpp" />
+    <ClCompile Include="sni_cartesian.cpp" />
+    <ClCompile Include="sni_char.cpp" />
+    <ClCompile Include="sni_collapse.cpp" />
+    <ClCompile Include="sni_comparison.cpp" />
+    <ClCompile Include="sni_concat.cpp" />
+    <ClCompile Include="sni_debug.cpp" />
+    <ClCompile Include="sni_define.cpp" />
+    <ClCompile Include="sni_delayedcall.cpp" />
+    <ClCompile Include="sni_delayedprocessor.cpp" />
+    <ClCompile Include="sni_divide.cpp" />
+    <ClCompile Include="sni_doubletostring.cpp" />
+    <ClCompile Include="sni_equals.cpp" />
+    <ClCompile Include="sni_error.cpp" />
+    <ClCompile Include="sni_expression.cpp" />
+    <ClCompile Include="sni_file.cpp" />
+    <ClCompile Include="sni_function.cpp" />
+    <ClCompile Include="sni_functiondef.cpp" />
+    <ClCompile Include="sni_greaterequals.cpp" />
+    <ClCompile Include="sni_greaterthan.cpp" />
+    <ClCompile Include="sni_helpers.cpp" />
+    <ClCompile Include="sni_if.cpp" />
+    <ClCompile Include="sni_implies.cpp" />
+    <ClCompile Include="sni_revand.cpp" />
+    <ClCompile Include="sni_hasmember.cpp" />
+    <ClCompile Include="sni_inttostring.cpp" />
+    <ClCompile Include="sni_lambda.cpp" />
+    <ClCompile Include="sni_lessequals.cpp" />
+    <ClCompile Include="sni_lessthan.cpp" />
+    <ClCompile Include="sni_let.cpp" />
+    <ClCompile Include="sni_local.cpp" />
+    <ClCompile Include="sni_lookaheadleft.cpp" />
+    <ClCompile Include="sni_lookaheadright.cpp" />
+    <ClCompile Include="sni_manager.cpp" />
+    <ClCompile Include="sni_meta.cpp" />
+    <ClCompile Include="sni_multiply.cpp" />
+    <ClCompile Include="sni_namable.cpp" />
+    <ClCompile Include="sni_negative.cpp" />
+    <ClCompile Include="sni_not.cpp" />
+    <ClCompile Include="sni_revor.cpp" />
+    <ClCompile Include="sni_null.cpp" />
+    <ClCompile Include="sni_number.cpp" />
+    <ClCompile Include="sni_object.cpp" />
+    <ClCompile Include="sni_or.cpp" />
+    <ClCompile Include="sni_replacement.cpp" />
+    <ClCompile Include="sni_result.cpp" />
+    <ClCompile Include="sni_same.cpp" />
+    <ClCompile Include="sni_selectleftchar.cpp" />
+    <ClCompile Include="sni_selectrightchar.cpp" />
+    <ClCompile Include="sni_set.cpp" />
+    <ClCompile Include="sni_splitter.cpp" />
+    <ClCompile Include="sni_square.cpp" />
+    <ClCompile Include="sni_squareroot.cpp" />
+    <ClCompile Include="sni_string.cpp" />
+    <ClCompile Include="sni_stringref.cpp" />
+    <ClCompile Include="sni_stringtodouble.cpp" />
+    <ClCompile Include="sni_stringtoint.cpp" />
+    <ClCompile Include="sni_subtract.cpp" />
+    <ClCompile Include="sni_subtractleft.cpp" />
+    <ClCompile Include="sni_subtractleftchar.cpp" />
+    <ClCompile Include="sni_subtractright.cpp" />
+    <ClCompile Include="sni_subtractrightchar.cpp" />
+    <ClCompile Include="sni_taggedvalue.cpp" />
+    <ClCompile Include="sni_unary.cpp" />
+    <ClCompile Include="sni_unaryrevand.cpp" />
+    <ClCompile Include="sni_unaryrevor.cpp" />
+    <ClCompile Include="sni_value.cpp" />
+    <ClCompile Include="sni_valueset.cpp" />
+    <ClCompile Include="sni_vardef.cpp" />
+    <ClCompile Include="sni_variable.cpp" />
+    <ClCompile Include="sni_world.cpp" />
+    <ClCompile Include="sni_worldset.cpp" />
+    <ClCompile Include="sn_bool.cpp" />
+    <ClCompile Include="sn_cartesian.cpp" />
+    <ClCompile Include="sn_char.cpp" />
+    <ClCompile Include="sn_debug.cpp" />
+    <ClCompile Include="sn_define.cpp" />
+    <ClCompile Include="sn_error.cpp" />
+    <ClCompile Include="sn_expression.cpp" />
+    <ClCompile Include="sn_function.cpp" />
+    <ClCompile Include="sn_functiondef.cpp" />
+    <ClCompile Include="sn_lambda.cpp" />
+    <ClCompile Include="sn_let.cpp" />
+    <ClCompile Include="sn_local.cpp" />
+    <ClCompile Include="sn_manager.cpp" />
+    <ClCompile Include="sn_meta.cpp" />
+    <ClCompile Include="sn_null.cpp" />
+    <ClCompile Include="sn_number.cpp" />
+    <ClCompile Include="sn_object.cpp" />
+    <ClCompile Include="sn_operators.cpp" />
+    <ClCompile Include="sn_parameter.cpp" />
+    <ClCompile Include="sn_pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="sn_set.cpp" />
+    <ClCompile Include="sn_string.cpp" />
+    <ClCompile Include="sn_stringref.cpp" />
+    <ClCompile Include="sn_value.cpp" />
+    <ClCompile Include="sn_valueset.cpp" />
+    <ClCompile Include="sn_variable.cpp" />
+    <ClCompile Include="utility.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

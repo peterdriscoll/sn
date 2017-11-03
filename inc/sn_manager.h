@@ -1,0 +1,53 @@
+#if !defined(SN_MANAGER_H_INCLUDED)
+#define SN_MANAGER_H_INCLUDED
+
+#pragma once
+
+#include "exp_ctrl_sn.h"
+
+#include <string>
+using namespace std;
+
+namespace SNI
+{
+	class SNI_Manager;
+}
+
+namespace SN
+{
+	class SN_Error;
+
+	typedef void OnErrorHandler(SN_Error p_Result);
+
+	class SN_EXPORT SN_Manager
+	{
+	public:
+		static SN_Manager GetTopManager();
+
+		SN_Manager();
+		SN_Manager(SNI::SNI_Manager *p_Manager);
+		SN_Manager(OnErrorHandler p_Handler, bool p_DelayOnEvaluate = false, size_t p_MaxCardinalityCall = 100, size_t p_MaxCardinalityUnify = 100);
+
+		virtual ~SN_Manager();
+
+		string LogFilePath();
+		void SetLogFilePath(string p_LogFilePath);
+
+		OnErrorHandler *ErrorHandler();
+		void SetErrorHandler(OnErrorHandler *p_ErrorHandler);
+
+		bool DelayOnEvaluate();
+		void SetDelayOnEvaluate(bool p_DelayOnEvaluate);
+
+		size_t MaxCardinalityCall();
+		size_t MaxCardinalityUnify();
+		void SetMaxCardinality(size_t p_MaxCardinalityCall, size_t p_MaxCardinalityUnify);
+
+
+	private:
+		SNI::SNI_Manager *m_Manager;
+		bool m_MyManager;
+	};
+}
+
+#endif // !defined(SN_MANAGER_H_INCLUDED)

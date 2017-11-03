@@ -1,0 +1,327 @@
+#include "sni_or.h"
+
+#include "logcontext.h"
+#include "sn.h"
+#include "sn_cartesian.h"
+
+#include "sni_delayedprocessor.h"
+#include "sni_error.h"
+#include "sni_worldset.h"
+#include "sni_valueset.h"
+#include "sni_taggedvalue.h"
+#include "sni_bool.h"
+#include "sni_null.h"
+#include "sni_helpers.h"
+#include "sni_unaryrevor.h"
+#include "utility.h"
+
+#include "sn_pch.h"
+
+namespace SNI
+{
+	SNI_Or::SNI_Or()
+		: m_Partial(true)
+	{
+	}
+
+	SNI_Or::SNI_Or(bool p_Partial)
+		: m_Partial(p_Partial)
+	{
+	}
+
+	SNI_Or::~SNI_Or()
+	{
+	}
+
+	string SNI_Or::GetTypeName() const
+	{
+		return "Or";
+	}
+
+	string SNI_Or::DisplayCpp() const
+	{
+		return "SN::Or";
+	}
+
+	string SNI_Or::DisplaySN(long /*priority*/, SNI_VariablePointerList & /*p_DisplayVariableList*/) const
+	{
+		return "(|)";
+	}
+
+	long SNI_Or::GetPriority() const
+	{
+		return 1;
+	}
+
+	string SNI_Or::GetOperator() const
+	{
+		return "|";
+	}
+
+	SN::SN_Value SNI_Or::PrimaryFunctionValue(const SN::SN_Value &p_Left, const SN::SN_Value &p_Right) const
+	{
+		return p_Left.DoOr(p_Right);
+	}
+
+	SN::SN_Expression SNI_Or::PrimaryFunctionExpression(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right) const
+	{
+		return p_Left || p_Right;
+	}
+
+	SN::SN_Value SNI_Or::LeftInverseFunctionValue(const SN::SN_Value &p_Result, const SN::SN_Value &p_Left) const
+	{
+		return p_Result.DoRevOr(p_Left);
+	}
+
+	SN::SN_Expression SNI_Or::LeftInverseFunctionExpression(const SN::SN_Expression &p_Result, const SN::SN_Expression &p_Left) const
+	{
+		return p_Result.RevOr(p_Left);
+	}
+
+	SN::SN_Value SNI_Or::RightInverseFunctionValue(const SN::SN_Value &p_Result, const SN::SN_Value &p_Right) const
+	{
+		return p_Result.DoRevOr(p_Right);
+	}
+
+	SN::SN_Expression SNI_Or::RightInverseFunctionExpression(const SN::SN_Expression &p_Result, const SN::SN_Expression &p_Right) const
+	{
+		return p_Right.RevOr(p_Result);
+	}
+
+	SN::SN_Expression SNI_Or::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
+	{
+		SN::LogContext context("SNI_Or::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+
+		SN::SN_Expression left_value = (*p_ParameterList)[1].PartialEvaluate(p_MetaLevel);
+		SN::SN_Expression right_value = (*p_ParameterList)[0].PartialEvaluate(p_MetaLevel);
+
+		if (0 == p_MetaLevel)
+		{
+			if (SN::Is<SNI_Value *>(left_value) && SN::Is<SNI_Value *>(right_value))
+			{
+				return LOG_RETURN(context, left_value.DoOr(right_value));
+			}
+			if (SN::Is<SNI_Bool *>(left_value))
+			{
+				if (SN::SN_Bool(left_value).GetBool())
+				{
+					return LOG_RETURN(context, SN::SN_Bool(true));
+				}
+				else
+				{
+					return LOG_RETURN(context, right_value);
+				}
+			}
+			if (SN::Is<SNI_Bool *>(right_value))
+			{
+				if (SN::SN_Bool(right_value).GetBool())
+				{
+					return LOG_RETURN(context, SN::SN_Bool(true));
+				}
+				else
+				{
+					return LOG_RETURN(context, left_value);
+				}
+			}
+		}
+		return LOG_RETURN(context, left_value || right_value);
+	}
+
+	SN::SN_Error SNI_Or::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	{
+		SN::LogContext context("SNI_Or::Unify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
+		SN::SN_Error e2;
+		if (m_Partial)
+		{
+			SNI_FunctionDef *unaryRevOr = skynet::UnaryRevOr.GetSNI_FunctionDef();
+			SN::SN_Cartesian params = p_Result.CartProd(PU2_Result, unaryRevOr) * (*p_ParameterList)[1].GetValue().CartProd(PU2_First, unaryRevOr) * (*p_ParameterList)[0].GetValue().CartProd(PU2_Second, this);
+			SN::SN_Error e1 = params.ForEachUnify(unaryRevOr);
+			if (e1.IsError())
+			{
+				e1.AddNote(context, this, "Partial 'or' first parameter failed");
+				return e1;
+			}
+			e2 = params.ForEachUnify(this);
+		}
+		else
+		{
+			e2 = (p_Result.CartProd(PU2_Result) * (*p_ParameterList)[1].GetValue().CartProd(PU2_First) * (*p_ParameterList)[0].GetValue().CartProd(PU2_Second, this)).ForEachUnify(this);
+		}
+		if (e2.IsError())
+		{
+			e2.AddNote(context, this, m_Partial ? "Partial 'or' second parameter failed" : "Non partial or failed");
+		}
+		return e2;
+	}
+
+	SN::SN_Error SNI_Or::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	{
+		SN::LogContext context("SNI_Or::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
+
+		return LOG_RETURN(context, PartialUnifyInternal((*p_ParameterList)[1].GetValue(), (*p_ParameterList)[0].GetValue(), p_Result));
+	}
+
+	SN::SN_Error SNI_Or::PartialUnifyInternal(SN::SN_Expression &p_left, SN::SN_Expression &p_right, SN::SN_Expression &p_Result)
+	{
+		SN::LogContext context("SNI_Or::PartialUnifyInternal");
+		SN::SN_Expression left_value = p_left.PartialEvaluate();
+		SN::SN_Expression right_value = p_right.PartialEvaluate();
+		if (SN::Is<SNI_Value *>(left_value) && SN::Is<SNI_Value *>(right_value))
+		{
+			return p_Result.PartialAssertValue(left_value.DoOr(right_value));
+		}
+		SN::SN_Expression result = p_Result.PartialEvaluate();
+		if (SN::Is<SNI_Value *>(result))
+		{
+			if (SN::SN_Bool(result).GetBool())
+			{
+				if (SN::Is<SNI_Bool *>(right_value) && !SN::SN_Bool(right_value).GetBool())
+				{
+					SN::SN_Error e = p_left.PartialAssertValue(SN::SN_Bool(true));
+					if (e.IsError())
+					{
+						e.AddNote(context, this, "Partial Assert left condition true");
+					}
+					return e;
+				}
+				if (SN::Is<SNI_Bool *>(left_value) && !SN::SN_Bool(left_value).GetBool())
+				{
+					SN::SN_Error e = p_right.PartialAssertValue(SN::SN_Bool(true));
+					if (e.IsError())
+					{
+						e.AddNote(context, this, "Partial Assert right condition true");
+					}
+					return e;
+				}
+			}
+			else
+			{
+				SN::SN_Error e1 = p_left.PartialAssertValue(SN::SN_Bool(false));
+				if (e1.IsError())
+				{
+					e1.AddNote(context, this, "Partial Assert left condition false");
+					return e1;
+				}
+				SN::SN_Error e2 = p_right.PartialAssertValue(SN::SN_Bool(false));
+				if (e2.IsError())
+				{
+					e2.AddNote(context, this, "Partial Assert right condition false");
+				}
+				return e2;
+			}
+		}
+		return SN::SN_Error(false, false, "Shouldn't be here");
+	}
+	size_t SNI_Or::CardinalityOfCall(long p_Depth, SN::SN_Expression * p_ParamList) const
+	{
+		if (p_ParamList[PC2_First].IsNullValue())
+		{
+			return CARDINALITY_MAX;
+		}
+		else
+		{
+			SN::SN_Bool left = p_ParamList[PC2_First].GetVariableValue();
+			if (!left.IsNull() && left.GetBool())
+			{
+				return 1;
+			}
+		}
+		if (1 < p_Depth)
+		{
+			if (p_ParamList[PC2_Second].IsNullValue())
+			{
+				return CARDINALITY_MAX;
+			}
+			else
+			{
+				SN::SN_Bool right = p_ParamList[PC2_Second].GetVariableValue();
+				if (!right.IsNull() && right.GetBool())
+				{
+					return 1;
+				}
+			}
+		}
+		return MultiplyCardinality(p_ParamList[PC2_First].Cardinality(), p_ParamList[PC2_Second].Cardinality());
+	}
+
+	size_t SNI_Or::CardinalityOfUnify(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const
+	{
+		if (2 <= p_TotalCalc)
+		{
+			SN::SN_Bool result = p_ParamList[PU2_Result].GetVariableValue();
+			if (!result.IsNull() && !result.GetBool())
+			{
+				return 1;
+			}
+			SN::SN_Bool left = p_ParamList[PU2_First].GetVariableValue();
+			if (!left.IsNull() && left.GetBool())
+			{
+				return 1;
+			}
+			SN::SN_Bool right = p_ParamList[PU2_Second].GetVariableValue();
+			if (!right.IsNull() && right.GetBool())
+			{
+				return 1;
+			}
+		}
+		return SNI_Binary::CardinalityOfUnify(p_Depth, p_ParamList, p_CalcPos, p_TotalCalc);
+	}
+
+	SN::SN_Error SNI_Or::UnifyElement(long p_Depth, SN::SN_Expression *p_ParamList, SNI_World **p_WorldList, long p_CalcPos, long p_TotalCalc, SNI_WorldSet *worldSet) const
+	{
+		// Note the order is: 0:Left param, 1:Result, 2:right param.
+		switch (p_TotalCalc)
+		{
+		case 0:
+		{
+			bool exists = false;
+			SNI_World *world = worldSet->JoinWorldsArray(ManualAddWorld, AlwaysCreateWorld, exists, p_Depth, p_WorldList);
+			if (exists)
+			{
+				if (PrimaryFunctionValue(p_ParamList[PU2_First], p_ParamList[PU2_Second]).Equivalent(p_ParamList[PU2_Result]))
+				{
+					world->AddToSetList();
+				}
+			}
+			return true;
+		}
+		break;
+		case 1:
+		{
+			switch (p_CalcPos)
+			{
+			case PU2_First:
+			{
+				return p_ParamList[p_CalcPos].AddValue(RightInverseFunctionValue(p_ParamList[PU2_Result], p_ParamList[PU2_Second]), p_Depth, p_WorldList, worldSet);
+			}
+			case PU2_Second:
+			{
+				return p_ParamList[p_CalcPos].AddValue(LeftInverseFunctionValue(p_ParamList[PU2_Result], p_ParamList[PU2_First]), p_Depth, p_WorldList, worldSet);
+			}
+			case PU2_Result:
+			{
+				return p_ParamList[p_CalcPos].AddValue(PrimaryFunctionValue(p_ParamList[PU2_First], p_ParamList[PU2_Second]), p_Depth, p_WorldList, worldSet);
+			}
+			}
+		}
+		case 2:
+		{
+			SN::SN_Bool cond = p_ParamList[PU2_First].GetVariableValue();
+			if (!cond.IsNull() && !cond.GetBool())
+			{
+				p_ParamList[PU2_Result].AddValue(skynet::True, p_Depth, p_WorldList, worldSet);
+				p_ParamList[PU2_Second].AddValue(skynet::Null, p_Depth, p_WorldList, worldSet);
+				return true;
+			}
+			SN::SN_Bool result = p_ParamList[PU2_Result].GetVariableValue();
+			if (!result.IsNull() && !result.GetBool())
+			{
+				p_ParamList[PU2_First].AddValue(skynet::False, p_Depth, p_WorldList, worldSet);
+				p_ParamList[PU2_Second].AddValue(skynet::False, p_Depth, p_WorldList, worldSet);
+				return true;
+			}
+		}
+		}
+		return false;
+	}
+}

@@ -1,0 +1,77 @@
+#include "sni_concat.h"
+
+#include "sni_delayedprocessor.h"
+
+#include "sn_pch.h"
+
+namespace SNI
+{
+	SNI_Concat::SNI_Concat()
+	{
+	}
+
+	SNI_Concat::~SNI_Concat()
+	{
+	}
+
+	/// @cond
+	void SNI_Concat::PromoteMembers()
+	{
+	}
+
+	string SNI_Concat::GetTypeName() const
+	{
+		return "Concat";
+	}
+
+	string SNI_Concat::DisplayCpp() const
+	{
+		return "SN::Concat";
+	}
+
+	string SNI_Concat::DisplaySN(long /*priority*/, SNI_VariablePointerList & /*p_DisplayVariableList*/) const
+	{
+		return "(+)";
+	}
+
+	long SNI_Concat::GetPriority() const
+	{
+		return 1;
+	}
+
+	string SNI_Concat::GetOperator() const
+	{
+		return "+";
+	}
+	/// @endcond
+
+	SN::SN_Value SNI_Concat::PrimaryFunctionValue(const SN::SN_Value &p_Left, const SN::SN_Value &p_Right) const
+	{
+		return p_Left.GetSNI_Value()->DoConcat(p_Right.GetSNI_Value());
+	}
+
+	SN::SN_Expression SNI_Concat::PrimaryFunctionExpression(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right) const
+	{
+		return p_Left.Concat(p_Right);
+	}
+
+	SN::SN_Value SNI_Concat::LeftInverseFunctionValue(const SN::SN_Value &p_Result, const SN::SN_Value &p_Left) const
+	{
+		return p_Result.GetSNI_Value()->DoSubtractLeft(p_Left.GetSNI_Value());
+	}
+
+	SN::SN_Expression SNI_Concat::LeftInverseFunctionExpression(const SN::SN_Expression &p_Result, const SN::SN_Expression &p_Left) const
+	{
+		return p_Result.SubtractLeft(p_Left);
+	}
+
+	SN::SN_Value SNI_Concat::RightInverseFunctionValue(const SN::SN_Value &p_Result, const SN::SN_Value &p_Right) const
+	{
+		return p_Result.GetSNI_Value()->DoSubtractRight(p_Right.GetSNI_Value());
+	}
+
+	SN::SN_Expression SNI_Concat::RightInverseFunctionExpression(const SN::SN_Expression &p_Result, const SN::SN_Expression &p_Right) const
+	{
+		return p_Result.SubtractRight(p_Right);
+	}
+}

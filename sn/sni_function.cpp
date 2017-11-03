@@ -1,0 +1,201 @@
+#include "sni_function.h"
+
+#include "logcontext.h"
+#include "sn_expression.h"
+#include "sn_parameter.h"
+#include "sn_value.h"
+#include "sn_error.h"
+
+#include "utility.h"
+
+#include "sn_pch.h"
+
+namespace SNI
+{
+	SNI_Function::SNI_Function()
+	{
+
+	}
+
+	SNI_Function::SNI_Function(SNI_Expression *p_Function)
+		: m_Function(p_Function)
+		, m_Parameter(NULL)
+		, m_Condition(NULL)
+	{
+	}
+
+
+	SNI_Function::SNI_Function(SNI_Expression *p_Function, SNI_Expression *p_Parameter)
+		: m_Function(p_Function)
+		, m_Parameter(p_Parameter)
+		, m_Condition(NULL)
+	{
+	}
+
+	SNI_Function::SNI_Function(SNI_Expression *p_Function, SNI_Expression *p_Parameter, SNI_Expression *p_Condition)
+		: m_Function(p_Function)
+		, m_Parameter(p_Parameter)
+		, m_Condition(p_Condition)
+	{
+	}
+
+	SNI_Function::~SNI_Function()
+	{
+
+	}
+
+	void SNI_Function::PromoteMembers()
+	{
+	}
+
+	string SNI_Function::GetTypeName() const
+	{
+		return "Function";
+	}
+
+	string SNI_Function::DisplayCpp() const
+	{
+		return m_Function->DisplayCpp() + "(" + m_Parameter->DisplayCpp() + ")";
+	}
+
+	string SNI_Function::DisplaySN(long priority, SNI_VariablePointerList &p_DisplayVariableList) const
+	{
+		return Bracket(priority, m_Function->DisplaySN(GetPriority(), p_DisplayVariableList) + (m_Parameter ? " " + m_Parameter->DisplaySN(GetPriority(), p_DisplayVariableList) : ""));
+	}
+
+	long SNI_Function::GetPriority() const
+	{
+		return 3;
+	}
+
+	string SNI_Function::GetOperator() const
+	{
+		return " ";
+	}
+
+	SNI_Expression * SNI_Function::GetFunction()
+	{
+		return m_Function;
+	}
+
+	SNI_Expression * SNI_Function::GetParameter()
+	{
+		return m_Parameter;
+	}
+
+	SNI_Expression * SNI_Function::Clone(SNI_ReplacementList * p_ReplacementList, bool &p_Changed)
+	{
+		bool changed = false;
+		SNI_Expression * l_Function = m_Function->Clone(p_ReplacementList, changed);
+		string f = l_Function->DisplaySN0();
+		SNI_Expression * l_Parameter = m_Parameter->Clone(p_ReplacementList, changed);
+		string p = l_Parameter->DisplaySN0();
+		if (changed)
+		{
+			p_Changed = true;
+			return dynamic_cast<SNI_Expression *>(new SNI_Function(l_Function, l_Parameter));
+		}
+		return this;
+	}
+
+	bool SNI_Function::Equivalent(SNI_Object * p_Other) const
+	{
+		if (dynamic_cast<SNI_Function *>(p_Other))
+		{
+			SNI_Function * l_function = dynamic_cast<SNI_Function *>(p_Other);
+			return m_Function->Equivalent(dynamic_cast<SNI_Object *>(l_function->m_Function))
+				&& m_Parameter->Equivalent(dynamic_cast<SNI_Object *>(l_function->m_Parameter));
+		}
+		return false;
+	}
+
+	SN::SN_Expression SNI_Function::Evaluate(long p_MetaLevel /* = 0 */) const
+	{
+		SN::SN_ExpressionList * l_ParameterList = new SN::SN_ExpressionList();
+		l_ParameterList->push_back(m_Parameter);
+		return m_Function->Call(l_ParameterList, p_MetaLevel);
+	}
+
+	SN::SN_Expression SNI_Function::PartialEvaluate(long p_MetaLevel /* = 0 */) const
+	{
+		SN::SN_ExpressionList * l_ParameterList = new SN::SN_ExpressionList();
+		l_ParameterList->push_back(m_Parameter);
+		SN::SN_Expression result = m_Function->PartialCall(l_ParameterList, p_MetaLevel);
+		if (result.IsNull())
+		{
+			return this;
+		}
+		return result;
+	}
+
+	SN::SN_Error SNI_Function::Assert()
+	{
+		return AssertValue(skynet::True);
+	}
+
+	SN::SN_Error SNI_Function::AssertValue(const SN::SN_Expression &p_Value)
+	{
+		if (p_Value.IsError())
+		{
+			return p_Value;
+		}
+		SN::LogContext context(DisplaySN0() + ".SNI_Function::AssertValue ( " + p_Value.DisplaySN() + " )");
+		SN::SN_ParameterList * l_ParameterList = new SN::SN_ParameterList();
+		l_ParameterList->push_back(SN::SN_Parameter(m_Parameter, m_Condition));
+
+		return m_Function->Unify(l_ParameterList, p_Value);
+	}
+
+	SN::SN_Error SNI_Function::AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World ** p_WorldList, SNI_WorldSet * p_WorldSet)
+	{
+		ASSERTM(p_WorldList == 0, "Called only with a cardinality of 1, so no worlds.");
+		return AssertValue(p_Value);
+	}
+
+	SN::SN_Error SNI_Function::PartialAssert()
+	{
+		return PartialAssertValue(skynet::True);
+	}
+
+	SN::SN_Error SNI_Function::PartialAssertValue(const SN::SN_Expression &p_Expression, bool /* p_Define = false */)
+	{
+		SN::LogContext context(DisplaySN0() + "SNI_Function::PartialAssertValue ( " + p_Expression.DisplaySN() + " )");
+
+		SN::SN_ParameterList * l_ParameterList = new SN::SN_ParameterList();
+		l_ParameterList->push_back(SN::SN_Parameter(m_Parameter, m_Condition));
+		return m_Function->PartialUnify(l_ParameterList, p_Expression);
+	}
+
+	SN::SN_Expression SNI_Function::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
+	{
+		SN::LogContext context(DisplaySN0() + ".SNI_Function::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+
+		p_ParameterList->push_back(m_Parameter);
+		return m_Function->Call(p_ParameterList, p_MetaLevel);
+	}
+
+	SN::SN_Expression SNI_Function::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
+	{
+		SN::LogContext context(DisplaySN0() + ".SNI_Function::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+
+		p_ParameterList->push_back(m_Parameter);
+		return m_Function->PartialCall(p_ParameterList, p_MetaLevel);
+	}
+
+	SN::SN_Error SNI_Function::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	{
+		SN::LogContext context(DisplaySN0() + ".SNI_Function::Unify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
+
+		p_ParameterList->push_back(SN::SN_Parameter(m_Parameter, m_Condition));
+		return m_Function->Unify(p_ParameterList, p_Result);
+	}
+
+	SN::SN_Error SNI_Function::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	{
+		SN::LogContext context(DisplaySN0() + ".SNI_Function::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
+
+		p_ParameterList->push_back(SN::SN_Parameter(m_Parameter, m_Condition));
+		return m_Function->PartialUnify(p_ParameterList, p_Result);
+	}
+
+}

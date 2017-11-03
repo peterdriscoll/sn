@@ -1,0 +1,54 @@
+#if !defined(SNI_LAMBDA_H_INCLUDED)
+#define SNI_LAMBDA_H_INCLUDED
+
+#pragma once
+
+#include <string>
+
+#include "sni_value.h"
+
+namespace SNI
+{
+	class SNI_Lambda : public SNI_Value
+	{
+		PGC_CLASS(SNI_Lambda);
+	public:
+		SNI_Lambda();
+		SNI_Lambda(SNI_Expression *p_FormalParameter, SNI_Expression *p_Expresion);
+		virtual ~SNI_Lambda();
+
+		virtual string GetTypeName() const;
+		virtual string DisplayCpp() const;
+		virtual string DisplaySN(long priority, SNI_VariablePointerList &p_DisplayVariableList) const;
+		virtual long GetPriority() const;
+		virtual string GetOperator() const;
+
+		virtual bool Equivalent(SNI_Object * p_Other) const;
+		virtual size_t Cardinality() const;
+		virtual SNI_Expression * Clone(SNI_ReplacementList * p_ReplacementList, bool &p_Changed);
+
+		virtual SN::SN_Expression Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const;
+		virtual SN::SN_Expression PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const;
+		virtual SN::SN_Expression Evaluate(long p_MetaLevel = 0) const;
+		virtual SN::SN_Expression PartialEvaluate(long p_MetaLevel = 0) const;
+		virtual SN::SN_Error Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
+		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
+
+		SNI_Expression * GetFormalParameter();
+		SNI_Expression * GetExpression();
+
+	protected:
+		virtual void PromoteMembers();
+
+	private:
+		SNI_Expression * m_FormalParameter;
+		SNI_Expression * m_Expression;
+
+	private:
+		static long m_Id;
+	};
+
+	typedef vector<SNI_Lambda> SNI_LambdaList;
+}
+
+#endif // !defined(SNI_LAMBDA_H_INCLUDED)

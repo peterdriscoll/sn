@@ -1,0 +1,996 @@
+#include "sni_stringref.h"
+
+#include "logcontext.h"
+#include "sn.h"
+
+#include "sni_delayedprocessor.h"
+#include "sni_string.h"
+#include "sni_char.h"
+#include "sni_real.h"
+#include "sni_error.h"
+#include "sni_null.h"
+#include "sni_valueset.h"
+#include "sni_world.h"
+#include "sni_worldset.h"
+#include "sni_functiondef.h"
+#include "sni_helpers.h"
+#include "utility.h"
+
+#include "sn_pch.h"
+
+namespace SNI
+{
+	SNI_StringRef::SNI_StringRef()
+		: m_WorldSet(NULL)
+	{
+	}
+
+	SNI_StringRef::SNI_StringRef(const SN::SN_Value & p_Source, const SN::SN_Expression & p_Start, const SN::SN_Expression & p_End)
+		: m_WorldSet(NULL)
+	{
+		m_Source = p_Source;
+		m_Start = p_Start;
+		m_End = p_End;
+	}
+
+	SNI_StringRef::~SNI_StringRef()
+	{
+	}
+
+	//-----------------------------------------------------------------------
+	// Logging
+	//-----------------------------------------------------------------------
+
+	string SNI_StringRef::GetTypeName() const
+	{
+		return "StringRef";
+	}
+
+	string SNI_StringRef::DisplayCpp() const
+	{
+		if (IsNull())
+		{
+			const string & source = GetSourceString();
+			ReplaceAll(source, "\"", "\\\"");
+			SN::SN_Expression end = GetEnd().GetVariableValue();
+			SN::SN_Long l_long = end.Evaluate();
+			if (l_long.IsNull())
+			{
+				end = GetEnd();
+			}
+			else if (l_long.GetNumber() == -1)
+			{
+				end = SN::SN_Long((long) source.length());
+			}
+			return "\"" + source + "\", " + GetStart().DisplayCpp() + ", " + end.DisplayCpp();
+		}
+		string quotedString = GetString();
+		ReplaceAll(quotedString, "\"", "\\\"");
+		return "\"" + quotedString + "\"";
+	}
+
+	size_t SNI_StringRef::Cardinality() const
+	{
+		if (IsNull())
+		{
+			return 1; // Slightly dubious. Needed for TestStringRefDefinition.
+		}
+		return SNI_FunctionDef::MultiplyCardinality(GetStart().Cardinality(), GetEnd().Cardinality());
+	}
+
+	void SNI_StringRef::ForEachCall(SNI_Cartesian *p_Cart, long p_Depth)
+	{
+		SN::SN_Expression start = GetStart().Evaluate();
+		SN::SN_Expression end = GetEnd().Evaluate();
+		if (Cardinality() == 1)
+		{
+			p_Cart->ProcessValueCall(this, NULL, p_Depth);
+		}
+		else
+		{
+			const string &source_text = GetSourceString();
+			SN::SN_String source = m_Source;
+			SNI_WorldSet *worldSet = new SNI_WorldSet;
+			start.ForEach(
+				[&end, &source, &source_text, &p_Cart, worldSet, p_Depth](const SN::SN_Expression &p_Param, SNI::SNI_World *p_World) -> SN::SN_Error
+			{
+				SN::SN_Expression start_exp = p_Param;
+				SNI::SNI_World *startWorld = p_World;
+				end.ForEach(
+					[&source, &source_text, &start_exp, &p_Cart, startWorld, worldSet, p_Depth](const SN::SN_Expression &p_Param, SNI::SNI_World *p_World) -> SN::SN_Error
+				{
+					SN::SN_Expression end_exp = p_Param;
+					SN::SN_Long start_long = start_exp;
+					SN::SN_Long end_long = end_exp;
+					SNI::SNI_World *endWorld = p_World;
+					SN::SN_Value value;
+					if (!start_long.IsNullValue() && !end_long.IsNullValue())
+					{
+						size_t start_pos = start_long.GetNumber();
+						size_t end_pos = end_long.GetNumber();
+						string s = source_text.substr(start_pos, end_pos - start_pos);
+						value = SN::SN_String(s);
+					}
+					else
+					{
+						value = SN::SN_StringRef(source, start_exp, end_exp);
+					}
+					bool exists = false;
+					SNI_World *world = worldSet->JoinWorldsArgs(AutoAddWorld, CreateIfActiveParents, exists, startWorld, endWorld);
+					if (exists)
+					{
+						p_Cart->ProcessValueCall(value, world, p_Depth);
+					}
+					return true;
+				});
+				return true;
+			});
+		}
+	}
+
+	SN::SN_Error SNI_StringRef::ForEachCartUnify(long p_Depth, SNI_Cart *p_Cart)
+	{
+		SN::SN_Expression start = GetStart().Evaluate();
+		SN::SN_Expression end = GetEnd().Evaluate();
+		if (Cardinality() == 1)
+		{
+			return p_Cart->ProcessValueUnify(p_Depth, this, NULL);
+		}
+		else
+		{
+			const string &source_text = GetSourceString();
+			SN::SN_String source = m_Source;
+			SNI_WorldSet *worldSet = new SNI_WorldSet;
+			return start.ForEach(
+				[&end, &source, &source_text, &p_Cart, worldSet, p_Depth](const SN::SN_Expression &p_Param, SNI::SNI_World *p_World) -> SN::SN_Error
+			{
+				SN::SN_Expression start_exp = p_Param;
+				SNI::SNI_World *startWorld = p_World;
+				return end.ForEach(
+					[&source, &source_text, &start_exp, &p_Cart, startWorld, worldSet, p_Depth](const SN::SN_Expression &p_Param, SNI::SNI_World *p_World) -> SN::SN_Error
+				{
+					SN::SN_Expression end_exp = p_Param;
+					SN::SN_Long start_long = start_exp;
+					SN::SN_Long end_long = end_exp;
+					SNI::SNI_World *endWorld = p_World;
+					SN::SN_Value value;
+					if (!start_long.IsNullValue() && !end_long.IsNullValue())
+					{
+						size_t start_pos = start_long.GetNumber();
+						size_t end_pos = end_long.GetNumber();
+						string s = source_text.substr(start_pos, end_pos - start_pos);
+						value = SN::SN_String(s);
+					}
+					else
+					{
+						value = SN::SN_StringRef(source, start_exp, end_exp);
+					}
+					bool exists = false;
+					SNI_World *world = worldSet->JoinWorldsArgs(AutoAddWorld, CreateIfActiveParents, exists, startWorld, endWorld);
+					if (exists)
+					{
+						return p_Cart->ProcessValueUnify(p_Depth, value, world);
+					}
+					return true;
+				});
+			});
+		}
+	}
+
+	void SNI_StringRef::ForEachUnify(SNI_Cartesian *p_Cart, long p_Depth)
+	{
+		SN::SN_Expression start = GetStart().Evaluate();
+		SN::SN_Expression end = GetEnd().Evaluate();
+		if (Cardinality() == 1)
+		{
+			p_Cart->ProcessValueUnify(this, NULL, p_Depth);
+		}
+		else
+		{
+			const string &source_text = GetSourceString();
+			SN::SN_String source = m_Source;
+			SNI_WorldSet *worldSet = new SNI_WorldSet;
+			start.ForEach(
+				[&end, &source, &source_text, &p_Cart, worldSet, p_Depth](const SN::SN_Expression &p_Param, SNI::SNI_World *p_World) -> SN::SN_Error
+			{
+				SN::SN_Expression start_exp = p_Param;
+				SNI::SNI_World *startWorld = p_World;
+				end.ForEach(
+					[&source, &source_text, &start_exp, &p_Cart, startWorld, worldSet, p_Depth](const SN::SN_Expression &p_Param, SNI::SNI_World *p_World) -> SN::SN_Error
+				{
+					SN::SN_Expression end_exp = p_Param;
+					SN::SN_Long start_long = start_exp;
+					SN::SN_Long end_long = end_exp;
+					SNI::SNI_World *endWorld = p_World;
+					SN::SN_Value value;
+					if (!start_long.IsNullValue() && !end_long.IsNullValue())
+					{
+						size_t start_pos = start_long.GetNumber();
+						size_t end_pos = end_long.GetNumber();
+						string s = source_text.substr(start_pos, end_pos - start_pos);
+						value = SN::SN_String(s);
+					}
+					else
+					{
+						value = SN::SN_StringRef(source, start_exp, end_exp);
+					}
+					bool exists = false;
+					SNI_World *world = worldSet->JoinWorldsArgs(AutoAddWorld, CreateIfActiveParents, exists, startWorld, endWorld);
+					if (exists)
+					{
+						p_Cart->ProcessValueUnify(value, world, p_Depth);
+					}
+					return true;
+				});
+				return true;
+			});
+		}
+	}
+
+	SN::SN_Error SNI_StringRef::ForEach(std::function<SN::SN_Error(const SN::SN_Expression &p_Param, SNI_World *p_World)> p_Action)
+	{
+		SN::SN_Expression start = GetStart().Evaluate();
+		SN::SN_Expression end = GetEnd().Evaluate();
+		if (Cardinality() == 1)
+		{
+			return p_Action(this, NULL);
+		}
+		else
+		{
+			const string &source_text = GetSourceString();
+			SN::SN_String source = m_Source;
+			SNI_WorldSet *worldSet = new SNI_WorldSet;
+			return start.ForEach(
+				[&end, &source, &source_text, &p_Action, worldSet](const SN::SN_Expression &p_Param, SNI::SNI_World *p_World) -> SN::SN_Error
+			{
+				SN::SN_Expression start_exp = p_Param;
+				SNI::SNI_World *startWorld = p_World;
+				return end.ForEach(
+					[&source, &source_text, &start_exp, &p_Action, startWorld, worldSet](const SN::SN_Expression &p_Param, SNI::SNI_World *p_World) -> SN::SN_Error
+				{
+					SN::SN_Expression end_exp = p_Param;
+					SN::SN_Long start_long = start_exp;
+					SN::SN_Long end_long = end_exp;
+					SNI::SNI_World *endWorld = p_World;
+					SN::SN_Value value;
+					if (!start_long.IsNullValue() && !end_long.IsNullValue())
+					{
+						size_t start_pos = start_long.GetNumber();
+						size_t end_pos = end_long.GetNumber();
+						string s = source_text.substr(start_pos, end_pos - start_pos);
+						value = SN::SN_String(s);
+					}
+					else
+					{
+						value = SN::SN_StringRef(source, start_exp, end_exp);
+					}
+					bool exists = false;
+					SNI_World *world = worldSet->JoinWorldsArgs(AutoAddWorld, CreateIfActiveParents, exists, startWorld, endWorld);
+					if (exists)
+					{
+						return p_Action(value, world);
+					}
+					return true;
+				});
+				return true;
+			});
+		}
+	}
+
+	string SNI_StringRef::DisplaySN(long /*priority*/, SNI_VariablePointerList & /*p_DisplayVariableList*/) const
+	{
+		const string &source = GetSourceString();
+		SN::SN_Expression end = GetEnd().Evaluate();
+		string text;
+		GetStart().Evaluate().ForEach(
+			[&end, &source, &text](const SN::SN_Expression &p_Param, SNI::SNI_World *p_World) -> SN::SN_Error
+		{
+			SN::SN_Long start_long = p_Param;
+			SNI::SNI_World *startWorld = p_World;
+			end.ForEach(
+				[&source, &start_long, &text, startWorld](const SN::SN_Expression &p_Param, SNI::SNI_World *p_World) -> SN::SN_Error
+			{
+				SN::SN_Long end_long = p_Param;
+				SNI::SNI_World *endWorld = p_World;
+				string value;
+				if (!start_long.IsNullValue() && !end_long.IsNullValue())
+				{
+					size_t start_pos = start_long.GetNumber();
+					size_t end_pos = end_long.GetNumber();
+					value = source.substr(start_pos, end_pos - start_pos);
+					ReplaceAll(value, "\"", "\\\"");
+				}
+				else
+				{
+					value = "<unknown>";
+				}
+				if (text.length())
+				{
+					text += ", ";
+				}
+				text += "\"" + value + "\"";
+				if (startWorld || endWorld)
+				{
+					text += "::";
+					if (startWorld)
+					{
+						text += startWorld->DisplaySN();
+					}
+					if (endWorld)
+					{
+						if (startWorld)
+						{
+							text += "&";
+						}
+						text += endWorld->DisplaySN();
+					}
+				}
+				return true;
+			});
+			return true;
+		});
+
+		return "[" + text + "]";
+	}
+
+	long SNI_StringRef::GetPriority() const
+	{
+		return 100;
+	}
+	//-----------------------------------------------------------------------
+	// Members
+	//-----------------------------------------------------------------------
+
+	bool SNI_StringRef::IsNull() const
+	{
+		SN::SN_Value start_value = m_Start.Evaluate();
+		SN::SN_Value end_value = m_End.Evaluate();
+		return start_value.IsNull() || end_value.IsNull();
+	}
+
+	bool SNI_StringRef::IsNullValue() const
+	{
+		return IsNull();
+	}
+
+	bool SNI_StringRef::IsKnownValue() const
+	{
+		SN::SN_Value start_value = m_Start.Evaluate();
+		SN::SN_Value end_value = m_End.Evaluate();
+		return start_value.IsKnownValue() && end_value.IsKnownValue();
+	}
+
+	bool SNI_StringRef::IsReferableValue() const
+	{
+		return true;
+	}
+
+	SNI_WorldSet * SNI_StringRef::GetWorldSet()
+	{
+		if (!m_WorldSet)
+		{
+			m_WorldSet = new SNI_WorldSet;
+		}
+		return m_WorldSet;
+	}
+
+	void SNI_StringRef::PromoteMembers()
+	{
+	}
+
+	SN::SN_String SNI_StringRef::GetSource() const
+	{
+		return m_Source.GetSNI_String()->GetSource();
+	}
+
+	const string &SNI_StringRef::GetSourceString() const
+	{
+		return m_Source.GetSNI_String()->GetSourceString();
+	}
+
+	long SNI_StringRef::GetLeftMostPos() const
+	{
+		SN::SN_Long start = m_Start.Evaluate();
+		if (start.IsNullValue())
+		{
+			return m_Source.GetSNI_String()->GetLeftMostPos();
+		}
+		return start.GetNumber();
+	}
+
+	long SNI_StringRef::GetRightMostPos() const
+	{
+		SN::SN_Long end = m_End.Evaluate();
+		if (end.IsNullValue())
+		{
+			return m_Source.GetSNI_String()->GetRightMostPos();
+		}
+		return end.GetNumber();
+	}
+
+	SN::SN_Expression SNI_StringRef::GetStart() const
+	{
+		return m_Start;
+	}
+
+	SN::SN_Expression SNI_StringRef::GetEnd() const
+	{
+		return m_End;
+	}
+
+	string SNI_StringRef::GetString() const
+	{
+		SN::SN_Value start = m_Start.Evaluate();
+		if (start.IsNullValue())
+		{
+			return "";
+		}
+		long start_pos = SN::SN_Long(start).GetNumber();
+		SN::SN_Value end = m_End.Evaluate();
+		if (end.IsNullValue())
+		{
+			return "";
+		}
+		long end_pos = SN::SN_Long(end).GetNumber();
+		return GetSourceString().substr(start_pos, end_pos - start_pos);
+	}
+
+	size_t SNI_StringRef::Length() const
+	{
+		SN::SN_Value start = m_Start.Evaluate();
+		if (start.IsNullValue())
+		{
+			return 0;
+		}
+		long start_pos = SN::SN_Long(start).GetNumber();
+		SN::SN_Value end = m_End.Evaluate();
+		if (end.IsNullValue())
+		{
+			return 0;
+		}
+		long end_pos = SN::SN_Long(end).GetNumber();
+		return end_pos - start_pos;
+	}
+
+	//-----------------------------------------------------------------------
+	// Base
+	//-----------------------------------------------------------------------
+
+	SN::SN_Error SNI_StringRef::AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World ** p_World, SNI_WorldSet *p_WorldSet)
+	{
+		bool exists = true;
+		// SNI_World *world = p_WorldSet->JoinWorlds(ManualAddWorld, AlwaysCreateWorld,, exists, p_NumWorlds, p_World);
+		if (exists)
+		{ // Multiple values?
+			return AssertValue(p_Value);
+		}
+		else
+		{
+			string worldString = DisplayWorlds(p_NumWorlds, p_World);
+			SN::LogContext context("SNI_StringRef::AddValue ( conflict " + p_Value.DisplaySN() + worldString + " )");
+			return SN::SN_Error("SNI_StringRef::AddValue: Value conflict.");
+		}
+	}
+
+	SN::SN_Error SNI_StringRef::AssertValue(const SN::SN_Expression &p_Value)
+	{
+		if (p_Value.IsError())
+		{
+			return p_Value;
+		}
+		if (SN::Is<SNI_String *>(p_Value))
+		{
+			SN::SN_String text = p_Value;
+			string part = text.GetString();
+			long part_len = (long) part.length();
+
+			SN::SN_Value start = m_Start.Evaluate();
+			if (start.IsNull())
+			{
+				return false;
+			}
+
+			long start_pos = SN::SN_Long(start).GetNumber();
+			if (start_pos + part_len > GetRightMostPos())
+			{
+				return SN::SN_Error("SNI_StringRef.AssertValue: String too long.");
+			}
+			if (GetSourceString().substr(start_pos, part_len) == part)
+			{
+				return m_End.AssertValue(SN::SN_Long(start_pos + part_len));
+			}
+		}
+		else if (SN::Is<SNI_ValueSet *>(p_Value))
+		{
+			SN::SN_ValueSet valueSet(p_Value);
+			return valueSet.AssertValue(this);
+		}
+		return false;
+	}
+
+	SN::SN_Expression SNI_StringRef::Evaluate(long p_MetaLevel /* = 0 */) const
+	{
+		SN::SN_Value start = m_Start.Evaluate(p_MetaLevel);
+		if (start.IsNull())
+		{
+			return this;
+		}
+		if (!SN::Is<SNI_Long *>(start))
+		{
+			return this;
+		}
+
+		long start_pos = SN::SN_Long(start).GetNumber();
+
+		SN::SN_Value end = m_End.Evaluate(p_MetaLevel);
+		if (end.IsNull())
+		{
+			return this;
+		}
+		if (!SN::Is<SNI_Long *>(end))
+		{
+			return this;
+		}
+
+		long end_pos = SN::SN_Long(end).GetNumber();
+		return SN::SN_String(m_Source.GetString().substr(start_pos, end_pos - start_pos + 1));
+	}
+
+	SN::SN_Expression SNI_StringRef::PartialEvaluate(long p_MetaLevel /* = 0 */) const
+	{
+		return Evaluate(p_MetaLevel);
+	}
+
+	bool SNI_StringRef::Equivalent(SNI_Object * p_Other) const
+	{
+		if (dynamic_cast<SNI_StringRef *>(p_Other))
+		{
+			SN::SN_StringRef other = dynamic_cast<SNI_StringRef *>(p_Other);
+			return m_Source.Equivalent(other.GetSource())
+				&& m_Start.Equivalent(other.GetStart())
+				&& m_End.Equivalent(other.GetEnd());
+		}
+		else if (dynamic_cast<SNI_String *>(p_Other))
+		{
+			if (!IsNull())
+			{
+				SN::SN_String other = dynamic_cast<SNI_String *>(p_Other);
+				return GetString() == other.GetString();
+			}
+		}
+		return false;
+	}
+
+	//-----------------------------------------------------------------------
+	// Implementation
+	//-----------------------------------------------------------------------
+
+	SN::SN_Value SNI_StringRef::DoAdd(SNI_Value * p_Other) const
+	{
+		return DoConcat(p_Other);
+	}
+
+	SN::SN_Value SNI_StringRef::DoConcat(SNI_Value * p_Other) const
+	{
+		if (dynamic_cast<SNI_StringRef *>(p_Other))
+		{
+			SN::SN_StringRef other = p_Other;
+			if (GetSource().GetSNI_String() == other.GetSource().GetSNI_String())
+			{
+				SN::SN_Expression start = other.GetStart().PartialEvaluate();
+				SN::SN_Expression end = other.GetEnd().PartialEvaluate();
+				if (end.Equivalent(start))
+				{
+					return SN::SN_StringRef(this, m_Start, other.GetEnd());
+				}
+			}
+			SN::SN_Value this_value = Evaluate(0);
+			if (SN::Is<SNI_String *>(this_value))
+			{
+				SN::SN_Value other_value = p_Other->Evaluate(0);
+				if (SN::Is<SNI_String *>(other_value))
+				{
+					return this_value.GetSNI_Value()->DoConcat(other_value.GetSNI_Value());
+				}
+			}
+		}
+		if (dynamic_cast<SNI_String *>(p_Other))
+		{
+			SN::SN_Value value = Evaluate(0);
+			if (SN::Is<SNI_String *>(value))
+			{
+				return SN::SN_String(value.GetString() + p_Other->GetString());
+			}
+		}
+		if (dynamic_cast<SNI_String *>(p_Other))
+		{
+			SN::SN_Value value = Evaluate(0);
+			if (SN::Is<SNI_String *>(value))
+			{
+				SNI_Char * l_char = dynamic_cast<SNI_Char *>(p_Other);
+				return SN::SN_String(value.GetString() + l_char->GetChar());
+			}
+		}
+
+		return skynet::Null;
+	}
+
+	SN::SN_Value SNI_StringRef::DoSubtractLeft(SNI_Value * p_Part) const
+	{
+		SN::SN_Value part = p_Part->Evaluate();
+		if (part.IsNull())
+		{
+			return skynet::Null;
+		}
+		if (!SN::Is<SNI_String *>(part))
+		{
+			return SN::SN_Error("StringRef.SubtractLeft: Expected a string to subtract: " + DisplayPmExpression(part));
+		}
+		string part_text = part.GetString();
+		long part_len = (long) part_text.length();
+		if (part_len == 0)
+		{
+			return SN::SN_Error("StringRef.SubtractLeft: Expected a string to subtract: " + DisplayPmExpression(part));
+		}
+		SN::SN_Value start = m_Start.Evaluate();
+		if (!start.IsNull())
+		{
+			if (!SN::Is<SNI_Long *>(start))
+			{
+				return SN::SN_Error("StringRef.SubtractLeft: Start of string ref must be long in: " + DisplaySN0());
+			}
+			long start_pos = SN::SN_Long(start).GetNumber();
+
+			SN::SN_Expression end = m_End.PartialEvaluate();
+			if (SN::Is<SNI_Value *>(end))
+			{
+				if (!SN::Is<SNI_Long *>(end))
+				{
+					return SN::SN_Error("StringRef.SubtractLeft: End of string ref must be long: " + DisplaySN0());
+				}
+				SN::SN_Long end = m_End.Evaluate();
+				if (end.IsNullValue())
+				{
+					return SN::SN_Error("StringRef.SubtractLeft: End is not known: " + DisplaySN0() + " < " + DisplayPmExpression(part));
+				}
+				long end_pos = end.GetNumber();
+				if (start_pos + part_len > end_pos)
+				{
+					return SN::SN_Error("StringRef.SubtractLeft: Not enough characters to subtract: " + DisplaySN0() + " < " + DisplayPmExpression(part));
+				}
+			}
+
+			string match = GetSourceString().substr(start_pos, part_len);
+			if (match != part_text)
+			{
+				return SN::SN_Error("StringRef.SubtractLeft: Subtract string does not match: " + match + " != " + part_text);
+			}
+			return SN::SN_StringRef(this, SN::SN_Long(start_pos + part_len), end);
+		}
+		else
+		{
+			long start_pos = GetLeftMostPos();
+			long end_pos = GetRightMostPos();
+			if (start_pos + part_len > end_pos)
+			{
+				return SN::SN_Error("StringRef.SubtractLeft: Not enough characters to subtract: " + DisplaySN0() + " < " + DisplayPmExpression(part));
+			}
+			SN::SN_ValueSet vs_start;
+			SN::SN_ValueSet vs_end;
+			size_t pos = start_pos;
+			size_t find_pos = 0;
+			while ((find_pos = GetSourceString().find(part_text, pos)) != string::npos)
+			{
+				vs_start.AddTaggedValue(SN::SN_Long((long) find_pos), vs_start.GetWorldSet()->CreateWorld());
+				vs_end.AddTaggedValue(SN::SN_Long((long) find_pos + part_len), vs_end.GetWorldSet()->CreateWorld());
+				pos = find_pos + 1;
+			}
+			if (vs_start.Length())
+			{
+				const_cast<SNI_StringRef *>(this)->m_Start.AssertValue(vs_start.SimplifyValue());
+				return SN::SN_StringRef(this, vs_end.SimplifyValue(), m_End);
+			}
+		}
+		return SN::SN_Error("StringRef.SubtractLeft: Left string not matched in search: " + DisplaySN0() + " < " + DisplayPmExpression(part));
+	}
+
+	SN::SN_Value SNI_StringRef::DoSubtractRight(SNI_Value * p_Part) const
+	{
+		SN::SN_Value part = p_Part->Evaluate();
+		if (part.IsNull())
+		{
+			return skynet::Null;
+		}
+		if (!SN::Is<SNI_String *>(part))
+		{
+			return SN::SN_Error("SubtractLeft: Expected a string to subtract: " + DisplayPmExpression(part));
+		}
+		SN::SN_Value start = m_Start.PartialEvaluate();
+		if (SN::Is<SNI_Value *>(start))
+		{
+			if (start.IsNull())
+			{
+				return skynet::Null;
+			}
+			if (!SN::Is<SNI_Long *>(start))
+			{
+				return SN::SN_Error("SubtractLeft: Start of string ref must be long in: " + DisplaySN0());
+			}
+		}
+		string part_text = part.GetString();
+		long part_len = (long) part_text.length();
+		if (part_len == 0)
+		{
+			return SN::SN_Error("StringRef.SubtractLeft: Expected a string to subtract: " + DisplayPmExpression(part));
+		}
+		SN::SN_Value end = m_End.Evaluate();
+		if (!end.IsNull())
+		{
+			if (!SN::Is<SNI_Long *>(end))
+			{
+				return SN::SN_Error("SubtractLeft: End of string ref must be long in: " + DisplaySN0());
+			}
+
+			long end_pos = GetRightMostPos();
+
+			string match = GetSourceString().substr(end_pos - part_len, part_len);
+			if (match != part_text)
+			{
+				return SN::SN_Error("SubtractLeft: Subtract string does not match: " + match + " != " + part_text);
+			}
+			return SN::SN_StringRef(this, start, SN::SN_Long(end_pos - part_len));
+		}
+		else
+		{
+			size_t start_pos = GetLeftMostPos();
+			size_t end_pos = GetRightMostPos();
+			if (start_pos + part_len > end_pos)
+			{
+				return SN::SN_Error("StringRef.SubtractLeft: Not enough characters to subtract: " + DisplaySN0() + " < " + DisplayPmExpression(part));
+			}
+			SN::SN_ValueSet vs_start;
+			SN::SN_ValueSet vs_end;
+			SNI_WorldSet *worldSet = new SNI_WorldSet();
+			vs_start.SetWorldSet(worldSet);
+			vs_end.SetWorldSet(worldSet);
+			size_t pos = start_pos;
+			size_t find_pos = 0;
+			while (pos < end_pos && (find_pos = GetSourceString().find(part_text, pos)) != string::npos)
+			{
+				if (find_pos < end_pos)
+				{
+					SNI_World *world = worldSet->CreateWorld();
+					vs_start.AddTaggedValue(SN::SN_Long((long) find_pos), world);
+					vs_end.AddTaggedValue(SN::SN_Long((long) find_pos + part_len), world);
+				}
+				pos = find_pos + 1;
+			}
+			if (vs_start.Length())
+			{
+				const_cast<SNI_StringRef *>(this)->m_End.AssertValue(vs_end.SimplifyValue());
+				return SN::SN_StringRef(this, m_Start, vs_start.SimplifyValue());
+			}
+		}
+		return SN::SN_Error("StringRef.SubtractRight: Right string not matched in search: " + DisplaySN0() + " < " + DisplayPmExpression(part));
+	}
+
+	SN::SN_Value SNI_StringRef::DoSubtractLeftChar() const
+	{
+		SN::SN_Value start = m_Start.Evaluate();
+		if (start.IsNull())
+		{
+			return skynet::Null;
+		}
+		if (!SN::Is<SNI_Long *>(start))
+		{
+			return SN::SN_Error("SubtractLeftChar: Start of string ref must be long in: " + DisplaySN0());
+		}
+		long start_pos = SN::SN_Long(start).GetNumber();
+		SN::SN_Expression end = m_End.PartialEvaluate();
+		if (SN::Is<SNI_Value *>(end))
+		{
+			if (!SN::Is<SNI_Long *>(end))
+			{
+				return SN::SN_Error("DoSubtractLeftChar: End of string ref must be long: " + DisplaySN0());
+			}
+			long end_pos = SN::SN_Long(end).GetNumber();
+			if (start_pos + 1 > end_pos)
+			{
+				return SN::SN_Error("DoSubtractLeftChar: Not enough characters to subtract one: " + DisplaySN0());
+			}
+		}
+		return SN::SN_StringRef(this, SN::SN_Long(start_pos + 1), end);
+	}
+
+	SN::SN_Value SNI_StringRef::DoSubtractRightChar() const
+	{
+		SN::SN_Expression end = m_End.PartialEvaluate();
+		if (!SN::Is<SNI_Long *>(end))
+		{
+			return SN::SN_Error("SubtractRightChar: End of string ref must be long: " + DisplaySN0());
+		}
+		long end_pos = SN::SN_Long(end).GetNumber();
+		SN::SN_Value start = m_Start.Evaluate();
+		if (SN::Is<SNI_Value *>(start))
+		{
+			if (start.IsNull())
+			{
+				return skynet::Null;
+			}
+			if (!SN::Is<SNI_Long *>(start))
+			{
+				return SN::SN_Error("SubtractRightChar: Start of string ref must be long in: " + DisplaySN0());
+			}
+			long start_pos = SN::SN_Long(start).GetNumber();
+			if (start_pos > end_pos - 1)
+			{
+				return SN::SN_Error("SubtractRightChar: Not enough characters to subtract one: " + DisplaySN0());
+			}
+		}
+		return SN::SN_StringRef(this, start, SN::SN_Long(end_pos - 1));
+	}
+
+	SN::SN_Value SNI_StringRef::DoSelectLeftChar() const
+	{
+		SN::SN_Value start = m_Start.Evaluate();
+		if (start.IsNull())
+		{
+			return skynet::Null;
+		}
+		if (!SN::Is<SNI_Long *>(start))
+		{
+			return SN::SN_Error("SelectLeftChar: Start of string ref must be long in: " + DisplaySN0());
+		}
+
+		long start_pos = SN::SN_Long(start).GetNumber();
+
+		SN::SN_Expression end = m_End.PartialEvaluate();
+		if (SN::Is<SNI_Value *>(end))
+		{
+			if (!SN::Is<SNI_Long *>(end))
+			{
+				return SN::SN_Error("SelectLeftChar: End of string ref must be long: " + DisplaySN0());
+			}
+			long end_pos = SN::SN_Long(end).GetNumber();
+			if (start_pos + 1 > end_pos)
+			{
+				return SN::SN_Error("SelectLeftChar: Not enough characters to select char: " + DisplaySN0());
+			}
+		}
+		return SN::SN_Char(GetSourceString()[start_pos]);
+	}
+
+	SN::SN_Value SNI_StringRef::DoSelectRightChar() const
+	{
+		SN::SN_Expression end = m_End.PartialEvaluate();
+		if (!SN::Is<SNI_Long *>(end))
+		{
+			return SN::SN_Error("SelectRightChar: End of string ref must be long: " + DisplaySN0());
+		}
+		long end_pos = SN::SN_Long(end).GetNumber();
+		SN::SN_Value start = m_Start.Evaluate();
+		if (SN::Is<SNI_Value *>(start))
+		{
+			if (start.IsNull())
+			{
+				return skynet::Null;
+			}
+			if (!SN::Is<SNI_Long *>(start))
+			{
+				return SN::SN_Error("SelectRightChar: Start of string ref must be long in: " + DisplaySN0());
+			}
+			long start_pos = SN::SN_Long(start).GetNumber();
+			if (start_pos + 1 > end_pos)
+			{
+				return SN::SN_Error("SelectRightChar: Not enough characters to select char: " + DisplaySN0());
+			}
+		}
+		return SN::SN_Char(GetSourceString()[end_pos - 1]);
+	}
+
+	SN::SN_Value SNI_StringRef::DoLookaheadLeft() const
+	{
+		SN::SN_Expression start = m_Start.PartialEvaluate();
+		if (!SN::Is<SNI_Long *>(start))
+		{
+			return skynet::Null;
+		}
+		size_t start_pos = SN::SN_Long(start).GetNumber();
+		if (start_pos < GetSourceString().length())
+		{
+			return SN::SN_Char(GetSourceString()[start_pos]);
+		}
+		return skynet::Null;
+	}
+
+	SN::SN_Value SNI_StringRef::DoLookaheadRight() const
+	{
+		SN::SN_Expression end = m_End.PartialEvaluate();
+		if (!SN::Is<SNI_Long *>(end))
+		{
+			return skynet::Null;
+		}
+		size_t end_pos = SN::SN_Long(end).GetNumber();
+		if (end_pos < GetSourceString().length())
+		{
+			return SN::SN_Char(GetSourceString()[end_pos]);
+		}
+		return skynet::Null;
+	}
+
+	SN::SN_Value SNI_StringRef::DoFile() const
+	{
+		return SN::SN_String("");
+	}
+
+	SN::SN_Value SNI_StringRef::DoEquals(SNI_Value *p_Other) const
+	{
+		SN::SN_Value start = m_Start.Evaluate();
+		SN::SN_Value end = m_End.Evaluate();
+		if (dynamic_cast<SNI_StringRef *>(p_Other))
+		{
+			if (!start.IsNullValue() && !end.IsNullValue())
+			{
+				p_Other->DoEquals(SN::SN_String(GetString()).GetSNI_String());
+			}
+			return skynet::Null;
+		}
+		if (dynamic_cast<SNI_String *>(p_Other))
+		{
+			if (!start.IsNullValue() && !end.IsNullValue())
+			{
+				return SN::SN_Bool(GetString() == p_Other->GetString());
+			}
+			if (!start.IsNullValue() && end.IsNullValue())
+			{
+				long start_pos = SN::SN_Long(start).GetNumber();
+				string source = m_Source.GetString().substr(start_pos, p_Other->GetString().length());
+				if (source != p_Other->GetString())
+				{
+					return skynet::False;
+				}
+				SN::SN_ValueSet result;
+				SNI_World *worldTrue = result.GetWorldSet()->CreateWorld();
+				result.AddTaggedValue(skynet::True, worldTrue);
+				SNI_World *worldFalse = result.GetWorldSet()->CreateWorld();
+				result.AddTaggedValue(skynet::False, worldFalse);
+				SN::SN_ValueSet endVS;
+				SN::SN_Variable endVar;
+				SN::SN_ParameterList *l_ParameterList = new SN::SN_ParameterList();
+				l_ParameterList->push_back(SN::SN_Parameter(endVar));
+				l_ParameterList->push_back(SN::SN_Parameter(SN::SN_Long((long) (start_pos + p_Other->GetString().length()))));
+				SNI_DelayedProcessor::GetProcessor()->Delay(skynet::Equals, l_ParameterList, skynet::False);
+				endVS.AddTaggedValue(SN::SN_Long((long) (start_pos + p_Other->GetString().length())), worldTrue);
+				endVS.AddTaggedValue(endVar, worldFalse);
+				const_cast<SNI_StringRef *>(this)->m_End = endVS;
+				return result;
+			}
+			if (start.IsNullValue() && !end.IsNullValue())
+			{
+				long end_pos = SN::SN_Long(end).GetNumber();
+				string source = m_Source.GetString().substr(end_pos - p_Other->GetString().length());
+				if (source != p_Other->GetString())
+				{
+					return skynet::False;
+				}
+				SN::SN_ValueSet result;
+				SNI_World *worldTrue = result.GetWorldSet()->CreateWorld();
+				result.AddTaggedValue(skynet::True, worldTrue);
+				SNI_World *worldFalse = result.GetWorldSet()->CreateWorld();
+				result.AddTaggedValue(skynet::False, worldFalse);
+				SN::SN_Variable startVar;
+				SN::SN_ParameterList *l_ParameterList = new SN::SN_ParameterList();
+				l_ParameterList->push_back(SN::SN_Parameter(startVar));
+				l_ParameterList->push_back(SN::SN_Parameter(SN::SN_Long((long) (end_pos - p_Other->GetString().length()))));
+				SNI_DelayedProcessor::GetProcessor()->Delay(skynet::Equals, l_ParameterList, skynet::False);
+				SN::SN_ValueSet startVS;
+				startVS.AddTaggedValue(SN::SN_Long((long) (end_pos - p_Other->GetString().length())), worldTrue);
+				startVS.AddTaggedValue(startVar, worldFalse);
+				const_cast<SNI_StringRef *>(this)->m_Start = startVS;
+				return result;
+			}
+			return skynet::Null;
+		}
+		return skynet::False;
+	}
+}

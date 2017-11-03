@@ -1,0 +1,202 @@
+#if !defined(SNI_EXPRESSION_H_INCLUDED)
+#define SNI_EXPRESSION_H_INCLUDED
+
+#pragma once
+
+#include "exp_ctrl_sn.h"
+
+#include <string>
+#include <functional>
+using namespace std;
+
+#include "sni_base.h"
+
+namespace SN
+{
+	class SN_Parameter;
+	typedef vector<SN_Parameter> SN_ParameterList;
+
+	class SN_Expression;
+	typedef vector<SN_Expression> SN_ExpressionList;
+
+	class SN_Value;
+	typedef vector<SN_Value> SN_ValueList;
+
+	class SN_ValueSet;
+	class SN_Cartesian;
+
+	class SN_Error;
+
+	class LogContext;
+}
+
+namespace SNI
+{
+	class SNI_ValueSet;
+	class SNI_Value;
+	class SNI_World;
+	class SNI_WorldSet;
+	class SNI_Cartesian;
+	class SNI_Cart;
+	class SNI_Splitter;
+
+	class SNI_Replacement;
+	typedef vector<SNI_Replacement> SNI_ReplacementList;
+
+	class SNI_Variable;
+	typedef vector<const SNI_Variable *> SNI_VariablePointerList;
+
+	class SNI_Expression : public SNI_Base
+	{
+		PGC_CLASS(SNI_Expression);
+
+	public:
+		SNI_Expression();
+		SNI_Expression(const SNI_Expression &p_Expression);
+
+		virtual ~SNI_Expression();
+
+		//---------------------------------------------------------------
+		// Logging
+		//---------------------------------------------------------------
+		virtual string GetTypeName() const;
+		virtual string DisplayCpp() const;
+		virtual string DisplaySN(long priority, SNI_VariablePointerList &p_DisplayVariableList) const;
+		virtual string DisplayValueSN(long, SNI_VariablePointerList & p_DisplayVariableList) const;
+		virtual long GetPriority() const;
+		virtual string GetOperator() const;
+		virtual string DisplaySN0() const;
+
+		//---------------------------------------------------------------
+		// Members
+		//---------------------------------------------------------------
+		virtual SNI_Expression * Clone(SNI_ReplacementList * p_ReplacementList, bool &p_Changed);
+		virtual SNI_Expression * Clone();
+		virtual bool GetBool() const;
+		virtual string GetString() const;
+		virtual size_t Count() const;
+		virtual size_t Length() const;
+		virtual void Simplify();
+		virtual SN::SN_Expression SimplifyValue();
+		virtual bool IsStringValue() const;
+		virtual bool IsRequested() const;
+		virtual SNI_WorldSet *GetWorldSet();
+
+		virtual bool IsNull() const;
+		virtual bool IsKnownValue() const;
+		virtual bool IsVariable() const;
+		virtual bool IsNullValue() const;
+		virtual bool IsReferableValue() const;
+		virtual SN::SN_Expression GetVariableValue(bool p_IfComplete);
+		virtual bool IsError() const;
+		virtual bool AllValues() const;
+		virtual SN::SN_Error AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World **p_World, SNI_WorldSet *p_WorldSet);
+		virtual bool MarkComplete();
+
+		//---------------------------------------------------------------
+		// Cardinality
+		//---------------------------------------------------------------
+		virtual size_t Cardinality() const;
+		virtual SN::SN_Error ForEach(std::function<SN::SN_Error(const SN::SN_Expression &p_Param, SNI_World *p_World)> p_Action);
+		virtual SN::SN_Error ForEachCartUnify(long p_Depth, SNI_Cart * p_Cart);
+		virtual void ForEachCall(SNI_Cartesian * p_Cart, long p_Depth);
+		virtual void ForEachUnify(SNI_Cartesian * p_Cart, long p_Depth);
+		virtual void ForEachSplit(SNI_Splitter * p_Splitter);
+		virtual SN::SN_Cartesian CartProd(long p_Index, SNI_FunctionDef *p_FunctionDef = NULL);
+
+		//---------------------------------------------------------------
+		// Base
+		//---------------------------------------------------------------
+		virtual SN::SN_Expression Evaluate(long p_MetaLevel = 0) const;
+		virtual SN::SN_Expression PartialEvaluate(long p_MetaLevel = 0) const;
+		virtual SN::SN_Expression Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const;
+		virtual SN::SN_Expression PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const;
+		virtual SN::SN_Error Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Expression);
+		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Expression);
+		virtual SN::SN_Error Assert();
+		virtual SN::SN_Error AssertValue(const SN::SN_Expression &p_Value);
+		virtual SN::SN_Error SelfAssert();
+		virtual SN::SN_Error PartialAssert();
+		virtual SN::SN_Error PartialAssertValue(const SN::SN_Expression &p_Expression, bool p_Define = false);
+		virtual bool Equivalent(SNI_Object * p_Other) const;
+
+		virtual void AssertThrow();
+		virtual void PartialAssertThrow();
+		virtual void EvaluateThrow();
+		virtual void PartialEvaluateThrow();
+
+		virtual void AssertAction();
+		virtual void PartialAssertAction();
+		virtual void EvaluateAction();
+		virtual void PartialEvaluateAction();
+
+		//---------------------------------------------------------------
+		// Implementation
+		//---------------------------------------------------------------
+
+		// Numbers
+		virtual SN::SN_Value DoAdd(SNI_Value * p_Other) const;
+		virtual SN::SN_Value DoSubtract(SNI_Value * p_Other) const;
+		virtual SN::SN_Value DoDivide(SNI_Value * p_Other) const;
+		virtual SN::SN_Value DoMultiply(SNI_Value * p_Other) const;
+		virtual SN::SN_Value DoNegative() const;
+		virtual SN::SN_Value DoSquare() const;
+		virtual SN::SN_Value DoSquareRoot() const;
+
+		// Logic
+		virtual SN::SN_Value DoAnd(SNI_Expression * p_Other) const;
+		virtual SN::SN_Value DoOr(SNI_Expression * p_Other) const;
+		virtual SN::SN_Value DoIf(SNI_Expression * p_PositiveCase, SNI_Expression * p_NegativeCase) const;
+		virtual SN::SN_Value DoImplies(SNI_Expression * p_PositiveCase) const;
+		virtual SN::SN_Value DoNot() const;
+		virtual SN::SN_Value DoRevAnd(SNI_Expression * p_PositiveCase) const;
+		virtual SN::SN_Value DoRevOr(SNI_Expression * p_PositiveCase) const;
+		virtual SN::SN_Value DoCollapse();
+		virtual SN::SN_Value DoUnaryRevAnd() const;
+		virtual SN::SN_Value DoUnaryRevOr() const;
+
+		// Comparison
+		virtual SN::SN_Value DoEquals(SNI_Value *p_Other) const;
+		virtual SN::SN_Value DoLessThan(SNI_Value * p_Other) const;
+		virtual SN::SN_Value DoGreaterThan(SNI_Value * p_Other) const;
+		virtual SN::SN_Value DoLessEquals(SNI_Value * p_Other) const;
+		virtual SN::SN_Value DoGreaterEquals(SNI_Value * p_Other) const;
+
+		// Strings
+		virtual SN::SN_Value DoConcat(SNI_Value * p_Other) const;
+		virtual SN::SN_Value DoSubtractLeft(SNI_Value * p_Other) const;
+		virtual SN::SN_Value DoSubtractRight(SNI_Value * p_Other) const;
+		virtual SN::SN_Value DoSubtractLeftChar() const;
+		virtual SN::SN_Value DoSubtractRightChar() const;
+		virtual	SN::SN_Value DoSelectLeftChar() const;
+		virtual	SN::SN_Value DoSelectRightChar() const;
+		virtual	SN::SN_Value DoLookaheadLeft() const;
+		virtual	SN::SN_Value DoLookaheadRight() const;
+		virtual	SN::SN_Value DoFile() const;
+
+		// Conversions
+		virtual	SN::SN_Value DoIntToString() const;
+		virtual	SN::SN_Value DoStringToInt() const;
+		virtual	SN::SN_Value DoDoubleToString() const;
+		virtual	SN::SN_Value DoStringToDouble() const;
+
+		// Sets
+		virtual SN::SN_Value DoBuildSet() const;
+		virtual SN::SN_Value DoHasMember(SNI_Value * p_Member) const;
+
+		// Value sets
+		virtual bool DoIsEmpty() const;
+		virtual SN::SN_ValueSet DoRemove(const SN::SN_Value &p_Other);
+
+	protected:
+		string Bracket(long p_Priority, const string &p_Expression) const;
+
+		virtual void PromoteMembers();
+
+	private:
+		void HandleAssertAction(SN::LogContext & p_Context, SN::SN_Expression p_Result, string p_Text);
+		void HandleEvaluateAction(SN::LogContext & p_Context, SN::SN_Expression p_Result, string p_Text);
+	};
+}
+
+#endif // !defined(SNI_EXPRESSION_H_INCLUDED)

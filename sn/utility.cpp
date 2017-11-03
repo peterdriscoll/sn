@@ -1,0 +1,206 @@
+#include "utility.h"
+
+#include "sn_parameter.h"
+
+#include "sni_world.h"
+#include "sni_worldset.h"
+#include "sni_taggedvalue.h"
+
+#include "sn_pch.h"
+
+namespace SNI
+{
+	void Split(const string& a_buffer,
+		const string& a_delimeter,
+		vector<string>& a_result)
+	{
+		string tmp = a_buffer;
+		string substring;
+
+		a_result.clear();
+
+		if (a_delimeter == "\n") {
+			// Replace all \r with \n
+			for (size_t i = 0; i < tmp.length(); i++)
+			{
+				if (tmp[i] == '\r')
+				{
+					tmp[i] = '\n';
+				}
+			}
+		}
+		bool isTrue = true;
+		while (isTrue)
+		{
+			size_t index = tmp.find(a_delimeter, 1);
+			if (index == string::npos)
+			{
+				a_result.push_back(tmp);
+				return;
+			}
+			a_result.push_back(tmp.substr(0, index));
+			tmp = tmp.substr(index + a_delimeter.length());
+		};
+	}
+
+	string ReplaceAll(const string &source, const string &target, const string &replace)
+	{
+		string::size_type pos;
+		string::size_type lastPos = 0;
+		string result;
+		while ((pos = source.find(target, lastPos)) != string::npos)
+		{
+			result += source.substr(lastPos, pos - lastPos) + replace;
+			lastPos = pos + target.length();
+		}
+		result += source.substr(lastPos);
+		return result;
+	}
+
+	string DisplayPmExpressionList(SN::SN_ExpressionList * p_ParameterList)
+	{
+		string result;
+		string separator;
+		for (unsigned long j = 0; j < p_ParameterList->size(); j++)
+		{
+			result += separator + (*p_ParameterList)[j].DisplayValueSN();
+			separator = ", ";
+		}
+		return result;
+	}
+
+	string DisplayPmValueList(const SN::SN_ValueList &p_ParameterList)
+	{
+		string result;
+		string separator;
+		for (unsigned long j = 0; j < p_ParameterList.size(); j++)
+		{
+			result += separator + p_ParameterList[j].DisplayValueSN();
+			separator = ", ";
+		}
+		return result;
+	}
+
+	string DisplayPmParameterList(SN::SN_ParameterList * p_ParameterList)
+	{
+		string result;
+		string separator;
+		for (unsigned long j = 0; j < p_ParameterList->size(); j++)
+		{
+			result += separator + (*p_ParameterList)[j].GetValue().DisplaySN();
+			if (!(*p_ParameterList)[j].GetCondition().IsNull())
+			{
+				result += ": " + (*p_ParameterList)[j].GetCondition().DisplaySN();
+			}
+			separator = ", ";
+		}
+		return result;
+	}
+
+	string DisplayPmTaggedValueList(const SNI_TaggedValueList &p_TaggedValueList)
+	{
+		string result;
+		string separator;
+		for (unsigned long j = 0; j < p_TaggedValueList.size(); j++)
+		{
+			result += separator + p_TaggedValueList[j].GetValue().DisplaySN();
+
+			SNI_World *world = p_TaggedValueList[j].GetWorld();
+			if (world)
+			{
+				result += "::" + p_TaggedValueList[j].GetWorld()->DisplaySN();
+			}
+			separator = ", ";
+		}
+		return result;
+	}
+
+	string DisplayPmTaggedExpressionList(const SNI_TaggedValueList &p_TaggedValueList, SNI_VariablePointerList & p_DisplayVariableList)
+	{
+		string result;
+		string separator;
+		for (unsigned long j = 0; j < p_TaggedValueList.size(); j++)
+		{
+			result += separator + p_TaggedValueList[j].GetValue().GetSNI_Expression()->DisplaySN(0, p_DisplayVariableList);
+
+			SNI_World *world = p_TaggedValueList[j].GetWorld();
+			if (world)
+			{
+				result += "::" + p_TaggedValueList[j].GetWorld()->DisplaySN();
+			}
+			separator = ", ";
+		}
+		return result;
+	}
+
+
+
+	string DisplayPmExpression(SNI_Expression *p_Expression)
+	{
+		if (p_Expression)
+		{
+			return SN::SN_Expression(p_Expression).DisplayValueSN();
+		}
+		return "Null";
+	}
+
+	string DisplayPmExpression(const SN::SN_Expression &p_Expression)
+	{
+		if (p_Expression.GetSNI_Expression())
+		{
+			return p_Expression.DisplayValueSN();
+		}
+		return "Null";
+	}
+
+	string DisplayWorlds(long p_NumWorlds, SNI_World ** p_World)
+	{
+		if (!p_World)
+		{
+			return "";
+		}
+		string result;
+		for (long j = 0; j < p_NumWorlds; j++)
+		{
+			if (result.length())
+			{
+				result += ", ";
+			}
+			if (p_World[j])
+			{
+				result += p_World[j]->DisplaySN();
+			}
+		}
+		return "worlds " + result;
+	}
+
+	string DisplayValues(long p_NumWorlds, SN::SN_Expression * p_ParamList, SNI_World ** p_World)
+	{
+		string result;
+		for (long j = 0; j < p_NumWorlds; j++)
+		{
+			if (result.length())
+			{
+				result += ", ";
+			}
+			result += p_ParamList[j].DisplayValueSN();
+			if (p_World)
+			{
+				if (p_World[j])
+				{
+					result += "::" + p_World[j]->DisplaySN();
+				}
+			}
+		}
+		return "values " + result;
+	}
+
+	string DisplayWorldSet(SNI_WorldSet *p_WorldSet)
+	{
+		if (p_WorldSet)
+		{
+			return p_WorldSet->DisplaySN();
+		}
+		return "";
+	}
+}

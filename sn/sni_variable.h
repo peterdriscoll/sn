@@ -1,0 +1,90 @@
+#if !defined(SNI_VARIABLE_H_INCLUDED)
+#define SNI_VARIABLE_H_INCLUDED
+
+#pragma once
+
+#include "sni_namable.h"
+#include "sni_vardef.h"
+
+#include "ref.h"
+
+#include <string>
+using namespace std;
+
+namespace SNI
+{
+	class SNI_Value;
+	class SNI_DelayedCall;
+
+	class SNI_Variable : virtual public SNI_VarDef, virtual public SNI_Namable
+	{
+		PGC_CLASS(SNI_Variable);
+	public:
+		SNI_Variable();
+		SNI_Variable(const SN::SN_Expression &p_other);
+		virtual ~SNI_Variable();
+
+		virtual string GetTypeName() const;
+		virtual string DisplayCpp() const;
+		virtual string DisplaySN(long priority, SNI_VariablePointerList &p_DisplayVariableList) const;
+		virtual long GetPriority() const;
+
+		virtual bool GetBool() const;
+		virtual string GetString() const;
+		virtual size_t Count() const;
+		virtual size_t Length() const;
+
+		virtual bool IsRequested() const;
+		virtual bool IsNullValue() const;
+		virtual bool IsKnownValue() const;
+		virtual bool IsVariable() const;
+		virtual bool IsReferableValue() const;
+		virtual void Request();
+		virtual SNI_Expression * GetValue() const;
+		virtual void Simplify();
+		virtual SN::SN_Expression SimplifyValue();
+		virtual SN::SN_Expression GetVariableValue(bool p_IfComplete);
+		virtual SN::SN_Error AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World ** p_WorldList, SNI_WorldSet *p_WorldSet);
+
+		virtual SNI_Expression * Clone(SNI_ReplacementList * p_ReplacementList, bool &p_Changed);
+		virtual bool Equivalent(SNI_Object * p_Other) const;
+		virtual SNI_WorldSet * GetWorldSet();
+
+		virtual size_t Cardinality() const;
+		virtual SN::SN_Error ForEach(std::function<SN::SN_Error(const SN::SN_Expression &p_Param, SNI_World*p_World)> p_Action);
+		virtual void ForEachCall(SNI_Cartesian * p_Cart, long p_Depth);
+		virtual SN::SN_Error ForEachCartUnify(long p_Depth, SNI_Cart * p_Cart);
+		virtual void ForEachUnify(SNI_Cartesian * p_Cart, long p_Depth);
+		virtual void ForEachSplit(SNI_Splitter * p_Splitter);
+
+		virtual SN::SN_Expression Evaluate(long p_MetaLevel = 0) const;
+		virtual SN::SN_Expression PartialEvaluate(long p_MetaLevel = 0) const;
+		virtual SN::SN_Error SelfAssert();
+		virtual SN::SN_Error AssertValue(const SN::SN_Expression &p_Value);
+		virtual SN::SN_Error PartialAssertValue(const SN::SN_Expression &p_Expression, bool p_Define = false);
+
+		virtual SN::SN_Expression Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const;
+		virtual SN::SN_Expression PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const;
+		virtual SN::SN_Error Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
+		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
+
+		void AttachDelayedCall(SNI_DelayedCall *p_Call);
+	protected:
+		virtual void PromoteMembers();
+
+	private:
+		bool FindVariable(SNI_VariablePointerList &p_DisplayVariableList) const;
+
+		static SN::SN_Expression AddLambdas(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
+
+
+	private:
+		SNI_Expression * m_Value;
+		bool m_Requested;
+	};
+
+	typedef vector<SNI_Variable> SNI_VariableList;
+	typedef vector<const SNI_Variable *> SNI_VariablePointerList;
+}
+
+#endif // !defined(SNI_VARIABLE_H_INCLUDED)

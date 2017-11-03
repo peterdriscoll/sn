@@ -1,0 +1,33 @@
+#if !defined(SNI_REPLACEMENT_H_INCLUDED)
+#define SNI_REPLACEMENT_H_INCLUDED
+
+#pragma once
+
+#include "sn_variable.h"
+
+#include <vector>
+using namespace std;
+
+namespace SNI
+{
+	class SNI_Replacement
+	{
+	public:
+		SNI_Replacement();
+		SNI_Replacement(const SN::SN_Variable &p_From, const SN::SN_Variable &p_To);
+		virtual ~SNI_Replacement();
+
+		SN::SN_Variable ReplaceVariable(const SN::SN_Variable &p_Variable);
+
+	protected:
+		virtual void PromoteMembers();
+
+	private:
+		SN::SN_Variable m_From;
+		SN::SN_Variable m_To;
+	};
+
+	typedef vector<SNI_Replacement> SNI_ReplacementList;
+}
+
+#endif // !defined(SNI_REPLACEMENT_H_INCLUDED)

@@ -1,0 +1,106 @@
+#if !defined(SNI_BASE_H_INCLUDED)
+#define SNI_BASE_H_INCLUDED
+
+#pragma once
+
+#include "exp_ctrl_sn.h"
+
+#include <string>
+#include <functional>
+using namespace std;
+
+#include "../sn/sni_object.h"
+
+#define CARDINALITY_MAX ULONG_MAX
+#define CARDINALITY_SQUARE_ROOT_MAX USHRT_MAX
+
+namespace SN
+{
+	class SN_ValueSet;
+	class SN_Cartesian;
+
+	class SN_Error;
+
+	class LogContext;
+
+	class SN_Parameter;
+	typedef vector<SN_Parameter> SN_ParameterList;
+
+	class SN_Expression;
+	typedef vector<SN_Expression> SN_ExpressionList;
+
+	class SN_Value;
+	typedef vector<SN_Value> SN_ValueList;
+}
+
+namespace SNI
+{
+	class SNI_FunctionDef;
+
+	class SNI_Variable;
+	typedef vector<const SNI_Variable *> SNI_VariablePointerList;
+
+	class SNI_Base : public SNI_Object
+	{
+	public:
+		SNI_Base() {};
+		SNI_Base(const SNI_Base &p_Expression)
+			: SNI_Object(p_Expression)
+		{};
+
+		virtual ~SNI_Base() {};
+
+		//---------------------------------------------------------------
+		// Logging
+		//---------------------------------------------------------------
+		virtual string GetTypeName() const = 0;
+		virtual string DisplayCpp() const = 0;
+		virtual string DisplaySN(long priority, SNI_VariablePointerList &p_DisplayVariableList) const = 0;
+		virtual string DisplayValueSN(long, SNI_VariablePointerList & p_DisplayVariableList) const = 0;
+		virtual long GetPriority() const = 0;
+		virtual string GetOperator() const = 0;
+
+		//---------------------------------------------------------------
+		// Cardinality
+		//---------------------------------------------------------------
+		virtual size_t Cardinality() const = 0;
+		virtual SN::SN_Error ForEach(std::function<SN::SN_Error(const SN::SN_Expression &p_Param, SNI_World *p_World)> p_Action) = 0;
+		virtual SN::SN_Cartesian CartProd(long p_Index, SNI_FunctionDef *p_FunctionDef = NULL) = 0;
+
+		//---------------------------------------------------------------
+		// Status
+		//---------------------------------------------------------------
+		virtual bool IsNull() const = 0;
+		virtual bool IsNullValue() const = 0;
+		virtual bool IsKnownValue() const = 0;
+		virtual bool IsVariable() const = 0;
+		virtual bool IsError() const = 0;
+
+		//---------------------------------------------------------------
+		// Base
+		//---------------------------------------------------------------
+		virtual SN::SN_Expression Evaluate(long p_MetaLevel = 0) const = 0;
+		virtual SN::SN_Expression PartialEvaluate(long p_MetaLevel = 0) const = 0;
+		virtual SN::SN_Expression Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const = 0;
+		virtual SN::SN_Expression PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const = 0;
+		virtual SN::SN_Error Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Expression) = 0;
+		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Expression) = 0;
+		virtual SN::SN_Error Assert() = 0;
+		virtual SN::SN_Error AssertValue(const SN::SN_Expression &p_Value) = 0;
+		virtual SN::SN_Error PartialAssert() = 0;
+		virtual SN::SN_Error PartialAssertValue(const SN::SN_Expression &p_Expression, bool p_Define = false) = 0;
+		virtual bool Equivalent(SNI_Object * p_Other) const = 0;
+
+		virtual void AssertThrow() = 0;
+		virtual void PartialAssertThrow() = 0;
+		virtual void EvaluateThrow() = 0;
+		virtual void PartialEvaluateThrow() = 0;
+
+		virtual void AssertAction() = 0;
+		virtual void PartialAssertAction() = 0;
+		virtual void EvaluateAction() = 0;
+		virtual void PartialEvaluateAction() = 0;
+	};
+}
+
+#endif // !defined(SNI_BASE_H_INCLUDED)
