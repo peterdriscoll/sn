@@ -63,6 +63,11 @@ namespace SNI
 		m_Name = p_Name;
 	}
 
+	bool SNI_FunctionDef::AllowDelay() const
+	{
+		return true;
+	}
+
 	bool SNI_FunctionDef::Equivalent(SNI_Object * p_Other) const
 	{
 		if (dynamic_cast<SNI_FunctionDef *>(p_Other))
@@ -101,7 +106,7 @@ namespace SNI
 		SN::SN_Expression *paramList = LoadParameters(p_ParameterList, p_Result);
 		long calcPos = -1;
 		long totalCalc = depth;
-		for (size_t j = 0; j < depth; j++)
+		for (long j = 0; j < depth; j++)
 		{
 			if (paramList[j].IsKnownValue())
 			{
@@ -138,7 +143,7 @@ namespace SNI
 		bool *output = new bool[depth];
 		bool allFound = false;
 		long totalCalc = depth;
-		for (size_t j = 0; j < depth; j++)
+		for (long j = 0; j < depth; j++)
 		{
 			if (paramList[j].IsKnownValue())
 			{
@@ -156,7 +161,7 @@ namespace SNI
 		long calcPos = -1;
 		size_t card = 0;
 		size_t maxCard = SN::SN_Manager::GetTopManager().MaxCardinalityCall();
-		for (size_t j = 0; j < depth; j++)
+		for (long j = 0; j < depth; j++)
 		{
 			if (!paramList[j].IsKnownValue() && !paramList[j].IsReferableValue())
 			{
@@ -211,13 +216,21 @@ namespace SNI
 			card = CardinalityOfUnify(depth, inputList, calcPos, totalCalc);
 			if (maxCard < card)
 			{
-				ReplaceParameters(inputList, p_ParameterList, p_Result);
-				delete[] paramList;
-				SNI_DelayedProcessor::GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), p_ParameterList, p_Result);
+				if (AllowDelay())
+				{
+					ReplaceParameters(inputList, p_ParameterList, p_Result);
+					delete[] paramList;
+					SNI_DelayedProcessor::GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), p_ParameterList, p_Result);
+				}
+				else
+				{
+					e = SN::SN_Error(true, true);
+				}
 			}
 			else
 			{
 				e = ForEachUnify(card, depth, inputList, paramList, output, calcPos, totalCalc);
+				ReplaceParameters(inputList, p_ParameterList, p_Result);
 			}
 		}
 		delete[] inputList;

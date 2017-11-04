@@ -176,15 +176,19 @@ namespace SNI
 	{
 		SN::LogContext context("SNI_And::Unify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
 
-		SNI_FunctionDef *unaryAnd = skynet::UnaryAnd.GetSNI_FunctionDef();
-		SN::SN_Cartesian params = p_Result.CartProd(PU2_Result, unaryAnd) * (*p_ParameterList)[1].GetValue().CartProd(PU2_First, unaryAnd) * (*p_ParameterList)[0].GetValue().CartProd(PU2_Second, this);
-		SN::SN_Error e1 = params.ForEachUnify(unaryAnd);
+		SN::SN_ParameterList firstParamList(1);
+		firstParamList[0] = (*p_ParameterList)[1];
+		SN::SN_Error e1 = skynet::UnaryAnd.Unify(&firstParamList, p_Result);
 		if (e1.IsError())
 		{
 			e1.AddNote(context, this, "First parameter failed");
 			return e1;
 		}
-		SN::SN_Error e2 = params.ForEachUnify(this);
+
+		SN::SN_ParameterList * secondParamList = new SN::SN_ParameterList(2);
+		(*secondParamList)[0] = (*p_ParameterList)[0];
+		(*secondParamList)[1] = firstParamList[0];
+		SN::SN_Error e2 = SNI_Binary::Unify(secondParamList, p_Result);
 		if (e2.IsError())
 		{
 			e2.AddNote(context, this, "Second parameter failed");

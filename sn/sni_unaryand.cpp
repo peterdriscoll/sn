@@ -37,6 +37,11 @@ namespace SNI
 		return "==";
 	}
 
+	bool SNI_UnaryAnd::AllowDelay() const
+	{
+		return false;
+	}
+
 	SN::SN_Value SNI_UnaryAnd::PrimaryFunctionValue(const SN::SN_Value &p_Param) const
 	{
 		return p_Param.GetSNI_Value()->DoUnaryAnd();

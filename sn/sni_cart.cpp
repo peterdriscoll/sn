@@ -158,6 +158,10 @@ namespace SNI
 
 	SN::SN_Error SNI_Cart::DelayUnify()
 	{
+		if (!m_FunctionDef->AllowDelay())
+		{
+			return SN::SN_Error(true, true);
+		}
 		bool exists = false;
 		SNI_WorldSet *worldSet = m_WorldSet;
 		if (0 <= m_CalcPos)

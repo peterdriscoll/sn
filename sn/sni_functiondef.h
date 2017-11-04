@@ -48,6 +48,7 @@ namespace SNI
 		virtual long GetPriority() const;
 		virtual string GetOperator() const;
 
+		virtual bool AllowDelay() const;
 		virtual long GetNumParameters() const;
 
 		string GetName();
