@@ -183,7 +183,10 @@ namespace SNI
 		SN::SN_Error e2;
 		if (splitter.PositiveNotNull())
 		{
-			e2 = (splitter.Positive().CartProd(PU2_Result) * p_Result.CartProd(PU2_First) * (*p_ParameterList)[1].GetValue().CartProd(PU2_Second)).ForEachUnify(skynet::Equals.GetSNI_FunctionDef());
+			SN::SN_ParameterList paramList(2);
+			paramList[0] = p_Result;
+			paramList[1] = (*p_ParameterList)[1];
+			e2 = skynet::Equals.Unify(&paramList, splitter.Positive());
 			if (e2.IsError())
 			{
 				e2.AddNote(context, this, "'if' positive case unification failed");
@@ -193,7 +196,10 @@ namespace SNI
 		}
 		if (splitter.NegativeNotNull())
 		{
-			e2 = (splitter.Negative().CartProd(PU2_Result) * p_Result.CartProd(PU2_First) * (*p_ParameterList)[0].GetValue().CartProd(PU2_Second)).ForEachUnify(skynet::Equals.GetSNI_FunctionDef());
+			SN::SN_ParameterList paramList(2);
+			paramList[0] = p_Result;
+			paramList[1] = (*p_ParameterList)[0];
+			e2 = skynet::Equals.Unify(&paramList, splitter.Negative());
 			if (e2.IsError())
 			{
 				e2.AddNote(context, this, "'if' negative case unification failed");
