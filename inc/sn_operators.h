@@ -21,8 +21,8 @@ namespace SN
 		SN_EXPORT SN::SN_Expression Implies(const SN::SN_Expression &p_Condition, const SN::SN_Expression &p_PositiveCase);
 		SN_EXPORT SN::SN_Expression RevAnd(const SN::SN_Expression &p_Condition, const SN::SN_Expression &p_PositiveCase);
 		SN_EXPORT SN::SN_Expression RevOr(const SN::SN_Expression &p_PositiveCase, const SN::SN_Expression &p_Condition);
-		SN_EXPORT SN::SN_Expression UnaryRevAnd(const SN::SN_Expression &p_Condition);
-		SN_EXPORT SN::SN_Expression UnaryRevOr(const SN::SN_Expression &p_Result);
+		SN_EXPORT SN::SN_Expression UnaryAnd(const SN::SN_Expression &p_Condition);
+		SN_EXPORT SN::SN_Expression UnaryOr(const SN::SN_Expression &p_Result);
 		SN_EXPORT SN::SN_Expression Collapse(const SN::SN_Expression &p_Value);
 
 		// Comparison

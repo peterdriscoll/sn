@@ -104,8 +104,8 @@ namespace skynet
 	extern SN_EXPORT SN::SN_FunctionDef Implies;
 	extern SN_EXPORT SN::SN_FunctionDef RevAnd;
 	extern SN_EXPORT SN::SN_FunctionDef RevOr;
-	extern SN_EXPORT SN::SN_FunctionDef UnaryRevAnd;
-	extern SN_EXPORT SN::SN_FunctionDef UnaryRevOr;
+	extern SN_EXPORT SN::SN_FunctionDef UnaryAnd;
+	extern SN_EXPORT SN::SN_FunctionDef UnaryOr;
 	extern SN_EXPORT SN::SN_FunctionDef Collapse;
 	extern SN_EXPORT SN::SN_FunctionDef Same;
 

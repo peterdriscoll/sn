@@ -12,7 +12,7 @@
 #include "sni_bool.h"
 #include "sni_null.h"
 #include "sni_helpers.h"
-#include "sni_unaryimplies.h"
+#include "sni_unaryand.h"
 #include "utility.h"
 
 #include "sn_pch.h"
@@ -176,9 +176,9 @@ namespace SNI
 	{
 		SN::LogContext context("SNI_And::Unify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
 
-		SNI_FunctionDef *unaryRevAnd = skynet::UnaryRevAnd.GetSNI_FunctionDef();
-		SN::SN_Cartesian params = p_Result.CartProd(PU2_Result, unaryRevAnd) * (*p_ParameterList)[1].GetValue().CartProd(PU2_First, unaryRevAnd) * (*p_ParameterList)[0].GetValue().CartProd(PU2_Second, this);
-		SN::SN_Error e1 = params.ForEachUnify(unaryRevAnd);
+		SNI_FunctionDef *unaryAnd = skynet::UnaryAnd.GetSNI_FunctionDef();
+		SN::SN_Cartesian params = p_Result.CartProd(PU2_Result, unaryAnd) * (*p_ParameterList)[1].GetValue().CartProd(PU2_First, unaryAnd) * (*p_ParameterList)[0].GetValue().CartProd(PU2_Second, this);
+		SN::SN_Error e1 = params.ForEachUnify(unaryAnd);
 		if (e1.IsError())
 		{
 			e1.AddNote(context, this, "First parameter failed");

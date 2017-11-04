@@ -152,8 +152,8 @@ namespace SNI
 		virtual SN::SN_Value DoRevAnd(SNI_Expression * p_PositiveCase) const;
 		virtual SN::SN_Value DoRevOr(SNI_Expression * p_PositiveCase) const;
 		virtual SN::SN_Value DoCollapse();
-		virtual SN::SN_Value DoUnaryRevAnd() const;
-		virtual SN::SN_Value DoUnaryRevOr() const;
+		virtual SN::SN_Value DoUnaryAnd() const;
+		virtual SN::SN_Value DoUnaryOr() const;
 
 		// Comparison
 		virtual SN::SN_Value DoEquals(SNI_Value *p_Other) const;

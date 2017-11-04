@@ -127,8 +127,8 @@ namespace SN
 		SN_Expression Implies(const SN_Expression &p_PositiveCase) const;
 		SN_Expression RevAnd(const SN_Expression &p_PositiveCase) const;
 		SN_Expression RevOr(const SN_Expression &p_Condition) const;
-		SN_Expression UnaryRevAnd() const;
-		SN_Expression UnaryRevOr() const;
+		SN_Expression UnaryAnd() const;
+		SN_Expression UnaryOr() const;
 		SN_Expression Collapse() const;
 
 		// Comparison

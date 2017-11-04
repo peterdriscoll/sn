@@ -69,8 +69,8 @@
 #include "sni_implies.h"
 #include "sni_revand.h"
 #include "sni_revor.h"
-#include "sni_unaryrevand.h"
-#include "sni_unaryrevor.h"
+#include "sni_unaryand.h"
+#include "sni_unaryor.h"
 #include "sni_collapse.h"
 #include "sni_same.h"
 

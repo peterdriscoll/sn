@@ -12,7 +12,7 @@
 #include "sni_bool.h"
 #include "sni_null.h"
 #include "sni_helpers.h"
-#include "sni_unaryrevor.h"
+#include "sni_unaryor.h"
 #include "utility.h"
 
 #include "sn_pch.h"
@@ -133,9 +133,9 @@ namespace SNI
 		SN::SN_Error e2;
 		if (m_Partial)
 		{
-			SNI_FunctionDef *unaryRevOr = skynet::UnaryRevOr.GetSNI_FunctionDef();
-			SN::SN_Cartesian params = p_Result.CartProd(PU2_Result, unaryRevOr) * (*p_ParameterList)[1].GetValue().CartProd(PU2_First, unaryRevOr) * (*p_ParameterList)[0].GetValue().CartProd(PU2_Second, this);
-			SN::SN_Error e1 = params.ForEachUnify(unaryRevOr);
+			SNI_FunctionDef *unaryOr = skynet::UnaryOr.GetSNI_FunctionDef();
+			SN::SN_Cartesian params = p_Result.CartProd(PU2_Result, unaryOr) * (*p_ParameterList)[1].GetValue().CartProd(PU2_First, unaryOr) * (*p_ParameterList)[0].GetValue().CartProd(PU2_Second, this);
+			SN::SN_Error e1 = params.ForEachUnify(unaryOr);
 			if (e1.IsError())
 			{
 				e1.AddNote(context, this, "Partial 'or' first parameter failed");

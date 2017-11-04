@@ -500,12 +500,12 @@ namespace SNI
 		return SN::SN_Error(GetTypeName() + " collapse function not implemented.");
 	}
 
-	SN::SN_Value SNI_Expression::DoUnaryRevAnd() const
+	SN::SN_Value SNI_Expression::DoUnaryAnd() const
 	{
 		return SN::SN_Error(GetTypeName() + " 'reverse implies' function not implemented.");
 	}
 
-	SN::SN_Value SNI_Expression::DoUnaryRevOr() const
+	SN::SN_Value SNI_Expression::DoUnaryOr() const
 	{
 		return SN::SN_Error(GetTypeName() + " 'reverse implies' function not implemented.");
 	}

@@ -24,8 +24,8 @@
 #include "sni_implies.h"
 #include "sni_revand.h"
 #include "sni_revor.h"
-#include "sni_unaryrevand.h"
-#include "sni_unaryrevor.h"
+#include "sni_unaryand.h"
+#include "sni_unaryor.h"
 #include "sni_collapse.h"
 #include "sni_same.h"
 
@@ -78,8 +78,8 @@ namespace skynet
 	SN::SN_FunctionDef Implies(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Implies()));
 	SN::SN_FunctionDef RevAnd(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_RevAnd()));
 	SN::SN_FunctionDef RevOr(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_RevOr()));
-	SN::SN_FunctionDef UnaryRevAnd(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_UnaryRevAnd()));
-	SN::SN_FunctionDef UnaryRevOr(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_UnaryRevOr()));
+	SN::SN_FunctionDef UnaryAnd(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_UnaryAnd()));
+	SN::SN_FunctionDef UnaryOr(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_UnaryOr()));
 	SN::SN_FunctionDef Collapse(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Collapse()));
 	SN::SN_FunctionDef Same(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Same()));
 

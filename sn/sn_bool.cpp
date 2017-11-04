@@ -95,14 +95,14 @@ namespace SN
 		return SN_Operators::RevOr(*this, p_Condition);
 	}
 
-	SN_Expression SN_Bool::UnaryRevAnd() const
+	SN_Expression SN_Bool::UnaryAnd() const
 	{
-		return SN_Operators::UnaryRevAnd(*this);
+		return SN_Operators::UnaryAnd(*this);
 	}
 
-	SN_Expression SN_Bool::UnaryRevOr() const
+	SN_Expression SN_Bool::UnaryOr() const
 	{
-		return SN_Operators::UnaryRevOr(*this);
+		return SN_Operators::UnaryOr(*this);
 	}
 
 	SN_Expression SN_Bool::Collapse() const

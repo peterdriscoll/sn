@@ -345,12 +345,6 @@
     <ClInclude Include="sni_revor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sni_unaryrevand.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_unaryrevor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="sni_implies.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -364,6 +358,12 @@
       <Filter>Include Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sni_cart.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_unaryor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_unaryand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -665,12 +665,6 @@
     <ClCompile Include="sni_file.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sni_unaryrevor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_unaryrevand.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sni_revand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -687,6 +681,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sni_cart.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_unaryand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_unaryor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

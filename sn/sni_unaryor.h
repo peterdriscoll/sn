@@ -1,5 +1,5 @@
-#if !defined(SNI_UNARYREVAND_H_INCLUDED)
-#define SNI_UNARYREVAND_H_INCLUDED
+#if !defined(SNI_UNARYOR_H_INCLUDED)
+#define SNI_UNARYOR_H_INCLUDED
 
 #pragma once
 
@@ -7,18 +7,17 @@
 
 namespace SNI
 {
-	class SNI_UnaryRevAnd : public SNI_Unary
+	class SNI_UnaryOr : public SNI_Unary
 	{
-		PGC_CLASS(SNI_UnaryRevAnd)
+		PGC_CLASS(SNI_UnaryOr)
 	public:
-		SNI_UnaryRevAnd();
-		virtual ~SNI_UnaryRevAnd();
+		SNI_UnaryOr();
+		virtual ~SNI_UnaryOr();
 
 		virtual string GetTypeName() const;
 		virtual string DisplayCpp() const;
 		virtual string DisplaySN(long priority, SNI_VariablePointerList &p_DisplayVariableList) const;
 		virtual long GetPriority() const;
-		virtual string GetOperator() const;
 
 		virtual SN::SN_Value PrimaryFunctionValue(const SN::SN_Value &p_Param) const;
 		virtual SN::SN_Expression PrimaryFunctionExpression(const SN::SN_Expression &p_Param) const;
@@ -30,4 +29,4 @@ namespace SNI
 	};
 }
 
-#endif // !defined(SNI_UNARYREVAND_H_INCLUDED)
+#endif // !defined(SNI_UNARYOR_H_INCLUDED)

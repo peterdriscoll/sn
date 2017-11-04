@@ -42,7 +42,7 @@ namespace SNI
 		virtual SN::SN_Expression PartialEvaluate(long p_MetaLevel) const;
 
 		virtual SN::SN_Value DoOr(SNI_Expression * p_Other) const;
-		virtual SN::SN_Value DoUnaryRevOr() const;
+		virtual SN::SN_Value DoUnaryOr() const;
 		virtual SN::SN_Value DoBuildSet() const;
 
 	protected:

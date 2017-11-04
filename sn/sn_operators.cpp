@@ -51,14 +51,14 @@ namespace SN
 			return SN::SN_Function(SN::SN_Function(skynet::RevOr, p_PositiveCase), p_Condition);
 		}
 
-		SN::SN_Expression UnaryRevAnd(const SN::SN_Expression & p_Condition)
+		SN::SN_Expression UnaryAnd(const SN::SN_Expression & p_Condition)
 		{
-			return SN::SN_Function(skynet::UnaryRevAnd, p_Condition);
+			return SN::SN_Function(skynet::UnaryAnd, p_Condition);
 		}
 
-		SN::SN_Expression UnaryRevOr(const SN::SN_Expression & p_Result)
+		SN::SN_Expression UnaryOr(const SN::SN_Expression & p_Result)
 		{
-			return SN::SN_Function(skynet::UnaryRevOr, p_Result);
+			return SN::SN_Function(skynet::UnaryOr, p_Result);
 		}
 
 		SN::SN_Expression Collapse(const SN::SN_Expression &p_Value)

@@ -173,7 +173,7 @@ namespace SNI
 		return skynet::True;
 	}
 
-	SN::SN_Value SNI_Bool::DoUnaryRevAnd() const
+	SN::SN_Value SNI_Bool::DoUnaryAnd() const
 	{
 		if (!GetBool())
 		{
@@ -182,7 +182,7 @@ namespace SNI
 		return SN::SN_ValueSet(skynet::True, skynet::False);
 	}
 
-	SN::SN_Value SNI_Bool::DoUnaryRevOr() const
+	SN::SN_Value SNI_Bool::DoUnaryOr() const
 	{
 		if (GetBool())
 		{

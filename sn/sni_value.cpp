@@ -164,7 +164,7 @@ namespace SNI
 		return SNI_ValueSet::GeneralDoOr(this, p_Other);
 	}
 
-	SN::SN_Value SNI_Value::DoUnaryRevOr() const
+	SN::SN_Value SNI_Value::DoUnaryOr() const
 	{
 		return skynet::Null; // Let GeneralDoOr construct the valueset.
 	}
