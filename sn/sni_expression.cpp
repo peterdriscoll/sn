@@ -203,9 +203,9 @@ namespace SNI
 		return skynet::Null;
 	}
 
-	size_t SNI_Expression::Cardinality() const
+	size_t SNI_Expression::Cardinality(size_t p_MaxCardinality) const
 	{
-		return CARDINALITY_MAX;
+		return p_MaxCardinality;
 	}
 
 	SN::SN_Error SNI_Expression::ForEach(std::function<SN::SN_Error(const SN::SN_Expression &p_Param, SNI_World *p_World)> p_Action)

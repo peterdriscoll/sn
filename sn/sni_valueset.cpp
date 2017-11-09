@@ -446,13 +446,13 @@ namespace SNI
 		}
 	}
 
-	size_t SNI_ValueSet::Cardinality() const
+	size_t SNI_ValueSet::Cardinality(size_t p_MaxCardinality) const
 	{
 		if (m_ValueList.size())
 		{
 			return m_ValueList.size();
 		}
-		return CARDINALITY_MAX;
+		return p_MaxCardinality;
 	}
 
 	SN::SN_Expression SNI_ValueSet::Evaluate(long /* p_MetaLevel /* = 0 */) const

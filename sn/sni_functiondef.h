@@ -78,7 +78,7 @@ namespace SNI
 
 		virtual bool EvaluateNow(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const;
 
-		static size_t MultiplyCardinality(size_t p_Left, size_t p_Right, size_t p_MaxCardinality = CARDINALITY_MAX);
+		static size_t MultiplyCardinality(size_t p_Left, size_t p_Right);
 	private:
 		string m_Name;
 	};

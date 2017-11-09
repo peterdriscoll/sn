@@ -45,9 +45,9 @@ namespace SNI
 		return dynamic_cast<SNI_Null *>(p_Other) != NULL;
 	}
 
-	size_t SNI_Null::Cardinality()
+	size_t SNI_Null::Cardinality(size_t p_MaxCardinality)
 	{
-		return CARDINALITY_MAX;
+		return p_MaxCardinality;
 	}
 
 	bool SNI_Null::IsNull() const

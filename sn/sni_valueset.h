@@ -72,7 +72,7 @@ namespace SNI
 		virtual void ForEachSplit(SNI_Splitter * p_Splitter);
 
 		// Cardinality
-		virtual size_t Cardinality() const;
+		virtual size_t Cardinality(size_t p_MaxCardinality = CARDINALITY_MAX) const;
 
 		// Base    
 		virtual bool Equivalent(SNI_Object * p_Other) const;

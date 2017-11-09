@@ -1466,7 +1466,6 @@ namespace test_sn
 
 		TEST_METHOD(TestValueSetOfStringFunctions)
 		{
-			return; // ???
 			Initialize();
 			Manager manager(AssertErrorHandler);
 			{

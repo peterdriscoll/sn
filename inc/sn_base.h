@@ -115,13 +115,13 @@ namespace SN
 			return SN_Operators::HasMember(p_Set, m_Expression);
 		}
 
-		size_t Cardinality() const
+		size_t Cardinality(size_t p_MaxCardinality = CARDINALITY_MAX) const
 		{
 			if (!GetSNI_Base())
 			{
-				return CARDINALITY_MAX;
+				return p_MaxCardinality;
 			}
-			return GetSNI_Base()->Cardinality();
+			return GetSNI_Base()->Cardinality(p_MaxCardinality);
 		}
 
 		Exp Evaluate(long p_MetaLevel = 0) const

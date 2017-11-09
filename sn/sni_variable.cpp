@@ -280,17 +280,17 @@ namespace SNI
 		return NULL;
 	}
 
-	size_t SNI_Variable::Cardinality() const
+	size_t SNI_Variable::Cardinality(size_t p_MaxCardinality) const
 	{
 		if (!m_Value)
 		{
-			return CARDINALITY_MAX;
+			return p_MaxCardinality;
 		}
 		if (SN::Is<SNI_DelayedCall *>(m_Value))
 		{
-			return CARDINALITY_MAX;
+			return p_MaxCardinality;
 		}
-		return m_Value->Cardinality();
+		return m_Value->Cardinality(p_MaxCardinality);
 	}
 
 	SN::SN_Error SNI_Variable::ForEach(std::function<SN::SN_Error(const SN::SN_Expression &p_Param, SNI_World*p_World)> p_Action)

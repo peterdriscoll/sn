@@ -321,13 +321,13 @@ namespace SNI
 		return false;
 	}
 
-	/*static*/size_t SNI_FunctionDef::MultiplyCardinality(size_t p_Left, size_t p_Right, size_t p_MaxCardinality)
+	/*static*/size_t SNI_FunctionDef::MultiplyCardinality(size_t p_Left, size_t p_Right)
 	{
-		size_t left = (p_MaxCardinality < p_Left) ? p_MaxCardinality : p_Left;
-		size_t right = (p_MaxCardinality < p_Right) ? p_MaxCardinality : p_Right;
-		if (left < CARDINALITY_SQUARE_ROOT_MAX && right < CARDINALITY_SQUARE_ROOT_MAX)
+		//size_t left = (p_MaxCardinality < p_Left) ? p_MaxCardinality : p_Left;
+		//size_t right = (p_MaxCardinality < p_Right) ? p_MaxCardinality : p_Right;
+		if (p_Left < CARDINALITY_SQUARE_ROOT_MAX && p_Right < CARDINALITY_SQUARE_ROOT_MAX)
 		{
-			return left * right;
+			return p_Left * p_Right;
 		}
 		return CARDINALITY_MAX;
 	}

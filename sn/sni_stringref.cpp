@@ -69,13 +69,13 @@ namespace SNI
 		return "\"" + quotedString + "\"";
 	}
 
-	size_t SNI_StringRef::Cardinality() const
+	size_t SNI_StringRef::Cardinality(size_t p_MaxCardinality) const
 	{
 		if (IsNull())
 		{
 			return 1; // Slightly dubious. Needed for TestStringRefDefinition.
 		}
-		return SNI_FunctionDef::MultiplyCardinality(GetStart().Cardinality(), GetEnd().Cardinality());
+		return SNI_FunctionDef::MultiplyCardinality(GetStart().Cardinality(p_MaxCardinality), GetEnd().Cardinality(p_MaxCardinality));
 	}
 
 	void SNI_StringRef::ForEachCall(SNI_Cartesian *p_Cart, long p_Depth)

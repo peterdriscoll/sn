@@ -28,7 +28,7 @@ namespace SNI
 		virtual bool IsReferableValue() const;
 		SN::SN_Expression GetVariableValue(bool p_IfComplete = true);
 
-		virtual size_t Cardinality() const;
+		virtual size_t Cardinality(size_t p_MaxCardinality = CARDINALITY_MAX) const;
 
 		virtual SN::SN_Error ForEach(function<SN::SN_Error(const SN::SN_Expression &p_Param, SNI_World *p_World)> p_Action);
 		virtual void ForEachCall(SNI_Cartesian * p_Cart, long p_Depth);

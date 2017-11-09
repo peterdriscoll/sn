@@ -98,7 +98,7 @@ namespace SNI
 		return false;
 	}
 
-	size_t SNI_Lambda::Cardinality() const
+	size_t SNI_Lambda::Cardinality(size_t) const
 	{
 		return 1;
 	}

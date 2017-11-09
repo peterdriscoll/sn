@@ -70,7 +70,7 @@ namespace SNI
 		return this;
 	}
 
-	size_t SNI_Value::Cardinality() const
+	size_t SNI_Value::Cardinality(size_t p_MaxCardinality) const
 	{
 		return 1;
 	}

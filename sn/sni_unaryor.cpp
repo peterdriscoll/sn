@@ -71,7 +71,7 @@ namespace SNI
 			{
 				return 1;
 			}
-			return MultiplyCardinality(p_ParamList[PU1_First].Cardinality(), p_ParamList[PU1_Result].Cardinality(), 2);
+			return MultiplyCardinality(p_ParamList[PU1_First].Cardinality(2), p_ParamList[PU1_Result].Cardinality(2));
 		}
 		return CARDINALITY_MAX;
 	}
