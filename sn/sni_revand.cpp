@@ -84,30 +84,6 @@ namespace SNI
 		return p_Right && p_Result;
 	}
 
-	/// @brief Extract the left and right values from the parameter list and call UnifyInternal.
-	///
-	/// @param p_ParameterList List of two parameters to be "anded".
-	/// @param p_Result The result of anding the two values.
-	/// @retval True if successful, false for failure.
-	SN::SN_Error SNI_RevAnd::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
-	{
-		SN::LogContext context("SNI_RevAnd::Unify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
-
-		// Left param. Result, right param.
-		// * Left is true. The result is true. Right is undefined.
-		// * Result is the most likely to have a value.
-		SN::SN_Error e = ((*p_ParameterList)[1].GetValue().CartProd(PU2_First) * p_Result.CartProd(PU2_Result) * (*p_ParameterList)[0].GetValue().CartProd(PU2_Second)).ForEachUnify(this);
-		if (e.GetDelay())
-		{
-			SNI_DelayedProcessor::GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), p_ParameterList, p_Result);
-		}
-		if (e.IsError())
-		{
-			e.AddNote(context, this, "Cartesian product failed");
-		}
-		return e;
-	}
-
 	size_t SNI_RevAnd::CardinalityOfCall(long p_Depth, SN::SN_Expression * p_ParamList) const
 	{
 		if (p_Depth >= 1)
