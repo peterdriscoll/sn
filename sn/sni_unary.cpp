@@ -196,11 +196,13 @@ namespace SNI
 			{
 			case PU1_First:
 			{
-				return p_ParamList[p_CalcPos].AddValue(InverseFunctionValue(p_ParamList[PU1_Result].GetVariableValue()), p_Depth, p_WorldList, worldSet);
+				SN::SN_Value value = InverseFunctionValue(p_ParamList[PU1_Result].GetVariableValue());
+				return p_ParamList[p_CalcPos].AddValue(value, p_Depth, p_WorldList, worldSet);
 			}
 			case PU1_Result:
 			{
-				return p_ParamList[p_CalcPos].AddValue(PrimaryFunctionValue(p_ParamList[PU1_First].GetVariableValue()), p_Depth, p_WorldList, worldSet);
+				SN::SN_Value value = PrimaryFunctionValue(p_ParamList[PU1_First].GetVariableValue());
+				return p_ParamList[p_CalcPos].AddValue(value, p_Depth, p_WorldList, worldSet);
 			}
 			}
 		}

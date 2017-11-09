@@ -30,7 +30,6 @@ namespace SNI
 	    , m_ValueList(new SN::SN_Expression[p_Depth])
 	    , m_WorldList(new SNI_World *[p_Depth])
 		, m_CalcPos(p_CalcPos)
-		, m_TotalCalc(p_TotalCalc)
 		, m_ValueCalcPos(new long[p_Depth+1])
 		, m_ValueTotalCalc(new long[p_Depth+1])
 	{
@@ -168,10 +167,15 @@ namespace SNI
 		{
 			worldSet = m_ValueList[m_CalcPos].GetWorldSet();
 		}
+		if (!worldSet)
+		{
+			FORCE_ASSERTM("No world set.");
+		}
 		SNI_World *world = worldSet->JoinWorldsArray(AutoAddWorld, AlwaysCreateWorld, exists, m_Depth, m_WorldList);
 		if (exists)
 		{
 			SN::SN_ParameterList *l_ParameterList = new SN::SN_ParameterList();
+			SN::SN_Expression result;
 			for (long j = 0; j < m_Depth; j++)
 			{
 				if (j == m_CalcPos)
@@ -189,19 +193,26 @@ namespace SNI
 					}
 					if (j == PU2_Result)
 					{
-						m_ValueList[j] = var;
+						result = var;
 					}
 					else
 					{
 						l_ParameterList->push_back(var);
 					}
 				}
-				else if (j != PU2_Result)
+				else
 				{
-					l_ParameterList->push_back(m_ValueList[j]);
+					if (j == PU2_Result)
+					{
+						result = m_ValueList[j];
+					}
+					else
+					{
+						l_ParameterList->push_back(m_ValueList[j]);
+					}
 				}
 			}
-			SNI_DelayedProcessor::GetProcessor()->Delay(m_FunctionDef, l_ParameterList, m_ValueList[PU2_Result], world);
+			SNI_DelayedProcessor::GetProcessor()->Delay(m_FunctionDef, l_ParameterList, result, world);
 		}
 		return true;
 	}

@@ -237,6 +237,13 @@ namespace SNI
 					return CARDINALITY_MAX;
 				}
 			}
+			else if (!p_ParamList[PU2_Result].IsKnownValue())
+			{
+				if (p_TotalCalc > 1)
+				{
+					return CARDINALITY_MAX;
+				}
+			}
 			else
 			{
 				if (p_TotalCalc > 0)

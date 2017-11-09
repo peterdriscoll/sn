@@ -124,8 +124,34 @@ namespace SNI
 	{
 		if (p_Card == 1)
 		{
-			delete [] p_ParamList;
-			return UnifyElement(p_Depth, p_InputList, NULL, p_CalcPos, p_TotalCalc, NULL);
+			if (!AllowDelay())
+			{
+				for (long j = 0; j < p_Depth; j++)
+				{
+					if (p_Output[j] && !p_ParamList[j].IsVariable())
+					{
+						p_InputList[j] = new SNI_Variable;
+					}
+				}
+			}
+			SN::SN_Error e = UnifyElement(p_Depth, p_InputList, NULL, p_CalcPos, p_TotalCalc, NULL);
+			if (!AllowDelay())
+			{
+				for (size_t j = 0; j < p_Depth; j++)
+				{
+					if (p_Output[j] && !p_ParamList[j].IsVariable())
+					{
+						SN::SN_Value simple = p_InputList[j].SimplifyValue();
+						SN::SN_Error  e = p_ParamList[j].AssertValue(simple);
+						if (e.IsError())
+						{
+							return e;
+						}
+					}
+				}
+			}
+			delete[] p_ParamList;
+			return e;
 		}
 		else
 		{
@@ -150,7 +176,10 @@ namespace SNI
 				inputList[j] = paramList[j].GetVariableValue();
 				output[j] = false;
 				totalCalc--;
-				allFound |= inputList[j].GetSNI_Expression()->AllValues();
+				if (AllowDelay())
+				{
+					allFound |= inputList[j].GetSNI_Expression()->AllValues();
+				}
 			}
 			else
 			{
@@ -181,18 +210,11 @@ namespace SNI
 				{
 					if (allFound || maxCard < card)
 					{
-						if (false)
+						inputList[j] = new SNI_Variable();
+						e = paramList[j].AssertValue(inputList[j]);
+						if (e.IsError())
 						{
-							inputList[j] = paramList[j].Evaluate();
-						}
-						else
-						{
-							inputList[j] = new SNI_Variable();
-							e = paramList[j].AssertValue(inputList[j]);
-							if (e.IsError())
-							{
-								break;
-							}
+							break;
 						}
 					}
 				}
@@ -299,11 +321,13 @@ namespace SNI
 		return false;
 	}
 
-	/*static*/size_t SNI_FunctionDef::MultiplyCardinality(size_t p_Left, size_t p_Right)
+	/*static*/size_t SNI_FunctionDef::MultiplyCardinality(size_t p_Left, size_t p_Right, size_t p_MaxCardinality)
 	{
-		if (p_Left < CARDINALITY_SQUARE_ROOT_MAX && p_Right < CARDINALITY_SQUARE_ROOT_MAX)
+		size_t left = (p_MaxCardinality < p_Left) ? p_MaxCardinality : p_Left;
+		size_t right = (p_MaxCardinality < p_Right) ? p_MaxCardinality : p_Right;
+		if (left < CARDINALITY_SQUARE_ROOT_MAX && right < CARDINALITY_SQUARE_ROOT_MAX)
 		{
-			return p_Left * p_Right;
+			return left * right;
 		}
 		return CARDINALITY_MAX;
 	}

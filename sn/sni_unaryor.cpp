@@ -32,6 +32,11 @@ namespace SNI
 		return 4;
 	}
 
+	bool SNI_UnaryOr::AllowDelay() const
+	{
+		return false;
+	}
+
 	SN::SN_Value SNI_UnaryOr::PrimaryFunctionValue(const SN::SN_Value &p_Param) const
 	{
 		return p_Param.GetSNI_Value()->DoUnaryOr();
@@ -56,18 +61,17 @@ namespace SNI
 	{
 		if (p_TotalCalc <= 1)
 		{
-			return 1;
 			SN::SN_Bool result = p_ParamList[PU1_Result].GetVariableValue();
-			if (!result.IsNull() && !result.GetBool())
+			if (result.IsKnownValue() && !result.GetBool())
 			{
 				return 1;
 			}
 			SN::SN_Bool first = p_ParamList[PU1_First].GetVariableValue();
-			if (!first.IsNull() && first.GetBool())
+			if (first.IsKnownValue() && first.GetBool())
 			{
 				return 1;
 			}
-			return 2; // MultiplyCardinality(p_ParamList[PU1_First].Cardinality(), p_ParamList[PU1_Result].Cardinality());
+			return MultiplyCardinality(p_ParamList[PU1_First].Cardinality(), p_ParamList[PU1_Result].Cardinality(), 2);
 		}
 		return CARDINALITY_MAX;
 	}

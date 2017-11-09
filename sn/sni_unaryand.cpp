@@ -32,11 +32,6 @@ namespace SNI
 		return 4;
 	}
 
-	string SNI_UnaryAnd::GetOperator() const
-	{
-		return "==";
-	}
-
 	bool SNI_UnaryAnd::AllowDelay() const
 	{
 		return false;

@@ -130,26 +130,22 @@ namespace SNI
 	SN::SN_Error SNI_Or::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
 	{
 		SN::LogContext context("SNI_Or::Unify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
-		SN::SN_Error e2;
-		if (m_Partial)
+		SN::SN_ParameterList firstParamList(1);
+		firstParamList[0] = (*p_ParameterList)[1];
+		SN::SN_Error e1 = skynet::UnaryOr.Unify(&firstParamList, p_Result);
+		if (e1.IsError())
 		{
-			SNI_FunctionDef *unaryOr = skynet::UnaryOr.GetSNI_FunctionDef();
-			SN::SN_Cartesian params = p_Result.CartProd(PU2_Result, unaryOr) * (*p_ParameterList)[1].GetValue().CartProd(PU2_First, unaryOr) * (*p_ParameterList)[0].GetValue().CartProd(PU2_Second, this);
-			SN::SN_Error e1 = params.ForEachUnify(unaryOr);
-			if (e1.IsError())
-			{
-				e1.AddNote(context, this, "Partial 'or' first parameter failed");
-				return e1;
-			}
-			e2 = params.ForEachUnify(this);
+			e1.AddNote(context, this, "First parameter failed");
+			return e1;
 		}
-		else
-		{
-			e2 = (p_Result.CartProd(PU2_Result) * (*p_ParameterList)[1].GetValue().CartProd(PU2_First) * (*p_ParameterList)[0].GetValue().CartProd(PU2_Second, this)).ForEachUnify(this);
-		}
+
+		SN::SN_ParameterList * secondParamList = new SN::SN_ParameterList(2);
+		(*secondParamList)[0] = (*p_ParameterList)[0];
+		(*secondParamList)[1] = firstParamList[0];
+		SN::SN_Error e2 = SNI_Binary::Unify(secondParamList, p_Result);
 		if (e2.IsError())
 		{
-			e2.AddNote(context, this, m_Partial ? "Partial 'or' second parameter failed" : "Non partial or failed");
+			e2.AddNote(context, this, "Second parameter failed");
 		}
 		return e2;
 	}

@@ -42,7 +42,6 @@ namespace SNI
 		SN::SN_Expression * m_ValueList;
 		SNI_World ** m_WorldList;
 		long m_CalcPos;
-		long m_TotalCalc;
 		long *m_ValueCalcPos;
 		long *m_ValueTotalCalc;
 		SNI_WorldSet *m_WorldSet;
