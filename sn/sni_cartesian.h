@@ -28,7 +28,6 @@ namespace SNI
 
 		SN::SN_Error ForEach(std::function<SN::SN_Error (long p_Depth, SN::SN_Expression *p_ParamList, SNI_World**p_WorldList, long p_CalcPos, long p_TotalCalc)> p_Action);
 		SN::SN_Value ForEachCall(const SNI_FunctionDef * p_FunctionDef);
-		SN::SN_Error ForEachUnify(const SNI_FunctionDef * p_FunctionDef);
 
 		// Call
 		SN::SN_Error ProcessValueCall(const SN::SN_Expression & p_Param, SNI_World * p_World, long p_Depth);
@@ -38,14 +37,6 @@ namespace SNI
 		// Call
 		SN::SN_Error LoopSetupCall(long p_Depth, const SNI_FunctionDef * p_FunctionDef, SN::SN_Expression * p_InputList, SN::SN_Expression * p_ValueList, SNI_World ** p_WorldList, SN::SN_ValueSet p_Result);
 		SN::SN_Error LoopCall(long p_Depth);
-		SN::SN_Error ProcessValueUnify(const SN::SN_Expression & p_Param, SNI_World * p_World, long p_Depth);
-
-
-		// Unify
-		SN::SN_Error LoopSetupUnify(long p_Depth, const SNI_FunctionDef *p_FunctionDef, SN::SN_Expression * p_InputList, SN::SN_Expression * p_ValueList, SNI_World ** p_WorldList, long &p_CalcPos, long &p_TotalCalc);
-		SN::SN_Error LoopSetupPartialUnify(long p_Depth, const SNI_FunctionDef * p_FunctionDef, SN::SN_Expression * p_InputList, SN::SN_Expression * p_ValueList, SNI_World ** p_WorldList, long & p_CalcPos, long & p_TotalCalc);
-		SN::SN_Error LoopUnify(long p_Depth, long p_ValueCalcPos, long p_ValueTotalCalc, SNI_WorldSet *p_WorldSet);
-		SN::SN_Error LoopCleanupUnify(long p_Depth);
 
 		// Generic
 		SN::SN_Error Loop(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, long p_CalcPos, long p_TotalCalc, std::function<SN::SN_Error(long p_Depth, SN::SN_Expression *p_ParamList, SNI_World **p_WorldList, long p_CalcPos, long p_TotalCalc)> p_Action);
