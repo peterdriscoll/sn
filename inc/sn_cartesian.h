@@ -37,7 +37,6 @@ namespace SN
 
 		SNI::SNI_Cartesian *GetSNI_Cartesian() const;
 	private:
-		SN_Error ForEachUnify(const SNI::SNI_FunctionDef * p_FunctionDef);
 		SNI::SNI_Cartesian *m_Cartesian;
 	};
 }

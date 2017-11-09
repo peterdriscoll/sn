@@ -432,14 +432,6 @@ namespace SNI
 		return true;
 	}
 
-	void SNI_ValueSet::ForEachUnify(SNI_Cartesian *p_Cart, long p_Depth)
-	{
-		for (SNI_TaggedValue &tv : m_ValueList)
-		{
-			p_Cart->ProcessValueUnify(tv.GetValue(), tv.GetWorld(), p_Depth);
-		}
-	}
-
 	void SNI_ValueSet::ForEachSplit(SNI_Splitter * p_Splitter)
 	{
 		for (SNI_TaggedValue &tv : m_ValueList)

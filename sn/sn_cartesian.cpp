@@ -43,11 +43,6 @@ namespace SN
 		return m_Cartesian->ForEachCall(p_FunctionDef);
 	}
 
-	SN_Error SN_Cartesian::ForEachUnify(const SNI::SNI_FunctionDef *p_FunctionDef)
-	{
-		return m_Cartesian->ForEachUnify(p_FunctionDef);
-	}
-
 	SNI::SNI_Cartesian * SN_Cartesian::GetSNI_Cartesian() const
 	{
 		SNI::SNI_Cartesian *cartesian = m_Cartesian;

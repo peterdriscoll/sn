@@ -308,11 +308,6 @@ namespace SNI
 		return p_Cart->ProcessValueUnify(p_Depth, this, NULL);
 	}
 
-	void SNI_Variable::ForEachUnify(SNI_Cartesian * p_Cart, long p_Depth)
-	{
-		p_Cart->ProcessValueUnify(SN::SN_Expression(this), NULL, p_Depth);
-	}
-
 	void SNI_Variable::ForEachSplit(SNI_Splitter * p_Splitter)
 	{
 		if (m_Value)

@@ -33,12 +33,12 @@ namespace SNI
 		// Call
 		SN::SN_Error ProcessValueCall(const SN::SN_Expression & p_Param, SNI_World * p_World, long p_Depth);
 		// Unify
-		SN::SN_Error ProcessValueUnify(const SN::SN_Expression & p_Param, SNI_World * p_World, long p_Depth);
 
 	private:
 		// Call
 		SN::SN_Error LoopSetupCall(long p_Depth, const SNI_FunctionDef * p_FunctionDef, SN::SN_Expression * p_InputList, SN::SN_Expression * p_ValueList, SNI_World ** p_WorldList, SN::SN_ValueSet p_Result);
 		SN::SN_Error LoopCall(long p_Depth);
+		SN::SN_Error ProcessValueUnify(const SN::SN_Expression & p_Param, SNI_World * p_World, long p_Depth);
 
 
 		// Unify
