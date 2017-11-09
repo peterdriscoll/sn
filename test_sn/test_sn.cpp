@@ -904,6 +904,26 @@ namespace test_sn
 			Cleanup();
 		}
 
+		TEST_METHOD(TestOrReversed4WithSolve)
+		{
+			Initialize();
+			Manager manager(AssertErrorHandler);
+			{
+				Transaction transaction;
+
+				SN_DECLARE(x);
+				(Long(6) == x + Long(3) || Long(8) == x + Long(4) || Long(10) == x + Long(5) || Long(12) == x + Long(6)).AssertAction();
+				string x_string = x.DisplaySN();
+				string x_valueset = x.Evaluate().DisplaySN();
+				string x_buildset = x.BuildSet().Evaluate().DisplaySN();
+
+				(x.BuildSet() == (Long(3) || Long(4) || Long(5) || Long(6)).BuildSet()).EvaluateAction();
+				cout << x.DisplaySN();
+			}
+
+			Cleanup();
+		}
+
 		TEST_METHOD(TestCharInValueSet)
 		{
 			Initialize();
