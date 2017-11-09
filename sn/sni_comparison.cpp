@@ -64,27 +64,6 @@ namespace SNI
 		return LOG_RETURN(context, PrimaryFunctionExpression(left_value, right_value));
 	}
 
-	/// @brief Extract the left and right values from the parameter list and call UnifyInternal.
-	///
-	/// @param p_ParameterList List of two parameters.
-	/// @param p_Result The result of applying the operation  to the two values
-	/// @retval True if successful, false for failure.
-	SN::SN_Error SNI_Comparison::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
-	{
-		SN::LogContext context("SNI_Binary::Unify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
-
-		SN::SN_Error e = ((*p_ParameterList)[1].GetValue().CartProd(PU2_First) * (*p_ParameterList)[0].GetValue().CartProd(PU2_Second) * p_Result.CartProd(PU2_Result)).ForEachUnify(this);
-		if (e.GetDelay())
-		{
-			SNI_DelayedProcessor::GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), p_ParameterList, p_Result);
-		}
-		if (e.IsError())
-		{
-			e.AddNote(context, this, "Cartesian product failed");
-		}
-		return e;
-	}
-
 	SN::SN_Error SNI_Comparison::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
 	{
 		SN::LogContext context("SNI_Comparison::PartialUnifyInternal ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
