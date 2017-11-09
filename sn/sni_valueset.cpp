@@ -337,7 +337,9 @@ namespace SNI
 	SN::SN_Error SNI_ValueSet::AssertValue(const SN::SN_Expression &p_Value)
 	{
 		SN::LogContext context("SNI_ValueSet::AssertValue ( " + p_Value.DisplayValueSN() + " )");
-		SN::SN_Error e = (CartProd(PU1_First) * p_Value.CartProd(PU1_Result)).ForEachUnify(skynet::Same.GetSNI_FunctionDef());
+		SN::SN_ParameterList *paramList = new SN::SN_ParameterList(1);
+		(*paramList)[0] = SN::SN_Parameter(this);
+		SN::SN_Error e = skynet::Same.Unify(paramList, p_Value);
 		if (e.IsError())
 		{
 			e.AddNote(context, this, "Assert by cartesian product failed");
