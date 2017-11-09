@@ -864,6 +864,26 @@ namespace test_sn
 			Cleanup();
 		}
 
+		TEST_METHOD(TestOr4WithCalc)
+		{
+			Initialize();
+			Manager manager(AssertErrorHandler);
+			{
+				Transaction transaction;
+
+				SN_DECLARE(x);
+				(x == Long(3)+Long(3) || x == Long(4)+Long(4) || x == Long(5)+Long(5) || x == Long(6)+Long(6)).AssertAction();
+				string x_string = x.DisplaySN();
+				string x_valueset = x.Evaluate().DisplaySN();
+				string x_buildset = x.BuildSet().Evaluate().DisplaySN();
+
+				(x.BuildSet() == (Long(3)+Long(3) || Long(4)+Long(4) || Long(5)+Long(5) || Long(6)+Long(6)).BuildSet()).EvaluateAction();
+				cout << x.DisplaySN();
+			}
+
+			Cleanup();
+		}
+
 		TEST_METHOD(TestCharInValueSet)
 		{
 			Initialize();
