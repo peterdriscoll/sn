@@ -33,16 +33,6 @@ namespace SN
 	{
 	}
 
-	string SN_FunctionDef::GetName()
-	{
-		return m_FunctionDef->GetName();
-	}
-
-	void SN_FunctionDef::SetName(const string &p_Name)
-	{
-		m_FunctionDef->SetName(p_Name);
-	}
-
 	SN_Expression SN_FunctionDef::operator==(const SN_Expression &p_Other) const
 	{
 		return SN_Operators::operator==(*this, p_Other);

@@ -42,9 +42,6 @@ namespace SN
 		// Valuesets of functions
 		SN::SN_Expression operator ||(const SN::SN_Expression &p_Other) const;
 
-		string GetName();
-		void SetName(const string &p_Name);
-
 		size_t Cardinality(SN_ParameterList * p_ParameterList, SN_Expression p_Result) const;
 
 		SN_Error Unify(SN_ParameterList *p_ParameterList, SN_Expression p_Result);

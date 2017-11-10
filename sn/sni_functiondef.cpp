@@ -53,16 +53,6 @@ namespace SNI
 		return 0;
 	}
 
-	string SNI_FunctionDef::GetName()
-	{
-		return m_Name;
-	}
-
-	void SNI_FunctionDef::SetName(const string &p_Name)
-	{
-		m_Name = p_Name;
-	}
-
 	bool SNI_FunctionDef::AllowDelay() const
 	{
 		return true;
@@ -76,48 +66,6 @@ namespace SNI
 			return this == l_function;
 		}
 		return false;
-	}
-
-	SN::SN_Expression * SNI_FunctionDef::LoadParametersUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result) const
-	{
-		size_t numParams = p_ParameterList->size()+1;
-		SN::SN_Expression *paramList = new SN::SN_Expression[numParams];
-		paramList[PU2_Result] = p_Result;
-		for (size_t j = 1; j < numParams; j++)
-		{
-			paramList[j] = (*p_ParameterList)[numParams - j - 1].GetValue();
-		}
-		return paramList;
-	}
-
-	void SNI_FunctionDef::ReplaceParametersUnify(SN::SN_Expression * p_ParamList, SN::SN_ParameterList * p_ParameterList, SN::SN_Expression & p_Result) const
-	{
-		size_t numParams = p_ParameterList->size() + 1;
-		p_Result = p_ParamList[PU2_Result];
-		for (size_t j = 1; j < numParams; j++)
-		{
-			(*p_ParameterList)[numParams - 1 - j].GetValue() = p_ParamList[j];
-		}
-	}
-
-	SN::SN_Expression * SNI_FunctionDef::LoadParametersCall(SN::SN_ExpressionList * p_ParameterList) const
-	{
-		size_t numParams = p_ParameterList->size();
-		SN::SN_Expression *paramList = new SN::SN_Expression[numParams];
-		for (size_t j = 0; j < numParams; j++)
-		{
-			paramList[j] = (*p_ParameterList)[numParams - j - 1];
-		}
-		return paramList;
-	}
-
-	void SNI_FunctionDef::ReplaceParametersCall(SN::SN_Expression * p_ParamList, SN::SN_ExpressionList * p_ParameterList) const
-	{
-		size_t numParams = p_ParameterList->size();
-		for (size_t j = 0; j < numParams; j++)
-		{
-			(*p_ParameterList)[numParams - 1 - j] = p_ParamList[j];
-		}
 	}
 
 	size_t SNI_FunctionDef::Cardinality(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result) const
@@ -138,61 +86,6 @@ namespace SNI
 			}
 		}
 		return CardinalityOfUnify(depth, paramList, calcPos, totalCalc);
-	}
-
-	SN::SN_Error SNI_FunctionDef::ForEachUnify(size_t p_Card, long p_Depth, SN::SN_Expression * p_InputList, SN::SN_Expression * p_ParamList, bool * p_Output, long p_CalcPos, long p_TotalCalc) const
-	{
-		if (p_Card == 1)
-		{
-			if (!AllowDelay())
-			{
-				for (long j = 0; j < p_Depth; j++)
-				{
-					if (p_Output[j] && !p_ParamList[j].IsVariable())
-					{
-						p_InputList[j] = new SNI_Variable;
-					}
-				}
-			}
-			SN::SN_Error e = UnifyElement(p_Depth, p_InputList, NULL, p_CalcPos, p_TotalCalc, NULL);
-			if (!AllowDelay())
-			{
-				for (size_t j = 0; j < p_Depth; j++)
-				{
-					if (p_Output[j] && !p_ParamList[j].IsVariable())
-					{
-						SN::SN_Value simple = p_InputList[j].SimplifyValue();
-						SN::SN_Error  e = p_ParamList[j].AssertValue(simple);
-						if (e.IsError())
-						{
-							return e;
-						}
-					}
-				}
-			}
-			delete[] p_ParamList;
-			return e;
-		}
-		else
-		{
-			SNI_CartUnify cart(this, p_Depth, p_InputList, p_ParamList, p_Output, p_CalcPos, p_TotalCalc);
-			return cart.ForEachUnify();
-		}
-	}
-
-	SN::SN_Error SNI_FunctionDef::ForEachCall(size_t p_Card, long p_Depth, SN::SN_Expression * p_InputList) const
-	{
-		if (p_Card == 1)
-		{
-			SN::SN_Value result;
-			SN::SN_Error e = CallElement(p_Depth, p_InputList, NULL, result);
-			return e;
-		}
-		else
-		{
-			SNI_CartCall cart(this, p_Depth, p_InputList);
-			return cart.ForEach();
-		}
 	}
 
 	SN::SN_Error SNI_FunctionDef::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
@@ -431,8 +324,101 @@ namespace SNI
 		return CARDINALITY_MAX;
 	}
 
-	bool  SNI_FunctionDef::EvaluateNow(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const
+	SN::SN_Error SNI_FunctionDef::ForEachCall(size_t p_Card, long p_Depth, SN::SN_Expression * p_InputList) const
 	{
-		return CardinalityOfUnify(p_Depth, p_ParamList, p_CalcPos, p_TotalCalc) ? 1 : CARDINALITY_MAX;
+		if (p_Card == 1)
+		{
+			SN::SN_Value result;
+			SN::SN_Error e = CallElement(p_Depth, p_InputList, NULL, result);
+			return e;
+		}
+		else
+		{
+			SNI_CartCall cart(this, p_Depth, p_InputList);
+			return cart.ForEach();
+		}
 	}
+
+	SN::SN_Error SNI_FunctionDef::ForEachUnify(size_t p_Card, long p_Depth, SN::SN_Expression * p_InputList, SN::SN_Expression * p_ParamList, bool * p_Output, long p_CalcPos, long p_TotalCalc) const
+	{
+		if (p_Card == 1)
+		{
+			if (!AllowDelay())
+			{
+				for (long j = 0; j < p_Depth; j++)
+				{
+					if (p_Output[j] && !p_ParamList[j].IsVariable())
+					{
+						p_InputList[j] = new SNI_Variable;
+					}
+				}
+			}
+			SN::SN_Error e = UnifyElement(p_Depth, p_InputList, NULL, p_CalcPos, p_TotalCalc, NULL);
+			if (!AllowDelay())
+			{
+				for (size_t j = 0; j < p_Depth; j++)
+				{
+					if (p_Output[j] && !p_ParamList[j].IsVariable())
+					{
+						SN::SN_Value simple = p_InputList[j].SimplifyValue();
+						SN::SN_Error  e = p_ParamList[j].AssertValue(simple);
+						if (e.IsError())
+						{
+							return e;
+						}
+					}
+				}
+			}
+			delete[] p_ParamList;
+			return e;
+		}
+		else
+		{
+			SNI_CartUnify cart(this, p_Depth, p_InputList, p_ParamList, p_Output, p_CalcPos, p_TotalCalc);
+			return cart.ForEachUnify();
+		}
+	}
+
+	SN::SN_Expression * SNI_FunctionDef::LoadParametersCall(SN::SN_ExpressionList * p_ParameterList) const
+	{
+		size_t numParams = p_ParameterList->size();
+		SN::SN_Expression *paramList = new SN::SN_Expression[numParams];
+		for (size_t j = 0; j < numParams; j++)
+		{
+			paramList[j] = (*p_ParameterList)[numParams - j - 1];
+		}
+		return paramList;
+	}
+
+	void SNI_FunctionDef::ReplaceParametersCall(SN::SN_Expression * p_ParamList, SN::SN_ExpressionList * p_ParameterList) const
+	{
+		size_t numParams = p_ParameterList->size();
+		for (size_t j = 0; j < numParams; j++)
+		{
+			(*p_ParameterList)[numParams - 1 - j] = p_ParamList[j];
+		}
+	}
+
+	SN::SN_Expression * SNI_FunctionDef::LoadParametersUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result) const
+	{
+		size_t numParams = p_ParameterList->size() + 1;
+		SN::SN_Expression *paramList = new SN::SN_Expression[numParams];
+		paramList[PU2_Result] = p_Result;
+		for (size_t j = 1; j < numParams; j++)
+		{
+			paramList[j] = (*p_ParameterList)[numParams - j - 1].GetValue();
+		}
+		return paramList;
+	}
+
+	void SNI_FunctionDef::ReplaceParametersUnify(SN::SN_Expression * p_ParamList, SN::SN_ParameterList * p_ParameterList, SN::SN_Expression & p_Result) const
+	{
+		size_t numParams = p_ParameterList->size() + 1;
+		p_Result = p_ParamList[PU2_Result];
+		for (size_t j = 1; j < numParams; j++)
+		{
+			(*p_ParameterList)[numParams - 1 - j].GetValue() = p_ParamList[j];
+		}
+	}
+
 }
