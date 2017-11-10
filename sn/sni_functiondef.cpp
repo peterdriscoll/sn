@@ -78,7 +78,7 @@ namespace SNI
 		return false;
 	}
 
-	SN::SN_Expression * SNI_FunctionDef::LoadParameters(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result) const
+	SN::SN_Expression * SNI_FunctionDef::LoadParametersUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result) const
 	{
 		size_t numParams = p_ParameterList->size()+1;
 		SN::SN_Expression *paramList = new SN::SN_Expression[numParams];
@@ -90,7 +90,7 @@ namespace SNI
 		return paramList;
 	}
 
-	void SNI_FunctionDef::ReplaceParameters(SN::SN_Expression * p_ParamList, SN::SN_ParameterList * p_ParameterList, SN::SN_Expression & p_Result) const
+	void SNI_FunctionDef::ReplaceParametersUnify(SN::SN_Expression * p_ParamList, SN::SN_ParameterList * p_ParameterList, SN::SN_Expression & p_Result) const
 	{
 		size_t numParams = p_ParameterList->size() + 1;
 		p_Result = p_ParamList[PU2_Result];
@@ -100,10 +100,30 @@ namespace SNI
 		}
 	}
 
+	SN::SN_Expression * SNI_FunctionDef::LoadParametersCall(SN::SN_ExpressionList * p_ParameterList) const
+	{
+		size_t numParams = p_ParameterList->size();
+		SN::SN_Expression *paramList = new SN::SN_Expression[numParams];
+		for (size_t j = 0; j < numParams; j++)
+		{
+			paramList[j] = (*p_ParameterList)[numParams - j - 1];
+		}
+		return paramList;
+	}
+
+	void SNI_FunctionDef::ReplaceParametersCall(SN::SN_Expression * p_ParamList, SN::SN_ExpressionList * p_ParameterList) const
+	{
+		size_t numParams = p_ParameterList->size();
+		for (size_t j = 0; j < numParams; j++)
+		{
+			(*p_ParameterList)[numParams - 1 - j] = p_ParamList[j];
+		}
+	}
+
 	size_t SNI_FunctionDef::Cardinality(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result) const
 	{
 		long depth = (long) p_ParameterList->size()+1;
-		SN::SN_Expression *paramList = LoadParameters(p_ParameterList, p_Result);
+		SN::SN_Expression *paramList = LoadParametersUnify(p_ParameterList, p_Result);
 		long calcPos = -1;
 		long totalCalc = depth;
 		for (long j = 0; j < depth; j++)
@@ -160,11 +180,26 @@ namespace SNI
 		}
 	}
 
+	SN::SN_Error SNI_FunctionDef::ForEachCall(size_t p_Card, long p_Depth, SN::SN_Expression * p_InputList) const
+	{
+		if (p_Card == 1)
+		{
+			SN::SN_Value result;
+			SN::SN_Error e = CallElement(p_Depth, p_InputList, NULL, result);
+			return e;
+		}
+		else
+		{
+			SNI_CartCall cart(this, p_Depth, p_InputList);
+			return cart.ForEach();
+		}
+	}
+
 	SN::SN_Error SNI_FunctionDef::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
 	{
 		SN::SN_Error  e = true;
 		long depth = (long) p_ParameterList->size() + 1;
-		SN::SN_Expression *paramList = LoadParameters(p_ParameterList, p_Result);
+		SN::SN_Expression *paramList = LoadParametersUnify(p_ParameterList, p_Result);
 		SN::SN_Expression *inputList = new SN::SN_Expression[depth];
 		bool *output = new bool[depth];
 		bool allFound = false;
@@ -240,7 +275,7 @@ namespace SNI
 			{
 				if (AllowDelay())
 				{
-					ReplaceParameters(inputList, p_ParameterList, p_Result);
+					ReplaceParametersUnify(inputList, p_ParameterList, p_Result);
 					delete[] paramList;
 					SNI_DelayedProcessor::GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), p_ParameterList, p_Result);
 				}
@@ -252,7 +287,7 @@ namespace SNI
 			else
 			{
 				e = ForEachUnify(card, depth, inputList, paramList, output, calcPos, totalCalc);
-				ReplaceParameters(inputList, p_ParameterList, p_Result);
+				ReplaceParametersUnify(inputList, p_ParameterList, p_Result);
 			}
 		}
 		delete[] inputList;
@@ -274,7 +309,71 @@ namespace SNI
 	{
 		SN::LogContext context(DisplaySN0() + ".SNI_FunctionDef::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )");
 
-		return skynet::Null;
+		SN::SN_Error  e = true;
+		long depth = (long)p_ParameterList->size() + 1;
+		SN::SN_Expression *paramList = LoadParametersCall(p_ParameterList);
+		SN::SN_Expression *inputList = new SN::SN_Expression[depth];
+		for (long j = 0; j < depth; j++)
+		{
+			if (paramList[j].IsKnownValue())
+			{
+				inputList[j] = paramList[j].GetVariableValue();
+			}
+			else
+			{
+				inputList[j] = paramList[j];
+			}
+		}
+		size_t card = 0;
+		size_t maxCard = SN::SN_Manager::GetTopManager().MaxCardinalityCall();
+		for (long j = 0; j < depth; j++)
+		{
+			if (!paramList[j].IsKnownValue() && !paramList[j].IsReferableValue())
+			{
+				card = CardinalityOfCall(depth, inputList);
+				if (paramList[j].IsVariable())
+				{
+					if (maxCard < card)
+					{
+						e = inputList[j].GetSNI_Expression()->SelfAssert();
+						if (e.IsError())
+						{
+							break;
+						}
+					}
+				}
+				else
+				{
+					if (maxCard < card)
+					{
+						inputList[j] = new SNI_Variable();
+						e = paramList[j].AssertValue(inputList[j]);
+						if (e.IsError())
+						{
+							break;
+						}
+					}
+				}
+			}
+			if (inputList[j].IsKnownValue())
+			{
+				inputList[j] = inputList[j].GetVariableValue();
+			}
+		}
+		if (e.GetBool())
+		{
+			card = CardinalityOfCall(depth, inputList);
+			if (maxCard < card)
+			{
+				e = SN::SN_Error(true, true);
+			}
+			else
+			{
+				e = ForEachCall(card, depth, inputList);
+			}
+		}
+		delete[] inputList;
+		return e;
 	}
 
 	SN::SN_Expression SNI_FunctionDef::PartialCall(SN::SN_ExpressionList * p_ParameterList, long  /* = 0 */) const

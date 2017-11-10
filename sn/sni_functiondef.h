@@ -55,11 +55,15 @@ namespace SNI
 		void SetName(const string &p_Name);
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 
-		virtual SN::SN_Expression * LoadParameters(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result) const;
-		virtual void ReplaceParameters(SN::SN_Expression * p_ParamList, SN::SN_ParameterList * p_ParameterList, SN::SN_Expression & p_Result) const;
+		virtual SN::SN_Expression * LoadParametersUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result) const;
+		virtual void ReplaceParametersUnify(SN::SN_Expression * p_ParamList, SN::SN_ParameterList * p_ParameterList, SN::SN_Expression & p_Result) const;
+
+		virtual SN::SN_Expression * LoadParametersCall(SN::SN_ExpressionList * p_ParameterList) const;
+		virtual void ReplaceParametersCall(SN::SN_Expression * p_ParamList, SN::SN_ExpressionList * p_ParameterList) const;
 
 		virtual size_t Cardinality(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result) const;
 		virtual SN::SN_Error ForEachUnify(size_t p_Card, long p_Depth, SN::SN_Expression * p_ParamList, SN::SN_Expression * p_InputList, bool *p_Output, long p_CalcPos, long p_TotalCalc) const;
+		virtual SN::SN_Error ForEachCall(size_t p_Card, long p_Depth, SN::SN_Expression * p_InputList) const;
 
 		virtual SN::SN_Expression Evaluate(long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression PartialEvaluate(long p_MetaLevel = 0) const;
