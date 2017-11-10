@@ -305,7 +305,7 @@ namespace SNI
 
 	SN::SN_Error SNI_Variable::ForEachCart(long p_Depth, SNI_Cart * p_Cart)
 	{
-		return p_Cart->ProcessValueUnify(p_Depth, this, NULL);
+		return p_Cart->ProcessValue(p_Depth, this, NULL);
 	}
 
 	void SNI_Variable::ForEachSplit(SNI_Splitter * p_Splitter)

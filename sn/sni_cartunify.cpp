@@ -1,4 +1,4 @@
-#include "sni_cart.h"
+#include "sni_cartunify.h"
 
 #include "logcontext.h"
 #include "sn.h"
@@ -54,7 +54,7 @@ namespace SNI
 		delete [] m_ValueTotalCalc;
 	};
 
-	SN::SN_Error SNI_CartUnify::ProcessValueUnify(long p_Depth, const SN::SN_Expression &p_Param, SNI_World*p_World)
+	SN::SN_Error SNI_CartUnify::ProcessValue(long p_Depth, const SN::SN_Expression &p_Param, SNI_World*p_World)
 	{
 		SN::SN_Error e(true);
 		m_ValueList[p_Depth] = p_Param;
@@ -73,7 +73,7 @@ namespace SNI
 		{
 			if (m_Output[p_Depth + 1])
 			{
-				e = ProcessValueUnify(p_Depth + 1, m_InputList[p_Depth + 1], NULL);
+				e = ProcessValue(p_Depth + 1, m_InputList[p_Depth + 1], NULL);
 			}
 			else
 			{
@@ -102,7 +102,7 @@ namespace SNI
 		CreateVariablesForOutput();
 		if (m_Output[0])
 		{
-			e = ProcessValueUnify(0, m_InputList[0], NULL);
+			e = ProcessValue(0, m_InputList[0], NULL);
 		}
 		else
 		{

@@ -25,8 +25,7 @@ namespace SNI
 
 		SN::SN_Error ForEachUnify();
 
-		SN::SN_Error ProcessValueUnify(long p_Depth, const SN::SN_Expression & p_Param, SNI_World * p_World);
-
+		virtual SN::SN_Error ProcessValue(long p_Depth, const SN::SN_Expression & p_Param, SNI_World * p_World);
 
 	protected:
 		void CreateVariablesForOutput();

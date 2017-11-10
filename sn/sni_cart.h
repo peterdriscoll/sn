@@ -12,7 +12,7 @@ namespace SNI
 	class SNI_Cart
 	{
 	public:
-		virtual SN::SN_Error ProcessValueUnify(long p_Depth, const SN::SN_Expression & p_Param, SNI_World * p_World) = 0;
+		virtual SN::SN_Error ProcessValue(long p_Depth, const SN::SN_Expression & p_Param, SNI_World * p_World) = 0;
 	};
 }
 

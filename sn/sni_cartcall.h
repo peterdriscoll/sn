@@ -7,7 +7,7 @@
 #include "sn_parameter.h"
 #include "sn_valueset.h"
 
-using namespace std;
+#include "sni_cart.h"
 
 namespace SNI
 {
@@ -17,7 +17,7 @@ namespace SNI
 	class SNI_Binary;
 	class SNI_Unary;
 
-	class SNI_CartCall
+	class SNI_CartCall : public SNI_Cart
 	{
 	public:
 		SNI_CartCall(const SNI_FunctionDef *p_FunctionDef, long p_Depth, SN::SN_Expression * p_InputList);
@@ -25,7 +25,7 @@ namespace SNI
 
 		SN::SN_Error ForEach();
 
-		SN::SN_Error ProcessValue(long p_Depth, const SN::SN_Expression & p_Param, SNI_World * p_World);
+		virtual SN::SN_Error ProcessValue(long p_Depth, const SN::SN_Expression & p_Param, SNI_World * p_World);
 
 	private:
 		const SNI_FunctionDef *m_FunctionDef;

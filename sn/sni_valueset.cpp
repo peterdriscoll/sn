@@ -427,7 +427,7 @@ namespace SNI
 	{
 		for (SNI_TaggedValue &tv : m_ValueList)
 		{
-			SN::SN_Error e = p_Cart->ProcessValueUnify(p_Depth, tv.GetValue(), tv.GetWorld());
+			SN::SN_Error e = p_Cart->ProcessValue(p_Depth, tv.GetValue(), tv.GetWorld());
 		}
 		return true;
 	}

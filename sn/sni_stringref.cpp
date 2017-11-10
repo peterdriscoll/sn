@@ -134,7 +134,7 @@ namespace SNI
 		SN::SN_Expression end = GetEnd().Evaluate();
 		if (Cardinality() == 1)
 		{
-			return p_Cart->ProcessValueUnify(p_Depth, this, NULL);
+			return p_Cart->ProcessValue(p_Depth, this, NULL);
 		}
 		else
 		{
@@ -169,7 +169,7 @@ namespace SNI
 					SNI_World *world = worldSet->JoinWorldsArgs(AutoAddWorld, CreateIfActiveParents, exists, startWorld, endWorld);
 					if (exists)
 					{
-						return p_Cart->ProcessValueUnify(p_Depth, value, world);
+						return p_Cart->ProcessValue(p_Depth, value, world);
 					}
 					return true;
 				});
