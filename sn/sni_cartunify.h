@@ -17,11 +17,11 @@ namespace SNI
 	class SNI_Binary;
 	class SNI_Unary;
 
-	class SNI_Cart
+	class SNI_CartUnify
 	{
 	public:
-		SNI_Cart(const SNI_FunctionDef *p_FunctionDef, long p_Depth, SN::SN_Expression * p_InputList, SN::SN_Expression * p_ParamList, bool *p_Output, long p_CalcPos, long p_TotalCalc);
-		virtual ~SNI_Cart();
+		SNI_CartUnify(const SNI_FunctionDef *p_FunctionDef, long p_Depth, SN::SN_Expression * p_InputList, SN::SN_Expression * p_ParamList, bool *p_Output, long p_CalcPos, long p_TotalCalc);
+		virtual ~SNI_CartUnify();
 
 		SN::SN_Error ForEachUnify();
 

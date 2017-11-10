@@ -155,7 +155,7 @@ namespace SNI
 		}
 		else
 		{
-			SNI_Cart cart(this, p_Depth, p_InputList, p_ParamList, p_Output, p_CalcPos, p_TotalCalc);
+			SNI_CartUnify cart(this, p_Depth, p_InputList, p_ParamList, p_Output, p_CalcPos, p_TotalCalc);
 			return cart.ForEachUnify();
 		}
 	}

@@ -423,7 +423,7 @@ namespace SNI
 		}
 	}
 
-	SN::SN_Error SNI_ValueSet::ForEachCartUnify(long p_Depth, SNI_Cart *p_Cart)
+	SN::SN_Error SNI_ValueSet::ForEachCartUnify(long p_Depth, SNI_CartUnify *p_Cart)
 	{
 		for (SNI_TaggedValue &tv : m_ValueList)
 		{

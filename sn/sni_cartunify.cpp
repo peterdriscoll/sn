@@ -21,7 +21,7 @@
 
 namespace SNI
 {
-	SNI_Cart::SNI_Cart(const SNI_FunctionDef *p_FunctionDef, long p_Depth, SN::SN_Expression * p_InputList, SN::SN_Expression * p_ParamList, bool *p_Output, long p_CalcPos, long p_TotalCalc)
+	SNI_CartUnify::SNI_CartUnify(const SNI_FunctionDef *p_FunctionDef, long p_Depth, SN::SN_Expression * p_InputList, SN::SN_Expression * p_ParamList, bool *p_Output, long p_CalcPos, long p_TotalCalc)
 		: m_FunctionDef(p_FunctionDef)
 		, m_Depth(p_Depth)
 		, m_InputList(p_InputList)
@@ -45,7 +45,7 @@ namespace SNI
 		}
 	}
 
-	SNI_Cart::~SNI_Cart()
+	SNI_CartUnify::~SNI_CartUnify()
 	{
 		delete [] m_ParamList;
 		delete [] m_ValueList;
@@ -54,7 +54,7 @@ namespace SNI
 		delete [] m_ValueTotalCalc;
 	};
 
-	SN::SN_Error SNI_Cart::ProcessValueUnify(long p_Depth, const SN::SN_Expression &p_Param, SNI_World*p_World)
+	SN::SN_Error SNI_CartUnify::ProcessValueUnify(long p_Depth, const SN::SN_Expression &p_Param, SNI_World*p_World)
 	{
 		SN::SN_Error e(true);
 		m_ValueList[p_Depth] = p_Param;
@@ -96,7 +96,7 @@ namespace SNI
 		return e;
 	}
 
-	SN::SN_Error SNI_Cart::ForEachUnify()
+	SN::SN_Error SNI_CartUnify::ForEachUnify()
 	{
 		SN::SN_Error e;
 		CreateVariablesForOutput();
@@ -123,7 +123,7 @@ namespace SNI
 		return e;
 	}
 
-	void SNI_Cart::CreateVariablesForOutput()
+	void SNI_CartUnify::CreateVariablesForOutput()
 	{
 		for (long j = 0; j < m_Depth; j++)
 		{
@@ -134,7 +134,7 @@ namespace SNI
 		}
 	}
 
-	SN::SN_Error SNI_Cart::CaptureOutput()
+	SN::SN_Error SNI_CartUnify::CaptureOutput()
 	{
 		for (size_t j = 0; j < m_Depth; j++)
 		{
@@ -155,7 +155,7 @@ namespace SNI
 		return true;
 	}
 
-	SN::SN_Error SNI_Cart::DelayUnify()
+	SN::SN_Error SNI_CartUnify::DelayUnify()
 	{
 		if (!m_FunctionDef->AllowDelay())
 		{

@@ -32,7 +32,7 @@ namespace SNI
 
 		virtual SN::SN_Error ForEach(function<SN::SN_Error(const SN::SN_Expression &p_Param, SNI_World *p_World)> p_Action);
 		virtual void ForEachCall(SNI_Cartesian * p_Cart, long p_Depth);
-		virtual SN::SN_Error ForEachCartUnify(long p_Depth, SNI_Cart * p_Cart);
+		virtual SN::SN_Error ForEachCartUnify(long p_Depth, SNI_CartUnify * p_Cart);
 		virtual void ForEachSplit(SNI_Splitter * p_Splitter);
 
 		virtual SN::SN_Error AssertValue(const SN::SN_Expression & p_Value);

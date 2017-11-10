@@ -85,7 +85,7 @@ namespace SNI
 		p_Cart->ProcessValueCall(SN::SN_Expression(this), NULL, p_Depth);
 	}
 
-	SN::SN_Error SNI_Value::ForEachCartUnify(long p_Depth, SNI_Cart * p_Cart)
+	SN::SN_Error SNI_Value::ForEachCartUnify(long p_Depth, SNI_CartUnify * p_Cart)
 	{
 		return p_Cart->ProcessValueUnify(p_Depth, this, NULL);
 	}

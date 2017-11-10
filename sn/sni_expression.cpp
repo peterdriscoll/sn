@@ -215,7 +215,7 @@ namespace SNI
 		return SN::SN_Error(GetTypeName() + " ForEach not implemented .");
 	}
 
-	SN::SN_Error SNI_Expression::ForEachCartUnify(long p_Depth, SNI_Cart * p_Cart)
+	SN::SN_Error SNI_Expression::ForEachCartUnify(long p_Depth, SNI_CartUnify * p_Cart)
 	{
 		SN::LogContext context(DisplaySN0() + ".SNI_Expression::ForEachCartUnify ( cartesian )");
 
