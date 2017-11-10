@@ -3,8 +3,6 @@
 #include "logcontext.h"
 #include "sn.h"
 #include "sn_value.h"
-#include "sn_valueset.h"
-#include "sn_parameter.h"
 #include "sn_variable.h"
 #include "sn_error.h"
 #include "sn_manager.h"
@@ -12,10 +10,6 @@
 #include "sni_functiondef.h"
 #include "sni_world.h"
 #include "sni_worldset.h"
-#include "sni_result.h"
-#include "sni_helpers.h"
-#include "sni_delayedprocessor.h"
-#include "utility.h"
 
 #include "sn_pch.h"
 
@@ -43,7 +37,7 @@ namespace SNI
 		m_WorldList[p_Depth] = p_World;
 		if (p_Depth < m_Depth-1)
 		{
-			// e = m_InputList[p_Depth+1].GetSNI_Expression()->ForEachCart(p_Depth+1, this);
+			e = m_InputList[p_Depth+1].GetSNI_Expression()->ForEachCart(p_Depth+1, this);
 		}
 		else
 		{
@@ -61,8 +55,13 @@ namespace SNI
 		return e;
 	}
 
-	SN::SN_Error SNI_CartCall::ForEach()
+	SN::SN_Value SNI_CartCall::ForEach()
 	{
-		return SN::SN_Error(); // m_InputList[0].GetSNI_Expression()->ForEachCartCall(0, this);
+		SN::SN_Error e = m_InputList[0].GetSNI_Expression()->ForEachCart(0, this);
+		if (e.IsError())
+		{
+			return e;
+		}
+		return m_Result;
 	}
 }

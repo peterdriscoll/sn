@@ -23,7 +23,7 @@ namespace SNI
 		SNI_CartCall(const SNI_FunctionDef *p_FunctionDef, long p_Depth, SN::SN_Expression * p_InputList);
 		virtual ~SNI_CartCall();
 
-		SN::SN_Error ForEach();
+		SN::SN_Value ForEach();
 
 		virtual SN::SN_Error ProcessValue(long p_Depth, const SN::SN_Expression & p_Param, SNI_World * p_World);
 
