@@ -215,11 +215,6 @@ namespace SN
 		GetSNI_Expression()->ForEachCall(p_Cart, p_Depth);
 	}
 
-	void SN_Expression::ForEachUnify(SNI::SNI_Cartesian * p_Cart, long p_Depth)
-	{
-		GetSNI_Expression()->ForEachUnify(p_Cart, p_Depth);
-	}
-
 	SN_Cartesian SN_Expression::CartProd(long p_Index, SNI_FunctionDef *p_FunctionDef) const
 	{
 		return GetSNI_Expression()->CartProd(p_Index, p_FunctionDef);

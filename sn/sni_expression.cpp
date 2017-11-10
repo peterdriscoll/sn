@@ -229,13 +229,6 @@ namespace SNI
 		FORCE_ASSERTM(GetTypeName() + " ForEachCall not implemented .");
 	}
 
-	void SNI_Expression::ForEachUnify(SNI_Cartesian * p_Cart, long p_Depth)
-	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Expression::ForEachUnify ( cartesian )");
-
-		FORCE_ASSERTM(GetTypeName() + " ForEachUnify not implemented .");
-	}
-
 	void SNI_Expression::ForEachSplit(SNI_Splitter * p_Splitter)
 	{
 		SN::LogContext context(DisplaySN0() + ".SNI_Expression::ForEachSplit ( splitter )");

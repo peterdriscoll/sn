@@ -100,7 +100,8 @@ namespace SNI
 		virtual SN::SN_Error ForEach(std::function<SN::SN_Error(const SN::SN_Expression &p_Param, SNI_World *p_World)> p_Action);
 		virtual SN::SN_Error ForEachCartUnify(long p_Depth, SNI_Cart * p_Cart);
 		virtual void ForEachCall(SNI_Cartesian * p_Cart, long p_Depth);
-		virtual void ForEachUnify(SNI_Cartesian * p_Cart, long p_Depth);
+
+	public:
 		virtual void ForEachSplit(SNI_Splitter * p_Splitter);
 		virtual SN::SN_Cartesian CartProd(long p_Index, SNI_FunctionDef *p_FunctionDef = NULL);
 

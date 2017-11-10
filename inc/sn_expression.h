@@ -191,7 +191,6 @@ namespace SN
 		SN_Expression GetVariableValue(bool p_IfComplete = true);
 		SN::SN_Error ForEach(std::function<SN::SN_Error(const SN_Expression &p_Param, SNI::SNI_World *p_World)> p_Action);
 		void ForEachCall(SNI::SNI_Cartesian * p_Cart, long p_Depth);
-		void ForEachUnify(SNI::SNI_Cartesian * p_Cart, long p_Depth);
 		SN_Cartesian CartProd(long p_Index, SNI::SNI_FunctionDef *p_FunctionDef = NULL) const;
 	};
 

@@ -33,7 +33,6 @@ namespace SNI
 
 		virtual SN::SN_Error ForEachCartUnify(long p_Depth, SNI_Cart * p_Cart);
 		virtual void ForEachCall(SNI_Cartesian * p_Cart, long p_Depth);
-		virtual void ForEachUnify(SNI_Cartesian * p_Cart, long p_Depth);
 		virtual void ForEachSplit(SNI_Splitter * p_Splitter);
 
 	protected:

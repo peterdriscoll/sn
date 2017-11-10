@@ -202,6 +202,7 @@
     <ClInclude Include="sni_bool.h" />
     <ClInclude Include="sni_buildset.h" />
     <ClInclude Include="sni_cart.h" />
+    <ClInclude Include="sni_cartcall.h" />
     <ClInclude Include="sni_cartesian.h" />
     <ClInclude Include="sni_char.h" />
     <ClInclude Include="sni_collapse.h" />
@@ -288,6 +289,7 @@
     <ClCompile Include="sni_bool.cpp" />
     <ClCompile Include="sni_buildset.cpp" />
     <ClCompile Include="sni_cart.cpp" />
+    <ClCompile Include="sni_cartcall.cpp" />
     <ClCompile Include="sni_cartesian.cpp" />
     <ClCompile Include="sni_char.cpp" />
     <ClCompile Include="sni_collapse.cpp" />
