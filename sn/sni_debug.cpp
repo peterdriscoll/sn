@@ -119,9 +119,9 @@ namespace SNI
 		return LOG_RETURN(context, m_Expression->PartialUnify(p_ParameterList, p_Result.Debug()));
 	}
 
-	SN::SN_Error SNI_Debug::ForEachCartUnify(long p_Depth, SNI_CartUnify * p_Cart)
+	SN::SN_Error SNI_Debug::ForEachCart(long p_Depth, SNI_Cart * p_Cart)
 	{
-		return m_Expression->ForEachCartUnify(p_Depth, p_Cart);
+		return m_Expression->ForEachCart(p_Depth, p_Cart);
 	}
 
 	void SNI_Debug::ForEachCall(SNI_Cartesian * p_Cart, long p_Depth)

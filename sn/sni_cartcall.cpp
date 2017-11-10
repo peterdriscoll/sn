@@ -43,7 +43,7 @@ namespace SNI
 		m_WorldList[p_Depth] = p_World;
 		if (p_Depth < m_Depth-1)
 		{
-			// e = m_InputList[p_Depth+1].GetSNI_Expression()->ForEachCartUnify(p_Depth+1, this);
+			// e = m_InputList[p_Depth+1].GetSNI_Expression()->ForEachCart(p_Depth+1, this);
 		}
 		else
 		{

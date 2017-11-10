@@ -103,6 +103,7 @@
 #include "sni_helpers.h"
 #include "sni_manager.h"
 #include "sni_cartesian.h"
+#include "sni_cart.h"
 #include "sni_cartcall.h"
 #include "sni_cartunify.h"
 #include "sni_splitter.h"

@@ -77,7 +77,7 @@ namespace SNI
 			}
 			else
 			{
-				e = m_InputList[p_Depth+1].GetSNI_Expression()->ForEachCartUnify(p_Depth+1, this);
+				e = m_InputList[p_Depth+1].GetSNI_Expression()->ForEachCart(p_Depth+1, this);
 			}
 		}
 		else
@@ -106,7 +106,7 @@ namespace SNI
 		}
 		else
 		{
-			e = m_InputList[0].GetSNI_Expression()->ForEachCartUnify(0, this);
+			e = m_InputList[0].GetSNI_Expression()->ForEachCart(0, this);
 		}
 		if (e.GetBool())
 		{

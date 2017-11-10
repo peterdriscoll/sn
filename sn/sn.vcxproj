@@ -201,6 +201,7 @@
     <ClInclude Include="sni_binary.h" />
     <ClInclude Include="sni_bool.h" />
     <ClInclude Include="sni_buildset.h" />
+    <ClInclude Include="sni_cart.h" />
     <ClInclude Include="sni_cartunify.h" />
     <ClInclude Include="sni_cartcall.h" />
     <ClInclude Include="sni_cartesian.h" />

@@ -128,7 +128,7 @@ namespace SNI
 		}
 	}
 
-	SN::SN_Error SNI_StringRef::ForEachCartUnify(long p_Depth, SNI_CartUnify *p_Cart)
+	SN::SN_Error SNI_StringRef::ForEachCart(long p_Depth, SNI_Cart *p_Cart)
 	{
 		SN::SN_Expression start = GetStart().Evaluate();
 		SN::SN_Expression end = GetEnd().Evaluate();

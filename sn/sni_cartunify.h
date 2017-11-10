@@ -1,5 +1,5 @@
-#if !defined(SNI_CART_H_INCLUDED)
-#define SNI_CART_H_INCLUDED
+#if !defined(SNI_CARTUNIFY_H_INCLUDED)
+#define SNI_CARTUNIFY_H_INCLUDED
 
 #pragma once
 
@@ -7,7 +7,7 @@
 #include "sn_parameter.h"
 #include "sn_valueset.h"
 
-using namespace std;
+#include "sni_cart.h"
 
 namespace SNI
 {
@@ -17,7 +17,7 @@ namespace SNI
 	class SNI_Binary;
 	class SNI_Unary;
 
-	class SNI_CartUnify
+	class SNI_CartUnify : public SNI_Cart
 	{
 	public:
 		SNI_CartUnify(const SNI_FunctionDef *p_FunctionDef, long p_Depth, SN::SN_Expression * p_InputList, SN::SN_Expression * p_ParamList, bool *p_Output, long p_CalcPos, long p_TotalCalc);
@@ -48,4 +48,4 @@ namespace SNI
 	};
 }
 
-#endif //SNI_CART_H_INCLUDED
+#endif //SNI_CARTUNIFY_H_INCLUDED

@@ -31,7 +31,7 @@ namespace SNI
 		virtual SN::SN_Error Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
 		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
 
-		virtual SN::SN_Error ForEachCartUnify(long p_Depth, SNI_CartUnify * p_Cart);
+		virtual SN::SN_Error ForEachCart(long p_Depth, SNI_Cart * p_Cart);
 		virtual void ForEachCall(SNI_Cartesian * p_Cart, long p_Depth);
 		virtual void ForEachSplit(SNI_Splitter * p_Splitter);
 
