@@ -66,8 +66,7 @@ namespace SNI
 		virtual SN::SN_Error Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
 
 		virtual SN::SN_Error ForEach(std::function<SN::SN_Error(const SN::SN_Expression&p_Param, SNI_World*p_World)> p_Action);
-		virtual void ForEachCall(SNI_Cartesian *p_Cart, long p_Depth);
-		SN::SN_Error ForEachCart(long p_Depth, SNI_Cart * p_Cart);
+		virtual SN::SN_Error ForEachCart(long p_Depth, SNI_Cart * p_Cart);
 		virtual void ForEachSplit(SNI_Splitter * p_Splitter);
 
 		// Cardinality

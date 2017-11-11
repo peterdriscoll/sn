@@ -78,56 +78,6 @@ namespace SNI
 		return SNI_FunctionDef::MultiplyCardinality(GetStart().Cardinality(p_MaxCardinality), GetEnd().Cardinality(p_MaxCardinality));
 	}
 
-	void SNI_StringRef::ForEachCall(SNI_Cartesian *p_Cart, long p_Depth)
-	{
-		SN::SN_Expression start = GetStart().Evaluate();
-		SN::SN_Expression end = GetEnd().Evaluate();
-		if (Cardinality() == 1)
-		{
-			p_Cart->ProcessValueCall(this, NULL, p_Depth);
-		}
-		else
-		{
-			const string &source_text = GetSourceString();
-			SN::SN_String source = m_Source;
-			SNI_WorldSet *worldSet = new SNI_WorldSet;
-			start.ForEach(
-				[&end, &source, &source_text, &p_Cart, worldSet, p_Depth](const SN::SN_Expression &p_Param, SNI::SNI_World *p_World) -> SN::SN_Error
-			{
-				SN::SN_Expression start_exp = p_Param;
-				SNI::SNI_World *startWorld = p_World;
-				end.ForEach(
-					[&source, &source_text, &start_exp, &p_Cart, startWorld, worldSet, p_Depth](const SN::SN_Expression &p_Param, SNI::SNI_World *p_World) -> SN::SN_Error
-				{
-					SN::SN_Expression end_exp = p_Param;
-					SN::SN_Long start_long = start_exp;
-					SN::SN_Long end_long = end_exp;
-					SNI::SNI_World *endWorld = p_World;
-					SN::SN_Value value;
-					if (!start_long.IsNullValue() && !end_long.IsNullValue())
-					{
-						size_t start_pos = start_long.GetNumber();
-						size_t end_pos = end_long.GetNumber();
-						string s = source_text.substr(start_pos, end_pos - start_pos);
-						value = SN::SN_String(s);
-					}
-					else
-					{
-						value = SN::SN_StringRef(source, start_exp, end_exp);
-					}
-					bool exists = false;
-					SNI_World *world = worldSet->JoinWorldsArgs(AutoAddWorld, CreateIfActiveParents, exists, startWorld, endWorld);
-					if (exists)
-					{
-						p_Cart->ProcessValueCall(value, world, p_Depth);
-					}
-					return true;
-				});
-				return true;
-			});
-		}
-	}
-
 	SN::SN_Error SNI_StringRef::ForEachCart(long p_Depth, SNI_Cart *p_Cart)
 	{
 		SN::SN_Expression start = GetStart().Evaluate();

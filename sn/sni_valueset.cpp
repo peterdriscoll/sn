@@ -419,14 +419,6 @@ namespace SNI
 		return true;
 	}
 
-	void SNI_ValueSet::ForEachCall(SNI_Cartesian *p_Cart, long p_Depth)
-	{
-		for (SNI_TaggedValue &tv : m_ValueList)
-		{
-			p_Cart->ProcessValueCall(tv.GetValue(), tv.GetWorld(), p_Depth);
-		}
-	}
-
 	SN::SN_Error SNI_ValueSet::ForEachCart(long p_Depth, SNI_Cart *p_Cart)
 	{
 		for (SNI_TaggedValue &tv : m_ValueList)

@@ -298,11 +298,6 @@ namespace SNI
 		return p_Action(this, NULL);
 	}
 
-	void SNI_Variable::ForEachCall(SNI_Cartesian * p_Cart, long p_Depth)
-	{
-		p_Cart->ProcessValueCall(SN::SN_Expression(this), NULL, p_Depth);
-	}
-
 	SN::SN_Error SNI_Variable::ForEachCart(long p_Depth, SNI_Cart * p_Cart)
 	{
 		return p_Cart->ProcessValue(p_Depth, this, NULL);

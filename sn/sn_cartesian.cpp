@@ -38,11 +38,6 @@ namespace SN
 		return m_Cartesian->ForEach(p_Action);
 	};
 
-	SN_Value SN_Cartesian::ForEachCall(const SNI::SNI_FunctionDef *p_FunctionDef)
-	{
-		return m_Cartesian->ForEachCall(p_FunctionDef);
-	}
-
 	SNI::SNI_Cartesian * SN_Cartesian::GetSNI_Cartesian() const
 	{
 		SNI::SNI_Cartesian *cartesian = m_Cartesian;

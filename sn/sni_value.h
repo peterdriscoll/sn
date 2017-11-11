@@ -31,7 +31,6 @@ namespace SNI
 		virtual size_t Cardinality(size_t p_MaxCardinality = CARDINALITY_MAX) const;
 
 		virtual SN::SN_Error ForEach(function<SN::SN_Error(const SN::SN_Expression &p_Param, SNI_World *p_World)> p_Action);
-		virtual void ForEachCall(SNI_Cartesian * p_Cart, long p_Depth);
 		virtual SN::SN_Error ForEachCart(long p_Depth, SNI_Cart * p_Cart);
 		virtual void ForEachSplit(SNI_Splitter * p_Splitter);
 

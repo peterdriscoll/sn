@@ -124,11 +124,6 @@ namespace SNI
 		return m_Expression->ForEachCart(p_Depth, p_Cart);
 	}
 
-	void SNI_Debug::ForEachCall(SNI_Cartesian * p_Cart, long p_Depth)
-	{
-		m_Expression->ForEachCall(p_Cart, p_Depth);
-	}
-
 	void SNI_Debug::ForEachSplit(SNI_Splitter * p_Splitter)
 	{
 		m_Expression->ForEachSplit(p_Splitter);
