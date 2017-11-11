@@ -60,4 +60,21 @@ namespace SNI
 	{
 		return skynet::Null;
 	}
+
+	SN::SN_Expression SNI_BuildSet::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel  /* = 0 */) const
+	{
+		SN::LogContext context("SNI_Unary::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		SN::SN_Value value = (*p_ParameterList)[0].Evaluate(p_MetaLevel);
+		if (value.IsNull())
+		{
+			return LOG_RETURN(context, value);
+		}
+
+		if (0 < p_MetaLevel)
+		{
+			return LOG_RETURN(context, PrimaryFunctionExpression(value));
+		}
+
+		return LOG_RETURN(context, PrimaryFunctionValue(value));
+	}
 }
