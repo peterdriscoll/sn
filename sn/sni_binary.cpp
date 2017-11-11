@@ -284,10 +284,17 @@ namespace SNI
 		return CARDINALITY_MAX;
 	}
 
-	SN::SN_Error SNI_Binary::CallElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, SN::SN_ValueSet p_Result) const
+	SN::SN_Value SNI_Binary::CallElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, SN::SN_ValueSet p_Result) const
 	{
-		p_Result.AddValue(PrimaryFunctionValue(p_ParamList[PC2_First], p_ParamList[PC2_Second]), p_Depth, p_WorldList, NULL);
-		return SN::SN_Error(true);
+		if (p_WorldList)
+		{
+			p_Result.AddValue(PrimaryFunctionValue(p_ParamList[PC2_First].GetVariableValue(), p_ParamList[PC2_Second].GetVariableValue()), p_Depth, p_WorldList, NULL);
+			return SN::SN_Error(true);
+		}
+		else
+		{
+			return PrimaryFunctionValue(p_ParamList[PC2_First].GetVariableValue(), p_ParamList[PC2_Second].GetVariableValue());
+		}
 	}
 
 	size_t SNI_Binary::CardinalityOfUnify(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const
@@ -335,16 +342,23 @@ namespace SNI
 		{
 		case 0:
 		{
-			bool exists = false;
-			SNI_World *world = worldSet->JoinWorldsArray(ManualAddWorld, AlwaysCreateWorld, exists, p_Depth, p_WorldList);
-			if (exists)
+			if (p_WorldList)
 			{
-				if (PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()).Equivalent(p_ParamList[PU2_Result].GetVariableValue()))
+				bool exists = false;
+				SNI_World *world = worldSet->JoinWorldsArray(ManualAddWorld, AlwaysCreateWorld, exists, p_Depth, p_WorldList);
+				if (exists)
 				{
-					world->AddToSetList();
+					if (PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()).Equivalent(p_ParamList[PU2_Result].GetVariableValue()))
+					{
+						world->AddToSetList();
+					}
 				}
+				return true;
 			}
-			return true;
+			else
+			{
+				return PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()).Equivalent(p_ParamList[PU2_Result].GetVariableValue());
+			}
 		}
 		break;
 		case 1:

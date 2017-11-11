@@ -267,29 +267,31 @@ namespace SNI
 		{
 		case 0:
 		{
-			if (!p_WorldList)
+			if (p_WorldList)
 			{
-				return PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()).Equivalent(p_ParamList[PU2_Result].GetVariableValue());
-			}
-
-			bool exists = false;
-			SNI_World *world = worldSet->JoinWorldsArray(ManualAddWorld, AlwaysCreateWorld, exists, p_Depth, p_WorldList);
-			if (exists)
-			{
-				if (PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()).Equivalent(p_ParamList[PU2_Result].GetVariableValue()))
+				bool exists = false;
+				SNI_World *world = worldSet->JoinWorldsArray(ManualAddWorld, AlwaysCreateWorld, exists, p_Depth, p_WorldList);
+				if (exists)
 				{
-					world->AddToSetList();
+					if (PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()).Equivalent(p_ParamList[PU2_Result].GetVariableValue()))
+					{
+						world->AddToSetList();
+					}
+					else
+					{
+						context.LogText("fail", "Value conflict on " + DisplayValues(p_Depth, p_ParamList, p_WorldList));
+					}
 				}
 				else
 				{
-					context.LogText("fail", "Value conflict on " + DisplayValues(p_Depth, p_ParamList, p_WorldList));
+					context.LogText("fail", "Join worlds failed on " + DisplayWorlds(p_Depth, p_WorldList));
 				}
+				return true;
 			}
 			else
 			{
-				context.LogText("fail", "Join worlds failed on " + DisplayWorlds(p_Depth, p_WorldList));
+				return PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()).Equivalent(p_ParamList[PU2_Result].GetVariableValue());
 			}
-			return true;
 		}
 		break;
 		case 1:

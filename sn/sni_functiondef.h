@@ -68,11 +68,11 @@ namespace SNI
 		virtual size_t CardinalityOfUnify(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const;
 		virtual SN::SN_Error UnifyElement(long p_Depth, SN::SN_Expression * p_InputList, SNI_World ** p_WorldList, long p_CalcPos, long p_TotalCalc, SNI_WorldSet * worldSet) const;
 		virtual size_t CardinalityOfCall(long p_Depth, SN::SN_Expression * p_ParameterList) const;
-		virtual SN::SN_Error CallElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, SN::SN_ValueSet p_Result) const;
+		virtual SN::SN_Value CallElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, SN::SN_ValueSet p_Result) const;
 
 		static size_t MultiplyCardinality(size_t p_Left, size_t p_Right);
 	protected:
-		virtual SN::SN_Error ForEachCall(size_t p_Card, long p_Depth, SN::SN_Expression * p_InputList) const;
+		virtual SN::SN_Value  ForEachCall(size_t p_Card, long p_Depth, SN::SN_Expression * p_InputList) const;
 		virtual SN::SN_Error ForEachUnify(size_t p_Card, long p_Depth, SN::SN_Expression * p_ParamList, SN::SN_Expression * p_InputList, bool *p_Output, long p_CalcPos, long p_TotalCalc) const;
 
 		virtual SN::SN_Expression * LoadParametersCall(SN::SN_ExpressionList * p_ParameterList) const;

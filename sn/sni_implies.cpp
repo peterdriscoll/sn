@@ -117,16 +117,23 @@ namespace SNI
 		{
 		case 0:
 		{
-			bool exists = false;
-			SNI_World *world = worldSet->JoinWorldsArray(ManualAddWorld, AlwaysCreateWorld, exists, p_Depth, p_WorldList);
-			if (exists)
+			if (p_WorldList)
 			{
-				if (PrimaryFunctionValue(p_ParamList[PU2_First], p_ParamList[PU2_Second]).Equivalent(p_ParamList[PU2_Result]))
+				bool exists = false;
+				SNI_World *world = worldSet->JoinWorldsArray(ManualAddWorld, AlwaysCreateWorld, exists, p_Depth, p_WorldList);
+				if (exists)
 				{
-					world->AddToSetList();
+					if (PrimaryFunctionValue(p_ParamList[PU2_First], p_ParamList[PU2_Second]).Equivalent(p_ParamList[PU2_Result]))
+					{
+						world->AddToSetList();
+					}
 				}
+				return true;
 			}
-			return true;
+			else
+			{
+				return PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()).Equivalent(p_ParamList[PU2_Result].GetVariableValue());
+			}
 		}
 		break;
 		case 1:

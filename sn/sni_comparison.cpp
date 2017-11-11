@@ -99,7 +99,7 @@ namespace SNI
 
 	SN::SN_Error SNI_Comparison::UnifyElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, long p_CalcPos, long p_TotalCalc, SNI_WorldSet * worldSet) const
 	{
-		SN::LogContext context("SNI_Equals::UnifyElement(CalcPos " + to_string(p_CalcPos) + " TotalCalc " + to_string(p_TotalCalc) + " " + DisplayValues(p_Depth, p_ParamList, p_WorldList) + ")");
+		SN::LogContext context("SNI_Comparison::UnifyElement(CalcPos " + to_string(p_CalcPos) + " TotalCalc " + to_string(p_TotalCalc) + " " + DisplayValues(p_Depth, p_ParamList, p_WorldList) + ")");
 		if (worldSet)
 		{
 			context.LogText("World set", worldSet->DisplayLong());
@@ -108,24 +108,31 @@ namespace SNI
 		{
 		case 0:
 		{
-			bool exists = false;
-			SNI_World *world = worldSet->JoinWorldsArray(ManualAddWorld, AlwaysCreateWorld, exists, p_Depth, p_WorldList);
-			if (exists)
+			if (p_WorldList)
 			{
-				if (PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()).Equivalent(p_ParamList[PU2_Result].GetVariableValue()))
+				bool exists = false;
+				SNI_World *world = worldSet->JoinWorldsArray(ManualAddWorld, AlwaysCreateWorld, exists, p_Depth, p_WorldList);
+				if (exists)
 				{
-					world->AddToSetList();
+					if (PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()).Equivalent(p_ParamList[PU2_Result].GetVariableValue()))
+					{
+						world->AddToSetList();
+					}
+					else
+					{
+						context.LogText("fail", "Value conflict on " + DisplayValues(p_Depth, p_ParamList, p_WorldList));
+					}
 				}
 				else
 				{
-					context.LogText("fail", "Value conflict on " + DisplayValues(p_Depth, p_ParamList, p_WorldList));
+					context.LogText("fail", "Join worlds failed on " + DisplayWorlds(p_Depth, p_WorldList));
 				}
+				return true;
 			}
 			else
 			{
-				context.LogText("fail", "Join worlds failed on " + DisplayWorlds(p_Depth, p_WorldList));
+				return PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()).Equivalent(p_ParamList[PU2_Result].GetVariableValue());
 			}
-			return true;
 		}
 		case 1:
 		{

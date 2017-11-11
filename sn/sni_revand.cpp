@@ -97,10 +97,17 @@ namespace SNI
 		return SNI_Binary::CardinalityOfCall(p_Depth, p_ParamList);
 	}
 
-	SN::SN_Error SNI_RevAnd::CallElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, SN::SN_ValueSet p_Result) const
+	SN::SN_Value SNI_RevAnd::CallElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, SN::SN_ValueSet p_Result) const
 	{
-		p_Result.AddValue(PrimaryFunctionValue(p_ParamList[PC2_First], p_ParamList[PC2_Second]), p_Depth, p_WorldList, NULL);
-		return SN::SN_Error(true);
+		if (p_WorldList)
+		{
+			p_Result.AddValue(PrimaryFunctionValue(p_ParamList[PC2_First].GetVariableValue(), p_ParamList[PC2_Second].GetVariableValue()), p_Depth, p_WorldList, NULL);
+			return SN::SN_Error(true);
+		}
+		else
+		{
+			return PrimaryFunctionValue(p_ParamList[PC2_First].GetVariableValue(), p_ParamList[PC2_Second].GetVariableValue());
+		}
 	}
 
 	size_t SNI_RevAnd::CardinalityOfUnify(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const
@@ -123,16 +130,23 @@ namespace SNI
 		{
 		case 0:
 		{
-			bool exists = false;
-			SNI_World *world = worldSet->JoinWorldsArray(ManualAddWorld, AlwaysCreateWorld, exists, p_Depth, p_WorldList);
-			if (exists)
+			if (p_WorldList)
 			{
-				if (PrimaryFunctionValue(p_ParamList[PU2_First], p_ParamList[PU2_Second]).Equivalent(p_ParamList[PU2_Result]))
+				bool exists = false;
+				SNI_World *world = worldSet->JoinWorldsArray(ManualAddWorld, AlwaysCreateWorld, exists, p_Depth, p_WorldList);
+				if (exists)
 				{
-					world->AddToSetList();
+					if (PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()).Equivalent(p_ParamList[PU2_Result].GetVariableValue()))
+					{
+						world->AddToSetList();
+					}
 				}
+				return true;
 			}
-			return true;
+			else
+			{
+				return PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()).Equivalent(p_ParamList[PU2_Result].GetVariableValue());
+			}
 		}
 		break;
 		case 1:
@@ -141,15 +155,15 @@ namespace SNI
 			{
 			case PU2_First:
 			{
-				return p_ParamList[p_CalcPos].AddValue(RightInverseFunctionValue(p_ParamList[PU2_Result], p_ParamList[PU2_Second]), p_Depth, p_WorldList, worldSet);
+				return p_ParamList[p_CalcPos].AddValue(RightInverseFunctionValue(p_ParamList[PU2_Result].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()), p_Depth, p_WorldList, worldSet);
 			}
 			case PU2_Second:
 			{
-				return p_ParamList[p_CalcPos].AddValue(LeftInverseFunctionValue(p_ParamList[PU2_Result], p_ParamList[PU2_First]), p_Depth, p_WorldList, worldSet);
+				return p_ParamList[p_CalcPos].AddValue(LeftInverseFunctionValue(p_ParamList[PU2_Result].GetVariableValue(), p_ParamList[PU2_First].GetVariableValue()), p_Depth, p_WorldList, worldSet);
 			}
 			case PU2_Result:
 			{
-				return p_ParamList[p_CalcPos].AddValue(PrimaryFunctionValue(p_ParamList[PU2_First], p_ParamList[PU2_Second]), p_Depth, p_WorldList, worldSet);
+				return p_ParamList[p_CalcPos].AddValue(PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()), p_Depth, p_WorldList, worldSet);
 			}
 			}
 		}

@@ -202,20 +202,12 @@ namespace SNI
 	{
 		SN::LogContext context(DisplaySN0() + ".SNI_FunctionDef::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )");
 
-		SN::SN_Error  e = true;
-		long depth = (long)p_ParameterList->size() + 1;
+		long depth = (long)p_ParameterList->size();
 		SN::SN_Expression *paramList = LoadParametersCall(p_ParameterList);
 		SN::SN_Expression *inputList = new SN::SN_Expression[depth];
 		for (long j = 0; j < depth; j++)
 		{
-			if (paramList[j].IsKnownValue())
-			{
-				inputList[j] = paramList[j].GetVariableValue();
-			}
-			else
-			{
-				inputList[j] = paramList[j];
-			}
+			inputList[j] = paramList[j].GetVariableValue();
 		}
 		size_t card = 0;
 		size_t maxCard = SN::SN_Manager::GetTopManager().MaxCardinalityCall();
@@ -224,49 +216,24 @@ namespace SNI
 			if (!paramList[j].IsKnownValue() && !paramList[j].IsReferableValue())
 			{
 				card = CardinalityOfCall(depth, inputList);
-				if (paramList[j].IsVariable())
+				if (maxCard < card)
 				{
-					if (maxCard < card)
-					{
-						e = inputList[j].GetSNI_Expression()->SelfAssert();
-						if (e.IsError())
-						{
-							break;
-						}
-					}
+					inputList[j] = paramList[j].Evaluate();
 				}
-				else
-				{
-					if (maxCard < card)
-					{
-						inputList[j] = new SNI_Variable();
-						e = paramList[j].AssertValue(inputList[j]);
-						if (e.IsError())
-						{
-							break;
-						}
-					}
-				}
-			}
-			if (inputList[j].IsKnownValue())
-			{
-				inputList[j] = inputList[j].GetVariableValue();
 			}
 		}
-		if (e.GetBool())
+		card = CardinalityOfCall(depth, inputList);
+		SN::SN_Value result;
+		if (maxCard < card)
 		{
-			card = CardinalityOfCall(depth, inputList);
-			if (maxCard < card)
-			{
-				e = SN::SN_Error(true, true);
-			}
-			else
-			{
-				e = ForEachCall(card, depth, inputList);
-			}
+			result = SN::SN_Error(true, true, "Cardinality of "+context.GetSimpleDescription()+", "+to_string(card)+" exceeds max cardinality "+to_string(maxCard));
+		}
+		else
+		{
+			result = ForEachCall(card, depth, inputList);
 		}
 		delete[] inputList;
-		return e;
+		return result;
 	}
 
 	SN::SN_Expression SNI_FunctionDef::PartialCall(SN::SN_ExpressionList * p_ParameterList, long  /* = 0 */) const
@@ -308,7 +275,7 @@ namespace SNI
 		return 1;
 	}
 
-	SN::SN_Error SNI_FunctionDef::CallElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, SN::SN_ValueSet p_Result) const
+	SN::SN_Value SNI_FunctionDef::CallElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, SN::SN_ValueSet p_Result) const
 	{
 		return false;
 	}
@@ -324,13 +291,11 @@ namespace SNI
 		return CARDINALITY_MAX;
 	}
 
-	SN::SN_Error SNI_FunctionDef::ForEachCall(size_t p_Card, long p_Depth, SN::SN_Expression * p_InputList) const
+	SN::SN_Value SNI_FunctionDef::ForEachCall(size_t p_Card, long p_Depth, SN::SN_Expression * p_InputList) const
 	{
 		if (p_Card == 1)
 		{
-			SN::SN_Value result;
-			SN::SN_Error e = CallElement(p_Depth, p_InputList, NULL, result);
-			return e;
+			return CallElement(p_Depth, p_InputList, NULL, SN::SN_Value());
 		}
 		else
 		{

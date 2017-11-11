@@ -118,6 +118,7 @@ namespace SNI
 	{
 		if (!p_WorldList)
 		{
+			exists = false;
 			return NULL;
 		}
 		bool active = (p_CreateWorld == AlwaysCreateWorld);
