@@ -83,10 +83,6 @@ namespace SNI
 		(*p_ParameterList)[0].GetValue() = p_ParamList[PU2_Second];
 	}
 
-	/// \brief Evaluate the operation on two values, if they are known, and return the result.
-	///
-	/// - Extract first element from list as left and evaluate it.
-	///   + If unknown then return unknown
 	/// - Extract second element from list as right and evaluate it.
 	///   + If unknown then return unknown
 	/// - If meta level is greater than 0
@@ -105,13 +101,7 @@ namespace SNI
 			return PrimaryFunctionExpression((*p_ParameterList)[1].Evaluate(p_MetaLevel), (*p_ParameterList)[0].Evaluate(p_MetaLevel));
 		}
 
-		SN::SN_Value result = ((*p_ParameterList)[1].CartProd(PC2_First) * (*p_ParameterList)[0].CartProd(PC2_Second)).ForEachCall(this);
-		if (result.IsError())
-		{
-			SN::SN_Error e = result;
-			e.AddNote(context, this, "Cartesian product failed");
-		}
-		return result;
+		return SNI_FunctionDef::Call(p_ParameterList, p_MetaLevel);
 	}
 
 	/// \brief Return an expression or a value for the operation applied to two values.

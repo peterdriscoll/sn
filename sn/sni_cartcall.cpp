@@ -62,6 +62,6 @@ namespace SNI
 		{
 			return e;
 		}
-		return m_Result;
+		return m_Result.SimplifyValue();
 	}
 }

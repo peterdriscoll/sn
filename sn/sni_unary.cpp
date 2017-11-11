@@ -68,6 +68,18 @@ namespace SNI
 		return PrimaryFunctionExpression(p_Param);
 	}
 
+	SN::SN_Expression SNI_Unary::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
+	{
+		SN::LogContext context("SNI_Unary::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+
+		if (0 < p_MetaLevel)
+		{
+			return PrimaryFunctionExpression((*p_ParameterList)[0].Evaluate(p_MetaLevel));
+		}
+
+		return SNI_FunctionDef::Call(p_ParameterList, p_MetaLevel);
+	}
+
 	SN::SN_Expression SNI_Unary::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
 		SN::LogContext context("SNI_Unary::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");

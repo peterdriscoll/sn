@@ -322,6 +322,10 @@ namespace SNI
 					it++;
 				}
 			}
+			else
+			{
+				it++;
+			}
 		}
 		if (!found)
 		{
