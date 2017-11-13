@@ -127,7 +127,7 @@ namespace SNI
 		return LOG_RETURN(context, left_value || right_value);
 	}
 
-	SN::SN_Error SNI_Or::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	SN::SN_Expression SNI_Or::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
 	{
 		SN::LogContext context("SNI_Or::Unify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
 		SN::SN_ParameterList firstParamList(1);

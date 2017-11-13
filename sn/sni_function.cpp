@@ -142,8 +142,21 @@ namespace SNI
 		SN::LogContext context(DisplaySN0() + ".SNI_Function::AssertValue ( " + p_Value.DisplaySN() + " )");
 		SN::SN_ParameterList * l_ParameterList = new SN::SN_ParameterList();
 		l_ParameterList->push_back(SN::SN_Parameter(m_Parameter, m_Condition));
-
-		return m_Function->Unify(l_ParameterList, p_Value);
+		if (true)
+		{
+			return m_Function->Unify(l_ParameterList, p_Value);
+		}
+		else
+		{
+			SNI_Expression *function = m_Function;
+			SNI_Error *e = NULL;
+			do
+			{
+				function = function->Unify(l_ParameterList, p_Value).GetSNI_Expression();
+				e = dynamic_cast<SNI_Error *>(function);
+			} while (!e);
+			return e;
+		}
 	}
 
 	SN::SN_Error SNI_Function::AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World ** p_WorldList, SNI_WorldSet * p_WorldSet)
@@ -182,7 +195,7 @@ namespace SNI
 		return m_Function->PartialCall(p_ParameterList, p_MetaLevel);
 	}
 
-	SN::SN_Error SNI_Function::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	SN::SN_Expression SNI_Function::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
 	{
 		SN::LogContext context(DisplaySN0() + ".SNI_Function::Unify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
 

@@ -144,7 +144,7 @@ namespace SNI
 		return m_Expression->PartialCall(p_ParameterList, p_MetaLevel);
 	}
 
-	SN::SN_Error SNI_Local::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	SN::SN_Expression SNI_Local::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
 	{
 		SN::LogContext context(DisplaySN0() + ".SNI_Local::Unify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
 

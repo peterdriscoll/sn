@@ -88,7 +88,7 @@ namespace SNI
 		return CardinalityOfUnify(depth, paramList, calcPos, totalCalc);
 	}
 
-	SN::SN_Error SNI_FunctionDef::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	SN::SN_Expression SNI_FunctionDef::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
 	{
 		SN::SN_Error  e = true;
 		long depth = (long) p_ParameterList->size() + 1;

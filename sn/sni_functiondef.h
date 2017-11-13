@@ -62,7 +62,7 @@ namespace SNI
 
 		virtual SN::SN_Error Assert();
 		virtual SN::SN_Error PartialAssert();
-		virtual SN::SN_Error Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression);
+		virtual SN::SN_Expression Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression);
 		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression);
 
 		virtual size_t CardinalityOfUnify(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const;

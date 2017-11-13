@@ -144,7 +144,7 @@ namespace SNI
 		return this;
 	}
 
-	SN::SN_Error SNI_Lambda::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	SN::SN_Expression SNI_Lambda::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
 	{
 		SN::LogContext context(DisplaySN0() + ".SNI_Lambda::Unify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
 
@@ -157,7 +157,7 @@ namespace SNI
 		if (e.IsError())
 		{
 			e.AddNote(context, this, "Assigning parameter value failed");
-			return false;
+			return SN::SN_Error(false);
 		}
 		if (p_ParameterList->size() > 0)
 		{

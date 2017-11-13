@@ -451,7 +451,7 @@ namespace SNI
 		return SN::SN_Error(GetTypeName() + " partial function to call is unknown.");
 	}
 
-	SN::SN_Error SNI_Variable::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	SN::SN_Expression SNI_Variable::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
 	{
 		if (m_Value)
 		{
@@ -464,7 +464,7 @@ namespace SNI
 		else
 		{
 			m_Value = AddLambdas(p_ParameterList, p_Result).GetSNI_Expression();
-			return true;
+			return SN::SN_Error(true);
 		}
 	}
 

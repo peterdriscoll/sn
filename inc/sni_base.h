@@ -83,7 +83,7 @@ namespace SNI
 		virtual SN::SN_Expression PartialEvaluate(long p_MetaLevel = 0) const = 0;
 		virtual SN::SN_Expression Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const = 0;
 		virtual SN::SN_Expression PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const = 0;
-		virtual SN::SN_Error Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Expression) = 0;
+		virtual SN::SN_Expression Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Expression) = 0;
 		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Expression) = 0;
 		virtual SN::SN_Error Assert() = 0;
 		virtual SN::SN_Error AssertValue(const SN::SN_Expression &p_Value) = 0;

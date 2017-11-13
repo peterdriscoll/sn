@@ -162,7 +162,7 @@ namespace SNI
 		return LOG_RETURN(context, condition.If(positiveCase, negativeCase));
 	}
 
-	SN::SN_Error SNI_If::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	SN::SN_Expression SNI_If::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
 	{
 		SN::LogContext context("SNI_If::Unify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
 

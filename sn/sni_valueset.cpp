@@ -377,7 +377,7 @@ namespace SNI
 		return vs.SimplifyValue();
 	}
 
-	SN::SN_Error SNI_ValueSet::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	SN::SN_Expression SNI_ValueSet::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
 	{
 		SN::LogContext context("SNI_ValueSet::Unify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
 		SN::SN_Error err(true);
@@ -397,7 +397,7 @@ namespace SNI
 		}
 		if (success)
 		{
-			return success;
+			return SN::SN_Error(success);
 		}
 		err.AddNote(context, this, "No function from the valueset unified successfully.");
 		return err;

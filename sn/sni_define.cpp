@@ -90,7 +90,7 @@ namespace SNI
 		return m_Variable->PartialAssertValue(p_Expression, true);
 	}
 
-	SN::SN_Error SNI_Define::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	SN::SN_Expression SNI_Define::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
 	{
 		return m_Variable->PartialUnify(p_ParameterList, p_Result);
 	}

@@ -24,7 +24,7 @@ namespace SNI
 		virtual SN::SN_Value InverseFunctionValue(const SN::SN_Value &p_Param) const;
 		virtual SN::SN_Expression InverseFunctionExpression(const SN::SN_Expression &p_Param) const;
 		
-		virtual SN::SN_Error Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
+		virtual SN::SN_Expression Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
 	};
 }
 

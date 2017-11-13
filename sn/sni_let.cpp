@@ -132,7 +132,7 @@ namespace SNI
 		return m_Expression->PartialEvaluate(p_MetaLevel);
 	}
 
-	SN::SN_Error SNI_Let::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	SN::SN_Expression SNI_Let::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
 	{
 		SN::LogContext context(DisplaySN0() + ".SNI_Let::Unify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
 
