@@ -29,7 +29,7 @@ namespace SNI
 		SN::SN_Expression Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const;
 		virtual SN::SN_Error PartialAssertValue(const SN::SN_Expression &p_Expression, bool p_Define = false);
-		virtual SN::SN_Expression Unify(SN::SN_ParameterList * p_ParameterList);
+		virtual SN::SN_Expression Unify(SN::SN_ExpressionList * p_ParameterList);
 		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
 
 		SNI_Variable* GetVariable();

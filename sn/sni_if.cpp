@@ -162,15 +162,15 @@ namespace SNI
 		return LOG_RETURN(context, condition.If(positiveCase, negativeCase));
 	}
 
-	SN::SN_Expression SNI_If::Unify(SN::SN_ParameterList * p_ParameterList)
+	SN::SN_Expression SNI_If::Unify(SN::SN_ExpressionList * p_ParameterList)
 	{
-		SN::LogContext context("SNI_If::Unify ( " + DisplayPmParameterList(p_ParameterList) + " )");
+		SN::LogContext context("SNI_If::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )");
 
 		SN::SN_ValueSet condition;
 		SNI_WorldSet *condition_worldSet = new SNI_WorldSet;
 		condition.AddTaggedValue(skynet::False, condition_worldSet->CreateWorld());
 		condition.AddTaggedValue(skynet::True, condition_worldSet->CreateWorld());
-		SN::SN_Error e1 = (*p_ParameterList)[3].GetValue().AssertValue(condition);
+		SN::SN_Error e1 = (*p_ParameterList)[3].AssertValue(condition);
 		if (e1.IsError())
 		{
 			e1.AddNote(context, this, "condition assert " + condition.DisplayValueSN());
@@ -183,7 +183,7 @@ namespace SNI
 		SN::SN_Error e2;
 		if (splitter.PositiveNotNull())
 		{
-			SN::SN_ParameterList paramList(3);
+			SN::SN_ExpressionList paramList(3);
 			paramList[0] = splitter.Positive();
 			paramList[1] = (*p_ParameterList)[0];
 			paramList[2] = (*p_ParameterList)[2];
@@ -197,7 +197,7 @@ namespace SNI
 		}
 		if (splitter.NegativeNotNull())
 		{
-			SN::SN_ParameterList paramList(3);
+			SN::SN_ExpressionList paramList(3);
 			paramList[0] = splitter.Negative();
 			paramList[1] = (*p_ParameterList)[0];
 			paramList[2] = (*p_ParameterList)[1];
@@ -209,7 +209,7 @@ namespace SNI
 			}
 			splitter.Negative().Simplify();
 		}
-		(*p_ParameterList)[3].GetValue().Simplify();
+		(*p_ParameterList)[3].Simplify();
 		return e2;
 	}
 

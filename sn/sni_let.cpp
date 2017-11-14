@@ -132,9 +132,9 @@ namespace SNI
 		return m_Expression->PartialEvaluate(p_MetaLevel);
 	}
 
-	SN::SN_Expression SNI_Let::Unify(SN::SN_ParameterList * p_ParameterList)
+	SN::SN_Expression SNI_Let::Unify(SN::SN_ExpressionList * p_ParameterList)
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Let::Unify ( " + DisplayPmParameterList(p_ParameterList) + " )");
+		SN::LogContext context(DisplaySN0() + ".SNI_Let::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )");
 
 		SN::SN_Error e = SN::SN_Expression(m_Condition).Assert();
 		if (e.IsError())
@@ -146,7 +146,7 @@ namespace SNI
 		{
 			return m_Expression->Unify(p_ParameterList);
 		}
-		return m_Expression->AssertValue((*p_ParameterList)[0].GetValue());
+		return m_Expression->AssertValue((*p_ParameterList)[0]);
 	}
 
 	SN::SN_Error SNI_Let::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)

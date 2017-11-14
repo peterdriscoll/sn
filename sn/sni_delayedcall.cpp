@@ -31,7 +31,7 @@ namespace SNI
 	{
 	}
 
-	SNI_DelayedCall::SNI_DelayedCall(SN::SN_FunctionDef p_Function, SN::SN_ParameterList *p_ParameterList, SNI_World * p_World)
+	SNI_DelayedCall::SNI_DelayedCall(SN::SN_FunctionDef p_Function, SN::SN_ExpressionList *p_ParameterList, SNI_World * p_World)
 		: m_Function(p_Function)
 		, m_ParameterList(p_ParameterList)
 		, m_Requested(false)
@@ -42,14 +42,6 @@ namespace SNI
 
 	SNI_DelayedCall::~SNI_DelayedCall()
 	{
-	}
-
-	void SNI_DelayedCall::EvaluateParameters()
-	{
-		for (size_t j = 0; j < m_ParameterList->size(); j++)
-		{
-			(*m_ParameterList)[j].UpdateValue();
-		}
 	}
 
 	// Estimate the number of values that will be created in the unknown variable. This value may be infinite, represented by LONG_MAX.
@@ -81,7 +73,7 @@ namespace SNI
 	{
 		for (size_t i = 0; i < m_ParameterList->size(); i++)
 		{
-			SN::SN_Expression var = (*m_ParameterList)[i].GetValue();
+			SN::SN_Expression var = (*m_ParameterList)[i];
 			if (var.IsRequested())
 			{
 				return true;
@@ -95,7 +87,7 @@ namespace SNI
 	{
 		for (size_t i = 0; i < m_ParameterList->size(); i++)
 		{
-			LinkVariable((*m_ParameterList)[i].GetValue());
+			LinkVariable((*m_ParameterList)[i]);
 		}
 	}
 

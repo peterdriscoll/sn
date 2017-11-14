@@ -63,7 +63,7 @@ namespace SNI
 		virtual void SetWorldSet(SNI_WorldSet *p_WorldSet);
 
 		virtual SN::SN_Expression Call(SN::SN_ExpressionList * p_ParameterList, long  p_MetaLevel = 0) const;
-		virtual SN::SN_Expression Unify(SN::SN_ParameterList * p_ParameterList);
+		virtual SN::SN_Expression Unify(SN::SN_ExpressionList * p_ParameterList);
 
 		virtual SN::SN_Error ForEach(std::function<SN::SN_Error(const SN::SN_Expression&p_Param, SNI_World*p_World)> p_Action);
 		virtual SN::SN_Error ForEachCart(long p_Depth, SNI_Cart * p_Cart);

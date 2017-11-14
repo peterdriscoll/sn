@@ -127,10 +127,10 @@ namespace SNI
 		return LOG_RETURN(context, left_value || right_value);
 	}
 
-	SN::SN_Expression SNI_Or::Unify(SN::SN_ParameterList * p_ParameterList)
+	SN::SN_Expression SNI_Or::Unify(SN::SN_ExpressionList * p_ParameterList)
 	{
-		SN::LogContext context("SNI_Or::Unify ( " + DisplayPmParameterList(p_ParameterList) + " )");
-		SN::SN_ParameterList firstParamList(2);
+		SN::LogContext context("SNI_Or::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		SN::SN_ExpressionList firstParamList(2);
 		firstParamList[0] = (*p_ParameterList)[0];
 		firstParamList[1] = (*p_ParameterList)[2];
 		SN::SN_Error e1 = skynet::UnaryOr.Unify(&firstParamList);
@@ -140,7 +140,7 @@ namespace SNI
 			return e1;
 		}
 
-		SN::SN_ParameterList * secondParamList = new SN::SN_ParameterList(3);
+		SN::SN_ExpressionList * secondParamList = new SN::SN_ExpressionList(3);
 		(*secondParamList)[0] = (*p_ParameterList)[0];
 		(*secondParamList)[1] = (*p_ParameterList)[1];
 		(*secondParamList)[2] = firstParamList[1];

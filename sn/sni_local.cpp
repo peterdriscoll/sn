@@ -144,11 +144,11 @@ namespace SNI
 		return m_Expression->PartialCall(p_ParameterList, p_MetaLevel);
 	}
 
-	SN::SN_Expression SNI_Local::Unify(SN::SN_ParameterList * p_ParameterList)
+	SN::SN_Expression SNI_Local::Unify(SN::SN_ExpressionList * p_ParameterList)
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Local::Unify ( " + DisplayPmParameterList(p_ParameterList) + " )");
+		SN::LogContext context(DisplaySN0() + ".SNI_Local::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )");
 
-		return m_Expression->AssertValue((*p_ParameterList)[0].GetValue());
+		return m_Expression->AssertValue((*p_ParameterList)[0]);
 	}
 
 	SN::SN_Error SNI_Local::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)

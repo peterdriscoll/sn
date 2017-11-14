@@ -63,12 +63,12 @@ namespace SN
 		return dynamic_cast<SNI::SNI_Unary *>(m_FunctionDef);
 	}
 
-	size_t SN_FunctionDef::Cardinality(SN_ParameterList * p_ParameterList) const
+	size_t SN_FunctionDef::Cardinality(SN_ExpressionList * p_ParameterList) const
 	{
 		return m_FunctionDef->Cardinality(p_ParameterList);
 	}
 
-	SN_Error SN_FunctionDef::Unify(SN_ParameterList * p_ParameterList)
+	SN_Error SN_FunctionDef::Unify(SN_ExpressionList * p_ParameterList)
 	{
 		return m_FunctionDef->Unify(p_ParameterList);
 	}

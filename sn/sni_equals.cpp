@@ -311,9 +311,9 @@ namespace SNI
 					SN::SN_Variable varLeft;
 					e = p_ParamList[p_CalcPos].AddValue(varLeft, p_Depth, p_WorldList, worldSet);
 
-					SN::SN_ParameterList *l_ParameterList = new SN::SN_ParameterList();
+					SN::SN_ExpressionList *l_ParameterList = new SN::SN_ExpressionList();
 					l_ParameterList->push_back(p_ParamList[PU2_Result]);
-					l_ParameterList->push_back(SN::SN_Parameter(varLeft));
+					l_ParameterList->push_back(varLeft);
 					l_ParameterList->push_back(p_ParamList[PU2_Second]);
 					SNI_DelayedProcessor::GetProcessor()->Delay(this, l_ParameterList);
 				}
@@ -332,9 +332,9 @@ namespace SNI
 					SN::SN_Variable varRight;
 					e = p_ParamList[p_CalcPos].AddValue(varRight, p_Depth, p_WorldList, worldSet);
 
-					SN::SN_ParameterList *l_ParameterList = new SN::SN_ParameterList();
-					l_ParameterList->push_back(SN::SN_Parameter(varRight));
-					l_ParameterList->push_back(SN::SN_Parameter(p_ParamList[PU2_Result]));
+					SN::SN_ExpressionList *l_ParameterList = new SN::SN_ExpressionList();
+					l_ParameterList->push_back(varRight);
+					l_ParameterList->push_back(p_ParamList[PU2_Result]);
 					l_ParameterList->push_back(p_ParamList[PU2_First]);
 					SNI_DelayedProcessor::GetProcessor()->Delay(this, l_ParameterList);
 				}

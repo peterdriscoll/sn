@@ -174,7 +174,7 @@ namespace SNI
 		SNI_World *world = worldSet->JoinWorldsArray(AutoAddWorld, AlwaysCreateWorld, exists, m_Depth, m_WorldList);
 		if (exists)
 		{
-			SN::SN_ParameterList *l_ParameterList = new SN::SN_ParameterList();
+			SN::SN_ExpressionList *l_ParameterList = new SN::SN_ExpressionList();
 			for (long j = 0; j < m_Depth; j++)
 			{
 				if (j == m_CalcPos)

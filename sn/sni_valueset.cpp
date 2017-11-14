@@ -341,9 +341,9 @@ namespace SNI
 	SN::SN_Error SNI_ValueSet::AssertValue(const SN::SN_Expression &p_Value)
 	{
 		SN::LogContext context("SNI_ValueSet::AssertValue ( " + p_Value.DisplayValueSN() + " )");
-		SN::SN_ParameterList *paramList = new SN::SN_ParameterList(2);
-		(*paramList)[0] = SN::SN_Parameter(p_Value);
-		(*paramList)[1] = SN::SN_Parameter(this);
+		SN::SN_ExpressionList *paramList = new SN::SN_ExpressionList(2);
+		(*paramList)[0] = p_Value;
+		(*paramList)[1] = this;
 		SN::SN_Error e = skynet::Same.Unify(paramList);
 		if (e.IsError())
 		{
@@ -378,14 +378,14 @@ namespace SNI
 		return vs.SimplifyValue();
 	}
 
-	SN::SN_Expression SNI_ValueSet::Unify(SN::SN_ParameterList * p_ParameterList)
+	SN::SN_Expression SNI_ValueSet::Unify(SN::SN_ExpressionList * p_ParameterList)
 	{
-		SN::LogContext context("SNI_ValueSet::Unify ( " + DisplayPmParameterList(p_ParameterList) + " )");
+		SN::LogContext context("SNI_ValueSet::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )");
 		SN::SN_Error err(true);
 		bool success = false;
 		for (const SNI_TaggedValue &tv : m_ValueList)
 		{
-			SN::SN_ParameterList paramListClone = *p_ParameterList;
+			SN::SN_ExpressionList paramListClone = *p_ParameterList;
 			SN::SN_Error e = tv.GetValue().GetSNI_Expression()->Unify(&paramListClone);
 			if (e.GetBool())
 			{

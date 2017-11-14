@@ -451,7 +451,7 @@ namespace SNI
 		return SN::SN_Error(GetTypeName() + " partial function to call is unknown.");
 	}
 
-	SN::SN_Expression SNI_Variable::Unify(SN::SN_ParameterList * p_ParameterList)
+	SN::SN_Expression SNI_Variable::Unify(SN::SN_ExpressionList * p_ParameterList)
 	{
 		if (m_Value)
 		{
@@ -481,15 +481,15 @@ namespace SNI
 		}
 	}
 
-	/* static */ SN::SN_Expression SNI_Variable::AddLambdas(SN::SN_ParameterList * p_ParameterList)
+	/* static */ SN::SN_Expression SNI_Variable::AddLambdas(SN::SN_ExpressionList * p_ParameterList)
 	{
 		if (p_ParameterList->size())
 		{
-			SN::SN_Expression param = p_ParameterList->at(0).GetValue();
+			SN::SN_Expression param = p_ParameterList->at(0);
 			p_ParameterList->erase(p_ParameterList->begin());
 			return SN::SN_Lambda(param, AddLambdas(p_ParameterList));
 		}
-		return (*p_ParameterList)[0].GetValue();
+		return (*p_ParameterList)[0];
 	}
 
 	/* static */ SN::SN_Expression SNI_Variable::AddLambdasPartial(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)

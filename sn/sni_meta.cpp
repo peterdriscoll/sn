@@ -158,7 +158,7 @@ namespace SNI
 		return m_Expression->PartialAssertValue(p_Expression, true);
 	}
 
-	SN::SN_Expression SNI_Meta::Unify(SN::SN_ParameterList * p_ParameterList)
+	SN::SN_Expression SNI_Meta::Unify(SN::SN_ExpressionList * p_ParameterList)
 	{
 		return m_Expression->Unify(p_ParameterList);
 	}

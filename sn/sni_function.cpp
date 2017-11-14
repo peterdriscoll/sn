@@ -142,9 +142,9 @@ namespace SNI
 			return p_Value;
 		}
 		SN::LogContext context(DisplaySN0() + ".SNI_Function::AssertValue ( " + p_Value.DisplaySN() + " )");
-		SN::SN_ParameterList * l_ParameterList = new SN::SN_ParameterList();
-		l_ParameterList->push_back(SN::SN_Parameter(p_Value));
-		l_ParameterList->push_back(SN::SN_Parameter(m_Parameter, m_Condition));
+		SN::SN_ExpressionList * l_ParameterList = new SN::SN_ExpressionList();
+		l_ParameterList->push_back(p_Value);
+		l_ParameterList->push_back(m_Parameter);
 		// Flatten the call stack, by returning the function to be called from Unify, instead of calling it there.
 		SNI_Expression *function = m_Function;
 		SNI_Error *e = NULL;
@@ -192,11 +192,11 @@ namespace SNI
 		return m_Function->PartialCall(p_ParameterList, p_MetaLevel);
 	}
 
-	SN::SN_Expression SNI_Function::Unify(SN::SN_ParameterList * p_ParameterList)
+	SN::SN_Expression SNI_Function::Unify(SN::SN_ExpressionList * p_ParameterList)
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Function::Unify ( " + DisplayPmParameterList(p_ParameterList) + " )");
+		SN::LogContext context(DisplaySN0() + ".SNI_Function::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )");
 
-		p_ParameterList->push_back(SN::SN_Parameter(m_Parameter, m_Condition));
+		p_ParameterList->push_back(m_Parameter);
 		return m_Function;
 	}
 

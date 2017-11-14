@@ -333,7 +333,7 @@ namespace SNI
 		return SN::SN_Error(GetTypeName() + " Partial Call not implemented.");
 	}
 
-	SN::SN_Expression SNI_Expression::Unify(SN::SN_ParameterList * /*p_ParameterList*/)
+	SN::SN_Expression SNI_Expression::Unify(SN::SN_ExpressionList * /*p_ParameterList*/)
 	{
 		return SN::SN_Error(GetTypeName() + " Unify not implemented.");
 	}

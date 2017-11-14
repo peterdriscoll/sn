@@ -144,12 +144,12 @@ namespace SNI
 		return this;
 	}
 
-	SN::SN_Expression SNI_Lambda::Unify(SN::SN_ParameterList * p_ParameterList)
+	SN::SN_Expression SNI_Lambda::Unify(SN::SN_ExpressionList * p_ParameterList)
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Lambda::Unify ( " + DisplayPmParameterList(p_ParameterList) + " )");
+		SN::LogContext context(DisplaySN0() + ".SNI_Lambda::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )");
 
 		ASSERTM(p_ParameterList->size() > 1, "Cannot call a lambda without a parameter");
-		SN::SN_Expression x = p_ParameterList->back().GetValue();
+		SN::SN_Expression x = p_ParameterList->back();
 		p_ParameterList->pop_back();
 		SN::SN_Error e = SN::SN_Expression(m_FormalParameter).PartialAssertValue(x, true); // Lazy evaluation until needed.
 		//SN::SN_Error e = SN::SN_Expression(x).AssertValue(m_FormalParameter); // Strict evaluation until needed.
@@ -163,7 +163,7 @@ namespace SNI
 		{
 			return m_Expression->Unify(p_ParameterList);
 		}
-		return m_Expression->AssertValue(p_ParameterList->back().GetValue());
+		return m_Expression->AssertValue(p_ParameterList->back());
 	}
 
 	SN::SN_Error SNI_Lambda::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
