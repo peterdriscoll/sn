@@ -105,11 +105,11 @@ namespace SNI
 		return LOG_RETURN(context, m_Expression->PartialCall(p_ParameterList, p_MetaLevel).Debug());
 	}
 
-	SN::SN_Expression SNI_Debug::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	SN::SN_Expression SNI_Debug::Unify(SN::SN_ParameterList * p_ParameterList)
 	{
-		SN::LogContext context(DisplaySN0() + ".Unify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )", LOG_DEBUG_INDEX);
+		SN::LogContext context(DisplaySN0() + ".Unify ( " + DisplayPmParameterList(p_ParameterList) + " )", LOG_DEBUG_INDEX);
 
-		return LOG_RETURN(context, m_Expression->Unify(p_ParameterList, p_Result));
+		return LOG_RETURN(context, m_Expression->Unify(p_ParameterList));
 	}
 
 	SN::SN_Error SNI_Debug::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)

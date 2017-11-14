@@ -34,9 +34,9 @@ namespace SNI
 	}
 
 	// Create a delayed call and link it in as the value of the variables..
-	void SNI_DelayedProcessor::Delay(SN::SN_FunctionDef p_Function, SN::SN_ParameterList *p_ParameterList, SN::SN_Expression p_Result, SNI_World *p_World)
+	void SNI_DelayedProcessor::Delay(SN::SN_FunctionDef p_Function, SN::SN_ParameterList *p_ParameterList, SNI_World *p_World)
 	{
-		SNI_DelayedCall *call = new SNI_DelayedCall(p_Function, p_ParameterList, p_Result, p_World);
+		SNI_DelayedCall *call = new SNI_DelayedCall(p_Function, p_ParameterList, p_World);
 		call->LinkToVariables();
 		m_DelayedCallList.push_back(call);
 	}

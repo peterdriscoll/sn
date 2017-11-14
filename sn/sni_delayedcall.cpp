@@ -31,10 +31,9 @@ namespace SNI
 	{
 	}
 
-	SNI_DelayedCall::SNI_DelayedCall(SN::SN_FunctionDef p_Function, SN::SN_ParameterList *p_ParameterList, SN::SN_Expression p_Result, SNI_World * p_World)
+	SNI_DelayedCall::SNI_DelayedCall(SN::SN_FunctionDef p_Function, SN::SN_ParameterList *p_ParameterList, SNI_World * p_World)
 		: m_Function(p_Function)
 		, m_ParameterList(p_ParameterList)
-		, m_Result(p_Result)
 		, m_Requested(false)
 		, m_Locked(false)
 		, m_World(NULL)
@@ -51,12 +50,12 @@ namespace SNI
 		{
 			(*m_ParameterList)[j].UpdateValue();
 		}
-		m_Result = m_Result.Evaluate();
 	}
+
 	// Estimate the number of values that will be created in the unknown variable. This value may be infinite, represented by LONG_MAX.
 	size_t SNI_DelayedCall::CallCardinality() const
 	{
-		return m_Function.Cardinality(m_ParameterList, m_Result);
+		return m_Function.Cardinality(m_ParameterList);
 	}
 
 	bool SNI_DelayedCall::IsNull() const
@@ -66,7 +65,7 @@ namespace SNI
 
 	bool SNI_DelayedCall::Run()
 	{
-		m_Error = m_Function.Unify(m_ParameterList, m_Result);
+		m_Error = m_Function.Unify(m_ParameterList);
 		if (m_Error.IsError())
 		{
 			if (m_World)
@@ -94,7 +93,6 @@ namespace SNI
 	// Attach this delayed call as the value of any parameters, and the result that are variables.
 	void SNI_DelayedCall::LinkToVariables()
 	{
-		LinkVariable(m_Result);
 		for (size_t i = 0; i < m_ParameterList->size(); i++)
 		{
 			LinkVariable((*m_ParameterList)[i].GetValue());

@@ -63,7 +63,7 @@ namespace SNI
 
 		virtual SN::SN_Expression Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const;
-		virtual SN::SN_Expression Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
+		virtual SN::SN_Expression Unify(SN::SN_ParameterList * p_ParameterList);
 		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
 
 		void AttachDelayedCall(SNI_DelayedCall *p_Call);
@@ -73,7 +73,8 @@ namespace SNI
 	private:
 		bool FindVariable(SNI_VariablePointerList &p_DisplayVariableList) const;
 
-		static SN::SN_Expression AddLambdas(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
+		static SN::SN_Expression AddLambdas(SN::SN_ParameterList * p_ParameterList);
+		static SN::SN_Expression AddLambdasPartial(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
 
 
 	private:

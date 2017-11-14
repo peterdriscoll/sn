@@ -172,14 +172,14 @@ namespace SNI
 	/// @param p_ParameterList List of two parameters to be "anded".
 	/// @param p_Result The result of anding the two values.
 	/// @retval True if successful, false for failure.
-	SN::SN_Expression SNI_And::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	SN::SN_Expression SNI_And::Unify(SN::SN_ParameterList * p_ParameterList)
 	{
-		SN::LogContext context("SNI_And::Unify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
+		SN::LogContext context("SNI_And::Unify ( " + DisplayPmParameterList(p_ParameterList) + " )");
 
 		SN::SN_ParameterList firstParamList(2);
 		firstParamList[0] = (*p_ParameterList)[0];
 		firstParamList[1] = (*p_ParameterList)[2];
-		SN::SN_Error e1 = skynet::UnaryAnd.Unify(&firstParamList, (*p_ParameterList)[0].GetValue());
+		SN::SN_Error e1 = skynet::UnaryAnd.Unify(&firstParamList);
 		if (e1.IsError())
 		{
 			e1.AddNote(context, this, "First parameter failed");
@@ -190,7 +190,7 @@ namespace SNI
 		(*secondParamList)[0] = (*p_ParameterList)[0];
 		(*secondParamList)[1] = (*p_ParameterList)[1];
 		(*secondParamList)[2] = firstParamList[1];
-		SN::SN_Error e2 = SNI_Binary::Unify(secondParamList, (*p_ParameterList)[0].GetValue());
+		SN::SN_Error e2 = SNI_Binary::Unify(secondParamList);
 		if (e2.IsError())
 		{
 			e2.AddNote(context, this, "Second parameter failed");

@@ -75,14 +75,14 @@ namespace SNI
 		return p_Param.Collapse();
 	}
 
-	SN::SN_Expression SNI_Collapse::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	SN::SN_Expression SNI_Collapse::Unify(SN::SN_ParameterList * p_ParameterList)
 	{
-		SN::LogContext context("SNI_Collapse::Unify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
+		SN::LogContext context("SNI_Collapse::Unify ( " + DisplayPmParameterList(p_ParameterList) + " )");
 
-		SN::SN_Error e = UnifyInternal((*p_ParameterList)[0].GetValue(), p_Result);
+		SN::SN_Error e = UnifyInternal((*p_ParameterList)[1].GetValue(), (*p_ParameterList)[0].GetValue());
 		if (e.GetDelay())
 		{
-			SNI_DelayedProcessor::GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), p_ParameterList, p_Result);
+			SNI_DelayedProcessor::GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), p_ParameterList);
 		}
 		if (e.IsError())
 		{
@@ -93,7 +93,7 @@ namespace SNI
 
 	SN::SN_Error SNI_Collapse::UnifyInternal(SN::SN_Expression &p_value, SN::SN_Expression &p_Result)
 	{
-		SN::LogContext context("SNI_Unary::UnifyInternal ( " + p_value.DisplaySN() + " = " + p_Result.DisplaySN() + " )");
+		SN::LogContext context("SNI_Unary::UnifyInternal ( " + p_value.DisplaySN() + " )");
 
 		SN::SN_Value result = p_Result.Evaluate();
 		if (result.IsError())

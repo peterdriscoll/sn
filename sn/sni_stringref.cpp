@@ -857,9 +857,10 @@ namespace SNI
 				SN::SN_ValueSet endVS;
 				SN::SN_Variable endVar;
 				SN::SN_ParameterList *l_ParameterList = new SN::SN_ParameterList();
+				l_ParameterList->push_back(SN::SN_Parameter(skynet::False));
 				l_ParameterList->push_back(SN::SN_Parameter(endVar));
 				l_ParameterList->push_back(SN::SN_Parameter(SN::SN_Long((long) (start_pos + p_Other->GetString().length()))));
-				SNI_DelayedProcessor::GetProcessor()->Delay(skynet::Equals, l_ParameterList, skynet::False);
+				SNI_DelayedProcessor::GetProcessor()->Delay(skynet::Equals, l_ParameterList);
 				endVS.AddTaggedValue(SN::SN_Long((long) (start_pos + p_Other->GetString().length())), worldTrue);
 				endVS.AddTaggedValue(endVar, worldFalse);
 				const_cast<SNI_StringRef *>(this)->m_End = endVS;
@@ -880,9 +881,10 @@ namespace SNI
 				result.AddTaggedValue(skynet::False, worldFalse);
 				SN::SN_Variable startVar;
 				SN::SN_ParameterList *l_ParameterList = new SN::SN_ParameterList();
+				l_ParameterList->push_back(SN::SN_Parameter(skynet::False));
 				l_ParameterList->push_back(SN::SN_Parameter(startVar));
 				l_ParameterList->push_back(SN::SN_Parameter(SN::SN_Long((long) (end_pos - p_Other->GetString().length()))));
-				SNI_DelayedProcessor::GetProcessor()->Delay(skynet::Equals, l_ParameterList, skynet::False);
+				SNI_DelayedProcessor::GetProcessor()->Delay(skynet::Equals, l_ParameterList);
 				SN::SN_ValueSet startVS;
 				startVS.AddTaggedValue(SN::SN_Long((long) (end_pos - p_Other->GetString().length())), worldTrue);
 				startVS.AddTaggedValue(startVar, worldFalse);

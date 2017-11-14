@@ -68,10 +68,10 @@ namespace SNI
 		return false;
 	}
 
-	size_t SNI_FunctionDef::Cardinality(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result) const
+	size_t SNI_FunctionDef::Cardinality(SN::SN_ParameterList * p_ParameterList) const
 	{
 		long depth = (long) p_ParameterList->size();
-		SN::SN_Expression *paramList = LoadParametersUnify(p_ParameterList, p_Result);
+		SN::SN_Expression *paramList = LoadParametersUnify(p_ParameterList);
 		long calcPos = -1;
 		long totalCalc = depth;
 		for (long j = 0; j < depth; j++)
@@ -88,11 +88,11 @@ namespace SNI
 		return CardinalityOfUnify(depth, paramList, calcPos, totalCalc);
 	}
 
-	SN::SN_Expression SNI_FunctionDef::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	SN::SN_Expression SNI_FunctionDef::Unify(SN::SN_ParameterList * p_ParameterList)
 	{
 		SN::SN_Error  e = true;
 		long depth = (long) p_ParameterList->size();
-		SN::SN_Expression *paramList = LoadParametersUnify(p_ParameterList, p_Result);
+		SN::SN_Expression *paramList = LoadParametersUnify(p_ParameterList);
 		SN::SN_Expression *inputList = new SN::SN_Expression[depth];
 		bool *output = new bool[depth];
 		bool allFound = false;
@@ -168,9 +168,9 @@ namespace SNI
 			{
 				if (AllowDelay())
 				{
-					ReplaceParametersUnify(inputList, p_ParameterList, p_Result);
+					ReplaceParametersUnify(inputList, p_ParameterList);
 					delete[] paramList;
-					SNI_DelayedProcessor::GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), p_ParameterList, p_Result);
+					SNI_DelayedProcessor::GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), p_ParameterList);
 				}
 				else
 				{
@@ -180,7 +180,7 @@ namespace SNI
 			else
 			{
 				e = ForEachUnify(card, depth, inputList, paramList, output, calcPos, totalCalc);
-				ReplaceParametersUnify(inputList, p_ParameterList, p_Result);
+				ReplaceParametersUnify(inputList, p_ParameterList);
 			}
 		}
 		delete[] inputList;
@@ -245,7 +245,7 @@ namespace SNI
 
 	SN::SN_Error SNI_FunctionDef::Assert()
 	{
-		return Unify(NULL, SN::SN_Bool(true));
+		return Unify(NULL);
 	}
 
 	SN::SN_Error SNI_FunctionDef::PartialAssert()
@@ -364,7 +364,7 @@ namespace SNI
 		}
 	}
 
-	SN::SN_Expression * SNI_FunctionDef::LoadParametersUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result) const
+	SN::SN_Expression * SNI_FunctionDef::LoadParametersUnify(SN::SN_ParameterList * p_ParameterList) const
 	{
 		size_t numParams = p_ParameterList->size();
 		SN::SN_Expression *paramList = new SN::SN_Expression[numParams];
@@ -376,10 +376,9 @@ namespace SNI
 		return paramList;
 	}
 
-	void SNI_FunctionDef::ReplaceParametersUnify(SN::SN_Expression * p_ParamList, SN::SN_ParameterList * p_ParameterList, SN::SN_Expression & p_Result) const
+	void SNI_FunctionDef::ReplaceParametersUnify(SN::SN_Expression * p_ParamList, SN::SN_ParameterList * p_ParameterList) const
 	{
 		size_t numParams = p_ParameterList->size();
-		p_Result = p_ParamList[PU2_Result];
 		(*p_ParameterList)[0].GetValue() = p_ParamList[PU2_Result];
 		for (size_t j = 1; j < numParams; j++)
 		{

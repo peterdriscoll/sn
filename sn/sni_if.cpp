@@ -162,9 +162,9 @@ namespace SNI
 		return LOG_RETURN(context, condition.If(positiveCase, negativeCase));
 	}
 
-	SN::SN_Expression SNI_If::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	SN::SN_Expression SNI_If::Unify(SN::SN_ParameterList * p_ParameterList)
 	{
-		SN::LogContext context("SNI_If::Unify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
+		SN::LogContext context("SNI_If::Unify ( " + DisplayPmParameterList(p_ParameterList) + " )");
 
 		SN::SN_ValueSet condition;
 		SNI_WorldSet *condition_worldSet = new SNI_WorldSet;
@@ -187,7 +187,7 @@ namespace SNI
 			paramList[0] = splitter.Positive();
 			paramList[1] = (*p_ParameterList)[0];
 			paramList[2] = (*p_ParameterList)[2];
-			e2 = skynet::Equals.Unify(&paramList, splitter.Positive());
+			e2 = skynet::Equals.Unify(&paramList);
 			if (e2.IsError())
 			{
 				e2.AddNote(context, this, "'if' positive case unification failed");
@@ -201,7 +201,7 @@ namespace SNI
 			paramList[0] = splitter.Negative();
 			paramList[1] = (*p_ParameterList)[0];
 			paramList[2] = (*p_ParameterList)[1];
-			e2 = skynet::Equals.Unify(&paramList, splitter.Negative());
+			e2 = skynet::Equals.Unify(&paramList);
 			if (e2.IsError())
 			{
 				e2.AddNote(context, this, "'if' negative case unification failed");

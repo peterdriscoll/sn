@@ -56,16 +56,16 @@ namespace SNI
 		return skynet::Null;
 	}
 
-	SN::SN_Expression SNI_File::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	SN::SN_Expression SNI_File::Unify(SN::SN_ParameterList * p_ParameterList)
 	{
-		SN::LogContext context("SNI_File::Unify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
+		SN::LogContext context("SNI_File::Unify ( " + DisplayPmParameterList(p_ParameterList) + " )");
 		SN::SN_String name = (*p_ParameterList)[1].GetValue().Evaluate();
 		if (!name.IsNull())
 		{
 			SN::SN_Value file = name.GetSNI_String()->DoFile();
 			if (file.IsNull())
 			{
-				SN::SN_String contents = p_Result.Evaluate();
+				SN::SN_String contents = (*p_ParameterList)[0].GetValue().Evaluate();
 				if (!contents.IsNull())
 				{
 					name.GetSNI_String()->DoWriteFile(contents);
@@ -74,10 +74,10 @@ namespace SNI
 			}
 			else
 			{
-				return p_Result.AssertValue(file);
+				return (*p_ParameterList)[0].GetValue().AssertValue(file);
 			}
 		}
-		SNI_DelayedProcessor::GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), p_ParameterList, p_Result);
+		SNI_DelayedProcessor::GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), p_ParameterList);
 		return SN::SN_Error(true);
 	}
 }

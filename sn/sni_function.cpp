@@ -150,7 +150,7 @@ namespace SNI
 		SNI_Error *e = NULL;
 		do
 		{
-			function = function->Unify(l_ParameterList, p_Value).GetSNI_Expression();
+			function = function->Unify(l_ParameterList).GetSNI_Expression();
 			e = dynamic_cast<SNI_Error *>(function);
 		} while (!e);
 		return SN::SN_Expression(e);
@@ -192,9 +192,9 @@ namespace SNI
 		return m_Function->PartialCall(p_ParameterList, p_MetaLevel);
 	}
 
-	SN::SN_Expression SNI_Function::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	SN::SN_Expression SNI_Function::Unify(SN::SN_ParameterList * p_ParameterList)
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Function::Unify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
+		SN::LogContext context(DisplaySN0() + ".SNI_Function::Unify ( " + DisplayPmParameterList(p_ParameterList) + " )");
 
 		p_ParameterList->push_back(SN::SN_Parameter(m_Parameter, m_Condition));
 		return m_Function;

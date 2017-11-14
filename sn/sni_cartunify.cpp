@@ -175,7 +175,6 @@ namespace SNI
 		if (exists)
 		{
 			SN::SN_ParameterList *l_ParameterList = new SN::SN_ParameterList();
-			SN::SN_Expression result;
 			for (long j = 0; j < m_Depth; j++)
 			{
 				if (j == m_CalcPos)
@@ -191,22 +190,14 @@ namespace SNI
 					{
 						vs.AddTaggedValue(var, world);
 					}
-					if (j == PU2_Result)
-					{
-						result = var;
-					}
 					l_ParameterList->push_back(var);
 				}
 				else
 				{
-					if (j == PU2_Result)
-					{
-						result = m_ValueList[j];
-					}
 					l_ParameterList->push_back(m_ValueList[j]);
 				}
 			}
-			SNI_DelayedProcessor::GetProcessor()->Delay(m_FunctionDef, l_ParameterList, result, world);
+			SNI_DelayedProcessor::GetProcessor()->Delay(m_FunctionDef, l_ParameterList, world);
 		}
 		return true;
 	}
