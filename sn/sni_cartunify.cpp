@@ -195,10 +195,7 @@ namespace SNI
 					{
 						result = var;
 					}
-					else
-					{
-						l_ParameterList->push_back(var);
-					}
+					l_ParameterList->push_back(var);
 				}
 				else
 				{
@@ -206,10 +203,7 @@ namespace SNI
 					{
 						result = m_ValueList[j];
 					}
-					else
-					{
-						l_ParameterList->push_back(m_ValueList[j]);
-					}
+					l_ParameterList->push_back(m_ValueList[j]);
 				}
 			}
 			SNI_DelayedProcessor::GetProcessor()->Delay(m_FunctionDef, l_ParameterList, result, world);

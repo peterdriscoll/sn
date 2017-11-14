@@ -70,7 +70,7 @@ namespace SNI
 
 	size_t SNI_FunctionDef::Cardinality(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result) const
 	{
-		long depth = (long) p_ParameterList->size()+1;
+		long depth = (long) p_ParameterList->size();
 		SN::SN_Expression *paramList = LoadParametersUnify(p_ParameterList, p_Result);
 		long calcPos = -1;
 		long totalCalc = depth;
@@ -91,7 +91,7 @@ namespace SNI
 	SN::SN_Expression SNI_FunctionDef::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
 	{
 		SN::SN_Error  e = true;
-		long depth = (long) p_ParameterList->size() + 1;
+		long depth = (long) p_ParameterList->size();
 		SN::SN_Expression *paramList = LoadParametersUnify(p_ParameterList, p_Result);
 		SN::SN_Expression *inputList = new SN::SN_Expression[depth];
 		bool *output = new bool[depth];
@@ -360,29 +360,30 @@ namespace SNI
 		size_t numParams = p_ParameterList->size();
 		for (size_t j = 0; j < numParams; j++)
 		{
-			(*p_ParameterList)[numParams - 1 - j] = p_ParamList[j];
+			(*p_ParameterList)[numParams - j - 1] = p_ParamList[j];
 		}
 	}
 
 	SN::SN_Expression * SNI_FunctionDef::LoadParametersUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result) const
 	{
-		size_t numParams = p_ParameterList->size() + 1;
+		size_t numParams = p_ParameterList->size();
 		SN::SN_Expression *paramList = new SN::SN_Expression[numParams];
-		paramList[PU2_Result] = p_Result;
+		paramList[PU2_Result] = (*p_ParameterList)[0].GetValue();
 		for (size_t j = 1; j < numParams; j++)
 		{
-			paramList[j] = (*p_ParameterList)[numParams - j - 1].GetValue();
+			paramList[j] = (*p_ParameterList)[numParams - j].GetValue();
 		}
 		return paramList;
 	}
 
 	void SNI_FunctionDef::ReplaceParametersUnify(SN::SN_Expression * p_ParamList, SN::SN_ParameterList * p_ParameterList, SN::SN_Expression & p_Result) const
 	{
-		size_t numParams = p_ParameterList->size() + 1;
+		size_t numParams = p_ParameterList->size();
 		p_Result = p_ParamList[PU2_Result];
+		(*p_ParameterList)[0].GetValue() = p_ParamList[PU2_Result];
 		for (size_t j = 1; j < numParams; j++)
 		{
-			(*p_ParameterList)[numParams - 1 - j].GetValue() = p_ParamList[j];
+			(*p_ParameterList)[numParams - j].GetValue() = p_ParamList[j];
 		}
 	}
 

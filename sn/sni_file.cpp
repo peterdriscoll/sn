@@ -59,7 +59,7 @@ namespace SNI
 	SN::SN_Expression SNI_File::Unify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
 	{
 		SN::LogContext context("SNI_File::Unify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
-		SN::SN_String name = (*p_ParameterList)[0].GetValue().Evaluate();
+		SN::SN_String name = (*p_ParameterList)[1].GetValue().Evaluate();
 		if (!name.IsNull())
 		{
 			SN::SN_Value file = name.GetSNI_String()->DoFile();

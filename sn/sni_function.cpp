@@ -60,6 +60,8 @@ namespace SNI
 
 	string SNI_Function::DisplaySN(long priority, SNI_VariablePointerList &p_DisplayVariableList) const
 	{
+
+
 		return Bracket(priority, m_Function->DisplaySN(GetPriority(), p_DisplayVariableList) + (m_Parameter ? " " + m_Parameter->DisplaySN(GetPriority(), p_DisplayVariableList) : ""));
 	}
 
@@ -141,6 +143,7 @@ namespace SNI
 		}
 		SN::LogContext context(DisplaySN0() + ".SNI_Function::AssertValue ( " + p_Value.DisplaySN() + " )");
 		SN::SN_ParameterList * l_ParameterList = new SN::SN_ParameterList();
+		l_ParameterList->push_back(SN::SN_Parameter(p_Value));
 		l_ParameterList->push_back(SN::SN_Parameter(m_Parameter, m_Condition));
 		// Flatten the call stack, by returning the function to be called from Unify, instead of calling it there.
 		SNI_Expression *function = m_Function;

@@ -507,6 +507,21 @@ namespace test_sn
 			Cleanup();
 		}
 
+		TEST_METHOD(TestLongAssertSimplified)
+		{
+			Initialize();
+			Manager manager(AssertErrorHandler);
+			{
+				Transaction transaction;
+
+				SN_DECLARE(c);
+
+				(Long(2) + Long(3) == c).AssertAction();
+
+				Assert::IsTrue(c.Equivalent(Long(5)));
+			}
+		}
+		
 		TEST_METHOD(TestLongAssert)
 		{
 			Initialize();

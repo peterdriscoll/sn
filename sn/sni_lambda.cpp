@@ -148,7 +148,7 @@ namespace SNI
 	{
 		SN::LogContext context(DisplaySN0() + ".SNI_Lambda::Unify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
 
-		ASSERTM(p_ParameterList->size() >0, "Cannot call a lambda without a parameter");
+		ASSERTM(p_ParameterList->size() > 1, "Cannot call a lambda without a parameter");
 		SN::SN_Expression x = p_ParameterList->back().GetValue();
 		p_ParameterList->pop_back();
 		SN::SN_Error e = SN::SN_Expression(m_FormalParameter).PartialAssertValue(x, true); // Lazy evaluation until needed.
@@ -159,11 +159,11 @@ namespace SNI
 			e.AddNote(context, this, "Assigning parameter value failed");
 			return SN::SN_Error(false);
 		}
-		if (p_ParameterList->size() > 0)
+		if (p_ParameterList->size() > 1)
 		{
 			return m_Expression->Unify(p_ParameterList, p_Result);
 		}
-		return m_Expression->AssertValue(p_Result);
+		return m_Expression->AssertValue(p_ParameterList->back().GetValue());
 	}
 
 	SN::SN_Error SNI_Lambda::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
