@@ -23,8 +23,8 @@ namespace SNI
 		virtual SN::SN_Expression PrimaryFunctionExpression(const SN::SN_Expression &p_Left) const;
 		virtual SN::SN_Value InverseFunctionValue(const SN::SN_Value &p_Param) const;
 		virtual SN::SN_Expression InverseFunctionExpression(const SN::SN_Expression &p_Param) const;
-		
-		virtual SN::SN_Expression Unify(SN::SN_ExpressionList * p_ParameterList);
+
+		virtual SN::SN_Expression UnifyArray(SN::SN_Expression * p_ParamList);
 	};
 }
 

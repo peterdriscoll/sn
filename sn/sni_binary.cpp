@@ -52,7 +52,7 @@ namespace SNI
 
 	long SNI_Binary::GetNumParameters() const
 	{
-		return 2;
+		return 3;
 	}
 
 	SN::SN_Value SNI_Binary::RightInverseFunctionValue(const SN::SN_Value &p_Left, const SN::SN_Value &p_Right) const
@@ -347,7 +347,8 @@ namespace SNI
 			}
 			else
 			{
-				return PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()).Equivalent(p_ParamList[PU2_Result].GetVariableValue());
+				SN::SN_Value value = PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue());
+				return value.Equivalent(p_ParamList[PU2_Result].GetVariableValue());
 			}
 		}
 		break;
@@ -357,15 +358,18 @@ namespace SNI
 			{
 			case PU2_First:
 			{
-				return p_ParamList[p_CalcPos].AddValue(RightInverseFunctionValue(p_ParamList[PU2_Result].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()), p_Depth, p_WorldList, worldSet);
+				SN::SN_Value value = RightInverseFunctionValue(p_ParamList[PU2_Result].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue());
+				return p_ParamList[p_CalcPos].AddValue(value, p_Depth, p_WorldList, worldSet);
 			}
 			case PU2_Second:
 			{
-				return p_ParamList[p_CalcPos].AddValue(LeftInverseFunctionValue(p_ParamList[PU2_Result].GetVariableValue(), p_ParamList[PU2_First].GetVariableValue()), p_Depth, p_WorldList, worldSet);
+				SN::SN_Value value = LeftInverseFunctionValue(p_ParamList[PU2_Result].GetVariableValue(), p_ParamList[PU2_First].GetVariableValue());
+				return p_ParamList[p_CalcPos].AddValue(value , p_Depth, p_WorldList, worldSet);
 			}
 			case PU2_Result:
 			{
-				return p_ParamList[p_CalcPos].AddValue(PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()), p_Depth, p_WorldList, worldSet);
+				SN::SN_Value value = PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue());
+				return p_ParamList[p_CalcPos].AddValue(value, p_Depth, p_WorldList, worldSet);
 			}
 			}
 		}

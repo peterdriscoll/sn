@@ -127,28 +127,22 @@ namespace SNI
 		return LOG_RETURN(context, left_value || right_value);
 	}
 
-	SN::SN_Expression SNI_Or::Unify(SN::SN_ExpressionList * p_ParameterList)
+	SN::SN_Expression SNI_Or::UnifyArray(SN::SN_Expression * p_ParameterList)
 	{
-		SN::LogContext context("SNI_Or::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )");
-		SN::SN_ExpressionList firstParamList(2);
-		firstParamList[0] = (*p_ParameterList)[0];
-		firstParamList[1] = (*p_ParameterList)[2];
-		SN::SN_Error e1 = skynet::UnaryOr.Unify(&firstParamList);
+		SN::SN_Expression* firstParamList = new SN::SN_Expression[2];
+		firstParamList[0] = p_ParameterList[0];
+		firstParamList[1] = p_ParameterList[1];
+		SN::SN_Error e1 = skynet::UnaryOr.GetSNI_FunctionDef()->UnifyArray(firstParamList);
 		if (e1.IsError())
 		{
-			e1.AddNote(context, this, "First parameter failed");
 			return e1;
 		}
 
-		SN::SN_ExpressionList * secondParamList = new SN::SN_ExpressionList(3);
-		(*secondParamList)[0] = (*p_ParameterList)[0];
-		(*secondParamList)[1] = (*p_ParameterList)[1];
-		(*secondParamList)[2] = firstParamList[1];
-		SN::SN_Error e2 = SNI_Binary::Unify(secondParamList);
-		if (e2.IsError())
-		{
-			e2.AddNote(context, this, "Second parameter failed");
-		}
+		SN::SN_Expression* secondParamList = new SN::SN_Expression[3];
+		secondParamList[0] = p_ParameterList[0];
+		secondParamList[1] = firstParamList[1];
+		secondParamList[2] = p_ParameterList[2];
+		SN::SN_Error e2 = SNI_Binary::UnifyArray(secondParamList);
 		return e2;
 	}
 

@@ -47,6 +47,13 @@ namespace SN
 	class SN_Char;
 	class SN_Cartesian;
 
+	class SN_Context
+	{
+	public:
+		SN_ExpressionList m_ParameterList;
+		SNI::SNI_World         *m_world;
+	};
+
 	template <typename T>
 	class SN_Real;
 

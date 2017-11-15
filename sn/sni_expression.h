@@ -46,6 +46,13 @@ namespace SNI
 	class SNI_Variable;
 	typedef vector<const SNI_Variable *> SNI_VariablePointerList;
 
+	class SNI_UnifyContext
+	{
+	public:
+		SN::SN_ExpressionList *m_ParameterList;
+		SNI_World             *m_World;
+	};
+
 	class SNI_Expression : public SNI_Base
 	{
 		PGC_CLASS(SNI_Expression);

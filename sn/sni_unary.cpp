@@ -55,7 +55,7 @@ namespace SNI
 
 	long SNI_Unary::GetNumParameters() const
 	{
-		return 1;
+		return 2;
 	}
 
 	SN::SN_Value SNI_Unary::InverseFunctionValue(const SN::SN_Value & p_Param) const

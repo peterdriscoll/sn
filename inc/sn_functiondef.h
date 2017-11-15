@@ -42,18 +42,12 @@ namespace SN
 		// Valuesets of functions
 		SN::SN_Expression operator ||(const SN::SN_Expression &p_Other) const;
 
-		size_t Cardinality(SN_ExpressionList * p_ParameterList) const;
-
-		SN_Error Unify(SN_ExpressionList *p_ParameterList);
-	    SN_Error PartialUnify(SN_ParameterList *p_ParameterList, SN_Expression p_Result);
-
 		SNI::SNI_Binary * GetSNI_Binary() const;
 		SNI::SNI_Unary * GetSNI_Unary() const;
 
 		SNI::SNI_FunctionDef * GetSNI_FunctionDef() const;
 
 	private:
-
 		SNI::SNI_FunctionDef * m_FunctionDef;
 	};
 }

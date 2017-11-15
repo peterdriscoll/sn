@@ -47,7 +47,6 @@ namespace SNI
 
 	SNI_CartUnify::~SNI_CartUnify()
 	{
-		delete [] m_ParamList;
 		delete [] m_ValueList;
 		delete [] m_WorldList;
 		delete [] m_ValueCalcPos;
@@ -174,7 +173,7 @@ namespace SNI
 		SNI_World *world = worldSet->JoinWorldsArray(AutoAddWorld, AlwaysCreateWorld, exists, m_Depth, m_WorldList);
 		if (exists)
 		{
-			SN::SN_ExpressionList *l_ParameterList = new SN::SN_ExpressionList();
+			SN::SN_Expression *l_ParamList = new SN::SN_Expression[m_Depth];
 			for (long j = 0; j < m_Depth; j++)
 			{
 				if (j == m_CalcPos)
@@ -190,14 +189,14 @@ namespace SNI
 					{
 						vs.AddTaggedValue(var, world);
 					}
-					l_ParameterList->push_back(var);
+					l_ParamList[j] =  var;
 				}
 				else
 				{
-					l_ParameterList->push_back(m_ValueList[j]);
+					l_ParamList[j] = m_ValueList[j];
 				}
 			}
-			SNI_DelayedProcessor::GetProcessor()->Delay(m_FunctionDef, l_ParameterList, world);
+			SNI_DelayedProcessor::GetProcessor()->Delay(m_FunctionDef, l_ParamList, world);
 		}
 		return true;
 	}

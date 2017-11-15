@@ -68,15 +68,14 @@ namespace SNI
 		return false;
 	}
 
-	size_t SNI_FunctionDef::Cardinality(SN::SN_ExpressionList * p_ParameterList) const
+	size_t SNI_FunctionDef::Cardinality(SN::SN_Expression * p_ParamList) const
 	{
-		long depth = (long) p_ParameterList->size();
-		SN::SN_Expression *paramList = LoadParametersUnify(p_ParameterList);
+		long depth = GetNumParameters();
 		long calcPos = -1;
 		long totalCalc = depth;
 		for (long j = 0; j < depth; j++)
 		{
-			if (paramList[j].IsKnownValue())
+			if (p_ParamList[j].IsKnownValue())
 			{
 				totalCalc--;
 			}
@@ -85,23 +84,22 @@ namespace SNI
 				calcPos = (long) j;
 			}
 		}
-		return CardinalityOfUnify(depth, paramList, calcPos, totalCalc);
+		return CardinalityOfUnify(depth, p_ParamList, calcPos, totalCalc);
 	}
 
-	SN::SN_Expression SNI_FunctionDef::Unify(SN::SN_ExpressionList * p_ParameterList)
+	SN::SN_Expression SNI_FunctionDef::UnifyArray(SN::SN_Expression * p_ParamList)
 	{
 		SN::SN_Error  e = true;
-		long depth = (long) p_ParameterList->size();
-		SN::SN_Expression *paramList = LoadParametersUnify(p_ParameterList);
+		long depth = GetNumParameters();
 		SN::SN_Expression *inputList = new SN::SN_Expression[depth];
 		bool *output = new bool[depth];
 		bool allFound = false;
 		long totalCalc = depth;
 		for (long j = 0; j < depth; j++)
 		{
-			if (paramList[j].IsKnownValue())
+			if (p_ParamList[j].IsKnownValue())
 			{
-				inputList[j] = paramList[j].GetVariableValue();
+				inputList[j] = p_ParamList[j].GetVariableValue();
 				output[j] = false;
 				totalCalc--;
 				if (AllowDelay())
@@ -111,7 +109,7 @@ namespace SNI
 			}
 			else
 			{
-				inputList[j] = paramList[j];
+				inputList[j] = p_ParamList[j];
 				output[j] = true;
 			}
 		}
@@ -120,10 +118,10 @@ namespace SNI
 		size_t maxCard = SN::SN_Manager::GetTopManager().MaxCardinalityCall();
 		for (long j = 0; j < depth; j++)
 		{
-			if (!paramList[j].IsKnownValue() && !paramList[j].IsReferableValue())
+			if (!p_ParamList[j].IsKnownValue() && !p_ParamList[j].IsReferableValue())
 			{
-				card = CardinalityOfUnify(depth, inputList, (long) j, totalCalc);
-				if (paramList[j].IsVariable())
+				card = CardinalityOfUnify(depth, inputList, (long)j, totalCalc);
+				if (p_ParamList[j].IsVariable())
 				{
 					if (allFound || maxCard < card)
 					{
@@ -139,7 +137,7 @@ namespace SNI
 					if (allFound || maxCard < card)
 					{
 						inputList[j] = new SNI_Variable();
-						e = paramList[j].AssertValue(inputList[j]);
+						e = p_ParamList[j].AssertValue(inputList[j]);
 						if (e.IsError())
 						{
 							break;
@@ -158,7 +156,7 @@ namespace SNI
 			}
 			else
 			{
-				calcPos = (long) j;
+				calcPos = (long)j;
 			}
 		}
 		if (e.GetBool())
@@ -168,9 +166,7 @@ namespace SNI
 			{
 				if (AllowDelay())
 				{
-					ReplaceParametersUnify(inputList, p_ParameterList);
-					delete[] paramList;
-					SNI_DelayedProcessor::GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), p_ParameterList);
+					SNI_DelayedProcessor::GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), inputList);
 				}
 				else
 				{
@@ -179,11 +175,13 @@ namespace SNI
 			}
 			else
 			{
-				e = ForEachUnify(card, depth, inputList, paramList, output, calcPos, totalCalc);
-				ReplaceParametersUnify(inputList, p_ParameterList);
+				e = ForEachUnify(card, depth, inputList, p_ParamList, output, calcPos, totalCalc);
 			}
 		}
-		delete[] inputList;
+		for (long j = 0; j < depth; j++)
+		{
+			p_ParamList[j] = inputList[j];
+		}
 		delete[] output;
 		return e;
 	}
@@ -334,7 +332,6 @@ namespace SNI
 					}
 				}
 			}
-			delete[] p_ParamList;
 			return e;
 		}
 		else

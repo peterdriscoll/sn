@@ -975,7 +975,7 @@ namespace test_sn
 				SN_DECLARE(a);
 				SN_DECLARE(b);
 				(a + b == "1abc").AssertAction();
-				//IsInteger(a).AssertAction();
+				IsInteger(a).AssertAction();
 				string test_a = a.GetString();
 				string test_b = b.GetString();
 

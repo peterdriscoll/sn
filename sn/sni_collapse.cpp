@@ -75,18 +75,12 @@ namespace SNI
 		return p_Param.Collapse();
 	}
 
-	SN::SN_Expression SNI_Collapse::Unify(SN::SN_ExpressionList * p_ParameterList)
+	SN::SN_Expression SNI_Collapse::UnifyArray(SN::SN_Expression * p_ParamList)
 	{
-		SN::LogContext context("SNI_Collapse::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )");
-
-		SN::SN_Error e = UnifyInternal((*p_ParameterList)[1], (*p_ParameterList)[0]);
+		SN::SN_Error e = UnifyInternal(p_ParamList[1], p_ParamList[0]);
 		if (e.GetDelay())
 		{
-			SNI_DelayedProcessor::GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), p_ParameterList);
-		}
-		if (e.IsError())
-		{
-			e.AddNote(context, this, "Collapse failed");
+			SNI_DelayedProcessor::GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), p_ParamList);
 		}
 		return e;
 	}

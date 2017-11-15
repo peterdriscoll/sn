@@ -20,7 +20,7 @@ namespace SNI
 		PGC_CLASS(SNI_DelayedCall)
 	public:
 		SNI_DelayedCall();
-		SNI_DelayedCall(SN::SN_FunctionDef p_Function, SN::SN_ExpressionList *p_ParameterList, SNI_World * p_World = NULL);
+		SNI_DelayedCall(SN::SN_FunctionDef p_Function, SN::SN_Expression*p_ParameterList, SNI_World * p_World = NULL);
 		virtual ~SNI_DelayedCall();
 
 		virtual size_t CallCardinality() const;
@@ -35,7 +35,7 @@ namespace SNI
 
 	private:
 		SN::SN_FunctionDef    m_Function;
-		SN::SN_ExpressionList *m_ParameterList;
+		SN::SN_Expression     *m_ParameterList;
 		bool                  m_Requested;
 		SNI_World             *m_World;
 		bool                  m_Locked;

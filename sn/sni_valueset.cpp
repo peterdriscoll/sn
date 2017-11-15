@@ -344,7 +344,7 @@ namespace SNI
 		SN::SN_ExpressionList *paramList = new SN::SN_ExpressionList(2);
 		(*paramList)[0] = p_Value;
 		(*paramList)[1] = this;
-		SN::SN_Error e = skynet::Same.Unify(paramList);
+		SN::SN_Error e = skynet::Same.GetSNI_FunctionDef()->Unify(paramList);
 		if (e.IsError())
 		{
 			e.AddNote(context, this, "Assert by cartesian product failed");
@@ -386,8 +386,24 @@ namespace SNI
 		for (const SNI_TaggedValue &tv : m_ValueList)
 		{
 			SN::SN_ExpressionList paramListClone = *p_ParameterList;
-			SN::SN_Error e = tv.GetValue().GetSNI_Expression()->Unify(&paramListClone);
-			if (e.GetBool())
+			// Flatten the call stack, by returning the function to be called from Unify, instead of calling it there.
+			SNI_Expression *function = tv.GetValue().GetSNI_Expression();
+			SNI_Error *e = dynamic_cast<SNI_Error *>(function);
+			while (!e)
+			{
+				SNI_FunctionDef *functionDef = dynamic_cast<SNI_FunctionDef *>(function);
+				if (functionDef)
+				{
+					SN::SN_Expression *param_List = functionDef->LoadParametersUnify(&paramListClone);
+					function = functionDef->UnifyArray(param_List).GetSNI_Expression();
+				}
+				else
+				{
+					function = function->Unify(&paramListClone).GetSNI_Expression();
+				}
+				e = dynamic_cast<SNI_Error *>(function);
+			}
+			if (e->GetBool())
 			{
 				success = true;
 			}

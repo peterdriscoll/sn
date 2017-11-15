@@ -349,7 +349,7 @@ namespace SNI
 
 	SN::SN_Error SNI_Variable::SelfAssert()
 	{
-		if (m_Value && !m_Value->IsKnownValue() && !m_Value->IsReferableValue())
+		if (m_Value && !m_Value->IsNull() && !m_Value->IsKnownValue() && !m_Value->IsReferableValue())
 		{
 			SNI_Expression *value = m_Value;
 			m_Value = NULL;

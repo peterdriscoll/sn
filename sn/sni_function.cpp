@@ -147,12 +147,21 @@ namespace SNI
 		l_ParameterList->push_back(m_Parameter);
 		// Flatten the call stack, by returning the function to be called from Unify, instead of calling it there.
 		SNI_Expression *function = m_Function;
-		SNI_Error *e = NULL;
-		do
+		SNI_Error *e = dynamic_cast<SNI_Error *>(function);
+		while (!e)
 		{
-			function = function->Unify(l_ParameterList).GetSNI_Expression();
+			SNI_FunctionDef *functionDef = dynamic_cast<SNI_FunctionDef *>(function);
+			if (functionDef)
+			{
+				SN::SN_Expression *param_List = functionDef->LoadParametersUnify(l_ParameterList);
+				function = functionDef->UnifyArray(param_List).GetSNI_Expression();
+			}
+			else
+			{
+				function = function->Unify(l_ParameterList).GetSNI_Expression();
+			}
 			e = dynamic_cast<SNI_Error *>(function);
-		} while (!e);
+		}
 		return SN::SN_Expression(e);
 	}
 
