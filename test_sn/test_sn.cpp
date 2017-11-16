@@ -1453,7 +1453,8 @@ namespace test_sn
 
 				SN_DECLARE(x);
 				(x == f(long(8))(long(13))).AssertAction();
-				string x_string = x.DisplaySN();
+				string x_string = x.BuildSet().Evaluate().DisplaySN();
+				Assert::IsTrue(x_string == "{Long(21), Long(104)}");
 				(x < long(30)).AssertAction();
 				string x_string2 = x.DisplaySN();
 				long x_num = Long(x).GetNumber();

@@ -25,6 +25,10 @@ namespace SNI
 	private:
 		PGC_CLASS(SNI_World);
 	public:
+		static SNI_World *Context();
+		void PushContext(SNI_World *p_Context);
+		void PopContext();
+
 		SNI_World(SNI_WorldSet * p_WorldSet);
 		virtual ~SNI_World();
 
@@ -53,6 +57,7 @@ namespace SNI
 		bool Fail();
 		void MarkEmpty();
 		SNI_World * OneParent(SNI_WorldSet * parentWorldSet);
+
 	protected:
 		virtual void PromoteMembers();
 

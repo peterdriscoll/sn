@@ -8,6 +8,23 @@
 
 namespace SNI
 {
+	thread_local SNI_WorldList g_ContextStack;
+
+	SNI_World * SNI_World::Context()
+	{
+		return g_ContextStack.back();
+	}
+
+	void SNI_World::PushContext(SNI_World * p_Context)
+	{
+		g_ContextStack.push_back(p_Context);
+	}
+
+	void SNI_World::PopContext()
+	{
+		g_ContextStack.pop_back();
+	}
+
 	SNI_World::SNI_World(SNI_WorldSet * p_WorldSet)
 		: m_Mark(false)
 		, m_IsEmpty(false)
