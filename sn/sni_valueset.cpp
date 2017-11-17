@@ -439,7 +439,12 @@ namespace SNI
 		for (SNI_TaggedValue &tv : m_ValueList)
 		{
 			SNI_World *world = tv.GetWorld();
-			if (!world || !world->IsEmpty())
+			if (!world)
+			{
+				world = GetWorldSet()->CreateWorld();
+				tv.SetWorld(world);
+			}
+			if (!world->IsEmpty())
 			{
 				if (!contextWorld || contextWorld->CompatibleWorld(world))
 				{
@@ -452,12 +457,6 @@ namespace SNI
 						SNI_FunctionDef *functionDef = dynamic_cast<SNI_FunctionDef *>(function);
 						if (functionDef)
 						{
-							SNI_World *world = tv.GetWorld();
-							if (!world)
-							{
-								world = GetWorldSet()->CreateWorld();
-								tv.SetWorld(world);
-							}
 							SNI_World::PushContextWorld(world);
 							SN::SN_Expression *param_List = functionDef->LoadParametersUnify(&paramListClone);
 							function = functionDef->UnifyArray(param_List).GetSNI_Expression();
