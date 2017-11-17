@@ -115,36 +115,48 @@ namespace SNI
 		{
 			FORCE_ASSERTM("Variable not expected.");
 		}
-		if (p_WorldList)
+		if (SNI_World::ContextWorld())
 		{
-			string worldString = DisplayWorlds(p_NumWorlds, p_WorldList);
-			SN::LogContext context("SNI_Variable::AddValue (" + SN::SN_Expression(this).DisplayValueSN() + " := " + p_Value.DisplayValueSN() + " worlds " + worldString + " set " + DisplayWorldSet(p_WorldSet) + " )");
-			bool exists = false;
-			SNI_WorldSet *l_WorldSet = p_WorldSet;
-			if (!l_WorldSet)
+			if (!m_Value || m_Value->IsNull())
 			{
-				l_WorldSet = GetWorldSet();
+				m_Value = new SNI_ValueSet();
 			}
-			SNI_World *world = l_WorldSet->JoinWorldsArray(ManualAddWorld, AlwaysCreateWorld, exists, p_NumWorlds, p_WorldList);
-			if (exists)
-			{
-				context.LogExpression(world->DisplaySN(), p_Value);
-				SN::SN_Error e = AssertValue(p_Value);
-				if (e.GetBool())
-				{
-					l_WorldSet->AddToSetList(world);
-				}
-				return e;
-			}
-			else
-			{
-				context.LogText("Fail", "JoinWorlds failed on " + worldString);
-				return SN::SN_Error("SNI_Variable::AddValue: JoinWorlds failed on " + worldString);
-			}
+			return m_Value->AddValue(p_Value, p_NumWorlds, p_WorldList, p_WorldSet);
 		}
 		else
 		{
-			return AssertValue(p_Value);
+			if (p_WorldList)
+			{
+				string worldString = DisplayWorlds(p_NumWorlds, p_WorldList);
+				SN::LogContext context("SNI_Variable::AddValue (" + SN::SN_Expression(this).DisplayValueSN() + " := " + p_Value.DisplayValueSN() + " worlds " + worldString + " set " + DisplayWorldSet(p_WorldSet) + " )");
+				bool exists = false;
+				SNI_WorldSet *l_WorldSet = p_WorldSet;
+				if (!l_WorldSet)
+				{
+					l_WorldSet = GetWorldSet();
+				}
+				SNI_World *world = l_WorldSet->JoinWorldsArray(ManualAddWorld, AlwaysCreateWorld, exists, p_NumWorlds, p_WorldList);
+				if (exists)
+				{
+					context.LogExpression(world->DisplaySN(), p_Value);
+					SN::SN_Error e = AssertValue(p_Value);
+					if (e.GetBool())
+					{
+						l_WorldSet->AddToSetList(world);
+					}
+					return e;
+				}
+				else
+				{
+					context.LogText("Fail", "JoinWorlds failed on " + worldString);
+					return SN::SN_Error("SNI_Variable::AddValue: JoinWorlds failed on " + worldString);
+				}
+
+			}
+			else
+			{
+				return AssertValue(p_Value);
+			}
 		}
 	}
 

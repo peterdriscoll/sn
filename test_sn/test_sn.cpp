@@ -376,35 +376,6 @@ namespace test_sn
 			Cleanup();
 		}
 
-		TEST_METHOD(TestBoolPartialAssert)
-		{
-			return; // I think this wasn't working before. The challenge is to unify two variables without creating infinite recursion.
-
-			Initialize();
-			Manager manager(AssertErrorHandler);
-			{
-				Transaction transaction;
-
-				SN_DECLARE(y);
-				SN_DECLARE(z);
-
-				(y == z).PartialAssertAction();
-				Assert::IsTrue(y.PartialEvaluate().Equivalent(z.PartialEvaluate()));
-				Assert::IsTrue(z.PartialEvaluate().Equivalent(y.PartialEvaluate()));
-				Assert::IsTrue((Bool(true) == y).PartialEvaluate().Equivalent((Bool(true) == z).PartialEvaluate()));
-				(z == Bool(true)).AssertAction();
-				Assert::IsTrue(y.Evaluate().Equivalent(True));
-
-				SN_DECLARE(a);
-				SN_DECLARE(b);
-				(False || a == b).PartialAssertAction();
-
-				(b == True).AssertAction();
-				Assert::IsTrue((a.Evaluate().Equivalent(True)));
-			}
-			Cleanup();
-		}
-
 		TEST_METHOD(TestDoubleEquivalent)
 		{
 			Initialize();
@@ -968,9 +939,9 @@ namespace test_sn
 				(Define(IsInteger)(i) == (Digit(i) && !Digit(i.LookaheadRight())).Collapse().If(Bool(true), Digit(i.SelectLeftChar()) && IsInteger(i.SubtractLeftChar()))).PartialAssertAction();
 				IsInteger.LogDisplaySN();
 
-				//(IsInteger(String("1")).AssertAction());
-				//(IsInteger(String("12")).AssertAction());
-				//(IsInteger(String("123456789")).AssertAction());
+				(IsInteger(String("1")).AssertAction());
+				(IsInteger(String("12")).AssertAction());
+				(IsInteger(String("123456789")).AssertAction());
 
 				SN_DECLARE(a);
 				SN_DECLARE(b);

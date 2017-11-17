@@ -10,17 +10,21 @@ namespace SNI
 {
 	thread_local SNI_WorldList g_ContextStack;
 
-	SNI_World * SNI_World::Context()
+		/*static*/ SNI_World * SNI_World::ContextWorld()
 	{
-		return g_ContextStack.back();
+		if (g_ContextStack.size())
+		{
+			return g_ContextStack.back();
+		}
+		return NULL;
 	}
 
-	void SNI_World::PushContext(SNI_World * p_Context)
+	/*static*/ void SNI_World::PushContextWorld(SNI_World * p_Context)
 	{
 		g_ContextStack.push_back(p_Context);
 	}
 
-	void SNI_World::PopContext()
+	/*static*/ void SNI_World::PopContextWorld()
 	{
 		g_ContextStack.pop_back();
 	}
@@ -99,6 +103,19 @@ namespace SNI
 		{
 			m_ChildList[j]->Mark(true);
 		}
+		if (!p_World->HasMutualExclusion())
+		{
+			m_ChildList.push_back(p_World);
+			return true;
+		}
+		return false;
+	}
+
+	bool SNI_World::CompatibleWorld(SNI_World *p_World)
+	{
+		ASSERTM(p_World, "Attempt to add null child world.");
+		p_World->Mark(false);
+		Mark(true);
 		if (!p_World->HasMutualExclusion())
 		{
 			m_ChildList.push_back(p_World);

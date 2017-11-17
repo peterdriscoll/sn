@@ -25,9 +25,9 @@ namespace SNI
 	private:
 		PGC_CLASS(SNI_World);
 	public:
-		static SNI_World *Context();
-		void PushContext(SNI_World *p_Context);
-		void PopContext();
+		static SNI_World *ContextWorld();
+		static void PushContextWorld(SNI_World *p_Context);
+		static void PopContextWorld();
 
 		SNI_World(SNI_WorldSet * p_WorldSet);
 		virtual ~SNI_World();
@@ -40,6 +40,8 @@ namespace SNI
 		SNI_WorldSet *GetWorldSet();
 		bool AddChildWorld(SNI_World *p_World);
 		void AddToSetList();
+
+		bool CompatibleWorld(SNI_World * p_World);
 
 		bool Contains(SNI_World * p_World) const;
 

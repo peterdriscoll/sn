@@ -72,6 +72,11 @@ namespace SNI
 
 	SN::SN_Error SNI_Null::AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World **p_WorldList, SNI_WorldSet *p_WorldSet)
 	{
+		if (!p_WorldSet)
+		{
+			return true;
+		}
+
 		// The assumption is that no one cares about the value. That is why it is given as Null.
 		// Their could be an active Null, but that would be a value set.
 		bool exists = false;

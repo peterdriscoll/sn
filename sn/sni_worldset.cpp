@@ -116,32 +116,34 @@ namespace SNI
 
 	SNI_World * SNI_WorldSet::JoinWorldsArray(AddWorldType p_AddWorld, CreateWorldType p_CreateWorld, bool &exists, long p_NumWorlds, SNI_World *p_WorldList[], SNI_World * p_ExtraWorld)
 	{
-		if (!p_WorldList)
-		{
-			exists = false;
-			return NULL;
-		}
 		bool active = (p_CreateWorld == AlwaysCreateWorld);
-
-		for (long i = 0; i < p_NumWorlds; i++)
+		SNI_World *contextWorld = SNI_World::ContextWorld();
+		if (p_WorldList)
 		{
-			active |= p_WorldList[i] && p_WorldList[i]->IsAnyActive();
+			for (long i = 0; i < p_NumWorlds; i++)
+			{
+				active |= p_WorldList[i] && p_WorldList[i]->IsAnyActive();
+			}
 		}
 		active |= p_ExtraWorld && p_ExtraWorld->IsAnyActive();
+		active |= contextWorld && contextWorld->IsAnyActive();
 
 		if (active)
 		{
 			SNI_World * world = new SNI_World(this);
-			for (long j = 0; j < p_NumWorlds; j++)
+			if (p_WorldList)
 			{
-				if (p_WorldList[j] && p_WorldList[j]->IsAnyActive())
+				for (long j = 0; j < p_NumWorlds; j++)
 				{
-					if (!world->AddChildWorld(p_WorldList[j]))
+					if (p_WorldList[j] && p_WorldList[j]->IsAnyActive())
 					{
-						exists = false;
-						return NULL; // There is conflict between the child worlds, so the world does not exist.
+						if (!world->AddChildWorld(p_WorldList[j]))
+						{
+							exists = false;
+							return NULL; // There is conflict between the child worlds, so the world does not exist.
+						}
+						AddChildWorldSet(p_WorldList[j]->GetWorldSet());
 					}
-					AddChildWorldSet(p_WorldList[j]->GetWorldSet());
 				}
 			}
 			if (p_ExtraWorld && p_ExtraWorld->IsAnyActive())
@@ -152,6 +154,15 @@ namespace SNI
 					return NULL; // There is conflict between the child worlds, so the world does not exist.
 				}
 				AddChildWorldSet(p_ExtraWorld->GetWorldSet());
+			}
+			if (contextWorld && contextWorld->IsAnyActive())
+			{
+				if (!world->AddChildWorld(contextWorld))
+				{
+					exists = false;
+					return NULL; // There is conflict between the child worlds, so the world does not exist.
+				}
+				AddChildWorldSet(contextWorld->GetWorldSet());
 			}
 			if (p_AddWorld == AutoAddWorld)
 			{

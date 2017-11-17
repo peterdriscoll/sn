@@ -82,6 +82,23 @@ namespace SNI
 		return 100;
 	}
 
+	bool SNI_ValueSet::IsKnownValue() const
+	{
+		SNI_World *contextWorld = SNI_World::ContextWorld();
+		for (const SNI_TaggedValue &tv : m_ValueList)
+		{
+			SNI_World *world = tv.GetWorld();
+			if (!world || !world->IsEmpty())
+			{
+				if (!contextWorld || contextWorld->CompatibleWorld(world))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	bool SNI_ValueSet::IsString() const
 	{
 		if (0 < m_ValueList.size())
@@ -95,18 +112,26 @@ namespace SNI
 	{
 		bool trueFound = false;
 		bool falseFound = false;
+		SNI_World *contextWorld = SNI_World::ContextWorld();
 		for (const SNI_TaggedValue &tv : m_ValueList)
 		{
-			SN::SN_Bool b = tv.GetValue();
-			if (b.IsKnownValue())
+			SNI_World *world = tv.GetWorld();
+			if (!world || !world->IsEmpty())
 			{
-				if (b.GetBool())
+				if (!contextWorld || contextWorld->CompatibleWorld(world))
 				{
-					trueFound = true;
-				}
-				else
-				{
-					falseFound = true;
+					SN::SN_Bool b = tv.GetValue();
+					if (b.IsKnownValue())
+					{
+						if (b.GetBool())
+						{
+							trueFound = true;
+						}
+						else
+						{
+							falseFound = true;
+						}
+					}
 				}
 			}
 		}
@@ -118,10 +143,17 @@ namespace SNI
 		SN::SN_ValueSet result;
 		if (0 < m_ValueList.size())
 		{
-			SNI_WorldSet * worldSet = new SNI_WorldSet();
-			for (size_t i = 0; i<m_ValueList.size(); i++)
+			SNI_World *contextWorld = SNI_World::ContextWorld();
+			for (const SNI_TaggedValue &tv : m_ValueList)
 			{
-				result.AddTaggedValue(m_ValueList[i].GetValue().GetSNI_Expression()->Clone(p_ReplacementList, p_Changed), NULL);
+				SNI_World *world = tv.GetWorld();
+				if (!world || !world->IsEmpty())
+				{
+					if (!contextWorld || contextWorld->CompatibleWorld(world))
+					{
+						result.AddTaggedValue(tv.GetValue().GetSNI_Expression()->Clone(p_ReplacementList, p_Changed), world);
+					}
+				}
 			}
 		}
 		return dynamic_cast<SNI_Expression *>(result.GetSNI_ValueSet());
@@ -137,16 +169,20 @@ namespace SNI
 		if (0 < m_ValueList.size())
 		{
 			SNI_WorldSet * worldSet = new SNI_WorldSet();
-			for (size_t i = 0; i<m_ValueList.size(); i++)
+			SNI_World *contextWorld = SNI_World::ContextWorld();
+			for (SNI_TaggedValue &tv : m_ValueList)
 			{
-				SNI_World * world = m_ValueList[i].GetWorld();
-				if (world)
+				SNI_World *world = tv.GetWorld();
+				if (!world || !world->IsEmpty())
 				{
-					world->Activate();
-				}
-				else
-				{
-					m_ValueList[i].SetWorld(worldSet->CreateWorld());
+					if (world)
+					{
+						world->Activate();
+					}
+					else
+					{
+						tv.SetWorld(worldSet->CreateWorld());
+					}
 				}
 			}
 		}
@@ -240,30 +276,37 @@ namespace SNI
 		{
 			return false;
 		}
-		for (size_t i = 0; i < m_ValueList.size(); i++)
+		SNI_World *contextWorld = SNI_World::ContextWorld();
+		for (const SNI_TaggedValue &tv : m_ValueList)
 		{
-			SNI_World *world = m_ValueList[i].GetWorld();
+			SNI_World *world = tv.GetWorld();
 			if (!world || !world->IsEmpty())
 			{
-				if (!SN::Is<SNI_Bool *>(m_ValueList[i].GetValue()))
+				if (!contextWorld || contextWorld->CompatibleWorld(world))
 				{
-					return false;
-				}
-				else if (world && world->IsAnyActive())
-				{
-					return false;
+					if (!SN::Is<SNI_Bool *>(tv.GetValue()))
+					{
+						return false;
+					}
+					else if (world && world->IsAnyActive())
+					{
+						return false;
+					}
 				}
 			}
 		}
-		for (size_t i = 0; i < m_ValueList.size(); i++)
+		for (const SNI_TaggedValue &tv : m_ValueList)
 		{
-			SNI_World *world = m_ValueList[i].GetWorld();
+			SNI_World *world = tv.GetWorld();
 			if (!world || !world->IsEmpty())
 			{
-				if (m_ValueList[i].GetValue().GetBool())
+				if (!contextWorld || contextWorld->CompatibleWorld(world))
 				{
-					p_Value = true;
-					return true;
+					if (tv.GetValue().GetBool())
+					{
+						p_Value = true;
+						return true;
+					}
 				}
 			}
 		}
@@ -289,6 +332,7 @@ namespace SNI
 		bool oneValue = true;
 		bool found = false;
 		SN::SN_Expression loopError = SN::SN_Error(GetTypeName() + " has no values.");
+		SNI_World *contextWorld = SNI_World::ContextWorld();
 		for (SNI_TaggedValueList::iterator it = m_ValueList.begin(); it != m_ValueList.end();)
 		{
 			SNI_World *world = it->GetWorld();
@@ -369,11 +413,19 @@ namespace SNI
 	SN::SN_Expression SNI_ValueSet::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel) const
 	{
 		SN::SN_ValueSet vs;
+		SNI_World *contextWorld = SNI_World::ContextWorld();
 		for (const SNI_TaggedValue &tv : m_ValueList)
 		{
-			SN::SN_ExpressionList paramListClone = *p_ParameterList;
-			SN::SN_Expression v = tv.GetValue().GetSNI_Expression()->Call(&paramListClone, p_MetaLevel);
-			vs.AddTaggedValue(v, tv.GetWorld());
+			SNI_World *world = tv.GetWorld();
+			if (!world || !world->IsEmpty())
+			{
+				if (!contextWorld || contextWorld->CompatibleWorld(world))
+				{
+					SN::SN_ExpressionList paramListClone = *p_ParameterList;
+					SN::SN_Expression v = tv.GetValue().GetSNI_Expression()->Call(&paramListClone, p_MetaLevel);
+					vs.AddTaggedValue(v, tv.GetWorld());
+				}
+			}
 		}
 		return vs.SimplifyValue();
 	}
@@ -383,33 +435,49 @@ namespace SNI
 		SN::LogContext context("SNI_ValueSet::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )");
 		SN::SN_Error err(true);
 		bool success = false;
-		for (const SNI_TaggedValue &tv : m_ValueList)
+		SNI_World *contextWorld = SNI_World::ContextWorld();
+		for (SNI_TaggedValue &tv : m_ValueList)
 		{
-			SN::SN_ExpressionList paramListClone = *p_ParameterList;
-			// Flatten the call stack, by returning the function to be called from Unify, instead of calling it there.
-			SNI_Expression *function = tv.GetValue().GetSNI_Expression();
-			SNI_Error *e = dynamic_cast<SNI_Error *>(function);
-			while (!e)
+			SNI_World *world = tv.GetWorld();
+			if (!world || !world->IsEmpty())
 			{
-				SNI_FunctionDef *functionDef = dynamic_cast<SNI_FunctionDef *>(function);
-				if (functionDef)
+				if (!contextWorld || contextWorld->CompatibleWorld(world))
 				{
-					SN::SN_Expression *param_List = functionDef->LoadParametersUnify(&paramListClone);
-					function = functionDef->UnifyArray(param_List).GetSNI_Expression();
+					SN::SN_ExpressionList paramListClone = *p_ParameterList;
+					// Flatten the call stack, by returning the function to be called from Unify, instead of calling it there.
+					SNI_Expression *function = tv.GetValue().GetSNI_Expression();
+					SNI_Error *e = dynamic_cast<SNI_Error *>(function);
+					while (!e)
+					{
+						SNI_FunctionDef *functionDef = dynamic_cast<SNI_FunctionDef *>(function);
+						if (functionDef)
+						{
+							SNI_World *world = tv.GetWorld();
+							if (!world)
+							{
+								world = GetWorldSet()->CreateWorld();
+								tv.SetWorld(world);
+							}
+							SNI_World::PushContextWorld(world);
+							SN::SN_Expression *param_List = functionDef->LoadParametersUnify(&paramListClone);
+							function = functionDef->UnifyArray(param_List).GetSNI_Expression();
+							SNI_World::PopContextWorld();
+						}
+						else
+						{
+							function = function->Unify(&paramListClone).GetSNI_Expression();
+						}
+						e = dynamic_cast<SNI_Error *>(function);
+					}
+					if (e->GetBool())
+					{
+						success = true;
+					}
+					else
+					{
+						err = e;
+					}
 				}
-				else
-				{
-					function = function->Unify(&paramListClone).GetSNI_Expression();
-				}
-				e = dynamic_cast<SNI_Error *>(function);
-			}
-			if (e->GetBool())
-			{
-				success = true;
-			}
-			else
-			{
-				err = e;
 			}
 		}
 		if (success)
@@ -422,42 +490,73 @@ namespace SNI
 
 	SN::SN_Error SNI_ValueSet::ForEach(std::function<SN::SN_Error(const SN::SN_Expression &p_Param, SNI_World *p_World)> p_Action)
 	{
+		SNI_World *contextWorld = SNI_World::ContextWorld();
 		for (SNI_TaggedValue &tv : m_ValueList)
 		{
-			SN::SN_Value l_Value = tv.GetValue().GetVariableValue();
 			SNI_World *world = tv.GetWorld();
-			if (!world)
+			if (!contextWorld || contextWorld->CompatibleWorld(world))
 			{
-				world = GetWorldSet()->CreateWorld();
-				tv.SetWorld(world);
+				SN::SN_Value l_Value = tv.GetValue().GetVariableValue();
+				if (!world)
+				{
+					world = GetWorldSet()->CreateWorld();
+					tv.SetWorld(world);
+				}
+				p_Action(l_Value, world);
 			}
-			p_Action(l_Value, world);
 		}
 		return true;
 	}
 
 	SN::SN_Error SNI_ValueSet::ForEachCart(long p_Depth, SNI_Cart *p_Cart)
 	{
+		SNI_World *contextWorld = SNI_World::ContextWorld();
 		for (SNI_TaggedValue &tv : m_ValueList)
 		{
-			SN::SN_Error e = p_Cart->ProcessValue(p_Depth, tv.GetValue(), tv.GetWorld());
+			SNI_World *world = tv.GetWorld();
+			if (!contextWorld || contextWorld->CompatibleWorld(world))
+			{
+				SN::SN_Error e = p_Cart->ProcessValue(p_Depth, tv.GetValue(), world);
+			}
 		}
 		return true;
 	}
 
 	void SNI_ValueSet::ForEachSplit(SNI_Splitter * p_Splitter)
 	{
+		SNI_World *contextWorld = SNI_World::ContextWorld();
 		for (SNI_TaggedValue &tv : m_ValueList)
 		{
-			p_Splitter->ProcessValueSplit(tv.GetValue(), tv.GetWorld());
+			SNI_World *world = tv.GetWorld();
+			if (!contextWorld || contextWorld->CompatibleWorld(world))
+			{
+				p_Splitter->ProcessValueSplit(tv.GetValue(), world);
+			}
 		}
 	}
 
 	size_t SNI_ValueSet::Cardinality(size_t p_MaxCardinality) const
 	{
-		if (m_ValueList.size())
+		SNI_World *contextWorld = SNI_World::ContextWorld();
+		size_t card = 1;
+		if (contextWorld)
 		{
-			return m_ValueList.size();
+			for (const SNI_TaggedValue &tv : m_ValueList)
+			{
+				SNI_World *world = tv.GetWorld();
+				if (!contextWorld || contextWorld->CompatibleWorld(world))
+				{
+					card++;
+				}
+			}
+		}
+		else
+		{
+			card = m_ValueList.size();
+		}
+		if (card)
+		{
+			return card;
 		}
 		return p_MaxCardinality;
 	}
@@ -477,11 +576,19 @@ namespace SNI
 		SN::LogContext context("SNI_ValueSet::DoRemove ( " + DisplayPmTaggedValueList(m_ValueList) + " )");
 
 		SN::SN_ValueSet valueSet;
-		for (size_t i = 0; i<m_ValueList.size(); i++)
+		SNI_World *contextWorld = SNI_World::ContextWorld();
+		for (SNI_TaggedValue &tv : m_ValueList)
 		{
-			if (!p_Other.Equivalent(m_ValueList[i].GetValue()))
+			SNI_World *world = tv.GetWorld();
+			if (!world || !world->IsEmpty())
 			{
-				valueSet.AddTaggedValue(m_ValueList[i].GetValue(), m_ValueList[i].GetWorld());
+				if (!contextWorld || contextWorld->CompatibleWorld(world))
+				{
+					if (!p_Other.Equivalent(tv.GetValue()))
+					{
+						valueSet.AddTaggedValue(tv.GetValue(), world);
+					}
+				}
 			}
 		}
 		return LOG_RETURN(context, valueSet);
@@ -501,11 +608,19 @@ namespace SNI
 
 	bool SNI_ValueSet::Equivalent(SNI_Object * p_Other) const
 	{
+		SNI_World *contextWorld = SNI_World::ContextWorld();
 		for (const SNI_TaggedValue &tv : m_ValueList)
 		{
-			if (tv.GetValue().GetSNI_Expression()->Equivalent(p_Other))
+			SNI_World *world = tv.GetWorld();
+			if (!world || !world->IsEmpty())
 			{
-				return true;
+				if (!contextWorld || contextWorld->CompatibleWorld(world))
+				{
+					if (tv.GetValue().GetSNI_Expression()->Equivalent(p_Other))
+					{
+						return true;
+					}
+				}
 			}
 		}
 		return false; // There is no simple test for equivalence.
@@ -571,13 +686,18 @@ namespace SNI
 
 	bool SNI_ValueSet::IsReferableValue(const SN::SN_Value &p_Value) const
 	{
-		for (size_t i = 0; i < m_ValueList.size(); i++)
+		SNI_World *contextWorld = SNI_World::ContextWorld();
+		for (const SNI_TaggedValue &tv : m_ValueList)
 		{
-			if (!m_ValueList[i].GetWorld() || !m_ValueList[i].GetWorld()->IsEmpty())
+			SNI_World *world = tv.GetWorld();
+			if (!world || !world->IsEmpty())
 			{
-				if (m_ValueList[i].GetValue().IsNull() || m_ValueList[i].GetValue().Equivalent(p_Value)) //19/09/2017
+				if (!contextWorld || contextWorld->CompatibleWorld(world))
 				{
-					return true;
+					if (tv.GetValue().IsNull() || tv.GetValue().Equivalent(p_Value))
+					{
+						return true;
+					}
 				}
 			}
 		}
@@ -596,13 +716,13 @@ namespace SNI
 		{
 			result = new SNI_ValueSet;
 			SNI_WorldSet *worldSet = new SNI_WorldSet;
-			for (size_t i = 0; i<m_ValueList.size(); i++)
+			for (const SNI_TaggedValue &tv : m_ValueList)
 			{
 				bool exists = false;
-				SNI_World * world = worldSet->JoinWorldsArgs(AutoAddWorld, CreateIfActiveParents, exists, m_ValueList[i].GetWorld());
+				SNI_World * newWorld = worldSet->JoinWorldsArgs(AutoAddWorld, CreateIfActiveParents, exists, tv.GetWorld());
 				if (exists)
 				{
-					result.AddTaggedValue(m_ValueList[i].GetValue(), world);
+					result.AddTaggedValue(tv.GetValue(), newWorld);
 				}
 			}
 		}
@@ -614,10 +734,10 @@ namespace SNI
 			for (long j = 0; j<other.Length(); j++)
 			{
 				bool exists = false;
-				SNI_World * world = worldSet->JoinWorldsArgs(AutoAddWorld, CreateIfActiveParents, exists, other[j].GetWorld());
+				SNI_World * newWorld = worldSet->JoinWorldsArgs(AutoAddWorld, CreateIfActiveParents, exists, other[j].GetWorld());
 				if (exists)
 				{
-					result.AddTaggedValue(other[j].GetValue(), world);
+					result.AddTaggedValue(other[j].GetValue(), newWorld);
 				}
 			}
 		}
@@ -734,30 +854,39 @@ namespace SNI
 	{
 		bool typeIsBool = true;
 		bool value = false;
-		for (SNI_TaggedValueList::iterator it = m_ValueList.begin(); it != m_ValueList.end(); it++)
+		SNI_World *contextWorld = SNI_World::ContextWorld();
+		for (const SNI_TaggedValue &tv : m_ValueList)
 		{
-			if (!it->GetWorld()->IsEmpty())
+			SNI_World *world = tv.GetWorld();
+			if (!world || !world->IsEmpty())
 			{
-				SN::SN_Value val(it->GetValue());
-				if (!SN::Is<SNI_Bool *>(val) && !SN::Is<SNI_Null *>(val))
+				if (!contextWorld || contextWorld->CompatibleWorld(world))
 				{
-					typeIsBool = false;
-				}
-				if (val.GetBool())
-				{
-					value = true;
+					SN::SN_Value val(tv.GetValue());
+					if (!SN::Is<SNI_Bool *>(val) && !SN::Is<SNI_Null *>(val))
+					{
+						typeIsBool = false;
+					}
+					if (val.GetBool())
+					{
+						value = true;
+					}
 				}
 			}
 		}
 		if (typeIsBool)
 		{
-			for (SNI_TaggedValueList::iterator it = m_ValueList.begin(); it != m_ValueList.end(); it++)
+			for (const SNI_TaggedValue &tv : m_ValueList)
 			{
-				if (!it->GetWorld()->IsEmpty())
+				SNI_World *world = tv.GetWorld();
+				if (!world || !world->IsEmpty())
 				{
-					if (SN::Is<SNI_Null *>(it->GetValue()) || !it->GetValue().GetBool())
+					if (!contextWorld || contextWorld->CompatibleWorld(world))
 					{
-						it->GetWorld()->Fail();
+						if (SN::Is<SNI_Null *>(tv.GetValue()) || !tv.GetValue().GetBool())
+						{
+							world->Fail();
+						}
 					}
 				}
 			}
