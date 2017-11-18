@@ -377,25 +377,36 @@ namespace SNI
 			FORCE_ASSERTM("Variable not expected.");
 		}
 
-		if (m_Value == NULL || dynamic_cast<SNI_Null *>(m_Value) || dynamic_cast<SNI_DelayedCall *>(m_Value))
+		if (SNI_World::ContextWorld())
 		{
-			if (SN::Is<SNI_ValueSet *>(p_Value))
+			if (!m_Value || m_Value->IsNull())
 			{
-				SN::SN_ValueSet set(p_Value);
-
-				set.GetSNI_ValueSet()->AssignToVariable(this);
+				m_Value = new SNI_ValueSet();
 			}
-
-			SNI_DelayedCall *call = dynamic_cast<SNI_DelayedCall *>(m_Value);
-			m_Value = dynamic_cast<SNI_Expression *>(p_Value.GetSNI_Value());
-			if (call)
-			{
-				SNI_DelayedProcessor::GetProcessor()->Request(call);
-			}
-			return true;
+			return m_Value->AddValue(p_Value, 0, NULL, NULL);
 		}
+		else
+		{
+			if (m_Value == NULL || dynamic_cast<SNI_Null *>(m_Value) || dynamic_cast<SNI_DelayedCall *>(m_Value))
+			{
+				if (SN::Is<SNI_ValueSet *>(p_Value))
+				{
+					SN::SN_ValueSet set(p_Value);
 
-		return m_Value->AssertValue(p_Value);
+					set.GetSNI_ValueSet()->AssignToVariable(this);
+				}
+
+				SNI_DelayedCall *call = dynamic_cast<SNI_DelayedCall *>(m_Value);
+				m_Value = dynamic_cast<SNI_Expression *>(p_Value.GetSNI_Value());
+				if (call)
+				{
+					SNI_DelayedProcessor::GetProcessor()->Request(call);
+				}
+				return true;
+			}
+
+			return m_Value->AssertValue(p_Value);
+		}
 	}
 
 	SN::SN_Error SNI_Variable::PartialAssertValue(const SN::SN_Expression &p_Expression, bool p_Define)

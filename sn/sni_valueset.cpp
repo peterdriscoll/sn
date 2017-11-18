@@ -144,12 +144,12 @@ namespace SNI
 		if (0 < m_ValueList.size())
 		{
 			SNI_World *contextWorld = SNI_World::ContextWorld();
-			for (const SNI_TaggedValue &tv : m_ValueList)
+			for (SNI_TaggedValue &tv : m_ValueList)
 			{
 				SNI_World *world = tv.GetWorld();
 				if (!world || !world->IsEmpty())
 				{
-					if (!contextWorld || contextWorld->CompatibleWorld(world))
+					if (!world || !contextWorld || contextWorld->CompatibleWorld(world))
 					{
 						result.AddTaggedValue(tv.GetValue().GetSNI_Expression()->Clone(p_ReplacementList, p_Changed), world);
 					}
@@ -436,13 +436,13 @@ namespace SNI
 		SN::SN_Error err(true);
 		bool success = false;
 		SNI_World *contextWorld = SNI_World::ContextWorld();
+		SNI_WorldSet *worldSet = new SNI_WorldSet();
 		for (SNI_TaggedValue &tv : m_ValueList)
 		{
 			SNI_World *world = tv.GetWorld();
 			if (!world)
 			{
-				world = GetWorldSet()->CreateWorld();
-				tv.SetWorld(world);
+				world = worldSet->CreateWorld();
 			}
 			if (!world->IsEmpty())
 			{
@@ -452,15 +452,14 @@ namespace SNI
 					// Flatten the call stack, by returning the function to be called from Unify, instead of calling it there.
 					SNI_Expression *function = tv.GetValue().GetSNI_Expression();
 					SNI_Error *e = dynamic_cast<SNI_Error *>(function);
+					SNI_World::PushContextWorld(world);
 					while (!e)
 					{
 						SNI_FunctionDef *functionDef = dynamic_cast<SNI_FunctionDef *>(function);
 						if (functionDef)
 						{
-							SNI_World::PushContextWorld(world);
 							SN::SN_Expression *param_List = functionDef->LoadParametersUnify(&paramListClone);
 							function = functionDef->UnifyArray(param_List).GetSNI_Expression();
-							SNI_World::PopContextWorld();
 						}
 						else
 						{
@@ -468,6 +467,7 @@ namespace SNI
 						}
 						e = dynamic_cast<SNI_Error *>(function);
 					}
+					SNI_World::PopContextWorld();
 					if (e->GetBool())
 					{
 						success = true;

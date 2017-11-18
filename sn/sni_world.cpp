@@ -118,7 +118,6 @@ namespace SNI
 		Mark(true);
 		if (!p_World->HasMutualExclusion())
 		{
-			m_ChildList.push_back(p_World);
 			return true;
 		}
 		return false;

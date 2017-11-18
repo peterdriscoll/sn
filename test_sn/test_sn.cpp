@@ -1464,8 +1464,10 @@ namespace test_sn
 				SN_DECLARE(x);
 				(String("{{expression}}") == f(x)).AssertAction();
 				string x_display = x.DisplaySN();
-				string x_string = x.GetString();
-				Assert::IsTrue(x_string == "expression");
+				string x_string = x.BuildSet().Evaluate().DisplaySN();
+				string x_compare_string = "{String(\"expression\"), String(\"{expression}\"), String(\"{{expression}}\")}";
+
+				Assert::IsTrue(x_string == x_compare_string);
 				// This is not quite right. Logically, 'x' should be a value set ["{{expression}}", "{expression}", "expression"]
 				// Not set up to implement this yet. ????
 			}
