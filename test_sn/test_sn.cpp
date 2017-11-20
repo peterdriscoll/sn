@@ -656,6 +656,62 @@ namespace test_sn
 			Cleanup();
 		}
 
+		TEST_METHOD(TestPartialCall)
+		{
+			Initialize();
+			Manager manager(AssertErrorHandler);
+			{
+				Transaction transaction;
+				SN_DECLARE(f);
+				SN_DECLARE(g);
+				SN_DECLARE(a);
+				SN_DECLARE(b);
+				SN_DECLARE(c);
+
+				(f(a)(b) == a * b).PartialAssertAction();
+				(Define(g) == f(Long(5))).PartialAssertAction();
+
+				(g(Long(4)) == c).AssertAction();
+				string c_string = c.DisplaySN();
+				Assert::IsTrue(c_string == "c[Long(20)]");
+
+				(c == Long(20)).AssertAction();
+			}
+		}
+
+
+		TEST_METHOD(TestYCombinator)
+		{
+			Initialize();
+			Manager manager(AssertErrorHandler);
+			{
+				Transaction transaction;
+				SN_DECLARE(Y);
+				SN_DECLARE(f);
+				SN_DECLARE(x);
+				SN_DECLARE(z);
+				(Define(Y) == Lambda(f, Lambda(x, f(x(x)))(Lambda(z, f(z(z)))))).PartialAssertAction();
+
+				SN_DECLARE(Fact);
+				SN_DECLARE(g);
+				SN_DECLARE(n);
+
+				(Define(Fact)(g)(n) == (n == Long(0)).If(Long(1), n * g(n - Long(1)))).PartialAssertAction();
+
+				//(Y(Fact)(Long(0)) == Long(1)).EvaluateAction();
+				(Y(Fact)(Long(1)) == Long(1)).EvaluateAction();
+				(Y(Fact)(Long(3)) == Long(6)).EvaluateAction();
+				(Y(Fact)(Long(10)) == Long(3628800)).EvaluateAction();
+				(Y(Fact)(Long(12)) == Long(479001600)).EvaluateAction();
+
+				(Y(Fact)(Long(0)) == Long(1)).AssertAction();
+				(Y(Fact)(Long(1)) == Long(1)).AssertAction();
+				(Y(Fact)(Long(3)) == Long(6)).AssertAction();
+				(Y(Fact)(Long(10)) == Long(3628800)).AssertAction();
+				(Y(Fact)(Long(12)) == Long(479001600)).AssertAction();
+			}
+		}
+
 		TEST_METHOD(TestStringRefDefinition)
 		{
 			Initialize();

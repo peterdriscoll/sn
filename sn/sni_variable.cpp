@@ -506,9 +506,9 @@ namespace SNI
 
 	/* static */ SN::SN_Expression SNI_Variable::AddLambdas(SN::SN_ExpressionList * p_ParameterList)
 	{
-		if (p_ParameterList->size())
+		if (1 < p_ParameterList->size())
 		{
-			SN::SN_Expression param = p_ParameterList->at(0);
+			SN::SN_Expression param = (*p_ParameterList)[1];
 			p_ParameterList->erase(p_ParameterList->begin());
 			return SN::SN_Lambda(param, AddLambdas(p_ParameterList));
 		}
@@ -519,8 +519,8 @@ namespace SNI
 	{
 		if (p_ParameterList->size())
 		{
-			SN::SN_Expression param = p_ParameterList->at(0).GetValue();
-			p_ParameterList->erase(p_ParameterList->begin());
+			SN::SN_Expression param = p_ParameterList->back().GetValue();
+			p_ParameterList->pop_back();
 			return SN::SN_Lambda(param, AddLambdasPartial(p_ParameterList, p_Result));
 		}
 		return p_Result;

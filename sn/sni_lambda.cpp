@@ -73,16 +73,20 @@ namespace SNI
 	SNI_Expression * SNI_Lambda::Clone(SNI_ReplacementList * p_ReplacementList, bool &p_Changed)
 	{
 		bool changed = false;
-		SN::SN_Variable l_from = new SNI_Variable;
-		l_from.SetName(dynamic_cast<SNI_Variable *>(m_FormalParameter)->GetName() + "_" + to_string(++m_Id));
-		p_ReplacementList->push_back(SNI_Replacement(SN::SN_Variable(m_FormalParameter), l_from));
+		SN::SN_Variable l_to = new SNI_Variable;
+		l_to.SetName(dynamic_cast<SNI_Variable *>(m_FormalParameter)->GetName() + "_" + to_string(++m_Id));
+		p_ReplacementList->push_back(SNI_Replacement(SN::SN_Variable(m_FormalParameter), l_to));
+		SN::SN_Expression e_before = m_Expression;
+		string before = e_before.DisplaySN();
 		SNI_Expression * result = m_Expression->Clone(p_ReplacementList, changed);
-		p_ReplacementList->erase(p_ReplacementList->begin());
+		SN::SN_Expression e_after = result;
+		string after = e_after.DisplaySN();
+		p_ReplacementList->pop_back();
 
 		if (changed)
 		{
 			p_Changed = true;
-			return dynamic_cast<SNI_Expression *>(new SNI_Lambda(dynamic_cast<SNI_Expression *>(l_from.GetSNI_Variable()), result));
+			return dynamic_cast<SNI_Expression *>(new SNI_Lambda(dynamic_cast<SNI_Expression *>(l_to.GetSNI_Variable()), result));
 		}
 		return this;
 	}
@@ -110,7 +114,7 @@ namespace SNI
 		ASSERTM(p_ParameterList->size() >0, "Cannot call a lambda without a parameter");
 		SN::SN_Expression param = p_ParameterList->back().GetSNI_Expression();
 		p_ParameterList->pop_back();
-		m_FormalParameter->AssertValue(param.Evaluate());
+		m_FormalParameter->PartialAssertValue(param, true);
 		if (p_ParameterList->size() > 0)
 		{
 			return m_Expression->Call(p_ParameterList, p_MetaLevel);
