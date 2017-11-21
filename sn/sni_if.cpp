@@ -30,10 +30,6 @@ namespace SNI
 	}
 
 	/// @cond
-	void SNI_If::PromoteMembers()
-	{
-	}
-
 	string SNI_If::GetTypeName() const
 	{
 		return "If";
@@ -58,6 +54,11 @@ namespace SNI
 	{
 		return "?";
 	}
+
+	long SNI_If::GetNumParameters() const
+	{
+		return 4;
+	}
 	/// @endcond
 
 	/// \brief Evaluate if bool then value else value, and return the result.
@@ -74,24 +75,23 @@ namespace SNI
 	/// @param p_ParameterList List of three parameters (condition, positive case, negative case).
 	/// @param p_MetaLevel The meta level; 0 means evaluate the value. > 0 means return the expression to concatenate left and right.
 	/// @retval A value, expression (for meta code) or null.
-	SN::SN_Expression SNI_If::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
+	SN::SN_Expression SNI_If::CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel /* = 0 */) const
 	{
-		SN::LogContext context("SNI_If::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )");
-
-		SN::SN_Value condition = (*p_ParameterList)[2].Evaluate(p_MetaLevel);
+		SN::SN_Value condition = p_ParamList[0].Evaluate(p_MetaLevel);
 		if (condition.IsNull())
 		{
-			return LOG_RETURN(context, condition);;
+			return condition;
 		}
 
 		if (0 < p_MetaLevel)
 		{
-			SN::SN_Expression positiveCase = (*p_ParameterList)[1].PartialEvaluate(p_MetaLevel);
-			SN::SN_Expression negativeCase = (*p_ParameterList)[0].PartialEvaluate(p_MetaLevel);
-			return LOG_RETURN(context, condition.If(positiveCase, negativeCase));
+			SN::SN_Expression positiveCase = p_ParamList[1].PartialEvaluate(p_MetaLevel);
+			SN::SN_Expression negativeCase = p_ParamList[2].PartialEvaluate(p_MetaLevel);
+			return condition.If(positiveCase, negativeCase);
 		}
 
-		return LOG_RETURN(context, condition.DoIf((*p_ParameterList)[1], (*p_ParameterList)[0]));
+		//return SNI_FunctionDef::CallArray(p_ParamList, p_MetaLevel);
+		return condition.DoIf(p_ParamList[1], p_ParamList[2]);
 	}
 
 	/// \brief Return an expression or value for if bool then value else value.
@@ -320,5 +320,39 @@ namespace SNI
 			}
 		}
 		return false;
+	}
+
+	size_t SNI_If::CardinalityOfCall(long p_Depth, SN::SN_Expression * p_ParamList) const
+	{
+		if (p_Depth >= 2)
+		{
+			if (!p_ParamList[0].IsKnownValue())
+			{
+				return CARDINALITY_MAX;
+			}
+			if (p_ParamList[0].GetBool())
+			{
+				return MultiplyCardinality(p_ParamList[0].Cardinality(2), p_ParamList[1].Cardinality());
+			}
+			else if (p_Depth == 3)
+			{
+				return MultiplyCardinality(p_ParamList[0].Cardinality(2), p_ParamList[2].Cardinality());
+ 			}
+			return p_ParamList[1].Cardinality() + p_ParamList[2].Cardinality();
+		}
+		return CARDINALITY_MAX;
+	}
+
+	SN::SN_Value SNI_If::CallElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, SN::SN_ValueSet p_Result) const
+	{
+		if (p_WorldList)
+		{
+			p_Result.AddValue(p_ParamList[0].GetVariableValue().DoIf(p_ParamList[1].GetVariableValue(), p_ParamList[2].GetVariableValue()), p_Depth, p_WorldList, NULL);
+			return SN::SN_Error(true);
+		}
+		else
+		{
+			return p_ParamList[0].GetVariableValue().DoIf(p_ParamList[1].GetVariableValue(), p_ParamList[2].GetVariableValue());
+		}
 	}
 }

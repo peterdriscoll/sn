@@ -99,8 +99,8 @@ namespace SNI
 
 	SN::SN_Expression SNI_FunctionDef::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		SN::SN_Expression *param_List = LoadParametersCall(p_ParameterList);
-		return CallArray(param_List, p_MetaLevel);
+		SN::SN_Expression *paramList = LoadParametersCall(p_ParameterList);
+		return CallArray(paramList, p_MetaLevel);
 	}
 
 	SN::SN_Expression SNI_FunctionDef::CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel /* = 0 */) const

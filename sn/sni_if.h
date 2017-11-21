@@ -20,18 +20,19 @@ namespace SNI
 		virtual string DisplaySN(long priority, SNI_VariablePointerList &p_DisplayVariableList) const;
 		virtual long GetPriority() const;
 		virtual string GetOperator() const;
+		virtual long GetNumParameters() const;
 		/// @endcond
 
-		virtual SN::SN_Expression Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const;
+		virtual SN::SN_Expression CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression UnifyArray(SN::SN_Expression * p_ParameterList);
 		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
 		virtual SN::SN_Error PartialUnifyInternal(SN::SN_Expression &p_Condition, SN::SN_Expression &p_PositiveCase, SN::SN_Expression &p_NegativeCase, SN::SN_Expression &p_Result);
 
+		size_t CardinalityOfCall(long p_NumParams, SN::SN_Expression * p_ParameterList) const;
+
 	protected:
-		/// @cond
-		virtual void PromoteMembers();
-		/// @endcond
+		virtual SN::SN_Value CallElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, SN::SN_ValueSet p_Result) const;
 	};
 }
 
