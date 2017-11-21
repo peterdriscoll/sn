@@ -92,16 +92,14 @@ namespace SNI
 	/// @param p_ParameterList List of two parameters to be concatenated.
 	/// @param p_MetaLevel The meta level; 0 means evaluate the value. > 0 means return the expression to concatenate left and right.
 	/// @retval A value for the operation applied to two values.
-	SN::SN_Expression SNI_Binary::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
+	SN::SN_Expression SNI_Binary::CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel /* = 0 */) const
 	{
-		SN::LogContext context("SNI_Binary::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )");
-
 		if (0 < p_MetaLevel)
 		{
-			return PrimaryFunctionExpression((*p_ParameterList)[1].Evaluate(p_MetaLevel), (*p_ParameterList)[0].Evaluate(p_MetaLevel));
+			return PrimaryFunctionExpression(p_ParamList[0].Evaluate(p_MetaLevel), p_ParamList[1].Evaluate(p_MetaLevel));
 		}
 
-		return SNI_FunctionDef::Call(p_ParameterList, p_MetaLevel);
+		return SNI_FunctionDef::CallArray(p_ParamList, p_MetaLevel);
 	}
 
 	/// \brief Return an expression or a value for the operation applied to two values.
