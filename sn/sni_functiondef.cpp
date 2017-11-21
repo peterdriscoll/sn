@@ -87,6 +87,74 @@ namespace SNI
 		return CardinalityOfUnify(depth, p_ParamList, calcPos, totalCalc);
 	}
 
+	SN::SN_Expression SNI_FunctionDef::Evaluate(long  /* = 0 */) const
+	{
+		return this;
+	}
+
+	SN::SN_Expression SNI_FunctionDef::PartialEvaluate(long  /* = 0 */) const
+	{
+		return this;
+	}
+
+	SN::SN_Expression SNI_FunctionDef::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
+	{
+		SN::SN_Expression *param_List = LoadParametersCall(p_ParameterList);
+		return SNI_FunctionDef::CallArray(param_List, p_MetaLevel);
+	}
+
+	SN::SN_Expression SNI_FunctionDef::CallArray(SN::SN_Expression * p_ParamList, long  /* = 0 */) const
+	{
+		long depth = GetNumParameters() - 1;
+		SN::SN_Expression *inputList = new SN::SN_Expression[depth];
+		for (long j = 0; j < depth; j++)
+		{
+			inputList[j] = p_ParamList[j].GetVariableValue();
+		}
+		size_t card = 0;
+		size_t maxCard = SN::SN_Manager::GetTopManager().MaxCardinalityCall();
+		for (long j = 0; j < depth; j++)
+		{
+			if (!p_ParamList[j].IsKnownValue() && !p_ParamList[j].IsReferableValue())
+			{
+				card = CardinalityOfCall(depth, inputList);
+				if (maxCard < card)
+				{
+					inputList[j] = p_ParamList[j].Evaluate();
+				}
+			}
+		}
+		card = CardinalityOfCall(depth, inputList);
+		SN::SN_Value result;
+		if (maxCard < card)
+		{
+			result = SN::SN_Error(true, true, "Cardinality " + to_string(card) + " exceeds max cardinality " + to_string(maxCard));
+		}
+		else
+		{
+			result = ForEachCall(card, depth, inputList);
+		}
+		delete[] inputList;
+		return result;
+	}
+
+	SN::SN_Expression SNI_FunctionDef::PartialCall(SN::SN_ExpressionList * p_ParameterList, long  /* = 0 */) const
+	{
+		SN::LogContext context(DisplaySN0() + ".SNI_FunctionDef::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+
+		return skynet::Null;
+	}
+
+	SN::SN_Error SNI_FunctionDef::Assert()
+	{
+		return Unify(NULL);
+	}
+
+	SN::SN_Error SNI_FunctionDef::PartialAssert()
+	{
+		return PartialUnify(NULL, SN::SN_Bool(true));
+	}
+
 	SN::SN_Expression SNI_FunctionDef::UnifyArray(SN::SN_Expression * p_ParamList)
 	{
 		SN::SN_Error  e = true;
@@ -184,71 +252,6 @@ namespace SNI
 		}
 		delete[] output;
 		return e;
-	}
-
-	SN::SN_Expression SNI_FunctionDef::Evaluate(long  /* = 0 */) const
-	{
-		return this;
-	}
-
-	SN::SN_Expression SNI_FunctionDef::PartialEvaluate(long  /* = 0 */) const
-	{
-		return this;
-	}
-
-	SN::SN_Expression SNI_FunctionDef::Call(SN::SN_ExpressionList * p_ParameterList, long  /* = 0 */) const
-	{
-		SN::LogContext context(DisplaySN0() + ".SNI_FunctionDef::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )");
-
-		long depth = (long)p_ParameterList->size();
-		SN::SN_Expression *paramList = LoadParametersCall(p_ParameterList);
-		SN::SN_Expression *inputList = new SN::SN_Expression[depth];
-		for (long j = 0; j < depth; j++)
-		{
-			inputList[j] = paramList[j].GetVariableValue();
-		}
-		size_t card = 0;
-		size_t maxCard = SN::SN_Manager::GetTopManager().MaxCardinalityCall();
-		for (long j = 0; j < depth; j++)
-		{
-			if (!paramList[j].IsKnownValue() && !paramList[j].IsReferableValue())
-			{
-				card = CardinalityOfCall(depth, inputList);
-				if (maxCard < card)
-				{
-					inputList[j] = paramList[j].Evaluate();
-				}
-			}
-		}
-		card = CardinalityOfCall(depth, inputList);
-		SN::SN_Value result;
-		if (maxCard < card)
-		{
-			result = SN::SN_Error(true, true, "Cardinality of "+context.GetSimpleDescription()+", "+to_string(card)+" exceeds max cardinality "+to_string(maxCard));
-		}
-		else
-		{
-			result = ForEachCall(card, depth, inputList);
-		}
-		delete[] inputList;
-		return result;
-	}
-
-	SN::SN_Expression SNI_FunctionDef::PartialCall(SN::SN_ExpressionList * p_ParameterList, long  /* = 0 */) const
-	{
-		SN::LogContext context(DisplaySN0() + ".SNI_FunctionDef::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");
-
-		return skynet::Null;
-	}
-
-	SN::SN_Error SNI_FunctionDef::Assert()
-	{
-		return Unify(NULL);
-	}
-
-	SN::SN_Error SNI_FunctionDef::PartialAssert()
-	{
-		return PartialUnify(NULL, SN::SN_Bool(true));
 	}
 
 	SN::SN_Error SNI_FunctionDef::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
