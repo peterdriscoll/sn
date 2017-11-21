@@ -508,8 +508,8 @@ namespace SNI
 	{
 		if (1 < p_ParameterList->size())
 		{
-			SN::SN_Expression param = (*p_ParameterList)[1];
-			p_ParameterList->erase(p_ParameterList->begin());
+			SN::SN_Expression param = p_ParameterList->back();
+			p_ParameterList->pop_back();
 			return SN::SN_Lambda(param, AddLambdas(p_ParameterList));
 		}
 		return (*p_ParameterList)[0];
