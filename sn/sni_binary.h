@@ -33,9 +33,6 @@ namespace SNI
 		virtual SN::SN_Expression RightInverseFunctionExpression(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right) const;
 
 	protected:
-		virtual SN::SN_Expression * LoadParameters(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result) const;
-		virtual void ReplaceParameters(SN::SN_Expression * p_ParamList, SN::SN_ParameterList * p_ParameterList, SN::SN_Expression & p_Result) const;
-
 		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
 		virtual SN::SN_Error PartialUnifyInternal(SN::SN_Expression &p_left, SN::SN_Expression &p_right, SN::SN_Expression &p_Result);
 

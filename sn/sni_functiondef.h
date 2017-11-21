@@ -79,9 +79,6 @@ namespace SNI
 		virtual SN::SN_Error ForEachUnify(size_t p_Card, long p_Depth, SN::SN_Expression * p_ParamList, SN::SN_Expression * p_InputList, bool *p_Output, long p_CalcPos, long p_TotalCalc) const;
 
 		virtual SN::SN_Expression * LoadParametersCall(SN::SN_ExpressionList * p_ParameterList) const;
-		virtual void ReplaceParametersCall(SN::SN_Expression * p_ParamList, SN::SN_ExpressionList * p_ParameterList) const;
-
-		virtual void ReplaceParametersUnify(SN::SN_Expression * p_ParamList, SN::SN_ExpressionList * p_ParameterList) const;
 	};
 
 	typedef vector<SNI_FunctionDef *> SNI_FunctionDefList;

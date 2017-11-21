@@ -355,15 +355,6 @@ namespace SNI
 		return paramList;
 	}
 
-	void SNI_FunctionDef::ReplaceParametersCall(SN::SN_Expression * p_ParamList, SN::SN_ExpressionList * p_ParameterList) const
-	{
-		size_t numParams = p_ParameterList->size();
-		for (size_t j = 0; j < numParams; j++)
-		{
-			(*p_ParameterList)[numParams - j - 1] = p_ParamList[j];
-		}
-	}
-
 	SN::SN_Expression * SNI_FunctionDef::LoadParametersUnify(SN::SN_ExpressionList * p_ParameterList) const
 	{
 		size_t numParams = p_ParameterList->size();
@@ -375,15 +366,4 @@ namespace SNI
 		}
 		return paramList;
 	}
-
-	void SNI_FunctionDef::ReplaceParametersUnify(SN::SN_Expression * p_ParamList, SN::SN_ExpressionList * p_ParameterList) const
-	{
-		size_t numParams = p_ParameterList->size();
-		(*p_ParameterList)[0] = p_ParamList[PU2_Result];
-		for (size_t j = 1; j < numParams; j++)
-		{
-			(*p_ParameterList)[numParams - j] = p_ParamList[j];
-		}
-	}
-
 }

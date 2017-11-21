@@ -66,23 +66,6 @@ namespace SNI
 		return LeftInverseFunctionExpression(p_Left, p_Right);
 	}
 
-	SN::SN_Expression * SNI_Binary::LoadParameters(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result) const
-	{
-		size_t numParams = p_ParameterList->size() + 1;
-		SN::SN_Expression *paramList = new SN::SN_Expression[numParams];
-		paramList[PU2_Result] = p_Result;
-		paramList[PU2_First] = (*p_ParameterList)[1].GetValue();
-		paramList[PU2_Second] = (*p_ParameterList)[0].GetValue();
-		return paramList;
-	}
-
-	void SNI_Binary::ReplaceParameters(SN::SN_Expression *p_ParamList, SN::SN_ParameterList * p_ParameterList, SN::SN_Expression &p_Result) const
-	{
-		p_Result = p_ParamList[PU2_Result];
-		(*p_ParameterList)[1].GetValue() = p_ParamList[PU2_First];
-		(*p_ParameterList)[0].GetValue() = p_ParamList[PU2_Second];
-	}
-
 	/// - Extract second element from list as right and evaluate it.
 	///   + If unknown then return unknown
 	/// - If meta level is greater than 0
