@@ -367,7 +367,7 @@ namespace SNI
 	void SNI_Expression::AssertAction()
 	{
 		SN::LogContext context("SNI_Expression::AssertAction()");
-		HandleAssertAction(context, Assert(), "Assert");
+		HandleAssertAction(context, Clone()->Assert(), "Assert");
 	}
 
 	void SNI_Expression::PartialAssertAction()

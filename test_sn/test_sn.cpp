@@ -712,6 +712,145 @@ namespace test_sn
 			}
 		}
 
+		TEST_METHOD(TestChurchSucc)
+		{
+			Initialize();
+			Manager manager(AssertErrorHandler);
+			{
+				Transaction transaction;
+				SN_DECLARE(inc);
+				SN_DECLARE(succ);
+				SN_DECLARE(n);
+				SN_DECLARE(f);
+				SN_DECLARE(x);
+				SN_DECLARE(v);
+				SN_DECLARE(r);
+				(inc(v) == v + Long(1)).PartialAssertAction();
+				(inc(inc(inc(Long(0)))) == Long(3)).AssertAction();
+
+				(Define(succ)(n)(f)(x) == f(n(f)(x))).PartialAssertAction();
+				(succ(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(4)).EvaluateAction();
+				(succ(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r).AssertAction();
+				(r == Long(4)).EvaluateAction();
+			}
+		}
+
+		TEST_METHOD(TestChurchPlus)
+		{
+			Initialize();
+			Manager manager(AssertErrorHandler);
+			{
+				Transaction transaction;
+				SN_DECLARE(plus);
+				SN_DECLARE(n);
+				SN_DECLARE(m);
+				SN_DECLARE(f);
+				SN_DECLARE(inc);
+				SN_DECLARE(x);
+				SN_DECLARE(v);
+				SN_DECLARE(r);
+				(inc(v) == v + Long(1)).PartialAssertAction();
+				(inc(inc(inc(Long(0)))) == Long(3)).AssertAction();
+
+				(Define(plus) == Lambda(m, Lambda(n, Lambda(f, Lambda(x, m(f)((n(f)(x)))))))).PartialAssertAction();
+
+				(plus(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(2)).EvaluateAction();
+				(plus(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(4)).EvaluateAction();
+
+				(plus(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(6)).EvaluateAction();
+				(plus(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r).AssertAction();
+				(r == Long(6)).EvaluateAction();
+			}
+		}
+		
+		TEST_METHOD(TestChurchMultiply)
+		{
+			Initialize();
+			Manager manager(AssertErrorHandler);
+			{
+				Transaction transaction;
+				SN_DECLARE(mult);
+				SN_DECLARE(n);
+				SN_DECLARE(m);
+				SN_DECLARE(f);
+				SN_DECLARE(inc);
+				SN_DECLARE(x);
+				SN_DECLARE(v);
+				SN_DECLARE(r);
+				(inc(v) == v + Long(1)).PartialAssertAction();
+				(inc(inc(inc(Long(0)))) == Long(3)).AssertAction();
+
+				(Define(mult)(m)(n)(f)(x) == m(n(f))(x)).PartialAssertAction();
+
+				(mult(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(1)).EvaluateAction();
+				(mult(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(4)).EvaluateAction();
+
+				(mult(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(9)).EvaluateAction();
+				(mult(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r).AssertAction();
+				(r == Long(9)).EvaluateAction();
+			}
+		}
+
+		TEST_METHOD(TestChurchExp)
+		{
+			Initialize();
+			Manager manager(AssertErrorHandler);
+			{
+				Transaction transaction;
+				SN_DECLARE(exp);
+				SN_DECLARE(n);
+				SN_DECLARE(m);
+				SN_DECLARE(f);
+				SN_DECLARE(inc);
+				SN_DECLARE(x);
+				SN_DECLARE(v);
+				SN_DECLARE(r);
+				(inc(v) == v + Long(1)).PartialAssertAction();
+				(inc(inc(inc(Long(0)))) == Long(3)).AssertAction();
+
+				(Define(exp)(m)(n)(f)(x) == m(n)(f)(x)).PartialAssertAction();
+
+				(exp(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(1)).EvaluateAction();
+				(exp(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(4)).EvaluateAction();
+
+				(exp(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(27)).EvaluateAction();
+				(exp(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r).AssertAction();
+				(r == Long(27)).EvaluateAction();
+			}
+		}
+
+		TEST_METHOD(TestChurchPred)
+		{
+			Initialize();
+			Manager manager(AssertErrorHandler);
+			{
+				Transaction transaction;
+				SN_DECLARE(pred);
+				SN_DECLARE(n);
+				SN_DECLARE(m);
+				SN_DECLARE(h);
+				SN_DECLARE(g);
+				SN_DECLARE(u);
+				SN_DECLARE(f);
+				SN_DECLARE(inc);
+				SN_DECLARE(x);
+				SN_DECLARE(v);
+				SN_DECLARE(r);
+				(inc(v) == v + Long(1)).PartialAssertAction();
+				(inc(inc(inc(Long(0)))) == Long(3)).AssertAction();
+
+				(Define(pred) == Lambda(n, Lambda(f, Lambda(x, n(Lambda(g, Lambda(h, h(g(f))))) (Lambda(u, x))(Lambda(u, u)))))).PartialAssertAction();
+				             // \lambda n.\lambda f.\lambda x.n\ (\lambda g.\lambda h.h\ (g\ f))\ (\lambda u.x)\ (\lambda u.u)
+				(pred(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(0)).EvaluateAction();
+				(pred(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(1)).EvaluateAction();
+
+				(pred(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(2)).EvaluateAction();
+				// ???
+				// (pred(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r).AssertAction();
+				// (r == Long(2)).EvaluateAction();
+			}
+		}
+
 		TEST_METHOD(TestStringRefDefinition)
 		{
 			Initialize();
