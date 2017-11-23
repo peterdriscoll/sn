@@ -372,11 +372,6 @@ namespace SNI
 
 	SN::SN_Error SNI_Variable::AssertValue(const SN::SN_Expression &p_Value)
 	{
-		if (p_Value.IsVariable())
-		{
-			FORCE_ASSERTM("Variable not expected.");
-		}
-
 		if (SNI_World::ContextWorld())
 		{
 			if (!m_Value || m_Value->IsNull())

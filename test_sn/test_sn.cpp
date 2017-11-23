@@ -845,9 +845,8 @@ namespace test_sn
 				(pred(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(1)).EvaluateAction();
 
 				(pred(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(2)).EvaluateAction();
-				// ???
-				// (pred(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r).AssertAction();
-				// (r == Long(2)).EvaluateAction();
+				(pred(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r).AssertAction();
+				(r == Long(2)).EvaluateAction();
 			}
 		}
 
