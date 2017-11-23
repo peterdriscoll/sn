@@ -805,6 +805,7 @@ namespace test_sn
 				SN_DECLARE(inc);
 				SN_DECLARE(x);
 				SN_DECLARE(v);
+				SN_DECLARE(r0);
 				SN_DECLARE(r1);
 				SN_DECLARE(r2);
 				SN_DECLARE(r3);
@@ -812,6 +813,10 @@ namespace test_sn
 				(inc(inc(inc(Long(0)))) == Long(3)).AssertAction();
 
 				(Define(mult)(m)(n)(f)(x) == m(n(f))(x)).PartialAssertAction();
+
+				(mult(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(0)).EvaluateAction();
+				(mult(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == r0).AssertAction();
+				(r0 == Long(0)).EvaluateAction();
 
 				(mult(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(1)).EvaluateAction();
 				(mult(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).AssertAction();
