@@ -845,6 +845,7 @@ namespace test_sn
 				SN_DECLARE(inc);
 				SN_DECLARE(x);
 				SN_DECLARE(v);
+				SN_DECLARE(r0);
 				SN_DECLARE(r1);
 				SN_DECLARE(r2);
 				SN_DECLARE(r3);
@@ -852,6 +853,11 @@ namespace test_sn
 				(inc(inc(inc(Long(0)))) == Long(3)).AssertAction();
 
 				(Define(exp)(m)(n)(f)(x) == m(n)(f)(x)).PartialAssertAction();
+
+				(exp(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(1)).EvaluateAction();
+				(exp(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == r0).AssertAction();
+				(r0 == Long(1)).EvaluateAction();
+
 
 				(exp(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(1)).EvaluateAction();
 				(exp(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).AssertAction();
@@ -883,6 +889,7 @@ namespace test_sn
 				SN_DECLARE(inc);
 				SN_DECLARE(x);
 				SN_DECLARE(v);
+				SN_DECLARE(r0);
 				SN_DECLARE(r1);
 				SN_DECLARE(r2);
 				SN_DECLARE(r3);
@@ -891,6 +898,11 @@ namespace test_sn
 
 				(Define(pred) == Lambda(n, Lambda(f, Lambda(x, n(Lambda(g, Lambda(h, h(g(f))))) (Lambda(u, x))(Lambda(u, u)))))).PartialAssertAction();
 				             // \lambda n.\lambda f.\lambda x.n\ (\lambda g.\lambda h.h\ (g\ f))\ (\lambda u.x)\ (\lambda u.u)
+
+				(pred(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(0)).EvaluateAction();
+				(pred(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == r0).AssertAction();
+				(r0 == Long(0)).EvaluateAction();
+
 				(pred(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(0)).EvaluateAction();
 				(pred(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).AssertAction();
 				(r1 == Long(0)).EvaluateAction();
