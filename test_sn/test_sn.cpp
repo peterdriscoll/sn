@@ -724,14 +724,31 @@ namespace test_sn
 				SN_DECLARE(f);
 				SN_DECLARE(x);
 				SN_DECLARE(v);
-				SN_DECLARE(r);
+				SN_DECLARE(r0);
+				SN_DECLARE(r1);
+				SN_DECLARE(r2);
+				SN_DECLARE(r3);
 				(inc(v) == v + Long(1)).PartialAssertAction();
 				(inc(inc(inc(Long(0)))) == Long(3)).AssertAction();
 
 				(Define(succ)(n)(f)(x) == f(n(f)(x))).PartialAssertAction();
+
+				(succ(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(1)).EvaluateAction();
+				(succ(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == r0).AssertAction();
+				(r0 == Long(1)).EvaluateAction();
+
+
+				(succ(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(2)).EvaluateAction();
+				(succ(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).AssertAction();
+				(r1 == Long(2)).EvaluateAction();
+
+				(succ(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(3)).EvaluateAction();
+				(succ(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).AssertAction();
+				(r2 == Long(3)).EvaluateAction();
+
 				(succ(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(4)).EvaluateAction();
-				(succ(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r).AssertAction();
-				(r == Long(4)).EvaluateAction();
+				(succ(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).AssertAction();
+				(r3 == Long(4)).EvaluateAction();
 			}
 		}
 
@@ -748,18 +765,30 @@ namespace test_sn
 				SN_DECLARE(inc);
 				SN_DECLARE(x);
 				SN_DECLARE(v);
-				SN_DECLARE(r);
+				SN_DECLARE(r0);
+				SN_DECLARE(r1);
+				SN_DECLARE(r2);
+				SN_DECLARE(r3);
 				(inc(v) == v + Long(1)).PartialAssertAction();
 				(inc(inc(inc(Long(0)))) == Long(3)).AssertAction();
 
 				(Define(plus) == Lambda(m, Lambda(n, Lambda(f, Lambda(x, m(f)((n(f)(x)))))))).PartialAssertAction();
 
+				(plus(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(0)).EvaluateAction();
+				(plus(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == r0).AssertAction();
+				(r0 == Long(0)).EvaluateAction();
+
 				(plus(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(2)).EvaluateAction();
+				(plus(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).AssertAction();
+				(r1 == Long(2)).EvaluateAction();
+
 				(plus(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(4)).EvaluateAction();
+				(plus(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).AssertAction();
+				(r2 == Long(4)).EvaluateAction();
 
 				(plus(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(6)).EvaluateAction();
-				(plus(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r).AssertAction();
-				(r == Long(6)).EvaluateAction();
+				(plus(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).AssertAction();
+				(r3 == Long(6)).EvaluateAction();
 			}
 		}
 		
@@ -776,18 +805,25 @@ namespace test_sn
 				SN_DECLARE(inc);
 				SN_DECLARE(x);
 				SN_DECLARE(v);
-				SN_DECLARE(r);
+				SN_DECLARE(r1);
+				SN_DECLARE(r2);
+				SN_DECLARE(r3);
 				(inc(v) == v + Long(1)).PartialAssertAction();
 				(inc(inc(inc(Long(0)))) == Long(3)).AssertAction();
 
 				(Define(mult)(m)(n)(f)(x) == m(n(f))(x)).PartialAssertAction();
 
 				(mult(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(1)).EvaluateAction();
+				(mult(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).AssertAction();
+				(r1 == Long(1)).EvaluateAction();
+
 				(mult(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(4)).EvaluateAction();
+				(mult(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).AssertAction();
+				(r2 == Long(4)).EvaluateAction();
 
 				(mult(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(9)).EvaluateAction();
-				(mult(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r).AssertAction();
-				(r == Long(9)).EvaluateAction();
+				(mult(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).AssertAction();
+				(r3 == Long(9)).EvaluateAction();
 			}
 		}
 
