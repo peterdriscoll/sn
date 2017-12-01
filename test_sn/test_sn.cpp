@@ -731,6 +731,7 @@ namespace test_sn
 				(inc(v) == v + Long(1)).PartialAssertAction();
 				(inc(inc(inc(Long(0)))) == Long(3)).AssertAction();
 
+				// succ n f x = f (n f x)
 				(Define(succ)(n)(f)(x) == f(n(f)(x))).PartialAssertAction();
 
 				(succ(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(1)).EvaluateAction();
@@ -772,6 +773,7 @@ namespace test_sn
 				(inc(v) == v + Long(1)).PartialAssertAction();
 				(inc(inc(inc(Long(0)))) == Long(3)).AssertAction();
 
+				// plus m n f x = m f (n f x) 
 				(Define(plus) == Lambda(m, Lambda(n, Lambda(f, Lambda(x, m(f)((n(f)(x)))))))).PartialAssertAction();
 
 				(plus(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(0)).EvaluateAction();
@@ -812,6 +814,7 @@ namespace test_sn
 				(inc(v) == v + Long(1)).PartialAssertAction();
 				(inc(inc(inc(Long(0)))) == Long(3)).AssertAction();
 
+				// multiply m n f x = m (n f) x
 				(Define(mult)(m)(n)(f)(x) == m(n(f))(x)).PartialAssertAction();
 
 				(mult(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(0)).EvaluateAction();
@@ -852,6 +855,7 @@ namespace test_sn
 				(inc(v) == v + Long(1)).PartialAssertAction();
 				(inc(inc(inc(Long(0)))) == Long(3)).AssertAction();
 
+				// exp m n f x = (n m) f x 
 				(Define(exp)(m)(n)(f)(x) == m(n)(f)(x)).PartialAssertAction();
 
 				(exp(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(1)).EvaluateAction();
@@ -896,8 +900,8 @@ namespace test_sn
 				(inc(v) == v + Long(1)).PartialAssertAction();
 				(inc(inc(inc(Long(0)))) == Long(3)).AssertAction();
 
+				// \n.\f.\x.n\ (\g.\h.h\ (g f)) (\u.x)\ (\u.u)
 				(Define(pred) == Lambda(n, Lambda(f, Lambda(x, n(Lambda(g, Lambda(h, h(g(f))))) (Lambda(u, x))(Lambda(u, u)))))).PartialAssertAction();
-				             // \lambda n.\lambda f.\lambda x.n\ (\lambda g.\lambda h.h\ (g\ f))\ (\lambda u.x)\ (\lambda u.u)
 
 				(pred(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(0)).EvaluateAction();
 				(pred(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == r0).AssertAction();
@@ -941,11 +945,15 @@ namespace test_sn
 				(inc(v) == v + Long(1)).PartialAssertAction();
 				(inc(inc(inc(Long(0)))) == Long(3)).AssertAction();
 
+				// \n.\f.\x.n\ (\g.\h.h\ (g f)) (\u.x)\ (\u.u)
 				(Define(pred) == Lambda(n, Lambda(f, Lambda(x, n(Lambda(g, Lambda(h, h(g(f))))) (Lambda(u, x))(Lambda(u, u)))))).PartialAssertAction();
-				// \lambda n.\lambda f.\lambda x.n\ (\lambda g.\lambda h.h\ (g\ f))\ (\lambda u.x)\ (\lambda u.u)
 
-				(Define(minus)(m)(n)(f)(x) == n(pred)(m)(f)(x)).PartialAssertAction();
 				// minus m n = (n pred) m	
+				(Define(minus)(m)(n) == n(pred)(m)).PartialAssertAction();
+
+				// This works too.
+				// (Define(minus)(m)(n)(f)(x) == n(pred)(m)(f)(x)).PartialAssertAction();
+
 				(minus(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(1)).EvaluateAction();
 				(minus(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == r0).AssertAction();
 				(r0 == Long(1)).EvaluateAction();
