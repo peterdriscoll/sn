@@ -43,6 +43,11 @@ namespace SN
 		size_t MaxCardinalityUnify();
 		void SetMaxCardinality(size_t p_MaxCardinalityCall, size_t p_MaxCardinalityUnify);
 
+		void ConsoleFunctions(bool p_kbhit(), int p_GetCh());
+		bool HasConsole();
+		bool KbHit();
+		int  GetCh();
+		void DebugCommand(string p_text);
 
 	private:
 		SNI::SNI_Manager *m_Manager;

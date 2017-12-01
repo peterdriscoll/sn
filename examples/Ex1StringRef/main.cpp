@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <conio.h>
 
 #include "sn.h"
 using namespace PGCX;
@@ -34,6 +35,7 @@ void main(int argc, char *argv[])
 {
 	Manager manager; // Sets up any configuration parameters for SN
 
+	_getch();
 	Transaction transaction;
 	try
 	{

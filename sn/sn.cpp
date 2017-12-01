@@ -86,9 +86,9 @@ namespace skynet
 	// Comparison
 	SN::SN_FunctionDef Equals(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Equals()));
 	SN::SN_FunctionDef LessThan(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_LessThan()));
-	SN::SN_FunctionDef GreaterThan(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_LessThan()));
-	SN::SN_FunctionDef LessEqual(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_LessThan()));
-	SN::SN_FunctionDef GreaterEqual(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_LessThan()));
+	SN::SN_FunctionDef GreaterThan(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_GreaterThan()));
+	SN::SN_FunctionDef LessEqual(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_LessEquals()));
+	SN::SN_FunctionDef GreaterEqual(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_GreaterEquals()));
 
 	// Strings
 	SN::SN_FunctionDef Concat(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Concat()));

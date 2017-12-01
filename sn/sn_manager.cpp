@@ -81,4 +81,25 @@ namespace SN
 	{
 		return m_Manager->MaxCardinalityUnify();
 	}
+
+	void SN_Manager::ConsoleFunctions(bool p_kbhit(), int p_GetCh())
+	{
+		return m_Manager->ConsoleFunctions(p_kbhit, p_GetCh);
+	}
+	bool SN_Manager::HasConsole()
+	{
+		return m_Manager->HasConsole();
+	}
+	bool SN_Manager::KbHit()
+	{
+		return m_Manager->KbHit();
+	}
+	int SN_Manager::GetCh()
+	{
+		return m_Manager->GetCh();
+	}
+	void SN_Manager::DebugCommand(string p_text)
+	{
+		return m_Manager->DebugCommand(p_text);
+	}
 }

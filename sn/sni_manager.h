@@ -37,6 +37,15 @@ namespace SNI
 
 		bool DelayOnEvaluate();
 		void SetDelayOnEvaluate(bool p_DelayOnEvaluate);
+
+		void ConsoleFunctions(bool p_Kbhit(), int p_GetCh());
+
+		bool HasConsole();
+		bool KbHit();
+		int  GetCh();
+
+		void DebugCommand(string p_text);
+
 	private:
 		static SNI_Manager *m_TopManager;
 		SNI_Manager *m_LastManager;
@@ -49,6 +58,10 @@ namespace SNI
 		size_t m_MaxCardinalityUnify;
 
 		bool m_DelayOnEvaluate;
+
+		bool m_HasConsole;
+		bool (*m_KbHit)();
+		int (*m_GetCh)();
 	};
 }
 

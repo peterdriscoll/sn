@@ -4,6 +4,9 @@
 
 #include "sn_pch.h"
 
+#define VK_F10 0x79
+#define VK_F11 0x7A
+
 namespace SNI
 {
 	string DefaultLogFilePath = "\\log\\SN_";
@@ -21,6 +24,9 @@ namespace SNI
 		, m_MaxCardinalityCall(10)
 		, m_MaxCardinalityUnify(10)
 		, m_LogFilePath(DefaultLogFilePath)
+		, m_HasConsole(false)
+	    , m_KbHit(NULL)
+	    , m_GetCh(NULL)
 	{
 		m_LastManager = m_TopManager;
 		m_TopManager = this;
@@ -101,5 +107,42 @@ namespace SNI
 			m_TopManager = new SNI_Manager();
 		}
 		return m_TopManager;
+	}
+
+	void SNI_Manager::ConsoleFunctions(bool p_KbHit(), int p_GetCh())
+	{
+		m_HasConsole = true;
+		m_KbHit = p_KbHit; 
+		m_GetCh = p_GetCh;
+	}
+
+	bool SNI_Manager::HasConsole()
+	{
+		return m_GetCh;
+	}
+
+	bool SNI_Manager::KbHit()
+	{
+		return (*m_KbHit)();
+	}
+
+	int SNI_Manager::GetCh()
+	{
+		return (*m_GetCh)();
+	}
+
+	void SNI_Manager::DebugCommand(string p_text)
+	{
+		while (KbHit())
+		{
+			int response = GetCh();
+			/*
+			switch (response)
+			{
+			case VK_F1:
+
+			}
+			*/
+		}
 	}
 }

@@ -917,6 +917,53 @@ namespace test_sn
 			}
 		}
 
+		TEST_METHOD(TestChurchMinus)
+		{
+			Initialize();
+			Manager manager(AssertErrorHandler);
+			{
+				Transaction transaction;
+				SN_DECLARE(pred);
+				SN_DECLARE(h);
+				SN_DECLARE(g);
+				SN_DECLARE(u);
+				SN_DECLARE(minus);
+				SN_DECLARE(n);
+				SN_DECLARE(m);
+				SN_DECLARE(f);
+				SN_DECLARE(inc);
+				SN_DECLARE(x);
+				SN_DECLARE(v);
+				SN_DECLARE(r0);
+				SN_DECLARE(r1);
+				SN_DECLARE(r2);
+				SN_DECLARE(r3);
+				(inc(v) == v + Long(1)).PartialAssertAction();
+				(inc(inc(inc(Long(0)))) == Long(3)).AssertAction();
+
+				(Define(pred) == Lambda(n, Lambda(f, Lambda(x, n(Lambda(g, Lambda(h, h(g(f))))) (Lambda(u, x))(Lambda(u, u)))))).PartialAssertAction();
+				// \lambda n.\lambda f.\lambda x.n\ (\lambda g.\lambda h.h\ (g\ f))\ (\lambda u.x)\ (\lambda u.u)
+
+				(Define(minus)(m)(n)(f)(x) == n(pred)(m)(f)(x)).PartialAssertAction();
+				// minus m n = (n pred) m	
+				(minus(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(1)).EvaluateAction();
+				(minus(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == r0).AssertAction();
+				(r0 == Long(1)).EvaluateAction();
+
+				(minus(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(2)).EvaluateAction();
+				(minus(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).AssertAction();
+				(r1 == Long(2)).EvaluateAction();
+
+				(minus(Lambda(f, Lambda(x, f(f(f(f(f(x))))))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(3)).EvaluateAction();
+				(minus(Lambda(f, Lambda(x, f(f(f(f(f(x))))))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).AssertAction();
+				(r2 == Long(3)).EvaluateAction();
+
+				(minus(Lambda(f, Lambda(x, f(f(f(f(f(f(f(f(x)))))))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(5)).EvaluateAction();
+				(minus(Lambda(f, Lambda(x, f(f(f(f(f(f(f(f(x)))))))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).AssertAction();
+				(r3 == Long(5)).EvaluateAction();
+			}
+		}
+
 		TEST_METHOD(TestStringRefDefinition)
 		{
 			Initialize();
