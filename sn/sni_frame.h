@@ -14,9 +14,9 @@ namespace SNI
 		SNI_Frame();
 		virtual ~SNI_Frame();
 
-		SNI_ReplacementList &GetReplacementList();
 		SNI_Expression *ReplaceVariable(SNI_Variable *p_Variable, bool & p_Changed);
 		SNI_Expression *CloneReplace(bool & p_Changed, SNI_Variable * p_From, SNI_Variable * p_To, SNI_Expression *p_Expression);
+		SNI_ReplacementList &GetReplacementList();
 	private:
 		void PromoteMembers();
 

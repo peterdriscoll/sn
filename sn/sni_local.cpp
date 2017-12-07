@@ -77,10 +77,9 @@ namespace SNI
 		bool changed = false;
 		SNI_Variable *l_from = new SNI_Variable;
 		l_from->SetName(dynamic_cast<SNI_Variable *>(m_LocalVariable)->GetName() + "_" + to_string(++m_Id));
-		p_Frame->GetReplacementList().push_back(SNI_Replacement(m_LocalVariable, l_from));
-		SNI_Expression * result = m_Expression->Clone(p_Frame, changed);
-		p_Frame->GetReplacementList().erase(p_Frame->GetReplacementList().begin());
-
+		SNI_Variable *l_LocalVariable = dynamic_cast<SNI_Variable *>(m_LocalVariable);
+		l_from->SetName(l_LocalVariable->GetName() + "_" + to_string(++m_Id));
+		SNI_Expression *result = p_Frame->CloneReplace(p_Changed, l_LocalVariable, l_from, m_Expression);
 		if (changed)
 		{
 			p_Changed = true;
