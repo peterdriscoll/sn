@@ -17,10 +17,11 @@ namespace SNI
 		SNI_Replacement(const SN::SN_Variable &p_From, const SN::SN_Variable &p_To);
 		virtual ~SNI_Replacement();
 
-		SN::SN_Variable ReplaceVariable(const SN::SN_Variable &p_Variable);
+		SNI_Variable * ReplaceVariable(SNI_Variable * p_Variable);
 
 	protected:
 		virtual void PromoteMembers();
+
 
 	private:
 		SN::SN_Variable m_From;

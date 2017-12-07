@@ -24,11 +24,11 @@ namespace SNI
 	{
 	}
 
-	SN::SN_Variable SNI_Replacement::ReplaceVariable(const SN::SN_Variable &p_Variable)
+	SNI_Variable * SNI_Replacement::ReplaceVariable(SNI_Variable *p_Variable)
 	{
-		if (p_Variable.GetSNI_Variable() == m_From.GetSNI_Variable())
+		if (p_Variable == m_From.GetSNI_Variable())
 		{
-			return m_To;
+			return m_To.GetSNI_Variable();
 		}
 		return NULL;
 	}

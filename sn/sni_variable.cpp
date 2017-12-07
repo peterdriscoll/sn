@@ -250,7 +250,7 @@ namespace SNI
 
 	SNI_Expression * SNI_Variable::Clone(SNI_Frame *p_Frame, bool &p_Changed)
 	{
-		return p_Frame->ReplaceVariable(dynamic_cast<SNI_Variable *>(this), p_Changed).GetSNI_Variable();
+		return p_Frame->ReplaceVariable(this, p_Changed);
 	}
 
 	bool SNI_Variable::Equivalent(SNI_Object * p_Other) const
