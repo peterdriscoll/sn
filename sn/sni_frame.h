@@ -3,9 +3,11 @@
 
 #pragma once
 
+#include "../sn/sni_object.h"
+
 namespace SNI
 {
-	class SNI_Frame
+	class SNI_Frame : public SNI_Object
 	{
 		PGC_CLASS(SNI_Frame)
 	public:
@@ -14,6 +16,7 @@ namespace SNI
 
 		SNI_ReplacementList &GetReplacementList();
 		SNI_Expression *ReplaceVariable(SNI_Variable *p_Variable, bool & p_Changed);
+		SNI_Expression *CloneReplace(bool & p_Changed, SNI_Variable * p_From, SNI_Variable * p_To, SNI_Expression *p_Expression);
 	private:
 		void PromoteMembers();
 

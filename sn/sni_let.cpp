@@ -77,10 +77,7 @@ namespace SNI
 		SNI_Variable *l_from = new SNI_Variable;
 		SNI_Variable *l_condition = dynamic_cast<SNI_Variable *>(m_Condition);
 		l_from->SetName(l_condition->GetName() + "_" + to_string(++m_Id));
-		p_Frame->GetReplacementList().push_back(SNI_Replacement(l_condition, l_from));
-		SNI_Expression * result = m_Expression->Clone(p_Frame, changed);
-		p_Frame->GetReplacementList().erase(p_Frame->GetReplacementList().begin());
-
+		SNI_Expression *result = p_Frame->CloneReplace(p_Changed, l_condition, l_from, m_Expression);
 		if (changed)
 		{
 			p_Changed = true;

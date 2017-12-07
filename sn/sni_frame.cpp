@@ -1,5 +1,7 @@
 #include "sni_frame.h"
 
+#include "sni_variable.h"
+
 #include "sn_pch.h"
 
 namespace SNI
@@ -47,6 +49,13 @@ namespace SNI
 		return p_Variable;
 	}
 
+	SNI_Expression * SNI_Frame::CloneReplace(bool &p_Changed, SNI_Variable *p_From, SNI_Variable *p_To, SNI_Expression *p_Expression)
+	{
+		m_ReplacementList.push_back(SNI_Replacement(p_From, p_To));
+		SNI_Expression * result = p_Expression->Clone(this, p_Changed);
+		m_ReplacementList.pop_back();
+		return result;
+	}
 	void SNI_Frame::PromoteMembers()
 	{
 	}

@@ -77,11 +77,7 @@ namespace SNI
 		l_to->SetName(dynamic_cast<SNI_Variable *>(m_FormalParameter)->GetName() + "_" + to_string(++m_Id));
 		SNI_Variable *l_FormalParameter = dynamic_cast<SNI_Variable *>(m_FormalParameter);
 		p_Frame->GetReplacementList().push_back(SNI_Replacement(l_FormalParameter, l_to));
-		SN::SN_Expression e_before = m_Expression;
-		string before = e_before.DisplaySN();
 		SNI_Expression * result = m_Expression->Clone(p_Frame, changed);
-		SN::SN_Expression e_after = result;
-		string after = e_after.DisplaySN();
 		p_Frame->GetReplacementList().pop_back();
 
 		if (changed)
