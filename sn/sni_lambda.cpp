@@ -73,9 +73,10 @@ namespace SNI
 	SNI_Expression * SNI_Lambda::Clone(SNI_Frame *p_Frame, bool &p_Changed)
 	{
 		bool changed = false;
-		SN::SN_Variable l_to = new SNI_Variable;
-		l_to.SetName(dynamic_cast<SNI_Variable *>(m_FormalParameter)->GetName() + "_" + to_string(++m_Id));
-		p_Frame->GetReplacementList().push_back(SNI_Replacement(SN::SN_Variable(m_FormalParameter), l_to));
+		SNI_Variable *l_to = new SNI_Variable;
+		l_to->SetName(dynamic_cast<SNI_Variable *>(m_FormalParameter)->GetName() + "_" + to_string(++m_Id));
+		SNI_Variable *l_FormalParameter = dynamic_cast<SNI_Variable *>(m_FormalParameter);
+		p_Frame->GetReplacementList().push_back(SNI_Replacement(l_FormalParameter, l_to));
 		SN::SN_Expression e_before = m_Expression;
 		string before = e_before.DisplaySN();
 		SNI_Expression * result = m_Expression->Clone(p_Frame, changed);
@@ -86,7 +87,7 @@ namespace SNI
 		if (changed)
 		{
 			p_Changed = true;
-			return dynamic_cast<SNI_Expression *>(new SNI_Lambda(dynamic_cast<SNI_Expression *>(l_to.GetSNI_Variable()), result));
+			return dynamic_cast<SNI_Expression *>(new SNI_Lambda(dynamic_cast<SNI_Expression *>(l_to), result));
 		}
 		return this;
 	}

@@ -10,7 +10,7 @@ namespace SNI
 	{
 	}
 
-	SNI_Replacement::SNI_Replacement(const SN::SN_Variable &p_From, const SN::SN_Variable &p_To)
+	SNI_Replacement::SNI_Replacement(SNI_Variable *p_From, SNI_Variable *p_To)
 		: m_From(p_From)
 		, m_To(p_To)
 	{
@@ -26,9 +26,9 @@ namespace SNI
 
 	SNI_Variable * SNI_Replacement::ReplaceVariable(SNI_Variable *p_Variable)
 	{
-		if (p_Variable == m_From.GetSNI_Variable())
+		if (p_Variable == m_From)
 		{
-			return m_To.GetSNI_Variable();
+			return m_To;
 		}
 		return NULL;
 	}

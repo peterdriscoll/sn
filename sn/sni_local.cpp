@@ -75,16 +75,16 @@ namespace SNI
 	SNI_Expression * SNI_Local::Clone(SNI_Frame *p_Frame, bool &p_Changed)
 	{
 		bool changed = false;
-		SN::SN_Variable l_from = new SNI_Variable;
-		l_from.SetName(dynamic_cast<SNI_Variable *>(m_LocalVariable)->GetName() + "_" + to_string(++m_Id));
-		p_Frame->GetReplacementList().push_back(SNI_Replacement(SN::SN_Variable(m_LocalVariable), l_from));
+		SNI_Variable *l_from = new SNI_Variable;
+		l_from->SetName(dynamic_cast<SNI_Variable *>(m_LocalVariable)->GetName() + "_" + to_string(++m_Id));
+		p_Frame->GetReplacementList().push_back(SNI_Replacement(m_LocalVariable, l_from));
 		SNI_Expression * result = m_Expression->Clone(p_Frame, changed);
 		p_Frame->GetReplacementList().erase(p_Frame->GetReplacementList().begin());
 
 		if (changed)
 		{
 			p_Changed = true;
-			return dynamic_cast<SNI_Expression *>(new SNI_Local(l_from.GetSNI_Variable(), result));
+			return dynamic_cast<SNI_Expression *>(new SNI_Local(l_from, result));
 		}
 		return this;
 	}

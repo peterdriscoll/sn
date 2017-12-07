@@ -730,7 +730,7 @@ namespace SNI
 		{
 			SNI_WorldSet *worldSet = new SNI_WorldSet;
 			SN::SN_ValueSet other = other_expression;
-			for (long j = 0; j<other.Length(); j++)
+			for (size_t j = 0; j<other.Length(); j++)
 			{
 				bool exists = false;
 				SNI_World * newWorld = worldSet->JoinWorldsArgs(AutoAddWorld, CreateIfActiveParents, exists, other[j].GetWorld());
@@ -759,7 +759,7 @@ namespace SNI
 		if (SN::Is<SNI_ValueSet *>(right_value))
 		{
 			SN::SN_ValueSet rightValueSet = right_value;
-			for (long j = 0; j<rightValueSet.Length(); j++)
+			for (size_t j = 0; j<rightValueSet.Length(); j++)
 			{
 				bool exists = false;
 				SNI_World * world = worldSet->JoinWorldsArgs(AutoAddWorld, CreateIfActiveParents, exists, rightValueSet[j].GetWorld());
@@ -795,7 +795,7 @@ namespace SNI
 				{
 					SN::SN_ValueSet l_PositiveValueSet = l_PositiveExpression;
 
-					for (long j = 0; j<l_PositiveValueSet.Length(); j++)
+					for (size_t j = 0; j<l_PositiveValueSet.Length(); j++)
 					{
 						bool exists = false;
 						SNI_World * world = worldSet->JoinWorldsArgs(AutoAddWorld, CreateIfActiveParents, exists, m_ValueList[i].GetWorld(), l_PositiveValueSet[j].GetWorld());
