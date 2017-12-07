@@ -29,11 +29,6 @@ namespace SNI
 	{
 	}
 
-	SNI_ReplacementList & SNI_Frame::GetReplacementList()
-	{
-		return m_ReplacementList;
-	}
-
 	SNI_Expression *SNI_Frame::ReplaceVariable(SNI_Variable *p_Variable, bool &p_Changed)
 	{
 		for (unsigned long j = 0; j < m_ReplacementList.size(); j++)
