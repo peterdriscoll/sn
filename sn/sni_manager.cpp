@@ -2,14 +2,28 @@
 
 #include "sn_error.h"
 
+#include "logcontext.h"
+
+#include <chrono>
+#include <thread>
+
 #include "sn_pch.h"
 
-#define VK_F10 0x79
-#define VK_F11 0x7A
+#define VK_F5 63
+#define VK_SHIFT_F5 64
+#define VK_F10 68
+#define VK_F11 133
+#define VK_SHIFT_F11 135
+#define VK_F12 136
+#define VK_H 104
+#define VK_SHIFT_H 72
 
 namespace SNI
 {
 	string DefaultLogFilePath = "\\log\\SN_";
+	/*static*/ enum DebugAction SNI_Manager::m_DebugAction;
+	/*static*/ long SNI_Manager::m_FrameDepth;
+	/*static*/ long SNI_Manager::m_Thread;
 
 	void ThrowErrorHandler(SN::SN_Error p_Result)
 	{
@@ -109,7 +123,7 @@ namespace SNI
 		return m_TopManager;
 	}
 
-	void SNI_Manager::ConsoleFunctions(bool p_KbHit(), int p_GetCh())
+	void SNI_Manager::ConsoleFunctions(int p_KbHit(), int p_GetCh())
 	{
 		m_HasConsole = true;
 		m_KbHit = p_KbHit; 
@@ -131,18 +145,81 @@ namespace SNI
 		return (*m_GetCh)();
 	}
 
-	void SNI_Manager::DebugCommand(string p_text)
+	bool SNI_Manager::IsBreakPoint(SN::InterruptPoint p_InterruptPoint, long p_FrameDepth, long p_Thread)
 	{
-		while (KbHit())
+		bool baseInterrupt = (p_InterruptPoint == SN::BreakPoint || p_InterruptPoint == SN::ErrorPoint);
+		switch (m_DebugAction)
 		{
-			int response = GetCh();
-			/*
-			switch (response)
-			{
-			case VK_F1:
+		case RunToEnd:
+			return false;
+		case Run:
+			return baseInterrupt;
+		case StepInto:
+			return baseInterrupt || p_InterruptPoint == SN::CallPoint;
+		case StepOver:
+			return baseInterrupt || (p_InterruptPoint == SN::CallPoint && p_FrameDepth <= m_FrameDepth && p_Thread == m_Thread);
+		case StepOut:
+			return baseInterrupt || (p_InterruptPoint == SN::CallPoint && p_FrameDepth < m_FrameDepth && p_Thread == m_Thread);
+		case StepParameter:
+			return p_InterruptPoint == SN::BreakPoint || p_InterruptPoint == SN::CallPoint || p_InterruptPoint == SN::ParameterPoint;
+		}
+		return false;
+	}
 
+	void SNI_Manager::DebugCommand(SN::InterruptPoint p_InterruptPoint, long p_FrameDepth, long p_Thread)
+	{
+		if (HasConsole() && IsBreakPoint(p_InterruptPoint, p_FrameDepth, p_Thread))
+		{
+			m_DebugAction = None;
+			cout << "\n>> ";
+			while (m_DebugAction == None)
+			{
+				int response = GetCh();
+				switch (response)
+				{
+				case VK_F5:
+					cout << "F5";
+					m_DebugAction = Run;
+					break;
+				case VK_SHIFT_F5:
+					cout << "Shift F5";
+					m_DebugAction = RunToEnd;
+					break;
+				case VK_F10:
+					cout << "F10";
+					m_DebugAction = StepOver;
+					break;
+				case VK_F11:
+					cout << "F11";
+					m_DebugAction = StepInto;
+					m_FrameDepth = p_FrameDepth;
+					m_Thread = p_Thread;
+					break;
+				case VK_SHIFT_F11:
+					cout << "Shift F11";
+					m_DebugAction = StepOut;
+					m_FrameDepth = p_FrameDepth;
+					m_Thread = p_Thread;
+					break;
+				case VK_F12:
+					cout << "F12";
+					m_DebugAction = StepParameter;
+					break;
+				case VK_H:
+				case VK_SHIFT_H:
+				{
+					SN::LogContext context("Help: ");
+					context.LogText("F5", "Run");
+					context.LogText("F10", "Step over");
+					context.LogText("F11", "Step into");
+					context.LogText("Shift F11", "Step out");
+					context.LogText("h, H", "Help");
+					break;
+				}
+				default:
+					break;
+				}
 			}
-			*/
 		}
 	}
 }

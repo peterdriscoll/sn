@@ -100,6 +100,8 @@
 
 // Utility
 #include "utility.h"
+#include "log.h"
+#include "logcontext.h"
 #include "sni_helpers.h"
 #include "sni_manager.h"
 #include "sni_cartesian.h"
@@ -122,6 +124,8 @@
 #include <limits>
 #include <fstream>
 #include <sstream>
+#include <chrono>
+#include <thread>
 
 using namespace std;
 

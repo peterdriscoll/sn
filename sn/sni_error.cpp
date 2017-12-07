@@ -15,6 +15,10 @@ namespace SNI
 		, m_Delay(p_Delay)
 		, m_Description(p_Description)
 	{
+		if (!m_Success)
+		{
+			SNI_Manager::GetTopManager()->DebugCommand(SN::ErrorPoint, 0, 0);
+		}
 	}
 
 	SNI_Error::SNI_Error(const string &p_Description)
@@ -22,6 +26,7 @@ namespace SNI
 		, m_Delay(false)
 		, m_Description(p_Description)
 	{
+		SNI_Manager::GetTopManager()->DebugCommand(SN::ErrorPoint, 0, 0);
 	}
 
 	SNI_Error::SNI_Error(const SNI_Error &p_Other)

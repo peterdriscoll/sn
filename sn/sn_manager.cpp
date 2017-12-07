@@ -82,7 +82,7 @@ namespace SN
 		return m_Manager->MaxCardinalityUnify();
 	}
 
-	void SN_Manager::ConsoleFunctions(bool p_kbhit(), int p_GetCh())
+	void SN_Manager::ConsoleFunctions(int p_kbhit(), int p_GetCh())
 	{
 		return m_Manager->ConsoleFunctions(p_kbhit, p_GetCh);
 	}
@@ -98,8 +98,8 @@ namespace SN
 	{
 		return m_Manager->GetCh();
 	}
-	void SN_Manager::DebugCommand(string p_text)
+	void SN_Manager::DebugCommand(InterruptPoint p_InterruptPoint, long p_FrameDepth, long p_Thread)
 	{
-		return m_Manager->DebugCommand(p_text);
+		return m_Manager->DebugCommand(p_InterruptPoint, p_FrameDepth, p_Thread);
 	}
 }

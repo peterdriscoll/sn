@@ -67,19 +67,8 @@ namespace SN
 			string line = arrLines[i];
 			WriteLogFile(delimeter + line);
 			delimeter = "\n";
-			//        cout << line << endl;
-			//        if (m_external_log)
-			//        {
-			//            m_external_log->WriteLine(string2BSTR(line));
-			//        }
 		}
 	}
-
-	//void Log::AddExternalLog(IExternalLog *p_external_log)
-	//{
-	//    m_external_log = p_external_log;
-	//}
-
 
 	Log * Log::GetLog(long p_LogIndex)
 	{
@@ -103,48 +92,8 @@ namespace SN
 		string title = "DAGEN Error Found";
 		string description = p_description + SN::LogContext::GetContextDescription(LOG_STANDARD_INDEX);
 		WriteLine("---------- Error found ----------");
-		//    if (!p_symbol.IsEndOfFile())
-		//    {
-		//        if (m_external_log)
-		//        {
-		//            m_external_log->SelectDocumentText(string2BSTR(p_path), p_symbol.GetLineNum()+1, p_symbol.GetCharNum()+1, p_symbol.GetWord().GetLength());
-		//        }
-		//    }
 		WriteLine(description);
-		if (GetShowMessageBox())
-		{
-			//        ::MessageBox(0,description.data(),title.data(),MB_OK | MB_ICONERROR);
-		}
 		ASSERTM(false, "description");
-	}
-
-	void Log::Warning(const string &p_description)
-	{
-		string title = "DAGEN Warning";
-		//    if (!p_symbol.IsEndOfFile())
-		//    {
-		//        if (m_external_log)
-		//        {
-		//            m_external_log->SelectDocumentText(string2BSTR(p_path), p_symbol.GetLineNum()+1, p_symbol.GetCharNum()+1, p_symbol.GetWord().GetLength());
-		//        }
-		//    }
-		string description = p_description + SN::LogContext::GetContextDescription(LOG_STANDARD_INDEX);
-		WriteLine("---------- Warning ----------");
-		WriteLine(description);
-		if (GetShowMessageBox())
-		{
-			//        ::MessageBox(0,description.data(),title.data(),MB_OK | MB_ICONERROR);
-		}
-	}
-
-	bool Log::GetShowMessageBox()
-	{
-		return m_ShowMessageBox;
-	}
-
-	void Log::SetShowMessageBox(bool p_value)
-	{
-		m_ShowMessageBox = p_value;
 	}
 
 	void Log::CreateLogFile(long p_LogIndex)
@@ -163,8 +112,9 @@ namespace SN
 
 	void Log::WriteLogFile(const string &p_Line)
 	{
-		m_LogFile.write(p_Line.data(), p_Line.length());
+		m_LogFile << p_Line;
 		m_LogFile.flush();
+		cout << p_Line;
 	}
 
 	void Log::CloseLogFile()

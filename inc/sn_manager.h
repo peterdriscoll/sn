@@ -19,6 +19,11 @@ namespace SN
 
 	typedef void OnErrorHandler(SN_Error p_Result);
 
+	enum InterruptPoint
+	{
+		BreakPoint, CallPoint, ParameterPoint, ErrorPoint
+	};
+
 	class SN_EXPORT SN_Manager
 	{
 	public:
@@ -43,11 +48,11 @@ namespace SN
 		size_t MaxCardinalityUnify();
 		void SetMaxCardinality(size_t p_MaxCardinalityCall, size_t p_MaxCardinalityUnify);
 
-		void ConsoleFunctions(bool p_kbhit(), int p_GetCh());
+		void ConsoleFunctions(int p_kbhit(), int p_GetCh());
 		bool HasConsole();
 		bool KbHit();
 		int  GetCh();
-		void DebugCommand(string p_text);
+		void DebugCommand(InterruptPoint p_InterruptPoint, long p_FrameDepth, long p_Thread);
 
 	private:
 		SNI::SNI_Manager *m_Manager;

@@ -12,24 +12,6 @@
 #include <fstream>
 using namespace std;
 
-#define NOVAVERIFY(condition, description)                     \
-    if (!(condition))                                          \
-    {                                                          \
-        Log::GetLog()->VerifyForce(description);               \
-    }
-
-#define NOVAVERIFYSYMBOL(condition, description, path, symbol) \
-    if (!(condition))                                          \
-    {                                                          \
-        Log::GetLog()->VerifyForce(description, path, symbol); \
-    }
-
-#define NOVAWARNING(condition, description)                    \
-    if (!(condition))                                          \
-    {                                                          \
-        Log::GetLog()->Warning(description);                   \
-    }
-
 namespace SN
 {
 	class Log
@@ -43,11 +25,6 @@ namespace SN
 		void WriteLine(const string &p_line);
 		void Verify(bool p_value, const string &p_description);
 		void VerifyForce(const string &p_description);
-
-		void Warning(const string &p_description);
-
-		bool GetShowMessageBox();
-		void SetShowMessageBox(bool p_value);
 
 	protected:
 		void CreateLogFile(long p_LogIndex);

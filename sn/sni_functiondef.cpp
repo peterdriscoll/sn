@@ -105,6 +105,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_FunctionDef::CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel /* = 0 */) const
 	{
+		SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, 0, 0);
 		long depth = GetNumParameters() - 1;
 		SN::SN_Expression *inputList = new SN::SN_Expression[depth];
 		for (long j = 0; j < depth; j++)
@@ -118,10 +119,15 @@ namespace SNI
 			if (!p_ParamList[j].IsKnownValue() && !p_ParamList[j].IsReferableValue())
 			{
 				card = CardinalityOfCall(depth, inputList);
+				SNI_Manager::GetTopManager()->DebugCommand(SN::ParameterPoint, 0, 0);
 				if (maxCard < card)
 				{
 					inputList[j] = p_ParamList[j].Evaluate();
 				}
+			}
+			else
+			{
+				SNI_Manager::GetTopManager()->DebugCommand(SN::ParameterPoint, 0, 0);
 			}
 		}
 		card = CardinalityOfCall(depth, inputList);
@@ -163,6 +169,7 @@ namespace SNI
 		bool *output = new bool[depth];
 		bool allFound = false;
 		long totalCalc = depth;
+		SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, 0, 0);
 		for (long j = 0; j < depth; j++)
 		{
 			if (p_ParamList[j].IsKnownValue())
@@ -189,6 +196,7 @@ namespace SNI
 			if (!p_ParamList[j].IsKnownValue() && !p_ParamList[j].IsReferableValue())
 			{
 				card = CardinalityOfUnify(depth, inputList, (long)j, totalCalc);
+				SNI_Manager::GetTopManager()->DebugCommand(SN::ParameterPoint, 0, 0);
 				if (p_ParamList[j].IsVariable())
 				{
 					if (allFound || maxCard < card)
@@ -212,6 +220,10 @@ namespace SNI
 						}
 					}
 				}
+			}
+			else
+			{
+				SNI_Manager::GetTopManager()->DebugCommand(SN::ParameterPoint, 0, 0);
 			}
 			if (inputList[j].IsKnownValue())
 			{

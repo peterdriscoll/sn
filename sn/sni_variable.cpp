@@ -449,6 +449,7 @@ namespace SNI
 		if (m_Value)
 		{
 			SNI_Expression * l_clone = m_Value->Clone();
+			SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, 0, 0);
 			return l_clone->Call(p_ParameterList, p_MetaLevel);
 		}
 		return dynamic_cast<SNI_Expression *>(SN::SN_Error(GetTypeName() + " function to call is unknown.").GetSNI_Error());
@@ -473,10 +474,8 @@ namespace SNI
 	{
 		if (m_Value)
 		{
-			string textb = m_Value->DisplaySN0();
 			SNI_Expression * l_clone = m_Value->Clone();
-			string text = l_clone->DisplaySN0();
-
+			SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, 0, 0);
 			return l_clone->Unify(p_ParameterList);
 		}
 		else

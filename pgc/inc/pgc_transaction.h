@@ -85,6 +85,7 @@ namespace PGC
 		static void ResetNetMemoryUsed();
 		static void ResetGrossMemoryUsed();
 
+		static long GetThreadNum();
 		void CollectGarbage();
 
 		// Multi threading
@@ -99,6 +100,7 @@ namespace PGC
 
 		static PGC_Transaction *m_TopTransaction;
 		static PGC_Transaction *m_AllocatingTransaction;
+		static long m_NextThreadNum;
 
 		size_t m_NetMemoryUsed;
 		static size_t m_TotalNetMemoryUsed;
