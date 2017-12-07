@@ -74,14 +74,12 @@ namespace SNI
 	SNI_Expression * SNI_Let::Clone(SNI_Frame *p_Frame, bool &p_Changed)
 	{
 		bool changed = false;
-		SNI_Variable *l_from = new SNI_Variable;
-		SNI_Variable *l_condition = dynamic_cast<SNI_Variable *>(m_Condition);
-		l_from->SetName(l_condition->GetName() + "_" + to_string(++m_Id));
-		SNI_Expression *result = p_Frame->CloneReplace(p_Changed, l_condition, l_from, m_Expression);
+		SNI_Expression * condition = m_Condition->Clone(p_Frame, changed);
+		SNI_Expression * expression = m_Expression->Clone(p_Frame, changed);
 		if (changed)
 		{
 			p_Changed = true;
-			return dynamic_cast<SNI_Expression *>(new SNI_Let(dynamic_cast<SNI_Expression *>(l_from), result));
+			return dynamic_cast<SNI_Expression *>(new SNI_Let(condition, expression));
 		}
 		return this;
 	}
