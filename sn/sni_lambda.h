@@ -25,7 +25,7 @@ namespace SNI
 
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 		virtual size_t Cardinality(size_t p_MaxCardinality = CARDINALITY_MAX) const;
-		virtual SNI_Expression * Clone(SNI_ReplacementList * p_ReplacementList, bool &p_Changed);
+		virtual SNI_Expression * Clone(SNI_Frame *p_Frame, bool &p_Changed);
 
 		virtual SN::SN_Expression Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const;

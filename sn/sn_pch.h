@@ -17,6 +17,7 @@
 
 // Other
 #include "sni_replacement.h"
+#include "sni_frame.h"
 
 // Language elements
 #include "sni_meta.h"

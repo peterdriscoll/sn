@@ -138,7 +138,7 @@ namespace SNI
 		return trueFound && falseFound;
 	}
 
-	SNI_Expression * SNI_ValueSet::Clone(SNI_ReplacementList * p_ReplacementList, bool &p_Changed)
+	SNI_Expression * SNI_ValueSet::Clone(SNI_Frame *p_Frame, bool &p_Changed)
 	{
 		SN::SN_ValueSet result;
 		if (0 < m_ValueList.size())
@@ -151,7 +151,7 @@ namespace SNI
 				{
 					if (!world || !contextWorld || contextWorld->CompatibleWorld(world))
 					{
-						result.AddTaggedValue(tv.GetValue().GetSNI_Expression()->Clone(p_ReplacementList, p_Changed), world);
+						result.AddTaggedValue(tv.GetValue().GetSNI_Expression()->Clone(p_Frame, p_Changed), world);
 					}
 				}
 			}

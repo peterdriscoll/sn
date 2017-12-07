@@ -39,6 +39,7 @@ namespace SNI
 	class SNI_Cartesian;
 	class SNI_Cart;
 	class SNI_Splitter;
+	class SNI_Frame;
 
 	class SNI_Replacement;
 	typedef vector<SNI_Replacement> SNI_ReplacementList;
@@ -77,7 +78,7 @@ namespace SNI
 		//---------------------------------------------------------------
 		// Members
 		//---------------------------------------------------------------
-		virtual SNI_Expression * Clone(SNI_ReplacementList * p_ReplacementList, bool &p_Changed);
+		virtual SNI_Expression * Clone(SNI_Frame *p_Frame, bool &p_Changed);
 		virtual SNI_Expression * Clone();
 		virtual bool GetBool() const;
 		virtual string GetString() const;

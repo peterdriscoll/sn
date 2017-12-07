@@ -85,7 +85,6 @@ namespace PGC
 		static void ResetNetMemoryUsed();
 		static void ResetGrossMemoryUsed();
 
-		static long GetThreadNum();
 		void CollectGarbage();
 
 		// Multi threading

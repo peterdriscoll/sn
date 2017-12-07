@@ -1,32 +1,25 @@
-#if !defined(SNI_INTTOSTRING_H_INCLUDED)
-#define SNI_INTTOSTRING_H_INCLUDED
+#if !defined(SNI_FRAME_INCLUDED)
+#define SNI_FRAME_INCLUDED
 
 #pragma once
 
-#include "sni_unary.h"
-
 namespace SNI
 {
-	class SNI_IntToString : public SNI_Unary
+	class SNI_Frame
 	{
-		PGC_CLASS(SNI_IntToString)
+		PGC_CLASS(SNI_Frame)
 	public:
-		SNI_IntToString();
-		virtual ~SNI_IntToString();
+		SNI_Frame();
+		virtual ~SNI_Frame();
 
-		virtual string GetTypeName() const;
-		virtual string DisplayCpp() const;
-		virtual string DisplaySN(long priority, SNI_VariablePointerList &p_DisplayVariableList) const;
-		virtual long GetPriority() const;
+		SNI_ReplacementList &GetReplacementList();
+	private:
+		void PromoteMembers();
 
-		virtual SN::SN_Value PrimaryFunctionValue(const SN::SN_Value &p_Left) const;
-		virtual SN::SN_Expression PrimaryFunctionExpression(const SN::SN_Expression &p_Left) const;
-		virtual SN::SN_Value InverseFunctionValue(const SN::SN_Value &p_Param) const;
-		virtual SN::SN_Expression InverseFunctionExpression(const SN::SN_Expression &p_Param) const;
-
-	protected:
-		virtual void PromoteMembers();
+		long m_ThreadNum;
+		long m_FrameNum;
+		SNI_ReplacementList m_ReplacementList;
 	};
 }
 
-#endif // !defined(SNI_INTTOSTRING_H_INCLUDED)
+#endif // !defined(SNI_FRAME_INCLUDED)

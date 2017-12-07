@@ -70,18 +70,18 @@ namespace SNI
 		return m_FormalParameter;
 	}
 
-	SNI_Expression * SNI_Lambda::Clone(SNI_ReplacementList * p_ReplacementList, bool &p_Changed)
+	SNI_Expression * SNI_Lambda::Clone(SNI_Frame *p_Frame, bool &p_Changed)
 	{
 		bool changed = false;
 		SN::SN_Variable l_to = new SNI_Variable;
 		l_to.SetName(dynamic_cast<SNI_Variable *>(m_FormalParameter)->GetName() + "_" + to_string(++m_Id));
-		p_ReplacementList->push_back(SNI_Replacement(SN::SN_Variable(m_FormalParameter), l_to));
+		p_Frame->GetReplacementList().push_back(SNI_Replacement(SN::SN_Variable(m_FormalParameter), l_to));
 		SN::SN_Expression e_before = m_Expression;
 		string before = e_before.DisplaySN();
-		SNI_Expression * result = m_Expression->Clone(p_ReplacementList, changed);
+		SNI_Expression * result = m_Expression->Clone(p_Frame, changed);
 		SN::SN_Expression e_after = result;
 		string after = e_after.DisplaySN();
-		p_ReplacementList->pop_back();
+		p_Frame->GetReplacementList().pop_back();
 
 		if (changed)
 		{

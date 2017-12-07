@@ -85,12 +85,12 @@ namespace SNI
 		return m_Parameter;
 	}
 
-	SNI_Expression * SNI_Function::Clone(SNI_ReplacementList * p_ReplacementList, bool &p_Changed)
+	SNI_Expression * SNI_Function::Clone(SNI_Frame *p_Frame, bool &p_Changed)
 	{
 		bool changed = false;
-		SNI_Expression * l_Function = m_Function->Clone(p_ReplacementList, changed);
+		SNI_Expression * l_Function = m_Function->Clone(p_Frame, changed);
 		string f = l_Function->DisplaySN0();
-		SNI_Expression * l_Parameter = m_Parameter->Clone(p_ReplacementList, changed);
+		SNI_Expression * l_Parameter = m_Parameter->Clone(p_Frame, changed);
 		string p = l_Parameter->DisplaySN0();
 		if (changed)
 		{

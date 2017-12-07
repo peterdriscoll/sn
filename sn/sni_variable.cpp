@@ -248,12 +248,12 @@ namespace SNI
 		return false;
 	}
 
-	SNI_Expression * SNI_Variable::Clone(SNI_ReplacementList * p_ReplacementList, bool &p_Changed)
+	SNI_Expression * SNI_Variable::Clone(SNI_Frame *p_Frame, bool &p_Changed)
 	{
-		for (unsigned long j = 0; j < p_ReplacementList->size(); j++)
+		for (unsigned long j = 0; j < p_Frame->GetReplacementList().size(); j++)
 		{
 
-			SNI_Variable* l_to = (*p_ReplacementList)[j].ReplaceVariable(dynamic_cast<SNI_Variable *>(this)).GetSNI_Variable();
+			SNI_Variable* l_to = p_Frame->GetReplacementList()[j].ReplaceVariable(dynamic_cast<SNI_Variable *>(this)).GetSNI_Variable();
 			if (l_to)
 			{
 				p_Changed = true;

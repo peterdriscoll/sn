@@ -219,6 +219,7 @@
     <ClInclude Include="sni_error.h" />
     <ClInclude Include="sni_expression.h" />
     <ClInclude Include="sni_file.h" />
+    <ClInclude Include="sni_frame.h" />
     <ClInclude Include="sni_function.h" />
     <ClInclude Include="sni_functiondef.h" />
     <ClInclude Include="sni_greaterequals.h" />
@@ -306,6 +307,7 @@
     <ClCompile Include="sni_error.cpp" />
     <ClCompile Include="sni_expression.cpp" />
     <ClCompile Include="sni_file.cpp" />
+    <ClCompile Include="sni_frame.cpp" />
     <ClCompile Include="sni_function.cpp" />
     <ClCompile Include="sni_functiondef.cpp" />
     <ClCompile Include="sni_greaterequals.cpp" />

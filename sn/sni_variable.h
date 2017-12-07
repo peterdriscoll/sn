@@ -46,7 +46,7 @@ namespace SNI
 		virtual SN::SN_Expression GetVariableValue(bool p_IfComplete);
 		virtual SN::SN_Error AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World ** p_WorldList, SNI_WorldSet *p_WorldSet);
 
-		virtual SNI_Expression * Clone(SNI_ReplacementList * p_ReplacementList, bool &p_Changed);
+		virtual SNI_Expression * Clone(SNI_Frame *p_Frame, bool &p_Changed);
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 		virtual SNI_WorldSet * GetWorldSet();
 

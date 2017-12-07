@@ -18,7 +18,6 @@ namespace PGC
 	/*static*/ bool PGC_Transaction::m_MultiThreaded = false;
 
 	/*static*/ long PGC_Transaction::m_NextThreadNum = 0;
-	thread_local long t_ThreadNum = 0;
 
 	PGC_Transaction::PGC_Transaction()
 		: m_FirstBlock(0)
@@ -193,11 +192,6 @@ namespace PGC
 		m_TotalGrossMemoryUsed = PGC_Promotion::PromotionFreeMemory();
 	}
 
-	long PGC_Transaction::GetThreadNum()
-	{
-		return t_ThreadNum;
-	}
-
 	void PGC_Transaction::CollectGarbage()
 	{
 	}
@@ -219,7 +213,6 @@ namespace PGC
 
 	void PGC_Transaction::Process()
 	{
-		t_ThreadNum = ++m_NextThreadNum;
 		while (!m_Dieing)
 		{
 			CollectGarbage();

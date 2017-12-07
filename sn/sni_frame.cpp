@@ -1,59 +1,38 @@
-#include "sni_inttostring.h"
+#include "sni_frame.h"
 
 #include "sn_pch.h"
 
 namespace SNI
 {
-	SNI_IntToString::SNI_IntToString()
+	long m_MaxThreadNum = 0;
+	thread_local long t_ThreadNum = -1;
+	thread_local long t_MaxFrameNum = 0;
+	long GetThreadNum()
+	{
+		if (t_ThreadNum == -1)
+		{
+			t_ThreadNum = ++m_MaxThreadNum;
+		}
+		return t_ThreadNum;
+	}
+
+	SNI_Frame::SNI_Frame()
+		: m_ThreadNum(GetThreadNum())
+		, m_FrameNum(++t_MaxFrameNum)
+
 	{
 	}
 
-	SNI_IntToString::~SNI_IntToString()
+	SNI_Frame::~SNI_Frame()
 	{
 	}
 
-	void SNI_IntToString::PromoteMembers()
+	SNI_ReplacementList & SNI_Frame::GetReplacementList()
 	{
+		return m_ReplacementList;
 	}
 
-	string SNI_IntToString::GetTypeName() const
+	void SNI_Frame::PromoteMembers()
 	{
-		return "IntToString";
 	}
-
-	string SNI_IntToString::DisplayCpp() const
-	{
-		return "SN::IntToString";
-	}
-
-	string SNI_IntToString::DisplaySN(long /*priority*/, SNI_VariablePointerList & /*p_DisplayVariableList*/) const
-	{
-		return "IntToString";
-	}
-
-	long SNI_IntToString::GetPriority() const
-	{
-		return 1;
-	}
-
-	SN::SN_Value SNI_IntToString::PrimaryFunctionValue(const SN::SN_Value &p_Param) const
-	{
-		return p_Param.GetSNI_Value()->DoIntToString();
-	}
-
-	SN::SN_Expression SNI_IntToString::PrimaryFunctionExpression(const SN::SN_Expression &p_Param) const
-	{
-		return p_Param.IntToString();
-	}
-
-	SN::SN_Value SNI_IntToString::InverseFunctionValue(const SN::SN_Value &p_Param) const
-	{
-		return p_Param.GetSNI_Value()->DoStringToInt();
-	}
-
-	SN::SN_Expression SNI_IntToString::InverseFunctionExpression(const SN::SN_Expression & p_Param) const
-	{
-		return p_Param.StringToInt();
-	}
-
 }

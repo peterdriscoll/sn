@@ -372,6 +372,9 @@
     <ClInclude Include="sni_cart.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sni_frame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -696,6 +699,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sni_cartunify.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_frame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

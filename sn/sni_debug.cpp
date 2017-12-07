@@ -51,9 +51,9 @@ namespace SNI
 		return m_Expression->GetOperator();
 	}
 
-	SNI_Expression * SNI_Debug::Clone(SNI_ReplacementList * p_ReplacementList, bool &p_Changed)
+	SNI_Expression * SNI_Debug::Clone(SNI_Frame *p_Frame, bool &p_Changed)
 	{
-		SNI_Expression *l_clone = m_Expression->Clone(p_ReplacementList, p_Changed);
+		SNI_Expression *l_clone = m_Expression->Clone(p_Frame, p_Changed);
 		if (p_Changed)
 		{
 			return new SNI_Debug(l_clone);

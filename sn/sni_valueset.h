@@ -52,7 +52,7 @@ namespace SNI
 		void AddTaggedValue(const SN::SN_Expression &p_Value, SNI_World *p_World);
 		SN::SN_Error AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World **p_WorldList, SNI_WorldSet *p_WorldSet);
 		virtual SN::SN_ValueSet DoRemove(const SN::SN_Value &p_Other);
-		SNI_Expression * Clone(SNI_ReplacementList * p_ReplacementList, bool &p_Changed);
+		SNI_Expression * Clone(SNI_Frame *p_Frame, bool &p_Changed);
 		void AssignToVariable(SNI_Variable * p_Variable);
 		string GenerateTempVariableName();
 		virtual void RemoveFailedWorlds();

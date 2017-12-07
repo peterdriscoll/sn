@@ -75,7 +75,7 @@ namespace SNI
 		return "";
 	}
 
-	SNI_Expression * SNI_Expression::Clone(SNI_ReplacementList * /*p_ReplacementList*/, bool &/*p_Changed*/)
+	SNI_Expression * SNI_Expression::Clone(SNI_Frame *p_Frame, bool &/*p_Changed*/)
 	{
 		return this;
 	}
@@ -83,7 +83,7 @@ namespace SNI
 	SNI_Expression * SNI_Expression::Clone()
 	{
 		bool changed = false;
-		return Clone(new SNI_ReplacementList, changed);
+		return Clone(new SNI_Frame, changed);
 	}
 
 	string SNI_Expression::Bracket(long p_Priority, const string &p_Expression) const
@@ -262,7 +262,7 @@ namespace SNI
 			SN::SN_ValueSet valueSet(p_Value, 0);
 			SN::LogContext context(DisplaySN0() + "SNI_Expression::AssertValue ( " + valueSet.DisplaySN() + " )");
 			bool result = false;
-			for (long i = 0; i < valueSet.Length(); i++)
+			for (size_t i = 0; i < valueSet.Length(); i++)
 			{
 				if (valueSet[i].GetValue().IsNull())
 				{
