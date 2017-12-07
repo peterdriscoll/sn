@@ -39,11 +39,11 @@ namespace SNI
 		for (unsigned long j = 0; j < m_ReplacementList.size(); j++)
 		{
 
-			SNI_Variable* l_to = m_ReplacementList[j].ReplaceVariable(p_Variable);
-			if (l_to)
+			SNI_Variable* l_NewVariable = m_ReplacementList[j].ReplaceVariable(p_Variable);
+			if (l_NewVariable)
 			{
 				p_Changed = true;
-				return dynamic_cast<SNI_Expression *>(l_to);
+				return dynamic_cast<SNI_Expression *>(l_NewVariable);
 			}
 		}
 		return p_Variable;

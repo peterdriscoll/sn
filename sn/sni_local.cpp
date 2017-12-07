@@ -75,15 +75,13 @@ namespace SNI
 	SNI_Expression * SNI_Local::Clone(SNI_Frame *p_Frame, bool &p_Changed)
 	{
 		bool changed = false;
-		SNI_Variable *l_from = new SNI_Variable;
-		l_from->SetName(dynamic_cast<SNI_Variable *>(m_LocalVariable)->GetName() + "_" + to_string(++m_Id));
-		SNI_Variable *l_LocalVariable = dynamic_cast<SNI_Variable *>(m_LocalVariable);
-		l_from->SetName(l_LocalVariable->GetName() + "_" + to_string(++m_Id));
-		SNI_Expression *result = p_Frame->CloneReplace(p_Changed, l_LocalVariable, l_from, m_Expression);
+		SNI_Variable *l_NewVariable = new SNI_Variable;
+		l_NewVariable->SetName(m_LocalVariable->GetName() + "_" + to_string(++m_Id));
+		SNI_Expression *l_expression = p_Frame->CloneReplace(p_Changed, m_LocalVariable, l_NewVariable, m_Expression);
 		if (changed)
 		{
 			p_Changed = true;
-			return dynamic_cast<SNI_Expression *>(new SNI_Local(l_from, result));
+			return dynamic_cast<SNI_Expression *>(new SNI_Local(l_NewVariable, l_expression));
 		}
 		return this;
 	}

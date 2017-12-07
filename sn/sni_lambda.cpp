@@ -73,17 +73,26 @@ namespace SNI
 	SNI_Expression * SNI_Lambda::Clone(SNI_Frame *p_Frame, bool &p_Changed)
 	{
 		bool changed = false;
-		SNI_Variable *l_to = new SNI_Variable;
-		l_to->SetName(dynamic_cast<SNI_Variable *>(m_FormalParameter)->GetName() + "_" + to_string(++m_Id));
+		SNI_Variable *l_NewVariable = new SNI_Variable;
 		SNI_Variable *l_FormalParameter = dynamic_cast<SNI_Variable *>(m_FormalParameter);
-		p_Frame->GetReplacementList().push_back(SNI_Replacement(l_FormalParameter, l_to));
-		SNI_Expression * result = m_Expression->Clone(p_Frame, changed);
-		p_Frame->GetReplacementList().pop_back();
-
-		if (changed)
+		if (l_FormalParameter)
 		{
-			p_Changed = true;
-			return dynamic_cast<SNI_Expression *>(new SNI_Lambda(dynamic_cast<SNI_Expression *>(l_to), result));
+			l_NewVariable->SetName(l_FormalParameter->GetName() + "_" + to_string(++m_Id));
+			SNI_Expression *l_expression = p_Frame->CloneReplace(changed, l_FormalParameter, l_NewVariable, m_Expression);
+			if (changed)
+			{
+				p_Changed = true;
+				return dynamic_cast<SNI_Expression *>(new SNI_Lambda(dynamic_cast<SNI_Expression *>(l_NewVariable), l_expression));
+			}
+		}
+		else
+		{
+			SNI_Expression *l_expression = m_Expression->Clone(p_Frame, changed);
+			if (changed)
+			{
+				p_Changed = true;
+				return dynamic_cast<SNI_Expression *>(new SNI_Lambda(m_FormalParameter, l_expression));
+			}
 		}
 		return this;
 	}
