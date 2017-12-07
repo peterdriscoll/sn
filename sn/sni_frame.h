@@ -13,6 +13,7 @@ namespace SNI
 		virtual ~SNI_Frame();
 
 		SNI_ReplacementList &GetReplacementList();
+		SN::SN_Variable ReplaceVariable(const SN::SN_Variable & p_Variable, bool & p_Changed);
 	private:
 		void PromoteMembers();
 

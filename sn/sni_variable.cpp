@@ -250,22 +250,7 @@ namespace SNI
 
 	SNI_Expression * SNI_Variable::Clone(SNI_Frame *p_Frame, bool &p_Changed)
 	{
-		for (unsigned long j = 0; j < p_Frame->GetReplacementList().size(); j++)
-		{
-
-			SNI_Variable* l_to = p_Frame->GetReplacementList()[j].ReplaceVariable(dynamic_cast<SNI_Variable *>(this)).GetSNI_Variable();
-			if (l_to)
-			{
-				p_Changed = true;
-				string name = l_to->GetName();
-				return dynamic_cast<SNI_Expression *>(l_to);
-			}
-		}
-		if (GetName() == "i")
-		{
-			string textThis = SN::SN_Expression(this).DisplaySN();
-		}
-		return this;
+		return p_Frame->ReplaceVariable(dynamic_cast<SNI_Variable *>(this), p_Changed).GetSNI_Variable();
 	}
 
 	bool SNI_Variable::Equivalent(SNI_Object * p_Other) const

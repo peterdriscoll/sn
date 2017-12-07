@@ -32,6 +32,21 @@ namespace SNI
 		return m_ReplacementList;
 	}
 
+	SN::SN_Variable SNI_Frame::ReplaceVariable(const SN::SN_Variable &p_Variable, bool &p_Changed)
+	{
+		for (unsigned long j = 0; j < m_ReplacementList.size(); j++)
+		{
+
+			SNI_Variable* l_to = m_ReplacementList[j].ReplaceVariable(p_Variable).GetSNI_Variable();
+			if (l_to)
+			{
+				p_Changed = true;
+				return dynamic_cast<SNI_Expression *>(l_to);
+			}
+		}
+		return p_Variable;
+	}
+
 	void SNI_Frame::PromoteMembers()
 	{
 	}
