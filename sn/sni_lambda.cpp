@@ -77,7 +77,7 @@ namespace SNI
 		SNI_Variable *l_FormalParameter = dynamic_cast<SNI_Variable *>(m_FormalParameter);
 		if (l_FormalParameter)
 		{
-			l_NewVariable->SetName(l_FormalParameter->GetName() + "_" + to_string(++m_Id));
+			l_NewVariable->SetName(p_Frame->GenerateName(l_FormalParameter));
 			SNI_Expression *l_expression = p_Frame->CloneReplace(changed, l_FormalParameter, l_NewVariable, m_Expression);
 			if (changed)
 			{

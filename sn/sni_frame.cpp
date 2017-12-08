@@ -51,6 +51,16 @@ namespace SNI
 		m_ReplacementList.pop_back();
 		return result;
 	}
+
+	string SNI_Frame::GenerateName(SNI_Variable *p_Variable)
+	{
+		if (m_ThreadNum == 1)
+		{	// Main thread
+			return to_string(++m_FrameNum) + "." + p_Variable->GetName();
+		}
+		return to_string(++m_ThreadNum) + "_" + to_string(++m_FrameNum) + "." + p_Variable->GetName();
+	}
+
 	void SNI_Frame::PromoteMembers()
 	{
 	}

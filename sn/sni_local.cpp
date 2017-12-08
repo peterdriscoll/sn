@@ -76,7 +76,7 @@ namespace SNI
 	{
 		bool changed = false;
 		SNI_Variable *l_NewVariable = new SNI_Variable;
-		l_NewVariable->SetName(m_LocalVariable->GetName() + "_" + to_string(++m_Id));
+		l_NewVariable->SetName(p_Frame->GenerateName(m_LocalVariable));
 		SNI_Expression *l_expression = p_Frame->CloneReplace(p_Changed, m_LocalVariable, l_NewVariable, m_Expression);
 		if (changed)
 		{
