@@ -98,8 +98,8 @@ namespace SN
 	{
 		return m_Manager->GetCh();
 	}
-	void SN_Manager::DebugCommand(InterruptPoint p_InterruptPoint, long p_FrameDepth, long p_Thread)
+	void SN_Manager::DebugCommand(InterruptPoint p_InterruptPoint)
 	{
-		return m_Manager->DebugCommand(p_InterruptPoint, p_FrameDepth, p_Thread);
+		return m_Manager->DebugCommand(p_InterruptPoint);
 	}
 }

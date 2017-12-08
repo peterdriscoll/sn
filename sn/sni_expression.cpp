@@ -83,7 +83,9 @@ namespace SNI
 	SNI_Expression * SNI_Expression::Clone()
 	{
 		bool changed = false;
-		return Clone(new SNI_Frame, changed);
+		SNI_Expression * result = Clone(SNI_Frame::Push(), changed);
+		SNI_Frame::Pop();
+		return result;
 	}
 
 	string SNI_Expression::Bracket(long p_Priority, const string &p_Expression) const

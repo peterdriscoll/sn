@@ -52,7 +52,7 @@ namespace SN
 		bool HasConsole();
 		bool KbHit();
 		int  GetCh();
-		void DebugCommand(InterruptPoint p_InterruptPoint, long p_FrameDepth, long p_Thread);
+		void DebugCommand(InterruptPoint p_InterruptPoint);
 
 	private:
 		SNI::SNI_Manager *m_Manager;

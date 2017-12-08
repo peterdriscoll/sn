@@ -22,8 +22,8 @@ namespace SNI
 {
 	string DefaultLogFilePath = "\\log\\SN_";
 	/*static*/ enum DebugAction SNI_Manager::m_DebugAction;
-	/*static*/ long SNI_Manager::m_FrameDepth;
-	/*static*/ long SNI_Manager::m_Thread;
+	/*static*/ long SNI_Manager::m_FrameStackDepth;
+	/*static*/ long SNI_Manager::m_ThreadNum;
 
 	void ThrowErrorHandler(SN::SN_Error p_Result)
 	{
@@ -145,7 +145,7 @@ namespace SNI
 		return (*m_GetCh)();
 	}
 
-	bool SNI_Manager::IsBreakPoint(SN::InterruptPoint p_InterruptPoint, long p_FrameDepth, long p_Thread)
+	bool SNI_Manager::IsBreakPoint(SN::InterruptPoint p_InterruptPoint, long p_ThreadNum, long p_FrameStackDepth)
 	{
 		bool baseInterrupt = (p_InterruptPoint == SN::BreakPoint || p_InterruptPoint == SN::ErrorPoint);
 		switch (m_DebugAction)
@@ -157,20 +157,24 @@ namespace SNI
 		case StepInto:
 			return baseInterrupt || p_InterruptPoint == SN::CallPoint;
 		case StepOver:
-			return baseInterrupt || (p_InterruptPoint == SN::CallPoint && p_FrameDepth <= m_FrameDepth && p_Thread == m_Thread);
+			return baseInterrupt || (p_InterruptPoint == SN::CallPoint && p_ThreadNum == m_ThreadNum && p_FrameStackDepth <= m_FrameStackDepth);
 		case StepOut:
-			return baseInterrupt || (p_InterruptPoint == SN::CallPoint && p_FrameDepth < m_FrameDepth && p_Thread == m_Thread);
+			return baseInterrupt || (p_InterruptPoint == SN::CallPoint&& p_ThreadNum == m_ThreadNum  && p_FrameStackDepth < m_FrameStackDepth);
 		case StepParameter:
 			return p_InterruptPoint == SN::BreakPoint || p_InterruptPoint == SN::CallPoint || p_InterruptPoint == SN::ParameterPoint;
 		}
 		return false;
 	}
 
-	void SNI_Manager::DebugCommand(SN::InterruptPoint p_InterruptPoint, long p_FrameDepth, long p_Thread)
+	void SNI_Manager::DebugCommand(SN::InterruptPoint p_InterruptPoint)
 	{
-		if (HasConsole() && IsBreakPoint(p_InterruptPoint, p_FrameDepth, p_Thread))
+		long l_ThreadNum = SNI_Frame::GetThreadNum();
+		long l_FrameStackDepth = SNI_Frame::GetFrameStackDepth();
+		if (HasConsole() && IsBreakPoint(p_InterruptPoint, l_ThreadNum, l_FrameStackDepth))
 		{
 			m_DebugAction = None;
+			m_ThreadNum = l_ThreadNum;
+			m_FrameStackDepth = l_FrameStackDepth;
 			cout << "\n>> ";
 			while (m_DebugAction == None)
 			{
@@ -192,14 +196,10 @@ namespace SNI
 				case VK_F11:
 					cout << "F11";
 					m_DebugAction = StepInto;
-					m_FrameDepth = p_FrameDepth;
-					m_Thread = p_Thread;
 					break;
 				case VK_SHIFT_F11:
 					cout << "Shift F11";
 					m_DebugAction = StepOut;
-					m_FrameDepth = p_FrameDepth;
-					m_Thread = p_Thread;
 					break;
 				case VK_F12:
 					cout << "F12";

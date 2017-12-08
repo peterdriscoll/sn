@@ -121,7 +121,7 @@ namespace SNI
 		SN::SN_Expression param = p_ParameterList->back().GetSNI_Expression();
 		p_ParameterList->pop_back();
 		m_FormalParameter->PartialAssertValue(param, true);
-		SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, 0, 0);
+		SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint);
 		if (p_ParameterList->size() > 0)
 		{
 			return m_Expression->Call(p_ParameterList, p_MetaLevel);
@@ -170,7 +170,7 @@ namespace SNI
 			e.AddNote(context, this, "Assigning parameter value failed");
 			return SN::SN_Error(false);
 		}
-		SNI_Manager::GetTopManager()->DebugCommand(SN::ParameterPoint, 0, 0);
+		SNI_Manager::GetTopManager()->DebugCommand(SN::ParameterPoint);
 		if (p_ParameterList->size() > 1)
 		{
 			return m_Expression->Unify(p_ParameterList);

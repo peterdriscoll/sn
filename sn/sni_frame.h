@@ -7,10 +7,20 @@
 
 namespace SNI
 {
+	class SNI_Variable;
+
+	class SNI_Frame;
+	typedef vector<SNI_Frame *> SNI_FrameList;
+
 	class SNI_Frame : public SNI_Object
 	{
 		PGC_CLASS(SNI_Frame)
 	public:
+		static SNI_Frame *Push();
+		static void Pop();
+		static long GetThreadNum();
+		static long GetFrameStackDepth();
+
 		SNI_Frame();
 		virtual ~SNI_Frame();
 

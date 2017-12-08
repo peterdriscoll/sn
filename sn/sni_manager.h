@@ -49,8 +49,8 @@ namespace SNI
 		bool KbHit();
 		int  GetCh();
 
-		bool IsBreakPoint(SN::InterruptPoint p_InterruptPoint, long p_FrameDepth, long p_Thread);
-		void DebugCommand(SN::InterruptPoint p_InterruptPoint, long p_FrameDepth, long p_Thread);
+		bool IsBreakPoint(SN::InterruptPoint p_InterruptPoint, long p_ThreadNum, long p_FrameStackDepth);
+		void DebugCommand(SN::InterruptPoint p_InterruptPoint);
 
 	private:
 		static SNI_Manager *m_TopManager;
@@ -70,8 +70,8 @@ namespace SNI
 		int (*m_GetCh)();
 
 		static enum DebugAction m_DebugAction;
-		static long m_FrameDepth;
-		static long m_Thread;
+		static long m_ThreadNum;
+		static long m_FrameStackDepth;
 	};
 }
 

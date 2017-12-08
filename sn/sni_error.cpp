@@ -17,7 +17,7 @@ namespace SNI
 	{
 		if (!m_Success)
 		{
-			SNI_Manager::GetTopManager()->DebugCommand(SN::ErrorPoint, 0, 0);
+			SNI_Manager::GetTopManager()->DebugCommand(SN::ErrorPoint);
 		}
 	}
 
@@ -26,7 +26,7 @@ namespace SNI
 		, m_Delay(false)
 		, m_Description(p_Description)
 	{
-		SNI_Manager::GetTopManager()->DebugCommand(SN::ErrorPoint, 0, 0);
+		SNI_Manager::GetTopManager()->DebugCommand(SN::ErrorPoint);
 	}
 
 	SNI_Error::SNI_Error(const SNI_Error &p_Other)

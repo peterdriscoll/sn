@@ -17,6 +17,29 @@ namespace SNI
 		}
 		return t_ThreadNum;
 	}
+	SNI_FrameList m_FrameStack;
+
+	/*static*/ SNI_Frame *SNI_Frame::Push()
+	{
+		SNI_Frame *newFrame = new SNI_Frame;
+		m_FrameStack.push_back(newFrame);
+		return newFrame;
+	}
+
+	/*static*/ void SNI_Frame::Pop()
+	{
+		m_FrameStack.pop_back();
+	}
+
+	/*static*/ long SNI_Frame::GetThreadNum()
+	{
+		return t_ThreadNum;
+	}
+
+	/*static*/ long SNI_Frame::GetFrameStackDepth()
+	{
+		return m_FrameStack.size();
+	}
 
 	SNI_Frame::SNI_Frame()
 		: m_ThreadNum(GetThreadNum())
