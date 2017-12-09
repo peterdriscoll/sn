@@ -15,11 +15,6 @@ namespace SNI
 {
 	typedef void OnErrorHandler(SN::SN_Error p_Result);
 
-	enum DebugAction
-	{
-		None, Run, RunToEnd, StepOver, StepInto, StepParameter, StepOut
-	};
-	
 	class SNI_Manager
 	{
 	public:
@@ -43,7 +38,7 @@ namespace SNI
 		bool DelayOnEvaluate();
 		void SetDelayOnEvaluate(bool p_DelayOnEvaluate);
 
-		void ConsoleFunctions(int p_Kbhit(), int p_GetCh());
+		void StartDebug(SN::DebugAction p_DebugAction, int p_Kbhit(), int p_GetCh());
 
 		bool HasConsole();
 		bool KbHit();
@@ -69,7 +64,7 @@ namespace SNI
 		int (*m_KbHit)();
 		int (*m_GetCh)();
 
-		static enum DebugAction m_DebugAction;
+		static enum SN::DebugAction m_DebugAction;
 		static long m_ThreadNum;
 		static long m_FrameStackDepth;
 	};

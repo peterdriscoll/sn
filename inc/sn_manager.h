@@ -19,6 +19,11 @@ namespace SN
 
 	typedef void OnErrorHandler(SN_Error p_Result);
 
+	enum DebugAction
+	{
+		None, Run, RunToEnd, StepOver, StepInto, StepParameter, StepOut
+	};
+
 	enum InterruptPoint
 	{
 		BreakPoint, CallPoint, ParameterPoint, ErrorPoint
@@ -48,7 +53,7 @@ namespace SN
 		size_t MaxCardinalityUnify();
 		void SetMaxCardinality(size_t p_MaxCardinalityCall, size_t p_MaxCardinalityUnify);
 
-		void ConsoleFunctions(int p_kbhit(), int p_GetCh());
+		void StartDebug(DebugAction p_DebugAction, int p_kbhit(), int p_GetCh());
 		bool HasConsole();
 		bool KbHit();
 		int  GetCh();

@@ -56,6 +56,7 @@ namespace skynet
 {
 	// Manager
 	typedef SN::SN_Manager Manager;
+	typedef SN::DebugAction DebugAction;
 
 	// Logging
 	typedef SN::Log Log;

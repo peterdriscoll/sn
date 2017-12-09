@@ -6,7 +6,7 @@
 #include "exp_ctrl_sn.h"
 #include "sn.h"
 
-using namespace SN
+namespace SN
 {
 	class SN_EXPORT Parser
 	{

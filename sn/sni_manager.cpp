@@ -1,6 +1,7 @@
 #include "sni_manager.h"
 
 #include "sn_error.h"
+#include "sn_manager.h"
 
 #include "logcontext.h"
 
@@ -21,7 +22,7 @@
 namespace SNI
 {
 	string DefaultLogFilePath = "\\log\\SN_";
-	/*static*/ enum DebugAction SNI_Manager::m_DebugAction;
+	/*static*/ enum SN::DebugAction SNI_Manager::m_DebugAction;
 	/*static*/ long SNI_Manager::m_FrameStackDepth;
 	/*static*/ long SNI_Manager::m_ThreadNum;
 
@@ -123,9 +124,10 @@ namespace SNI
 		return m_TopManager;
 	}
 
-	void SNI_Manager::ConsoleFunctions(int p_KbHit(), int p_GetCh())
+	void SNI_Manager::StartDebug(SN::DebugAction p_DebugAction, int p_KbHit(), int p_GetCh())
 	{
 		m_HasConsole = true;
+		m_DebugAction = p_DebugAction;
 		m_KbHit = p_KbHit; 
 		m_GetCh = p_GetCh;
 	}
@@ -150,17 +152,17 @@ namespace SNI
 		bool baseInterrupt = (p_InterruptPoint == SN::BreakPoint || p_InterruptPoint == SN::ErrorPoint);
 		switch (m_DebugAction)
 		{
-		case RunToEnd:
+		case SN::RunToEnd:
 			return false;
-		case Run:
+		case SN::Run:
 			return baseInterrupt;
-		case StepInto:
+		case SN::StepInto:
 			return baseInterrupt || p_InterruptPoint == SN::CallPoint;
-		case StepOver:
+		case SN::StepOver:
 			return baseInterrupt || (p_InterruptPoint == SN::CallPoint && p_ThreadNum == m_ThreadNum && p_FrameStackDepth <= m_FrameStackDepth);
-		case StepOut:
+		case SN::StepOut:
 			return baseInterrupt || (p_InterruptPoint == SN::CallPoint&& p_ThreadNum == m_ThreadNum  && p_FrameStackDepth < m_FrameStackDepth);
-		case StepParameter:
+		case SN::StepParameter:
 			return p_InterruptPoint == SN::BreakPoint || p_InterruptPoint == SN::CallPoint || p_InterruptPoint == SN::ParameterPoint;
 		}
 		return false;
@@ -172,38 +174,38 @@ namespace SNI
 		long l_FrameStackDepth = SNI_Frame::GetFrameStackDepth();
 		if (HasConsole() && IsBreakPoint(p_InterruptPoint, l_ThreadNum, l_FrameStackDepth))
 		{
-			m_DebugAction = None;
+			m_DebugAction = SN::None;
 			m_ThreadNum = l_ThreadNum;
 			m_FrameStackDepth = l_FrameStackDepth;
 			cout << "\n>> ";
-			while (m_DebugAction == None)
+			while (m_DebugAction == SN::None)
 			{
 				int response = GetCh();
 				switch (response)
 				{
 				case VK_F5:
-					cout << "F5";
-					m_DebugAction = Run;
+					cout << "F5 - Run";
+					m_DebugAction = SN::Run;
 					break;
 				case VK_SHIFT_F5:
-					cout << "Shift F5";
-					m_DebugAction = RunToEnd;
+					cout << "Shift F5 - Run to end";
+					m_DebugAction = SN::RunToEnd;
 					break;
 				case VK_F10:
-					cout << "F10";
-					m_DebugAction = StepOver;
+					cout << "F10 - Step over";
+					m_DebugAction = SN::StepOver;
 					break;
 				case VK_F11:
-					cout << "F11";
-					m_DebugAction = StepInto;
+					cout << "F11 -  Step into";
+					m_DebugAction = SN::StepInto;
 					break;
 				case VK_SHIFT_F11:
-					cout << "Shift F11";
-					m_DebugAction = StepOut;
+					cout << "Shift F11 - Step out";
+					m_DebugAction = SN::StepOut;
 					break;
 				case VK_F12:
-					cout << "F12";
-					m_DebugAction = StepParameter;
+					cout << "F12 - Step to parameter";
+					m_DebugAction = SN::StepParameter;
 					break;
 				case VK_H:
 				case VK_SHIFT_H:
@@ -213,6 +215,7 @@ namespace SNI
 					context.LogText("F10", "Step over");
 					context.LogText("F11", "Step into");
 					context.LogText("Shift F11", "Step out");
+					context.LogText("F12", "Step to parameter");
 					context.LogText("h, H", "Help");
 					break;
 				}

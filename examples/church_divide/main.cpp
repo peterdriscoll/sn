@@ -99,7 +99,7 @@ void TestChurchDivide()
 void main(int argc, char *argv[])
 {
 	Manager manager; // Sets up any configuration parameters for SN
-	manager.ConsoleFunctions(_kbhit, _getch);
+	manager.StartDebug(SN::StepInto, _kbhit, _getch);
 
 	Transaction transaction;
 	try
