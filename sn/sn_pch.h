@@ -101,6 +101,7 @@
 
 // Utility
 #include "utility.h"
+#include "sni_log.h"
 #include "log.h"
 #include "logcontext.h"
 #include "sni_helpers.h"

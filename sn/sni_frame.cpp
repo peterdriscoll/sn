@@ -54,17 +54,32 @@ namespace SNI
 
 	SNI_Expression *SNI_Frame::ReplaceVariable(SNI_Variable *p_Variable, bool &p_Changed)
 	{
-		for (unsigned long j = 0; j < m_ReplacementList.size(); j++)
+
+		SNI_Variable* l_Result = p_Variable;
+		for (SNI_Replacement &r: m_ReplacementList)
 		{
 
-			SNI_Variable* l_NewVariable = m_ReplacementList[j].ReplaceVariable(p_Variable);
+			SNI_Variable* l_NewVariable = r.ReplaceVariable(p_Variable);
 			if (l_NewVariable)
 			{
 				p_Changed = true;
-				return dynamic_cast<SNI_Expression *>(l_NewVariable);
+				l_Result = l_NewVariable;
+				break;
 			}
 		}
-		return p_Variable;
+		bool found = false;
+		for (const SNI_Variable *v : m_VariableList)
+		{
+			if (v == l_Result)
+			{
+				found = true;
+			}
+		}
+		if (!found)
+		{
+			m_VariableList.push_back(p_Variable);
+		}
+		return l_Result;
 	}
 
 	SNI_Expression * SNI_Frame::CloneReplace(bool &p_Changed, SNI_Variable *p_From, SNI_Variable *p_To, SNI_Expression *p_Expression)
@@ -82,6 +97,11 @@ namespace SNI
 			return to_string(++m_FrameNum) + "." + p_Variable->GetName();
 		}
 		return to_string(++m_ThreadNum) + "_" + to_string(++m_FrameNum) + "." + p_Variable->GetName();
+	}
+
+	string SNI_Frame::GetLogDescription()
+	{
+		return string();
 	}
 
 	void SNI_Frame::PromoteMembers()

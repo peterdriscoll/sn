@@ -32,6 +32,10 @@ namespace SNI
 	class SNI_World;
 	class SNI_WorldSet;
 
+	string CurrentWorkingDirectory();
+	string ExtractDirPath(const string& str);
+	string GetFormattedTime(void);
+
 	void Split(const string& a_buffer,
 		const string& a_delimeter,
 		vector<string>& a_result);

@@ -10,6 +10,36 @@
 
 namespace SNI
 {
+	string CurrentWorkingDirectory()
+	{
+		char* cwd = _getcwd(0, 0); // **** microsoft specific ****
+		string working_directory(cwd);
+		free(cwd);
+		return working_directory;
+	}
+
+	string ExtractDirPath(const string& str)
+	{
+		size_t found = str.find_last_of("/\\");
+		return str.substr(0, found);
+	}
+
+	// Returns the local date/time formatted as 2014-03-19 11:11:52
+	string GetFormattedTime(void) {
+
+		time_t rawtime;
+		struct tm timeinfo;
+
+		time(&rawtime);
+		localtime_s(&timeinfo, &rawtime);
+
+		// Must be static, otherwise won't work
+		static char _retval[20];
+		strftime(_retval, sizeof(_retval), "%Y%m_%d_%H_%M_%S", &timeinfo);
+
+		return _retval;
+	}
+
 	void Split(const string& a_buffer,
 		const string& a_delimeter,
 		vector<string>& a_result)
@@ -132,8 +162,6 @@ namespace SNI
 		}
 		return result;
 	}
-
-
 
 	string DisplayPmExpression(SNI_Expression *p_Expression)
 	{

@@ -6,6 +6,25 @@
 
 namespace SN
 {
+	/*static*/ string GetLoggingLevelCode(SN::LoggingLevel p_LoggingLevel)
+	{
+		switch (p_LoggingLevel)
+		{
+		case ErrorLevel:
+			return "ERR";
+		case WarningLevel:
+			return "WRN";
+		case DebugLevel:
+			return "DBG";
+		case InfoLevel:
+			return "INF";
+		case DetailLevel:
+			return "DTL";
+		default:
+			return "???";
+		}
+	}
+
 	SN_Manager SN_Manager::GetTopManager()
 	{
 		return SN_Manager(SNI::SNI_Manager::GetTopManager());
@@ -82,10 +101,16 @@ namespace SN
 		return m_Manager->MaxCardinalityUnify();
 	}
 
+	void SN_Manager::StartLogging(SN::LoggingLevel p_LoggingLevel, ostream * p_Stream)
+	{
+		return m_Manager->StartLogging(p_LoggingLevel, p_Stream);
+	}
+
 	void SN_Manager::StartDebug(DebugAction p_DebugAction, int p_kbhit(), int p_GetCh())
 	{
 		return m_Manager->StartDebug(p_DebugAction, p_kbhit, p_GetCh);
 	}
+
 	bool SN_Manager::HasConsole()
 	{
 		return m_Manager->HasConsole();

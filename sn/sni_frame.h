@@ -27,12 +27,15 @@ namespace SNI
 		SNI_Expression *ReplaceVariable(SNI_Variable *p_Variable, bool & p_Changed);
 		SNI_Expression *CloneReplace(bool & p_Changed, SNI_Variable * p_From, SNI_Variable * p_To, SNI_Expression *p_Expression);
 		string GenerateName(SNI_Variable * p_Variable);
+		string GetLogDescription();
+
 	private:
 		void PromoteMembers();
 
 		long m_ThreadNum;
 		long m_FrameNum;
 		SNI_ReplacementList m_ReplacementList;
+		SNI_VariablePointerList m_VariableList;
 	};
 }
 

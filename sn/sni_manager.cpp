@@ -124,12 +124,23 @@ namespace SNI
 		return m_TopManager;
 	}
 
+	void SNI_Manager::StartLogging(SN::LoggingLevel p_LoggingLevel, ostream *p_Stream)
+	{
+		ostream *l_Stream = p_Stream;
+		if (!l_Stream)
+		{
+			l_Stream = CreateLogFile(p_LoggingLevel);
+		}
+		SNI_Log::GetLog()->AddStream(l_Stream);
+	}
+
 	void SNI_Manager::StartDebug(SN::DebugAction p_DebugAction, int p_KbHit(), int p_GetCh())
 	{
 		m_HasConsole = true;
 		m_DebugAction = p_DebugAction;
-		m_KbHit = p_KbHit; 
+		m_KbHit = p_KbHit;
 		m_GetCh = p_GetCh;
+		SNI_Log::GetLog()->AddStream(&cout);
 	}
 
 	bool SNI_Manager::HasConsole()
@@ -224,5 +235,22 @@ namespace SNI
 				}
 			}
 		}
+	}
+
+	ostream * SNI_Manager::CreateLogFile(SN::LoggingLevel p_LoggingLevel)
+	{
+		string currentDirectory = CurrentWorkingDirectory();
+
+		string timeId = GetFormattedTime();
+		string logIndex = SN::GetLoggingLevelCode(p_LoggingLevel);
+		string fileName = SN::SN_Manager::GetTopManager().LogFilePath() + logIndex + /*"_" + timeId +*/ ".log"; //" + timeId + "
+		fstream *logFile = new fstream;
+		logFile->open(fileName.data(), ios::out | ios::trunc);
+		if (!logFile->is_open())
+		{
+			delete logFile;
+			throw SN::SN_Error("Log file " + fileName + " not opened. Check folders exist in path from " + currentDirectory);
+		}
+		return logFile;
 	}
 }

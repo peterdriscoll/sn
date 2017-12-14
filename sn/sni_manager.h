@@ -38,6 +38,7 @@ namespace SNI
 		bool DelayOnEvaluate();
 		void SetDelayOnEvaluate(bool p_DelayOnEvaluate);
 
+		void StartLogging(SN::LoggingLevel p_LoggingLevel, ostream *p_Stream);
 		void StartDebug(SN::DebugAction p_DebugAction, int p_Kbhit(), int p_GetCh());
 
 		bool HasConsole();
@@ -46,6 +47,8 @@ namespace SNI
 
 		bool IsBreakPoint(SN::InterruptPoint p_InterruptPoint, long p_ThreadNum, long p_FrameStackDepth);
 		void DebugCommand(SN::InterruptPoint p_InterruptPoint);
+
+		ostream * CreateLogFile(SN::LoggingLevel);
 
 	private:
 		static SNI_Manager *m_TopManager;

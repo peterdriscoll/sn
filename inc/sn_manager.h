@@ -19,6 +19,11 @@ namespace SN
 
 	typedef void OnErrorHandler(SN_Error p_Result);
 
+	enum LoggingLevel
+	{
+		ErrorLevel, WarningLevel, DebugLevel, InfoLevel, DetailLevel
+	};
+
 	enum DebugAction
 	{
 		None, Run, RunToEnd, StepOver, StepInto, StepParameter, StepOut
@@ -28,6 +33,8 @@ namespace SN
 	{
 		BreakPoint, CallPoint, ParameterPoint, ErrorPoint
 	};
+
+	string GetLoggingLevelCode(LoggingLevel p_LoggingLevel);
 
 	class SN_EXPORT SN_Manager
 	{
@@ -53,11 +60,13 @@ namespace SN
 		size_t MaxCardinalityUnify();
 		void SetMaxCardinality(size_t p_MaxCardinalityCall, size_t p_MaxCardinalityUnify);
 
+		void StartLogging(SN::LoggingLevel p_LoggingLevel, ostream *p_Stream = NULL);
 		void StartDebug(DebugAction p_DebugAction, int p_kbhit(), int p_GetCh());
 		bool HasConsole();
 		bool KbHit();
 		int  GetCh();
 		void DebugCommand(InterruptPoint p_InterruptPoint);
+		ostream * CreateLogFile(LoggingLevel p_LoggingLevel);
 
 	private:
 		SNI::SNI_Manager *m_Manager;
