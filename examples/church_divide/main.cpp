@@ -13,6 +13,14 @@ void TestSimple()
 	(result > Long(11)).Debug().EvaluateAction();
 }
 
+void TestPythagoras()
+{
+	SN_DECLARE(X);
+	(Double(245.67).Square() + X.Square() == Double(357.56).Square()).AssertAction();
+	string X_string = X.BuildSet().Evaluate().DisplaySN();
+	ASSERTM(X_string == "{Double(259.798777), Double(-259.798777)}", "");
+}
+
 void TestChurchDivide()
 {
 	SN_DECLARE(divide);
@@ -104,7 +112,8 @@ void main(int argc, char *argv[])
 	Transaction transaction;
 	try
 	{
-		TestSimple();
+		TestPythagoras();
+		// TestSimple();
 		// TestChurchDivide();
 	}
 	catch (Error e)

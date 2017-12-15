@@ -15,8 +15,9 @@ namespace SNI
 		, m_Delay(p_Delay)
 		, m_Description(p_Description)
 	{
-		if (!m_Success)
+		if (!m_Success && !p_Description.empty())
 		{
+			LOG(WriteLine(SN::ErrorLevel, GetLogDescription()));
 			SNI_Manager::GetTopManager()->DebugCommand(SN::ErrorPoint);
 		}
 	}
@@ -104,6 +105,11 @@ namespace SNI
 	string SNI_Error::GetDescription()
 	{
 		return m_Description;
+	}
+
+	string SNI_Error::GetLogDescription()
+	{
+		return "Error: " + m_Description;
 	}
 
 	void SNI_Error::Log()

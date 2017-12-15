@@ -31,6 +31,15 @@ namespace SNI
 		m_FrameStack.pop_back();
 	}
 
+	/*static*/ SNI_Frame * SNI_Frame::Top()
+	{
+		if (m_FrameStack.size())
+		{
+			return m_FrameStack.back();
+		}
+		return NULL;
+	}
+
 	/*static*/ long SNI_Frame::GetThreadNum()
 	{
 		return t_ThreadNum;
@@ -101,7 +110,33 @@ namespace SNI
 
 	string SNI_Frame::GetLogDescription()
 	{
-		return string();
+		string heading;
+		string data;
+		size_t minFixedWidth = 9;
+		string delimeter = "";
+		for (const SNI_Variable *v : m_VariableList)
+		{
+			size_t fixedWidth = minFixedWidth;
+			string name = v->GetName();
+			SN::SN_Expression e = v->GetValue();
+			string value;
+			if (v->IsKnownValue())
+			{
+				value = e.DisplaySN();
+			}
+			if (fixedWidth < name.size())
+			{
+				fixedWidth = name.size();
+			}
+			if (fixedWidth < value.size())
+			{
+				fixedWidth = value.size();
+			}
+			heading += delimeter + Pad(name, fixedWidth);
+			data += delimeter + Pad(e.DisplaySN(), fixedWidth);
+			delimeter = " | ";
+		}
+		return heading + "\n" + data;
 	}
 
 	void SNI_Frame::PromoteMembers()

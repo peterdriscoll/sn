@@ -11,15 +11,17 @@
 
 #define _LOG
 #ifdef _LOG
-#define LOG(level, content) Log::GetLog()->content
+#define LOG(content) SNI_Log::GetLog()->content
 #else
-#define LOG(level, content)
+#define LOG(content)
 #endif
 
 using namespace std;
 
 namespace SNI
 {
+	class SNI_Frame;
+
 	class SNI_Log
 	{
 	public:
@@ -32,7 +34,7 @@ namespace SNI
 
 		void WriteLine(SN::LoggingLevel p_DebugLevel, const string & p_line);
 
-		void WriteFrame(SN::LoggingLevel p_DebugLevel, SNI_Frame *p_Frame);
+		void WriteFrame(SN::LoggingLevel p_DebugLevel, SNI_Frame *p_Frame = NULL);
 
 	private:
 		static SNI_Log *m_Log;

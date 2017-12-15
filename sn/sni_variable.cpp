@@ -435,7 +435,9 @@ namespace SNI
 		{
 			SNI_Expression * l_clone = m_Value->Clone();
 			SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint);
-			return l_clone->Call(p_ParameterList, p_MetaLevel);
+			SN::SN_Expression e = l_clone->Call(p_ParameterList, p_MetaLevel);
+			SNI_Frame::Pop();
+			return e;
 		}
 		return dynamic_cast<SNI_Expression *>(SN::SN_Error(GetTypeName() + " function to call is unknown.").GetSNI_Error());
 	}
@@ -461,7 +463,9 @@ namespace SNI
 		{
 			SNI_Expression * l_clone = m_Value->Clone();
 			SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint);
-			return l_clone->Unify(p_ParameterList);
+			SN::SN_Expression e = l_clone->Unify(p_ParameterList);
+			SNI_Frame::Pop();
+			return e;
 		}
 		else
 		{

@@ -84,7 +84,6 @@ namespace SNI
 	{
 		bool changed = false;
 		SNI_Expression * result = Clone(SNI_Frame::Push(), changed);
-		SNI_Frame::Pop();
 		return result;
 	}
 

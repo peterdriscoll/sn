@@ -169,6 +169,8 @@ namespace SNI
 		bool *output = new bool[depth];
 		bool allFound = false;
 		long totalCalc = depth;
+		SNI_Log::GetLog()->WriteFrame(SN::DebugLevel);
+		LOG(WriteFrame(SN::DebugLevel));
 		SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint);
 		for (long j = 0; j < depth; j++)
 		{

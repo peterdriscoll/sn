@@ -99,6 +99,17 @@ namespace SNI
 		return result;
 	}
 
+	string Pad(const string &p_Text, size_t p_Width)
+	{
+		size_t textWidth = p_Text.size();
+		size_t spacerWidth = 0;
+		if (p_Width > textWidth)
+		{
+			size_t spacer = p_Width - textWidth;
+		}
+		return p_Text + string(spacerWidth, ' ');
+	}
+
 	string DisplayPmValueList(const SN::SN_ValueList &p_ParameterList)
 	{
 		string result;

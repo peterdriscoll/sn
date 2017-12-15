@@ -113,7 +113,11 @@ namespace SNI
 
 	bool SNI_World::CompatibleWorld(SNI_World *p_World)
 	{
-		ASSERTM(p_World, "Attempt to add null child world.");
+		if (!p_World)
+		{
+			return true;
+		}
+		//ASSERTM(p_World, "Attempt to add null child world.");
 		p_World->Mark(false);
 		Mark(true);
 		if (!p_World->HasMutualExclusion())

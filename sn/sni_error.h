@@ -36,6 +36,8 @@ namespace SNI
 		virtual bool GetBool();
 		virtual bool GetDelay();
 		virtual string GetDescription();
+
+		string GetLogDescription();
 		virtual void Log();
 
 	private:

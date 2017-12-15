@@ -18,6 +18,7 @@ namespace SNI
 	public:
 		static SNI_Frame *Push();
 		static void Pop();
+		static SNI_Frame *Top();
 		static long GetThreadNum();
 		static long GetFrameStackDepth();
 

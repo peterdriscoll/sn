@@ -1,4 +1,5 @@
 #include "sni_log.h"
+#include "sni_frame.h"
 #include "logcontext.h"
 #include "sn_manager.h"
 #include "utility.h"
@@ -59,9 +60,14 @@ namespace SNI
 
 	void SNI_Log::WriteFrame(SN::LoggingLevel p_DebugLevel, SNI_Frame * p_Frame)
 	{
-		if (p_Frame)
+		SNI_Frame *frame = p_Frame;
+		if (!frame)
 		{
-			WriteLine(p_DebugLevel, p_Frame->GetLogDescription());
+			frame = SNI_Frame::Top();
+		}
+		if (frame)
+		{
+			WriteLine(p_DebugLevel, frame->GetLogDescription());
 		}
 	}
 }

@@ -114,7 +114,6 @@ namespace SN
 	{
 		m_LogFile << p_Line;
 		m_LogFile.flush();
-		cout << p_Line;
 	}
 
 	void Log::CloseLogFile()
