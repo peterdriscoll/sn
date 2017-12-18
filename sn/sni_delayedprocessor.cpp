@@ -53,9 +53,14 @@ namespace SNI
 	//  Post the delayed call to the list for processing.
 	void SNI_DelayedProcessor::Request(SNI_DelayedCall *p_Call)
 	{
-		if (p_Call->IsCallRequested())
+		if (!p_Call->IsScheduled())
 		{
-			m_DelayedCallList.push_front(p_Call);
+			if (p_Call->IsCallRequested())
+			{
+				p_Call->MarkScheduled();
+				m_DelayedCallList.push_front(p_Call);
+				Display();
+			}
 		}
 		if (!m_Processing)
 		{
@@ -81,6 +86,15 @@ namespace SNI
 	unordered_map<string, SN::SN_String>& SNI_DelayedProcessor::GetPreventReread()
 	{
 		return m_PreventReread;
+	}
+
+	void SNI_DelayedProcessor::Display()
+	{
+		LOG(WriteLine(SN::DebugLevel, "Delayed Call List"));
+		for (SNI_DelayedCall *d : m_DelayedCallList)
+		{
+			d->Display();
+		}
 	}
 
 	// Process those calls in the list that can be processed, starting with the least cardinality.

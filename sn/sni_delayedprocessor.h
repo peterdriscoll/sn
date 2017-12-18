@@ -35,6 +35,7 @@ namespace SNI
 		virtual bool Complete();
 		virtual void Promote(PGCX::Transaction *p_Transaction);
 		unordered_map<string, SN::SN_String> &GetPreventReread();
+		virtual void Display();
 	private:
 		SNI_DelayedCallList  m_DelayedCallList;
 		SNI_DelayedCallList  m_FailedList;
