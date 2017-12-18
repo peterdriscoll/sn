@@ -32,14 +32,17 @@ namespace SNI
 		bool IsLocked() const;
 		void Lock();
 		void Unlock();
+		void Display();
+		bool IsScheduled();
+		void MarkScheduled();
 
 	private:
 		SN::SN_FunctionDef    m_Function;
 		SN::SN_Expression     *m_ParameterList;
-		bool                  m_Requested;
 		SNI_World             *m_World;
 		bool                  m_Locked;
 		SN::SN_Error          m_Error;
+		bool				  m_Scheduled;
 	public:
 		void LinkToVariables();
 	private:

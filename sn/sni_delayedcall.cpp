@@ -26,7 +26,7 @@ namespace SNI
 {
 	SNI_DelayedCall::SNI_DelayedCall()
 		: m_ParameterList(NULL)
-		, m_Requested(false)
+		, m_Scheduled(false)
 		, m_World(NULL)
 	{
 	}
@@ -34,7 +34,7 @@ namespace SNI
 	SNI_DelayedCall::SNI_DelayedCall(SN::SN_FunctionDef p_Function, SN::SN_Expression *p_ParameterList, SNI_World * p_World)
 		: m_Function(p_Function)
 		, m_ParameterList(p_ParameterList)
-		, m_Requested(false)
+		, m_Scheduled(false)
 		, m_Locked(false)
 		, m_World(NULL)
 	{
@@ -118,5 +118,20 @@ namespace SNI
 	void SNI_DelayedCall::Unlock()
 	{
 		m_Locked = false;
+	}
+
+	void SNI_DelayedCall::Display()
+	{
+		LOG(WriteLine(SN::DebugLevel, "  " + m_Function.GetSNI_FunctionDef()->GetLogDescription(m_ParameterList)));
+	}
+
+	bool SNI_DelayedCall::IsScheduled()
+	{
+		return m_Scheduled;
+	}
+
+	void SNI_DelayedCall::MarkScheduled()
+	{
+		m_Scheduled = true;
 	}
 }
