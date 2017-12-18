@@ -39,6 +39,10 @@ namespace SNI
 		SNI_DelayedCall *call = new SNI_DelayedCall(p_Function, p_ParameterList, p_World);
 		call->LinkToVariables();
 		m_DelayedCallList.push_back(call);
+		if (call->IsCallRequested())
+		{
+			Request(call);
+		}
 	}
 
 	void SNI_DelayedProcessor::DelayCall(SNI_DelayedCall * p_Call, SNI_World * p_World)
