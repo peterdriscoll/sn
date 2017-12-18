@@ -23,10 +23,12 @@
 
 namespace SNI
 {
+	long m_MaxTempNum = 0;
 	SNI_Variable::SNI_Variable()
 		: m_Value(NULL)
 		, m_Requested(false)
 	{
+		SetName("temp." + to_string(++m_MaxTempNum));
 	}
 
 	SNI_Variable::SNI_Variable(const SN::SN_Expression &p_Other)
@@ -74,7 +76,7 @@ namespace SNI
 		m_Requested = true;
 	}
 
-	SNI_Expression * SNI_Variable::GetValue() const
+	SNI_Expression * SNI_Variable::GetValue(bool p_Request) const
 	{
 		const_cast<SNI_Variable*>(this)->Request();
 		if (m_Value)
@@ -434,7 +436,7 @@ namespace SNI
 		if (m_Value)
 		{
 			SNI_Expression * l_clone = m_Value->Clone();
-			SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint);
+			SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, "Variable.Call");
 			SN::SN_Expression e = l_clone->Call(p_ParameterList, p_MetaLevel);
 			SNI_Frame::Pop();
 			return e;
@@ -462,7 +464,7 @@ namespace SNI
 		if (m_Value)
 		{
 			SNI_Expression * l_clone = m_Value->Clone();
-			SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint);
+			SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, "Variable.Unify");
 			SN::SN_Expression e = l_clone->Unify(p_ParameterList);
 			SNI_Frame::Pop();
 			return e;

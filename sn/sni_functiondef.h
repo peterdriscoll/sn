@@ -55,6 +55,10 @@ namespace SNI
 
 		virtual size_t Cardinality(SN::SN_Expression * p_ParameterList) const;
 
+		string DisplayCall(long priority, SNI_VariablePointerList & p_DisplayVariableList, SN::SN_ExpressionList * p_ParameterList) const;
+
+		string GetLogDescription(SN::SN_Expression * p_ParamList) const;
+
 		virtual SN::SN_Expression Evaluate(long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression PartialEvaluate(long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const;

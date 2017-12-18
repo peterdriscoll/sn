@@ -123,8 +123,8 @@ namespace SN
 	{
 		return m_Manager->GetCh();
 	}
-	void SN_Manager::DebugCommand(InterruptPoint p_InterruptPoint)
+	void SN_Manager::DebugCommand(InterruptPoint p_InterruptPoint, string p_Text)
 	{
-		return m_Manager->DebugCommand(p_InterruptPoint);
+		return m_Manager->DebugCommand(p_InterruptPoint, p_Text);
 	}
 }

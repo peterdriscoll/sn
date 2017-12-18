@@ -82,7 +82,7 @@ namespace SNI
 	SN::SN_Expression SNI_Debug::Evaluate(long p_MetaLevel) const
 	{
 		SN::LogContext context(DisplaySN0() + ".Evaluate ()", LOG_DEBUG_INDEX);
-		SNI_Manager::GetTopManager()->DebugCommand(SN::BreakPoint);
+		SNI_Manager::GetTopManager()->DebugCommand(SN::BreakPoint, "Debug.Evaluate");
 		return LOG_RETURN(context, m_Expression->Evaluate(p_MetaLevel));
 	}
 

@@ -75,6 +75,22 @@ namespace SNI
 		return "";
 	}
 
+	SNI_Expression *SNI_Expression::LoadParameters(SN::SN_ExpressionList * p_ParameterList) const
+	{
+		return NULL;
+	}
+
+	string SNI_Expression::DisplayCall(long priority, SNI_VariablePointerList &p_DisplayVariableList, SN::SN_ExpressionList * p_ParameterList) const
+	{
+		string text;
+		string delimeter = "(";
+		for (SN::SN_Expression &p: *p_ParameterList)
+		{
+			text += delimeter + p.GetSNI_Expression()->DisplayValueSN(GetPriority(), p_DisplayVariableList);
+		}
+		return DisplaySN(priority, p_DisplayVariableList) + "(" + text + ")";
+	}
+
 	SNI_Expression * SNI_Expression::Clone(SNI_Frame *p_Frame, bool &/*p_Changed*/)
 	{
 		return this;
@@ -145,6 +161,10 @@ namespace SNI
 	bool SNI_Expression::IsRequested() const
 	{
 		return false;
+	}
+
+	void SNI_Expression::Request()
+	{
 	}
 
 	SNI_WorldSet * SNI_Expression::GetWorldSet()

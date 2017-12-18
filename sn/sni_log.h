@@ -9,7 +9,7 @@
 #include <vector>
 #include <ostream>
 
-#define _LOG
+//#define _LOG
 #ifdef _LOG
 #define LOG(content) SNI_Log::GetLog()->content
 #else
@@ -30,16 +30,19 @@ namespace SNI
 		SNI_Log();
 		virtual ~SNI_Log();
 
-		void AddStream(ostream *p_Stream);
+		void AddStream(SN::LoggingLevel p_LoggingLevel, ostream *p_Stream);
 
 		void WriteLine(SN::LoggingLevel p_DebugLevel, const string & p_line);
 
 		void WriteFrame(SN::LoggingLevel p_DebugLevel, SNI_Frame *p_Frame = NULL);
 
+		void WriteExpression(SN::LoggingLevel p_DebugLevel, SN::SN_Expression p_Result, SN::SN_Expression p_Expression);
+
 	private:
 		static SNI_Log *m_Log;
 
 		vector<ostream *> m_StreamList;
+		vector<SN::LoggingLevel> m_LoggingLevelList;
 	};
 }
 

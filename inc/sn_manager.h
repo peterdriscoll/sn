@@ -65,7 +65,7 @@ namespace SN
 		bool HasConsole();
 		bool KbHit();
 		int  GetCh();
-		void DebugCommand(InterruptPoint p_InterruptPoint);
+		void DebugCommand(InterruptPoint p_InterruptPoint, string p_Text);
 		ostream * CreateLogFile(LoggingLevel p_LoggingLevel);
 
 	private:

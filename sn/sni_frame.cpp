@@ -111,32 +111,98 @@ namespace SNI
 	string SNI_Frame::GetLogDescription()
 	{
 		string heading;
-		string data;
-		size_t minFixedWidth = 9;
+		string typeLine;
+		vector<string> data;
+		size_t minFixedWidth = 0;
 		string delimeter = "";
+		bool hasMoreRows = true;
+		string filler;
 		for (const SNI_Variable *v : m_VariableList)
 		{
 			size_t fixedWidth = minFixedWidth;
 			string name = v->GetName();
-			SN::SN_Expression e = v->GetValue();
+			SN::SN_Expression e = v->GetValue(false);
 			string value;
+			string typeText;
 			if (v->IsKnownValue())
 			{
 				value = e.DisplaySN();
+				typeText = e.GetSNI_Expression()->GetTypeName();
 			}
 			if (fixedWidth < name.size())
 			{
 				fixedWidth = name.size();
 			}
-			if (fixedWidth < value.size())
+			if (fixedWidth < typeText.size())
 			{
-				fixedWidth = value.size();
+				fixedWidth = typeText.size();
+			}
+			if (e.IsKnownValue())
+			{
+				e.ForEach(
+					[&fixedWidth](const SN::SN_Expression &p_Expression, SNI_World *p_World) -> SN::SN_Error
+				{
+					string valueText;
+					if (p_Expression.IsKnownValue())
+					{
+						valueText = p_Expression.DisplaySN() + string(p_World ? "::" + p_World->DisplayShort() : "");
+					}
+					if (fixedWidth < valueText.size())
+					{
+						fixedWidth = valueText.size();
+					}
+					return SN::SN_Error(true);
+				}
+				);
 			}
 			heading += delimeter + Pad(name, fixedWidth);
-			data += delimeter + Pad(e.DisplaySN(), fixedWidth);
+			typeLine += delimeter + Pad(typeText, fixedWidth);
+			size_t row = 0;
+			if (e.IsKnownValue())
+			{
+				e.ForEach(
+					[&data, &row, &delimeter, &filler, fixedWidth](const SN::SN_Expression &p_Expression, SNI_World *p_World)->SN::SN_Error
+				{
+					string valueText;
+					if (p_Expression.IsKnownValue())
+					{
+						valueText = p_Expression.DisplaySN() + string(p_World ? "::" + p_World->DisplayShort() : "");
+					}
+					row++;
+					if (data.size() < row)
+					{
+						data.push_back(filler);
+					}
+					data[row - 1] += delimeter + Pad(valueText, fixedWidth);
+					return SN::SN_Error(true);
+				}
+				);
+			}
+			string fillerField = delimeter + string(fixedWidth,' ');
+			for (size_t j = row; j < data.size(); j++)
+			{
+				data[j] += fillerField;
+			}
+			filler += fillerField;
 			delimeter = " | ";
 		}
-		return heading + "\n" + data;
+		string result = heading + " |";
+		if (!data.empty())
+		{
+			result += "\n" + typeLine + " |";
+			for (string &line : data)
+			{
+				result += "\n" + line + " |";
+			}
+		}
+		return result;
+	}
+
+	SNI_Variable * SNI_Frame::CreateTemporary()
+	{
+		SNI_Variable * result = new SNI_Variable();
+		m_VariableList.push_back(result);
+		return result;
 	}
 
 	void SNI_Frame::PromoteMembers()

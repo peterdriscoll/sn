@@ -131,7 +131,7 @@ namespace SNI
 		{
 			l_Stream = CreateLogFile(p_LoggingLevel);
 		}
-		SNI_Log::GetLog()->AddStream(l_Stream);
+		SNI_Log::GetLog()->AddStream(p_LoggingLevel, l_Stream);
 	}
 
 	void SNI_Manager::StartDebug(SN::DebugAction p_DebugAction, int p_KbHit(), int p_GetCh())
@@ -140,7 +140,7 @@ namespace SNI
 		m_DebugAction = p_DebugAction;
 		m_KbHit = p_KbHit;
 		m_GetCh = p_GetCh;
-		SNI_Log::GetLog()->AddStream(&cout);
+		SNI_Log::GetLog()->AddStream(SN::DebugLevel, &cout);
 	}
 
 	bool SNI_Manager::HasConsole()
@@ -179,7 +179,7 @@ namespace SNI
 		return false;
 	}
 
-	void SNI_Manager::DebugCommand(SN::InterruptPoint p_InterruptPoint)
+	void SNI_Manager::DebugCommand(SN::InterruptPoint p_InterruptPoint, string p_Text)
 	{
 		long l_ThreadNum = SNI_Frame::GetThreadNum();
 		long l_FrameStackDepth = SNI_Frame::GetFrameStackDepth();
@@ -188,46 +188,46 @@ namespace SNI
 			m_DebugAction = SN::None;
 			m_ThreadNum = l_ThreadNum;
 			m_FrameStackDepth = l_FrameStackDepth;
-			cout << "\n>> ";
+			cout << p_Text << ">> ";
 			while (m_DebugAction == SN::None)
 			{
 				int response = GetCh();
 				switch (response)
 				{
 				case VK_F5:
-					cout << "F5 - Run";
+					cout << "F5 - Run\n";
 					m_DebugAction = SN::Run;
 					break;
 				case VK_SHIFT_F5:
-					cout << "Shift F5 - Run to end";
+					cout << "Shift F5 - Run to end\n";
 					m_DebugAction = SN::RunToEnd;
 					break;
 				case VK_F10:
-					cout << "F10 - Step over";
+					cout << "F10 - Step over\n";
 					m_DebugAction = SN::StepOver;
 					break;
 				case VK_F11:
-					cout << "F11 -  Step into";
+					cout << "F11 -  Step into\n";
 					m_DebugAction = SN::StepInto;
 					break;
 				case VK_SHIFT_F11:
-					cout << "Shift F11 - Step out";
+					cout << "Shift F11 - Step out\n";
 					m_DebugAction = SN::StepOut;
 					break;
 				case VK_F12:
-					cout << "F12 - Step to parameter";
+					cout << "F12 - Step to parameter\n";
 					m_DebugAction = SN::StepParameter;
 					break;
 				case VK_H:
 				case VK_SHIFT_H:
 				{
-					SN::LogContext context("Help: ");
-					context.LogText("F5", "Run");
-					context.LogText("F10", "Step over");
-					context.LogText("F11", "Step into");
-					context.LogText("Shift F11", "Step out");
-					context.LogText("F12", "Step to parameter");
-					context.LogText("h, H", "Help");
+					cout << "Help:\n";
+					cout << "F5        - Run\n";
+					cout << "F10       - Step over\n";
+					cout << "F11       - Step into\n";
+					cout << "Shift F11 - Step out\n";
+					cout << "F12       - Step to parameter\n";
+					cout << "h, H      - Help\n";
 					break;
 				}
 				default:

@@ -78,6 +78,8 @@ namespace SNI
 		//---------------------------------------------------------------
 		// Members
 		//---------------------------------------------------------------
+		virtual SNI_Expression * LoadParameters(SN::SN_ExpressionList * p_ParameterList) const;
+		virtual string DisplayCall(long priority, SNI_VariablePointerList & p_DisplayVariableList, SN::SN_ExpressionList * p_ParameterList) const;
 		virtual SNI_Expression * Clone(SNI_Frame *p_Frame, bool &p_Changed);
 		virtual SNI_Expression * Clone();
 		virtual bool GetBool() const;
@@ -88,6 +90,7 @@ namespace SNI
 		virtual SN::SN_Expression SimplifyValue();
 		virtual bool IsStringValue() const;
 		virtual bool IsRequested() const;
+		virtual void Request();
 		virtual SNI_WorldSet *GetWorldSet();
 
 		virtual bool IsNull() const;

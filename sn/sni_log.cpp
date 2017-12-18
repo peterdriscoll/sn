@@ -33,27 +33,33 @@ namespace SNI
 	{
 	}
 
-	void SNI_Log::AddStream(ostream * p_Stream)
+	void SNI_Log::AddStream(SN::LoggingLevel p_LoggingLevel, ostream * p_Stream)
 	{
 		m_StreamList.push_back(p_Stream);
+		m_LoggingLevelList.push_back(p_LoggingLevel);
 	}
+
 	void SNI_Log::WriteLine(SN::LoggingLevel p_DebugLevel, const string &p_line)
 	{
 		vector<string> arrLines;
 		SNI::Split(p_line, "\n", arrLines);
-		size_t num_lines = arrLines.size();
+		size_t num_lines = arrLines.size()-1;
 		string timestamp = GetFormattedTime();
+		size_t j = 0;
 		for (ostream *stream : m_StreamList)
 		{
-			string delimeter;
-			string prefix = timestamp;
-			string blank(prefix.size(), ' ');
-			for (string & line : arrLines)
+			if (p_DebugLevel <= m_LoggingLevelList[j++])
 			{
-				*stream << prefix << line;
-				stream->flush();
-				delimeter = "\n";
-				prefix = blank;
+				string delimeter;
+				string prefix = timestamp;
+				string blank(prefix.size(), ' ');
+				for (string & line : arrLines)
+				{
+					*stream << prefix << " | " << line << "\n";
+					stream->flush();
+					delimeter = "\n";
+					prefix = blank;
+				}
 			}
 		}
 	}
@@ -69,5 +75,10 @@ namespace SNI
 		{
 			WriteLine(p_DebugLevel, frame->GetLogDescription());
 		}
+	}
+
+	void SNI_Log::WriteExpression(SN::LoggingLevel p_DebugLevel, SN::SN_Expression p_Result, SN::SN_Expression p_Expression)
+	{
+		WriteLine(p_DebugLevel, p_Result.DisplayValueSN() + " == " + p_Expression.DisplayValueSN());
 	}
 }

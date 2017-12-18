@@ -46,7 +46,7 @@ namespace SNI
 		int  GetCh();
 
 		bool IsBreakPoint(SN::InterruptPoint p_InterruptPoint, long p_ThreadNum, long p_FrameStackDepth);
-		void DebugCommand(SN::InterruptPoint p_InterruptPoint);
+		void DebugCommand(SN::InterruptPoint p_InterruptPoint, string p_Text);
 
 		ostream * CreateLogFile(SN::LoggingLevel);
 
