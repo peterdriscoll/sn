@@ -285,7 +285,7 @@ namespace SNI
 					LOG(WriteLine(SN::DebugLevel, "Parameter " + to_string(j) + ": " + inputList[j].DisplayValueSN()));
 					if (allFound || maxCard < card)
 					{
-						inputList[j] = new SNI_Variable();
+						inputList[j] = SNI_Frame::Top()->CreateTemporary();
 						e = p_ParamList[j].AssertValue(inputList[j]);
 						LOG(WriteLine(SN::DebugLevel, "Assert " + to_string(j) + ": " + inputList[j].DisplayValueSN()));
 						if (e.IsError())
