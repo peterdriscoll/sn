@@ -388,7 +388,9 @@ namespace SNI
 	void SNI_Expression::AssertAction()
 	{
 		SN::LogContext context("SNI_Expression::AssertAction()");
-		HandleAssertAction(context, Assert(), "Assert");
+		SN::SN_Expression clone = Clone();
+		HandleAssertAction(context, clone.Assert(), "Assert");
+		SNI_Frame::Pop();
 	}
 
 	void SNI_Expression::PartialAssertAction()
@@ -411,7 +413,9 @@ namespace SNI
 	void SNI_Expression::EvaluateAction()
 	{
 		SN::LogContext context("SNI_Expression::EvaluateAction()");
-		HandleEvaluateAction(context, Evaluate(), "Evaluate");
+		SN::SN_Expression clone = Clone();
+		HandleEvaluateAction(context, clone.Evaluate(), "Evaluate");
+		SNI_Frame::Pop();
 	}
 
 	void SNI_Expression::PartialEvaluateAction()

@@ -74,11 +74,19 @@ namespace SNI
 	void SNI_Variable::Request()
 	{
 		m_Requested = true;
+		SNI_DelayedCall *call = dynamic_cast<SNI_DelayedCall *>(m_Value);
+		if (call)
+		{
+			SNI_DelayedProcessor::GetProcessor()->Request(call);
+		}
 	}
 
 	SNI_Expression * SNI_Variable::GetValue(bool p_Request) const
 	{
-		const_cast<SNI_Variable*>(this)->Request();
+		if (p_Request)
+		{
+			const_cast<SNI_Variable*>(this)->Request();
+		}
 		if (m_Value)
 		{
 			const_cast<SNI_Variable*>(this)->Simplify();
