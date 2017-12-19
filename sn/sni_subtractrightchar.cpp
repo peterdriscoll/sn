@@ -37,11 +37,6 @@ namespace SNI
 		return 1;
 	}
 
-	string SNI_SubtractRightChar::GetOperator() const
-	{
-		return "SubtractRightChar";
-	}
-
 	SN::SN_Value SNI_SubtractRightChar::PrimaryFunctionValue(const SN::SN_Value &p_Param) const
 	{
 		return p_Param.GetSNI_Value()->DoSubtractRightChar();

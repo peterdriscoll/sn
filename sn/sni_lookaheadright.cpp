@@ -38,11 +38,6 @@ namespace SNI
 		return 1;
 	}
 
-	string SNI_LookaheadRight::GetOperator() const
-	{
-		return "LookaheadRight";
-	}
-
 	SN::SN_Value SNI_LookaheadRight::PrimaryFunctionValue(const SN::SN_Value &p_Param) const
 	{
 		return p_Param.GetSNI_Value()->DoLookaheadRight();

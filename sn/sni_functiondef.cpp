@@ -94,21 +94,20 @@ namespace SNI
 		string delimeter = "";
 		for (SN::SN_Expression &p : *p_ParameterList)
 		{
-			text += delimeter;
+			string del = delimeter;
 			if (GetOperator().empty())
 			{
-				text += GetTypeName() + "(";
-				delimeter = ", ";
+				delimeter = " ";
 			}
 			else
 			{
 				delimeter = GetOperator();
 			}
-			text += p.DisplayValueSN();
+			text = p.GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayVariableList) + del + text;
 		}
 		if (GetOperator().empty())
 		{
-			text += ")";
+			return GetTypeName() + " " + text;
 		}
 		return text;
 	}

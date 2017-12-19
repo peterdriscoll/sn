@@ -39,10 +39,6 @@ namespace SNI
 		return 1;
 	}
 
-	string SNI_Concat::GetOperator() const
-	{
-		return "+";
-	}
 	/// @endcond
 
 	SN::SN_Value SNI_Concat::PrimaryFunctionValue(const SN::SN_Value &p_Left, const SN::SN_Value &p_Right) const

@@ -64,11 +64,6 @@ namespace SNI
 		return 0;
 	}
 
-	string SNI_Meta::GetOperator() const
-	{
-		return "";
-	}
-
 	SNI_Expression * SNI_Meta::GetExpression()
 	{
 		return m_Expression;

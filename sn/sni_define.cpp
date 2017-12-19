@@ -47,11 +47,6 @@ namespace SNI
 		return 10;
 	}
 
-	string SNI_Define::GetOperator() const
-	{
-		return "";
-	}
-
 	bool SNI_Define::Equivalent(SNI_Object * p_Other) const
 	{
 		if (dynamic_cast<SNI_Define *>(p_Other))

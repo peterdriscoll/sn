@@ -48,11 +48,6 @@ namespace SNI
 		return 4;
 	}
 
-	string SNI_Unary::GetOperator() const
-	{
-		return "Unary Op";
-	}
-
 	long SNI_Unary::GetNumParameters() const
 	{
 		return 2;

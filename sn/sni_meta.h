@@ -24,7 +24,6 @@ namespace SNI
 		virtual string DisplayCpp() const;
 		virtual string DisplaySN(long priority, SNI_VariablePointerList &p_DisplayVariableList) const;
 		virtual long GetPriority() const;
-		virtual string GetOperator() const;
 
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 		virtual SN::SN_Expression Evaluate(long p_MetaLevel = 0) const;

@@ -22,11 +22,11 @@ namespace SNI
 
 		virtual string GetTypeName() const;
 		virtual string DisplayCpp() const;
-		virtual string DisplaySN(long priority, SNI_VariablePointerList &p_DisplayVariableList) const;
 		virtual long GetPriority() const;
-		virtual string GetOperator() const;
 
-		virtual SNI_Expression * Clone(SNI_Frame *p_Frame, bool &p_Changed);
+		virtual SNI_Expression *LoadParameters(SN::SN_ExpressionList * p_ParameterList) const;
+		virtual string DisplaySN(long priority, SNI_VariablePointerList &p_DisplayVariableList) const;
+		virtual SNI_Expression *Clone(SNI_Frame *p_Frame, bool &p_Changed);
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 
 		virtual SN::SN_Expression Evaluate(long p_MetaLevel = 0) const;

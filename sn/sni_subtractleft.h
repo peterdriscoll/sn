@@ -18,7 +18,6 @@ namespace SNI
 		virtual string DisplayCpp() const;
 		virtual string DisplaySN(long priority, SNI_VariablePointerList &p_DisplayVariableList) const;
 		virtual long GetPriority() const;
-		virtual string GetOperator() const;
 
 	protected:
 		//virtual bool PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);

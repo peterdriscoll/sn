@@ -58,21 +58,28 @@ namespace SNI
 		return m_Function->DisplayCpp() + "(" + m_Parameter->DisplayCpp() + ")";
 	}
 
+	SNI_Expression *SNI_Function::LoadParameters(SN::SN_ExpressionList * p_ParameterList) const
+	{
+		p_ParameterList->push_back(m_Parameter);
+		return m_Function;
+	}
+
 	string SNI_Function::DisplaySN(long priority, SNI_VariablePointerList &p_DisplayVariableList) const
 	{
-
-
-		return Bracket(priority, m_Function->DisplaySN(GetPriority(), p_DisplayVariableList) + (m_Parameter ? " " + m_Parameter->DisplaySN(GetPriority(), p_DisplayVariableList) : ""));
+		SN::SN_ExpressionList * l_ParameterList = new SN::SN_ExpressionList();
+		SNI_Expression *nextFunction = LoadParameters(l_ParameterList);
+		const SNI_Expression *function = NULL;
+		while (nextFunction)
+		{
+			function = nextFunction;
+			nextFunction = function->LoadParameters(l_ParameterList);
+		}
+		return Bracket(priority, function->DisplayCall(priority, p_DisplayVariableList, l_ParameterList));
 	}
 
 	long SNI_Function::GetPriority() const
 	{
 		return 3;
-	}
-
-	string SNI_Function::GetOperator() const
-	{
-		return " ";
 	}
 
 	SNI_Expression * SNI_Function::GetFunction()
@@ -137,6 +144,7 @@ namespace SNI
 
 	SN::SN_Error SNI_Function::AssertValue(const SN::SN_Expression &p_Value)
 	{
+		LOG(WriteExpression(SN::DebugLevel, p_Value, this));
 		if (p_Value.IsError())
 		{
 			return p_Value;

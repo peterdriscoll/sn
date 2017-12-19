@@ -14,10 +14,6 @@ namespace SNI
 	{
 	}
 
-	void SNI_SelectLeftChar::PromoteMembers()
-	{
-	}
-
 	string SNI_SelectLeftChar::GetTypeName() const
 	{
 		return "SelectLeftChar";
@@ -36,11 +32,6 @@ namespace SNI
 	long SNI_SelectLeftChar::GetPriority() const
 	{
 		return 1;
-	}
-
-	string SNI_SelectLeftChar::GetOperator() const
-	{
-		return "SelectLeftChar";
 	}
 
 	SN::SN_Value SNI_SelectLeftChar::PrimaryFunctionValue(const SN::SN_Value &p_Param) const

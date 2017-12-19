@@ -50,11 +50,6 @@ namespace SNI
 		return 4;
 	}
 
-	string SNI_Collapse::GetOperator() const
-	{
-		return "->|";
-	}
-
 	SN::SN_Value SNI_Collapse::PrimaryFunctionValue(const SN::SN_Value &p_Param) const
 	{
 		return p_Param.DoCollapse();

@@ -38,11 +38,6 @@ namespace SNI
 		return 1;
 	}
 
-	string SNI_SelectRightChar::GetOperator() const
-	{
-		return "SelectRight";
-	}
-
 	SN::SN_Value SNI_SelectRightChar::PrimaryFunctionValue(const SN::SN_Value &p_Param) const
 	{
 		return p_Param.GetSNI_Value()->DoSelectRightChar();

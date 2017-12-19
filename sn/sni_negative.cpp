@@ -38,7 +38,7 @@ namespace SNI
 
 	string SNI_Negative::GetOperator() const
 	{
-		return "!";
+		return "-";
 	}
 
 	SN::SN_Value SNI_Negative::PrimaryFunctionValue(const SN::SN_Value &p_Param) const
