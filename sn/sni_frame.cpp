@@ -96,7 +96,7 @@ namespace SNI
 		}
 		if (!found)
 		{
-			m_VariableList.push_back(p_Variable);
+			m_VariableList.push_back(l_Result);
 		}
 		return l_Result;
 	}
@@ -109,16 +109,7 @@ namespace SNI
 		return result;
 	}
 
-	string SNI_Frame::GenerateName(SNI_Variable *p_Variable)
-	{
-		if (m_ThreadNum == 1)
-		{	// Main thread
-			return to_string(++m_FrameNum) + "." + p_Variable->GetName();
-		}
-		return to_string(++m_ThreadNum) + "_" + to_string(++m_FrameNum) + "." + p_Variable->GetName();
-	}
-
-		string SNI_Frame::NameSuffix()
+	string SNI_Frame::NameSuffix()
 	{
 		if (m_ThreadNum == 1)
 		{	// Main thread

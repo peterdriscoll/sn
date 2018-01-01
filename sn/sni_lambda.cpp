@@ -73,11 +73,11 @@ namespace SNI
 	SNI_Expression * SNI_Lambda::Clone(SNI_Frame *p_Frame, bool &p_Changed)
 	{
 		bool changed = false;
-		SNI_Variable *l_NewVariable = new SNI_Variable;
 		SNI_Variable *l_FormalParameter = dynamic_cast<SNI_Variable *>(m_FormalParameter);
 		if (l_FormalParameter)
 		{
-			l_NewVariable->SetName(p_Frame->GenerateName(l_FormalParameter));
+			SNI_Variable *l_NewVariable = new SNI_Variable(l_FormalParameter->GetName());
+			l_NewVariable->SetFrame(p_Frame);
 			SNI_Expression *l_expression = p_Frame->CloneReplace(changed, l_FormalParameter, l_NewVariable, m_Expression);
 			if (changed)
 			{
@@ -170,6 +170,7 @@ namespace SNI
 			e.AddNote(context, this, "Assigning parameter value failed");
 			return SN::SN_Error(false);
 		}
+		LOG(WriteFrame(SN::DebugLevel));
 		SNI_Manager::GetTopManager()->DebugCommand(SN::ParameterPoint, "Lambda.Unify");
 		if (p_ParameterList->size() > 1)
 		{

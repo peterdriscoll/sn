@@ -29,7 +29,7 @@ namespace SNI
 		, m_Frame(NULL)
 		, m_Requested(false)
 	{
-		SetName("temp." + to_string(++m_MaxTempNum));
+		SetName("_t" + to_string(++m_MaxTempNum));
 	}
 
 	SNI_Variable::SNI_Variable(const string &p_Name)
@@ -201,10 +201,10 @@ namespace SNI
 		{
 			//		value = m_Value->DisplayCpp();
 		}
-		return "sn_Variable(" + GetName() + ")";
+		return "sn_Variable(" + FrameName() + ")";
 	}
 
-	string SNI_Variable::DisplaySN(long priority, SNI_VariablePointerList &p_DisplayVariableList) const
+	string SNI_Variable::DisplaySN(long p_Priority, SNI_VariablePointerList &p_DisplayVariableList) const
 	{
 		string value;
 		if (!m_Value)
@@ -221,7 +221,7 @@ namespace SNI
 			value = "[" + m_Value->DisplayValueSN(GetPriority(), p_DisplayVariableList) + "]";
 			p_DisplayVariableList.erase(p_DisplayVariableList.begin());
 		}
-		return Bracket(priority, GetName() + value);
+		return Bracket(p_Priority, FrameName() + value);
 	}
 
 	string SNI_Variable::DisplayCall(long p_Priority, SNI_VariablePointerList & p_DisplayVariableList, SN::SN_ExpressionList * p_ParameterList) const

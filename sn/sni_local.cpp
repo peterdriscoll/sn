@@ -75,8 +75,8 @@ namespace SNI
 	SNI_Expression * SNI_Local::Clone(SNI_Frame *p_Frame, bool &p_Changed)
 	{
 		bool changed = false;
-		SNI_Variable *l_NewVariable = new SNI_Variable;
-		l_NewVariable->SetName(p_Frame->GenerateName(m_LocalVariable));
+		SNI_Variable *l_NewVariable = new SNI_Variable(m_LocalVariable);
+		l_NewVariable->SetFrame(p_Frame);
 		SNI_Expression *l_expression = p_Frame->CloneReplace(p_Changed, m_LocalVariable, l_NewVariable, m_Expression);
 		if (changed)
 		{
