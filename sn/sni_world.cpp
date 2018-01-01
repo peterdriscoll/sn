@@ -10,7 +10,7 @@ namespace SNI
 {
 	thread_local SNI_WorldList g_ContextStack;
 
-		/*static*/ SNI_World * SNI_World::ContextWorld()
+	/*static*/ SNI_World * SNI_World::ContextWorld()
 	{
 		if (g_ContextStack.size())
 		{
@@ -29,14 +29,17 @@ namespace SNI
 		g_ContextStack.pop_back();
 	}
 
-	SNI_World::SNI_World(SNI_WorldSet * p_WorldSet)
+	SNI_World::SNI_World(SNI_WorldSet * p_WorldSet, SNI_World *p_CloneParent)
 		: m_Mark(false)
 		, m_IsEmpty(false)
 		, m_Active(false)
 		, m_WorldSet(p_WorldSet)
-		, m_WorldNo(m_WorldSet->NextWorldNo())
+		, m_CloneParent(p_CloneParent)
 	{
-
+		if (m_WorldSet)
+		{
+			m_WorldNo = m_WorldSet->NextWorldNo();
+		}
 	}
 
 	SNI_World::~SNI_World()
@@ -51,7 +54,7 @@ namespace SNI
 
 	string SNI_World::DisplayShort() const
 	{
-		return m_WorldSet->DisplaySN() + ":W" + to_string(m_WorldNo);
+		return m_WorldSet->DisplayShort() + ":W" + to_string(m_WorldNo);
 	}
 
 	string SNI_World::DisplaySNChildWorlds() const
@@ -229,6 +232,10 @@ namespace SNI
 
 	bool SNI_World::IsEmpty() const
 	{
+		if (m_CloneParent && m_CloneParent->IsEmpty())
+		{
+			return true;
+		}
 		return m_IsEmpty;
 	}
 

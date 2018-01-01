@@ -207,7 +207,11 @@ namespace SN
 
 	SN::SN_Error SN_Expression::ForEach(std::function<SN::SN_Error(const SN_Expression &p_Param, SNI::SNI_World *p_World)> p_Action)
 	{
-		return GetSNI_Expression()->ForEach(p_Action);
+		if (GetSNI_Expression())
+		{
+			return GetSNI_Expression()->ForEach(p_Action);
+		}
+		return NULL;
 	}
 
 	SN_Cartesian SN_Expression::CartProd(long p_Index, SNI_FunctionDef *p_FunctionDef) const

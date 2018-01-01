@@ -96,9 +96,7 @@ namespace SNI
 	{
 		bool changed = false;
 		SNI_Expression * l_Function = m_Function->Clone(p_Frame, changed);
-		string f = l_Function->DisplaySN0();
 		SNI_Expression * l_Parameter = m_Parameter->Clone(p_Frame, changed);
-		string p = l_Parameter->DisplaySN0();
 		if (changed)
 		{
 			p_Changed = true;
@@ -129,7 +127,10 @@ namespace SNI
 	{
 		SN::SN_ExpressionList * l_ParameterList = new SN::SN_ExpressionList();
 		l_ParameterList->push_back(m_Parameter);
+		SNI_World *world(new SNI_World(NULL)); // Only create a world so that errors are not fatal.
+		SNI_World::PushContextWorld(world);
 		SN::SN_Expression result = m_Function->PartialCall(l_ParameterList, p_MetaLevel);
+		SNI_World::PopContextWorld();
 		if (result.IsNull())
 		{
 			return this;

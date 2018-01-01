@@ -116,7 +116,7 @@ namespace SNI
 
 	void SNI_Variable::Simplify()
 	{
-		if (m_Value)
+		if (IsKnownValue() && !SNI_World::ContextWorld())
 		{
 			m_Value = m_Value->SimplifyValue().GetSNI_Expression();
 		}
@@ -485,7 +485,8 @@ namespace SNI
 
 		if (m_Value)
 		{
-			SNI_Expression * l_clone = m_Value->Clone();
+			SNI_Expression * l_clone = m_Value->Clone(this);
+			// SNI_Expression * l_clone = CloneValue();
 			SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, "Variable.Call");
 			SN::SN_Expression e = l_clone->Call(p_ParameterList, p_MetaLevel);
 			SNI_Frame::Pop();
@@ -513,7 +514,8 @@ namespace SNI
 	{
 		if (m_Value)
 		{
-			SNI_Expression * l_clone = m_Value->Clone();
+			SNI_Expression * l_clone = m_Value->Clone(this);
+			// SNI_Expression * l_clone = CloneValue();
 			SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, "Variable.Unify");
 			SN::SN_Expression e = l_clone->Unify(p_ParameterList);
 			SNI_Frame::Pop();

@@ -96,10 +96,10 @@ namespace SNI
 		return this;
 	}
 
-	SNI_Expression * SNI_Expression::Clone()
+	SNI_Expression * SNI_Expression::Clone(const SNI_Variable *p_Variable)
 	{
 		bool changed = false;
-		SNI_Expression * result = Clone(SNI_Frame::Push(NULL), changed);
+		SNI_Expression * result = Clone(SNI_Frame::Push(p_Variable), changed);
 		return result;
 	}
 
@@ -231,9 +231,7 @@ namespace SNI
 
 	SN::SN_Error SNI_Expression::ForEach(std::function<SN::SN_Error(const SN::SN_Expression &p_Param, SNI_World *p_World)> p_Action)
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Expression::ForEach ( function )");
-
-		return SN::SN_Error(GetTypeName() + " ForEach not implemented .");
+		return p_Action(SN::SN_Expression(this), NULL);
 	}
 
 	SN::SN_Error SNI_Expression::ForEachCart(long p_Depth, SNI_Cart * p_Cart)
@@ -388,7 +386,7 @@ namespace SNI
 	void SNI_Expression::AssertAction()
 	{
 		SN::LogContext context("SNI_Expression::AssertAction()");
-		SN::SN_Expression clone = Clone();
+		SN::SN_Expression clone = Clone(NULL);
 		HandleAssertAction(context, clone.Assert(), "Assert");
 		SNI_Frame::Pop();
 	}
@@ -413,7 +411,7 @@ namespace SNI
 	void SNI_Expression::EvaluateAction()
 	{
 		SN::LogContext context("SNI_Expression::EvaluateAction()");
-		SN::SN_Expression clone = Clone();
+		SN::SN_Expression clone = Clone(NULL);
 		HandleEvaluateAction(context, clone.Evaluate(), "Evaluate");
 		SNI_Frame::Pop();
 	}

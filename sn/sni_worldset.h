@@ -52,6 +52,8 @@ namespace SNI
 		SNI_World * JoinWorldsArray(AddWorldType p_AddWorld, CreateWorldType p_CreateWorld, bool & exists, long p_NumWorlds, SNI_World * p_WorldList[], SNI_World * p_ExtraWorld = NULL);
 		void AddToSetList(SNI_World * p_world);
 		SNI_World * CreateWorld();
+		SNI_WorldSet * Clone();
+		SNI_World * CreateCloneWorld(SNI_World * p_Parentworld);
 		bool IsEmpty() const;
 
 		void Mark(bool p_Mark);

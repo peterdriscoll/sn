@@ -188,6 +188,20 @@ namespace SNI
 		return world;
 	}
 
+	SNI_WorldSet * SNI_WorldSet::Clone()
+	{
+		return new SNI_WorldSet();
+	}
+
+	SNI_World * SNI_WorldSet::CreateCloneWorld(SNI_World * p_Parentworld)
+	{
+		if (p_Parentworld)
+		{
+			return new SNI_World(this, p_Parentworld);
+		}
+		return NULL;
+	}
+
 	bool SNI_WorldSet::IsEmpty() const
 	{
 		return m_WorldList.size() == 0;
@@ -217,7 +231,7 @@ namespace SNI
 
 	void SNI_WorldSet::CheckDependentWorlds()
 	{
-		SN::LogContext context("SNI_WorldSet::CheckDependentWorlds(" + DisplaySN() + ")");
+		SN::LogContext context("SNI_WorldSet::CheckDependentWorlds(" + DisplayShort() + ")");
 		LogSN();
 		MarkAllWorldInChildSets(false);
 		MarkChildWorlds(true);

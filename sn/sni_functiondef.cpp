@@ -139,7 +139,7 @@ namespace SNI
 			else if (p_ParamList[j].IsVariable())
 			{
 				SN::SN_Variable v = p_ParamList[j];
-				text += v.GetName();
+				text += v.FrameName();
 			}
 			else
 			{

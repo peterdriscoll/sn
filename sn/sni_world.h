@@ -29,7 +29,7 @@ namespace SNI
 		static void PushContextWorld(SNI_World *p_Context);
 		static void PopContextWorld();
 
-		SNI_World(SNI_WorldSet * p_WorldSet);
+		SNI_World(SNI_WorldSet * p_WorldSet, SNI_World *p_CloneParent = NULL);
 		virtual ~SNI_World();
 
 		string DisplaySN() const;
@@ -64,8 +64,9 @@ namespace SNI
 		virtual void PromoteMembers();
 
 	private:
-		SNI_WorldSet * m_WorldSet;
+		SNI_WorldSet  * m_WorldSet;
 		SNI_WorldList m_ChildList;
+		SNI_World     *m_CloneParent;
 
 		bool m_Mark;
 		bool m_IsEmpty;
