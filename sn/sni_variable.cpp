@@ -26,13 +26,23 @@ namespace SNI
 	long m_MaxTempNum = 0;
 	SNI_Variable::SNI_Variable()
 		: m_Value(NULL)
+		, m_Frame(NULL)
 		, m_Requested(false)
 	{
 		SetName("temp." + to_string(++m_MaxTempNum));
 	}
 
+	SNI_Variable::SNI_Variable(const string &p_Name)
+		: m_Frame(NULL)
+		, m_Value(NULL)
+		, m_Requested(false)
+	{
+		SetName(p_Name);
+	}
+
 	SNI_Variable::SNI_Variable(const SN::SN_Expression &p_Other)
 		: m_Value(p_Other.GetSNI_Expression())
+		, m_Frame(NULL)
 		, m_Requested(false)
 	{
 	}
@@ -79,6 +89,15 @@ namespace SNI
 		{
 			SNI_DelayedProcessor::GetProcessor()->Request(call);
 		}
+	}
+
+	string SNI_Variable::FrameName() const
+	{
+		if (m_Frame)
+		{	// Main thread
+			return GetName() + m_Frame->NameSuffix();
+		}
+		return GetName();
 	}
 
 	SNI_Expression * SNI_Variable::GetValue(bool p_Request) const
@@ -205,6 +224,19 @@ namespace SNI
 		return Bracket(priority, GetName() + value);
 	}
 
+	string SNI_Variable::DisplayCall(long p_Priority, SNI_VariablePointerList & p_DisplayVariableList, SN::SN_ExpressionList * p_ParameterList) const
+	{
+		string text;
+		string delimeter;
+		for (SN::SN_Expression &p : *p_ParameterList)
+		{
+			string del = delimeter;
+			delimeter = " ";
+			text = p.GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayVariableList) + del + text;
+		}
+		return DisplaySN(p_Priority, p_DisplayVariableList) + " " + text;
+	}
+
 	long SNI_Variable::GetPriority() const
 	{
 		return 100;
@@ -244,6 +276,16 @@ namespace SNI
 			return m_Value->Length();
 		}
 		return 0;
+	}
+
+	SNI_Frame * SNI_Variable::GetFrame() const
+	{
+		return m_Frame;
+	}
+
+	void SNI_Variable::SetFrame(SNI_Frame *p_Frame)
+	{
+		m_Frame = p_Frame;
 	}
 
 	bool SNI_Variable::FindVariable(SNI_VariablePointerList &p_DisplayVariableList) const

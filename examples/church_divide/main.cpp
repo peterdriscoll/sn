@@ -6,6 +6,40 @@
 using namespace PGCX;
 using namespace skynet; // Interface namespace for SN.
 
+void TestValueSetOfStringFunctions()
+{
+	Transaction transaction;
+
+	SN_DECLARE(f);
+
+	SN_DECLARE(wrap);
+	SN_DECLARE(map);
+	{
+		SN_DECLARE(a);
+
+		(Define(wrap)(a) == String("{") + (f(a) + String("}"))).PartialAssertAction();
+
+		SN_DECLARE(c);
+		SN_DECLARE(d);
+
+		(Define(map)(a) == a).PartialAssertAction();
+	}
+	string f_before_string = f.DisplaySN();
+
+	(Define(f) == (wrap || map)).PartialAssertAction();
+	string f_string = f.DisplaySN();
+
+	SN_DECLARE(x);
+	(String("{{expression}}") == f(x)).AssertAction();
+	string x_display = x.DisplaySN();
+	string x_string = x.BuildSet().Evaluate().DisplaySN();
+	string x_compare_string = "{String(\"expression\"), String(\"{expression}\"), String(\"{{expression}}\")}";
+
+	ASSERTM(x_string == x_compare_string, "compare strings");
+	// This is not quite right. Logically, 'x' should be a value set ["{{expression}}", "{expression}", "expression"]
+	// Not set up to implement this yet. ????
+}
+
 void TestSimple()
 {
 	SN_DECLARE(result);
@@ -112,7 +146,8 @@ void main(int argc, char *argv[])
 	Transaction transaction;
 	try
 	{
-		TestPythagoras();
+		TestValueSetOfStringFunctions();
+		// TestPythagoras();
 		// TestSimple();
 		// TestChurchDivide();
 	}

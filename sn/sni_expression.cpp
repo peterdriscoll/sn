@@ -99,7 +99,7 @@ namespace SNI
 	SNI_Expression * SNI_Expression::Clone()
 	{
 		bool changed = false;
-		SNI_Expression * result = Clone(SNI_Frame::Push(), changed);
+		SNI_Expression * result = Clone(SNI_Frame::Push(NULL), changed);
 		return result;
 	}
 

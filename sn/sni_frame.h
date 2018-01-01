@@ -16,27 +16,32 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Frame)
 	public:
-		static SNI_Frame *Push();
+		static SNI_Frame *Push(const SNI_Variable *p_Variable);
 		static void Pop();
 		static SNI_Frame *Top();
 		static long GetThreadNum();
 		static long GetFrameStackDepth();
+		static void DisplayFrameStack(long p_Depth);
 
 		SNI_Frame();
+		SNI_Frame(SN::SN_Expression p_Function);
 		virtual ~SNI_Frame();
 
 		SNI_Expression *ReplaceVariable(SNI_Variable *p_Variable, bool & p_Changed);
 		SNI_Expression *CloneReplace(bool & p_Changed, SNI_Variable * p_From, SNI_Variable * p_To, SNI_Expression *p_Expression);
 		string GenerateName(SNI_Variable * p_Variable);
+		string NameSuffix();
 		string GetLogDescription();
+		string GetLogShortDescription();
 		SNI_Variable *CreateTemporary();
 
 	private:
 		void PromoteMembers();
 
-		long m_ThreadNum;
-		long m_FrameNum;
-		SNI_ReplacementList m_ReplacementList;
+		SN::SN_Expression       m_Function;
+		long                    m_ThreadNum;
+		long                    m_FrameNum;
+		SNI_ReplacementList     m_ReplacementList;
 		SNI_VariablePointerList m_VariableList;
 	};
 }

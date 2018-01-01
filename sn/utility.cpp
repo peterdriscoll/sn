@@ -105,7 +105,7 @@ namespace SNI
 		size_t spacerWidth = 0;
 		if (p_Width > textWidth)
 		{
-			size_t spacer = p_Width - textWidth;
+			spacerWidth = p_Width - textWidth;
 		}
 		return p_Text + string(spacerWidth, ' ');
 	}
@@ -167,7 +167,7 @@ namespace SNI
 			SNI_World *world = p_TaggedValueList[j].GetWorld();
 			if (world)
 			{
-				result += "::" + p_TaggedValueList[j].GetWorld()->DisplaySN();
+				result += "::" + p_TaggedValueList[j].GetWorld()->DisplayShort();
 			}
 			separator = ", ";
 		}

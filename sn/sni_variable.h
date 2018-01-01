@@ -15,24 +15,30 @@ namespace SNI
 {
 	class SNI_Value;
 	class SNI_DelayedCall;
+	class SNI_Frame;
 
 	class SNI_Variable : virtual public SNI_VarDef, virtual public SNI_Namable
 	{
 		PGC_CLASS(SNI_Variable);
 	public:
 		SNI_Variable();
+		SNI_Variable(const string &p_Name);
 		SNI_Variable(const SN::SN_Expression &p_other);
 		virtual ~SNI_Variable();
 
 		virtual string GetTypeName() const;
 		virtual string DisplayCpp() const;
-		virtual string DisplaySN(long priority, SNI_VariablePointerList &p_DisplayVariableList) const;
+		virtual string DisplaySN(long p_Priority, SNI_VariablePointerList &p_DisplayVariableList) const;
+		virtual string DisplayCall(long p_Priority, SNI_VariablePointerList & p_DisplayVariableList, SN::SN_ExpressionList * p_ParameterList) const;
 		virtual long GetPriority() const;
 
 		virtual bool GetBool() const;
 		virtual string GetString() const;
 		virtual size_t Count() const;
 		virtual size_t Length() const;
+		SNI_Frame * GetFrame() const;
+		void SetFrame(SNI_Frame *p_Frame);
+		string FrameName() const;
 
 		virtual bool IsRequested() const;
 		virtual bool IsNullValue() const;
@@ -79,6 +85,7 @@ namespace SNI
 
 	private:
 		SNI_Expression * m_Value;
+		SNI_Frame      * m_Frame;
 		bool m_Requested;
 	};
 

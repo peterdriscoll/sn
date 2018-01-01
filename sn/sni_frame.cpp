@@ -9,19 +9,11 @@ namespace SNI
 	long m_MaxThreadNum = 0;
 	thread_local long t_ThreadNum = -1;
 	thread_local long t_MaxFrameNum = 0;
-	long GetThreadNum()
-	{
-		if (t_ThreadNum == -1)
-		{
-			t_ThreadNum = ++m_MaxThreadNum;
-		}
-		return t_ThreadNum;
-	}
 	SNI_FrameList m_FrameStack;
 
-	/*static*/ SNI_Frame *SNI_Frame::Push()
+	/*static*/ SNI_Frame *SNI_Frame::Push(const SNI_Variable *p_Variable)
 	{
-		SNI_Frame *newFrame = new SNI_Frame;
+		SNI_Frame *newFrame = new SNI_Frame(p_Variable);
 		m_FrameStack.push_back(newFrame);
 		return newFrame;
 	}
@@ -42,6 +34,10 @@ namespace SNI
 
 	/*static*/ long SNI_Frame::GetThreadNum()
 	{
+		if (t_ThreadNum == -1)
+		{
+			t_ThreadNum = ++m_MaxThreadNum;
+		}
 		return t_ThreadNum;
 	}
 
@@ -50,12 +46,26 @@ namespace SNI
 		return m_FrameStack.size();
 	}
 
-	SNI_Frame::SNI_Frame()
-		: m_ThreadNum(GetThreadNum())
-		, m_FrameNum(++t_MaxFrameNum)
+	/*static*/ void SNI_Frame::DisplayFrameStack(long p_Depth)
+	{
+		size_t base = 0;
+		if (0 < p_Depth)
+		{
+			base = m_FrameStack.size() - p_Depth;
+		}
+		for (size_t j = base; j < m_FrameStack.size(); j++)
+		{
+			LOG(WriteFrame(SN::DebugLevel, m_FrameStack[j]));
+		}
+	}
 
+	SNI_Frame::SNI_Frame(SN::SN_Expression p_Function)
+	    : m_ThreadNum(GetThreadNum())
+		, m_FrameNum(++t_MaxFrameNum)
+		, m_Function(p_Function)
 	{
 	}
+
 
 	SNI_Frame::~SNI_Frame()
 	{
@@ -108,7 +118,16 @@ namespace SNI
 		return to_string(++m_ThreadNum) + "_" + to_string(++m_FrameNum) + "." + p_Variable->GetName();
 	}
 
-	string SNI_Frame::GetLogDescription()
+		string SNI_Frame::NameSuffix()
+	{
+		if (m_ThreadNum == 1)
+		{	// Main thread
+			return "_" + to_string(m_FrameNum);
+		}
+		return "_"+to_string(m_ThreadNum) + "_" + to_string(m_FrameNum);
+	}
+
+    string SNI_Frame::GetLogDescription()
 	{
 		string heading;
 		string typeLine;
@@ -120,13 +139,11 @@ namespace SNI
 		for (const SNI_Variable *v : m_VariableList)
 		{
 			size_t fixedWidth = minFixedWidth;
-			string name = v->GetName();
+			string name = v->FrameName();
 			SN::SN_Expression e = v->GetValue(false);
-			string value;
 			string typeText;
 			if (v->IsKnownValue())
 			{
-				value = e.DisplaySN();
 				typeText = e.GetSNI_Expression()->GetTypeName();
 			}
 			if (fixedWidth < name.size())
@@ -137,15 +154,17 @@ namespace SNI
 			{
 				fixedWidth = typeText.size();
 			}
-			if (e.IsKnownValue())
-			{
-				e.ForEach(
-					[&fixedWidth](const SN::SN_Expression &p_Expression, SNI_World *p_World) -> SN::SN_Error
+			e.ForEach(
+				[&fixedWidth](const SN::SN_Expression &p_Expression, SNI_World *p_World) -> SN::SN_Error
 				{
 					string valueText;
 					if (p_Expression.IsKnownValue())
 					{
 						valueText = p_Expression.DisplaySN() + string(p_World ? "::" + p_World->DisplayShort() : "");
+					}
+					else if (p_Expression.IsVariable())
+					{
+						valueText = p_Expression.DisplaySN();
 					}
 					if (fixedWidth < valueText.size())
 					{
@@ -153,20 +172,21 @@ namespace SNI
 					}
 					return SN::SN_Error(true);
 				}
-				);
-			}
+			);
 			heading += delimeter + Pad(name, fixedWidth);
 			typeLine += delimeter + Pad(typeText, fixedWidth);
 			size_t row = 0;
-			if (e.IsKnownValue())
-			{
-				e.ForEach(
-					[&data, &row, &delimeter, &filler, fixedWidth](const SN::SN_Expression &p_Expression, SNI_World *p_World)->SN::SN_Error
+			e.ForEach(
+				[&data, &row, &delimeter, &filler, fixedWidth](const SN::SN_Expression &p_Expression, SNI_World *p_World)->SN::SN_Error
 				{
 					string valueText;
 					if (p_Expression.IsKnownValue())
 					{
 						valueText = p_Expression.DisplaySN() + string(p_World ? "::" + p_World->DisplayShort() : "");
+					}
+					else if (p_Expression.IsVariable())
+					{
+						valueText = p_Expression.DisplaySN();
 					}
 					row++;
 					if (data.size() < row)
@@ -176,8 +196,7 @@ namespace SNI
 					data[row - 1] += delimeter + Pad(valueText, fixedWidth);
 					return SN::SN_Error(true);
 				}
-				);
-			}
+			);
 			string fillerField = delimeter + string(fixedWidth,' ');
 			for (size_t j = row; j < data.size(); j++)
 			{
@@ -195,7 +214,16 @@ namespace SNI
 				result += "\n" + line + " |";
 			}
 		}
-		return result;
+		return GetLogShortDescription() +  "\n" + result;
+	}
+
+	string SNI_Frame::GetLogShortDescription()
+	{
+		if (m_ThreadNum == 1)
+		{
+			return "Frame " + to_string(m_FrameNum) + " " + m_Function.DisplaySN();
+		}
+		return "Frame " + to_string(m_FrameNum) + " thread " + to_string(m_ThreadNum) + " " + m_Function.DisplaySN();
 	}
 
 	SNI_Variable * SNI_Frame::CreateTemporary()
