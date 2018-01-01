@@ -10,7 +10,7 @@ namespace SNI
 	{
 	}
 
-	SNI_Replacement::SNI_Replacement(SNI_Variable *p_From, SNI_Variable *p_To)
+	SNI_Replacement::SNI_Replacement(const SNI_Variable *p_From, SNI_Variable *p_To)
 		: m_From(p_From)
 		, m_To(p_To)
 	{

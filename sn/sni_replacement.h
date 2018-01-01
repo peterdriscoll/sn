@@ -14,7 +14,7 @@ namespace SNI
 	{
 	public:
 		SNI_Replacement();
-		SNI_Replacement(SNI_Variable *p_From, SNI_Variable *p_To);
+		SNI_Replacement(const SNI_Variable *p_From, SNI_Variable *p_To);
 		virtual ~SNI_Replacement();
 
 		SNI_Variable * ReplaceVariable(SNI_Variable * p_Variable);
@@ -24,7 +24,7 @@ namespace SNI
 
 
 	private:
-		SNI_Variable *m_From;
+		const SNI_Variable *m_From;
 		SNI_Variable *m_To;
 	};
 
