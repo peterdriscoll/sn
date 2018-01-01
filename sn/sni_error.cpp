@@ -15,7 +15,7 @@ namespace SNI
 		, m_Delay(p_Delay)
 		, m_Description(p_Description)
 	{
-		if (!m_Success && !p_Description.empty())
+		if (!m_Success && !p_Description.empty() && !SNI_World::ContextWorld())
 		{
 			LOG(WriteLine(SN::ErrorLevel, GetLogDescription()));
 			SNI_Manager::GetTopManager()->DebugCommand(SN::ErrorPoint, "Error");
