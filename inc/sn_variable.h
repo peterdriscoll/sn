@@ -41,6 +41,7 @@ namespace SN
 
 		string GetName();
 		void SetName(const string &p_Name);
+		string FrameName();
 
 		SN_Expression GetValue() const;
 

@@ -27,7 +27,11 @@ namespace SNI
 		, m_Delay(false)
 		, m_Description(p_Description)
 	{
-		SNI_Manager::GetTopManager()->DebugCommand(SN::ErrorPoint, "Error");
+		if (!m_Success && !p_Description.empty() && !SNI_World::ContextWorld())
+		{
+			LOG(WriteLine(SN::ErrorLevel, GetLogDescription()));
+			SNI_Manager::GetTopManager()->DebugCommand(SN::ErrorPoint, "Error");
+		}
 	}
 
 	SNI_Error::SNI_Error(const SNI_Error &p_Other)

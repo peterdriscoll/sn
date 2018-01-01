@@ -77,6 +77,11 @@ namespace SN
 		GetSNI_Variable()->SetName(p_Name);
 	}
 
+	string SN_Variable::FrameName()
+	{
+		return GetSNI_Variable()->FrameName();
+	}
+
 	SN_Expression SN_Variable::GetValue() const
 	{
 		return GetSNI_Variable()->GetValue();
