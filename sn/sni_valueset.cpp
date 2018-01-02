@@ -331,7 +331,8 @@ namespace SNI
 		SN::SN_Expression value(SNI_Helpers::Null);
 		bool oneValue = true;
 		bool found = false;
-		SN::SN_Expression loopError = SN::SN_Error(GetTypeName() + " has no values.");
+
+		SN::SN_Expression loopError;
 		SNI_World *contextWorld = SNI_World::ContextWorld();
 		for (SNI_TaggedValueList::iterator it = m_ValueList.begin(); it != m_ValueList.end();)
 		{
@@ -373,6 +374,10 @@ namespace SNI
 		}
 		if (!found)
 		{
+			if (loopError.IsNull())
+			{
+				return SN::SN_Error(GetTypeName() + " has no values.");
+			}
 			return loopError;
 		}
 		if (oneValue)
