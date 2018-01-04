@@ -6,6 +6,99 @@
 using namespace PGCX;
 using namespace skynet; // Interface namespace for SN.
 
+void TestCharInValueSet()
+{
+	Transaction transaction;
+
+	SN_DECLARE(B_Digit);
+	SN_DECLARE(d);
+
+	(Define(B_Digit)(d) == (d == (String("0") || String("1") || String("2") || String("3") || String("4")
+		|| String("5") || String("6") || String("7") || String("8") || String("9")))).PartialAssertAction();
+
+/*
+	(B_Digit(String("0"))).AssertAction();
+	(B_Digit(String("1"))).AssertAction();
+	(B_Digit(String("2"))).AssertAction();
+	(B_Digit(String("3"))).AssertAction();
+	(B_Digit(String("4"))).AssertAction();
+	(B_Digit(String("5"))).AssertAction();
+	(B_Digit(String("6"))).AssertAction();
+	(B_Digit(String("7"))).AssertAction();
+	(B_Digit(String("8"))).AssertAction();
+	(B_Digit(String("9"))).AssertAction();
+
+	(!B_Digit(String("X"))).AssertAction();
+*/
+	// These return a value set of bools.  Should this reduce to a boolean value???
+
+	(B_Digit(String("0"))).EvaluateAction();
+	(B_Digit(String("1"))).EvaluateAction();
+	(B_Digit(String("2"))).EvaluateAction();
+	(B_Digit(String("3"))).EvaluateAction();
+	(B_Digit(String("4"))).EvaluateAction();
+	(B_Digit(String("5"))).EvaluateAction();
+	(B_Digit(String("6"))).EvaluateAction();
+	(B_Digit(String("7"))).EvaluateAction();
+	(B_Digit(String("8"))).EvaluateAction();
+	(B_Digit(String("9"))).EvaluateAction();
+
+	(!B_Digit(String("X"))).EvaluateAction();
+}
+
+
+void TestValueSetOfStandardFunctions()
+{
+	Transaction transaction;
+
+	SN_DECLARE(f);
+	(f == (skynet::Add || skynet::Multiply)).AssertAction();
+	string f_string = f.DisplaySN();
+
+	SN_DECLARE(x);
+	(x == f(long(8))(long(13))).AssertAction();
+	string x_string = x.BuildSet().Evaluate().DisplaySN();
+	(x < long(30)).AssertAction();
+	string x_string2 = x.DisplaySN();
+	long x_num = Long(x).GetNumber();
+	(x == Long(21)).AssertAction();
+}
+
+
+void TestValueSetOfLambdaFunctions()
+{
+	Transaction transaction;
+
+	SN_DECLARE(plus);
+	SN_DECLARE(times);
+
+	{
+		SN_DECLARE(a);
+		SN_DECLARE(b);
+
+		(Define(plus)(a)(b) == a + b).PartialAssertAction();
+
+		SN_DECLARE(c);
+		SN_DECLARE(d);
+
+		(Define(times)(c)(d) == c * d).PartialAssertAction();
+	}
+	string s_plus = plus.DisplayValueSN();
+	string s_times = times.DisplayValueSN();
+	string s_plus_times = (plus || times).Evaluate().DisplaySN();
+	string s_plus_times2 = (plus || times).Evaluate().DisplaySN();
+
+	SN_DECLARE(f);
+	(f == (plus || times)).AssertAction();
+	string f_string = f.DisplaySN();
+
+	SN_DECLARE(x);
+	(x == f(long(5))(long(8))).AssertAction();
+	string x_string = x.DisplaySN();
+	(x < long(20)).AssertAction();
+	(x == long(13)).AssertAction();
+}
+
 void TestValueSetOfStringFunctions()
 {
 	Transaction transaction;
@@ -146,7 +239,10 @@ void main(int argc, char *argv[])
 	Transaction transaction;
 	try
 	{
-		TestValueSetOfStringFunctions();
+		TestCharInValueSet();
+		// TestValueSetOfStandardFunctions();
+		// TestValueSetOfLambdaFunctions();
+		// TestValueSetOfStringFunctions();
 		// TestPythagoras();
 		// TestSimple();
 		// TestChurchDivide();

@@ -46,7 +46,7 @@ namespace SNI
 		int  GetCh();
 
 		bool IsBreakPoint(SN::InterruptPoint p_InterruptPoint, long p_ThreadNum, long p_FrameStackDepth);
-		void DebugCommand(SN::InterruptPoint p_InterruptPoint, string p_Text);
+		void DebugCommand(SN::InterruptPoint p_InterruptPoint, const string & p_Text);
 
 		ostream * CreateLogFile(SN::LoggingLevel);
 
@@ -57,6 +57,8 @@ namespace SNI
 		string m_LogFilePath;
 
 		OnErrorHandler *m_ErrorHandler;
+
+		void ProcessCommand(const string & p_Text);
 
 		size_t m_MaxCardinalityCall;
 		size_t m_MaxCardinalityUnify;

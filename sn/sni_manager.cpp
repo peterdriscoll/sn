@@ -11,13 +11,17 @@
 #include "sn_pch.h"
 
 #define VK_F5 63
-#define VK_SHIFT_F5 64
+#define VK_SHIFT_F5 88
+#define VK_F6 64
+#define VK_SHIFT_F6 89
 #define VK_F10 68
 #define VK_F11 133
 #define VK_SHIFT_F11 135
 #define VK_F12 136
 #define VK_H 104
 #define VK_SHIFT_H 72
+
+#define MAX_DEPTH_CHARS 20
 
 namespace SNI
 {
@@ -53,6 +57,9 @@ namespace SNI
 		, m_MaxCardinalityCall(p_MaxCardinalityCall)
 		, m_MaxCardinalityUnify(p_MaxCardinalityUnify)
 		, m_LogFilePath(DefaultLogFilePath)
+		, m_HasConsole(false)
+		, m_KbHit(NULL)
+		, m_GetCh(NULL)
 	{
 		m_LastManager = m_TopManager;
 		m_TopManager = this;
@@ -179,60 +186,97 @@ namespace SNI
 		return false;
 	}
 
-	void SNI_Manager::DebugCommand(SN::InterruptPoint p_InterruptPoint, string p_Text)
+	void SNI_Manager::DebugCommand(SN::InterruptPoint p_InterruptPoint, const string &p_Text)
+	{
+		if (!HasConsole())
+		{
+			return;
+		}
+		long l_ThreadNum = SNI_Frame::GetThreadNum();
+		long l_FrameStackDepth = SNI_Frame::GetFrameStackDepth();
+		if (KbHit())
+		{
+			ProcessCommand(p_Text);
+		}
+		if (IsBreakPoint(p_InterruptPoint, l_ThreadNum, l_FrameStackDepth))
+		{
+			ProcessCommand(p_Text);
+		}
+	}
+
+	void SNI_Manager::ProcessCommand(const string &p_Text)
 	{
 		long l_ThreadNum = SNI_Frame::GetThreadNum();
 		long l_FrameStackDepth = SNI_Frame::GetFrameStackDepth();
-		if (HasConsole() && IsBreakPoint(p_InterruptPoint, l_ThreadNum, l_FrameStackDepth))
+		m_DebugAction = SN::None;
+		m_ThreadNum = l_ThreadNum;
+		m_FrameStackDepth = l_FrameStackDepth;
+		bool displayPrompt = true;
+		while (m_DebugAction == SN::None)
 		{
-			m_DebugAction = SN::None;
-			m_ThreadNum = l_ThreadNum;
-			m_FrameStackDepth = l_FrameStackDepth;
-			cout << p_Text << ">> ";
-			while (m_DebugAction == SN::None)
+			if (displayPrompt)
 			{
-				int response = GetCh();
-				switch (response)
-				{
-				case VK_F5:
-					cout << "F5 - Run\n";
-					m_DebugAction = SN::Run;
-					break;
-				case VK_SHIFT_F5:
-					cout << "Shift F5 - Run to end\n";
-					m_DebugAction = SN::RunToEnd;
-					break;
-				case VK_F10:
-					cout << "F10 - Step over\n";
-					m_DebugAction = SN::StepOver;
-					break;
-				case VK_F11:
-					cout << "F11 -  Step into\n";
-					m_DebugAction = SN::StepInto;
-					break;
-				case VK_SHIFT_F11:
-					cout << "Shift F11 - Step out\n";
-					m_DebugAction = SN::StepOut;
-					break;
-				case VK_F12:
-					cout << "F12 - Step to parameter\n";
-					m_DebugAction = SN::StepParameter;
-					break;
-				case VK_H:
-				case VK_SHIFT_H:
-				{
-					cout << "Help:\n";
-					cout << "F5        - Run\n";
-					cout << "F10       - Step over\n";
-					cout << "F11       - Step into\n";
-					cout << "Shift F11 - Step out\n";
-					cout << "F12       - Step to parameter\n";
-					cout << "h, H      - Help\n";
-					break;
-				}
-				default:
-					break;
-				}
+				cout << p_Text << ">> ";
+			}
+			displayPrompt = true;
+			int response = GetCh();
+			switch (response)
+			{
+			case VK_F5:
+				cout << "F5 - Run\n";
+				m_DebugAction = SN::Run;
+				break;
+			case VK_SHIFT_F5:
+				cout << "Shift F5 - Run to end\n";
+				m_DebugAction = SN::RunToEnd;
+				break;
+			case VK_F6:
+				cout << "F6 - Display stack\n";
+				// SNI_Log::GetLog()->WriteFrameStack(SN::DebugLevel, -1);
+				break;
+			case VK_SHIFT_F6:
+			{
+				cout << "F6 - Display stack\nEnter depth >> ";
+				char buffer[MAX_DEPTH_CHARS];
+				cin.getline(buffer, MAX_DEPTH_CHARS);
+				long depth = atol(buffer);
+				// SNI_Log::GetLog()->WriteFrameStack(SN::DebugLevel, depth);
+				break;
+			}
+			case VK_F10:
+				cout << "F10 - Step over\n";
+				m_DebugAction = SN::StepOver;
+				break;
+			case VK_F11:
+				cout << "F11 -  Step into\n";
+				m_DebugAction = SN::StepInto;
+				break;
+			case VK_SHIFT_F11:
+				cout << "Shift F11 - Step out\n";
+				m_DebugAction = SN::StepOut;
+				break;
+			case VK_F12:
+				cout << "F12 - Step to parameter\n";
+				m_DebugAction = SN::StepParameter;
+				break;
+			case VK_H:
+			case VK_SHIFT_H:
+			{
+				cout << "Help:\n";
+				cout << "F5        - Run\n";
+				cout << "Shift F5  - Run to end (ignore breakpoints)\n";
+				cout << "F6        - Frame stack\n";
+				cout << "Shift F6  - Frame stack to depth\n";
+				cout << "F10       - Step over\n";
+				cout << "F11       - Step into\n";
+				cout << "Shift F11 - Step out\n";
+				cout << "F12       - Step to parameter\n";
+				cout << "h, H      - Help\n";
+				break;
+			}
+			default:
+				displayPrompt = false;
+				break;
 			}
 		}
 	}
