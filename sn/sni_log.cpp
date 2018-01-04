@@ -81,4 +81,23 @@ namespace SNI
 	{
 		WriteLine(p_DebugLevel, p_Result.DisplayValueSN() + " == " + p_Expression.DisplayValueSN());
 	}
+
+	void SNI_Log::WriteContext(SN::LoggingLevel p_DebugLevel, const string & p_Text)
+	{
+		SNI_World *world = SNI_World::ContextWorld();
+		if (world)
+		{
+			WriteLine(p_DebugLevel, p_Text + world->DisplayShort());
+		}
+		else
+		{
+			WriteLine(p_DebugLevel, p_Text + "global context");
+		}
+
+	}
+
+	void SNI_Log::WriteFrameStack(SN::LoggingLevel p_DebugLevel, long p_Depth)
+	{
+		SNI_Frame::DisplayFrameStack(p_Depth);
+	}
 }

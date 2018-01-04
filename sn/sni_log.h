@@ -38,6 +38,8 @@ namespace SNI
 
 		void WriteExpression(SN::LoggingLevel p_DebugLevel, SN::SN_Expression p_Result, SN::SN_Expression p_Expression);
 
+		void WriteContext(SN::LoggingLevel p_DebugLevel, const string &p_Text);
+		void WriteFrameStack(SN::LoggingLevel p_DebugLevel, long p_Depth);
 	private:
 		static SNI_Log *m_Log;
 
