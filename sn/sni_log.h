@@ -9,7 +9,7 @@
 #include <vector>
 #include <ostream>
 
-//#define _LOG
+#define _LOG
 #ifdef _LOG
 #define LOG(content) SNI_Log::GetLog()->content
 #else

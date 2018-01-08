@@ -82,19 +82,49 @@ namespace SNI
 		return 100;
 	}
 
+	bool SNI_ValueSet::IsComplete() const
+	{
+		if (m_WorldSet)
+		{
+			if (!m_WorldSet->IsComplete())
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	void SNI_ValueSet::Complete()
+	{
+		if (m_WorldSet)
+		{
+			m_WorldSet->Complete();
+		}
+	}
+
 	bool SNI_ValueSet::IsKnownValue() const
 	{
 		SNI_World *contextWorld = SNI_World::ContextWorld();
-		for (const SNI_TaggedValue &tv : m_ValueList)
+		if (contextWorld)
 		{
-			SNI_World *world = tv.GetWorld();
-			if (!world || !world->IsEmpty())
+			if (IsComplete())
 			{
-				if (!contextWorld || contextWorld->CompatibleWorld(world))
+				for (const SNI_TaggedValue &tv : m_ValueList)
 				{
-					return true;
+					SNI_World *world = tv.GetWorld();
+					if (!world || !world->IsEmpty())
+					{
+						if (contextWorld->CompatibleWorld(world))
+						{
+							return true;
+						}
+					}
 				}
 			}
+		}
+		else
+		{
+			return IsComplete() && !m_ValueList.empty();
 		}
 		return false;
 	}
@@ -166,9 +196,9 @@ namespace SNI
 			m_Variable = p_Variable;
 		}
 		// Construct worlds from each value for the variable.
-		if (0 < m_ValueList.size())
+		if (0 < m_ValueList.size() && !m_WorldSet)
 		{
-			SNI_WorldSet * worldSet = new SNI_WorldSet();
+			SNI_WorldSet * worldSet = GetWorldSet();
 			SNI_World *contextWorld = SNI_World::ContextWorld();
 			for (SNI_TaggedValue &tv : m_ValueList)
 			{
@@ -185,6 +215,7 @@ namespace SNI
 					}
 				}
 			}
+			worldSet->Complete();
 		}
 	}
 
@@ -264,6 +295,7 @@ namespace SNI
 								AddTaggedValue(vsValue, splitWorld);
 							}
 						}
+						vsWorldSet->Complete();
 					}
 				}
 			}
@@ -441,7 +473,7 @@ namespace SNI
 		SN::SN_Error err(true);
 		bool success = false;
 		SNI_World *contextWorld = SNI_World::ContextWorld();
-		SNI_WorldSet *worldSet = new SNI_WorldSet();
+		SNI_WorldSet *worldSet = GetWorldSet();
 		for (SNI_TaggedValue &tv : m_ValueList)
 		{
 			SNI_World *world = tv.GetWorld();
@@ -484,6 +516,7 @@ namespace SNI
 				}
 			}
 		}
+		worldSet->Complete();
 		if (success)
 		{
 			return SN::SN_Error(success);
@@ -495,6 +528,7 @@ namespace SNI
 	SN::SN_Error SNI_ValueSet::ForEach(std::function<SN::SN_Error(const SN::SN_Expression &p_Param, SNI_World *p_World)> p_Action)
 	{
 		SNI_World *contextWorld = SNI_World::ContextWorld();
+		SNI_WorldSet *worldSet = GetWorldSet();
 		for (SNI_TaggedValue &tv : m_ValueList)
 		{
 			SNI_World *world = tv.GetWorld();
@@ -503,26 +537,41 @@ namespace SNI
 				SN::SN_Value l_Value = tv.GetValue().GetVariableValue();
 				if (!world)
 				{
-					world = GetWorldSet()->CreateWorld();
+					world = worldSet->CreateWorld();
 					tv.SetWorld(world);
 				}
 				p_Action(l_Value, world);
 			}
 		}
+		worldSet->Complete();
 		return true;
 	}
 
 	SN::SN_Error SNI_ValueSet::ForEachCart(long p_Depth, SNI_Cart *p_Cart)
 	{
 		SNI_World *contextWorld = SNI_World::ContextWorld();
+		static long dog = 0;
+		static long depth = 0;
+		long loop = 0;
+		if (depth == 0)
+		{
+			dog++;
+		}
+		depth++;
 		for (SNI_TaggedValue &tv : m_ValueList)
 		{
+			loop++;
+			if (dog == 6 && depth == 2 && loop == 2)
+			{
+				long cat = 5;
+			}
 			SNI_World *world = tv.GetWorld();
 			if (!contextWorld || contextWorld->CompatibleWorld(world))
 			{
 				SN::SN_Error e = p_Cart->ProcessValue(p_Depth, tv.GetValue(), world);
 			}
 		}
+		depth--;
 		return true;
 	}
 
@@ -729,6 +778,7 @@ namespace SNI
 					result.AddTaggedValue(tv.GetValue(), newWorld);
 				}
 			}
+			worldSet->Complete();
 		}
 		SN::SN_Expression other_expression = p_Other;
 		if (SN::Is<SNI_ValueSet *>(other_expression))
@@ -744,6 +794,7 @@ namespace SNI
 					result.AddTaggedValue(other[j].GetValue(), newWorld);
 				}
 			}
+			worldSet->Complete();
 		}
 		else
 		{
@@ -851,6 +902,7 @@ namespace SNI
 			}
 		}
 
+		worldSet->Complete();
 		return LOG_RETURN(context, result);
 	}
 

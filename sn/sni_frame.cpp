@@ -9,13 +9,18 @@ namespace SNI
 	long m_MaxThreadNum = 0;
 	thread_local long t_ThreadNum = -1;
 	thread_local long t_MaxFrameNum = 0;
-	SNI_FrameList m_FrameStack;
+	thread_local SNI_FrameList m_FrameStack;
 
 	/*static*/ SNI_Frame *SNI_Frame::Push(const SNI_Variable *p_Variable)
 	{
 		SNI_Frame *newFrame = new SNI_Frame(p_Variable);
 		m_FrameStack.push_back(newFrame);
 		return newFrame;
+	}
+
+	/*static*/ void SNI_Frame::PushFrame(SNI_Frame *p_Frame)
+	{
+		m_FrameStack.push_back(p_Frame);
 	}
 
 	/*static*/ void SNI_Frame::Pop()

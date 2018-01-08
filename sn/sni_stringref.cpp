@@ -124,6 +124,7 @@ namespace SNI
 					return true;
 				});
 			});
+			worldSet->Complete();
 		}
 	}
 
@@ -174,6 +175,7 @@ namespace SNI
 				});
 				return true;
 			});
+			worldSet->Complete();
 		}
 	}
 
@@ -577,14 +579,18 @@ namespace SNI
 			}
 			SN::SN_ValueSet vs_start;
 			SN::SN_ValueSet vs_end;
+			SNI_WorldSet *ws_start = vs_start.GetWorldSet();
+			SNI_WorldSet *ws_end = vs_end.GetWorldSet();
 			size_t pos = start_pos;
 			size_t find_pos = 0;
 			while ((find_pos = GetSourceString().find(part_text, pos)) != string::npos)
 			{
-				vs_start.AddTaggedValue(SN::SN_Long((long) find_pos), vs_start.GetWorldSet()->CreateWorld());
-				vs_end.AddTaggedValue(SN::SN_Long((long) find_pos + part_len), vs_end.GetWorldSet()->CreateWorld());
+				vs_start.AddTaggedValue(SN::SN_Long((long) find_pos), ws_start->CreateWorld());
+				vs_end.AddTaggedValue(SN::SN_Long((long) find_pos + part_len), ws_end->CreateWorld());
 				pos = find_pos + 1;
 			}
+			ws_start->Complete();
+			ws_end->Complete();
 			if (vs_start.Length())
 			{
 				const_cast<SNI_StringRef *>(this)->m_Start.AssertValue(vs_start.SimplifyValue());
@@ -665,6 +671,7 @@ namespace SNI
 				}
 				pos = find_pos + 1;
 			}
+			worldSet->Complete();
 			if (vs_start.Length())
 			{
 				const_cast<SNI_StringRef *>(this)->m_End.AssertValue(vs_end.SimplifyValue());
@@ -850,9 +857,10 @@ namespace SNI
 					return skynet::False;
 				}
 				SN::SN_ValueSet result;
-				SNI_World *worldTrue = result.GetWorldSet()->CreateWorld();
+				SNI_WorldSet *ws_result = result.GetWorldSet();
+				SNI_World *worldTrue = ws_result->CreateWorld();
 				result.AddTaggedValue(skynet::True, worldTrue);
-				SNI_World *worldFalse = result.GetWorldSet()->CreateWorld();
+				SNI_World *worldFalse = ws_result->CreateWorld();
 				result.AddTaggedValue(skynet::False, worldFalse);
 				SN::SN_ValueSet endVS;
 				SN::SN_Variable endVar;
@@ -864,6 +872,7 @@ namespace SNI
 				endVS.AddTaggedValue(SN::SN_Long((long) (start_pos + p_Other->GetString().length())), worldTrue);
 				endVS.AddTaggedValue(endVar, worldFalse);
 				const_cast<SNI_StringRef *>(this)->m_End = endVS;
+				ws_result->Complete();
 				return result;
 			}
 			if (start.IsNullValue() && !end.IsNullValue())
@@ -875,9 +884,10 @@ namespace SNI
 					return skynet::False;
 				}
 				SN::SN_ValueSet result;
-				SNI_World *worldTrue = result.GetWorldSet()->CreateWorld();
+				SNI_WorldSet *ws_result = result.GetWorldSet();
+				SNI_World *worldTrue = ws_result->CreateWorld();
 				result.AddTaggedValue(skynet::True, worldTrue);
-				SNI_World *worldFalse = result.GetWorldSet()->CreateWorld();
+				SNI_World *worldFalse = ws_result->CreateWorld();
 				result.AddTaggedValue(skynet::False, worldFalse);
 				SN::SN_Variable startVar;
 				SN::SN_Expression *l_ParameterList = new SN::SN_Expression[3];
@@ -889,6 +899,7 @@ namespace SNI
 				startVS.AddTaggedValue(SN::SN_Long((long) (end_pos - p_Other->GetString().length())), worldTrue);
 				startVS.AddTaggedValue(startVar, worldFalse);
 				const_cast<SNI_StringRef *>(this)->m_Start = startVS;
+				ws_result->Complete();
 				return result;
 			}
 			return skynet::Null;

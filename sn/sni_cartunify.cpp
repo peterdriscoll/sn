@@ -47,6 +47,10 @@ namespace SNI
 
 	SNI_CartUnify::~SNI_CartUnify()
 	{
+		if (m_WorldSet)
+		{
+			m_WorldSet->Complete();
+		}
 		delete [] m_ValueList;
 		delete [] m_WorldList;
 		delete [] m_ValueCalcPos;
@@ -76,7 +80,9 @@ namespace SNI
 			}
 			else
 			{
+				long dog = 10;
 				e = m_InputList[p_Depth+1].GetSNI_Expression()->ForEachCart(p_Depth+1, this);
+				dog++;
 			}
 		}
 		else
@@ -137,8 +143,10 @@ namespace SNI
 	{
 		for (size_t j = 0; j < m_Depth; j++)
 		{
+			m_InputList[j].GetSNI_Expression()->Complete();
 			if (m_Output[j])
 			{
+
 				SN::SN_Value simple = m_InputList[j].SimplifyValue();
 				SN::SN_Error  e = m_ParamList[j].AssertValue(simple);
 				if (e.IsError())

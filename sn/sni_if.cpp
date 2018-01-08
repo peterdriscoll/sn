@@ -166,8 +166,10 @@ namespace SNI
 	{
 		SN::SN_ValueSet condition;
 		SNI_WorldSet *condition_worldSet = new SNI_WorldSet;
+		condition.SetWorldSet(condition_worldSet);
 		condition.AddTaggedValue(skynet::False, condition_worldSet->CreateWorld());
 		condition.AddTaggedValue(skynet::True, condition_worldSet->CreateWorld());
+		condition_worldSet->Complete();
 		SN::SN_Error e1 = p_ParameterList[1].AssertValue(condition);
 		if (e1.IsError())
 		{

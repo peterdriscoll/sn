@@ -27,15 +27,17 @@ namespace SNI
 	SNI_DelayedCall::SNI_DelayedCall()
 		: m_ParameterList(NULL)
 		, m_Scheduled(false)
+		, m_Frame(NULL)
 		, m_World(NULL)
 	{
 	}
 
-	SNI_DelayedCall::SNI_DelayedCall(SN::SN_FunctionDef p_Function, SN::SN_Expression *p_ParameterList, SNI_World * p_World)
+	SNI_DelayedCall::SNI_DelayedCall(SN::SN_FunctionDef p_Function, SN::SN_Expression *p_ParameterList, SNI_Frame *p_Frame, SNI_World * p_World)
 		: m_Function(p_Function)
 		, m_ParameterList(p_ParameterList)
 		, m_Scheduled(false)
 		, m_Locked(false)
+		, m_Frame(p_Frame)
 		, m_World(NULL)
 	{
 	}
@@ -57,7 +59,9 @@ namespace SNI
 
 	bool SNI_DelayedCall::Run()
 	{
+		SNI_Frame::PushFrame(m_Frame);
 		m_Error = m_Function.GetSNI_FunctionDef()->UnifyArray(m_ParameterList);
+		SNI_Frame::Pop();
 		if (m_Error.IsError())
 		{
 			if (m_World)

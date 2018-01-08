@@ -95,6 +95,8 @@ namespace SNI
 
 		virtual bool IsNull() const;
 		virtual bool IsKnownValue() const;
+		virtual bool IsComplete() const;
+		virtual void Complete();
 		virtual bool IsVariable() const;
 		virtual bool IsNullValue() const;
 		virtual bool IsReferableValue() const;

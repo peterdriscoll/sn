@@ -17,6 +17,7 @@ namespace SNI
 		PGC_CLASS(SNI_Frame)
 	public:
 		static SNI_Frame *Push(const SNI_Variable *p_Variable);
+		static void PushFrame(SNI_Frame * p_Frame);
 		static void Pop();
 		static SNI_Frame *Top();
 		static long GetThreadNum();

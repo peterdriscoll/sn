@@ -16,6 +16,7 @@ namespace SNI
 
 	SNI_WorldSet::SNI_WorldSet()
 		: m_Mark(false)
+		, m_Complete(false)
 		, m_WorldSetNo(++m_NextWorldSetNo)
 		, m_NextWorldNo(0)
 	{
@@ -301,5 +302,24 @@ namespace SNI
 			return m_ChildSetList[0];
 		}
 		return NULL;
+	}
+	bool SNI_WorldSet::IsComplete()
+	{
+		if (!m_Complete)
+		{
+			return false;
+		}
+		for (SNI_WorldSet *worldSet : m_ChildSetList)
+		{
+			if (!worldSet->IsComplete())
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	void SNI_WorldSet::Complete()
+	{
+		m_Complete = true;
 	}
 }

@@ -41,6 +41,8 @@ namespace SNI
 		// Members
 		virtual bool IsString() const;
 		virtual bool IsKnownValue() const;
+		virtual bool IsComplete() const;
+		virtual void Complete();
 		virtual bool AllValues() const;
 		virtual size_t Length() const;
 		SNI_TaggedValue &operator[](long p_index);

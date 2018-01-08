@@ -182,6 +182,15 @@ namespace SNI
 		return false;
 	}
 
+	bool SNI_Expression::IsComplete() const
+	{
+		return true;
+	}
+	
+	void SNI_Expression::Complete()
+	{
+	}
+
 	bool SNI_Expression::IsVariable() const
 	{
 		return false;
