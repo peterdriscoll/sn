@@ -355,6 +355,10 @@ namespace SNI
 		for (long j = 0; j < depth; j++)
 		{
 			p_ParamList[j] = inputList[j];
+			if (output[j])
+			{
+				p_ParamList[j].GetSNI_Expression()->Complete();
+			}
 		}
 		delete[] output;
 		return e;

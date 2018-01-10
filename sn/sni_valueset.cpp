@@ -57,6 +57,23 @@ namespace SNI
 	{
 	}
 
+	void SNI_ValueSet::CheckWorldSetConsistency()
+	{
+		return;
+		for (const SNI_TaggedValue &tv : m_ValueList)
+		{
+			SNI_World *world = tv.GetWorld();
+			if (world)
+			{
+				ASSERTM(world->GetWorldSet() == m_WorldSet, "World set inconsidtency");
+			}
+			else
+			{
+				ASSERTM(!m_WorldSet, "Null world for null world set inconsidtency");
+			}
+		}
+	}
+
 	SNI_ValueSet::SNI_ValueSet(const SNI_ValueSet &)
 		: m_WorldSet(NULL)
 	{
@@ -74,7 +91,12 @@ namespace SNI
 
 	string SNI_ValueSet::DisplaySN(long /*priority*/, SNI_VariablePointerList & p_DisplayVariableList) const
 	{
-		return "[" + DisplayPmTaggedExpressionList(m_ValueList, p_DisplayVariableList) + "]";
+		string status;
+		if (!IsComplete())
+		{
+			status = "incomplete:";
+		}
+		return status + "[" + DisplayPmTaggedExpressionList(m_ValueList, p_DisplayVariableList) + "]";
 	}
 
 	long SNI_ValueSet::GetPriority() const
@@ -186,6 +208,9 @@ namespace SNI
 				}
 			}
 		}
+		CheckWorldSetConsistency();
+		LOG(WriteLine(SN::DebugLevel, result.DisplaySN()));
+		SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, GetTypeName() + ".Clone");
 		return dynamic_cast<SNI_Expression *>(result.GetSNI_ValueSet());
 	}
 
@@ -216,6 +241,7 @@ namespace SNI
 				}
 			}
 			worldSet->Complete();
+			CheckWorldSetConsistency();
 		}
 	}
 
@@ -230,6 +256,7 @@ namespace SNI
 
 	void SNI_ValueSet::RemoveFailedWorlds()
 	{
+		CheckWorldSetConsistency();
 		SNI_WorldSet *worldSet = NULL;
 		SNI_WorldSet *parentWorldSet = NULL;
 		bool oneParent = true;
@@ -266,6 +293,7 @@ namespace SNI
 			}
 			SetWorldSet(parentWorldSet);
 		}
+		CheckWorldSetConsistency();
 	}
 
 	void SNI_ValueSet::FlattenValueSets()
@@ -470,6 +498,7 @@ namespace SNI
 	SN::SN_Expression SNI_ValueSet::Unify(SN::SN_ExpressionList * p_ParameterList)
 	{
 		SN::LogContext context("SNI_ValueSet::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		CheckWorldSetConsistency();
 		SN::SN_Error err(true);
 		bool success = false;
 		SNI_World *contextWorld = SNI_World::ContextWorld();
@@ -517,6 +546,7 @@ namespace SNI
 			}
 		}
 		worldSet->Complete();
+		SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after all values");
 		if (success)
 		{
 			return SN::SN_Error(success);
@@ -544,6 +574,7 @@ namespace SNI
 			}
 		}
 		worldSet->Complete();
+		CheckWorldSetConsistency();
 		return true;
 	}
 
@@ -578,6 +609,7 @@ namespace SNI
 	void SNI_ValueSet::ForEachSplit(SNI_Splitter * p_Splitter)
 	{
 		SNI_World *contextWorld = SNI_World::ContextWorld();
+		p_Splitter->SetWorldSet(GetWorldSet());
 		for (SNI_TaggedValue &tv : m_ValueList)
 		{
 			SNI_World *world = tv.GetWorld();
