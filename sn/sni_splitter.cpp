@@ -52,3 +52,9 @@ void SNI_Splitter::ProcessValueSplit(const SN::SN_Expression & p_Param, SNI_Worl
 		m_Positive.AddTaggedValue(skynet::Null, p_World);
 	}
 }
+
+void SNI_Splitter::SetWorldSet(SNI_WorldSet *p_WorldSet)
+{
+	m_Negative.SetWorldSet(p_WorldSet);
+	m_Positive.SetWorldSet(p_WorldSet);
+}

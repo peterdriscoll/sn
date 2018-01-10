@@ -40,6 +40,9 @@ namespace SNI
 		void SetFrame(SNI_Frame *p_Frame);
 		string FrameName() const;
 
+		virtual bool IsComplete() const;
+		virtual void Complete();
+
 		virtual bool IsRequested() const;
 		virtual bool IsNullValue() const;
 		virtual bool IsKnownValue() const;

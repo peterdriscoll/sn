@@ -59,9 +59,15 @@ namespace SNI
 
 	bool SNI_DelayedCall::Run()
 	{
-		SNI_Frame::PushFrame(m_Frame);
+		if (m_Frame)
+		{
+			SNI_Frame::PushFrame(m_Frame);
+		}
 		m_Error = m_Function.GetSNI_FunctionDef()->UnifyArray(m_ParameterList);
-		SNI_Frame::Pop();
+		if (m_Frame)
+		{
+			SNI_Frame::Pop();
+		}
 		if (m_Error.IsError())
 		{
 			if (m_World)

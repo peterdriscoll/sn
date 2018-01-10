@@ -6,6 +6,7 @@
 using namespace PGCX;
 using namespace skynet; // Interface namespace for SN.
 
+
 void TestCharInValueSet()
 {
 	Transaction transaction;
@@ -239,8 +240,8 @@ void main(int argc, char *argv[])
 	Transaction transaction;
 	try
 	{
-		TestCharInValueSet();
-		// TestValueSetOfStandardFunctions();
+		// TestCharInValueSet();
+		TestValueSetOfStandardFunctions();
 		// TestValueSetOfLambdaFunctions();
 		// TestValueSetOfStringFunctions();
 		// TestPythagoras();

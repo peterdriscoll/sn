@@ -198,7 +198,9 @@ namespace SNI
 	{
 		if (p_Parentworld)
 		{
-			return new SNI_World(this, p_Parentworld);
+			SNI_World * world = new SNI_World(this, p_Parentworld);
+			m_WorldList.push_back(world);
+			return world;
 		}
 		return NULL;
 	}

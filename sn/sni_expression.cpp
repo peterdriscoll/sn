@@ -408,6 +408,7 @@ namespace SNI
 
 	void SNI_Expression::HandleAssertAction(SN::LogContext & p_Context, SN::SN_Expression p_Result, string p_Text)
 	{
+		SNI_DelayedProcessor::GetProcessor()->Run();
 		SN::SN_Error e = p_Result;
 		if (e.IsError())
 		{
@@ -433,6 +434,7 @@ namespace SNI
 
 	void SNI_Expression::HandleEvaluateAction(SN::LogContext &p_Context, SN::SN_Expression p_Result, string p_Text)
 	{
+		SNI_DelayedProcessor::GetProcessor()->Run();
 		SN::SN_Error e = p_Result;
 		SN::SN_Bool b = p_Result;
 		if (b.IsNull())

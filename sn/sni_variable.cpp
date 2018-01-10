@@ -56,6 +56,23 @@ namespace SNI
 	{
 	}
 
+	bool SNI_Variable::IsComplete() const
+	{
+		if (m_Value)
+		{
+			return m_Value->IsComplete();
+		}
+		return true;
+	}
+
+	void SNI_Variable::Complete()
+	{
+		if (m_Value)
+		{
+			m_Value->Complete();
+		}
+	}
+
 	bool SNI_Variable::IsRequested() const
 	{
 		return m_Requested;

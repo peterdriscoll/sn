@@ -26,6 +26,8 @@ namespace SNI
 
 		void ProcessValueSplit(const SN::SN_Expression & p_Param, SNI_World * p_World);
 
+		void SetWorldSet(SNI_WorldSet * p_WorldSet);
+
 	private:
 		SN::SN_ValueSet m_Positive;
 		SN::SN_ValueSet m_Negative;
