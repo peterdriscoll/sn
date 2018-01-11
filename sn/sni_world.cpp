@@ -120,7 +120,6 @@ namespace SNI
 		{
 			return true;
 		}
-		//ASSERTM(p_World, "Attempt to add null child world.");
 		p_World->Mark(false);
 		Mark(true);
 		if (!p_World->HasMutualExclusion())
@@ -129,6 +128,7 @@ namespace SNI
 		}
 		return false;
 	}
+
 
 	bool SNI_World::Contains(SNI_World *p_World) const
 	{

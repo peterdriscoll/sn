@@ -195,16 +195,25 @@ namespace SNI
 		SN::SN_ValueSet result;
 		if (0 < m_ValueList.size())
 		{
+			SNI_WorldSet *worldSet = GetWorldSet();
+			SNI_WorldSet *worldSetClone = NULL;
+			if (worldSet)
+			{
+				worldSetClone = worldSet->Clone();
+				result.SetWorldSet(worldSetClone);
+			}
 			SNI_World *contextWorld = SNI_World::ContextWorld();
 			for (SNI_TaggedValue &tv : m_ValueList)
 			{
 				SNI_World *world = tv.GetWorld();
-				if (!world || !world->IsEmpty())
+				if (!contextWorld || contextWorld->CompatibleWorld(world))
 				{
-					if (!world || !contextWorld || contextWorld->CompatibleWorld(world))
+					SNI_World *cloneWorld = worldSetClone->CreateCloneWorld(world);
+					if (worldSetClone)
 					{
-						result.AddTaggedValue(tv.GetValue().GetSNI_Expression()->Clone(p_Frame, p_Changed), world);
+						cloneWorld = worldSetClone->CreateCloneWorld(world);
 					}
+					result.AddTaggedValue(tv.GetValue().GetSNI_Expression()->Clone(p_Frame, p_Changed), cloneWorld);
 				}
 			}
 		}
@@ -506,7 +515,11 @@ namespace SNI
 		for (SNI_TaggedValue &tv : m_ValueList)
 		{
 			SNI_World *world = tv.GetWorld();
-			if (!world)
+			if (world)
+			{
+				world->Activate();
+			}
+			else
 			{
 				world = worldSet->CreateWorld();
 			}
