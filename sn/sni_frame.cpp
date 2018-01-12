@@ -129,6 +129,7 @@ namespace SNI
 		string typeLine;
 		vector<string> data;
 		size_t minFixedWidth = 0;
+		size_t debugFieldWidth = SNI_Manager::GetTopManager()->DebugFieldWidth();
 		string delimeter = "";
 		bool hasMoreRows = true;
 		string filler;
@@ -169,6 +170,10 @@ namespace SNI
 					return SN::SN_Error(true);
 				}
 			);
+			if (debugFieldWidth < fixedWidth)
+			{
+				fixedWidth = debugFieldWidth;
+			}
 			heading += delimeter + Pad(name, fixedWidth);
 			typeLine += delimeter + Pad(typeText, fixedWidth);
 			size_t row = 0;
@@ -215,11 +220,12 @@ namespace SNI
 
 	string SNI_Frame::GetLogShortDescription()
 	{
+		size_t debugTitleWidth = SNI_Manager::GetTopManager()->DebugTitleWidth();
 		if (m_ThreadNum == 1)
 		{
-			return "Frame " + to_string(m_FrameNum) + " " + m_Function.DisplaySN();
+			return "Frame " + to_string(m_FrameNum) + " " + Pad(m_Function.DisplaySN(), debugTitleWidth);
 		}
-		return "Frame " + to_string(m_FrameNum) + " thread " + to_string(m_ThreadNum) + " " + m_Function.DisplaySN();
+		return "Frame " + to_string(m_FrameNum) + " thread " + to_string(m_ThreadNum) + " " + Pad(m_Function.DisplaySN(), debugTitleWidth);
 	}
 
 	SNI_Variable * SNI_Frame::CreateTemporary()

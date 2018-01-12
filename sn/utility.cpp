@@ -103,11 +103,16 @@ namespace SNI
 	{
 		size_t textWidth = p_Text.size();
 		size_t spacerWidth = 0;
+		string text = p_Text;
 		if (p_Width > textWidth)
 		{
 			spacerWidth = p_Width - textWidth;
 		}
-		return p_Text + string(spacerWidth, ' ');
+		else if (p_Width < textWidth)
+		{
+			text = p_Text.substr(0, p_Width-3) + "...";
+		}
+		return text + string(spacerWidth, ' ');
 	}
 
 	string DisplayPmValueList(const SN::SN_ValueList &p_ParameterList)

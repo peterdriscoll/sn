@@ -44,7 +44,9 @@ namespace SNI
 		, m_MaxCardinalityUnify(10)
 		, m_LogFilePath(DefaultLogFilePath)
 		, m_HasConsole(false)
-	    , m_KbHit(NULL)
+		, m_DebugFieldWidth(20)
+		, m_DebugTitleWidth(40)
+		, m_KbHit(NULL)
 	    , m_GetCh(NULL)
 	{
 		m_LastManager = m_TopManager;
@@ -56,6 +58,8 @@ namespace SNI
 		, m_DelayOnEvaluate(p_DelayOnEvaluate)
 		, m_MaxCardinalityCall(p_MaxCardinalityCall)
 		, m_MaxCardinalityUnify(p_MaxCardinalityUnify)
+		, m_DebugFieldWidth(20)
+		, m_DebugTitleWidth(40)
 		, m_LogFilePath(DefaultLogFilePath)
 		, m_HasConsole(false)
 		, m_KbHit(NULL)
@@ -204,6 +208,26 @@ namespace SNI
 		}
 	}
 
+	size_t SNI_Manager::DebugFieldWidth()
+	{
+		return m_DebugFieldWidth;
+	}
+
+	void SNI_Manager::SetDebugFieldWidth(size_t p_DebugFieldWidth)
+	{
+		m_DebugFieldWidth = p_DebugFieldWidth;
+	}
+
+	size_t SNI_Manager::DebugTitleWidth()
+	{
+		return m_DebugTitleWidth;
+	}
+
+	void SNI_Manager::SetDebugTitleWidth(size_t p_DebugTitleWidth)
+	{
+		m_DebugTitleWidth = p_DebugTitleWidth;
+	}
+
 	void SNI_Manager::ProcessCommand(const string &p_Text)
 	{
 		long l_ThreadNum = SNI_Frame::GetThreadNum();
@@ -232,7 +256,7 @@ namespace SNI
 				break;
 			case VK_F6:
 				cout << "F6 - Display stack\n";
-				// SNI_Log::GetLog()->WriteFrameStack(SN::DebugLevel, -1);
+				SNI_Log::GetLog()->WriteFrameStack(SN::DebugLevel, -1);
 				break;
 			case VK_SHIFT_F6:
 			{
@@ -240,7 +264,7 @@ namespace SNI
 				char buffer[MAX_DEPTH_CHARS];
 				cin.getline(buffer, MAX_DEPTH_CHARS);
 				long depth = atol(buffer);
-				// SNI_Log::GetLog()->WriteFrameStack(SN::DebugLevel, depth);
+				SNI_Log::GetLog()->WriteFrameStack(SN::DebugLevel, depth);
 				break;
 			}
 			case VK_F10:

@@ -121,6 +121,7 @@ namespace SNI
 		SN::SN_Expression param = p_ParameterList->back().GetSNI_Expression();
 		p_ParameterList->pop_back();
 		m_FormalParameter->PartialAssertValue(param, true);
+		LOG(WriteLine(SN::DebugLevel, DisplaySN0()));
 		SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, "Lambda.Call");
 		if (p_ParameterList->size() > 0)
 		{

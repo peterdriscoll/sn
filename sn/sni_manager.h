@@ -48,6 +48,12 @@ namespace SNI
 		bool IsBreakPoint(SN::InterruptPoint p_InterruptPoint, long p_ThreadNum, long p_FrameStackDepth);
 		void DebugCommand(SN::InterruptPoint p_InterruptPoint, const string & p_Text);
 
+		size_t DebugFieldWidth();
+		void SetDebugFieldWidth(size_t p_DebugFieldWidth);
+
+		size_t DebugTitleWidth();
+		void SetDebugTitleWidth(size_t p_DebugFieldWidth);
+
 		ostream * CreateLogFile(SN::LoggingLevel);
 
 	private:
@@ -64,6 +70,9 @@ namespace SNI
 		size_t m_MaxCardinalityUnify;
 
 		bool m_DelayOnEvaluate;
+
+		long m_DebugFieldWidth;
+		long m_DebugTitleWidth;
 
 		bool m_HasConsole;
 		int (*m_KbHit)();

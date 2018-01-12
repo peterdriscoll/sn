@@ -127,4 +127,24 @@ namespace SN
 	{
 		return m_Manager->DebugCommand(p_InterruptPoint, p_Text);
 	}
+
+	size_t SN_Manager::DebugFieldWidth()
+	{
+		return m_Manager->DebugFieldWidth();
+	}
+
+	void SN_Manager::SetDebugFieldWidth(size_t p_DebugFieldWidth)
+	{
+		m_Manager->SetDebugFieldWidth(p_DebugFieldWidth);
+	}
+
+	size_t SN_Manager::DebugTitleWidth()
+	{
+		return m_Manager->DebugTitleWidth();
+	}
+
+	void SN_Manager::SetDebugTitleWidth(size_t p_DebugTitleWidth)
+	{
+		m_Manager->SetDebugTitleWidth(p_DebugTitleWidth);
+	}
 }

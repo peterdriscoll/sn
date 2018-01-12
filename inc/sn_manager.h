@@ -68,6 +68,11 @@ namespace SN
 		void DebugCommand(InterruptPoint p_InterruptPoint, string p_Text);
 		ostream * CreateLogFile(LoggingLevel p_LoggingLevel);
 
+		size_t DebugFieldWidth();
+		void SetDebugFieldWidth(size_t p_DebugFieldWidth);
+
+		size_t DebugTitleWidth();
+		void SetDebugTitleWidth(size_t p_DebugFieldWidth);
 	private:
 		SNI::SNI_Manager *m_Manager;
 		bool m_MyManager;
