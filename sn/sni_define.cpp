@@ -39,7 +39,7 @@ namespace SNI
 
 	string SNI_Define::DisplaySN(long /*priority*/, SNI_VariablePointerList &p_DisplayVariableList) const
 	{
-		return m_Variable->DisplaySN(GetPriority(), p_DisplayVariableList) + "$";
+		return "$" + m_Variable->DisplaySN(GetPriority(), p_DisplayVariableList);
 	}
 
 	long SNI_Define::GetPriority() const
