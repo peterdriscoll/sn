@@ -148,6 +148,10 @@ namespace SNI
 	{
 	}
 
+	void SNI_Expression::Validate()
+	{
+	}
+
 	SN::SN_Expression SNI_Expression::SimplifyValue()
 	{
 		return this;

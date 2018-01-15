@@ -6,6 +6,54 @@
 using namespace PGCX;
 using namespace skynet; // Interface namespace for SN.
 
+void TestIsInteger()
+{
+	Transaction transaction;
+	SN_DECLARE(Digit);
+	SN_DECLARE(d);
+	SN_DECLARE(i);
+
+	(Define(Digit)(d) == (d == (String("0") || String("1") || String("2") || String("3") || String("4")
+		|| String("5") || String("6") || String("7") || String("8") || String("9")))).PartialAssertAction();
+	Digit.LogDisplaySN();
+
+	SN_DECLARE(IsInteger);
+	(Define(IsInteger)(i) == (Digit(i) && !Digit(i.LookaheadRight())).Collapse().If(Bool(true), Digit(i.SelectLeftChar()) && IsInteger(i.SubtractLeftChar()))).PartialAssertAction();
+	IsInteger.LogDisplaySN();
+
+	(IsInteger(String("1")).AssertAction());
+	(IsInteger(String("12")).AssertAction());
+	(IsInteger(String("123456789")).AssertAction());
+
+	SN_DECLARE(a);
+	SN_DECLARE(b);
+	(a + b == "1abc").AssertAction();
+	IsInteger(a).AssertAction();
+	string test_a = a.GetString();
+	string test_b = b.GetString();
+
+	SN_DECLARE(a1);
+	SN_DECLARE(b1);
+	(a1 + b1 == "12abc").AssertAction();
+	IsInteger(a1).AssertAction();
+	string test_a1 = a1.GetString();
+	string test_b1 = b1.GetString();
+
+	SN_DECLARE(a2);
+	SN_DECLARE(b2);
+	(a2 + b2 == "123456789abc").AssertAction();
+	//IsInteger(a2).AssertAction();
+	string test_a2 = a2.GetString();
+	string test_b2 = b2.GetString();
+
+	SN_DECLARE(PmGenInteger);
+	SN_DECLARE(s);
+	//(Define(PmGenInteger)(d) == IsInteger(d) && .If(IsInteger(d), d.IntToString())).PartialAssertAction();
+	//(Define(PmGenInteger)(s.StringToInt())) == IsInteger(s).If(IsInteger(d), d)).PartialAssertAction();
+	//(Define(PmGenInteger)(d) == ((d = Long(s)) && IsInteger(s)).If(d)).PartialAssertAction();
+	//(Define(PmGenInteger)(d) == ((s == d.IntToString()) && IsInteger(s)).If(s)).PartialAssertAction();
+}
+
 void TestCharInValueSet()
 {
 	Transaction transaction;
@@ -239,6 +287,7 @@ void main(int argc, char *argv[])
 	Transaction transaction;
 	try
 	{
+		TestIsInteger();
 		// TestCharInValueSet();
 		// TestValueSetOfStandardFunctions();
 		// TestValueSetOfLambdaFunctions();
@@ -246,7 +295,7 @@ void main(int argc, char *argv[])
 		// TestPythagoras();
 		// TestSimple();
 		
-		TestChurchDivide();
+		// TestChurchDivide();
 	}
 	catch (Error e)
 	{

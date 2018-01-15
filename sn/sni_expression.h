@@ -87,6 +87,7 @@ namespace SNI
 		virtual size_t Count() const;
 		virtual size_t Length() const;
 		virtual void Simplify();
+		virtual void Validate();
 		virtual SN::SN_Expression SimplifyValue();
 		virtual bool IsStringValue() const;
 		virtual bool IsRequested() const;

@@ -577,8 +577,8 @@ namespace test_sn
 
 					(Define(RemovePrefix) == Lambda(p, Lambda(x, x.SubtractLeft(p)))).PartialAssertAction();
 					std::cout << std::endl << "Variable " << RemovePrefix.DisplaySN() << std::endl;
-					string s_RemovePrefix = RemovePrefix.DisplaySN();
-					Assert::IsTrue(RemovePrefix.DisplaySN() == "RemovePrefix[Lambda(@p.@x.SubtractLeft x p)]");
+					string s_RemovePrefix = RemovePrefix.GetVariableValue().DisplaySN();
+					Assert::IsTrue(s_RemovePrefix == "@p.@x.SubtractLeft x p");
 					string v_RemovePrefix = Lambda(p, Lambda(x, x.SubtractLeft(p))).PartialEvaluate().DisplaySN();
 					Assert::IsTrue(v_RemovePrefix == "@p.@x.SubtractLeft x p");
 					Assert::IsTrue(RemovePrefix.PartialEvaluate().Equivalent(Lambda(p, Lambda(x, x.SubtractLeft(p))).PartialEvaluate()));
@@ -590,7 +590,7 @@ namespace test_sn
 					SN_DECLARE(x);
 
 					(Define(RemovePostfix) == Lambda(p, Lambda(x, x.SubtractRight(p)))).PartialAssertAction();
-					Assert::IsTrue(RemovePostfix.DisplaySN() == "RemovePostfix[Lambda(@p.@x.SubtractRight x p)]");
+					Assert::IsTrue(RemovePostfix.GetVariableValue().DisplaySN() == "@p.@x.SubtractRight x p");
 					std::cout << std::endl << "Variable " << RemovePostfix.DisplaySN() << std::endl;
 					Assert::IsTrue(RemovePostfix.PartialEvaluate().Equivalent(Lambda(p, Lambda(x, x.SubtractRight(p))).PartialEvaluate()));
 					(RemovePostfix(String("Atl"))(String("DogAtl")) == String("Dog")).EvaluateAction();
@@ -672,8 +672,8 @@ namespace test_sn
 				(Define(g) == f(Long(5))).PartialAssertAction();
 
 				(g(Long(4)) == c).AssertAction();
-				string c_string = c.DisplaySN();
-				Assert::IsTrue(c_string == "c[Long(20)]");
+				string c_string = c.GetVariableValue().DisplayValueSN();
+				Assert::IsTrue(c_string == "Long(20)");
 
 				(c == Long(20)).AssertAction();
 			}
@@ -1105,9 +1105,9 @@ namespace test_sn
 
 				SN_DECLARE(x);
 				(x == Long(3)).AssertAction();
-				string x_string = x.DisplayValueSN();
+				string x_string = x.GetVariableValue().DisplayValueSN();
 
-				Assert::IsTrue(x_string == "x[Long(3)]");
+				Assert::IsTrue(x_string == "Long(3)");
 				(x == Long(3)).EvaluateAction();
 			}
 		}

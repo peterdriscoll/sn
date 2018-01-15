@@ -238,7 +238,7 @@ namespace SNI
 			value = "[" + m_Value->DisplayValueSN(GetPriority(), p_DisplayVariableList) + "]";
 			p_DisplayVariableList.erase(p_DisplayVariableList.begin());
 		}
-		return Bracket(p_Priority, FrameName() + value);
+		return Bracket(p_Priority, FrameName() /* + value */);
 	}
 
 	string SNI_Variable::DisplayCall(long p_Priority, SNI_VariablePointerList & p_DisplayVariableList, SN::SN_ExpressionList * p_ParameterList) const

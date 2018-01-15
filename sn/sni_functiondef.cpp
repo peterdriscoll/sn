@@ -209,6 +209,7 @@ namespace SNI
 		}
 		SNI_Manager::GetTopManager()->DebugCommand(SN::ParameterPoint, GetTypeName() + ".Call after calculation");
 		delete[] inputList;
+		result.GetSNI_Expression()->Validate();
 		return result;
 	}
 

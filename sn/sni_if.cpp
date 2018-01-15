@@ -90,8 +90,9 @@ namespace SNI
 			return condition.If(positiveCase, negativeCase);
 		}
 
-		//return SNI_FunctionDef::CallArray(p_ParamList, p_MetaLevel);
-		return condition.DoIf(p_ParamList[1], p_ParamList[2]);
+		SN::SN_Value result = condition.DoIf(p_ParamList[1], p_ParamList[2]);
+		result.GetSNI_Expression()->Validate();
+		return result;
 	}
 
 	/// \brief Return an expression or value for if bool then value else value.
