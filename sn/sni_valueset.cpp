@@ -65,11 +65,17 @@ namespace SNI
 			SNI_World *world = tv.GetWorld();
 			if (world)
 			{
-				ASSERTM(world->GetWorldSet() == m_WorldSet, "World set inconsidtency");
+				if (world->GetWorldSet() != m_WorldSet)
+				{
+					ASSERTM(world->GetWorldSet() == m_WorldSet, "World set inconsistency");
+				}
 			}
 			else
 			{
-				ASSERTM(!m_WorldSet, "Null world for null world set inconsidtency");
+				if (m_WorldSet)
+				{
+					ASSERTM(!m_WorldSet, "Null world for null world set inconsistency");
+				}
 			}
 		}
 	}
@@ -389,6 +395,11 @@ namespace SNI
 		FlattenValueSets();
 	}
 
+	void SNI_ValueSet::Validate()
+	{
+		CheckWorldSetConsistency();
+	}
+
 	SN::SN_Expression SNI_ValueSet::SimplifyValue()
 	{
 		bool extractValue = false;
@@ -570,6 +581,7 @@ namespace SNI
 
 	SN::SN_Error SNI_ValueSet::ForEach(std::function<SN::SN_Error(const SN::SN_Expression &p_Param, SNI_World *p_World)> p_Action)
 	{
+		CheckWorldSetConsistency();
 		SNI_World *contextWorld = SNI_World::ContextWorld();
 		SNI_WorldSet *worldSet = GetWorldSet();
 		for (SNI_TaggedValue &tv : m_ValueList)
@@ -883,7 +895,7 @@ namespace SNI
 		SN::LogContext context(DisplaySN0() + "SNI_ValueSet::DoIf ( " + SN::SN_Expression(p_PositiveCase).DisplaySN() + SN::SN_Expression(p_NegativeCase).DisplaySN() + " )");
 
 		SN::SN_ValueSet result;
-		SNI_WorldSet * worldSet = new SNI_WorldSet();
+		SNI_WorldSet * worldSet = result.GetSNI_ValueSet()->GetWorldSet();
 
 		for (size_t i = 0; i<m_ValueList.size(); i++)
 		{

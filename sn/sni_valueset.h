@@ -61,6 +61,7 @@ namespace SNI
 		virtual void FlattenValueSets();
 		virtual bool ExtractBooleanValue(bool & p_Value);
 		virtual void Simplify();
+		virtual void Validate();
 		virtual SN::SN_Expression SimplifyValue();
 		virtual SN::SN_Error AssertValue(const SN::SN_Expression &p_Value);
 		virtual SNI_WorldSet *GetWorldSet();
