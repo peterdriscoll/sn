@@ -198,29 +198,32 @@ namespace SNI
 
 	SNI_Expression * SNI_ValueSet::Clone(SNI_Frame *p_Frame, bool &p_Changed)
 	{
+		CheckWorldSetConsistency();
 		SN::SN_ValueSet result;
 		if (0 < m_ValueList.size())
 		{
+			SNI_WorldSet *worldSet1 = m_WorldSet;
 			SNI_WorldSet *worldSet = GetWorldSet();
 			SNI_WorldSet *worldSetClone = NULL;
 			if (worldSet)
 			{
 				worldSetClone = worldSet->Clone();
-				result.SetWorldSet(worldSetClone);
 			}
+			result.SetWorldSet(worldSetClone);
 			SNI_World *contextWorld = SNI_World::ContextWorld();
 			for (SNI_TaggedValue &tv : m_ValueList)
 			{
 				SNI_World *world = tv.GetWorld();
 				if (!contextWorld || contextWorld->CompatibleWorld(world))
 				{
-					SNI_World *cloneWorld = worldSetClone->CreateCloneWorld(world);
-					if (worldSetClone)
+					SNI_World *cloneWorld = NULL;
+					if (worldSet1)
 					{
 						cloneWorld = worldSetClone->CreateCloneWorld(world);
 					}
 					result.AddTaggedValue(tv.GetValue().GetSNI_Expression()->Clone(p_Frame, p_Changed), cloneWorld);
 				}
+				GetWorldSet();
 			}
 		}
 		CheckWorldSetConsistency();
