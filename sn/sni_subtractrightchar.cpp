@@ -27,7 +27,7 @@ namespace SNI
 		return "SN::SubtractRightChar";
 	}
 
-	string SNI_SubtractRightChar::DisplaySN(long /*priority*/, SNI_VariablePointerList & /*p_DisplayVariableList*/) const
+	string SNI_SubtractRightChar::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
 	{
 		return "SubtractRightChar";
 	}

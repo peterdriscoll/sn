@@ -38,7 +38,7 @@ namespace SNI
 	class SNI_FunctionDef;
 
 	class SNI_Variable;
-	typedef vector<const SNI_Variable *> SNI_VariablePointerList;
+	typedef vector<const SNI_Variable *> SNI_VariableConstPointerList;
 
 	class SNI_Base : public SNI_Object
 	{
@@ -55,8 +55,8 @@ namespace SNI
 		//---------------------------------------------------------------
 		virtual string GetTypeName() const = 0;
 		virtual string DisplayCpp() const = 0;
-		virtual string DisplaySN(long priority, SNI_VariablePointerList &p_DisplayVariableList) const = 0;
-		virtual string DisplayValueSN(long, SNI_VariablePointerList & p_DisplayVariableList) const = 0;
+		virtual string DisplaySN(long priority, SNI_VariableConstPointerList &p_DisplayVariableList) const = 0;
+		virtual string DisplayValueSN(long, SNI_VariableConstPointerList & p_DisplayVariableList) const = 0;
 		virtual long GetPriority() const = 0;
 		virtual string GetOperator() const = 0;
 

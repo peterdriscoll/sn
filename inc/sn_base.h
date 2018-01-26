@@ -54,7 +54,7 @@ namespace SN
 		{
 			if (GetSNI_Base())
 			{
-				SNI::SNI_VariablePointerList l_DisplayList;
+				SNI::SNI_VariableConstPointerList l_DisplayList;
 				return GetSNI_Base()->DisplaySN(0, l_DisplayList);
 			}
 			return "";
@@ -64,7 +64,7 @@ namespace SN
 		{
 			if (GetSNI_Base())
 			{
-				SNI::SNI_VariablePointerList l_DisplayList;
+				SNI::SNI_VariableConstPointerList l_DisplayList;
 				return GetSNI_Base()->DisplayValueSN(0, l_DisplayList);
 			}
 			return "NULL";
@@ -74,7 +74,7 @@ namespace SN
 		{
 			if (GetSNI_Base())
 			{
-				SNI::SNI_VariablePointerList l_DisplayList;
+				SNI::SNI_VariableConstPointerList l_DisplayList;
 				SN::LogContext context(GetSNI_Base()->DisplaySN(0, l_DisplayList));
 			}
 			return "";

@@ -40,7 +40,7 @@ namespace SNI
 		return "SN::If";
 	}
 
-	string SNI_If::DisplaySN(long /*priority*/, SNI_VariablePointerList & /*p_DisplayVariableList*/) const
+	string SNI_If::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
 	{
 		return "if";
 	}

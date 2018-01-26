@@ -221,7 +221,7 @@ namespace SNI
 		return "sn_Variable(" + FrameName() + ")";
 	}
 
-	string SNI_Variable::DisplaySN(long p_Priority, SNI_VariablePointerList &p_DisplayVariableList) const
+	string SNI_Variable::DisplaySN(long p_Priority, SNI_VariableConstPointerList &p_DisplayVariableList) const
 	{
 		string value;
 		if (!m_Value)
@@ -241,7 +241,7 @@ namespace SNI
 		return Bracket(p_Priority, FrameName() /* + value */);
 	}
 
-	string SNI_Variable::DisplayCall(long p_Priority, SNI_VariablePointerList & p_DisplayVariableList, SN::SN_ExpressionList * p_ParameterList) const
+	string SNI_Variable::DisplayCall(long p_Priority, SNI_VariableConstPointerList & p_DisplayVariableList, SN::SN_ExpressionList * p_ParameterList) const
 	{
 		string text;
 		string delimeter;
@@ -305,7 +305,7 @@ namespace SNI
 		m_Frame = p_Frame;
 	}
 
-	bool SNI_Variable::FindVariable(SNI_VariablePointerList &p_DisplayVariableList) const
+	bool SNI_Variable::FindVariable(SNI_VariableConstPointerList &p_DisplayVariableList) const
 	{
 		for (unsigned long j = 0; j<p_DisplayVariableList.size(); j++)
 		{

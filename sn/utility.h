@@ -27,7 +27,7 @@ namespace SNI
 	typedef vector<SNI_TaggedValue> SNI_TaggedValueList;
 
 	class SNI_Variable;
-	typedef vector<const SNI_Variable *> SNI_VariablePointerList;
+	typedef vector<const SNI_Variable *> SNI_VariableConstPointerList;
 
 	class SNI_World;
 	class SNI_WorldSet;
@@ -48,7 +48,7 @@ namespace SNI
 	string DisplayPmValueList(const SN::SN_ValueList &p_ParameterList);
 	string DisplayPmParameterList(SN::SN_ParameterList * p_ParameterList);
 	string DisplayPmTaggedValueList(const SNI_TaggedValueList &p_TaggedValueList);
-	string DisplayPmTaggedExpressionList(const SNI_TaggedValueList &p_TaggedValueList, SNI_VariablePointerList & p_DisplayVariableList);
+	string DisplayPmTaggedExpressionList(const SNI_TaggedValueList &p_TaggedValueList, SNI_VariableConstPointerList & p_DisplayVariableList);
 	string DisplayPmExpression(SNI_Expression *p_Expression);
 	string DisplayPmExpression(const SN::SN_Expression &p_Expression);
 	string DisplayWorlds(long p_NumWorlds, SNI_World ** p_World);

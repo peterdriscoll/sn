@@ -39,7 +39,7 @@ namespace SNI
 		return "SN::And";
 	}
 
-	string SNI_And::DisplaySN(long /*priority*/, SNI_VariablePointerList & /*p_DisplayVariableList*/) const
+	string SNI_And::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
 	{
 		return "(&)";
 	}

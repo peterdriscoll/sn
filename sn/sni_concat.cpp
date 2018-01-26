@@ -29,7 +29,7 @@ namespace SNI
 		return "SN::Concat";
 	}
 
-	string SNI_Concat::DisplaySN(long /*priority*/, SNI_VariablePointerList & /*p_DisplayVariableList*/) const
+	string SNI_Concat::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
 	{
 		return "(+)";
 	}

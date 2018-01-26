@@ -45,7 +45,7 @@ namespace SNI
 	typedef vector<SNI_Replacement> SNI_ReplacementList;
 
 	class SNI_Variable;
-	typedef vector<const SNI_Variable *> SNI_VariablePointerList;
+	typedef vector<const SNI_Variable *> SNI_VariableConstPointerList;
 
 	class SNI_UnifyContext
 	{
@@ -69,8 +69,8 @@ namespace SNI
 		//---------------------------------------------------------------
 		virtual string GetTypeName() const;
 		virtual string DisplayCpp() const;
-		virtual string DisplaySN(long priority, SNI_VariablePointerList &p_DisplayVariableList) const;
-		virtual string DisplayValueSN(long, SNI_VariablePointerList & p_DisplayVariableList) const;
+		virtual string DisplaySN(long priority, SNI_VariableConstPointerList &p_DisplayVariableList) const;
+		virtual string DisplayValueSN(long, SNI_VariableConstPointerList & p_DisplayVariableList) const;
 		virtual long GetPriority() const;
 		virtual string GetOperator() const;
 		virtual string DisplaySN0() const;
@@ -79,7 +79,7 @@ namespace SNI
 		// Members
 		//---------------------------------------------------------------
 		virtual SNI_Expression * LoadParameters(SN::SN_ExpressionList * p_ParameterList) const;
-		virtual string DisplayCall(long priority, SNI_VariablePointerList & p_DisplayVariableList, SN::SN_ExpressionList * p_ParameterList) const;
+		virtual string DisplayCall(long priority, SNI_VariableConstPointerList & p_DisplayVariableList, SN::SN_ExpressionList * p_ParameterList) const;
 		virtual SNI_Expression * Clone(SNI_Frame *p_Frame, bool &p_Changed);
 		virtual SNI_Expression * Clone(const SNI_Variable *p_Variable);
 		virtual bool GetBool() const;

@@ -161,7 +161,7 @@ namespace SNI
 		return result;
 	}
 
-	string DisplayPmTaggedExpressionList(const SNI_TaggedValueList &p_TaggedValueList, SNI_VariablePointerList & p_DisplayVariableList)
+	string DisplayPmTaggedExpressionList(const SNI_TaggedValueList &p_TaggedValueList, SNI_VariableConstPointerList & p_DisplayVariableList)
 	{
 		string result;
 		string separator;

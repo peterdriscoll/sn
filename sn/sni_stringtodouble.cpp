@@ -26,7 +26,7 @@ namespace SNI
 		return "SN::StringToDouble";
 	}
 
-	string SNI_StringToDouble::DisplaySN(long /*priority*/, SNI_VariablePointerList & /*p_DisplayVariableList*/) const
+	string SNI_StringToDouble::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
 	{
 		return "StringToDouble";
 	}

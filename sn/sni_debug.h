@@ -16,7 +16,7 @@ namespace SNI
 
 		virtual string GetTypeName() const;
 		virtual string DisplayCpp() const;
-		virtual string DisplaySN(long p_Priority, SNI_VariablePointerList &p_DisplayVariableList) const;
+		virtual string DisplaySN(long p_Priority, SNI_VariableConstPointerList &p_DisplayVariableList) const;
 		virtual long GetPriority() const;
 		virtual string GetOperator() const;
 

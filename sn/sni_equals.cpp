@@ -52,7 +52,7 @@ namespace SNI
 		return "SN::Equals";
 	}
 
-	string SNI_Equals::DisplaySN(long /*priority*/, SNI_VariablePointerList & /*p_DisplayVariableList*/) const
+	string SNI_Equals::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
 	{
 		return "=";
 	}

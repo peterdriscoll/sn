@@ -64,7 +64,7 @@ namespace SNI
 		return m_Function;
 	}
 
-	string SNI_Function::DisplaySN(long priority, SNI_VariablePointerList &p_DisplayVariableList) const
+	string SNI_Function::DisplaySN(long priority, SNI_VariableConstPointerList &p_DisplayVariableList) const
 	{
 		SN::SN_ExpressionList * l_ParameterList = new SN::SN_ExpressionList();
 		SNI_Expression *nextFunction = LoadParameters(l_ParameterList);

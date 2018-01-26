@@ -55,12 +55,12 @@ namespace SNI
 		return GetTypeName();
 	}
 
-	string SNI_Expression::DisplaySN(long /*priority*/, SNI_VariablePointerList & /*p_DisplayVariableList*/) const
+	string SNI_Expression::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
 	{
 		return GetTypeName();
 	}
 
-	string SNI_Expression::DisplayValueSN(long priority, SNI_VariablePointerList & p_DisplayVariableList) const
+	string SNI_Expression::DisplayValueSN(long priority, SNI_VariableConstPointerList & p_DisplayVariableList) const
 	{
 		return DisplaySN(priority, p_DisplayVariableList);
 	}
@@ -80,7 +80,7 @@ namespace SNI
 		return NULL;
 	}
 
-	string SNI_Expression::DisplayCall(long priority, SNI_VariablePointerList &p_DisplayVariableList, SN::SN_ExpressionList * p_ParameterList) const
+	string SNI_Expression::DisplayCall(long priority, SNI_VariableConstPointerList &p_DisplayVariableList, SN::SN_ExpressionList * p_ParameterList) const
 	{
 		string text;
 		string delimeter = "(";
@@ -117,7 +117,7 @@ namespace SNI
 
 	string SNI_Expression::DisplaySN0() const
 	{
-		SNI_VariablePointerList l_DisplayList;
+		SNI_VariableConstPointerList l_DisplayList;
 		return DisplaySN(0, l_DisplayList);
 	}
 

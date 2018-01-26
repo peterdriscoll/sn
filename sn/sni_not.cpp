@@ -26,7 +26,7 @@ namespace SNI
 		return "SN::Not";
 	}
 
-	string SNI_Not::DisplaySN(long /*priority*/, SNI_VariablePointerList & /*p_DisplayVariableList*/) const
+	string SNI_Not::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
 	{
 		return "!";
 	}

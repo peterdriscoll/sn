@@ -25,7 +25,7 @@ namespace SNI
 
 		string GetTypeName() const;
 		string DisplayCpp() const;
-		string DisplaySN(long priority, SNI_VariablePointerList &p_DisplayVariableList) const;
+		string DisplaySN(long priority, SNI_VariableConstPointerList &p_DisplayVariableList) const;
 		long GetPriority() const;
 		virtual SN::SN_Expression Evaluate(long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression PartialEvaluate(long p_MetaLevel = 0) const;

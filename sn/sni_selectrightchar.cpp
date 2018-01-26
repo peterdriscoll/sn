@@ -28,7 +28,7 @@ namespace SNI
 		return "SN::SelectRightChar";
 	}
 
-	string SNI_SelectRightChar::DisplaySN(long /*priority*/, SNI_VariablePointerList & /*p_DisplayVariableList*/) const
+	string SNI_SelectRightChar::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
 	{
 		return "SelectRightChar";
 	}

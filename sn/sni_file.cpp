@@ -26,7 +26,7 @@ namespace SNI
 		return "SN::File";
 	}
 
-	string SNI_File::DisplaySN(long /*priority*/, SNI_VariablePointerList & /*p_DisplayVariableList*/) const
+	string SNI_File::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
 	{
 		return "File";
 	}

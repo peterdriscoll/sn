@@ -43,7 +43,7 @@ namespace SNI
 		return "SN::Or";
 	}
 
-	string SNI_Or::DisplaySN(long /*priority*/, SNI_VariablePointerList & /*p_DisplayVariableList*/) const
+	string SNI_Or::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
 	{
 		return "(|)";
 	}

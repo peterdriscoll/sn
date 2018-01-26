@@ -33,7 +33,7 @@ namespace SNI
 		return "SN::SquareRoot";
 	}
 
-	string SNI_SquareRoot::DisplaySN(long /*priority*/, SNI_VariablePointerList & /*p_DisplayVariableList*/) const
+	string SNI_SquareRoot::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
 	{
 		return "SquareRoot";
 	}

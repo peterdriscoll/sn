@@ -28,7 +28,7 @@ namespace SNI
 		return "SN::LessEquals";
 	}
 
-	string SNI_LessEquals::DisplaySN(long /*priority*/, SNI_VariablePointerList & /*p_DisplayVariableList*/) const
+	string SNI_LessEquals::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
 	{
 		return ">=";
 	}

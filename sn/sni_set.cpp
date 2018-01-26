@@ -56,7 +56,7 @@ namespace SNI
 		return "sn_Set( {" + DisplayPmValueList(m_SetList) + "} )";
 	}
 
-	string SNI_Set::DisplaySN(long /*priority*/, SNI_VariablePointerList & /*p_DisplayVariableList*/) const
+	string SNI_Set::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
 	{
 		return "{" + DisplayPmValueList(m_SetList) + "}";
 	}

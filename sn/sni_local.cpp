@@ -47,7 +47,7 @@ namespace SNI
 		return "sn_Local(" + m_LocalVariable->DisplayCpp() + ", " + m_Expression->DisplayCpp() + ")";
 	}
 
-	string SNI_Local::DisplaySN(long /*priority*/, SNI_VariablePointerList &p_DisplayVariableList) const
+	string SNI_Local::DisplaySN(long /*priority*/, SNI_VariableConstPointerList &p_DisplayVariableList) const
 	{
 		return "#" + m_LocalVariable->DisplaySN(GetPriority(), p_DisplayVariableList) + "." + m_Expression->DisplaySN(GetPriority(), p_DisplayVariableList);
 	}

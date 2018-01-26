@@ -31,7 +31,7 @@ namespace SNI
 		return "SN::BuildSet";
 	}
 
-	string SNI_BuildSet::DisplaySN(long /*priority*/, SNI_VariablePointerList & /*p_DisplayVariableList*/) const
+	string SNI_BuildSet::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
 	{
 		return "Set";
 	}

@@ -32,7 +32,7 @@ namespace SNI
 		return "SN::HasMember";
 	}
 
-	string SNI_HasMember::DisplaySN(long /*priority*/, SNI_VariablePointerList & /*p_DisplayVariableList*/) const
+	string SNI_HasMember::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
 	{
 		return "in";
 	}

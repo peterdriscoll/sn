@@ -43,7 +43,7 @@ namespace SNI
 		return "skynet::RevOr";
 	}
 
-	string SNI_RevOr::DisplaySN(long /*priority*/, SNI_VariablePointerList & /*p_DisplayVariableList*/) const
+	string SNI_RevOr::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
 	{
 		return "RevOr";
 	}

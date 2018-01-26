@@ -33,7 +33,7 @@ namespace SNI
 		return "SN::Add";
 	}
 
-	string SNI_Add::DisplaySN(long /*priority*/, SNI_VariablePointerList & /*p_DisplayVariableList*/) const
+	string SNI_Add::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
 	{
 		return "(+)";
 	}

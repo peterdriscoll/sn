@@ -30,7 +30,7 @@ namespace SNI
 		return "NULL";
 	}
 
-	string SNI_Null::DisplaySN(long /*priority*/, SNI_VariablePointerList & /*p_DisplayVariableList*/) const
+	string SNI_Null::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
 	{
 		return "null";
 	}

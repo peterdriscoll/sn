@@ -26,7 +26,7 @@ namespace SNI
 		return "SN::Negative";
 	}
 
-	string SNI_Negative::DisplaySN(long /*priority*/, SNI_VariablePointerList & /*p_DisplayVariableList*/) const
+	string SNI_Negative::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
 	{
 		return "!";
 	}

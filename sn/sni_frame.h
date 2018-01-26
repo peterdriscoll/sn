@@ -42,7 +42,7 @@ namespace SNI
 		long                    m_ThreadNum;
 		long                    m_FrameNum;
 		SNI_ReplacementList     m_ReplacementList;
-		SNI_VariablePointerList m_VariableList;
+		SNI_VariableConstPointerList m_VariableList;
 	};
 }
 

@@ -119,7 +119,7 @@ namespace SNI
             return to_string(m_Number);
         }
 
-        virtual string DisplaySN(long /*priority*/, SNI_VariablePointerList & /*p_DisplayVariableList*/) const
+        virtual string DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
         {
             return to_string(m_Number);
         }
