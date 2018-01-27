@@ -14,6 +14,8 @@
 #define VK_SHIFT_F5 88
 #define VK_F6 64
 #define VK_SHIFT_F6 89
+#define VK_F7 65
+#define VK_SHIFT_F7 90
 #define VK_F10 68
 #define VK_F11 133
 #define VK_SHIFT_F11 135
@@ -29,6 +31,7 @@ namespace SNI
 	/*static*/ enum SN::DebugAction SNI_Manager::m_DebugAction;
 	/*static*/ long SNI_Manager::m_FrameStackDepth;
 	/*static*/ long SNI_Manager::m_ThreadNum;
+	/*static*/ long SNI_Manager::m_Depth = -1;
 
 	void ThrowErrorHandler(SN::SN_Error p_Result)
 	{
@@ -230,6 +233,7 @@ namespace SNI
 
 	void SNI_Manager::ProcessCommand(const string &p_Text)
 	{
+		SNI_Log::GetLog()->WriteFrameStack(SN::DebugLevel, m_Depth);
 		long l_ThreadNum = SNI_Frame::GetThreadNum();
 		long l_FrameStackDepth = SNI_Frame::GetFrameStackDepth();
 		m_DebugAction = SN::None;
@@ -263,10 +267,13 @@ namespace SNI
 				cout << "F6 - Display stack\nEnter depth >> ";
 				char buffer[MAX_DEPTH_CHARS];
 				cin.getline(buffer, MAX_DEPTH_CHARS);
-				long depth = atol(buffer);
-				SNI_Log::GetLog()->WriteFrameStack(SN::DebugLevel, depth);
+				m_Depth = atol(buffer);
+				SNI_Log::GetLog()->WriteFrameStack(SN::DebugLevel, m_Depth);
 				break;
 			}
+			case VK_F7:
+				m_DebugAction = SN::StepInto;
+				break;
 			case VK_F10:
 				cout << "F10 - Step over\n";
 				m_DebugAction = SN::StepOver;

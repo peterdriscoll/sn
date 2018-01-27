@@ -77,10 +77,11 @@ namespace SNI
 		bool m_HasConsole;
 		int (*m_KbHit)();
 		int (*m_GetCh)();
-
+		static long m_Depth;
 		static enum SN::DebugAction m_DebugAction;
 		static long m_ThreadNum;
 		static long m_FrameStackDepth;
+
 	};
 }
 
