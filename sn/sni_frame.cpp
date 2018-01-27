@@ -11,9 +11,13 @@ namespace SNI
 	thread_local long t_MaxFrameNum = 0;
 	thread_local SNI_FrameList m_FrameStack;
 
-	/*static*/ SNI_Frame *SNI_Frame::Push(const SNI_Variable *p_Variable)
+	/*static*/ SNI_Frame *SNI_Frame::Push(const SNI_Expression *p_Function, SNI_Expression *p_Result)
 	{
-		SNI_Frame *newFrame = new SNI_Frame(p_Variable);
+		SNI_Frame *newFrame = new SNI_Frame(p_Function);
+		if (p_Result)
+		{
+			//newFrame->CreateParameter(0)->SetValue(p_Result);
+		}
 		m_FrameStack.push_back(newFrame);
 		return newFrame;
 	}
@@ -112,6 +116,11 @@ namespace SNI
 		SNI_Expression * result = p_Expression->Clone(this, p_Changed);
 		m_ReplacementList.pop_back();
 		return result;
+	}
+
+	SNI_Variable * SNI_Frame::GetVariable(size_t p_VariableNum)
+	{
+		return m_VariableList[p_VariableNum];
 	}
 
 	string SNI_Frame::NameSuffix()
@@ -231,6 +240,24 @@ namespace SNI
 	SNI_Variable * SNI_Frame::CreateTemporary()
 	{
 		SNI_Variable * result = new SNI_Variable();
+		m_VariableList.push_back(result);
+		return result;
+	}
+
+	SNI_Variable * SNI_Frame::CreateParameter(size_t p_ParamNum)
+	{
+		string paramName = "result";
+		if (p_ParamNum > 0)
+		{
+			paramName = "param" + to_string(p_ParamNum);
+		}
+		return CreateParameterByName(paramName);
+	}
+
+	SNI_Variable * SNI_Frame::CreateParameterByName(const string & p_ParamName)
+	{
+		SNI_Variable * result = new SNI_Variable();
+		result->SetName(p_ParamName + NameSuffix());
 		m_VariableList.push_back(result);
 		return result;
 	}

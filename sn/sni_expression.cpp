@@ -96,10 +96,10 @@ namespace SNI
 		return this;
 	}
 
-	SNI_Expression * SNI_Expression::Clone(const SNI_Variable *p_Variable)
+	SNI_Expression * SNI_Expression::Clone(const SNI_Variable *p_Variable, SNI_Expression *p_Result)
 	{
 		bool changed = false;
-		SNI_Expression * result = Clone(SNI_Frame::Push(p_Variable), changed);
+		SNI_Expression * result = Clone(SNI_Frame::Push(p_Variable, p_Result), changed);
 		return result;
 	}
 
@@ -399,7 +399,7 @@ namespace SNI
 	void SNI_Expression::AssertAction()
 	{
 		SN::LogContext context("SNI_Expression::AssertAction()");
-		SN::SN_Expression clone = Clone(NULL);
+		SN::SN_Expression clone = Clone(NULL, NULL);
 		HandleAssertAction(context, clone.Assert(), "Assert");
 		SNI_Frame::Pop();
 	}
@@ -425,7 +425,7 @@ namespace SNI
 	void SNI_Expression::EvaluateAction()
 	{
 		SN::LogContext context("SNI_Expression::EvaluateAction()");
-		SN::SN_Expression clone = Clone(NULL);
+		SN::SN_Expression clone = Clone(NULL, NULL);
 		HandleEvaluateAction(context, clone.Evaluate(), "Evaluate");
 		SNI_Frame::Pop();
 	}

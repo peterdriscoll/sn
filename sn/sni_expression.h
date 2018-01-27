@@ -46,6 +46,7 @@ namespace SNI
 
 	class SNI_Variable;
 	typedef vector<const SNI_Variable *> SNI_VariableConstPointerList;
+	typedef vector<SNI_Variable *> SNI_VariablePointerList;
 
 	class SNI_UnifyContext
 	{
@@ -81,7 +82,7 @@ namespace SNI
 		virtual SNI_Expression * LoadParameters(SN::SN_ExpressionList * p_ParameterList) const;
 		virtual string DisplayCall(long priority, SNI_VariableConstPointerList & p_DisplayVariableList, SN::SN_ExpressionList * p_ParameterList) const;
 		virtual SNI_Expression * Clone(SNI_Frame *p_Frame, bool &p_Changed);
-		virtual SNI_Expression * Clone(const SNI_Variable *p_Variable);
+		virtual SNI_Expression * Clone(const SNI_Variable *p_Variable, SNI_Expression *p_Result);
 		virtual bool GetBool() const;
 		virtual string GetString() const;
 		virtual size_t Count() const;
