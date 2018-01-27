@@ -76,6 +76,7 @@ namespace SNI
 		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
 
 		void AttachDelayedCall(SNI_DelayedCall *p_Call);
+		void SetValue(const SN::SN_Expression & p_Value);
 	protected:
 		virtual void PromoteMembers();
 

@@ -16,7 +16,7 @@ namespace SNI
 		SNI_Frame *newFrame = new SNI_Frame(p_Function);
 		if (p_Result)
 		{
-			//newFrame->CreateParameter(0)->SetValue(p_Result);
+			newFrame->CreateParameter(0)->SetValue(p_Result);
 		}
 		m_FrameStack.push_back(newFrame);
 		return newFrame;

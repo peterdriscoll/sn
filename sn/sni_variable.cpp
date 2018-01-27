@@ -586,4 +586,9 @@ namespace SNI
 			m_Value = p_Call;
 		}
 	}
+
+	void SNI_Variable::SetValue(const SN::SN_Expression &p_Value)
+	{
+		m_Value = dynamic_cast<SNI_Expression *>(p_Value.GetSNI_Expression());
+	}
 }
