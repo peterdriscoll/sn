@@ -174,12 +174,23 @@ namespace SNI
 	/// @retval True if successful, false for failure.
 	SN::SN_Expression SNI_And::UnifyArray(SN::SN_Expression * p_ParameterList)
 	{
+		SNI_Frame::Push(this, NULL);
+		SNI_Frame *topFrame = SNI_Frame::Top();
+		SNI_Variable* result_param = topFrame->CreateParameterByName("result");
+		SNI_Variable* left_param = topFrame->CreateParameterByName("left");
+		SNI_Variable* right_param = topFrame->CreateParameterByName("right");
+		result_param->SetValue(p_ParameterList[0]);
+		left_param->SetValue(p_ParameterList[1]);
+		right_param->SetValue(p_ParameterList[2]);
+		SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before calculation");
+
 		SN::SN_Expression * firstParamList = new SN::SN_Expression[2];
 		firstParamList[0] = p_ParameterList[0];
 		firstParamList[1] = p_ParameterList[1];
 		SN::SN_Error e1 = skynet::UnaryAnd.GetSNI_FunctionDef()->UnifyArray(firstParamList);
 		if (e1.IsError())
 		{
+			SNI_Frame::Pop();
 			return e1;
 		}
 
