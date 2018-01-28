@@ -199,6 +199,12 @@ namespace SNI
 		secondParamList[1] = firstParamList[1];
 		secondParamList[2] = p_ParameterList[2];
 		SN::SN_Error e2 = SNI_Binary::UnifyArray(secondParamList);
+
+		result_param->SetValue(secondParamList[0]);
+		left_param->SetValue(secondParamList[1]);
+		right_param->SetValue(secondParamList[2]);
+		SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after calculation");
+		SNI_Frame::Pop();
 		return e2;
 	}
 

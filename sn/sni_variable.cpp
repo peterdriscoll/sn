@@ -537,7 +537,6 @@ namespace SNI
 			SN::SN_Expression e = l_clone->Unify(p_ParameterList);
 			SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after unify");
 			SNI_Variable *result = SNI_Frame::Top()->GetResult();
-			ASSERTM(result, "Result is first parameter of frame.");
 			result->SetValue((*p_ParameterList)[0].GetVariableValue());
 			SNI_Frame::Pop();
 			return e;
