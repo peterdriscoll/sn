@@ -54,7 +54,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_UnaryAnd::InverseFunctionExpression(const SN::SN_Expression & p_Param) const
 	{
-		return p_Param.UnaryOr();
+		return p_Param.UnaryAnd();
 	}
 
 	size_t SNI_UnaryAnd::CardinalityOfUnify(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const
@@ -62,14 +62,30 @@ namespace SNI
 		if (p_TotalCalc <= 1)
 		{
 			SN::SN_Bool result = p_ParamList[PU1_Result].GetVariableValue();
-			if (!result.IsNull() && result.GetBool())
+			if (!result.IsNull())
 			{
-				return 1;
+				if (result.GetBool())
+				{
+					if (p_ParamList[PU1_First].IsNull())
+					{
+						return 1;
+					}
+					return p_ParamList[PU1_First].Cardinality();
+				}
+				return 0;
 			}
 			SN::SN_Bool first = p_ParamList[PU1_First].GetVariableValue();
-			if (!first.IsNull() && !first.GetBool())
+			if (!first.IsNull())
 			{
-				return 1;
+				if (!first.GetBool())
+				{
+					if (p_ParamList[PU1_Result].IsNull())
+					{
+						return 1;
+					}
+					return p_ParamList[PU1_Result].Cardinality();
+				}
+				return 0;
 			}
 			return MultiplyCardinality(p_ParamList[PU1_First].Cardinality(), p_ParamList[PU1_Result].Cardinality());
 		}

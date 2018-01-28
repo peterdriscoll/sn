@@ -332,40 +332,47 @@ namespace SNI
 		if (e.GetBool())
 		{
 			card = CardinalityOfUnify(depth, inputList, calcPos, totalCalc);
-			LOG(WriteLine(SN::DebugLevel, "Cardinality " + to_string(card)+ " with total fields "+to_string(totalCalc)));
-			if (totalCalc)
+			if (0 < card)
 			{
-				LOG(WriteLine(SN::DebugLevel, inputList[calcPos].DisplayValueSN()));
-			}
-			SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before calculation");
-			if (maxCard < card)
-			{
-				if (AllowDelay())
+				LOG(WriteLine(SN::DebugLevel, "Cardinality " + to_string(card) + " with total fields " + to_string(totalCalc)));
+				if (totalCalc)
 				{
-					LOG(WriteLine(SN::DebugLevel, "Delayed Call " + GetLogDescription(inputList)));
-					SNI_DelayedProcessor::GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), inputList);
+					LOG(WriteLine(SN::DebugLevel, inputList[calcPos].DisplayValueSN()));
+				}
+				SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before calculation");
+				if (maxCard < card)
+				{
+					if (AllowDelay())
+					{
+						LOG(WriteLine(SN::DebugLevel, "Delayed Call " + GetLogDescription(inputList)));
+						SNI_DelayedProcessor::GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), inputList);
+					}
+					else
+					{
+						e = SN::SN_Error(true, true);
+					}
 				}
 				else
 				{
-					e = SN::SN_Error(true, true);
+					e = ForEachUnify(card, depth, inputList, p_ParamList, output, calcPos, totalCalc);
+					LOG(WriteLine(SN::DebugLevel, GetLogDescription(inputList)));
 				}
+				for (long j = 0; j < depth; j++)
+				{
+					p_ParamList[j] = inputList[j];
+					if (output[j])
+					{
+						p_ParamList[j].GetSNI_Expression()->Complete();
+						topFrame->GetVariable(j)->SetValue(inputList[j]);
+					}
+				}
+				SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after calculation");
 			}
 			else
 			{
-				e = ForEachUnify(card, depth, inputList, p_ParamList, output, calcPos, totalCalc);
-				LOG(WriteLine(SN::DebugLevel, GetLogDescription(inputList)));
+				SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify no constraint");
 			}
 		}
-		for (long j = 0; j < depth; j++)
-		{
-			p_ParamList[j] = inputList[j];
-			if (output[j])
-			{
-				p_ParamList[j].GetSNI_Expression()->Complete();
-				topFrame->GetVariable(j)->SetValue(inputList[j]);
-			}
-		}
-		SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after calculation");
 		SNI_Frame::Pop();
 		delete[] output;
 		return e;
