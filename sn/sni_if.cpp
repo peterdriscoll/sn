@@ -165,6 +165,13 @@ namespace SNI
 
 	SN::SN_Expression SNI_If::UnifyArray(SN::SN_Expression * p_ParameterList)
 	{
+		SNI_Frame::Push(this, NULL);
+		SNI_Frame *topFrame = SNI_Frame::Top();
+		SNI_Variable* result_param = topFrame->CreateParameterByName("result");
+		SNI_Variable* condition_param = topFrame->CreateParameterByName("condition");
+		SNI_Variable* positive_param = topFrame->CreateParameterByName("positive");
+		SNI_Variable* negative_param = topFrame->CreateParameterByName("negative");
+		result_param->SetValue(p_ParameterList[0]);
 		SN::SN_ValueSet condition;
 		SNI_WorldSet *condition_worldSet = new SNI_WorldSet;
 		condition.SetWorldSet(condition_worldSet);
@@ -177,6 +184,8 @@ namespace SNI
 			return e1;
 		}
 		condition.Simplify();
+		condition_param->SetValue(condition);
+		LOG(WriteLine(SN::DebugLevel, "If condition"));
 		SNI_Splitter splitter;
 		condition.GetSNI_ValueSet()->ForEachSplit(&splitter);
 			
@@ -193,6 +202,9 @@ namespace SNI
 				return e2;
 			}
 			splitter.Positive().Simplify();
+			paramList[0].Simplify();
+			result_param->SetValue(paramList[0]);
+			positive_param->SetValue(paramList[2]);
 		}
 		if (splitter.NegativeNotNull())
 		{
@@ -206,8 +218,11 @@ namespace SNI
 				return e2;
 			}
 			splitter.Negative().Simplify();
+			paramList[0].Simplify();
+			result_param->SetValue(paramList[0]);
+			negative_param->SetValue(paramList[3]);
 		}
-		p_ParameterList[0].Simplify();
+		SNI_Frame::Pop();
 		return e2;
 	}
 
