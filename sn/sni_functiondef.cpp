@@ -238,8 +238,11 @@ namespace SNI
 		bool *output = new bool[depth];
 		bool allFound = false;
 		long totalCalc = depth;
+		SNI_Frame::Push(this, NULL);
+		SNI_Frame *topFrame = SNI_Frame::Top();
 		for (long j = 0; j < depth; j++)
 		{
+			topFrame->CreateParameter(j);
 			if (p_ParamList[j].IsKnownValue())
 			{
 				inputList[j] = p_ParamList[j].GetVariableValue();
@@ -286,7 +289,8 @@ namespace SNI
 					LOG(WriteLine(SN::DebugLevel, "Parameter " + to_string(j) + ": " + inputList[j].DisplayValueSN()));
 					if (allFound || maxCard < card)
 					{
-						inputList[j] = SNI_Frame::Top()->CreateTemporary();
+						inputList[j] = topFrame->CreateTemporary();
+						topFrame->GetVariable(j)->SetValue(inputList[j]);
 						e = p_ParamList[j].AssertValue(inputList[j]);
 						LOG(WriteLine(SN::DebugLevel, "Assert " + to_string(j) + ": " + inputList[j].DisplayValueSN()));
 						if (e.IsError())
@@ -316,14 +320,15 @@ namespace SNI
 					output[j] = false;
 					totalCalc--;
 				}
+				topFrame->GetVariable(j)->SetValue(inputList[j]);
 			}
 			else
 			{
 				calcPos = (long)j;
+				topFrame->GetVariable(j)->SetValue(p_ParamList[j]);
 			}
 		}
 		LOG(WriteLine(SN::DebugLevel, GetLogDescription(p_ParamList)));
-		LOG(WriteFrame(SN::DebugLevel));
 		if (e.GetBool())
 		{
 			card = CardinalityOfUnify(depth, inputList, calcPos, totalCalc);
@@ -349,8 +354,6 @@ namespace SNI
 			{
 				e = ForEachUnify(card, depth, inputList, p_ParamList, output, calcPos, totalCalc);
 				LOG(WriteLine(SN::DebugLevel, GetLogDescription(inputList)));
-				LOG(WriteFrame(SN::DebugLevel));
-				SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after calculation");
 			}
 		}
 		for (long j = 0; j < depth; j++)
@@ -359,8 +362,11 @@ namespace SNI
 			if (output[j])
 			{
 				p_ParamList[j].GetSNI_Expression()->Complete();
+				topFrame->GetVariable(j)->SetValue(inputList[j]);
 			}
 		}
+		SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after calculation");
+		SNI_Frame::Pop();
 		delete[] output;
 		return e;
 	}
