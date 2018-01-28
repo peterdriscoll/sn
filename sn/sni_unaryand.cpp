@@ -14,7 +14,7 @@ namespace SNI
 
 	string SNI_UnaryAnd::GetTypeName() const
 	{
-		return "Not";
+		return "UnaryAnd";
 	}
 
 	string SNI_UnaryAnd::DisplayCpp() const
@@ -24,7 +24,7 @@ namespace SNI
 
 	string SNI_UnaryAnd::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
 	{
-		return "Assert equal";
+		return "UnaryAnd";
 	}
 
 	long SNI_UnaryAnd::GetPriority() const
