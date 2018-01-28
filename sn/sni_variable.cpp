@@ -531,9 +531,14 @@ namespace SNI
 	{
 		if (m_Value)
 		{
-			SNI_Expression * l_clone = m_Value->Clone(this, NULL);
-			SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, "Variable.Unify");
+			SNI_Expression * l_clone = m_Value->Clone(this, (*p_ParameterList)[0].GetSNI_Expression());
+
+			SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after clone");
 			SN::SN_Expression e = l_clone->Unify(p_ParameterList);
+			SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after unify");
+			SNI_Variable *result = SNI_Frame::Top()->GetResult();
+			ASSERTM(result, "Result is first parameter of frame.");
+			result->SetValue((*p_ParameterList)[0].GetVariableValue());
 			SNI_Frame::Pop();
 			return e;
 		}

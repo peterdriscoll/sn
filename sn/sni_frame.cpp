@@ -123,6 +123,11 @@ namespace SNI
 		return m_VariableList[p_VariableNum];
 	}
 
+	SNI_Variable * SNI_Frame::GetResult()
+	{
+		return m_VariableList[0];
+	}
+
 	string SNI_Frame::NameSuffix()
 	{
 		if (m_ThreadNum == 1)

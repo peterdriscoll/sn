@@ -31,6 +31,7 @@ namespace SNI
 		SNI_Expression *ReplaceVariable(SNI_Variable *p_Variable, bool & p_Changed);
 		SNI_Expression *CloneReplace(bool & p_Changed, SNI_Variable * p_From, SNI_Variable * p_To, SNI_Expression *p_Expression);
 		SNI_Variable *GetVariable(size_t p_VariableNum);
+		SNI_Variable *GetResult();
 		string NameSuffix();
 		string GetLogDescription();
 		string GetLogShortDescription();
