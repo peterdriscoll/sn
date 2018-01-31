@@ -202,7 +202,6 @@ namespace SNI
 		SN::SN_ValueSet result;
 		if (0 < m_ValueList.size())
 		{
-			SNI_WorldSet *worldSet1 = m_WorldSet;
 			SNI_WorldSet *worldSet = GetWorldSet();
 			SNI_WorldSet *worldSetClone = NULL;
 			if (worldSet)
@@ -217,13 +216,12 @@ namespace SNI
 				if (!contextWorld || contextWorld->CompatibleWorld(world))
 				{
 					SNI_World *cloneWorld = NULL;
-					if (worldSet1)
+					if (worldSet)
 					{
 						cloneWorld = worldSetClone->CreateCloneWorld(world);
 					}
 					result.AddTaggedValue(tv.GetValue().GetSNI_Expression()->Clone(p_Frame, p_Changed), cloneWorld);
 				}
-				GetWorldSet();
 			}
 		}
 		CheckWorldSetConsistency();

@@ -120,6 +120,10 @@ namespace SNI
 		{
 			return true;
 		}
+		if (!p_World->IsActive())
+		{
+			return false;
+		}
 		p_World->Mark(false);
 		Mark(true);
 		if (!p_World->HasMutualExclusion())

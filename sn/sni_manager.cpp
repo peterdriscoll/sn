@@ -16,6 +16,8 @@
 #define VK_SHIFT_F6 89
 #define VK_F7 65
 #define VK_SHIFT_F7 90
+#define VK_F8 66
+#define VK_SHIFT_F8 91
 #define VK_F10 68
 #define VK_F11 133
 #define VK_SHIFT_F11 135
@@ -32,6 +34,9 @@ namespace SNI
 	/*static*/ long SNI_Manager::m_FrameStackDepth;
 	/*static*/ long SNI_Manager::m_ThreadNum;
 	/*static*/ long SNI_Manager::m_Depth = -1;
+	/*static*/ vector<long> SNI_Manager::m_ThreadStepCountList;
+	/*static*/ long SNI_Manager::m_GotoThreadNum;
+	/*static*/ long SNI_Manager::m_StepCount;
 
 	void ThrowErrorHandler(SN::SN_Error p_Result)
 	{
@@ -189,6 +194,8 @@ namespace SNI
 			return baseInterrupt || (p_InterruptPoint == SN::CallPoint&& p_ThreadNum == m_ThreadNum  && p_FrameStackDepth < m_FrameStackDepth);
 		case SN::StepParameter:
 			return p_InterruptPoint == SN::BreakPoint || p_InterruptPoint == SN::CallPoint || p_InterruptPoint == SN::ParameterPoint;
+		case SN::GotoStepCount:
+			return m_StepCount == m_ThreadStepCountList[m_GotoThreadNum];
 		}
 		return false;
 	}
@@ -199,15 +206,15 @@ namespace SNI
 		{
 			return;
 		}
-		long l_ThreadNum = SNI_Frame::GetThreadNum();
+		long l_ThreadNum = GetThreadNum();
 		long l_FrameStackDepth = SNI_Frame::GetFrameStackDepth();
 		if (KbHit())
 		{
-			ProcessCommand(p_Text);
+			ProcessCommand(p_Text, l_ThreadNum, l_FrameStackDepth);
 		}
 		if (IsBreakPoint(p_InterruptPoint, l_ThreadNum, l_FrameStackDepth))
 		{
-			ProcessCommand(p_Text);
+			ProcessCommand(p_Text, l_ThreadNum, l_FrameStackDepth);
 		}
 	}
 
@@ -231,13 +238,11 @@ namespace SNI
 		m_DebugTitleWidth = p_DebugTitleWidth;
 	}
 
-	void SNI_Manager::ProcessCommand(const string &p_Text)
+	void SNI_Manager::ProcessCommand(const string & p_Text, long l_ThreadNum, long l_FrameStackDepth)
 	{
 		SNI_Log::GetLog()->WriteFrameStack(SN::DebugLevel, m_Depth);
-		long l_ThreadNum = SNI_Frame::GetThreadNum();
-		long l_FrameStackDepth = SNI_Frame::GetFrameStackDepth();
 		m_DebugAction = SN::None;
-		m_ThreadNum = l_ThreadNum;
+		WriteStepCounts(l_ThreadNum);
 		m_FrameStackDepth = l_FrameStackDepth;
 		bool displayPrompt = true;
 		while (m_DebugAction == SN::None)
@@ -271,11 +276,33 @@ namespace SNI
 				SNI_Log::GetLog()->WriteFrameStack(SN::DebugLevel, m_Depth);
 				break;
 			}
+			case VK_F8:
+			{
+				cout << "F6 - Goto step count\nEnter step count >> ";
+				char buffer[MAX_DEPTH_CHARS];
+				m_GotoThreadNum = 0;
+				cin.getline(buffer, MAX_DEPTH_CHARS);
+				m_StepCount = atol(buffer);
+				m_DebugAction = SN::GotoStepCount;
+				break;
+			}
+			case VK_SHIFT_F8:
+			{
+				cout << "F6 - Goto step count\nEnter thread >> ";
+				char buffer[MAX_DEPTH_CHARS];
+				cin.getline(buffer, MAX_DEPTH_CHARS);
+				m_GotoThreadNum = atol(buffer);
+				cin.getline(buffer, MAX_DEPTH_CHARS);
+				cout << "Enter step count >> ";
+				m_StepCount = atol(buffer);
+				m_DebugAction = SN::GotoStepCount;
+				break;
+			}
 			case VK_F7:
 				m_DebugAction = SN::StepInto;
 				break;
 			case VK_F10:
-				cout << "F10 - Step over\n";
+				cout << "F10 - Step over\n1";
 				m_DebugAction = SN::StepOver;
 				break;
 			case VK_F11:
@@ -310,6 +337,39 @@ namespace SNI
 				break;
 			}
 		}
+	}
+
+	size_t SNI_Manager::GetThreadNum()
+	{
+		size_t l_ThreadNum = SNI_Frame::GetThreadNum();
+		size_t lastSize = m_ThreadStepCountList.size();
+		if (lastSize <= l_ThreadNum)
+		{
+			m_ThreadStepCountList.resize(l_ThreadNum + 1);
+			for (size_t j = lastSize; j <= l_ThreadNum; j++)
+			{
+				m_ThreadStepCountList[j] = 0;
+			}
+		}
+		m_ThreadStepCountList[l_ThreadNum]++;
+		return l_ThreadNum;
+	}
+
+	void SNI_Manager::WriteStepCounts(long l_ThreadNum)
+	{
+		cout << "Position: ";
+		string separator;
+		for (size_t k = 0; k <= l_ThreadNum; k++)
+		{
+			long stepCount = m_ThreadStepCountList[k];
+			cout << separator << to_string(k) << ':' << to_string(stepCount);
+			if (k == l_ThreadNum)
+			{
+				cout << '*';
+			}
+			separator = " ";
+		}
+		cout << "\n";
 	}
 
 	ostream * SNI_Manager::CreateLogFile(SN::LoggingLevel p_LoggingLevel)

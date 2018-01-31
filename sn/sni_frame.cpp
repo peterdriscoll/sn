@@ -45,7 +45,7 @@ namespace SNI
 	{
 		if (t_ThreadNum == -1)
 		{
-			t_ThreadNum = ++m_MaxThreadNum;
+			t_ThreadNum = m_MaxThreadNum++;
 		}
 		return t_ThreadNum;
 	}
@@ -131,7 +131,7 @@ namespace SNI
 
 	string SNI_Frame::NameSuffix()
 	{
-		if (m_ThreadNum == 1)
+		if (m_ThreadNum == 0)
 		{	// Main thread
 			return "_" + to_string(m_FrameNum);
 		}

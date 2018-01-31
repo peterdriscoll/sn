@@ -64,8 +64,10 @@ namespace SNI
 
 		OnErrorHandler *m_ErrorHandler;
 
-		void ProcessCommand(const string & p_Text);
+		void ProcessCommand(const string & p_Text, long l_ThreadNum, long l_FrameStackDepth);
 
+		size_t GetThreadNum();
+		void WriteStepCounts(long l_ThreadNum);
 		size_t m_MaxCardinalityCall;
 		size_t m_MaxCardinalityUnify;
 
@@ -81,7 +83,9 @@ namespace SNI
 		static enum SN::DebugAction m_DebugAction;
 		static long m_ThreadNum;
 		static long m_FrameStackDepth;
-
+		static vector<long> m_ThreadStepCountList;
+		static long m_GotoThreadNum;
+		static long m_StepCount;
 	};
 }
 
