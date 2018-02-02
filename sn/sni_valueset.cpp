@@ -59,7 +59,6 @@ namespace SNI
 
 	void SNI_ValueSet::CheckWorldSetConsistency()
 	{
-		return;
 		for (const SNI_TaggedValue &tv : m_ValueList)
 		{
 			SNI_World *world = tv.GetWorld();
