@@ -197,7 +197,7 @@ namespace SNI
 
 	SNI_Expression * SNI_ValueSet::Clone(SNI_Frame *p_Frame, bool &p_Changed)
 	{
-		CheckWorldSetConsistency();
+		Validate();
 		SN::SN_ValueSet result;
 		if (0 < m_ValueList.size())
 		{
@@ -223,7 +223,7 @@ namespace SNI
 				}
 			}
 		}
-		CheckWorldSetConsistency();
+		Validate();
 		LOG(WriteLine(SN::DebugLevel, result.DisplaySN()));
 		SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, GetTypeName() + ".Clone");
 		return dynamic_cast<SNI_Expression *>(result.GetSNI_ValueSet());
@@ -256,7 +256,7 @@ namespace SNI
 				}
 			}
 			worldSet->Complete();
-			CheckWorldSetConsistency();
+			Validate();
 		}
 	}
 
@@ -271,7 +271,6 @@ namespace SNI
 
 	void SNI_ValueSet::RemoveFailedWorlds()
 	{
-		CheckWorldSetConsistency();
 		SNI_WorldSet *worldSet = NULL;
 		SNI_WorldSet *parentWorldSet = NULL;
 		bool oneParent = true;
@@ -403,6 +402,7 @@ namespace SNI
 	SN::SN_Expression SNI_ValueSet::SimplifyValue()
 	{
 		bool extractValue = false;
+		Validate();
 		if (ExtractBooleanValue(extractValue))
 		{
 		 	return SN::SN_Bool(extractValue);
@@ -452,6 +452,7 @@ namespace SNI
 				it++;
 			}
 		}
+		Validate();
 		if (!found)
 		{
 			if (loopError.IsNull())
@@ -518,7 +519,7 @@ namespace SNI
 	SN::SN_Expression SNI_ValueSet::Unify(SN::SN_ExpressionList * p_ParameterList)
 	{
 		SN::LogContext context("SNI_ValueSet::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )");
-		CheckWorldSetConsistency();
+		Validate();
 		SN::SN_Error err(true);
 		bool success = false;
 		SNI_World *contextWorld = SNI_World::ContextWorld();
@@ -581,7 +582,7 @@ namespace SNI
 
 	SN::SN_Error SNI_ValueSet::ForEach(std::function<SN::SN_Error(const SN::SN_Expression &p_Param, SNI_World *p_World)> p_Action)
 	{
-		CheckWorldSetConsistency();
+		Validate();
 		SNI_World *contextWorld = SNI_World::ContextWorld();
 		SNI_WorldSet *worldSet = GetWorldSet();
 		for (SNI_TaggedValue &tv : m_ValueList)
@@ -599,7 +600,7 @@ namespace SNI
 			}
 		}
 		worldSet->Complete();
-		CheckWorldSetConsistency();
+		Validate();
 		return true;
 	}
 
