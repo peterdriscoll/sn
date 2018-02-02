@@ -245,7 +245,7 @@ namespace SNI
 			topFrame->CreateParameter(j);
 			if (p_ParamList[j].IsKnownValue())
 			{
-				inputList[j] = p_ParamList[j].GetVariableValue();
+				inputList[j] = p_ParamList[j].GetVariableValue().SimplifyValue();
 				output[j] = false;
 				totalCalc--;
 				if (AllowDelay())

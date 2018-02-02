@@ -202,7 +202,7 @@ namespace SNI
 		SN::SN_ValueSet result;
 		if (0 < m_ValueList.size())
 		{
-			SNI_WorldSet *worldSet = GetWorldSet();
+			SNI_WorldSet *worldSet = m_WorldSet;
 			SNI_WorldSet *worldSetClone = NULL;
 			if (worldSet)
 			{
@@ -988,7 +988,7 @@ namespace SNI
 				}
 			}
 		}
-		if (typeIsBool)
+		if (typeIsBool && value)
 		{
 			for (const SNI_TaggedValue &tv : m_ValueList)
 			{
