@@ -7,9 +7,12 @@
 
 #include <chrono>
 #include <thread>
+#include <WinBase.h>
 
 #include "sn_pch.h"
 
+#define VK_F4 62
+#define VK_SHIFT_F4 87
 #define VK_F5 63
 #define VK_SHIFT_F5 88
 #define VK_F6 64
@@ -24,6 +27,8 @@
 #define VK_F12 136
 #define VK_H 104
 #define VK_SHIFT_H 72
+#define VK_Q 113
+#define VK_SHIFT_Q 81
 
 #define MAX_DEPTH_CHARS 20
 
@@ -255,6 +260,14 @@ namespace SNI
 			int response = GetCh();
 			switch (response)
 			{
+			case VK_F4:
+				cout << "F4 - Display value\nEnter name >> ";
+				char buffer[MAX_DEPTH_CHARS];
+				cin.getline(buffer, MAX_DEPTH_CHARS);
+				SNI_Log::GetLog()->WriteVariableByName(SN::DebugLevel, buffer);
+				break;
+			case VK_SHIFT_F4:
+				break;
 			case VK_F5:
 				cout << "F5 - Run\n";
 				m_DebugAction = SN::Run;
@@ -276,9 +289,13 @@ namespace SNI
 				SNI_Log::GetLog()->WriteFrameStack(SN::DebugLevel, m_Depth);
 				break;
 			}
+			case VK_F7:
+				m_DebugAction = SN::StepInto;
+				__debugbreak();
+				break;
 			case VK_F8:
 			{
-				cout << "F6 - Goto step count\nEnter step count >> ";
+				cout << "F8 - Goto step count\nEnter step count >> ";
 				char buffer[MAX_DEPTH_CHARS];
 				m_GotoThreadNum = 0;
 				cin.getline(buffer, MAX_DEPTH_CHARS);
@@ -288,7 +305,7 @@ namespace SNI
 			}
 			case VK_SHIFT_F8:
 			{
-				cout << "F6 - Goto step count\nEnter thread >> ";
+				cout << "F8 - Goto step count\nEnter thread >> ";
 				char buffer[MAX_DEPTH_CHARS];
 				cin.getline(buffer, MAX_DEPTH_CHARS);
 				m_GotoThreadNum = atol(buffer);
@@ -298,9 +315,6 @@ namespace SNI
 				m_DebugAction = SN::GotoStepCount;
 				break;
 			}
-			case VK_F7:
-				m_DebugAction = SN::StepInto;
-				break;
 			case VK_F10:
 				cout << "F10 - Step over\n1";
 				m_DebugAction = SN::StepOver;
@@ -321,10 +335,14 @@ namespace SNI
 			case VK_SHIFT_H:
 			{
 				cout << "Help:\n";
+				cout << "F4        - Variable value\n";
 				cout << "F5        - Run\n";
 				cout << "Shift F5  - Run to end (ignore breakpoints)\n";
 				cout << "F6        - Frame stack\n";
 				cout << "Shift F6  - Frame stack to depth\n";
+				cout << "F7        - Debug break to C++\n";
+				cout << "F8        - Run until step count reaches value\n";
+				cout << "Shift F8  - Run until step count reaches value on thread\n";
 				cout << "F10       - Step over\n";
 				cout << "F11       - Step into\n";
 				cout << "Shift F11 - Step out\n";
@@ -332,6 +350,9 @@ namespace SNI
 				cout << "h, H      - Help\n";
 				break;
 			}
+			case VK_Q:
+			case VK_SHIFT_Q:
+				exit(-1);
 			default:
 				displayPrompt = false;
 				break;
@@ -357,7 +378,7 @@ namespace SNI
 
 	void SNI_Manager::WriteStepCounts(long l_ThreadNum)
 	{
-		cout << "Position: ";
+		cout << "Step count: ";
 		string separator;
 		for (size_t k = 0; k <= l_ThreadNum; k++)
 		{

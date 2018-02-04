@@ -68,6 +68,37 @@ namespace SNI
 		}
 	}
 
+	/*static*/ void SNI_Frame::DisplayName(const string &p_Name)
+	{
+		SNI_Variable *v = LookupVariable(p_Name);
+		LOG(WriteVariable(SN::DebugLevel, v));
+	}
+
+	/*static*/ SNI_Variable *SNI_Frame::LookupVariable(const string &p_Name)
+	{
+		for (SNI_Frame *f : m_FrameStack)
+		{
+			SNI_Variable *v = f->LookupVariableInFrame(p_Name);
+			if (v)
+			{
+				return v;
+			}
+		}
+		return NULL;
+	}
+	
+	SNI_Variable *SNI_Frame::LookupVariableInFrame(const string & p_Name)
+	{
+		for (SNI_Variable *v : m_VariableList)
+		{
+			if (p_Name == v->FrameName())
+			{
+				return v;
+			}
+		}
+		return NULL;
+	}
+
 	SNI_Frame::SNI_Frame(SN::SN_Expression p_Function)
 	    : m_ThreadNum(GetThreadNum())
 		, m_FrameNum(++t_MaxFrameNum)
@@ -170,13 +201,9 @@ namespace SNI
 				[&fixedWidth](const SN::SN_Expression &p_Expression, SNI_World *p_World) -> SN::SN_Error
 				{
 					string valueText;
-					if (p_Expression.IsKnownValue())
+					if (!p_Expression.IsNull())
 					{
 						valueText = p_Expression.DisplaySN() + string(p_World ? "::" + p_World->DisplayShort() : "");
-					}
-					else if (p_Expression.IsVariable())
-					{
-						valueText = p_Expression.DisplaySN();
 					}
 					if (fixedWidth < valueText.size())
 					{
@@ -196,13 +223,9 @@ namespace SNI
 				[&data, &row, &delimeter, &filler, fixedWidth](const SN::SN_Expression &p_Expression, SNI_World *p_World)->SN::SN_Error
 				{
 					string valueText;
-					if (p_Expression.IsKnownValue())
+					if (!p_Expression.IsNull())
 					{
 						valueText = p_Expression.DisplaySN() + string(p_World ? "::" + p_World->DisplayShort() : "");
-					}
-					else if (p_Expression.IsVariable())
-					{
-						valueText = p_Expression.DisplaySN();
 					}
 					row++;
 					if (data.size() < row)

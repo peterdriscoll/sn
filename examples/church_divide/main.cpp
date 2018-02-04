@@ -229,10 +229,13 @@ void TestChurchDivide()
 	SN_DECLARE(r3);
 
 	(inc(v) == v + Long(1)).PartialAssertAction();
-	(inc(inc(inc(Long(0)))) == Long(3)).AssertAction();
+	// (inc(inc(inc(Long(0)))) == Long(3)).AssertAction();
 
 	// divide = \n.divide1 (succ n)
 	(Define(divide) == Lambda(n, divide1(succ(n)))).PartialAssertAction();
+
+	// Y = \f.(\x.x x) (\x.f (x x))
+	(Define(Y) == Lambda(f, Lambda(x, f(x(x)))(Lambda(x, f(x(x)))))).PartialAssertAction();
 
 	// divide1 == Y div
 	(Define(divide1) == Y(div)).PartialAssertAction();
@@ -242,9 +245,6 @@ void TestChurchDivide()
 
 	// succ n f x = f (n f x)
 	(Define(succ)(n)(f)(x) == f(n(f)(x))).PartialAssertAction();
-
-	// Y = \f.(\x.x x) (\x.f (x x))
-	(Define(Y) == Lambda(f, Lambda(x, f(x(x)))(Lambda(x, f(x(x)))))).PartialAssertAction();
 
 	// zero = \f.\x.x
 	(Define(zero) == Lambda(f, Lambda(x, x))).PartialAssertAction();
@@ -264,10 +264,10 @@ void TestChurchDivide()
 	// \n.\f.\x.n (\g.\h.h (g f)) (\u.x) (\u.u)
 	(Define(pred) == Lambda(n, Lambda(f, Lambda(x, n(Lambda(g, Lambda(h, h(g(f))))) (Lambda(u, x))(Lambda(u, u)))))).PartialAssertAction();
 
-	(divide(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(1)).EvaluateAction();
+	//(divide(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(1)).EvaluateAction();
 	(divide(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).AssertAction();
 	(r1 == Long(1)).EvaluateAction();
-
+	return;
 	(divide(Lambda(f, Lambda(x, f(f(f(f(x)))))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(2)).EvaluateAction();
 	(divide(Lambda(f, Lambda(x, f(f(f(f(x)))))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).AssertAction();
 	(r2 == Long(2)).EvaluateAction();
@@ -286,7 +286,7 @@ void main(int argc, char *argv[])
 	Transaction transaction;
 	try
 	{
-		TestIsInteger();
+		// TestIsInteger();
 		// TestCharInValueSet();
 		// TestValueSetOfStandardFunctions();
 		// TestValueSetOfLambdaFunctions();
@@ -294,7 +294,7 @@ void main(int argc, char *argv[])
 		// TestPythagoras();
 		// TestSimple();
 		
-		// TestChurchDivide();
+		TestChurchDivide();
 	}
 	catch (Error e)
 	{

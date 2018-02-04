@@ -23,6 +23,8 @@ namespace SNI
 		static long GetThreadNum();
 		static long GetFrameStackDepth();
 		static void DisplayFrameStack(long p_Depth);
+		static void DisplayName(const string &p_Name);
+		static SNI_Variable *LookupVariable(const string & p_Name);
 
 		SNI_Frame();
 		SNI_Frame(SN::SN_Expression p_Function);
@@ -41,6 +43,7 @@ namespace SNI
 		SNI_Variable *CreateParameterByName(const string &p_ParamName);
 
 	private:
+		SNI_Variable *LookupVariableInFrame(const string & p_Name);
 		void PromoteMembers();
 
 		SN::SN_Expression       m_Function;

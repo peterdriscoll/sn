@@ -82,6 +82,24 @@ namespace SNI
 		WriteLine(p_DebugLevel, p_Result.DisplayValueSN() + " == " + p_Expression.DisplayValueSN());
 	}
 
+	void SNI_Log::WriteVariable(SN::LoggingLevel p_DebugLevel, SN::SN_Variable p_Variable)
+	{
+		WriteLine(p_DebugLevel, p_Variable.GetName() + " == " + p_Variable.GetVariableValue().DisplaySN());
+	}
+
+	void SNI_Log::WriteVariableByName(SN::LoggingLevel p_DebugLevel, const string &p_Name)
+	{
+		SNI_Variable *v = SNI_Frame::LookupVariable(p_Name);
+		if (v)
+		{
+			WriteVariable(p_DebugLevel, v);
+		}
+		else
+		{
+			WriteLine(p_DebugLevel, p_Name + " not found");
+		}
+	}
+
 	void SNI_Log::WriteContext(SN::LoggingLevel p_DebugLevel, const string & p_Text)
 	{
 		SNI_World *world = SNI_World::ContextWorld();
