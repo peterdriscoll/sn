@@ -73,28 +73,28 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>$(SolutionDir)inc;$(SolutionDir)pgc\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)bin\$(Platform)\$(Configuration);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
+    <IncludePath>C:\boost\boost_1_66_0;$(SolutionDir)inc;$(SolutionDir)pgc\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>C:\boost\boost_1_66_0\stage\lib;$(SolutionDir)bin\$(Platform)\$(Configuration);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
     <IntDir>$(ProjectDir)inter\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)inc;$(SolutionDir)pgc\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>$(SolutionDir)bin\$(Platform)\$(Configuration);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
+    <IncludePath>C:\boost\boost_1_66_0;$(SolutionDir)inc;$(SolutionDir)pgc\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>C:\boost\boost_1_66_0\stage\lib;$(SolutionDir)bin\$(Platform)\$(Configuration);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)inter\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>$(SolutionDir)inc;$(SolutionDir)pgc\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)bin\$(Platform)\$(Configuration);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
+    <IncludePath>C:\boost\boost_1_66_0;$(SolutionDir)inc;$(SolutionDir)pgc\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>C:\boost\boost_1_66_0\stage\lib;$(SolutionDir)bin\$(Platform)\$(Configuration);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
     <IntDir>$(ProjectDir)inter\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)inc;$(SolutionDir)pgc\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>$(SolutionDir)bin\$(Platform)\$(Configuration);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
+    <IncludePath>C:\boost\boost_1_66_0;$(SolutionDir)inc;$(SolutionDir)pgc\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>C:\boost\boost_1_66_0\stage\lib;$(SolutionDir)bin\$(Platform)\$(Configuration);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)inter\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
@@ -196,6 +196,15 @@
     <ClInclude Include="..\inc\sn_value.h" />
     <ClInclude Include="..\inc\sn_valueset.h" />
     <ClInclude Include="..\inc\sn_variable.h" />
+    <ClInclude Include="http_connection.h" />
+    <ClInclude Include="http_connection_manager.h" />
+    <ClInclude Include="http_header.h" />
+    <ClInclude Include="http_mime_types.h" />
+    <ClInclude Include="http_reply.h" />
+    <ClInclude Include="http_request.h" />
+    <ClInclude Include="http_request_handler.h" />
+    <ClInclude Include="http_request_parser.h" />
+    <ClInclude Include="http_server.h" />
     <ClInclude Include="sni_add.h" />
     <ClInclude Include="sni_and.h" />
     <ClInclude Include="sni_binary.h" />
@@ -283,6 +292,13 @@
     <ClInclude Include="utility.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="http_connection.cpp" />
+    <ClCompile Include="http_connection_manager.cpp" />
+    <ClCompile Include="http_mime_types.cpp" />
+    <ClCompile Include="http_reply.cpp" />
+    <ClCompile Include="http_request_handler.cpp" />
+    <ClCompile Include="http_request_parser.cpp" />
+    <ClCompile Include="http_server.cpp" />
     <ClCompile Include="log.cpp" />
     <ClCompile Include="logcontext.cpp" />
     <ClCompile Include="sn.cpp" />

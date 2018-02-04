@@ -378,6 +378,33 @@
     <ClInclude Include="sni_log.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="http_connection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="http_connection_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="http_mime_types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="http_reply.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="http_request.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="http_request_handler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="http_request_parser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="http_header.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="http_server.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -708,6 +735,27 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sni_log.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="http_connection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="http_connection_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="http_mime_types.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="http_reply.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="http_request_handler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="http_request_parser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="http_server.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

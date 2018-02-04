@@ -11,6 +11,9 @@
 
 #include "sn_pch.h"
 
+#define VK_FUNCTION 0
+#define VK_FUNCTION2 224
+
 #define VK_F4 62
 #define VK_SHIFT_F4 87
 #define VK_F5 63
@@ -260,77 +263,90 @@ namespace SNI
 			int response = GetCh();
 			switch (response)
 			{
-			case VK_F4:
-				cout << "F4 - Display value\nEnter name >> ";
-				char buffer[MAX_DEPTH_CHARS];
-				cin.getline(buffer, MAX_DEPTH_CHARS);
-				SNI_Log::GetLog()->WriteVariableByName(SN::DebugLevel, buffer);
-				break;
-			case VK_SHIFT_F4:
-				break;
-			case VK_F5:
-				cout << "F5 - Run\n";
-				m_DebugAction = SN::Run;
-				break;
-			case VK_SHIFT_F5:
-				cout << "Shift F5 - Run to end\n";
-				m_DebugAction = SN::RunToEnd;
-				break;
-			case VK_F6:
-				cout << "F6 - Display stack\n";
-				SNI_Log::GetLog()->WriteFrameStack(SN::DebugLevel, -1);
-				break;
-			case VK_SHIFT_F6:
+			case VK_FUNCTION:
+			case VK_FUNCTION2:
 			{
-				cout << "F6 - Display stack\nEnter depth >> ";
-				char buffer[MAX_DEPTH_CHARS];
-				cin.getline(buffer, MAX_DEPTH_CHARS);
-				m_Depth = atol(buffer);
-				SNI_Log::GetLog()->WriteFrameStack(SN::DebugLevel, m_Depth);
+				int responseFunctionKey = GetCh();
+				switch (responseFunctionKey)
+				{
+				case VK_F4:
+					cout << "F4 - Display value\nEnter name >> ";
+					char buffer[MAX_DEPTH_CHARS];
+					cin.getline(buffer, MAX_DEPTH_CHARS);
+					SNI_Log::GetLog()->WriteVariableByName(SN::DebugLevel, buffer);
+					break;
+				case VK_SHIFT_F4:
+					break;
+				case VK_F5:
+					cout << "F5 - Run\n";
+					m_DebugAction = SN::Run;
+					break;
+				case VK_SHIFT_F5:
+					cout << "Shift F5 - Run to end\n";
+					m_DebugAction = SN::RunToEnd;
+					break;
+				case VK_F6:
+					cout << "F6 - Display stack\n";
+					SNI_Log::GetLog()->WriteFrameStack(SN::DebugLevel, -1);
+					break;
+				case VK_SHIFT_F6:
+				{
+					cout << "F6 - Display stack\nEnter depth >> ";
+					char buffer[MAX_DEPTH_CHARS];
+					cin.getline(buffer, MAX_DEPTH_CHARS);
+					m_Depth = atol(buffer);
+					SNI_Log::GetLog()->WriteFrameStack(SN::DebugLevel, m_Depth);
+					break;
+				}
+				case VK_F7:
+					cout << "F7 - Debug break into C++\n";
+					m_DebugAction = SN::StepInto;
+					__debugbreak();
+					break;
+				case VK_F8:
+				{
+					cout << "F8 - Goto step count\nEnter step count >> ";
+					char buffer[MAX_DEPTH_CHARS];
+					m_GotoThreadNum = 0;
+					cin.getline(buffer, MAX_DEPTH_CHARS);
+					m_StepCount = atol(buffer);
+					m_DebugAction = SN::GotoStepCount;
+					break;
+				}
+				case VK_SHIFT_F8:
+				{
+					cout << "F8 - Goto step count\nEnter thread >> ";
+					char buffer[MAX_DEPTH_CHARS];
+					cin.getline(buffer, MAX_DEPTH_CHARS);
+					m_GotoThreadNum = atol(buffer);
+					cin.getline(buffer, MAX_DEPTH_CHARS);
+					cout << "Enter step count >> ";
+					m_StepCount = atol(buffer);
+					m_DebugAction = SN::GotoStepCount;
+					break;
+				}
+				case VK_F10:
+					cout << "F10 - Step over\n";
+					m_DebugAction = SN::StepOver;
+					break;
+				case VK_F11:
+					cout << "F11 -  Step into\n";
+					m_DebugAction = SN::StepInto;
+					break;
+				case VK_SHIFT_F11:
+					cout << "Shift F11 - Step out\n";
+					m_DebugAction = SN::StepOut;
+					break;
+				case VK_F12:
+					cout << "F12 - Step to parameter\n";
+					m_DebugAction = SN::StepParameter;
+					break;
+				default:
+					displayPrompt = false;
+					break;
+				}
 				break;
 			}
-			case VK_F7:
-				m_DebugAction = SN::StepInto;
-				__debugbreak();
-				break;
-			case VK_F8:
-			{
-				cout << "F8 - Goto step count\nEnter step count >> ";
-				char buffer[MAX_DEPTH_CHARS];
-				m_GotoThreadNum = 0;
-				cin.getline(buffer, MAX_DEPTH_CHARS);
-				m_StepCount = atol(buffer);
-				m_DebugAction = SN::GotoStepCount;
-				break;
-			}
-			case VK_SHIFT_F8:
-			{
-				cout << "F8 - Goto step count\nEnter thread >> ";
-				char buffer[MAX_DEPTH_CHARS];
-				cin.getline(buffer, MAX_DEPTH_CHARS);
-				m_GotoThreadNum = atol(buffer);
-				cin.getline(buffer, MAX_DEPTH_CHARS);
-				cout << "Enter step count >> ";
-				m_StepCount = atol(buffer);
-				m_DebugAction = SN::GotoStepCount;
-				break;
-			}
-			case VK_F10:
-				cout << "F10 - Step over\n1";
-				m_DebugAction = SN::StepOver;
-				break;
-			case VK_F11:
-				cout << "F11 -  Step into\n";
-				m_DebugAction = SN::StepInto;
-				break;
-			case VK_SHIFT_F11:
-				cout << "Shift F11 - Step out\n";
-				m_DebugAction = SN::StepOut;
-				break;
-			case VK_F12:
-				cout << "F12 - Step to parameter\n";
-				m_DebugAction = SN::StepParameter;
-				break;
 			case VK_H:
 			case VK_SHIFT_H:
 			{
@@ -353,8 +369,6 @@ namespace SNI
 			case VK_Q:
 			case VK_SHIFT_Q:
 				exit(-1);
-			default:
-				displayPrompt = false;
 				break;
 			}
 		}

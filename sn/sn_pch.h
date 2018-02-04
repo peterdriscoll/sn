@@ -116,6 +116,18 @@
 #include "sni_buildset.h"
 #include "sni_hasmember.h"
 
+// http server
+#include "http_connection.h"
+#include "http_connection_manager.h"
+#include "http_request_handler.h"
+#include "http_mime_types.h"
+#include "http_reply.h"
+#include "http_request.h"
+#include "http_request_handler.h"
+#include "http_request_parser.h"
+#include "http_header.h"
+#include "http_server.h"
+
 #include <time.h> // time_t, tm, time, localtime, strftime
 #include <direct.h>
 #include <string>
@@ -128,6 +140,8 @@
 #include <sstream>
 #include <chrono>
 #include <thread>
+#include <utility>
+#include <signal.h>
 
 using namespace std;
 
