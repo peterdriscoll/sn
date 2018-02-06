@@ -128,6 +128,11 @@ namespace SN
 		return m_Manager->DebugCommand(p_InterruptPoint, p_Text);
 	}
 
+	void SN_Manager::StartWebServer(SN::DebugAction p_DebugAction, const string & p_Address, const string & p_Port, const string & p_DocRoot)
+	{
+		return m_Manager->StartWebServer(p_DebugAction, p_Address, p_Port, p_DocRoot);
+	}
+
 	size_t SN_Manager::DebugFieldWidth()
 	{
 		return m_Manager->DebugFieldWidth();
@@ -146,5 +151,60 @@ namespace SN
 	void SN_Manager::SetDebugTitleWidth(size_t p_DebugTitleWidth)
 	{
 		m_Manager->SetDebugTitleWidth(p_DebugTitleWidth);
+	}
+
+	string SN_Manager::Skynet()
+	{
+		return m_Manager->Skynet();
+	}
+
+	string SN_Manager::Run()
+	{
+		return m_Manager->Run();
+	}
+
+	string SN_Manager::RunToEnd()
+	{
+		return m_Manager->RunToEnd();
+	}
+
+	string SN_Manager::DebugBreak()
+	{
+		return m_Manager->DebugBreak();
+	}
+
+	string SN_Manager::StepOver()
+	{
+		return m_Manager->StepOver();
+	}
+
+	string SN_Manager::StepInto()
+	{
+		return m_Manager->StepInto();
+	}
+
+	string SN_Manager::StepOut()
+	{
+		return m_Manager->StepOut();
+	}
+
+	string SN_Manager::StepParam()
+	{
+		return m_Manager->StepParam();
+	}
+
+	string SN_Manager::GotoStepCount(long p_StepCount, long p_ThreadNum)
+	{
+		return m_Manager->GotoStepCount(p_StepCount, p_ThreadNum);
+	}
+
+	string SN_Manager::SetMaxStackFrames(long p_StackDepth)
+	{
+		return m_Manager->SetMaxStackFrames(p_StackDepth);
+	}
+
+	string SN_Manager::Quit()
+	{
+		return m_Manager->Quit();
 	}
 }

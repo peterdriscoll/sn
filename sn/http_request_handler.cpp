@@ -7,12 +7,14 @@
 #include "http_mime_types.h"
 #include "http_reply.h"
 #include "http_request.h"
+#include "sni_frame.h"
 
 #include <fstream>
 #include <sstream>
 #include <string>
 
 #include "sn_pch.h"
+using namespace std;
 
 namespace HTTP
 {
@@ -47,30 +49,82 @@ namespace HTTP
 			{
 				request_path += "index.html";
 			}
-
-			// Determine the file extension.
-			std::size_t last_slash_pos = request_path.find_last_of("/");
-			std::size_t last_dot_pos = request_path.find_last_of(".");
-			std::string extension;
-			if (last_dot_pos != std::string::npos && last_dot_pos > last_slash_pos)
+			std::string extension = "html";
+			string gotostepcount = "/gotostepcount";
+			string maxstackframes = "/maxstackframes";
+			if (request_path == "/skynet")
 			{
-				extension = request_path.substr(last_dot_pos + 1);
+				rep.content = SN::SN_Manager::GetTopManager().Skynet();
 			}
-
-			// Open the file to send back.
-			std::string full_path = doc_root_ + request_path;
-			std::ifstream is(full_path.c_str(), std::ios::in | std::ios::binary);
-			if (!is)
+			else if (request_path == "/run")
 			{
-				rep = reply::stock_reply(reply::not_found);
-				return;
+				rep.content = SN::SN_Manager::GetTopManager().Run();
 			}
+			else if (request_path == "/runtoend")
+			{
+				rep.content = SN::SN_Manager::GetTopManager().RunToEnd();
+			}
+			else if (request_path == "/debugbreak")
+			{
+				rep.content = SN::SN_Manager::GetTopManager().DebugBreak();
+			}
+			else if (request_path == "/stepover")
+			{
+				rep.content = SN::SN_Manager::GetTopManager().StepOver();
+			}
+			else if (request_path == "/stepinto")
+			{
+				rep.content = SN::SN_Manager::GetTopManager().StepInto();
+			}
+			else if (request_path == "/stepout")
+			{
+				rep.content = SN::SN_Manager::GetTopManager().StepOut();
+			}
+			else if (request_path == "/stepparam")
+			{
+				rep.content = SN::SN_Manager::GetTopManager().StepParam();
+			}
+			else if (request_path.substr(0, gotostepcount.size()) == gotostepcount)
+			{
+				string data = request_path.substr(gotostepcount.size());
+				long stepCount = 0;
+				long threadNum = 0;
+				rep.content = SN::SN_Manager::GetTopManager().GotoStepCount(stepCount, threadNum);
+			}
+			else if (request_path.substr(0, maxstackframes.size()) == maxstackframes)
+			{
+				string data = request_path.substr(gotostepcount.size());
+				long stackDepth = 0;
+				rep.content = SN::SN_Manager::GetTopManager().SetMaxStackFrames(stackDepth);
+			}
+			else if (request_path == "/quit")
+			{
+				rep.content = SN::SN_Manager::GetTopManager().Quit();
+			}
+			else
+			{
+				// Determine the file extension.
+				std::size_t last_slash_pos = request_path.find_last_of("/");
+				std::size_t last_dot_pos = request_path.find_last_of(".");
+				if (last_dot_pos != std::string::npos && last_dot_pos > last_slash_pos)
+				{
+					extension = request_path.substr(last_dot_pos + 1);
+				}
 
+				// Open the file to send back.
+				std::string full_path = doc_root_ + request_path;
+				std::ifstream is(full_path.c_str(), std::ios::in | std::ios::binary);
+				if (!is)
+				{
+					rep = reply::stock_reply(reply::not_found);
+					return;
+				}
+				char buf[512];
+				while (is.read(buf, sizeof(buf)).gcount() > 0)
+					rep.content.append(buf, is.gcount());
+			}
 			// Fill out the reply to be sent to the client.
 			rep.status = reply::ok;
-			char buf[512];
-			while (is.read(buf, sizeof(buf)).gcount() > 0)
-				rep.content.append(buf, is.gcount());
 			rep.headers.resize(2);
 			rep.headers[0].name = "Content-Length";
 			rep.headers[0].value = std::to_string(rep.content.size());

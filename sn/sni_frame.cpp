@@ -9,7 +9,18 @@ namespace SNI
 	long m_MaxThreadNum = 0;
 	thread_local long t_ThreadNum = -1;
 	thread_local long t_MaxFrameNum = 0;
-	thread_local SNI_FrameList m_FrameStack;
+
+	/*static*/ SNI_ThreadFrameList SNI_Frame::m_ThreadFrameList;
+	
+	/*static*/ SNI_FrameList & SNI_Frame::GetFrameList()
+	{
+		long threadNum = GetThreadNum();
+		if (threadNum >= m_ThreadFrameList.size())
+		{
+			m_ThreadFrameList.resize(threadNum+1);
+		}
+		return m_ThreadFrameList[threadNum];
+	}
 
 	/*static*/ SNI_Frame *SNI_Frame::Push(const SNI_Expression *p_Function, SNI_Expression *p_Result)
 	{
@@ -18,25 +29,25 @@ namespace SNI
 		{
 			newFrame->CreateParameter(0)->SetValue(p_Result);
 		}
-		m_FrameStack.push_back(newFrame);
+		GetFrameList().push_back(newFrame);
 		return newFrame;
 	}
 
 	/*static*/ void SNI_Frame::PushFrame(SNI_Frame *p_Frame)
 	{
-		m_FrameStack.push_back(p_Frame);
+		GetFrameList().push_back(p_Frame);
 	}
 
 	/*static*/ void SNI_Frame::Pop()
 	{
-		m_FrameStack.pop_back();
+		GetFrameList().pop_back();
 	}
 
 	/*static*/ SNI_Frame * SNI_Frame::Top()
 	{
-		if (m_FrameStack.size())
+		if (GetFrameList().size())
 		{
-			return m_FrameStack.back();
+			return GetFrameList().back();
 		}
 		return NULL;
 	}
@@ -52,7 +63,7 @@ namespace SNI
 
 	/*static*/ long SNI_Frame::GetFrameStackDepth()
 	{
-		return m_FrameStack.size();
+		return GetFrameList().size();
 	}
 
 	/*static*/ void SNI_Frame::DisplayFrameStack(long p_Depth)
@@ -60,12 +71,36 @@ namespace SNI
 		size_t base = 0;
 		if (0 < p_Depth)
 		{
-			base = m_FrameStack.size() - p_Depth;
+			base = GetFrameList().size() - p_Depth;
 		}
-		for (size_t j = base; j < m_FrameStack.size(); j++)
+		for (size_t j = base; j < GetFrameList().size(); j++)
 		{
-			LOG(WriteFrame(SN::DebugLevel, m_FrameStack[j]));
+			LOG(WriteFrame(SN::DebugLevel, GetFrameList()[j]));
 		}
+	}
+
+	void SNI_Frame::WriteWebStack(ostream &p_Stream, long p_Depth)
+	{
+		p_Stream << "<table><tr>\n";
+		for (size_t k = 0; k < m_ThreadFrameList.size(); k++)
+		{
+			SNI_FrameList &frameList = m_ThreadFrameList[k];
+			p_Stream << "<td><table>\n";
+			p_Stream << "<caption>Thread " << k << "</caption>";
+			size_t base = 0;
+			if (0 < p_Depth)
+			{
+				base = frameList.size() - p_Depth;
+			}
+			for (size_t j = frameList.size(); j > base ; j--)
+			{
+				p_Stream << "<tr><td align = \"center\">\n";
+				frameList[j-1]->WriteWebFrame(p_Stream);
+				p_Stream << "<tr><td>\n";
+			}
+			p_Stream << "</table></td>\n";
+		}
+		p_Stream << "</tr></table>\n";
 	}
 
 	/*static*/ void SNI_Frame::DisplayName(const string &p_Name)
@@ -76,7 +111,7 @@ namespace SNI
 
 	/*static*/ SNI_Variable *SNI_Frame::LookupVariable(const string &p_Name)
 	{
-		for (SNI_Frame *f : m_FrameStack)
+		for (SNI_Frame *f : GetFrameList())
 		{
 			SNI_Variable *v = f->LookupVariableInFrame(p_Name);
 			if (v)
@@ -86,7 +121,7 @@ namespace SNI
 		}
 		return NULL;
 	}
-	
+
 	SNI_Variable *SNI_Frame::LookupVariableInFrame(const string & p_Name)
 	{
 		for (SNI_Variable *v : m_VariableList)
@@ -254,6 +289,54 @@ namespace SNI
 			}
 		}
 		return GetLogShortDescription() +  "\n" + result;
+	}
+
+	void SNI_Frame::WriteWebFrame(ostream &p_Stream)
+	{
+		p_Stream << "<table border=\"1\">\n";
+		p_Stream << "<caption>" << "Frame " << m_FrameNum << " " << m_Function.DisplaySN() << "</caption>\n";
+		size_t debugFieldWidth = SNI_Manager::GetTopManager()->DebugFieldWidth();
+		p_Stream << "<tr>\n";
+		for (const SNI_Variable *v : m_VariableList)
+		{
+			p_Stream << "<th>" << v->FrameName() << "</th>\n";
+		}
+		p_Stream << "</tr>\n";
+		p_Stream << "<tr>\n";
+		for (const SNI_Variable *v : m_VariableList)
+		{
+			SN::SN_Expression e = v->GetValue(false);
+			string typeText;
+			if (v->IsKnownValue())
+			{
+				typeText = e.GetSNI_Expression()->GetTypeName();
+			}
+			p_Stream << "<td>" << typeText << "</td>\n";
+		}
+		p_Stream << "</tr>\n";
+		p_Stream << "<tr>\n";
+		for (const SNI_Variable *v : m_VariableList)
+		{
+			p_Stream << "<td>\n";
+			SN::SN_Expression e = v->GetValue(false);
+			string delimeter;
+			e.ForEach(
+				[&p_Stream, &delimeter, debugFieldWidth](const SN::SN_Expression &p_Expression, SNI_World *p_World)->SN::SN_Error
+				{
+					string valueText;
+					if (!p_Expression.IsNull())
+					{
+						valueText = p_Expression.DisplaySN() + string(p_World ? "::" + p_World->DisplayShort() : "");
+					}
+					p_Stream << delimeter << Details(valueText, debugFieldWidth);
+					delimeter = "<br>";
+					return SN::SN_Error(true);
+				}
+			);
+			p_Stream << "</td>\n";
+		}
+		p_Stream << "</tr>\n";
+		p_Stream << "</table>\n";
 	}
 
 	string SNI_Frame::GetLogShortDescription()

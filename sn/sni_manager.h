@@ -40,6 +40,7 @@ namespace SNI
 
 		void StartLogging(SN::LoggingLevel p_LoggingLevel, ostream *p_Stream);
 		void StartDebug(SN::DebugAction p_DebugAction, int p_Kbhit(), int p_GetCh());
+		void StartWebServer(SN::DebugAction p_DebugAction, const string& p_Address, const string& p_Port, const string& p_DocRoot);
 
 		bool HasConsole();
 		bool KbHit();
@@ -56,7 +57,27 @@ namespace SNI
 
 		ostream * CreateLogFile(SN::LoggingLevel);
 
+		string DebugCommand(SN::DebugAction p_DebugAction, const string & p_Description);
+		string Skynet();
+		string Run();
+		string RunToEnd();
+		string DebugBreak();
+		string StepOver();
+		string StepInto();
+		string StepOut();
+		string StepParam();
+		string GotoStepCount(long p_StepCount, long p_ThreadNum);
+		string SetMaxStackFrames(long p_StackDepth);
+		string Quit();
+
+		void WriteWebPage(ostream &p_Stream);
+		void WriteShuttingDown(ostream & p_Stream);
 	private:
+		void WriteCommands(ostream & p_Stream);
+		void WriteSubmit(ostream & p_Stream, const string & p_Action, const string & p_Name, const string & p_Description);
+		void WriteGotoStepCount(ostream &p_Stream);
+		void WriteSetMaxStackFrames(ostream & p_Stream);
+
 		static SNI_Manager *m_TopManager;
 		SNI_Manager *m_LastManager;
 
@@ -67,7 +88,8 @@ namespace SNI
 		void ProcessCommand(const string & p_Text, long l_ThreadNum, long l_FrameStackDepth);
 
 		size_t GetThreadNum();
-		void WriteStepCounts(long l_ThreadNum);
+		void DisplayStepCounts(long l_ThreadNum);
+		void WriteStepCounts(ostream & p_Stream);
 		size_t m_MaxCardinalityCall;
 		size_t m_MaxCardinalityUnify;
 
@@ -79,7 +101,7 @@ namespace SNI
 		bool m_HasConsole;
 		int (*m_KbHit)();
 		int (*m_GetCh)();
-		static long m_Depth;
+		static long m_StackDepth;
 		static enum SN::DebugAction m_DebugAction;
 		static long m_ThreadNum;
 		static long m_FrameStackDepth;

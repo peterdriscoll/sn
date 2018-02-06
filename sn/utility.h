@@ -43,6 +43,8 @@ namespace SNI
 	string ReplaceAll(const string &source, const string &target, const string &replace);
 
 	string Pad(const string &p_Text, size_t p_Width);
+	string Trim(const string &p_Text, size_t p_Width);
+	string Details(const string &p_Text, size_t p_Width);
 
 	string DisplayPmExpressionList(SN::SN_ExpressionList * p_ParameterList);
 	string DisplayPmValueList(const SN::SN_ValueList &p_ParameterList);

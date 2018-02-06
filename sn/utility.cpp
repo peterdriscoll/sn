@@ -110,9 +110,35 @@ namespace SNI
 		}
 		else if (p_Width < textWidth)
 		{
-			text = p_Text.substr(0, p_Width-3) + "...";
+			text = p_Text.substr(0, p_Width - 3) + "...";
 		}
 		return text + string(spacerWidth, ' ');
+	}
+
+	string Trim(const string &p_Text, size_t p_Width)
+	{
+		size_t textWidth = p_Text.size();
+		string text = p_Text;
+		if (p_Width < textWidth)
+		{
+			text = p_Text.substr(0, p_Width - 3) + "...";
+		}
+		return text;
+	}
+
+	string Details(const string &p_Text, size_t p_Width)
+	{
+		size_t textWidth = p_Text.size();
+		string text = p_Text;
+		if (p_Width < textWidth)
+		{
+			text =
+				"<details>"
+				"<summary>" + p_Text.substr(0, p_Width - 3) + "...</summary>"
+				"<p>" + p_Text + "</p>"
+				"</details>";
+		}
+		return text;
 	}
 
 	string DisplayPmValueList(const SN::SN_ValueList &p_ParameterList)

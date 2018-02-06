@@ -26,7 +26,7 @@ namespace SN
 
 	enum DebugAction
 	{
-		None, Run, RunToEnd, StepOver, StepInto, StepParameter, StepOut, GotoStepCount
+		None, Run, RunToEnd, StepOver, StepInto, StepParameter, StepOut, GotoStepCount, Abort
 	};
 
 	enum InterruptPoint
@@ -68,11 +68,25 @@ namespace SN
 		void DebugCommand(InterruptPoint p_InterruptPoint, string p_Text);
 		ostream * CreateLogFile(LoggingLevel p_LoggingLevel);
 
+		void StartWebServer(SN::DebugAction p_DebugAction, const string& p_Address, const string& p_Port, const string& p_DocRoot);
+
 		size_t DebugFieldWidth();
 		void SetDebugFieldWidth(size_t p_DebugFieldWidth);
 
 		size_t DebugTitleWidth();
 		void SetDebugTitleWidth(size_t p_DebugFieldWidth);
+
+		string Skynet();
+		string Run();
+		string RunToEnd();
+		string DebugBreak();
+		string StepOver();
+		string StepInto();
+		string StepOut();
+		string StepParam();
+		string GotoStepCount(long p_StepCount, long p_ThreadNum);
+		string SetMaxStackFrames(long p_StackDepth);
+		string Quit();
 	private:
 		SNI::SNI_Manager *m_Manager;
 		bool m_MyManager;

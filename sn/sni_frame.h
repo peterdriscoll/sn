@@ -11,6 +11,7 @@ namespace SNI
 
 	class SNI_Frame;
 	typedef vector<SNI_Frame *> SNI_FrameList;
+	typedef vector<SNI_FrameList> SNI_ThreadFrameList;
 
 	class SNI_Frame : public SNI_Object
 	{
@@ -23,8 +24,10 @@ namespace SNI
 		static long GetThreadNum();
 		static long GetFrameStackDepth();
 		static void DisplayFrameStack(long p_Depth);
+		static void WriteWebStack(ostream & p_Stream, long p_Depth);
 		static void DisplayName(const string &p_Name);
 		static SNI_Variable *LookupVariable(const string & p_Name);
+		static SNI_FrameList &GetFrameList();
 
 		SNI_Frame();
 		SNI_Frame(SN::SN_Expression p_Function);
@@ -42,15 +45,18 @@ namespace SNI
 		SNI_Variable *CreateParameter(size_t p_ParamNum);
 		SNI_Variable *CreateParameterByName(const string &p_ParamName);
 
+		void WriteWebFrame(ostream &p_Stream);
 	private:
 		SNI_Variable *LookupVariableInFrame(const string & p_Name);
 		void PromoteMembers();
 
-		SN::SN_Expression       m_Function;
-		long                    m_ThreadNum;
-		long                    m_FrameNum;
-		SNI_ReplacementList     m_ReplacementList;
-		SNI_VariablePointerList m_VariableList;
+		static SNI_ThreadFrameList     m_ThreadFrameList;
+
+		SN::SN_Expression              m_Function;
+		long                           m_ThreadNum;
+		long                           m_FrameNum;
+		SNI_ReplacementList            m_ReplacementList;
+		SNI_VariablePointerList        m_VariableList;
 	};
 }
 
