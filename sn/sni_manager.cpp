@@ -45,6 +45,7 @@ namespace SNI
 	/*static*/ vector<long> SNI_Manager::m_ThreadStepCountList;
 	/*static*/ long SNI_Manager::m_GotoThreadNum;
 	/*static*/ long SNI_Manager::m_StepCount;
+	/*static*/ bool SNI_Manager::m_Running = false;
 
 	void ThrowErrorHandler(SN::SN_Error p_Result)
 	{
@@ -87,6 +88,7 @@ namespace SNI
 	
 	SNI_Manager::~SNI_Manager()
 	{
+		DebugCommand(SN::EndPoint,"Exit");
 		m_TopManager = m_LastManager;
 	}
 
@@ -211,11 +213,11 @@ namespace SNI
 
 	bool SNI_Manager::IsBreakPoint(SN::InterruptPoint p_InterruptPoint, long p_ThreadNum, long p_FrameStackDepth)
 	{
-		bool baseInterrupt = (p_InterruptPoint == SN::BreakPoint || p_InterruptPoint == SN::ErrorPoint);
+		bool baseInterrupt = (p_InterruptPoint == SN::BreakPoint || p_InterruptPoint == SN::ErrorPoint || p_InterruptPoint == SN::EndPoint);
 		switch (m_DebugAction)
 		{
 		case SN::RunToEnd:
-			return false;
+			return p_InterruptPoint == SN::EndPoint;
 		case SN::Run:
 			return baseInterrupt;
 		case SN::StepInto:
@@ -234,6 +236,7 @@ namespace SNI
 
 	void SNI_Manager::DebugCommand(SN::InterruptPoint p_InterruptPoint, const string &p_Text)
 	{
+		m_Running = false;
 		if (!HasConsole())
 		{
 			return;
@@ -252,6 +255,7 @@ namespace SNI
 		{
 			ProcessCommand(p_Text, l_ThreadNum, l_FrameStackDepth);
 		}
+		m_Running = true;
 	}
 
 	size_t SNI_Manager::DebugFieldWidth()
@@ -303,6 +307,7 @@ namespace SNI
 						cout << "F4 - Display value\nEnter name >> ";
 						char buffer[MAX_DEPTH_CHARS];
 						cin.getline(buffer, MAX_DEPTH_CHARS);
+						cin.peek();
 						SNI_Log::GetLog()->WriteVariableByName(SN::DebugLevel, buffer);
 						break;
 					case VK_SHIFT_F4:
@@ -480,53 +485,53 @@ namespace SNI
 		stringstream ss;
 		cout << "Skynet\n";
 		std::this_thread::yield();
-		WriteWebPage(ss);
+		WriteWebPage(ss, m_Running);
 		return ss.str();
 	}
 
-	string SNI_Manager::DebugCommand(enum SN::DebugAction p_DebugAction, const string &p_Description)
+	string SNI_Manager::StartCommand(enum SN::DebugAction p_DebugAction, const string &p_Description)
 	{
 		stringstream ss;
 		m_DebugAction = p_DebugAction;
 		cout << p_Description << "\n";
 		std::this_thread::yield();
-		WriteWebPage(ss);
+		WriteWebPage(ss, true);
 		return ss.str();
 	}
 
 	string SNI_Manager::Run()
 	{
-		return DebugCommand(SN::Run, "Run");
+		return StartCommand(SN::Run, "Run");
 	}
 
 	string SNI_Manager::RunToEnd()
 	{
-		return DebugCommand(SN::RunToEnd, "Run to end");
+		return StartCommand(SN::RunToEnd, "Run to end");
 	}
 
 	string SNI_Manager::DebugBreak()
 	{
-		return DebugCommand(SN::RunToEnd, "Debug break");
+		return StartCommand(SN::RunToEnd, "Debug break");
 	}
 
 	string SNI_Manager::StepOver()
 	{
-		return DebugCommand(SN::StepOver, "Step over");
+		return StartCommand(SN::StepOver, "Step over");
 	}
 
 	string SNI_Manager::StepInto()
 	{
-		return DebugCommand(SN::StepInto, "Step into");
+		return StartCommand(SN::StepInto, "Step into");
 	}
 
 	string SNI_Manager::StepOut()
 	{
-		return DebugCommand(SN::StepOut, "Step out");
+		return StartCommand(SN::StepOut, "Step out");
 	}
 
 	string SNI_Manager::StepParam()
 	{
-		return DebugCommand(SN::StepParameter, "Step parameter");
+		return StartCommand(SN::StepParameter, "Step parameter");
 	}
 
 	string SNI_Manager::GotoStepCount(long p_StepCount, long p_ThreadNum)
@@ -536,7 +541,7 @@ namespace SNI
 		m_StepCount = p_StepCount;
 		cout << "Goto step count\n";
 		std::this_thread::yield();
-		WriteWebPage(ss);
+		WriteWebPage(ss, true);
 		return ss.str();
 	}
 
@@ -545,7 +550,7 @@ namespace SNI
 		stringstream ss;
 		m_StackDepth = p_StackDepth;
 		cout << "Set max stack frames\n";
-		WriteWebPage(ss);
+		WriteWebPage(ss, true);
 		return ss.str();
 	}
 
@@ -558,7 +563,17 @@ namespace SNI
 		return ss.str();
 	}
 
-	void SNI_Manager::WriteWebPage(ostream & p_Stream)
+	void SNI_Manager::Lock()
+	{
+		m_Mutex.lock();
+	}
+
+	void SNI_Manager::Unlock()
+	{
+		m_Mutex.unlock();
+	}
+
+	void SNI_Manager::WriteWebPage(ostream & p_Stream, bool p_Refresh)
 	{
 		p_Stream << "<!doctype html>\n";
 		p_Stream << "<html lang = \"en\">\n";
@@ -581,19 +596,29 @@ namespace SNI
 		p_Stream << "}\n";
 		p_Stream << "</style>\n";
 		p_Stream << "<meta charset = \"utf-8\">\n";
+		if (p_Refresh)
+		{
+			p_Stream << "<meta http-equiv = 'refresh' content = '1;url=/skynet'/>\n";
+		}
 		p_Stream << "<title>Skynet Dashboard</title>\n";
 		p_Stream << "<meta name = \"description\" content = \"Skynet\">\n";
 		p_Stream << "<meta name = \"author\" content = \"SitePoint\">\n";
 		p_Stream << "<link rel = \"stylesheet\" href = \"styles.css\">\n";
 		p_Stream << "</head>\n";
 		p_Stream << "<body>\n";
-		p_Stream << "<script src = \"js/scripts.js\"></script>\n";
+		p_Stream << "<script src = 'js/scripts.js'></script>\n";
 
-		p_Stream << "<h1>Skynet Dashboard</h1>\n";
+		p_Stream << "<h1>Skynet Dashboard";
+		if (p_Refresh)
+		{
+			p_Stream << " - Running";
+		}
+		p_Stream << "</h1>\n";
 		WriteCommands(p_Stream);
 		WriteStepCounts(p_Stream);
+		Lock();
 		SNI_Frame::WriteWebStack(p_Stream, m_StackDepth);
-
+		Unlock();
 		p_Stream << "</body>\n";
 		p_Stream << "</html>\n";
 	}

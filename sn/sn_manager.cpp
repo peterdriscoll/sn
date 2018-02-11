@@ -207,4 +207,13 @@ namespace SN
 	{
 		return m_Manager->Quit();
 	}
+
+	void SN_Manager::Lock()
+	{
+		return m_Manager->Lock();
+	}
+	void SN_Manager::Unlock()
+	{
+		return m_Manager->Unlock();
+	}
 }

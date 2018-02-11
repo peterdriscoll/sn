@@ -29,18 +29,24 @@ namespace SNI
 		{
 			newFrame->CreateParameter(0)->SetValue(p_Result);
 		}
+		SN::SN_Manager::GetTopManager().Lock();
 		GetFrameList().push_back(newFrame);
+		SN::SN_Manager::GetTopManager().Unlock();
 		return newFrame;
 	}
 
 	/*static*/ void SNI_Frame::PushFrame(SNI_Frame *p_Frame)
 	{
+		SN::SN_Manager::GetTopManager().Lock();
 		GetFrameList().push_back(p_Frame);
+		SN::SN_Manager::GetTopManager().Unlock();
 	}
 
 	/*static*/ void SNI_Frame::Pop()
 	{
+		SN::SN_Manager::GetTopManager().Lock();
 		GetFrameList().pop_back();
+		SN::SN_Manager::GetTopManager().Unlock();
 	}
 
 	/*static*/ SNI_Frame * SNI_Frame::Top()
@@ -171,7 +177,9 @@ namespace SNI
 		}
 		if (!found)
 		{
+			SN::SN_Manager::GetTopManager().Lock();
 			m_VariableList.push_back(l_Result);
+			SN::SN_Manager::GetTopManager().Unlock();
 		}
 		return l_Result;
 	}
@@ -352,7 +360,9 @@ namespace SNI
 	SNI_Variable * SNI_Frame::CreateTemporary()
 	{
 		SNI_Variable * result = new SNI_Variable();
+		SN::SN_Manager::GetTopManager().Lock();
 		m_VariableList.push_back(result);
+		SN::SN_Manager::GetTopManager().Unlock();
 		return result;
 	}
 
@@ -370,7 +380,9 @@ namespace SNI
 	{
 		SNI_Variable * result = new SNI_Variable();
 		result->SetName(p_ParamName + NameSuffix());
+		SN::SN_Manager::GetTopManager().Lock();
 		m_VariableList.push_back(result);
+		SN::SN_Manager::GetTopManager().Unlock();
 		return result;
 	}
 

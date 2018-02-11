@@ -8,7 +8,7 @@
 
 namespace SN
 {
-	SN::LogContext *SN::LogContext::m_BaseContext[MAX_LOG_INDEX] = { NULL, NULL };
+	thread_local SN::LogContext *t_BaseContext[MAX_LOG_INDEX] = { NULL, NULL };
 
 	long m_LineCount = 0;
 
@@ -18,9 +18,9 @@ namespace SN
 
 	string SN::LogContext::GetContextDescription(long p_LogIndex)
 	{
-		if (m_BaseContext[p_LogIndex])
+		if (t_BaseContext[p_LogIndex])
 		{
-			return m_BaseContext[p_LogIndex]->GetDescription();
+			return t_BaseContext[p_LogIndex]->GetDescription();
 		}
 		return "";
 	}
@@ -30,8 +30,8 @@ namespace SN
 		, m_Depth(0)
 	{
 		m_LogIndex = p_LogIndex;
-		m_ParentContext = m_BaseContext[m_LogIndex];
-		m_BaseContext[m_LogIndex] = this;
+		m_ParentContext = t_BaseContext[m_LogIndex];
+		t_BaseContext[m_LogIndex] = this;
 		if (m_ParentContext)
 		{
 			m_Depth = m_ParentContext->Depth() + 1;
@@ -41,7 +41,7 @@ namespace SN
 
 	LogContext::~LogContext()
 	{
-		m_BaseContext[m_LogIndex] = m_ParentContext;
+		t_BaseContext[m_LogIndex] = m_ParentContext;
 		m_ParentContext = NULL;
 	}
 

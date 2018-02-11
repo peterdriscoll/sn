@@ -57,7 +57,7 @@ namespace SNI
 
 		ostream * CreateLogFile(SN::LoggingLevel);
 
-		string DebugCommand(SN::DebugAction p_DebugAction, const string & p_Description);
+		string StartCommand(SN::DebugAction p_DebugAction, const string & p_Description);
 		string Skynet();
 		string Run();
 		string RunToEnd();
@@ -70,7 +70,10 @@ namespace SNI
 		string SetMaxStackFrames(long p_StackDepth);
 		string Quit();
 
-		void WriteWebPage(ostream &p_Stream);
+		void Lock();
+		void Unlock();
+
+		void WriteWebPage(ostream &p_Stream, bool p_Refresh);
 		void WriteShuttingDown(ostream & p_Stream);
 	private:
 		void WriteCommands(ostream & p_Stream);
@@ -99,8 +102,11 @@ namespace SNI
 		long m_DebugTitleWidth;
 
 		bool m_HasConsole;
+
 		int (*m_KbHit)();
 		int (*m_GetCh)();
+		mutex m_Mutex;
+
 		static long m_StackDepth;
 		static enum SN::DebugAction m_DebugAction;
 		static long m_ThreadNum;
@@ -108,6 +114,7 @@ namespace SNI
 		static vector<long> m_ThreadStepCountList;
 		static long m_GotoThreadNum;
 		static long m_StepCount;
+		static bool m_Running;
 	};
 }
 

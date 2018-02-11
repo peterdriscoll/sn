@@ -26,9 +26,6 @@ namespace SN
 	public:
 		static string GetContextDescription(long p_LogIndex);
 
-	private:
-		static LogContext *m_BaseContext[MAX_LOG_INDEX];
-
 	public:
 		LogContext(const string &p_Description, long p_LogIndex = LOG_STANDARD_INDEX);
 		virtual ~LogContext();

@@ -31,7 +31,7 @@ namespace SN
 
 	enum InterruptPoint
 	{
-		BreakPoint, CallPoint, ParameterPoint, ErrorPoint
+		BreakPoint, CallPoint, ParameterPoint, ErrorPoint, EndPoint
 	};
 
 	string GetLoggingLevelCode(LoggingLevel p_LoggingLevel);
@@ -87,6 +87,10 @@ namespace SN
 		string GotoStepCount(long p_StepCount, long p_ThreadNum);
 		string SetMaxStackFrames(long p_StackDepth);
 		string Quit();
+
+		void Lock();
+		void Unlock();
+
 	private:
 		SNI::SNI_Manager *m_Manager;
 		bool m_MyManager;

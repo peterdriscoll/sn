@@ -89,12 +89,38 @@ namespace HTTP
 				string data = request_path.substr(gotostepcount.size());
 				long stepCount = 0;
 				long threadNum = 0;
+				vector<string> assignmentList;
+				Split(data, "?", assignmentList);
+				for (const string &element : assignmentList)
+				{
+					vector<string> tokenList;
+					Split(element, "=", tokenList);
+					if (tokenList[0] == "stepcount")
+					{
+						stepCount = atol(tokenList[1].c_str());
+					}
+					else if (tokenList[0] == "threadnum")
+					{
+						threadNum = atol(tokenList[1].c_str());
+					}
+				}
 				rep.content = SN::SN_Manager::GetTopManager().GotoStepCount(stepCount, threadNum);
 			}
 			else if (request_path.substr(0, maxstackframes.size()) == maxstackframes)
 			{
 				string data = request_path.substr(gotostepcount.size());
 				long stackDepth = 0;
+				vector<string> assignmentList;
+				Split(data, "?", assignmentList);
+				for (const string &element : assignmentList)
+				{
+					vector<string> tokenList;
+					Split(element, "=", tokenList);
+					if (tokenList[0] == "stackdepth")
+					{
+						stackDepth = atol(tokenList[1].c_str());
+					}
+				}
 				rep.content = SN::SN_Manager::GetTopManager().SetMaxStackFrames(stackDepth);
 			}
 			else if (request_path == "/quit")
