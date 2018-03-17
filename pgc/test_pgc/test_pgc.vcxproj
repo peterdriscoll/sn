@@ -23,8 +23,8 @@
     <ProjectGuid>{78CBCFC1-2840-47FB-80DF-A9D354DBE01B}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>test_pgc</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
     <ProjectSubType>NativeUnitTestProject</ProjectSubType>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
