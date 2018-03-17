@@ -97,8 +97,6 @@ namespace PGC
 	private:
 		void ReleaseBlocks();
 
-		static PGC_Transaction *m_TopTransaction;
-		static PGC_Transaction *m_AllocatingTransaction;
 		static long m_NextThreadNum;
 
 		size_t m_NetMemoryUsed;

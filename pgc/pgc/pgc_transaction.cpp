@@ -6,8 +6,8 @@
 
 namespace PGC
 {
-	/*static*/ PGC_Transaction *PGC_Transaction::m_TopTransaction = 0;
-	/*static*/ PGC_Transaction *PGC_Transaction::m_AllocatingTransaction = 0;
+	thread_local PGC_Transaction *m_TopTransaction = 0;
+	thread_local PGC_Transaction *m_AllocatingTransaction = 0;
 
 	/*static*/ size_t PGC_Transaction::m_TotalNetMemoryUsed = 0;
 	/*static*/ size_t PGC_Transaction::m_TotalGrossMemoryUsed = 0;
@@ -154,7 +154,7 @@ namespace PGC
 		{
 			new PGC_Transaction();
 		}
-		return PGC_Transaction::m_TopTransaction;
+		return m_TopTransaction;
 	}
 
 	size_t PGC_Transaction::NetMemoryUsed()
