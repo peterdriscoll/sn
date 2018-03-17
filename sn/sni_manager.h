@@ -6,6 +6,8 @@
 #include <string>
 using namespace std;
 
+#include "sni_debugcommand.h"
+
 namespace SN
 {
 	class SN_Error;
@@ -39,6 +41,9 @@ namespace SNI
 		void SetDelayOnEvaluate(bool p_DelayOnEvaluate);
 
 		void StartLogging(SN::LoggingLevel p_LoggingLevel, ostream *p_Stream);
+		void ScheduleCommand(SN::DebugAction p_DebugAction);
+		void DebugCommandLineServer(int p_KbHit(), int p_GetCh());
+		void StartDebugCommandLineServer(SN::DebugAction p_DebugAction, int p_KbHit(), int p_GetCh());
 		void StartDebug(SN::DebugAction p_DebugAction, int p_Kbhit(), int p_GetCh());
 		void StartWebServer(SN::DebugAction p_DebugAction, const string& p_Address, const string& p_Port, const string& p_DocRoot);
 
@@ -48,6 +53,7 @@ namespace SNI
 
 		bool IsBreakPoint(SN::InterruptPoint p_InterruptPoint, long p_ThreadNum, long p_FrameStackDepth);
 		void DebugCommand(SN::InterruptPoint p_InterruptPoint, const string & p_Text);
+		void DebugCommand2(SN::InterruptPoint p_InterruptPoint, const string & p_Text);
 
 		size_t DebugFieldWidth();
 		void SetDebugFieldWidth(size_t p_DebugFieldWidth);
@@ -107,6 +113,7 @@ namespace SNI
 		int (*m_GetCh)();
 		mutex m_Mutex;
 
+		SNI_DebugCommand m_DebugCommand;
 		static long m_StackDepth;
 		static enum SN::DebugAction m_DebugAction;
 		static long m_ThreadNum;

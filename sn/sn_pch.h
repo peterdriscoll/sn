@@ -111,6 +111,7 @@
 #include "sni_cartcall.h"
 #include "sni_cartunify.h"
 #include "sni_splitter.h"
+#include "sni_debugcommand.h"
 
 // Sets
 #include "sni_buildset.h"

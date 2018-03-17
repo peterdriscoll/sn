@@ -40,6 +40,7 @@ namespace SNI
 		void WriteVariableByName(SN::LoggingLevel p_DebugLevel, const string & p_Name);
 		void WriteContext(SN::LoggingLevel p_DebugLevel, const string &p_Text);
 		void WriteFrameStack(SN::LoggingLevel p_DebugLevel, long p_Depth);
+		void WriteFrameStack(SN::LoggingLevel p_DebugLevel, long p_ThreadNum, long p_Depth);
 	private:
 		static SNI_Log *m_Log;
 

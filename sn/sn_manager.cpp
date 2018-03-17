@@ -111,6 +111,11 @@ namespace SN
 		return m_Manager->StartDebug(p_DebugAction, p_kbhit, p_GetCh);
 	}
 
+	void SN_Manager::StartDebugCommandLineServer(DebugAction p_DebugAction, int p_kbhit(), int p_GetCh())
+	{
+		return m_Manager->StartDebugCommandLineServer(p_DebugAction, p_kbhit, p_GetCh);
+	}
+
 	bool SN_Manager::HasConsole()
 	{
 		return m_Manager->HasConsole();

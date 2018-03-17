@@ -163,6 +163,143 @@ namespace SNI
 		SNI_Log::GetLog()->AddStream(p_LoggingLevel, l_Stream);
 	}
 
+	void RunDebugCommandLineServer(SNI_Manager *p_Manager, int p_KbHit(), int p_GetCh())
+	{
+		p_Manager->DebugCommandLineServer(p_KbHit, p_GetCh);
+	}
+
+	void SNI_Manager::DebugCommandLineServer(int p_KbHit(), int p_GetCh())
+	{
+		SNI_Log::GetLog()->WriteFrameStack(SN::DebugLevel, m_StackDepth);
+		while (!m_DebugCommand.IsExiting())
+		{
+			int response = p_GetCh();
+			switch (response)
+			{
+			case VK_FUNCTION:
+			case VK_FUNCTION2:
+			{
+				int responseFunctionKey = p_GetCh();
+				switch (responseFunctionKey)
+				{
+				case VK_F3:
+				{
+					cout << "F3 - Select thread 0.." << m_ThreadStepCountList.size() - 1 << "\nEnter thread num  >> ";
+					char buffer[MAX_DEPTH_CHARS];
+					cin.getline(buffer, MAX_DEPTH_CHARS);
+					m_DebugCommand.SelectThread(atol(buffer));
+					break;
+				}
+				case VK_F4:
+				{
+					cout << "F4 - Display value\nEnter name >> ";
+					char buffer[MAX_DEPTH_CHARS];
+					cin.getline(buffer, MAX_DEPTH_CHARS);
+					SNI_Log::GetLog()->WriteVariableByName(SN::DebugLevel, buffer);
+					break;
+				}
+				case VK_SHIFT_F4:
+					break;
+				case VK_F5:
+					cout << "F5 - Run\n";
+					m_DebugCommand.Run();
+					break;
+				case VK_SHIFT_F5:
+					cout << "Shift F5 - Run to end\n";
+					m_DebugCommand.RunToEnd();
+					break;
+				case VK_F6:
+					cout << "F6 - Display stack\n";
+					SNI_Log::GetLog()->WriteFrameStack(SN::DebugLevel, -1);
+					break;
+				case VK_SHIFT_F6:
+				{
+					cout << "F6 - Display stack\nEnter depth >> ";
+					char buffer[MAX_DEPTH_CHARS];
+					cin.getline(buffer, MAX_DEPTH_CHARS);
+					m_StackDepth = atol(buffer);
+					SNI_Log::GetLog()->WriteFrameStack(SN::DebugLevel, m_DebugCommand.GetThreadNum(), m_StackDepth);
+					break;
+				}
+				case VK_F7:
+					cout << "F7 - Debug break into C++\n";
+					m_DebugCommand.DebugBreak();
+					break;
+				case VK_F8:
+				{
+					cout << "F8 - Goto step count\nEnter step count >> ";
+					char buffer[MAX_DEPTH_CHARS];
+					cin.getline(buffer, MAX_DEPTH_CHARS);
+					long stepCount = atol(buffer);
+					m_DebugCommand.GotoStepCount(stepCount, 0);
+					break;
+				}
+				case VK_F10:
+					cout << "F10 - Step over\n";
+					m_DebugCommand.StepOver();
+					break;
+				case VK_F11:
+					cout << "F11 -  Step into\n";
+					m_DebugCommand.StepInto();
+					break;
+				case VK_SHIFT_F11:
+					cout << "Shift F11 - Step out\n";
+					m_DebugCommand.StepOut();
+					break;
+				case VK_F12:
+					cout << "F12 - Step to parameter\n";
+					m_DebugCommand.StepParam();
+					break;
+				default:
+					break;
+				}
+				break;
+			}
+			case VK_H:
+			case VK_SHIFT_H:
+			{
+				cout << "Help:\n";
+				cout << "F4        - Variable value\n";
+				cout << "F5        - Run\n";
+				cout << "Shift F5  - Run to end (ignore breakpoints)\n";
+				cout << "F6        - Frame stack\n";
+				cout << "Shift F6  - Frame stack to depth\n";
+				cout << "F7        - Debug break to C++\n";
+				cout << "F8        - Run until step count reaches value\n";
+				cout << "Shift F8  - Run until step count reaches value on thread\n";
+				cout << "F10       - Step over\n";
+				cout << "F11       - Step into\n";
+				cout << "Shift F11 - Step out\n";
+				cout << "F12       - Step to parameter\n";
+				cout << "h, H      - Help\n";
+				break;
+			}
+			case VK_Q:
+				m_DebugCommand.Quit();
+				break;
+			case VK_SHIFT_Q:
+				m_DebugCommand.Abort();
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	void SNI_Manager::StartDebugCommandLineServer(SN::DebugAction p_DebugAction, int p_KbHit(), int p_GetCh())
+	{
+		try
+		{
+			m_DebugCommand.ScheduleCommand(p_DebugAction);
+			SNI_Log::GetLog()->AddStream(SN::DebugLevel, &cout);
+			thread *commandThread = new thread(RunDebugCommandLineServer, this, p_KbHit, p_GetCh);
+		}
+		catch (std::exception& e)
+		{
+			std::cerr << "exception: " << e.what() << "\n";
+		}
+	}
+
 	void SNI_Manager::StartDebug(SN::DebugAction p_DebugAction, int p_KbHit(), int p_GetCh())
 	{
 		m_HasConsole = true;
@@ -187,7 +324,6 @@ namespace SNI
 		{
 			std::cerr << "exception: " << e.what() << "\n";
 		}
-
 	}
 
 	void SNI_Manager::StartWebServer(SN::DebugAction p_DebugAction, const string& p_Address, const string& p_Port, const string& p_DocRoot)
@@ -235,6 +371,14 @@ namespace SNI
 	}
 
 	void SNI_Manager::DebugCommand(SN::InterruptPoint p_InterruptPoint, const string &p_Text)
+	{
+		m_DebugCommand.SetText(p_Text);
+		if (m_DebugCommand.IsBreakPoint(p_InterruptPoint, GetThreadNum(), SNI_Frame::GetFrameStackDepth(), m_ThreadStepCountList[GetThreadNum()]))
+		{
+		}
+	}
+	
+	void SNI_Manager::DebugCommand2(SN::InterruptPoint p_InterruptPoint, const string &p_Text)
 	{
 		m_Running = false;
 		if (!HasConsole())
@@ -501,46 +645,64 @@ namespace SNI
 
 	string SNI_Manager::Run()
 	{
-		return StartCommand(SN::Run, "Run");
+		m_DebugCommand.Run();
+		stringstream ss;
+		WriteWebPage(ss, true);
+		return ss.str();
 	}
 
 	string SNI_Manager::RunToEnd()
 	{
-		return StartCommand(SN::RunToEnd, "Run to end");
+		stringstream ss;
+		WriteWebPage(ss, true);
+		return ss.str();
+		m_DebugCommand.RunToEnd();
 	}
 
 	string SNI_Manager::DebugBreak()
 	{
-		return StartCommand(SN::RunToEnd, "Debug break");
+		m_DebugCommand.DebugBreak();
+		stringstream ss;
+		WriteWebPage(ss, true);
+		return ss.str();
 	}
 
 	string SNI_Manager::StepOver()
 	{
-		return StartCommand(SN::StepOver, "Step over");
+		m_DebugCommand.StepOver();
+		stringstream ss;
+		WriteWebPage(ss, true);
+		return ss.str();
 	}
 
 	string SNI_Manager::StepInto()
 	{
-		return StartCommand(SN::StepInto, "Step into");
+		m_DebugCommand.StepInto();
+		stringstream ss;
+		WriteWebPage(ss, true);
+		return ss.str();
 	}
 
 	string SNI_Manager::StepOut()
 	{
-		return StartCommand(SN::StepOut, "Step out");
+		m_DebugCommand.StepOut();
+		stringstream ss;
+		WriteWebPage(ss, true);
+		return ss.str();
 	}
 
 	string SNI_Manager::StepParam()
 	{
-		return StartCommand(SN::StepParameter, "Step parameter");
+		m_DebugCommand.StepParam();
+		stringstream ss;
+		WriteWebPage(ss, true);
+		return ss.str();
 	}
 
 	string SNI_Manager::GotoStepCount(long p_StepCount, long p_ThreadNum)
 	{
+		m_DebugCommand.GotoStepCount(p_StepCount, p_ThreadNum);
 		stringstream ss;
-		m_DebugAction = SN::GotoStepCount;
-		m_StepCount = p_StepCount;
-		cout << "Goto step count\n";
-		std::this_thread::yield();
 		WriteWebPage(ss, true);
 		return ss.str();
 	}

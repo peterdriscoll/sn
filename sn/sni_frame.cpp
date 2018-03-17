@@ -85,6 +85,20 @@ namespace SNI
 		}
 	}
 
+	/*static*/ void SNI_Frame::DisplayFrameStack(long p_ThreadNum, long p_Depth)
+	{
+		SNI_FrameList &frameList = m_ThreadFrameList[p_ThreadNum];
+		size_t base = 0;
+		if (0 < p_Depth)
+		{
+			base = frameList.size() - p_Depth;
+		}
+		for (size_t j = frameList.size(); j > base; j--)
+		{
+			LOG(WriteFrame(SN::DebugLevel, frameList[j]));
+		}
+	}
+
 	void SNI_Frame::WriteWebStack(ostream &p_Stream, long p_Depth)
 	{
 		p_Stream << "<table><tr>\n";
