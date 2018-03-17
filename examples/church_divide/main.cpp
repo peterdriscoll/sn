@@ -281,9 +281,9 @@ void TestChurchDivide()
 void main(int argc, char *argv[])
 {
 	Manager manager; // Sets up any configuration parameters for SN
-	manager.StartDebug(SN::StepInto, _kbhit, _getch);
-	manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html");
-
+	//manager.StartDebug(SN::StepInto, _kbhit, _getch);
+	//manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html");
+	manager.StartDebugCommandLineServer(SN::StepInto, _kbhit, _getch);
 	Transaction transaction;
 	try
 	{

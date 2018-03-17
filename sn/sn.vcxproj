@@ -219,6 +219,7 @@
     <ClInclude Include="sni_comparison.h" />
     <ClInclude Include="sni_concat.h" />
     <ClInclude Include="sni_debug.h" />
+    <ClInclude Include="sni_debugcommand.h" />
     <ClInclude Include="sni_define.h" />
     <ClInclude Include="sni_delayedcall.h" />
     <ClInclude Include="sni_delayedprocessor.h" />
@@ -315,6 +316,7 @@
     <ClCompile Include="sni_comparison.cpp" />
     <ClCompile Include="sni_concat.cpp" />
     <ClCompile Include="sni_debug.cpp" />
+    <ClCompile Include="sni_debugcommand.cpp" />
     <ClCompile Include="sni_define.cpp" />
     <ClCompile Include="sni_delayedcall.cpp" />
     <ClCompile Include="sni_delayedprocessor.cpp" />

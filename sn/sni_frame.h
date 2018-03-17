@@ -24,6 +24,7 @@ namespace SNI
 		static long GetThreadNum();
 		static long GetFrameStackDepth();
 		static void DisplayFrameStack(long p_Depth);
+		static void DisplayFrameStack(long p_ThreadNum, long p_Depth);
 		static void WriteWebStack(ostream & p_Stream, long p_Depth);
 		static void DisplayName(const string &p_Name);
 		static SNI_Variable *LookupVariable(const string & p_Name);
