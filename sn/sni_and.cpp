@@ -182,7 +182,7 @@ namespace SNI
 		result_param->SetValue(p_ParameterList[0]);
 		left_param->SetValue(p_ParameterList[1]);
 		right_param->SetValue(p_ParameterList[2]);
-		SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before calculation");
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before calculation");
 
 		SN::SN_Expression * firstParamList = new SN::SN_Expression[2];
 		firstParamList[0] = p_ParameterList[0];
@@ -203,7 +203,7 @@ namespace SNI
 		result_param->SetValue(secondParamList[0]);
 		left_param->SetValue(secondParamList[1]);
 		right_param->SetValue(secondParamList[2]);
-		SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after calculation");
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after calculation");
 		SNI_Frame::Pop();
 		return e2;
 	}

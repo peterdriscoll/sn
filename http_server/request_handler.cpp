@@ -16,6 +16,8 @@
 #include "reply.hpp"
 #include "request.hpp"
 
+#pragma warning (disable: 4244)
+
 namespace http {
 namespace server {
 

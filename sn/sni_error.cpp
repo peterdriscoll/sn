@@ -18,7 +18,7 @@ namespace SNI
 		if (!m_Success && !p_Description.empty() && !SNI_World::ContextWorld())
 		{
 			LOG(WriteLine(SN::ErrorLevel, GetLogDescription()));
-			SNI_Manager::GetTopManager()->DebugCommand(SN::ErrorPoint, "Error");
+			SNI_Thread::GetThread()->DebugCommand(SN::ErrorPoint, "Error");
 		}
 	}
 
@@ -30,7 +30,7 @@ namespace SNI
 		if (!m_Success && !p_Description.empty() && !SNI_World::ContextWorld())
 		{
 			LOG(WriteLine(SN::ErrorLevel, GetLogDescription()));
-			SNI_Manager::GetTopManager()->DebugCommand(SN::ErrorPoint, "Error");
+			SNI_Thread::GetThread()->DebugCommand(SN::ErrorPoint, "Error");
 		}
 	}
 

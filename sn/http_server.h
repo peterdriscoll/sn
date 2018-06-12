@@ -6,6 +6,8 @@
 #ifndef HTTP_SERVER_H_INCLUDED
 #define HTTP_SERVER_H_INCLUDED
 
+#include <SDKDDKVer.h>
+
 #include <boost/asio.hpp>
 #include <string>
 #include "http_connection.h"
@@ -31,6 +33,9 @@ namespace HTTP
 
 			/// Run the server's io_context loop.
 			void run();
+
+			// Stop the server.
+			void stop();
 
 		private:
 			/// Perform an asynchronous accept operation.

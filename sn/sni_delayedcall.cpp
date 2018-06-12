@@ -22,6 +22,8 @@
 
 #include "sn_pch.h"
 
+#pragma warning (disable: 4018)
+
 namespace SNI
 {
 	SNI_DelayedCall::SNI_DelayedCall()

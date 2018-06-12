@@ -16,6 +16,8 @@
 #include "sn_pch.h"
 using namespace std;
 
+#pragma warning (disable: 4244)
+
 namespace HTTP
 {
 	namespace server
@@ -50,104 +52,92 @@ namespace HTTP
 				request_path += "index.html";
 			}
 			std::string extension = "html";
-			string gotostepcount = "/gotostepcount";
-			string maxstackframes = "/maxstackframes";
-			if (request_path == "/skynet")
+			string_umap umap;
+			string path = extract_values(request_path, umap);
+			long threadNum = atol(umap["threadnum"].c_str());
+			long stackdepth = atol(umap["stackdepth"].c_str());
+			SNI_Thread::ThreadListLock();
+			SNI::SNI_Thread *l_thread = SNI::SNI_Thread::GetThreadByNumber(threadNum);
+			if (l_thread)
 			{
-				rep.content = SN::SN_Manager::GetTopManager().Skynet();
-			}
-			else if (request_path == "/run")
-			{
-				rep.content = SN::SN_Manager::GetTopManager().Run();
-			}
-			else if (request_path == "/runtoend")
-			{
-				rep.content = SN::SN_Manager::GetTopManager().RunToEnd();
-			}
-			else if (request_path == "/debugbreak")
-			{
-				rep.content = SN::SN_Manager::GetTopManager().DebugBreak();
-			}
-			else if (request_path == "/stepover")
-			{
-				rep.content = SN::SN_Manager::GetTopManager().StepOver();
-			}
-			else if (request_path == "/stepinto")
-			{
-				rep.content = SN::SN_Manager::GetTopManager().StepInto();
-			}
-			else if (request_path == "/stepout")
-			{
-				rep.content = SN::SN_Manager::GetTopManager().StepOut();
-			}
-			else if (request_path == "/stepparam")
-			{
-				rep.content = SN::SN_Manager::GetTopManager().StepParam();
-			}
-			else if (request_path.substr(0, gotostepcount.size()) == gotostepcount)
-			{
-				string data = request_path.substr(gotostepcount.size());
-				long stepCount = 0;
-				long threadNum = 0;
-				vector<string> assignmentList;
-				Split(data, "?", assignmentList);
-				for (const string &element : assignmentList)
+				if (path == "/skynet")
 				{
-					vector<string> tokenList;
-					Split(element, "=", tokenList);
-					if (tokenList[0] == "stepcount")
-					{
-						stepCount = atol(tokenList[1].c_str());
-					}
-					else if (tokenList[0] == "threadnum")
-					{
-						threadNum = atol(tokenList[1].c_str());
-					}
+					rep.content = l_thread->Skynet();
 				}
-				rep.content = SN::SN_Manager::GetTopManager().GotoStepCount(stepCount, threadNum);
-			}
-			else if (request_path.substr(0, maxstackframes.size()) == maxstackframes)
-			{
-				string data = request_path.substr(gotostepcount.size());
-				long stackDepth = 0;
-				vector<string> assignmentList;
-				Split(data, "?", assignmentList);
-				for (const string &element : assignmentList)
+				else if (path == "/run")
 				{
-					vector<string> tokenList;
-					Split(element, "=", tokenList);
-					if (tokenList[0] == "stackdepth")
-					{
-						stackDepth = atol(tokenList[1].c_str());
-					}
+					rep.content = l_thread->RunWeb();
 				}
-				rep.content = SN::SN_Manager::GetTopManager().SetMaxStackFrames(stackDepth);
-			}
-			else if (request_path == "/quit")
-			{
-				rep.content = SN::SN_Manager::GetTopManager().Quit();
+				else if (path == "/runtoend")
+				{
+					rep.content = l_thread->RunToEndWeb();
+				}
+				else if (path == "/debugbreak")
+				{
+					rep.content = l_thread->DebugBreakWeb();
+				}
+				else if (path == "/stepover")
+				{
+					rep.content = l_thread->StepOverWeb(stackdepth);
+				}
+				else if (path == "/stepinto")
+				{
+					rep.content = l_thread->StepIntoWeb();
+				}
+				else if (path == "/stepout")
+				{
+					rep.content = l_thread->StepOutWeb(stackdepth);
+				}
+				else if (path == "/stepparam")
+				{
+					rep.content = l_thread->StepParamWeb();
+				}
+				else if (path == "/gotostepcount")
+				{
+					long stepCount = atol(umap["stepcount"].c_str());
+					rep.content = l_thread->GotoStepCountWeb(stepCount);
+				}
+				else if (path == "/maxstackframes")
+				{
+					long stackDepth = atol(umap["stackdepth"].c_str());
+					rep.content = l_thread->SetMaxStackFramesWeb(stackDepth);
+				}
+				else if (path == "/thread")
+				{
+					rep.content = l_thread->Skynet();
+				}
+				else if (path == "/quit")
+				{
+					rep.content = l_thread->QuitWeb();
+				}
+				else
+				{
+					// Determine the file extension.
+					std::size_t last_slash_pos = request_path.find_last_of("/");
+					std::size_t last_dot_pos = request_path.find_last_of(".");
+					if (last_dot_pos != std::string::npos && last_dot_pos > last_slash_pos)
+					{
+						extension = request_path.substr(last_dot_pos + 1);
+					}
+
+					// Open the file to send back.
+					std::string full_path = doc_root_ + request_path;
+					std::ifstream is(full_path.c_str(), std::ios::in | std::ios::binary);
+					if (!is)
+					{
+						rep = reply::stock_reply(reply::not_found);
+						SNI_Thread::ThreadListUnlock();
+						return;
+					}
+					char buf[512];
+					while (is.read(buf, sizeof(buf)).gcount() > 0)
+						rep.content.append(buf, is.gcount());
+				}
+				SNI_Thread::ThreadListUnlock();
 			}
 			else
 			{
-				// Determine the file extension.
-				std::size_t last_slash_pos = request_path.find_last_of("/");
-				std::size_t last_dot_pos = request_path.find_last_of(".");
-				if (last_dot_pos != std::string::npos && last_dot_pos > last_slash_pos)
-				{
-					extension = request_path.substr(last_dot_pos + 1);
-				}
-
-				// Open the file to send back.
-				std::string full_path = doc_root_ + request_path;
-				std::ifstream is(full_path.c_str(), std::ios::in | std::ios::binary);
-				if (!is)
-				{
-					rep = reply::stock_reply(reply::not_found);
-					return;
-				}
-				char buf[512];
-				while (is.read(buf, sizeof(buf)).gcount() > 0)
-					rep.content.append(buf, is.gcount());
+				rep.content = SNI_Thread::ThreadEnded(threadNum);
 			}
 			// Fill out the reply to be sent to the client.
 			rep.status = reply::ok;
@@ -197,5 +187,28 @@ namespace HTTP
 			return true;
 		}
 
+
+		/*static*/ string request_handler::extract_values(const string &p_URL, string_umap &p_Map)
+		{
+			string result;
+			vector<string> partList;
+			Split(p_URL, "?", partList);
+			vector<string> assignmentList;
+			result = partList[0];
+			if (partList.size() == 2)
+			{
+				Split(partList[1], "&", assignmentList);
+				for (const string &element : assignmentList)
+				{
+					vector<string> tokenList;
+					Split(element, "=", tokenList);
+					string t0 = tokenList[0];
+					string t1 = tokenList[1];
+					p_Map[tokenList[0]] = tokenList[1];
+					string r1 = p_Map[tokenList[0]];
+				}
+			}
+			return result;
+		}
 	} // namespace server
 } // namespace http

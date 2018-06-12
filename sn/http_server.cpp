@@ -90,5 +90,15 @@ namespace HTTP
 			});
 		}
 
+		void server::stop()
+		{
+			// The server is stopped by cancelling all outstanding asynchronous
+			// operations. Once all operations have finished the io_context::run()
+			// call will exit.
+			acceptor_.close();
+			connection_manager_.stop_all();
+			io_context_.stop();
+		}
+
 	} // namespace server
 } // namespace http

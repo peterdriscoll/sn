@@ -18,19 +18,21 @@ namespace SNI
 		SNI_DelayedProcessor* task = dynamic_cast<SNI_DelayedProcessor *>(PGCX::Transaction::TopTransaction()->TopTask());
 		if (!task)
 		{
-			task = new SNI_DelayedProcessor();
+			task = new SNI_DelayedProcessor(SNI_Thread::TopManager());
 			PGCX::Transaction::TopTransaction()->SubmitTask(task);
 		}
 		return task;
 	}
 
-	SNI_DelayedProcessor::SNI_DelayedProcessor()
+	SNI_DelayedProcessor::SNI_DelayedProcessor(SNI_Manager *p_Manager)
 		: m_Processing(false)
+		, m_Manager(new SNI_Manager(p_Manager))
 	{
 	}
 
 	SNI_DelayedProcessor::~SNI_DelayedProcessor()
 	{
+		delete m_Manager;
 	}
 
 	// Create a delayed call and link it in as the value of the variables..

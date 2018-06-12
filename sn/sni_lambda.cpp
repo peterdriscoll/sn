@@ -122,7 +122,7 @@ namespace SNI
 		p_ParameterList->pop_back();
 		m_FormalParameter->PartialAssertValue(param, true);
 		LOG(WriteLine(SN::DebugLevel, DisplaySN0()));
-		SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, "Lambda.Call");
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Lambda.Call");
 		if (p_ParameterList->size() > 0)
 		{
 			return m_Expression->Call(p_ParameterList, p_MetaLevel);
@@ -171,8 +171,8 @@ namespace SNI
 			e.AddNote(context, this, "Assigning parameter value failed");
 			return SN::SN_Error(false);
 		}
-		LOG(WriteFrame(SN::DebugLevel));
-		SNI_Manager::GetTopManager()->DebugCommand(SN::ParameterPoint, "Lambda.Unify");
+		LOG(WriteFrame(SNI_Thread::GetThread(), SN::DebugLevel));
+		SNI_Thread::GetThread()->DebugCommand(SN::ParameterPoint, "Lambda.Unify");
 		if (p_ParameterList->size() > 1)
 		{
 			return m_Expression->Unify(p_ParameterList);

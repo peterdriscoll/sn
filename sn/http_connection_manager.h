@@ -7,6 +7,8 @@
 #ifndef HTTP_CONNECTION_MANAGER_H_INCLUDED
 #define HTTP_CONNECTION_MANAGER_H_INCLUDED
 
+#include <SDKDDKVer.h>
+
 #include <set>
 #include "http_connection.h"
 

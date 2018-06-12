@@ -15,6 +15,7 @@
 #include "sni_valueset.h"
 #include "sni_error.h"
 #include "sni_null.h"
+#include "sni_manager.h"
 #include "utility.h"
 
 #include "sn_pch.h"
@@ -377,40 +378,46 @@ namespace SNI
 
 	void SNI_Expression::AssertThrow()
 	{
-		SN::SN_Manager manager;
-		AssertAction();
+		AssertActionWithHandler(SNI_Manager::ThrowErrorHandler);
 	}
 	void SNI_Expression::PartialAssertThrow()
 	{
-		SN::SN_Manager manager;
-		PartialAssertAction();
+		PartialAssertActionWithHandler(SNI_Manager::ThrowErrorHandler);
 	}
 	void SNI_Expression::EvaluateThrow()
 	{
-		SN::SN_Manager manager;
-		EvaluateThrow();
+		EvaluateActionWithHandler(SNI_Manager::ThrowErrorHandler);
 	}
 	void SNI_Expression::PartialEvaluateThrow()
 	{
-		SN::SN_Manager manager;
-		PartialEvaluateThrow();
+		PartialEvaluateActionWithHandler(SNI_Manager::ThrowErrorHandler);
 	}
 
 	void SNI_Expression::AssertAction()
 	{
+		AssertActionWithHandler(SNI_Thread::TopManager()->ErrorHandler());
+	}
+
+	void SNI_Expression::AssertActionWithHandler(OnErrorHandler * p_ErrorHandler)
+	{
 		SN::LogContext context("SNI_Expression::AssertAction()");
 		SN::SN_Expression clone = Clone(NULL, NULL);
-		HandleAssertAction(context, clone.Assert(), "Assert");
+		HandleAssertAction(context, clone.Assert(), "Assert", p_ErrorHandler);
 		SNI_Frame::Pop();
 	}
 
 	void SNI_Expression::PartialAssertAction()
 	{
-		SN::LogContext context("SNI_Expression::PartialAssertAction()");
-		HandleAssertAction(context, PartialAssert(), "Partial assert");
+		PartialAssertActionWithHandler(SNI_Thread::TopManager()->ErrorHandler());
 	}
 
-	void SNI_Expression::HandleAssertAction(SN::LogContext & p_Context, SN::SN_Expression p_Result, string p_Text)
+	void SNI_Expression::PartialAssertActionWithHandler(OnErrorHandler * p_ErrorHandler)
+	{
+		SN::LogContext context("SNI_Expression::PartialAssertAction()");
+		HandleAssertAction(context, PartialAssert(), "Partial assert", p_ErrorHandler);
+	}
+
+	void SNI_Expression::HandleAssertAction(SN::LogContext & p_Context, SN::SN_Expression p_Result, string p_Text, OnErrorHandler * p_ErrorHandler)
 	{
 		SNI_DelayedProcessor::GetProcessor()->Run();
 		SN::SN_Error e = p_Result;
@@ -418,25 +425,35 @@ namespace SNI
 		{
 			e.AddNote(p_Context, this, p_Text);
 			e.Log();
-			SN::SN_Manager::GetTopManager().ErrorHandler()(e);
+			p_ErrorHandler(e);
 		}
 	}
 
 	void SNI_Expression::EvaluateAction()
 	{
+		EvaluateActionWithHandler(SNI_Thread::TopManager()->ErrorHandler());
+	}
+
+	void SNI_Expression::EvaluateActionWithHandler(OnErrorHandler *p_ErrorHandler)
+	{
 		SN::LogContext context("SNI_Expression::EvaluateAction()");
 		SN::SN_Expression clone = Clone(NULL, NULL);
-		HandleEvaluateAction(context, clone.Evaluate(), "Evaluate");
+		HandleEvaluateAction(context, clone.Evaluate(), "Evaluate", p_ErrorHandler);
 		SNI_Frame::Pop();
 	}
 
 	void SNI_Expression::PartialEvaluateAction()
 	{
-		SN::LogContext context("SNI_Expression::PartialEvaluateAction()");
-		HandleEvaluateAction(context, PartialEvaluate(), "Partial evaluate");
+		PartialEvaluateActionWithHandler(SNI_Thread::TopManager()->ErrorHandler());
 	}
 
-	void SNI_Expression::HandleEvaluateAction(SN::LogContext &p_Context, SN::SN_Expression p_Result, string p_Text)
+	void SNI_Expression::PartialEvaluateActionWithHandler(OnErrorHandler *p_ErrorHandler)
+	{
+		SN::LogContext context("SNI_Expression::PartialEvaluateAction()");
+		HandleEvaluateAction(context, PartialEvaluate(), "Partial evaluate", p_ErrorHandler);
+	}
+
+	void SNI_Expression::HandleEvaluateAction(SN::LogContext &p_Context, SN::SN_Expression p_Result, string p_Text, OnErrorHandler *p_ErrorHandler)
 	{
 		SNI_DelayedProcessor::GetProcessor()->Run();
 		SN::SN_Error e = p_Result;
@@ -459,7 +476,7 @@ namespace SNI
 		{
 			e.AddNote(p_Context, this, p_Text);
 			e.Log();
-			SN::SN_Manager::GetTopManager().ErrorHandler()(e);
+			p_ErrorHandler(e);
 		}
 	}
 

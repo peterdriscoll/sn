@@ -19,6 +19,8 @@
 
 #include "sn_pch.h"
 
+#pragma warning (disable: 4018)
+
 namespace SNI
 {
 	SNI_CartUnify::SNI_CartUnify(const SNI_FunctionDef *p_FunctionDef, long p_Depth, SN::SN_Expression * p_InputList, SN::SN_Expression * p_ParamList, bool *p_Output, long p_CalcPos, long p_TotalCalc)
@@ -87,7 +89,7 @@ namespace SNI
 		}
 		else
 		{
-			size_t maxCard = SN::SN_Manager::GetTopManager().MaxCardinalityUnify();
+			size_t maxCard = SNI_Thread::TopManager()->MaxCardinalityUnify();
 			size_t card = m_FunctionDef->CardinalityOfUnify(p_Depth + 1, m_ValueList, m_ValueCalcPos[p_Depth + 1], m_ValueTotalCalc[p_Depth + 1]);
 			if (maxCard < card)
 			{

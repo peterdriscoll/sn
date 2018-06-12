@@ -21,6 +21,7 @@ using namespace std;
 namespace SNI
 {
 	class SNI_Frame;
+	class SNI_Thread;
 
 	class SNI_Log
 	{
@@ -34,7 +35,7 @@ namespace SNI
 
 		void WriteLine(SN::LoggingLevel p_DebugLevel, const string & p_line);
 
-		void WriteFrame(SN::LoggingLevel p_DebugLevel, SNI_Frame *p_Frame = NULL);
+		void WriteFrame(SNI_Thread *p_Thread, SN::LoggingLevel p_DebugLevel, SNI_Frame * p_Frame = NULL);
 		void WriteExpression(SN::LoggingLevel p_DebugLevel, SN::SN_Expression p_Result, SN::SN_Expression p_Expression);
 		void WriteVariable(SN::LoggingLevel p_DebugLevel, SN::SN_Variable p_Variable);
 		void WriteVariableByName(SN::LoggingLevel p_DebugLevel, const string & p_Name);

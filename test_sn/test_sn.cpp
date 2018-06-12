@@ -45,12 +45,9 @@ namespace test_sn
 		TEST_METHOD(TestStringEquivalent)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
-
 			Assert::IsTrue(Transaction::TotalNetMemoryUsed() == 0);
 			{
-
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				Assert::IsTrue((String("dog") == String("dog")).Equivalent(Function(Function(Equals, String("dog")), String("dog"))));
 				Assert::IsTrue(!(String("dog") == String("dog")).Equivalent(Function(Function(Equals, String("dog")), String("cat"))));
@@ -70,7 +67,8 @@ namespace test_sn
 		{
 			Initialize();
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
+				// manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html");
 
 				(String("dog") == String("dog")).EvaluateAction();
 				(!(String("dog") == String("cat"))).EvaluateAction();
@@ -84,14 +82,12 @@ namespace test_sn
 		TEST_METHOD(TestStringPartialEvaluate)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				SN_DECLARE(y);
 				SN_DECLARE(x);
 				SN_DECLARE_VALUE(z, String("dog"));
-
 
 				Assert::IsTrue((String("dog") == y).PartialEvaluate().Equivalent(String("dog") == y));
 				Assert::IsTrue(!(String("dog") == y).PartialEvaluate().Equivalent(String("dog") == x));
@@ -110,48 +106,51 @@ namespace test_sn
 		TEST_METHOD(TestStringAssert)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
+				// manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html");
+				{
+					Transaction transaction;
 
-				SN_DECLARE(y);
+					SN_DECLARE(y);
 
-				(String("dog") == y).AssertAction();
-				(String("dog") == y).EvaluateAction();
+					(String("dog") == y).AssertAction();
+					(String("dog") == y).EvaluateAction();
 
-				SN_DECLARE(z);
+					SN_DECLARE(z);
 
-				(String("dog") + z == "dogcat").AssertAction();
-				Value cat_value = z.GetValue();
-				string s_cat_value = cat_value.GetString();
-				Assert::IsTrue(s_cat_value == "cat");
-				(String("cat") == z).EvaluateAction();
-			}
-			{
-				Transaction transaction;
+					(String("dog") + z == "dogcat").AssertAction();
+					Value cat_value = z.GetValue();
+					string s_cat_value = cat_value.GetString();
+					Assert::IsTrue(s_cat_value == "cat");
+					(String("cat") == z).EvaluateAction();
+				}
+				{
+					Transaction transaction;
 
-				SN_DECLARE(a);
-				(String("dog") + a == String("dogcat")).AssertAction();
-				(a == String("cat")).AssertAction();
-				SN_DECLARE(b);
-				(b + String("cat") == String("dogcat")).AssertAction();
-				(b == String("dog")).AssertAction();
-				SN_DECLARE(c);
-				(String("dog") + String("cat") == c).AssertAction();
-				(c == String("dogcat")).AssertAction();
-			}
-			{
-				Transaction transaction;
+					SN_DECLARE(a);
+					(String("dog") + a == String("dogcat")).AssertAction();
+					(a == String("cat")).AssertAction();
+					SN_DECLARE(b);
+					(b + String("cat") == String("dogcat")).AssertAction();
+					(b == String("dog")).AssertAction();
+					SN_DECLARE(c);
+					(String("dog") + String("cat") == c).AssertAction();
+					(c == String("dogcat")).AssertAction();
+				}
+				{
+					Transaction transaction;
 
-				SN_DECLARE(a);
-				(String("dogcat").SubtractRight(String("cat")) == a).AssertAction();
-				(a == String("dog")).AssertAction();
-				SN_DECLARE(b);
-				(String("dogcat").SubtractRight(b) == String("dog")).AssertAction();
-				(b == String("cat")).AssertAction();
-				SN_DECLARE(c);
-				(c.SubtractRight(String("cat")) == String("dog")).AssertAction();
-				(c == String("dogcat")).AssertAction();
+					SN_DECLARE(a);
+					(String("dogcat").SubtractRight(String("cat")) == a).AssertAction();
+					(a == String("dog")).AssertAction();
+					SN_DECLARE(b);
+					(String("dogcat").SubtractRight(b) == String("dog")).AssertAction();
+					(b == String("cat")).AssertAction();
+					SN_DECLARE(c);
+					(c.SubtractRight(String("cat")) == String("dog")).AssertAction();
+					(c == String("dogcat")).AssertAction();
+				}
 			}
 			Cleanup();
 		}
@@ -159,9 +158,8 @@ namespace test_sn
 		TEST_METHOD(TestBoolEquivalent)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				Assert::IsTrue((Bool(true) == Bool(true)).Equivalent(Function(Function(Equals, Bool(true)), Bool(true))));
 				Assert::IsTrue(!(Bool(true) == Bool(true)).Equivalent(Function(Function(Equals, Bool(true)), Bool(false))));
@@ -176,78 +174,84 @@ namespace test_sn
 		TEST_METHOD(TestBoolEvaluate)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
+				{
+					Transaction transaction;
 
-				(Bool(true) == Bool(true)).EvaluateAction();
-				(!(Bool(true) == Bool(false))).EvaluateAction();
+					(Bool(true) == Bool(true)).EvaluateAction();
+					(!(Bool(true) == Bool(false))).EvaluateAction();
+				}
+				{
+					Transaction transaction;
+
+					SN_DECLARE_VALUE(z, Bool(true));
+					(Bool(true) == z).EvaluateAction();
+
+					SN_DECLARE_VALUE(k, True);
+					SN_DECLARE_VALUE(l, False);
+					SN_DECLARE_VALUE(m, True);
+					(k.If(l, m) == False).EvaluateAction();
+					(True.If("dog", "cat") == "dog").EvaluateAction();
+					(False.If("dog", "cat") == "cat").EvaluateAction();
+				}
 			}
-			{
-				Transaction transaction;
-
-				SN_DECLARE_VALUE(z, Bool(true));
-				(Bool(true) == z).EvaluateAction();
-
-				SN_DECLARE_VALUE(k, True);
-				SN_DECLARE_VALUE(l, False);
-				SN_DECLARE_VALUE(m, True);
-				(k.If(l, m) == False).EvaluateAction();
-				(True.If("dog", "cat") == "dog").EvaluateAction();
-				(False.If("dog", "cat") == "cat").EvaluateAction();
-			}
+			Cleanup();
 		}
+
 		TEST_METHOD(TestBoolEvaluate2)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
-				//Truth table AND
-				(!(Bool(false) && Bool(false))).EvaluateAction();
-				(!(Bool(false) && Bool(true))).EvaluateAction();
-				(!(Bool(true) && Bool(false))).EvaluateAction();
-				(Bool(true) && Bool(true)).EvaluateAction();
-			}
-			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
+				{
+					Transaction transaction;
+					//Truth table AND
+					(!(Bool(false) && Bool(false))).EvaluateAction();
+					(!(Bool(false) && Bool(true))).EvaluateAction();
+					(!(Bool(true) && Bool(false))).EvaluateAction();
+					(Bool(true) && Bool(true)).EvaluateAction();
+				}
+				{
+					Transaction transaction;
 
-				// Truth table OR
-				(!(Bool(false) || Bool(false))).EvaluateAction();
-				(Bool(false) || Bool(true)).EvaluateAction();
-				(Bool(true) || Bool(false)).EvaluateAction();
-				(Bool(true) || Bool(true)).EvaluateAction();
-			}
-			{
-				Transaction transaction;
+					// Truth table OR
+					(!(Bool(false) || Bool(false))).EvaluateAction();
+					(Bool(false) || Bool(true)).EvaluateAction();
+					(Bool(true) || Bool(false)).EvaluateAction();
+					(Bool(true) || Bool(true)).EvaluateAction();
+				}
+				{
+					Transaction transaction;
 
-				// Truth table AND
-				((Bool(false) && Bool(false)) == Bool(false)).EvaluateAction();
-				((Bool(false) && Bool(true)) == Bool(false)).EvaluateAction();
-				((Bool(true) && Bool(false)) == Bool(false)).EvaluateAction();
-				((Bool(true) && Bool(true)) == Bool(true)).EvaluateAction();
-			}
-			{
-				Transaction transaction;
+					// Truth table AND
+					((Bool(false) && Bool(false)) == Bool(false)).EvaluateAction();
+					((Bool(false) && Bool(true)) == Bool(false)).EvaluateAction();
+					((Bool(true) && Bool(false)) == Bool(false)).EvaluateAction();
+					((Bool(true) && Bool(true)) == Bool(true)).EvaluateAction();
+				}
+				{
+					Transaction transaction;
 
-				// Truth table OR
-				((Bool(false) || Bool(false)) == Bool(false)).EvaluateAction();
-				((Bool(false) || Bool(true)) == Bool(true)).EvaluateAction();
-				((Bool(true) || Bool(false)) == Bool(true)).EvaluateAction();
-				((Bool(true) || Bool(true)) == Bool(true)).EvaluateAction();
-			}
-			{
-				Transaction transaction;
+					// Truth table OR
+					((Bool(false) || Bool(false)) == Bool(false)).EvaluateAction();
+					((Bool(false) || Bool(true)) == Bool(true)).EvaluateAction();
+					((Bool(true) || Bool(false)) == Bool(true)).EvaluateAction();
+					((Bool(true) || Bool(true)) == Bool(true)).EvaluateAction();
+				}
+				{
+					Transaction transaction;
 
-				// Truth table if A then B else C
-				(False.If(False, False) == False).EvaluateAction();
-				(False.If(False, True) == True).EvaluateAction();
-				(False.If(True, False) == False).EvaluateAction();
-				(False.If(True, True) == True).EvaluateAction();
-				(True.If(False, False) == False).EvaluateAction();
-				(True.If(False, True) == False).EvaluateAction();
-				(True.If(True, False) == True).EvaluateAction();
-				(True.If(True, True) == True).EvaluateAction();
+					// Truth table if A then B else C
+					(False.If(False, False) == False).EvaluateAction();
+					(False.If(False, True) == True).EvaluateAction();
+					(False.If(True, False) == False).EvaluateAction();
+					(False.If(True, True) == True).EvaluateAction();
+					(True.If(False, False) == False).EvaluateAction();
+					(True.If(False, True) == False).EvaluateAction();
+					(True.If(True, False) == True).EvaluateAction();
+					(True.If(True, True) == True).EvaluateAction();
+				}
 			}
 			Cleanup();
 		}
@@ -255,9 +259,8 @@ namespace test_sn
 		TEST_METHOD(TestBoolPartialEvaluate)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				SN_DECLARE(y);
 				SN_DECLARE(x);
@@ -311,9 +314,8 @@ namespace test_sn
 		TEST_METHOD(TestBoolAssert)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				SN_DECLARE(z);
 
@@ -347,9 +349,8 @@ namespace test_sn
 		TEST_METHOD(TestBoolAssertIf)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				SN_DECLARE(m);
 				SN_DECLARE(n);
@@ -367,9 +368,8 @@ namespace test_sn
 		TEST_METHOD(TestBoolNotAndNot)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				(!((Bool(true) && Bool(false)))).AssertAction();
 			}
@@ -379,9 +379,8 @@ namespace test_sn
 		TEST_METHOD(TestDoubleEquivalent)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				((Long(1) + Long(2)) == Long(3)).EvaluateAction();
 
@@ -398,9 +397,8 @@ namespace test_sn
 		TEST_METHOD(TestDoubleEvaluate)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				(Double(3.3) == Double(3.3)).EvaluateAction();
 				(!(Double(5.43) == Double(6))).EvaluateAction();
@@ -421,9 +419,8 @@ namespace test_sn
 		TEST_METHOD(TestDoublePartialEvaluate)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				SN_DECLARE(y);
 				SN_DECLARE(x);
@@ -447,9 +444,8 @@ namespace test_sn
 		TEST_METHOD(TestDoubleAssert)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				SN_DECLARE(y);
 
@@ -468,9 +464,8 @@ namespace test_sn
 		TEST_METHOD(TestLongEvaluate)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				(Long(4) * Double(1.25) == Double(5)).EvaluateAction();
 				(Double(5) / Long(4) == Double(1.25)).EvaluateAction();
@@ -481,9 +476,8 @@ namespace test_sn
 		TEST_METHOD(TestLongAssertSimplified)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				SN_DECLARE(c);
 
@@ -491,74 +485,77 @@ namespace test_sn
 
 				Assert::IsTrue(c.Equivalent(Long(5)));
 			}
+			Cleanup();
 		}
 		
 		TEST_METHOD(TestLongAssert)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
+				{
+					Transaction transaction;
 
-				SN_DECLARE(a);
-				SN_DECLARE(b);
-				SN_DECLARE(c);
+					SN_DECLARE(a);
+					SN_DECLARE(b);
+					SN_DECLARE(c);
 
-				(a + Long(3) == Long(5)).AssertAction();
-				(Long(2) + b == Long(5)).AssertAction();
-				(Long(2) + Long(3) == c).AssertAction();
+					(a + Long(3) == Long(5)).AssertAction();
+					(Long(2) + b == Long(5)).AssertAction();
+					(Long(2) + Long(3) == c).AssertAction();
 
-				Assert::IsTrue(a.Equivalent(Long(2)));
-				Assert::IsTrue(b.Equivalent(Long(3)));
-				Assert::IsTrue(c.Equivalent(Long(5)));
-			}
+					Assert::IsTrue(a.Equivalent(Long(2)));
+					Assert::IsTrue(b.Equivalent(Long(3)));
+					Assert::IsTrue(c.Equivalent(Long(5)));
+				}
 
-			{
-				Transaction transaction;
+				{
+					Transaction transaction;
 
-				SN_DECLARE(x);
-				SN_DECLARE(y);
-				SN_DECLARE(z);
+					SN_DECLARE(x);
+					SN_DECLARE(y);
+					SN_DECLARE(z);
 
-				(x - Long(3) == Long(2)).AssertAction();
-				(Long(5) - y == Long(2)).AssertAction();
-				(Long(5) - Long(3) == z).AssertAction();
+					(x - Long(3) == Long(2)).AssertAction();
+					(Long(5) - y == Long(2)).AssertAction();
+					(Long(5) - Long(3) == z).AssertAction();
 
-				Assert::IsTrue(x.Equivalent(Long(5)));
-				Assert::IsTrue(y.Equivalent(Long(3)));
-				Assert::IsTrue(z.Equivalent(Long(2)));
-			}
+					Assert::IsTrue(x.Equivalent(Long(5)));
+					Assert::IsTrue(y.Equivalent(Long(3)));
+					Assert::IsTrue(z.Equivalent(Long(2)));
+				}
 
-			{
-				Transaction transaction;
+				{
+					Transaction transaction;
 
-				SN_DECLARE(a);
-				SN_DECLARE(b);
-				SN_DECLARE(c);
+					SN_DECLARE(a);
+					SN_DECLARE(b);
+					SN_DECLARE(c);
 
-				(a * Double(1.25) == Long(5)).AssertAction();
-				(Long(4) * b == Double(5)).AssertAction();
-				(Long(4) * Double(1.25) == c).AssertAction();
+					(a * Double(1.25) == Long(5)).AssertAction();
+					(Long(4) * b == Double(5)).AssertAction();
+					(Long(4) * Double(1.25) == c).AssertAction();
 
-				Assert::IsTrue(a.Equivalent(Double(4)));
-				Assert::IsTrue(b.Equivalent(Double(1.25)));
-				Assert::IsTrue(c.Equivalent(Double(5)));
-			}
+					Assert::IsTrue(a.Equivalent(Double(4)));
+					Assert::IsTrue(b.Equivalent(Double(1.25)));
+					Assert::IsTrue(c.Equivalent(Double(5)));
+				}
 
-			{
-				Transaction transaction;
+				{
+					Transaction transaction;
 
-				SN_DECLARE(x);
-				SN_DECLARE(y);
-				SN_DECLARE(z);
+					SN_DECLARE(x);
+					SN_DECLARE(y);
+					SN_DECLARE(z);
 
-				(x / Long(4) == Double(1.25)).AssertAction();
-				(Long(5) / y == Double(1.25)).AssertAction();
-				(Double(5) / Long(4) == z).AssertAction();
+					(x / Long(4) == Double(1.25)).AssertAction();
+					(Long(5) / y == Double(1.25)).AssertAction();
+					(Double(5) / Long(4) == z).AssertAction();
 
-				Assert::IsTrue(x.Equivalent(Double(5)));
-				Assert::IsTrue(y.Equivalent(Double(4)));
-				Assert::IsTrue(z.Equivalent(Double(1.25)));
+					Assert::IsTrue(x.Equivalent(Double(5)));
+					Assert::IsTrue(y.Equivalent(Double(4)));
+					Assert::IsTrue(z.Equivalent(Double(1.25)));
+				}
 			}
 			Cleanup();
 		}
@@ -566,9 +563,8 @@ namespace test_sn
 		TEST_METHOD(TestFunctionDefinition)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				{
 					SN_DECLARE(RemovePrefix);
@@ -602,9 +598,8 @@ namespace test_sn
 		TEST_METHOD(TestRecursiveLambdaFunctionDefinition)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				SN_DECLARE(Factorial);
 				SN_DECLARE(n);
@@ -624,34 +619,37 @@ namespace test_sn
 				(Fact(Long(10)) == Long(3628800)).EvaluateAction();
 				(Fact(Long(12)) == Long(479001600)).EvaluateAction();
 			}
+			Cleanup();
 		}
 
 		TEST_METHOD(TestRecursiveFunctionDefinition)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
+				{
+					Transaction transaction;
 
-				SN_DECLARE(Fact);
-				SN_DECLARE(m);
+					SN_DECLARE(Fact);
+					SN_DECLARE(m);
 
-				(Define(Fact)(m) == (m == Long(0)).If(Long(1), m * Fact(m - Long(1)))).PartialAssertAction();
+					(Define(Fact)(m) == (m == Long(0)).If(Long(1), m * Fact(m - Long(1)))).PartialAssertAction();
 
-				(Fact(Long(0)) == Long(1)).AssertAction();
-				(Fact(Long(1)) == Long(1)).AssertAction();
-				(Fact(Long(3)) == Long(6)).AssertAction();
-				(Fact(Long(10)) == Long(3628800)).AssertAction();
-				(Fact(Long(12)) == Long(479001600)).AssertAction();
-			}
-			{
-				Transaction transaction;
+					(Fact(Long(0)) == Long(1)).AssertAction();
+					(Fact(Long(1)) == Long(1)).AssertAction();
+					(Fact(Long(3)) == Long(6)).AssertAction();
+					(Fact(Long(10)) == Long(3628800)).AssertAction();
+					(Fact(Long(12)) == Long(479001600)).AssertAction();
+				}
+				{
+					Transaction transaction;
 
-				SN_DECLARE(Fact);
-				SN_DECLARE(k);
-				SN_DECLARE(n);
-				// Fact 0 == 1 && Fact k : > 0 == k * Fact k-1 : < 0
-				((Fact(Long(0)) == Long(1)) && (Fact(k, Lambda(n, n > Long(0))) == k * Fact(k - Long(1), Lambda(n, n < Long(0))))).PartialAssertAction();
+					SN_DECLARE(Fact);
+					SN_DECLARE(k);
+					SN_DECLARE(n);
+					// Fact 0 == 1 && Fact k : > 0 == k * Fact k-1 : < 0
+					((Fact(Long(0)) == Long(1)) && (Fact(k, Lambda(n, n > Long(0))) == k * Fact(k - Long(1), Lambda(n, n < Long(0))))).PartialAssertAction();
+				}
 			}
 			Cleanup();
 		}
@@ -659,9 +657,8 @@ namespace test_sn
 		TEST_METHOD(TestPartialCall)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 				SN_DECLARE(f);
 				SN_DECLARE(g);
 				SN_DECLARE(a);
@@ -677,15 +674,15 @@ namespace test_sn
 
 				(c == Long(20)).AssertAction();
 			}
+			Cleanup();
 		}
 
 
 		TEST_METHOD(TestYCombinator)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 				SN_DECLARE(Y);
 				SN_DECLARE(f);
 				SN_DECLARE(x);
@@ -711,14 +708,15 @@ namespace test_sn
 				(Y(Fact)(Long(10)) == Long(3628800)).AssertAction();
 				(Y(Fact)(Long(12)) == Long(479001600)).AssertAction();
 			}
+			Cleanup();
 		}
 
 		TEST_METHOD(TestChurchSucc)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
+
 				SN_DECLARE(inc);
 				SN_DECLARE(succ);
 				SN_DECLARE(n);
@@ -752,14 +750,16 @@ namespace test_sn
 				(succ(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).AssertAction();
 				(r3 == Long(4)).EvaluateAction();
 			}
+			Cleanup();
 		}
 
 		TEST_METHOD(TestChurchPlus)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
+				// manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html");
+
 				SN_DECLARE(plus);
 				SN_DECLARE(n);
 				SN_DECLARE(m);
@@ -793,14 +793,15 @@ namespace test_sn
 				(plus(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).AssertAction();
 				(r3 == Long(6)).EvaluateAction();
 			}
+			Cleanup();
 		}
 		
 		TEST_METHOD(TestChurchMultiply)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
+
 				SN_DECLARE(mult);
 				SN_DECLARE(n);
 				SN_DECLARE(m);
@@ -834,14 +835,15 @@ namespace test_sn
 				(mult(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).AssertAction();
 				(r3 == Long(9)).EvaluateAction();
 			}
+			Cleanup();
 		}
 
 		TEST_METHOD(TestChurchExp)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
+
 				SN_DECLARE(exp);
 				SN_DECLARE(n);
 				SN_DECLARE(m);
@@ -876,14 +878,15 @@ namespace test_sn
 				(exp(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).AssertAction();
 				(r3 == Long(27)).EvaluateAction();
 			}
+			Cleanup();
 		}
 
 		TEST_METHOD(TestChurchPred)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
+
 				SN_DECLARE(pred);
 				SN_DECLARE(n);
 				SN_DECLARE(m);
@@ -920,14 +923,15 @@ namespace test_sn
 				(pred(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).AssertAction();
 				(r3 == Long(2)).EvaluateAction();
 			}
+			Cleanup();
 		}
 
 		TEST_METHOD(TestChurchMinus)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
+
 				SN_DECLARE(pred);
 				SN_DECLARE(h);
 				SN_DECLARE(g);
@@ -971,15 +975,16 @@ namespace test_sn
 				(minus(Lambda(f, Lambda(x, f(f(f(f(f(f(f(f(x)))))))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).AssertAction();
 				(r3 == Long(5)).EvaluateAction();
 			}
+			Cleanup();
 		}
 
 		TEST_METHOD(TestChurchDivide)
 		{
 			return;
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
+				// manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html");
 				SN_DECLARE(divide);
 
 				SN_DECLARE(div);
@@ -1059,14 +1064,14 @@ namespace test_sn
 				(divide(Lambda(f, Lambda(x, f(f(f(f(f(f(f(f(f(x))))))))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).AssertAction();
 				(r3 == Long(3)).EvaluateAction();
 			}
+			Cleanup();
 		}
 
 		TEST_METHOD(TestStringRefDefinition)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 				/*
 				SN_DECLARE(x);
 				SN_DECLARE(y);
@@ -1099,9 +1104,8 @@ namespace test_sn
 		TEST_METHOD(TestOr1)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				SN_DECLARE(x);
 				(x == Long(3)).AssertAction();
@@ -1110,14 +1114,14 @@ namespace test_sn
 				Assert::IsTrue(x_string == "Long(3)");
 				(x == Long(3)).EvaluateAction();
 			}
+			Cleanup();
 		}
 
 		TEST_METHOD(TestOr2)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				SN_DECLARE(x);
 				(x == Long(3) || x == Long(4)).AssertAction();
@@ -1136,14 +1140,14 @@ namespace test_sn
 				(x.BuildSet() == (Long(3) || Long(4)).BuildSet()).EvaluateAction();
 				cout << x.DisplaySN();
 			}
+			Cleanup();
 		}
 
 		TEST_METHOD(TestOr3)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				SN_DECLARE(x);
 				(x == Long(3) || x == Long(4) || x == Long(5)).AssertAction();
@@ -1157,14 +1161,14 @@ namespace test_sn
 				(x.BuildSet() == (Long(3) || Long(4) || Long(5)).BuildSet()).EvaluateAction();
 				cout << x.DisplaySN();
 			}
+			Cleanup();
 		}
 
 		TEST_METHOD(TestOr4)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				SN_DECLARE(x);
 				(x == Long(3) || x == Long(4) || x == Long(5) || x == Long(6)).AssertAction();
@@ -1182,9 +1186,8 @@ namespace test_sn
 		TEST_METHOD(TestOr4WithCalc)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				SN_DECLARE(x);
 				(x == Long(3)+Long(3) || x == Long(4)+Long(4) || x == Long(5)+Long(5) || x == Long(6)+Long(6)).AssertAction();
@@ -1195,16 +1198,14 @@ namespace test_sn
 				(x.BuildSet() == (Long(3)+Long(3) || Long(4)+Long(4) || Long(5)+Long(5) || Long(6)+Long(6)).BuildSet()).EvaluateAction();
 				cout << x.DisplaySN();
 			}
-
 			Cleanup();
 		}
 
 		TEST_METHOD(TestOrReversed4WithCalc)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				SN_DECLARE(x);
 				(Long(3) + Long(3) == x || Long(4) + Long(4) == x || Long(5) + Long(5) == x || Long(6) + Long(6) == x).AssertAction();
@@ -1215,16 +1216,14 @@ namespace test_sn
 				(x.BuildSet() == (Long(3) + Long(3) || Long(4) + Long(4) || Long(5) + Long(5) || Long(6) + Long(6)).BuildSet()).EvaluateAction();
 				cout << x.DisplaySN();
 			}
-
 			Cleanup();
 		}
 
 		TEST_METHOD(TestOrReversed4WithSolve)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				SN_DECLARE(x);
 				(Long(6) == x + Long(3) || Long(8) == x + Long(4) || Long(10) == x + Long(5) || Long(12) == x + Long(6)).AssertAction();
@@ -1235,16 +1234,14 @@ namespace test_sn
 				(x.BuildSet() == (Long(3) || Long(4) || Long(5) || Long(6)).BuildSet()).EvaluateAction();
 				cout << x.DisplaySN();
 			}
-
 			Cleanup();
 		}
 
 		TEST_METHOD(TestCharInValueSet)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				SN_DECLARE(B_Digit);
 				SN_DECLARE(d);
@@ -1281,14 +1278,14 @@ namespace test_sn
 
 				(!B_Digit(String("X"))).EvaluateAction();
 			}
+			Cleanup();
 		}
 
 		TEST_METHOD(TestCharInSet)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				SN_DECLARE(B_Digit2);
 				SN_DECLARE(d);
@@ -1329,9 +1326,8 @@ namespace test_sn
 		TEST_METHOD(TestIsInteger)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 				SN_DECLARE(Digit);
 				SN_DECLARE(d);
 				SN_DECLARE(i);
@@ -1376,23 +1372,23 @@ namespace test_sn
 				//(Define(PmGenInteger)(d) == ((d = Long(s)) && IsInteger(s)).If(d)).PartialAssertAction();
 				//(Define(PmGenInteger)(d) == ((s == d.IntToString()) && IsInteger(s)).If(s)).PartialAssertAction();
 			}
-
 			Cleanup();
 		}
 
 		TEST_METHOD(TestParser)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
+			{
+				Manager manager(AssertErrorHandler);
+			}
 			Cleanup();
 		}
 
 		TEST_METHOD(TestMetaEvaluate)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				SN_DECLARE_VALUE(dog, String("Vincent "));
 				SN_DECLARE_VALUE(cat, String("Emma "));
@@ -1437,9 +1433,8 @@ namespace test_sn
 		TEST_METHOD(TestMetaPartialEvaluateOnValues)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				SN_DECLARE_VALUE(dog, String("Vincent "));
 				SN_DECLARE_VALUE(cat, String("Emma "));
@@ -1484,9 +1479,8 @@ namespace test_sn
 		TEST_METHOD(TestMetaPartialEvaluate)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				SN_DECLARE(dog);
 				SN_DECLARE(cat);
@@ -1531,9 +1525,8 @@ namespace test_sn
 		TEST_METHOD(TestValueSetEvaluate)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				// || operator applied to values other than bool, creates a value set.
 				// ValueSet has Constructors for up to 5 parameters.  This will be mainly for testing. 
@@ -1590,9 +1583,8 @@ namespace test_sn
 		TEST_METHOD(TestValueSetEquivalencyEvaluate)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				(((String("Dog") || String("Cat")) + String("Food")).BuildSet() == ((String("DogFood") || String("CatFood")).BuildSet())).EvaluateAction();
 
@@ -1616,9 +1608,8 @@ namespace test_sn
 		TEST_METHOD(TestSetEvaluate)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				Expression a;
 				(((Long(2) || Long(-2))*(Long(3) || Long(-3))).BuildSet() == ((Long(6) || Long(-6)).BuildSet())).EvaluateAction();
@@ -1641,9 +1632,8 @@ namespace test_sn
 		TEST_METHOD(TestSetAssert)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				SN_DECLARE(x);
 				SN_DECLARE(z);
@@ -1664,9 +1654,8 @@ namespace test_sn
 		TEST_METHOD(TestSubStrings)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				(String("catdog").SubtractRight(String("catdog").SubtractLeft(String("cat"))) == String("cat")).AssertAction();
 				(String("catdog").SubtractLeft(String("catdog").SubtractRight(String("dog"))) == String("dog")).AssertAction();
@@ -1689,90 +1678,109 @@ namespace test_sn
 			Cleanup();
 		}
 
+		TEST_METHOD(TestAssertNothing)
+		{
+			Initialize();
+			{
+				Transaction transaction;
+				{
+					Manager manager(AssertErrorHandler);
+				}
+			}
+			Cleanup();
+		}
+
 		TEST_METHOD(TestAssertThow)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
-				try
+				//Transaction transaction;
 				{
-					(Long(5) == Long(6)).AssertThrow();
-					Assert::IsTrue(false, L"Expected a contradiction");
+					Manager manager(AssertErrorHandler);
+					// manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html");
+					{
+						try
+						{
+							(Long(5) == Long(6)).AssertThrow();
+							Assert::IsTrue(false, L"Expected a contradiction");
+						}
+						catch (Error e)
+						{
+							string description = e.GetDescription();
+							Assert::IsTrue(e.IsError(), wstring(description.begin(), description.end()).c_str());
+						}
+					};
 				}
-				catch (Error e)
-				{
-					string description = e.GetDescription();
-					Assert::IsTrue(e.IsError(), wstring(description.begin(), description.end()).c_str());
-				}
-			};
+			}
 			Cleanup();
 		}
 
 		TEST_METHOD(TestFileAccess)
 		{
 			Initialize();
-			string s_name_1 = "c:/temp/sn_test_testfileaccess_1.txt";
-			string s_name_2 = "c:/temp/sn_test_testfileaccess_2.txt";
-			string s_contents_1 = "Tora! Tora! Tora!";
-			string s_contents_2 = "Two dogs barking!";
-
-			remove(s_name_1.data());
-			remove(s_name_2.data());
 			{
-				std::ofstream out(s_name_1);
-				out << s_contents_1;
-				out.close();
-			}
+				string s_name_1 = "c:/temp/sn_test_testfileaccess_1.txt";
+				string s_name_2 = "c:/temp/sn_test_testfileaccess_2.txt";
+				string s_contents_1 = "Tora! Tora! Tora!";
+				string s_contents_2 = "Two dogs barking!";
 
-			Manager manager(AssertErrorHandler);
-			{
-				Transaction transaction;
-
-				SN_DECLARE_VALUE(name_1, String(s_name_1));
-				SN_DECLARE_VALUE(contents_1, String(s_contents_1));
-
-				(name_1.File() == contents_1).AssertAction();
-
+				remove(s_name_1.data());
+				remove(s_name_2.data());
 				{
 					std::ofstream out(s_name_1);
 					out << s_contents_1;
 					out.close();
 				}
 
-				(name_1.File() == contents_1).AssertAction();
-
-				SN_DECLARE_VALUE(name_2, String(s_name_2));
-				SN_DECLARE_VALUE(contents_2, String(s_contents_2));
-
-				(name_2.File() == contents_2).AssertAction();
-
-				ifstream inFile;
-				inFile.open(s_name_2); // open the input file
-				Assert::IsTrue(inFile.is_open());
-
-				stringstream strStream;
-				strStream << inFile.rdbuf(); // read the file
-				Assert::IsTrue(strStream.str() == s_contents_2);
-
+				Manager manager(AssertErrorHandler);
 				{
-					std::ofstream out(s_name_2);
-					out << s_contents_1;
-					out.close();
+					Transaction transaction;
+
+					SN_DECLARE_VALUE(name_1, String(s_name_1));
+					SN_DECLARE_VALUE(contents_1, String(s_contents_1));
+
+					(name_1.File() == contents_1).AssertAction();
+
+					{
+						std::ofstream out(s_name_1);
+						out << s_contents_1;
+						out.close();
+					}
+
+					(name_1.File() == contents_1).AssertAction();
+
+					SN_DECLARE_VALUE(name_2, String(s_name_2));
+					SN_DECLARE_VALUE(contents_2, String(s_contents_2));
+
+					(name_2.File() == contents_2).AssertAction();
+
+					ifstream inFile;
+					inFile.open(s_name_2); // open the input file
+					Assert::IsTrue(inFile.is_open());
+
+					stringstream strStream;
+					strStream << inFile.rdbuf(); // read the file
+					Assert::IsTrue(strStream.str() == s_contents_2);
+
+					{
+						std::ofstream out(s_name_2);
+						out << s_contents_1;
+						out.close();
+					}
+
+					(name_2.File() == contents_2).AssertAction(); // The assert still hold. For consistency, SN caches the value for the file name.
 				}
 
-				(name_2.File() == contents_2).AssertAction(); // The assert still hold. For consistency, SN caches the value for the file name.
-			}
+				// Outside the transaction, the cache is cleared and the value is re-read.
+				{
+					Transaction transaction;
 
-			// Outside the transaction, the cache is cleared and the value is re-read.
-			{
-				Transaction transaction;
-
-				SN_DECLARE_VALUE(name_1, String(s_name_1));
-				SN_DECLARE_VALUE(name_2, String(s_name_2));
-				SN_DECLARE_VALUE(contents_1, String(s_contents_1));
-				(name_1.File() == name_2.File()).AssertAction();
-				(name_2.File() == contents_1).AssertAction();
+					SN_DECLARE_VALUE(name_1, String(s_name_1));
+					SN_DECLARE_VALUE(name_2, String(s_name_2));
+					SN_DECLARE_VALUE(contents_1, String(s_contents_1));
+					(name_1.File() == name_2.File()).AssertAction();
+					(name_2.File() == contents_1).AssertAction();
+				}
 			}
 			Cleanup();
 		}
@@ -1780,9 +1788,8 @@ namespace test_sn
 		TEST_METHOD(TestValueSetOfLambdaFunctions)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				SN_DECLARE(plus);
 				SN_DECLARE(times);
@@ -1819,9 +1826,8 @@ namespace test_sn
 		TEST_METHOD(TestValueSetOfStandardFunctions)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				SN_DECLARE(f);
 				(f == (skynet::Add || skynet::Multiply)).AssertAction();
@@ -1843,9 +1849,8 @@ namespace test_sn
 		TEST_METHOD(TestValueSetOfStringFunctions)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				SN_DECLARE(f);
 
@@ -1882,37 +1887,39 @@ namespace test_sn
 		TEST_METHOD(TestStringSearch)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
+				{
+					Transaction transaction;
 
-				SN_DECLARE(money);
-				SN_DECLARE(evil);
-				(money + (String(" is the root of all ") + evil) == String("Money is the root of all evil")).AssertAction();
-				string money_string = money.GetString();
-				string evil_string = evil.GetString();
-				Assert::IsTrue(money_string == "Money");
-				Assert::IsTrue(evil_string == "evil");
-			}
-			{
-				Transaction transaction;
+					SN_DECLARE(money);
+					SN_DECLARE(evil);
+					(money + (String(" is the root of all ") + evil) == String("Money is the root of all evil")).AssertAction();
+					string money_string = money.GetString();
+					string evil_string = evil.GetString();
+					Assert::IsTrue(money_string == "Money");
+					Assert::IsTrue(evil_string == "evil");
+				}
+				{
+					Transaction transaction;
 
-				SN_DECLARE(money);
-				SN_DECLARE(evil);
-				(money + String(" is the root of all ") + evil == String("Money is the root of all evil")).AssertAction();
-				string money_string = money.GetString();
-				string evil_string = evil.GetString();
-				Assert::IsTrue(money_string == "Money");
-				Assert::IsTrue(evil_string == "evil");
+					SN_DECLARE(money);
+					SN_DECLARE(evil);
+					(money + String(" is the root of all ") + evil == String("Money is the root of all evil")).AssertAction();
+					string money_string = money.GetString();
+					string evil_string = evil.GetString();
+					Assert::IsTrue(money_string == "Money");
+					Assert::IsTrue(evil_string == "evil");
+				}
 			}
+			Cleanup();
 		}
 
 		TEST_METHOD(TestStringSearchExample1)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				SN_DECLARE(firstname1);
 				SN_DECLARE(surname1);
@@ -1928,50 +1935,53 @@ namespace test_sn
 				Assert::IsTrue(firstname2_string == "Bobby");
 				Assert::IsTrue(surname2_string == "Fischer");
 			}
+			Cleanup();
 		}
 
 		TEST_METHOD(TestStringSearchExample2)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
+				{
+					Transaction transaction;
 
-				SN_DECLARE(firstname);
-				SN_DECLARE(surname);
+					SN_DECLARE(firstname);
+					SN_DECLARE(surname);
 
-				(String("My first name is ") + (firstname + (String(" and my surname is ") + (surname + String(".")))) == String("My first name is Bobby and my surname is Fischer.")).AssertAction();
+					(String("My first name is ") + (firstname + (String(" and my surname is ") + (surname + String(".")))) == String("My first name is Bobby and my surname is Fischer.")).AssertAction();
 
-				string firstname_string = firstname.GetString();
-				string surname_string = surname.GetString();
-				Assert::IsTrue(firstname_string == "Bobby");
-				Assert::IsTrue(surname_string == "Fischer");
+					string firstname_string = firstname.GetString();
+					string surname_string = surname.GetString();
+					Assert::IsTrue(firstname_string == "Bobby");
+					Assert::IsTrue(surname_string == "Fischer");
 
-				(firstname == String("Bobby")).AssertAction();
-				(surname == String("Fischer")).AssertAction();
+					(firstname == String("Bobby")).AssertAction();
+					(surname == String("Fischer")).AssertAction();
+				}
+				{
+					Transaction transaction;
+
+					SN_DECLARE(firstname);
+					SN_DECLARE(surname);
+
+					(String("My first name is ") + firstname + String(" and my surname is ") + (surname + String(".")) == String("My first name is Bobby and my surname is Fischer.")).AssertAction();
+					(firstname == String("Bobby")).AssertAction();
+					(surname == String("Fischer")).AssertAction();
+					string firstname_string = firstname.GetString();
+					string surname_string = surname.GetString();
+					Assert::IsTrue(firstname_string == "Bobby");
+					Assert::IsTrue(surname_string == "Fischer");
+				}
 			}
-			{
-				Transaction transaction;
-
-				SN_DECLARE(firstname);
-				SN_DECLARE(surname);
-
-				(String("My first name is ") + firstname + String(" and my surname is ") + (surname + String(".")) == String("My first name is Bobby and my surname is Fischer.")).AssertAction();
-				(firstname == String("Bobby")).AssertAction();
-				(surname == String("Fischer")).AssertAction();
-				string firstname_string = firstname.GetString();
-				string surname_string = surname.GetString();
-				Assert::IsTrue(firstname_string == "Bobby");
-				Assert::IsTrue(surname_string == "Fischer");
-			}
+			Cleanup();
 		}
 
 		TEST_METHOD(TestStringAmbiguity)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				SN_DECLARE(firstClause);
 				SN_DECLARE(secondClause);
@@ -1990,14 +2000,14 @@ namespace test_sn
 				string sentence_string = sentence.GetString();
 				Assert::IsTrue(sentence_string == "I love dogs and cats and dogs love me.");
 			}
+			Cleanup();
 		}
 		
 		TEST_METHOD(TestPythagoras)
 		{
 			Initialize();
-			Manager manager(AssertErrorHandler);
 			{
-				Transaction transaction;
+				Manager manager(AssertErrorHandler);
 
 				SN_DECLARE(X);
 				(Double(245.67).Square() + X.Square() == Double(357.56).Square()).AssertAction();

@@ -11,6 +11,7 @@
 #include "logcontext.h"
 
 #include "sn_manager.h"
+#include "sn_thread.h"
 #include "sn_operators.h"
 #include "sn_expression.h"
 #include "sn_function.h"

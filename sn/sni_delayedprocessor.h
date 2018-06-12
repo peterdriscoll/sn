@@ -24,7 +24,7 @@ namespace SNI
 	public:
 		static SNI_DelayedProcessor *GetProcessor();
 
-		SNI_DelayedProcessor();
+		SNI_DelayedProcessor(SNI_Manager *p_Manager);
 		~SNI_DelayedProcessor();
 
 		void Delay(SN::SN_FunctionDef p_Function, SN::SN_Expression *p_ParameterList, SNI_World *p_World = NULL);
@@ -42,6 +42,7 @@ namespace SNI
 		bool                 m_Processing;
 		mutex                m_SearchLock;
 		unordered_map<string, SN::SN_String> m_PreventReread;
+		SNI_Manager         *m_Manager;
 	};
 }
 

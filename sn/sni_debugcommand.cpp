@@ -12,7 +12,7 @@ namespace SNI
 	    , m_StepCount(0)
 	    , m_Running(false)
 		, m_ReadyForCommand(true)
-		, m_ReadyForProcessing(true)
+		, m_ReadyForProcessing(false)
 	{
 	}
 
@@ -55,6 +55,10 @@ namespace SNI
 			break;
 		case SN::StepOut:
 			breakPoint = baseInterrupt || (p_InterruptPoint == SN::CallPoint&& p_ThreadNum == m_ThreadNum  && p_FrameStackDepth < m_FrameStackDepth);
+			if (breakPoint)
+			{
+				long dog = 10;
+			}
 			break;
 		case SN::StepParameter:
 			breakPoint = p_InterruptPoint == SN::BreakPoint || p_InterruptPoint == SN::CallPoint || p_InterruptPoint == SN::ParameterPoint;
@@ -103,8 +107,9 @@ namespace SNI
 		ScheduleCommand(SN::RunToEnd);
 	}
 
-	void SNI_DebugCommand::StepOver()
+	void SNI_DebugCommand::StepOver(long p_StackDepth)
 	{
+		m_FrameStackDepth = p_StackDepth;
 		ScheduleCommand(SN::StepOver);
 	}
 
@@ -113,8 +118,9 @@ namespace SNI
 		ScheduleCommand(SN::StepInto);
 	}
 
-	void SNI_DebugCommand::StepOut()
+	void SNI_DebugCommand::StepOut(long p_StackDepth)
 	{
+		m_FrameStackDepth = p_StackDepth;
 		ScheduleCommand(SN::StepOut);
 	}
 

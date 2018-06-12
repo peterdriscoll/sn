@@ -48,6 +48,8 @@ namespace SNI
 	typedef vector<const SNI_Variable *> SNI_VariableConstPointerList;
 	typedef vector<SNI_Variable *> SNI_VariablePointerList;
 
+	typedef void OnErrorHandler(SN::SN_Error p_Result);
+
 	class SNI_UnifyContext
 	{
 	public:
@@ -141,9 +143,13 @@ namespace SNI
 		virtual void PartialEvaluateThrow();
 
 		virtual void AssertAction();
+		virtual void AssertActionWithHandler(OnErrorHandler * p_ErrorHandler);
 		virtual void PartialAssertAction();
+		virtual void PartialAssertActionWithHandler(OnErrorHandler * p_ErrorHandler);
 		virtual void EvaluateAction();
 		virtual void PartialEvaluateAction();
+		virtual void EvaluateActionWithHandler(OnErrorHandler * p_ErrorHandler);
+		virtual void PartialEvaluateActionWithHandler(OnErrorHandler * p_ErrorHandler);
 
 		//---------------------------------------------------------------
 		// Implementation
@@ -209,8 +215,8 @@ namespace SNI
 		virtual void PromoteMembers();
 
 	private:
-		void HandleAssertAction(SN::LogContext & p_Context, SN::SN_Expression p_Result, string p_Text);
-		void HandleEvaluateAction(SN::LogContext & p_Context, SN::SN_Expression p_Result, string p_Text);
+		void HandleAssertAction(SN::LogContext & p_Context, SN::SN_Expression p_Result, string p_Text, OnErrorHandler * p_ErrorHandler);
+		void HandleEvaluateAction(SN::LogContext &p_Context, SN::SN_Expression p_Result, string p_Text, OnErrorHandler *p_ErrorHandler);
 	};
 }
 

@@ -8,12 +8,16 @@
 #define HTTP_REQUEST_HANDLER_H_INCLUDED
 
 #include <string>
+#include <unordered_map>
+using namespace std;
 
 namespace HTTP {
 	namespace server {
 
 		struct reply;
 		struct request;
+
+		typedef unordered_map<string, string> string_umap;
 
 		/// The common handler for all incoming requests.
 		class request_handler
@@ -35,6 +39,7 @@ namespace HTTP {
 			/// Perform URL-decoding on a string. Returns false if the encoding was
 			/// invalid.
 			static bool url_decode(const std::string& in, std::string& out);
+			static string extract_values(const string &p_URL, string_umap &p_Map);
 		};
 
 	}

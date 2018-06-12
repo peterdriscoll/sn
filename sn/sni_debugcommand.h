@@ -33,9 +33,9 @@ namespace SNI
 		void Run();
 		void RunToEnd();
 		void DebugBreak();
-		void StepOver();
+		void StepOver(long p_StackDepth);
 		void StepInto();
-		void StepOut();
+		void StepOut(long p_StackDepth);
 		void StepParam();
 		void GotoStepCount(long p_StepCount, long p_ThreadNum);
 		void Abort();

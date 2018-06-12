@@ -112,6 +112,7 @@
 #include "sni_cartunify.h"
 #include "sni_splitter.h"
 #include "sni_debugcommand.h"
+#include "sni_thread.h"
 
 // Sets
 #include "sni_buildset.h"
@@ -143,6 +144,8 @@
 #include <thread>
 #include <utility>
 #include <signal.h>
+
+#include <windows.h>
 
 using namespace std;
 

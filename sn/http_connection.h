@@ -7,6 +7,8 @@
 #ifndef HTTP_CONNECTION_H_INCLUDED
 #define HTTP_CONNECTION_H_INCLUDED
 
+#include <SDKDDKVer.h>
+
 #include <array>
 #include <memory>
 #include <boost/asio.hpp>

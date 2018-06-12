@@ -7,6 +7,8 @@
 #ifndef HTTP_REPLY_H_INCLUDED
 #define HTTP_REPLY_H_INCLUDED
 
+#include <SDKDDKVer.h>
+
 #include <string>
 #include <vector>
 #include <boost/asio.hpp>

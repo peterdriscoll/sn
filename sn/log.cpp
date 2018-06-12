@@ -1,6 +1,7 @@
 #include "log.h"
 #include "logcontext.h"
 #include "sn_manager.h"
+#include "sni_thread.h"
 #include "utility.h"
 #include "ref.h"
 
@@ -99,10 +100,10 @@ namespace SN
 	void Log::CreateLogFile(long p_LogIndex)
 	{
 		string currentDirectory = current_working_directory();
-
+		SNI_Thread *l_thread = SNI_Thread::GetThread();
 		string timeId = getFormattedTime();
 		string logIndex = to_string(p_LogIndex);
-		string fileName = SN::SN_Manager::GetTopManager().LogFilePath() + logIndex + /*"_" + timeId +*/ ".log"; //" + timeId + "
+		string fileName = l_thread->GetTopManager()->LogFilePath() + to_string(l_thread->GetThreadNum()) + "_" + logIndex + /*"_" + timeId +*/ ".log"; //" + timeId + "
 		m_LogFile.open(fileName.data(), ios::out | ios::trunc);
 		if (!m_LogFile.is_open())
 		{

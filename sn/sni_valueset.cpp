@@ -225,7 +225,7 @@ namespace SNI
 		}
 		Validate();
 		LOG(WriteLine(SN::DebugLevel, result.DisplaySN()));
-		SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, GetTypeName() + ".Clone");
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Clone");
 		return dynamic_cast<SNI_Expression *>(result.GetSNI_ValueSet());
 	}
 
@@ -571,7 +571,7 @@ namespace SNI
 			}
 		}
 		worldSet->Complete();
-		SNI_Manager::GetTopManager()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after all values");
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after all values");
 		if (success)
 		{
 			return SN::SN_Error(success);
@@ -938,7 +938,7 @@ namespace SNI
 				{
 					SN::SN_ValueSet l_NegativeValueSet = l_NegativeExpression;
 
-					for (long j = 0; j<l_NegativeValueSet.Length(); j++)
+					for (size_t j = 0; j<l_NegativeValueSet.Length(); j++)
 					{
 						bool exists = false;
 						SNI_World * world = worldSet->JoinWorldsArgs(AutoAddWorld, CreateIfActiveParents, exists, m_ValueList[i].GetWorld(), l_NegativeValueSet[j].GetWorld());

@@ -41,7 +41,7 @@ namespace SNI
 		}
 		else
 		{
-			size_t maxCard = SN::SN_Manager::GetTopManager().MaxCardinalityCall();
+			size_t maxCard = SNI_Thread::TopManager()->MaxCardinalityCall();
 			size_t card = m_FunctionDef->CardinalityOfCall(p_Depth + 1, m_ValueList);
 			if (maxCard < card)
 			{

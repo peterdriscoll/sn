@@ -25,11 +25,6 @@ namespace SN
 		}
 	}
 
-	SN_Manager SN_Manager::GetTopManager()
-	{
-		return SN_Manager(SNI::SNI_Manager::GetTopManager());
-	}
-
 	SN_Manager::SN_Manager()
 		: m_Manager(new SNI::SNI_Manager())
 		, m_MyManager(true)
@@ -106,11 +101,6 @@ namespace SN
 		return m_Manager->StartLogging(p_LoggingLevel, p_Stream);
 	}
 
-	void SN_Manager::StartDebug(DebugAction p_DebugAction, int p_kbhit(), int p_GetCh())
-	{
-		return m_Manager->StartDebug(p_DebugAction, p_kbhit, p_GetCh);
-	}
-
 	void SN_Manager::StartDebugCommandLineServer(DebugAction p_DebugAction, int p_kbhit(), int p_GetCh())
 	{
 		return m_Manager->StartDebugCommandLineServer(p_DebugAction, p_kbhit, p_GetCh);
@@ -127,10 +117,6 @@ namespace SN
 	int SN_Manager::GetCh()
 	{
 		return m_Manager->GetCh();
-	}
-	void SN_Manager::DebugCommand(InterruptPoint p_InterruptPoint, string p_Text)
-	{
-		return m_Manager->DebugCommand(p_InterruptPoint, p_Text);
 	}
 
 	void SN_Manager::StartWebServer(SN::DebugAction p_DebugAction, const string & p_Address, const string & p_Port, const string & p_DocRoot)
@@ -158,67 +144,8 @@ namespace SN
 		m_Manager->SetDebugTitleWidth(p_DebugTitleWidth);
 	}
 
-	string SN_Manager::Skynet()
+	SNI::SNI_Manager * SN_Manager::GetSNI_Manager()
 	{
-		return m_Manager->Skynet();
-	}
-
-	string SN_Manager::Run()
-	{
-		return m_Manager->Run();
-	}
-
-	string SN_Manager::RunToEnd()
-	{
-		return m_Manager->RunToEnd();
-	}
-
-	string SN_Manager::DebugBreak()
-	{
-		return m_Manager->DebugBreak();
-	}
-
-	string SN_Manager::StepOver()
-	{
-		return m_Manager->StepOver();
-	}
-
-	string SN_Manager::StepInto()
-	{
-		return m_Manager->StepInto();
-	}
-
-	string SN_Manager::StepOut()
-	{
-		return m_Manager->StepOut();
-	}
-
-	string SN_Manager::StepParam()
-	{
-		return m_Manager->StepParam();
-	}
-
-	string SN_Manager::GotoStepCount(long p_StepCount, long p_ThreadNum)
-	{
-		return m_Manager->GotoStepCount(p_StepCount, p_ThreadNum);
-	}
-
-	string SN_Manager::SetMaxStackFrames(long p_StackDepth)
-	{
-		return m_Manager->SetMaxStackFrames(p_StackDepth);
-	}
-
-	string SN_Manager::Quit()
-	{
-		return m_Manager->Quit();
-	}
-
-	void SN_Manager::Lock()
-	{
-		return m_Manager->Lock();
-	}
-	void SN_Manager::Unlock()
-	{
-		return m_Manager->Unlock();
+		return m_Manager;
 	}
 }

@@ -64,16 +64,16 @@ namespace SNI
 		}
 	}
 
-	void SNI_Log::WriteFrame(SN::LoggingLevel p_DebugLevel, SNI_Frame * p_Frame)
+	void SNI_Log::WriteFrame(SNI_Thread *p_Thread, SN::LoggingLevel p_DebugLevel, SNI_Frame * p_Frame)
 	{
 		SNI_Frame *frame = p_Frame;
 		if (!frame)
 		{
-			frame = SNI_Frame::Top();
+			frame = p_Thread->Top();
 		}
 		if (frame)
 		{
-			WriteLine(p_DebugLevel, frame->GetLogDescription());
+			WriteLine(p_DebugLevel, frame->GetLogDescription(p_Thread->GetTopManager()));
 		}
 	}
 
@@ -89,7 +89,7 @@ namespace SNI
 
 	void SNI_Log::WriteVariableByName(SN::LoggingLevel p_DebugLevel, const string &p_Name)
 	{
-		SNI_Variable *v = SNI_Frame::LookupVariable(p_Name);
+		SNI_Variable * v = SNI_Thread::GetThread()->LookupVariable(p_Name);
 		if (v)
 		{
 			WriteVariable(p_DebugLevel, v);

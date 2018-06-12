@@ -39,7 +39,7 @@ namespace SN
 	class SN_EXPORT SN_Manager
 	{
 	public:
-		static SN_Manager GetTopManager();
+		static void ThrowErrorHandler(SN::SN_Error p_Result);
 
 		SN_Manager();
 		SN_Manager(SNI::SNI_Manager *p_Manager);
@@ -61,14 +61,12 @@ namespace SN
 		void SetMaxCardinality(size_t p_MaxCardinalityCall, size_t p_MaxCardinalityUnify);
 
 		void StartLogging(SN::LoggingLevel p_LoggingLevel, ostream *p_Stream = NULL);
-		void StartDebug(DebugAction p_DebugAction, int p_kbhit(), int p_GetCh());
 		void StartDebugCommandLineServer(DebugAction p_DebugAction, int p_kbhit(), int p_GetCh());
 		void StartWebServer(SN::DebugAction p_DebugAction, const string& p_Address, const string& p_Port, const string& p_DocRoot);
+
 		bool HasConsole();
 		bool KbHit();
 		int  GetCh();
-		void DebugCommand(InterruptPoint p_InterruptPoint, string p_Text);
-		ostream * CreateLogFile(LoggingLevel p_LoggingLevel);
 
 		size_t DebugFieldWidth();
 		void SetDebugFieldWidth(size_t p_DebugFieldWidth);
@@ -76,21 +74,7 @@ namespace SN
 		size_t DebugTitleWidth();
 		void SetDebugTitleWidth(size_t p_DebugFieldWidth);
 
-		string Skynet();
-		string Run();
-		string RunToEnd();
-		string DebugBreak();
-		string StepOver();
-		string StepInto();
-		string StepOut();
-		string StepParam();
-		string GotoStepCount(long p_StepCount, long p_ThreadNum);
-		string SetMaxStackFrames(long p_StackDepth);
-		string Quit();
-
-		void Lock();
-		void Unlock();
-
+		SNI::SNI_Manager *GetSNI_Manager();
 	private:
 		SNI::SNI_Manager *m_Manager;
 		bool m_MyManager;
