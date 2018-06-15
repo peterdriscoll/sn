@@ -116,5 +116,9 @@ namespace skynet
 	SN::SN_Bool True(true);
 	SN::SN_Bool False(false);
 
+	// Constants
+	SN::SN_Error OK(true);
+	SN::SN_Error Fail(false);
+
 	SN::SN_Expression Null(dynamic_cast<SNI::SNI_Expression *>(new SNI::SNI_Null()));
 }

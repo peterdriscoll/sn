@@ -366,7 +366,7 @@ namespace SNI
 		if (p_WorldList)
 		{
 			p_Result.AddValue(p_ParamList[0].GetVariableValue().DoIf(p_ParamList[1].GetVariableValue(), p_ParamList[2].GetVariableValue()), p_Depth, p_WorldList, NULL);
-			return SN::SN_Error(true);
+			return skynet::OK;
 		}
 		else
 		{

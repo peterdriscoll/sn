@@ -75,9 +75,9 @@ namespace SNI
 						return e;
 					}
 				}
-				return SN::SN_Error(true);
+				return skynet::OK;
 			}
 		);
-		return SN::SN_Error(true);
+		return skynet::OK;
 	}
 }

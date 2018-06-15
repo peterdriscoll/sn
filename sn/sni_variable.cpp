@@ -544,7 +544,7 @@ namespace SNI
 		else
 		{
 			m_Value = AddLambdas(p_ParameterList).GetSNI_Expression();
-			return SN::SN_Error(true);
+			return skynet::OK;
 		}
 	}
 

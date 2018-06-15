@@ -144,6 +144,10 @@ namespace skynet
 	extern SN_EXPORT SN::SN_Bool True;
 	extern SN_EXPORT SN::SN_Bool False;
 
+	// * Error
+	extern SN_EXPORT SN::SN_Error OK;
+	extern SN_EXPORT SN::SN_Error Fail;
+
 	extern SN_EXPORT SN::SN_Expression Null;
 };
 

@@ -260,7 +260,7 @@ namespace SNI
 		if (p_WorldList)
 		{
 			p_Result.AddValue(PrimaryFunctionValue(p_ParamList[PC2_First].GetVariableValue(), p_ParamList[PC2_Second].GetVariableValue()), p_Depth, p_WorldList, NULL);
-			return SN::SN_Error(true);
+			return skynet::OK;
 		}
 		else
 		{

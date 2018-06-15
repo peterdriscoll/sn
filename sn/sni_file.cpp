@@ -68,7 +68,7 @@ namespace SNI
 				if (!contents.IsNull())
 				{
 					name.GetSNI_String()->DoWriteFile(contents);
-					return SN::SN_Error(true);
+					return skynet::OK;
 				}
 			}
 			else
@@ -77,6 +77,6 @@ namespace SNI
 			}
 		}
 		SNI_DelayedProcessor::GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), p_ParamList);
-		return SN::SN_Error(true);
+		return skynet::OK;
 	}
 }

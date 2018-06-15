@@ -169,7 +169,7 @@ namespace SNI
 		if (e.IsError())
 		{
 			e.AddNote(context, this, "Assigning parameter value failed");
-			return SN::SN_Error(false);
+			return skynet::Fail;
 		}
 		LOG(WriteFrame(SNI_Thread::GetThread(), SN::DebugLevel));
 		SNI_Thread::GetThread()->DebugCommand(SN::ParameterPoint, "Lambda.Unify");

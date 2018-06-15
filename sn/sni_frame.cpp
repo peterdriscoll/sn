@@ -187,7 +187,7 @@ namespace SNI
 					{
 						fixedWidth = valueText.size();
 					}
-					return SN::SN_Error(true);
+					return skynet::OK;
 				}
 			);
 			if (debugFieldWidth < fixedWidth)
@@ -211,7 +211,7 @@ namespace SNI
 						data.push_back(filler);
 					}
 					data[row - 1] += delimeter + Pad(valueText, fixedWidth);
-					return SN::SN_Error(true);
+					return skynet::OK;
 				}
 			);
 			string fillerField = delimeter + string(fixedWidth,' ');
@@ -272,7 +272,7 @@ namespace SNI
 					}
 					p_Stream << delimeter << Details(valueText, p_DebugFieldWidth);
 					delimeter = "<br>";
-					return SN::SN_Error(true);
+					return skynet::OK;
 				}
 			);
 			p_Stream << "</td>\n";

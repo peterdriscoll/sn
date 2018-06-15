@@ -1685,6 +1685,7 @@ namespace test_sn
 				Transaction transaction;
 				{
 					Manager manager(AssertErrorHandler);
+					manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html");
 				}
 			}
 			Cleanup();
@@ -1694,23 +1695,20 @@ namespace test_sn
 		{
 			Initialize();
 			{
-				//Transaction transaction;
+				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html");
 				{
-					Manager manager(AssertErrorHandler);
-					// manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html");
+					try
 					{
-						try
-						{
-							(Long(5) == Long(6)).AssertThrow();
-							Assert::IsTrue(false, L"Expected a contradiction");
-						}
-						catch (Error e)
-						{
-							string description = e.GetDescription();
-							Assert::IsTrue(e.IsError(), wstring(description.begin(), description.end()).c_str());
-						}
-					};
-				}
+						(Long(5) == Long(6)).AssertThrow();
+						Assert::IsTrue(false, L"Expected a contradiction");
+					}
+					catch (Error e)
+					{
+						string description = e.GetDescription();
+						Assert::IsTrue(e.IsError(), wstring(description.begin(), description.end()).c_str());
+					}
+				};
 			}
 			Cleanup();
 		}
