@@ -62,7 +62,7 @@ namespace SN
 
 		void StartLogging(SN::LoggingLevel p_LoggingLevel, ostream *p_Stream = NULL);
 		void StartDebugCommandLineServer(DebugAction p_DebugAction, int p_kbhit(), int p_GetCh());
-		void StartWebServer(SN::DebugAction p_DebugAction, const string& p_Address, const string& p_Port, const string& p_DocRoot);
+		void StartWebServer(SN::DebugAction p_DebugAction, const string& p_Address, const string& p_Port, const string& p_DocRoot, bool p_DoIt = true);
 
 		bool HasConsole();
 		bool KbHit();

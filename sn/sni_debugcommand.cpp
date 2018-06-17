@@ -168,4 +168,8 @@ namespace SNI
 	{
 		m_Text = p_Text;
 	}
+	void SNI_DebugCommand::SetRunning(bool p_Running)
+	{
+		m_Running = p_Running;
+	}
 }

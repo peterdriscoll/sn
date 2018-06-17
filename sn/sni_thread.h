@@ -114,6 +114,7 @@ namespace SNI
 		long m_ThreadStepCount;
 		bool m_WebServerThreadUsed;
 		SNI_Manager *m_TopManager;
+		bool m_Ended;
 
 		static vector<SNI_Thread *> m_ThreadList;
 		static mutex m_ThreadListMutex;

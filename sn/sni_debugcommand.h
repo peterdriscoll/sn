@@ -47,6 +47,7 @@ namespace SNI
 		string Text();
 		void SetText(const string &p_Text);
 
+		void SetRunning(bool p_Running);
 	private:
 		bool m_IsExiting;
 		SN::DebugAction m_DebugAction;

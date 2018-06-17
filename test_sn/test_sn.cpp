@@ -9,6 +9,8 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace skynet;
 using namespace PGCX;
 
+bool runWebServer = false;
+
 namespace test_sn
 {
 	void AssertErrorHandler(SN::SN_Error p_Result)
@@ -1685,7 +1687,7 @@ namespace test_sn
 				Transaction transaction;
 				{
 					Manager manager(AssertErrorHandler);
-					manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html");
+					manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 				}
 			}
 			Cleanup();
@@ -1696,7 +1698,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html");
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 				{
 					try
 					{

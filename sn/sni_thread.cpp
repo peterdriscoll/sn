@@ -109,6 +109,7 @@ namespace SNI
 		, m_WebServerThreadUsed(false)
 		, m_TopManager(NULL)
 		, m_ThreadNum(p_ThreadNum)
+		, m_Ended(false)
 	{
 	}
 
@@ -135,6 +136,10 @@ namespace SNI
 
 	void SNI_Thread::DebugCommand(SN::InterruptPoint p_InterruptPoint, const string &p_Text)
 	{
+		if (p_InterruptPoint == SN::EndPoint)
+		{
+			m_Ended = true;
+		}
 		if (GetTopManager()->HasDebugServer())
 		{
 			m_ThreadStepCount++;
@@ -399,6 +404,7 @@ namespace SNI
 
 	void SNI_Thread::WriteWebPage(ostream & p_Stream, bool p_Refresh)
 	{
+		m_DebugCommand.SetRunning(p_Refresh);
 		p_Stream << "<!doctype html>\n";
 		p_Stream << "<html lang = \"en\">\n";
 		p_Stream << "<head>\n";
@@ -427,7 +433,7 @@ namespace SNI
 		p_Stream << "<title>Skynet Dashboard</title>\n";
 		p_Stream << "<meta name = \"description\" content = \"Skynet\">\n";
 		p_Stream << "<meta name = \"author\" content = \"SitePoint\">\n";
-		p_Stream << "<link rel = \"stylesheet\" href = \"styles.css\">\n";
+		p_Stream << "<link rel = \"styles,hheet\" href = \"styles.css\">\n";
 		p_Stream << "</head>\n";
 		p_Stream << "<body>\n";
 		p_Stream << "<script src = 'js/scripts.js'></script>\n";
@@ -440,6 +446,10 @@ namespace SNI
 		p_Stream << "</h1>\n";
 		WriteCommands(p_Stream);
 		WriteStepCounts(p_Stream);
+		if (m_Ended)
+		{
+			p_Stream << "<h2>Thread ended</h2>";
+		}
 		SNI_Manager *manager = GetTopManager(false);
 		if (manager)
 		{

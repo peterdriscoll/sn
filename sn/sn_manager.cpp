@@ -119,9 +119,12 @@ namespace SN
 		return m_Manager->GetCh();
 	}
 
-	void SN_Manager::StartWebServer(SN::DebugAction p_DebugAction, const string & p_Address, const string & p_Port, const string & p_DocRoot)
+	void SN_Manager::StartWebServer(SN::DebugAction p_DebugAction, const string & p_Address, const string & p_Port, const string & p_DocRoot, bool p_DoIt)
 	{
-		return m_Manager->StartWebServer(p_DebugAction, p_Address, p_Port, p_DocRoot);
+		if (p_DoIt)
+		{
+			m_Manager->StartWebServer(p_DebugAction, p_Address, p_Port, p_DocRoot);
+		}
 	}
 
 	size_t SN_Manager::DebugFieldWidth()

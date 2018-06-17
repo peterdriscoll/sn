@@ -26,7 +26,7 @@ namespace SNI
 
 	SNI_DelayedProcessor::SNI_DelayedProcessor(SNI_Manager *p_Manager)
 		: m_Processing(false)
-		, m_Manager(new SNI_Manager(p_Manager))
+		, m_Manager(p_Manager)
 	{
 	}
 
