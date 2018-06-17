@@ -41,6 +41,8 @@ namespace SNI
 		SNI_Thread(size_t p_ThreadNum);
 
 		virtual ~SNI_Thread();
+
+		void Init();
 		
 		size_t GetThreadNum();
 		SNI_FrameList & GetFrameList();

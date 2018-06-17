@@ -9,7 +9,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace skynet;
 using namespace PGCX;
 
-bool runWebServer = true;
+bool runWebServer = false;
 
 namespace test_sn
 {
@@ -50,6 +50,7 @@ namespace test_sn
 			Assert::IsTrue(Transaction::TotalNetMemoryUsed() == 0);
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				Assert::IsTrue((String("dog") == String("dog")).Equivalent(Function(Function(Equals, String("dog")), String("dog"))));
 				Assert::IsTrue(!(String("dog") == String("dog")).Equivalent(Function(Function(Equals, String("dog")), String("cat"))));
@@ -70,7 +71,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
-				// manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html");
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				(String("dog") == String("dog")).EvaluateAction();
 				(!(String("dog") == String("cat"))).EvaluateAction();
@@ -86,6 +87,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(y);
 				SN_DECLARE(x);
@@ -110,7 +112,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
-				// manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html");
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 				{
 					Transaction transaction;
 
@@ -162,6 +164,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				Assert::IsTrue((Bool(true) == Bool(true)).Equivalent(Function(Function(Equals, Bool(true)), Bool(true))));
 				Assert::IsTrue(!(Bool(true) == Bool(true)).Equivalent(Function(Function(Equals, Bool(true)), Bool(false))));
@@ -178,6 +181,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 				{
 					Transaction transaction;
 
@@ -206,6 +210,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 				{
 					Transaction transaction;
 					//Truth table AND
@@ -263,6 +268,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(y);
 				SN_DECLARE(x);
@@ -318,6 +324,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(z);
 
@@ -353,6 +360,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(m);
 				SN_DECLARE(n);
@@ -372,6 +380,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				(!((Bool(true) && Bool(false)))).AssertAction();
 			}
@@ -383,6 +392,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				((Long(1) + Long(2)) == Long(3)).EvaluateAction();
 
@@ -401,6 +411,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				(Double(3.3) == Double(3.3)).EvaluateAction();
 				(!(Double(5.43) == Double(6))).EvaluateAction();
@@ -423,6 +434,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(y);
 				SN_DECLARE(x);
@@ -448,6 +460,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(y);
 
@@ -468,6 +481,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				(Long(4) * Double(1.25) == Double(5)).EvaluateAction();
 				(Double(5) / Long(4) == Double(1.25)).EvaluateAction();
@@ -480,6 +494,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(c);
 
@@ -495,6 +510,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 				{
 					Transaction transaction;
 
@@ -567,6 +583,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				{
 					SN_DECLARE(RemovePrefix);
@@ -602,6 +619,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(Factorial);
 				SN_DECLARE(n);
@@ -629,6 +647,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 				{
 					Transaction transaction;
 
@@ -661,6 +680,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 				SN_DECLARE(f);
 				SN_DECLARE(g);
 				SN_DECLARE(a);
@@ -685,6 +705,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 				SN_DECLARE(Y);
 				SN_DECLARE(f);
 				SN_DECLARE(x);
@@ -718,6 +739,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(inc);
 				SN_DECLARE(succ);
@@ -760,7 +782,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
-				// manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html");
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(plus);
 				SN_DECLARE(n);
@@ -803,6 +825,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(mult);
 				SN_DECLARE(n);
@@ -845,6 +868,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(exp);
 				SN_DECLARE(n);
@@ -888,6 +912,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(pred);
 				SN_DECLARE(n);
@@ -933,6 +958,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(pred);
 				SN_DECLARE(h);
@@ -986,7 +1012,8 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
-				// manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html");
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
+
 				SN_DECLARE(divide);
 
 				SN_DECLARE(div);
@@ -1074,6 +1101,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 				/*
 				SN_DECLARE(x);
 				SN_DECLARE(y);
@@ -1108,6 +1136,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(x);
 				(x == Long(3)).AssertAction();
@@ -1124,6 +1153,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(x);
 				(x == Long(3) || x == Long(4)).AssertAction();
@@ -1150,6 +1180,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(x);
 				(x == Long(3) || x == Long(4) || x == Long(5)).AssertAction();
@@ -1171,6 +1202,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(x);
 				(x == Long(3) || x == Long(4) || x == Long(5) || x == Long(6)).AssertAction();
@@ -1190,6 +1222,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(x);
 				(x == Long(3)+Long(3) || x == Long(4)+Long(4) || x == Long(5)+Long(5) || x == Long(6)+Long(6)).AssertAction();
@@ -1208,6 +1241,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(x);
 				(Long(3) + Long(3) == x || Long(4) + Long(4) == x || Long(5) + Long(5) == x || Long(6) + Long(6) == x).AssertAction();
@@ -1226,6 +1260,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(x);
 				(Long(6) == x + Long(3) || Long(8) == x + Long(4) || Long(10) == x + Long(5) || Long(12) == x + Long(6)).AssertAction();
@@ -1244,6 +1279,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(B_Digit);
 				SN_DECLARE(d);
@@ -1288,6 +1324,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(B_Digit2);
 				SN_DECLARE(d);
@@ -1330,6 +1367,8 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
+
 				SN_DECLARE(Digit);
 				SN_DECLARE(d);
 				SN_DECLARE(i);
@@ -1391,6 +1430,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE_VALUE(dog, String("Vincent "));
 				SN_DECLARE_VALUE(cat, String("Emma "));
@@ -1437,6 +1477,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE_VALUE(dog, String("Vincent "));
 				SN_DECLARE_VALUE(cat, String("Emma "));
@@ -1483,6 +1524,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(dog);
 				SN_DECLARE(cat);
@@ -1529,6 +1571,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				// || operator applied to values other than bool, creates a value set.
 				// ValueSet has Constructors for up to 5 parameters.  This will be mainly for testing. 
@@ -1587,6 +1630,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				(((String("Dog") || String("Cat")) + String("Food")).BuildSet() == ((String("DogFood") || String("CatFood")).BuildSet())).EvaluateAction();
 
@@ -1612,6 +1656,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				Expression a;
 				(((Long(2) || Long(-2))*(Long(3) || Long(-3))).BuildSet() == ((Long(6) || Long(-6)).BuildSet())).EvaluateAction();
@@ -1636,6 +1681,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(x);
 				SN_DECLARE(z);
@@ -1658,6 +1704,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				(String("catdog").SubtractRight(String("catdog").SubtractLeft(String("cat"))) == String("cat")).AssertAction();
 				(String("catdog").SubtractLeft(String("catdog").SubtractRight(String("dog"))) == String("dog")).AssertAction();
@@ -1733,6 +1780,7 @@ namespace test_sn
 				}
 
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 				{
 					Transaction transaction;
 
@@ -1790,6 +1838,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(plus);
 				SN_DECLARE(times);
@@ -1828,6 +1877,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(f);
 				(f == (skynet::Add || skynet::Multiply)).AssertAction();
@@ -1851,6 +1901,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(f);
 
@@ -1889,6 +1940,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 				{
 					Transaction transaction;
 
@@ -1920,6 +1972,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(firstname1);
 				SN_DECLARE(surname1);
@@ -1943,6 +1996,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 				{
 					Transaction transaction;
 
@@ -1982,6 +2036,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(firstClause);
 				SN_DECLARE(secondClause);
@@ -2008,6 +2063,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager(AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
 
 				SN_DECLARE(X);
 				(Double(245.67).Square() + X.Square() == Double(357.56).Square()).AssertAction();

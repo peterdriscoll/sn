@@ -30,7 +30,10 @@ namespace SN
 
 	SN_Thread::~SN_Thread()
 	{
-		delete m_Thread;
+		if (m_Thread)
+		{
+			delete m_Thread;
+		}
 	}
 
 	SNI::SNI_Thread * SN_Thread::GetSNI_Thread()

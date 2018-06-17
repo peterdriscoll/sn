@@ -118,10 +118,11 @@ namespace SNI
 		ThreadListLock();
 		m_ThreadList[m_ThreadNum] = NULL;
 		ThreadListUnlock();
-		//if (m_TopManager)
-		//{
-		//	delete m_TopManager;
-		//}
+	}
+
+	void SNI_Thread::Init()
+	{
+		m_Ended = false;
 	}
 
 	size_t SNI_Thread::GetThreadNum()
