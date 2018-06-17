@@ -32,6 +32,7 @@ namespace SNI
 		// Debug break actions.
 		void Run();
 		void RunToEnd();
+		void Debug();
 		void DebugBreak();
 		void StepOver(long p_StackDepth);
 		void StepInto();

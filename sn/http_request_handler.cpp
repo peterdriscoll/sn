@@ -72,6 +72,10 @@ namespace HTTP
 				{
 					rep.content = l_thread->RunToEndWeb();
 				}
+				else if (path == "/debug")
+				{
+					rep.content = l_thread->DebugWeb();
+				}
 				else if (path == "/debugbreak")
 				{
 					rep.content = l_thread->DebugBreakWeb();

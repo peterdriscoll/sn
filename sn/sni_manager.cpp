@@ -17,7 +17,8 @@
 //#define VK_F4 62
 #define VK_SHIFT_F4 87
 //#define VK_F5 63
-#define VK_SHIFT_F5 88
+#define VK_SHIFT_F5 188
+#define VK_CONTROL_F5 88
 //#define VK_F6 64
 #define VK_SHIFT_F6 89
 //#define VK_F7 65
@@ -294,6 +295,10 @@ namespace SNI
 				case VK_SHIFT_F5:
 					cout << "Shift F5 - Run to end\n";
 					l_thread->RunToEnd();
+					break;
+				case VK_CONTROL_F5:
+					cout << "Shift F5 - Run to end\n";
+					l_thread->Debug();
 					break;
 				case VK_F6:
 					cout << "F6 - Display stack\n";

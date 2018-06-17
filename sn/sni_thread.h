@@ -51,6 +51,7 @@ namespace SNI
 
 		void Run();
 		void RunToEnd();
+		void Debug();
 		void DebugBreak();
 		void StepOver(long p_StackDepth);
 		void StepInto();
@@ -64,6 +65,7 @@ namespace SNI
 		string Skynet();
 		string RunWeb();
 		string RunToEndWeb();
+		string DebugWeb();
 		string DebugBreakWeb();
 		string StepOverWeb(long p_StackDepth);
 		string StepIntoWeb();

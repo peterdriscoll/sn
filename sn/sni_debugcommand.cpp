@@ -41,10 +41,13 @@ namespace SNI
 		bool baseInterrupt = (p_InterruptPoint == SN::BreakPoint || p_InterruptPoint == SN::ErrorPoint || p_InterruptPoint == SN::EndPoint);
 		switch (m_DebugAction)
 		{
-		case SN::RunToEnd:
-			breakPoint = p_InterruptPoint == SN::EndPoint;
-			break;
 		case SN::Run:
+			breakPoint = p_InterruptPoint == SN::ErrorPoint;
+			break;
+		case SN::RunToEnd:
+			breakPoint = p_InterruptPoint == SN::EndPoint || p_InterruptPoint == SN::ErrorPoint;
+			break;
+		case SN::Debug:
 			breakPoint = baseInterrupt;
 			break;
 		case SN::StepInto:
@@ -100,6 +103,11 @@ namespace SNI
 	void SNI_DebugCommand::RunToEnd()
 	{
 		ScheduleCommand(SN::RunToEnd);
+	}
+
+	void SNI_DebugCommand::Debug()
+	{
+		ScheduleCommand(SN::Debug);
 	}
 
 	void SNI_DebugCommand::DebugBreak()

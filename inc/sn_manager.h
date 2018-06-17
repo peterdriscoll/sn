@@ -26,7 +26,7 @@ namespace SN
 
 	enum DebugAction
 	{
-		None, Run, RunToEnd, StepOver, StepInto, StepParameter, StepOut, GotoStepCount, Abort, Quit
+		None, Run, RunToEnd, Debug, StepOver, StepInto, StepParameter, StepOut, GotoStepCount, Abort, Quit
 	};
 
 	enum InterruptPoint

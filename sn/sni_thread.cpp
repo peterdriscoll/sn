@@ -249,6 +249,11 @@ namespace SNI
 		m_DebugCommand.RunToEnd();
 	}
 
+	void SNI_Thread::Debug()
+	{
+		m_DebugCommand.Debug();
+	}
+
 	void SNI_Thread::DebugBreak()
 	{
 		m_DebugCommand.DebugBreak();
@@ -304,10 +309,18 @@ namespace SNI
 
 	string SNI_Thread::RunToEndWeb()
 	{
+		m_DebugCommand.RunToEnd();
 		stringstream ss;
 		WriteWebPage(ss, true);
 		return ss.str();
-		m_DebugCommand.RunToEnd();
+	}
+
+	string SNI_Thread::DebugWeb()
+	{
+		m_DebugCommand.Debug();
+		stringstream ss;
+		WriteWebPage(ss, true);
+		return ss.str();
 	}
 
 	string SNI_Thread::DebugBreakWeb()
@@ -481,6 +494,7 @@ namespace SNI
 		p_Stream << "<div><table bgcolor='silver'><tr>\n";
 		WriteSubmit(p_Stream, "run", "Run", "Run");
 		WriteSubmit(p_Stream, "runtoend", "End", "Run to end");
+		WriteSubmit(p_Stream, "debug", "Debug", "Run to breakpoint");
 		WriteSubmit(p_Stream, "debugbreak", "Debug break", "Debug break C++");
 		WriteSubmit(p_Stream, "stepover", "Step over", "Step over call");
 		WriteSubmit(p_Stream, "stepinto", "Step into", "Step into call");
