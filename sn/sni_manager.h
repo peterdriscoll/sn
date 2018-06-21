@@ -35,11 +35,13 @@ namespace SNI
 		static void ThrowErrorHandler(SN::SN_Error p_Result);
 		SNI_Manager();
 		SNI_Manager(SNI_Manager * p_Manager);
-		SNI_Manager(OnErrorHandler *p_ErrorHandler, bool p_DelayOnEvaluate, size_t p_MaxCardinalityCall, size_t p_MaxCardinalityUnify);
+		SNI_Manager(string p_Description, OnErrorHandler *p_ErrorHandler, bool p_DelayOnEvaluate, size_t p_MaxCardinalityCall, size_t p_MaxCardinalityUnify);
 
 		virtual ~SNI_Manager();
 
 		void Init();
+
+		string Description();
 
 		string LogFilePath();
 		void SetLogFilePath(string p_LogFilePath);
@@ -75,6 +77,8 @@ namespace SNI
 	private:
 		static void DebugCommandLineServer(SNI_Thread * p_Thread, int p_KbHit(), int p_GetCh());
 		static void RunServer(const string & p_Address, const string & p_Port, const string & p_DocRoot);
+
+		string m_Description;
 
 		SNI_Manager *m_LastManager;
 

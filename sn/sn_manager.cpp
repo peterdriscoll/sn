@@ -37,8 +37,8 @@ namespace SN
 	{
 	}
 
-	SN_Manager::SN_Manager(OnErrorHandler *p_Handler, bool p_DelayOnEvaluate, size_t p_MaxCardinalityCall, size_t p_MaxCardinalityUnify)
-		: m_Manager(new SNI::SNI_Manager(p_Handler, p_DelayOnEvaluate, p_MaxCardinalityCall, p_MaxCardinalityUnify))
+	SN_Manager::SN_Manager(string p_Description, OnErrorHandler *p_Handler, bool p_DelayOnEvaluate, size_t p_MaxCardinalityCall, size_t p_MaxCardinalityUnify)
+		: m_Manager(new SNI::SNI_Manager(p_Description, p_Handler, p_DelayOnEvaluate, p_MaxCardinalityCall, p_MaxCardinalityUnify))
 		, m_MyManager(true)
 	{
 	}
@@ -49,6 +49,11 @@ namespace SN
 		{
 			delete m_Manager;
 		}
+	}
+
+	string SN_Manager::Description()
+	{
+		return m_Manager->Description();
 	}
 
 	string SN_Manager::LogFilePath()

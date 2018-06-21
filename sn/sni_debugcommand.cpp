@@ -38,6 +38,10 @@ namespace SNI
 		{
 			m_ReadyForProcessingCond.wait(mutex_lock);
 		}
+		if (p_InterruptPoint == SN::ErrorPoint)
+		{
+			long dog = 10;
+		}
 		bool baseInterrupt = (p_InterruptPoint == SN::BreakPoint || p_InterruptPoint == SN::ErrorPoint || p_InterruptPoint == SN::EndPoint);
 		switch (m_DebugAction)
 		{

@@ -625,7 +625,9 @@ namespace SNI
 			SNI_World *world = tv.GetWorld();
 			if (!contextWorld || contextWorld->CompatibleWorld(world))
 			{
+				//SNI_World::PushContextWorld(world);
 				SN::SN_Error e = p_Cart->ProcessValue(p_Depth, tv.GetValue(), world);
+				//SNI_World::PopContextWorld();
 			}
 		}
 		depth--;

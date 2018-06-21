@@ -82,7 +82,8 @@ namespace SNI
 	}
 
 	SNI_Manager::SNI_Manager(SNI_Manager *p_Manager)
-		: m_ErrorHandler(p_Manager->m_ErrorHandler)
+		: m_Description(p_Manager->m_Description)
+		, m_ErrorHandler(p_Manager->m_ErrorHandler)
 		, m_DelayOnEvaluate(p_Manager->m_DelayOnEvaluate)
 		, m_MaxCardinalityCall(p_Manager->m_MaxCardinalityCall)
 		, m_MaxCardinalityUnify(p_Manager->m_MaxCardinalityUnify)
@@ -105,8 +106,9 @@ namespace SNI
 		SNI_Thread::GetThread()->SetTopManager(this);
 	}
 
-	SNI_Manager::SNI_Manager(OnErrorHandler *p_ErrorHandler, bool p_DelayOnEvaluate, size_t p_MaxCardinalityCall, size_t p_MaxCardinalityUnify)
-		: m_ErrorHandler(p_ErrorHandler)
+	SNI_Manager::SNI_Manager(string p_Description, OnErrorHandler *p_ErrorHandler, bool p_DelayOnEvaluate, size_t p_MaxCardinalityCall, size_t p_MaxCardinalityUnify)
+		: m_Description(p_Description)
+		, m_ErrorHandler(p_ErrorHandler)
 		, m_DelayOnEvaluate(p_DelayOnEvaluate)
 		, m_MaxCardinalityCall(p_MaxCardinalityCall)
 		, m_MaxCardinalityUnify(p_MaxCardinalityUnify)
@@ -171,6 +173,11 @@ namespace SNI
 			m_Transaction = new PGC::PGC_Transaction;
 		}
 		SNI_Thread::GetThread()->SetTopManager(this);
+	}
+
+	string SNI_Manager::Description()
+	{
+		return m_Description;
 	}
 
 	void SNI_Manager::SetMaxCardinality(size_t p_MaxCardinalityCall, size_t p_MaxCardinalityUnify)

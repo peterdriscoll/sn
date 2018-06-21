@@ -453,18 +453,22 @@ namespace SNI
 		p_Stream << "<script src = 'js/scripts.js'></script>\n";
 
 		p_Stream << "<h1>Skynet Dashboard";
+		SNI_Manager *manager = GetTopManager(false);
+		if (manager)
+		{
+			p_Stream << " - " << manager->Description();
+		}
 		if (p_Refresh)
 		{
 			p_Stream << " - Running";
 		}
+		if (m_Ended)
+		{
+			p_Stream << " - Thread ended";
+		}
 		p_Stream << "</h1>\n";
 		WriteCommands(p_Stream);
 		WriteStepCounts(p_Stream);
-		if (m_Ended)
-		{
-			p_Stream << "<h2>Thread ended</h2>";
-		}
-		SNI_Manager *manager = GetTopManager(false);
 		if (manager)
 		{
 			WriteWebStack(p_Stream, m_StackDepth, manager->DebugFieldWidth());
