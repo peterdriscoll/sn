@@ -6,6 +6,23 @@
 
 namespace SNI
 {
+	thread_local long g_ErrorHandledDepth = 0;
+
+	/*static*/ bool SNI_Error::ErrorIsHandled()
+	{
+		return 0 <g_ErrorHandledDepth;
+	}
+
+	/*static*/ void SNI_Error::PushHandler()
+	{
+		g_ErrorHandledDepth++;
+	}
+
+	/*static*/ void SNI_Error::PopHandler()
+	{
+		g_ErrorHandledDepth--;
+	}
+
 	SNI_Error::SNI_Error()
 	{
 	}
@@ -18,7 +35,10 @@ namespace SNI
 		if (!m_Success && !p_Description.empty() && !SNI_World::ContextWorld())
 		{
 			LOG(WriteLine(SN::ErrorLevel, GetLogDescription()));
-			SNI_Thread::GetThread()->DebugCommand(SN::ErrorPoint, "Error");
+			if (!ErrorIsHandled())
+			{
+				SNI_Thread::GetThread()->DebugCommand(SN::ErrorPoint, "Error");
+			}
 		}
 	}
 
@@ -30,7 +50,10 @@ namespace SNI
 		if (!m_Success && !p_Description.empty() && !SNI_World::ContextWorld())
 		{
 			LOG(WriteLine(SN::ErrorLevel, GetLogDescription()));
-			SNI_Thread::GetThread()->DebugCommand(SN::ErrorPoint, "Error");
+			if (!ErrorIsHandled())
+			{
+				SNI_Thread::GetThread()->DebugCommand(SN::ErrorPoint, "Error");
+			}
 		}
 	}
 

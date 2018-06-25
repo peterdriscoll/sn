@@ -17,6 +17,10 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Error);
 	public:
+		static bool ErrorIsHandled();
+		static void PushHandler();
+		static void PopHandler();
+
 		SNI_Error();
 		SNI_Error(bool p_Success, bool p_Delay = false, const string &p_Description = "");
 		SNI_Error(const SNI_Error &p_Other);

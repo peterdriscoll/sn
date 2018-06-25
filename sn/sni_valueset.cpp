@@ -601,7 +601,7 @@ namespace SNI
 		}
 		worldSet->Complete();
 		Validate();
-		return true;
+		return skynet::OK;
 	}
 
 	SN::SN_Error SNI_ValueSet::ForEachCart(long p_Depth, SNI_Cart *p_Cart)
@@ -625,9 +625,9 @@ namespace SNI
 			SNI_World *world = tv.GetWorld();
 			if (!contextWorld || contextWorld->CompatibleWorld(world))
 			{
-				//SNI_World::PushContextWorld(world);
+				SNI_Error::PushHandler();
 				SN::SN_Error e = p_Cart->ProcessValue(p_Depth, tv.GetValue(), world);
-				//SNI_World::PopContextWorld();
+				SNI_Error::PopHandler();
 			}
 		}
 		depth--;
