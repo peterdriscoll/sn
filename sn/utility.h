@@ -35,6 +35,7 @@ namespace SNI
 	string CurrentWorkingDirectory();
 	string ExtractDirPath(const string& str);
 	string GetFormattedTime(void);
+	void OpenURLInBrowser(const string& str);
 
 	void Split(const string& a_buffer,
 		const string& a_delimeter,

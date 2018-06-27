@@ -10,6 +10,20 @@ using namespace skynet;
 using namespace PGCX;
 
 bool runWebServer = false;
+bool runWebServer2 = false;
+bool runWebServer3 = false;
+
+class TestEnd
+{
+public:
+	TestEnd() {};
+	~TestEnd()
+	{
+	};
+
+};
+
+//TestEnd TE;
 
 namespace test_sn
 {
@@ -1710,25 +1724,23 @@ namespace test_sn
 			Cleanup();
 		}
 
-		TEST_METHOD(TestAssertNothing)
+/*		TEST_METHOD(TestAssertNothing)
 		{
 			Initialize();
 			{
-				Transaction transaction;
-				{
-					Manager manager("Test Assert Nothing", AssertErrorHandler);
-					manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
-				}
+				Manager manager("Test Assert Nothing", AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer2);
 			}
 			Cleanup();
 		}
+*/
 
-		TEST_METHOD(TestAssertThow)
+		TEST_METHOD(TestAssertThrow)
 		{
 			Initialize();
 			{
-				Manager manager("Test Assert Thow", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
+				Manager manager("Test Assert Throw", AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer2);
 				{
 					try
 					{
@@ -1763,7 +1775,7 @@ namespace test_sn
 				}
 
 				Manager manager("Test File Access", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer2);
 				{
 					Transaction transaction;
 
@@ -1884,7 +1896,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Value Set Of String Functions", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html", runWebServer3);
 
 				SN_DECLARE(f);
 
@@ -1912,8 +1924,6 @@ namespace test_sn
 				string x_compare_string = "{String(\"expression\"), String(\"{expression}\"), String(\"{{expression}}\")}";
 
 				Assert::IsTrue(x_string == x_compare_string);
-				// This is not quite right. Logically, 'x' should be a value set ["{{expression}}", "{expression}", "expression"]
-				// Not set up to implement this yet. ????
 			}
 			Cleanup();
 		}

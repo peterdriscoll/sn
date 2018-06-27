@@ -8,6 +8,12 @@
 
 #include "sn_pch.h"
 
+#ifdef _WIN32
+#include <ShellApi.h>
+#else
+#include <stdlib.h>
+#endif
+
 namespace SNI
 {
 	string CurrentWorkingDirectory()
@@ -22,6 +28,15 @@ namespace SNI
 	{
 		size_t found = str.find_last_of("/\\");
 		return str.substr(0, found);
+	}
+
+	void OpenURLInBrowser(const string& str)
+	{
+#ifdef _WIN32
+		ShellExecuteA(NULL, "open", str.c_str(), NULL, NULL, SW_SHOW);
+#else
+		system((string("open")+ str).c_str());
+#endif
 	}
 
 	// Returns the local date/time formatted as 2014-03-19 11:11:52

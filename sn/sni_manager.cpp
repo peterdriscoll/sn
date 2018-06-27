@@ -151,12 +151,12 @@ namespace SNI
 			m_WebServerThreadUsageCount--;
 			if (m_WebServerThreadUsageCount == 0)
 			{
-				m_WebServer->stop();
-				m_WebServerThread->join();
-				delete m_WebServer;
-				m_WebServer = NULL;
-				delete m_WebServerThread;
-				m_WebServerThread = NULL;
+				// m_WebServer->stop();
+				// m_WebServerThread->join();
+				// delete m_WebServer;
+				// m_WebServer = NULL;
+				// delete m_WebServerThread;
+				// m_WebServerThread = NULL;
 			}
 		}
 		if (m_Transaction)
@@ -261,6 +261,31 @@ namespace SNI
 		{
 			std::cerr << "exception: " << e.what() << "\n";
 		}
+	}
+
+	void SNI_Manager::ScheduleWebServerShutdown()
+	{
+		try
+		{
+			thread *commandThread = new thread(WebServerShutdown);
+		}
+		catch (std::exception& e)
+		{
+			std::cerr << "exception: " << e.what() << "\n";
+		}
+	}
+
+	void SNI_Manager::WebServerShutdown()
+	{
+
+		Sleep(1000);
+
+		m_WebServer->stop();
+		m_WebServerThread->join();
+		delete m_WebServer;
+		m_WebServer = NULL;
+		delete m_WebServerThread;
+		m_WebServerThread = NULL;
 	}
 
 	void SNI_Manager::DebugCommandLineServer(SNI_Thread * p_Thread, int p_KbHit(), int p_GetCh())
@@ -412,6 +437,7 @@ namespace SNI
 			m_WebServerThreadUsed = true;
 		}
 		m_WebServerThreadUsageCount++;
+		OpenURLInBrowser("http://127.0.0.1/skynet");
 	}
 
 	bool SNI_Manager::HasConsole()

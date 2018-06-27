@@ -78,6 +78,9 @@ namespace SNI
 		static void DebugCommandLineServer(SNI_Thread * p_Thread, int p_KbHit(), int p_GetCh());
 		static void RunServer(const string & p_Address, const string & p_Port, const string & p_DocRoot);
 
+		void ScheduleWebServerShutdown();
+		static void WebServerShutdown();
+		
 		string m_Description;
 
 		SNI_Manager *m_LastManager;

@@ -123,6 +123,7 @@ namespace SNI
 	void SNI_Thread::Init()
 	{
 		m_Ended = false;
+		m_FrameList.clear();
 	}
 
 	size_t SNI_Thread::GetThreadNum()
@@ -213,6 +214,10 @@ namespace SNI
 		stringstream ss;
 		cout << "Skynet\n";
 		WriteWebPage(ss, m_Running);
+		if (m_Ended)
+		{
+			m_DebugCommand.Run();
+		}
 		return ss.str();
 	}
 
@@ -467,7 +472,10 @@ namespace SNI
 			p_Stream << " - Thread ended";
 		}
 		p_Stream << "</h1>\n";
-		WriteCommands(p_Stream);
+		if (!m_Ended)
+		{
+			WriteCommands(p_Stream);
+		}
 		WriteStepCounts(p_Stream);
 		if (manager)
 		{
