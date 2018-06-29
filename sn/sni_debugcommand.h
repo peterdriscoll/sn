@@ -25,9 +25,11 @@ namespace SNI
 
 		bool IsBreakPoint(SN::InterruptPoint p_InterruptPoint, long p_ThreadNum, long p_FrameStackDepth, long p_StepCount);
 
+		bool IsRunning();
 		bool IsExiting();
 
 		void ScheduleCommand(SN::DebugAction p_DebugAction);
+		void Continue();
 
 		// Debug break actions.
 		void Run();

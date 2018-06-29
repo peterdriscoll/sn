@@ -204,6 +204,11 @@ namespace SNI
 		return m_DebugCommand.ScheduleCommand(p_DebugAction);
 	}
 
+	void SNI_Thread::Continue()
+	{
+		return m_DebugCommand.Continue();
+	}
+
 	bool SNI_Thread::IsExiting()
 	{
 		return m_DebugCommand.IsExiting();
@@ -214,10 +219,6 @@ namespace SNI
 		stringstream ss;
 		cout << "Skynet\n";
 		WriteWebPage(ss, m_Running);
-		if (m_Ended)
-		{
-			m_DebugCommand.Run();
-		}
 		return ss.str();
 	}
 
@@ -445,7 +446,7 @@ namespace SNI
 		p_Stream << "}\n";
 		p_Stream << "</style>\n";
 		p_Stream << "<meta charset = \"utf-8\">\n";
-		if (p_Refresh)
+		if (m_DebugCommand.IsRunning())
 		{
 			p_Stream << "<meta http-equiv = 'refresh' content = '1;url=/skynet'/>\n";
 		}
@@ -463,7 +464,7 @@ namespace SNI
 		{
 			p_Stream << " - " << manager->Description();
 		}
-		if (p_Refresh)
+		if (m_DebugCommand.IsRunning())
 		{
 			p_Stream << " - Running";
 		}
@@ -472,10 +473,7 @@ namespace SNI
 			p_Stream << " - Thread ended";
 		}
 		p_Stream << "</h1>\n";
-		if (!m_Ended)
-		{
-			WriteCommands(p_Stream);
-		}
+		WriteCommands(p_Stream);
 		WriteStepCounts(p_Stream);
 		if (manager)
 		{

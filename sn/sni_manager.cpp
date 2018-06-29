@@ -430,14 +430,18 @@ namespace SNI
 	void SNI_Manager::StartWebServer(SN::DebugAction p_DebugAction, const string& p_Address, const string& p_Port, const string& p_DocRoot)
 	{
 		m_HasDebugServer = true;
-		SNI_Thread::GetThread()->ScheduleCommand(p_DebugAction);
-		if (m_WebServerThreadUsageCount == 0)
+		if (m_WebServerThreadUsageCount == 0 && !m_WebServerThread)
 		{
+			SNI_Thread::GetThread()->ScheduleCommand(p_DebugAction);
 			m_WebServerThread = new thread(RunServer, p_Address, p_Port, p_DocRoot);
 			m_WebServerThreadUsed = true;
+			OpenURLInBrowser("http://127.0.0.1/skynet");
+		}
+		else
+		{
+			//SNI_Thread::GetThread()->Continue();
 		}
 		m_WebServerThreadUsageCount++;
-		OpenURLInBrowser("http://127.0.0.1/skynet");
 	}
 
 	bool SNI_Manager::HasConsole()

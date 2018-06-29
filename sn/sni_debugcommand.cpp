@@ -50,6 +50,10 @@ namespace SNI
 			break;
 		case SN::RunToEnd:
 			breakPoint = p_InterruptPoint == SN::EndPoint || p_InterruptPoint == SN::ErrorPoint;
+			if (breakPoint)
+			{
+				long dog = 10;
+			}
 			break;
 		case SN::Debug:
 			breakPoint = baseInterrupt;
@@ -62,10 +66,6 @@ namespace SNI
 			break;
 		case SN::StepOut:
 			breakPoint = baseInterrupt || (p_InterruptPoint == SN::CallPoint&& p_ThreadNum == m_ThreadNum  && p_FrameStackDepth < m_FrameStackDepth);
-			if (breakPoint)
-			{
-				long dog = 10;
-			}
 			break;
 		case SN::StepParameter:
 			breakPoint = p_InterruptPoint == SN::BreakPoint || p_InterruptPoint == SN::CallPoint || p_InterruptPoint == SN::ParameterPoint;
@@ -75,9 +75,14 @@ namespace SNI
 			break;
 		}
 		m_ReadyForCommand = true;
-		m_ReadyForProcessing = !breakPoint;
+		m_ReadyForProcessing = !(breakPoint && processCommand);
 		m_ReadyForCommandCond.notify_one();
 		return breakPoint && processCommand;
+	}
+
+	bool SNI_DebugCommand::IsRunning()
+	{
+		return m_ReadyForProcessing;
 	}
 
 	bool SNI_DebugCommand::IsExiting()
@@ -94,6 +99,18 @@ namespace SNI
 			m_ReadyForCommandCond.wait(mutex_lock);
 		}
 		m_DebugAction = p_DebugAction;
+		m_ReadyForProcessing = true;
+		m_ReadyForCommand = false;
+		m_ReadyForProcessingCond.notify_one();
+	}
+
+	void SNI_DebugCommand::Continue()
+	{
+		unique_lock<mutex> mutex_lock(m_Mutex);
+		while (!m_ReadyForCommand)
+		{
+			m_ReadyForCommandCond.wait(mutex_lock);
+		}
 		m_ReadyForProcessing = true;
 		m_ReadyForCommand = false;
 		m_ReadyForProcessingCond.notify_one();
