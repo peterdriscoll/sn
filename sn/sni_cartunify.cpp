@@ -82,9 +82,7 @@ namespace SNI
 			}
 			else
 			{
-				long dog = 10;
 				e = m_InputList[p_Depth+1].GetSNI_Expression()->ForEachCart(p_Depth+1, this);
-				dog++;
 			}
 		}
 		else

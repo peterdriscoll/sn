@@ -29,7 +29,6 @@ namespace SNI
 		bool IsExiting();
 
 		void ScheduleCommand(SN::DebugAction p_DebugAction);
-		void Continue();
 
 		// Debug break actions.
 		void Run();

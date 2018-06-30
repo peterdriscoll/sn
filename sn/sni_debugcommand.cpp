@@ -38,10 +38,6 @@ namespace SNI
 		{
 			m_ReadyForProcessingCond.wait(mutex_lock);
 		}
-		if (p_InterruptPoint == SN::ErrorPoint)
-		{
-			long dog = 10;
-		}
 		bool baseInterrupt = (p_InterruptPoint == SN::BreakPoint || p_InterruptPoint == SN::ErrorPoint || p_InterruptPoint == SN::EndPoint);
 		switch (m_DebugAction)
 		{
@@ -50,10 +46,6 @@ namespace SNI
 			break;
 		case SN::RunToEnd:
 			breakPoint = p_InterruptPoint == SN::EndPoint || p_InterruptPoint == SN::ErrorPoint;
-			if (breakPoint)
-			{
-				long dog = 10;
-			}
 			break;
 		case SN::Debug:
 			breakPoint = baseInterrupt;
@@ -99,18 +91,6 @@ namespace SNI
 			m_ReadyForCommandCond.wait(mutex_lock);
 		}
 		m_DebugAction = p_DebugAction;
-		m_ReadyForProcessing = true;
-		m_ReadyForCommand = false;
-		m_ReadyForProcessingCond.notify_one();
-	}
-
-	void SNI_DebugCommand::Continue()
-	{
-		unique_lock<mutex> mutex_lock(m_Mutex);
-		while (!m_ReadyForCommand)
-		{
-			m_ReadyForCommandCond.wait(mutex_lock);
-		}
 		m_ReadyForProcessing = true;
 		m_ReadyForCommand = false;
 		m_ReadyForProcessingCond.notify_one();

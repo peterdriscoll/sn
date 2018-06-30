@@ -437,10 +437,6 @@ namespace SNI
 			m_WebServerThreadUsed = true;
 			OpenURLInBrowser("http://127.0.0.1/skynet");
 		}
-		else
-		{
-			//SNI_Thread::GetThread()->Continue();
-		}
 		m_WebServerThreadUsageCount++;
 	}
 

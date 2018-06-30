@@ -49,7 +49,6 @@ namespace SNI
 
 		void DebugCommand(SN::InterruptPoint p_InterruptPoint, const string & p_Text);
 		void ScheduleCommand(SN::DebugAction p_DebugAction);
-		void Continue();
 		bool IsExiting();
 
 		void Run();

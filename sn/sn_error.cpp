@@ -66,10 +66,6 @@ namespace SN
 
 	bool SN_Error::GetBool()
 	{
-		if (!m_Error)
-		{
-			long dog = 10;
-		}
 		return m_Error->GetBool();
 	}
 

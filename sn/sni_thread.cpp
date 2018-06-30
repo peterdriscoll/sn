@@ -204,11 +204,6 @@ namespace SNI
 		return m_DebugCommand.ScheduleCommand(p_DebugAction);
 	}
 
-	void SNI_Thread::Continue()
-	{
-		return m_DebugCommand.Continue();
-	}
-
 	bool SNI_Thread::IsExiting()
 	{
 		return m_DebugCommand.IsExiting();

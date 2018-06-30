@@ -607,21 +607,8 @@ namespace SNI
 	SN::SN_Error SNI_ValueSet::ForEachCart(long p_Depth, SNI_Cart *p_Cart)
 	{
 		SNI_World *contextWorld = SNI_World::ContextWorld();
-		static long dog = 0;
-		static long depth = 0;
-		long loop = 0;
-		if (depth == 0)
-		{
-			dog++;
-		}
-		depth++;
 		for (SNI_TaggedValue &tv : m_ValueList)
 		{
-			loop++;
-			if (dog == 6 && depth == 2 && loop == 2)
-			{
-				long cat = 5;
-			}
 			SNI_World *world = tv.GetWorld();
 			if (!contextWorld || contextWorld->CompatibleWorld(world))
 			{
@@ -630,7 +617,6 @@ namespace SNI
 				SNI_Error::PopHandler();
 			}
 		}
-		depth--;
 		return true;
 	}
 
