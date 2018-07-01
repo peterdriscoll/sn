@@ -240,6 +240,7 @@
     <ClInclude Include="sni_if.h" />
     <ClInclude Include="sni_implies.h" />
     <ClInclude Include="sni_log.h" />
+    <ClInclude Include="sni_logbuffer.h" />
     <ClInclude Include="sni_revand.h" />
     <ClInclude Include="sni_hasmember.h" />
     <ClInclude Include="sni_inttostring.h" />
@@ -338,6 +339,7 @@
     <ClCompile Include="sni_if.cpp" />
     <ClCompile Include="sni_implies.cpp" />
     <ClCompile Include="sni_log.cpp" />
+    <ClCompile Include="sni_logbuffer.cpp" />
     <ClCompile Include="sni_revand.cpp" />
     <ClCompile Include="sni_hasmember.cpp" />
     <ClCompile Include="sni_inttostring.cpp" />

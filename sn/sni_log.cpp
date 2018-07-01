@@ -26,6 +26,7 @@ namespace SNI
 	}
 
 	SNI_Log::SNI_Log()
+		: m_LogBuffer(NULL)
 	{
 	}
 
@@ -37,6 +38,12 @@ namespace SNI
 	{
 		m_StreamList.push_back(p_Stream);
 		m_LoggingLevelList.push_back(p_LoggingLevel);
+	}
+
+	void SNI_Log::SetLogBuffer(SN::LoggingLevel p_LoggingLevel, size_t p_Capacity)
+	{
+		m_LogBuffer = new SNI_LogBuffer(p_Capacity);
+		m_LogBufferLoggingLevel = p_LoggingLevel;
 	}
 
 	void SNI_Log::WriteLine(SN::LoggingLevel p_DebugLevel, const string &p_line)
@@ -59,6 +66,16 @@ namespace SNI
 					stream->flush();
 					delimeter = "\n";
 					prefix = blank;
+				}
+			}
+		}
+		if (m_LogBuffer)
+		{
+			if (p_DebugLevel <= m_LogBufferLoggingLevel)
+			{
+				for (string & line : arrLines)
+				{
+					m_LogBuffer->WriteLine(line);
 				}
 			}
 		}
@@ -122,5 +139,13 @@ namespace SNI
 	void SNI_Log::WriteFrameStack(SN::LoggingLevel p_DebugLevel, long p_ThreadNum, long p_Depth)
 	{
 		SNI_Frame::DisplayFrameStack(p_Depth);
+	}
+
+	void SNI_Log::LogTableToStream(ostream & p_Stream)
+	{
+		if (m_LogBuffer)
+		{
+			m_LogBuffer->LogTableToStream(p_Stream);
+		}
 	}
 }

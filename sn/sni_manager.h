@@ -74,6 +74,9 @@ namespace SNI
 
 		ostream * CreateLogFile(SN::LoggingLevel);
 
+		size_t LogBufferCapacity();
+		void SetLogBufferCapacity(size_t p_LogBufferCapacity);
+
 	private:
 		static void DebugCommandLineServer(SNI_Thread * p_Thread, int p_KbHit(), int p_GetCh());
 		static void RunServer(const string & p_Address, const string & p_Port, const string & p_DocRoot);
@@ -105,6 +108,8 @@ namespace SNI
 
 		PGC::PGC_Transaction *m_Transaction;
 		bool m_HasDebugServer;
+		
+		size_t m_LogBufferCapacity;
 
 		static thread *m_CommandServerThread;
 		static long m_CommandServerThreadUsageCount;

@@ -472,7 +472,14 @@ namespace SNI
 		WriteStepCounts(p_Stream);
 		if (manager)
 		{
+			p_Stream << "<table><tr>\n";
+			p_Stream << "<td valign='top'>\n";
 			WriteWebStack(p_Stream, m_StackDepth, manager->DebugFieldWidth());
+			p_Stream << "</td>\n";
+			p_Stream << "<td valign='top'>\n";
+			SNI_Log::GetLog()->LogTableToStream(p_Stream);
+			p_Stream << "</td>\n";
+			p_Stream << "</tr></table>\n";
 		}
 		p_Stream << "</body>\n";
 		p_Stream << "</html>\n";
@@ -562,7 +569,7 @@ namespace SNI
 
 	void SNI_Thread::WriteWebStack(ostream &p_Stream, long p_Depth, size_t p_DebugFieldWidth)
 	{
-		p_Stream << "<td><table>\n";
+		p_Stream << "<table>\n";
 		p_Stream << "<caption>Thread " << m_ThreadNum << "</caption>";
 		size_t base = 0;
 		if (0 < p_Depth)
@@ -577,7 +584,7 @@ namespace SNI
 			p_Stream << "<tr><td>\n";
 		}
 		Unlock();
-		p_Stream << "</table></td>\n";
+		p_Stream << "</table>\n";
 	}
 
 	void SNI_Thread::DisplayFrameStack(long p_Depth)

@@ -414,6 +414,9 @@
     <ClInclude Include="..\inc\sn_thread.h">
       <Filter>Include Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sni_logbuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -774,6 +777,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sn_thread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_logbuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

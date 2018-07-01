@@ -1,0 +1,40 @@
+#include "sni_logbuffer.h"
+using namespace std;
+
+#include "sn_pch.h"
+
+namespace SNI
+{
+	SNI_LogBuffer::SNI_LogBuffer(size_t p_Capacity)
+		: m_Buffer(p_Capacity)
+	{
+	}
+
+	SNI_LogBuffer::~SNI_LogBuffer()
+	{
+	}
+
+	void SNI_LogBuffer::WriteLine(const string & p_Line)
+	{
+		m_Mutex.lock();
+		if (m_Buffer.full())
+		{
+			m_Buffer.pop_front();
+		}
+		m_Buffer.push_back(p_Line);
+		m_Mutex.unlock();
+	}
+
+	void SNI_LogBuffer::LogTableToStream(ostream & p_Stream)
+	{
+		p_Stream << "<table>\n";
+		p_Stream << "<caption>Logging</caption>";
+		m_Mutex.lock();
+		for (auto it = m_Buffer.rbegin(); it != m_Buffer.rend(); it++)
+		{
+			p_Stream << "<tr><td>" << *it << "</td></tr>";
+		}
+		p_Stream << "</table>\n";
+		m_Mutex.unlock();
+	}
+}

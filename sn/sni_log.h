@@ -22,6 +22,7 @@ namespace SNI
 {
 	class SNI_Frame;
 	class SNI_Thread;
+	class SNI_LogBuffer;
 
 	class SNI_Log
 	{
@@ -32,6 +33,7 @@ namespace SNI
 		virtual ~SNI_Log();
 
 		void AddStream(SN::LoggingLevel p_LoggingLevel, ostream *p_Stream);
+		void SetLogBuffer(SN::LoggingLevel p_LoggingLevel, size_t p_Capacity);
 
 		void WriteLine(SN::LoggingLevel p_DebugLevel, const string & p_line);
 
@@ -42,11 +44,16 @@ namespace SNI
 		void WriteContext(SN::LoggingLevel p_DebugLevel, const string &p_Text);
 		void WriteFrameStack(SN::LoggingLevel p_DebugLevel, long p_Depth);
 		void WriteFrameStack(SN::LoggingLevel p_DebugLevel, long p_ThreadNum, long p_Depth);
+
+		void LogTableToStream(ostream & p_Stream);
 	private:
 		static SNI_Log *m_Log;
 
 		vector<ostream *> m_StreamList;
 		vector<SN::LoggingLevel> m_LoggingLevelList;
+
+		SN::LoggingLevel m_LogBufferLoggingLevel;
+		SNI_LogBuffer *m_LogBuffer;
 	};
 }
 

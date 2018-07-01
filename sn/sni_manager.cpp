@@ -72,6 +72,7 @@ namespace SNI
 		, m_CommandServerThreadUsed(false)
 		, m_Transaction(NULL)
 		, m_HasDebugServer(false)
+		, m_LogBufferCapacity(50)
 	{
 		m_LastManager = SNI_Thread::GetThread()->GetTopManager(false);
 		if (!m_LastManager)
@@ -97,6 +98,7 @@ namespace SNI
 		, m_CommandServerThreadUsed(false)
 		, m_Transaction(NULL)
 		, m_HasDebugServer(false)
+		, m_LogBufferCapacity(50)
 	{
 		m_LastManager = SNI_Thread::GetThread()->GetTopManager(false);
 		if (!m_LastManager)
@@ -122,6 +124,7 @@ namespace SNI
 		, m_CommandServerThreadUsed(false)
 		, m_Transaction(NULL)
 		, m_HasDebugServer(false)
+		, m_LogBufferCapacity(50)
 	{
 		m_LastManager = SNI_Thread::GetThread()->GetTopManager(false);
 		if (!m_LastManager)
@@ -433,6 +436,7 @@ namespace SNI
 		if (m_WebServerThreadUsageCount == 0 && !m_WebServerThread)
 		{
 			SNI_Thread::GetThread()->ScheduleCommand(p_DebugAction);
+			SNI_Log::GetLog()->SetLogBuffer(SN::DebugLevel, m_LogBufferCapacity);
 			m_WebServerThread = new thread(RunServer, p_Address, p_Port, p_DocRoot);
 			m_WebServerThreadUsed = true;
 			OpenURLInBrowser("http://127.0.0.1/skynet");
@@ -490,5 +494,13 @@ namespace SNI
 			throw SN::SN_Error("Log file " + fileName + " not opened. Check folders exist in path from " + currentDirectory);
 		}
 		return logFile;
+	}
+	size_t SNI_Manager::LogBufferCapacity()
+	{
+		return m_LogBufferCapacity;
+	}
+	void SNI_Manager::SetLogBufferCapacity(size_t p_LogBufferCapacity)
+	{
+		m_LogBufferCapacity = p_LogBufferCapacity;
 	}
 }

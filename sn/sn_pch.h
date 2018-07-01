@@ -104,6 +104,7 @@
 #include "sni_log.h"
 #include "log.h"
 #include "logcontext.h"
+#include "sni_logbuffer.h"
 #include "sni_helpers.h"
 #include "sni_manager.h"
 #include "sni_cartesian.h"
