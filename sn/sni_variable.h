@@ -50,6 +50,7 @@ namespace SNI
 		virtual bool IsReferableValue() const;
 		virtual void Request();
 		virtual SNI_Expression * GetValue(bool p_Request = true) const;
+		SNI_Expression * GetSafeValue() const;
 		virtual void Simplify();
 		virtual SN::SN_Expression SimplifyValue();
 		virtual SN::SN_Expression GetVariableValue(bool p_IfComplete);

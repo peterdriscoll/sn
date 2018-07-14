@@ -19,6 +19,13 @@ namespace PGC
 
 	/*static*/ long PGC_Transaction::m_NextThreadNum = 0;
 
+	thread_local bool m_InWebServer = false;
+
+	/*static*/ void PGC_Transaction::RegisterInWebServer()
+	{
+		m_InWebServer = true;
+	}
+
 	PGC_Transaction::PGC_Transaction()
 		: m_FirstBlock(0)
 		, m_CurrentBlock(0)
@@ -26,6 +33,10 @@ namespace PGC
 		, m_NetMemoryUsed(0)
 		, m_ProcessThread(NULL)
 	{
+		if (m_InWebServer)
+		{
+			long dog = 10;
+		}
 		m_LiveTransaction = new bool;
 		*m_LiveTransaction = true;
 		PGC_Transaction::AddTotalGrossMemorySize(sizeof(PGC_Transaction));
@@ -150,7 +161,7 @@ namespace PGC
 
 	/*static*/ PGC_Transaction *PGC_Transaction::TopTransaction()
 	{
-		if (m_TopTransaction == 0)
+		if ((m_TopTransaction == 0) && !m_InWebServer)
 		{
 			new PGC_Transaction();
 		}

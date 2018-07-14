@@ -131,6 +131,11 @@ namespace SNI
 		return skynet::Null.GetSNI_Expression();
 	}
 
+	SNI_Expression * SNI_Variable::GetSafeValue() const
+	{
+		return m_Value;
+	}
+
 	void SNI_Variable::Simplify()
 	{
 		if (IsKnownValue() && !SNI_World::ContextWorld())

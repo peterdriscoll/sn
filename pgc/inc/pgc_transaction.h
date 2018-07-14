@@ -94,6 +94,7 @@ namespace PGC
 		void Process();
 		void Complete();
 
+		static void RegisterInWebServer();
 	private:
 		void ReleaseBlocks();
 

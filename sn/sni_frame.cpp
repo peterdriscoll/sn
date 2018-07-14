@@ -247,7 +247,7 @@ namespace SNI
 		p_Stream << "<tr>\n";
 		for (const SNI_Variable *v : m_VariableList)
 		{
-			SN::SN_Expression e = v->GetValue(false);
+			SN::SN_Expression e = v->GetSafeValue();
 			string typeText;
 			if (v->IsKnownValue())
 			{
@@ -262,7 +262,7 @@ namespace SNI
 			p_Stream << "<td>\n";
 			SN::SN_Expression e = v->GetValue(false);
 			string delimeter;
-			e.ForEach(
+                                        			e.ForEach(
 				[&p_Stream, &delimeter, p_DebugFieldWidth](const SN::SN_Expression &p_Expression, SNI_World *p_World)->SN::SN_Error
 				{
 					string valueText;
