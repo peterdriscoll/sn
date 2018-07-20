@@ -65,6 +65,20 @@ namespace SNI
 		case SN::GotoStepCount:
 			breakPoint = m_StepCount == p_StepCount;
 			break;
+		case SN::Quit:
+			breakPoint = false;
+			if (p_InterruptPoint != SN::EndPoint)
+			{
+				throw -1;
+			}
+			else
+			{
+				m_DebugAction = SN::StepInto;
+			}
+			break;
+		case SN::Abort:
+			exit(-1);
+			break;
 		}
 		m_ReadyForCommand = true;
 		m_ReadyForProcessing = !(breakPoint && processCommand);
@@ -75,6 +89,11 @@ namespace SNI
 	bool SNI_DebugCommand::IsRunning()
 	{
 		return m_ReadyForProcessing;
+	}
+
+	bool SNI_DebugCommand::IsQuitting()
+	{
+		return m_DebugAction == SN::Quit;
 	}
 
 	bool SNI_DebugCommand::IsExiting()
@@ -160,7 +179,7 @@ namespace SNI
 
 	void SNI_DebugCommand::Quit()
 	{
-		m_DebugAction = SN::Quit;
+		ScheduleCommand(SN::Quit);
 	}
 
 	void SNI_DebugCommand::SelectThread(long p_ThreadNum)

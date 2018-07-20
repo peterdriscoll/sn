@@ -26,6 +26,7 @@ namespace SNI
 		bool IsBreakPoint(SN::InterruptPoint p_InterruptPoint, long p_ThreadNum, long p_FrameStackDepth, long p_StepCount);
 
 		bool IsRunning();
+		bool IsQuitting();
 		bool IsExiting();
 
 		void ScheduleCommand(SN::DebugAction p_DebugAction);
@@ -40,8 +41,8 @@ namespace SNI
 		void StepOut(long p_StackDepth);
 		void StepParam();
 		void GotoStepCount(long p_StepCount, long p_ThreadNum);
-		void Abort();
 		void Quit();
+		void Abort();
 
 		// Display actions
 		void SelectThread(long p_ThreadNum);

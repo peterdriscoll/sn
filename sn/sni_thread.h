@@ -77,7 +77,6 @@ namespace SNI
 		string SetMaxStackFramesWeb(long p_StackDepth);
 		string SetThreadNumWeb();
 		string QuitWeb();
-		string AbortWeb();
 
 		void Lock();
 		void Unlock();

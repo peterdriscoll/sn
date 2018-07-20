@@ -293,7 +293,7 @@ namespace SNI
 
 	void SNI_Thread::Quit()
 	{
-		m_DebugAction = SN::Abort;
+		m_DebugAction = SN::Quit;
 	}
 
 	void SNI_Thread::Abort()
@@ -392,18 +392,9 @@ namespace SNI
 	string SNI_Thread::QuitWeb()
 	{
 		stringstream ss;
-		m_DebugAction = SN::Abort;
-		cout << "Abort\n";
-		WriteShuttingDown(ss);
-		return ss.str();
-	}
-
-	string SNI_Thread::AbortWeb()
-	{
-		stringstream ss;
-		m_DebugAction = SN::Abort;
-		cout << "Abort\n";
-		WriteShuttingDown(ss);
+		m_DebugCommand.Quit();
+		cout << "Quit\n";
+		WriteWebPage(ss, true);
 		return ss.str();
 	}
 
@@ -459,7 +450,11 @@ namespace SNI
 		{
 			p_Stream << " - " << manager->Description();
 		}
-		if (m_DebugCommand.IsRunning())
+		if (m_DebugCommand.IsQuitting())
+		{
+			p_Stream << " - Quitting";
+		}
+		else if (m_DebugCommand.IsRunning())
 		{
 			p_Stream << " - Running";
 		}
@@ -474,7 +469,10 @@ namespace SNI
 		{
 			p_Stream << "<table><tr>\n";
 			p_Stream << "<td valign='top'>\n";
-			WriteWebStack(p_Stream, m_StackDepth, manager->DebugFieldWidth());
+			if (!m_DebugCommand.IsQuitting())
+			{
+				WriteWebStack(p_Stream, m_StackDepth, manager->DebugFieldWidth());
+			}
 			p_Stream << "</td>\n";
 			p_Stream << "<td valign='top'>\n";
 			SNI_Log::GetLog()->LogTableToStream(p_Stream);
@@ -515,7 +513,7 @@ namespace SNI
 		WriteSubmit(p_Stream, "stepparam", "Step parameter", "Step into parameters");
 		WriteGotoStepCount(p_Stream);
 		WriteSetMaxStackFrames(p_Stream);
-		WriteSubmit(p_Stream, "quit", "Quit", "Abort program");
+		WriteSubmit(p_Stream, "quit", "Quit", "Abort thread");
 		p_Stream << "</table></tr></div>\n";
 	}
 
