@@ -9,9 +9,9 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace skynet;
 using namespace PGCX;
 
-bool runWebServer = true;
-bool runWebServer2 = true;
-bool runWebServer3 = true;
+bool runWebServer = false;
+bool runWebServer2 = false;
+bool runWebServer3 = false;
 
 class TestEnd
 {
@@ -1051,26 +1051,29 @@ namespace test_sn
 				(inc(v) == v + Long(1)).PartialAssertAction();
 				(inc(inc(inc(Long(0)))) == Long(3)).AssertAction();
 
-				// divide = \n.divide1 (succ n)
-				(Define(divide) == Lambda(n, divide1(succ(n)))).PartialAssertAction();
+				// Y = \f.(\x.x x) (\x.f (x x))
+				(Define(Y) == Lambda(f, Lambda(x, f(x(x)))(Lambda(x, f(x(x)))))).PartialAssertAction();
+
+				// \n.\f.\x.n (\g.\h.h (g f)) (\u.x) (\u.u)
+				(Define(pred) == Lambda(n, Lambda(f, Lambda(x, n(Lambda(g, Lambda(h, h(g(f))))) (Lambda(u, x))(Lambda(u, u)))))).PartialAssertAction();
+
+				// minus m n = (n pred) m	
+				(Define(minus)(m)(n) == n(pred)(m)).PartialAssertAction();
+
+				// div = \c.\n.\m.\f.\x.(\d.IsZero d (0 f x) (f (c d m f x))) (minus n m)
+				(Define(div) == Lambda(c, Lambda(n, Lambda(m, Lambda(f, Lambda(x, (Lambda(d, IsZero(d)(zero(f)(x))(f(c(d)(m)(f)(x))))(minus(n)(m))))))))).PartialAssertAction();
 
 				// divide1 == Y div
 				(Define(divide1) == Y(div)).PartialAssertAction();
 
-				// div = \c.\n.\m.\f.\x.(\d.IsZero d (0 f x) (f (c d m f x))) (minus n m)
-				(Define(div) == Lambda(c, Lambda(n, Lambda(m, Lambda(f, Lambda(x, (Lambda(d,IsZero(d)(zero(f)(x))(f(c(d)(m)(f)(x))))(minus(n)(m))))))))).PartialAssertAction();
+				// divide = \n.divide1 (succ n)
+				(Define(divide) == Lambda(n, divide1(succ(n)))).PartialAssertAction();
 
 				// succ n f x = f (n f x)
 				(Define(succ)(n)(f)(x) == f(n(f)(x))).PartialAssertAction();
 
-				// Y = \f.(\x.x x) (\x.f (x x))
-				(Define(Y) == Lambda(f, Lambda(x, f(x(x)))(Lambda(x, f(x(x)))))).PartialAssertAction();
-
 				// zero = \f.\x.x
 				(Define(zero) == Lambda(f, Lambda(x, x))).PartialAssertAction();
-
-				// IsZero = \n.n (\x.false) true
-				(Define(IsZero) == Lambda(n, n(Lambda(x, falseL))(trueL))).PartialAssertAction();
 
 				// trueL = \a.\b.a
 				(Define(trueL) == Lambda(a, Lambda(b, a))).PartialAssertAction();
@@ -1078,11 +1081,8 @@ namespace test_sn
 				// falseL = \a.\b.a
 				(Define(falseL) == Lambda(a, Lambda(b, b))).PartialAssertAction();
 
-				// minus m n = (n pred) m	
-				(Define(minus)(m)(n) == n(pred)(m)).PartialAssertAction();
-
-				// \n.\f.\x.n (\g.\h.h (g f)) (\u.x) (\u.u)
-				(Define(pred) == Lambda(n, Lambda(f, Lambda(x, n(Lambda(g, Lambda(h, h(g(f))))) (Lambda(u, x))(Lambda(u, u)))))).PartialAssertAction();
+				// IsZero = \n.n (\x.false) true
+				(Define(IsZero) == Lambda(n, n(Lambda(x, falseL))(trueL))).PartialAssertAction();
 
 				(divide(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(1)).EvaluateAction();
 				(divide(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).AssertAction();

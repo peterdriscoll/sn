@@ -57,7 +57,7 @@ namespace SNI
 			breakPoint = baseInterrupt || (p_InterruptPoint == SN::CallPoint && p_ThreadNum == m_ThreadNum && p_FrameStackDepth <= m_FrameStackDepth);
 			break;
 		case SN::StepOut:
-			breakPoint = baseInterrupt || (p_InterruptPoint == SN::CallPoint&& p_ThreadNum == m_ThreadNum  && p_FrameStackDepth < m_FrameStackDepth);
+			breakPoint = baseInterrupt || (p_InterruptPoint == SN::CallPoint && p_ThreadNum == m_ThreadNum  && (m_FrameStackDepth == 0 || p_FrameStackDepth < m_FrameStackDepth));
 			break;
 		case SN::StepParameter:
 			breakPoint = p_InterruptPoint == SN::BreakPoint || p_InterruptPoint == SN::CallPoint || p_InterruptPoint == SN::ParameterPoint;

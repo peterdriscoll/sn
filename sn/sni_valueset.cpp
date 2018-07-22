@@ -484,7 +484,7 @@ namespace SNI
 
 	SNI_WorldSet * SNI_ValueSet::GetWorldSet()
 	{
-		if (!m_WorldSet)
+		if (!m_WorldSet && !PGC::PGC_Transaction::InWebServer())
 		{
 			m_WorldSet = new SNI_WorldSet;
 		}
@@ -591,7 +591,7 @@ namespace SNI
 			if (!contextWorld || contextWorld->CompatibleWorld(world))
 			{
 				SN::SN_Value l_Value = tv.GetValue().GetVariableValue();
-				if (!world)
+				if (!world && worldSet)
 				{
 					world = worldSet->CreateWorld();
 					tv.SetWorld(world);
@@ -599,8 +599,11 @@ namespace SNI
 				p_Action(l_Value, world);
 			}
 		}
-		worldSet->Complete();
-		Validate();
+		if (worldSet)
+		{
+			worldSet->Complete();
+			Validate();
+		}
 		return skynet::OK;
 	}
 

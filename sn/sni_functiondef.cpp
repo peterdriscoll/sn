@@ -234,6 +234,8 @@ namespace SNI
 
 	SN::SN_Expression SNI_FunctionDef::UnifyArray(SN::SN_Expression * p_ParamList)
 	{
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before cardinality check");
+
 		SN::SN_Error  e = true;
 		long depth = GetNumParameters();
 		SN::SN_Expression *inputList = new SN::SN_Expression[depth];

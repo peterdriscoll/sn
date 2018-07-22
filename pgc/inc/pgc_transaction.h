@@ -95,6 +95,7 @@ namespace PGC
 		void Complete();
 
 		static void RegisterInWebServer();
+		static bool InWebServer();
 	private:
 		void ReleaseBlocks();
 

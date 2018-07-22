@@ -26,6 +26,11 @@ namespace PGC
 		m_InWebServer = true;
 	}
 
+	bool PGC_Transaction::InWebServer()
+	{
+		return m_InWebServer;
+	}
+
 	PGC_Transaction::PGC_Transaction()
 		: m_FirstBlock(0)
 		, m_CurrentBlock(0)

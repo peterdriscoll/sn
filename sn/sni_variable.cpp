@@ -480,12 +480,15 @@ namespace SNI
 					{
 						m_Value = var->m_Value;
 					}
+					LOG(WriteVariable(SN::DebugLevel, this));
 					return true;
 				}
 			}
+
 			if (p_Define || SN::Is<SNI_Value*>(p_Expression))
 			{
 				m_Value = p_Expression.GetSNI_Expression();
+				LOG(WriteVariable(SN::DebugLevel, this));
 				return true;
 			}
 			return false;
