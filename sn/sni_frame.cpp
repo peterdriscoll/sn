@@ -75,6 +75,12 @@ namespace SNI
 		return NULL;
 	}
 
+	SNI_Frame::SNI_Frame()
+		: m_ThreadNum(SNI_Thread::GetThread()->GetThreadNum())
+		, m_FrameNum(++t_MaxFrameNum)
+	{
+	}
+
 	SNI_Frame::SNI_Frame(SN::SN_Expression p_Function)
 	    : m_ThreadNum(SNI_Thread::GetThread()->GetThreadNum())
 		, m_FrameNum(++t_MaxFrameNum)
@@ -294,6 +300,16 @@ namespace SNI
 	SNI_Variable * SNI_Frame::CreateTemporary()
 	{
 		SNI_Variable * result = new SNI_Variable();
+		SNI_Thread::GetThread()->Lock();
+		m_VariableList.push_back(result);
+		SNI_Thread::GetThread()->Unlock();
+		return result;
+	}
+
+	SNI_Variable * SNI_Frame::CreateVariable(const string &p_Name)
+	{
+		SNI_Variable * result = new SNI_Variable();
+		result->SetName(p_Name);
 		SNI_Thread::GetThread()->Lock();
 		m_VariableList.push_back(result);
 		SNI_Thread::GetThread()->Unlock();

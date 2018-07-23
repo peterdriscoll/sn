@@ -619,6 +619,17 @@ namespace SNI
 			return m_FrameList.back();
 		}
 		return NULL;
+/*
+		if (!m_FrameList.size())
+		{
+			if (PGC::PGC_Transaction::InWebServer())
+			{
+				return NULL;
+			}
+			PushFrame(new SNI_Frame());
+		}
+		return m_FrameList.back();
+*/
 	}
 
 	void SNI_Thread::PushFrame(SNI_Frame *p_Frame)

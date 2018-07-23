@@ -45,9 +45,11 @@
 //   SNI_Function
 #define SN_DECLARE(n) \
   SN::SN_Variable n; n.SetName(#n)
+// SN::SN_Variable n(string(#n))
 
 #define SN_DECLARE_VALUE(n, r) \
   SN::SN_Variable n(r, true); n.SetName(#n)
+// SN::SN_Variable n(string(#n), r)
 
 #define SN_DEFINE_REAL(C, B, TYPE, NAME)                       \
      SN_EXTERN template class SN_EXPORT SN::SN_Real<TYPE>;     \

@@ -29,6 +29,8 @@ namespace SN
 		SN_Variable(SNI::SNI_Variable* p_other);
 		SN_Variable(const SN_Expression &p_other, bool);
 		SN_Variable(const SN_Expression &p_other);
+		SN_Variable(const string &p_Name);
+		SN_Variable(const string &p_Name, const SN_Expression &p_other);
 
 		SN_APPLY_TYPES(SN_Variable, DUMMY, SN_CONSTRUCTOR)
 
@@ -42,6 +44,7 @@ namespace SN
 		string GetName();
 		void SetName(const string &p_Name);
 		string FrameName();
+		void AddToFrame();
 
 		SN_Expression GetValue() const;
 

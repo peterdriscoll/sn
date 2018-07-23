@@ -30,6 +30,17 @@ namespace SN
 		GetSNI_Variable()->AssertValue(p_Value.Evaluate(0));
 	}
 
+	SN_Variable::SN_Variable(const string &p_Name)
+		: SN_Expression(SNI_Frame::Top()->CreateVariable(p_Name))
+	{
+	}
+
+	SN_Variable::SN_Variable(const string &p_Name, const SN_Expression &p_Value)
+		: SN_Expression(SNI_Frame::Top()->CreateVariable(p_Name))
+	{
+		GetSNI_Variable()->AssertValue(p_Value.Evaluate(0));
+	}
+
 	SN_Variable::SN_Variable(const SN_Expression &p_Value)
 		: SN_Expression(dynamic_cast<SNI::SNI_Variable *>(p_Value.GetSNI_Expression()))
 	{

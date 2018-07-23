@@ -38,6 +38,7 @@ namespace SNI
 		string GetLogShortDescription(SNI_Manager *p_Manager);
 
 		SNI_Variable *CreateTemporary();
+		SNI_Variable *CreateVariable(const string & p_Name);
 		SNI_Variable *CreateParameter(size_t p_ParamNum);
 		SNI_Variable *CreateParameterByName(const string &p_ParamName);
 
