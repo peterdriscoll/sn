@@ -12,7 +12,7 @@
 namespace PGCX
 {
 	typedef PGC::PGC_Base Base;
-	typedef PGC::PGC_Transaction Transaction;
+	typedef PGC::PGC_Transaction PGC_Transaction;
 	typedef PGC::PGC_StackTransaction StackTransaction;
 	typedef PGC::PGC_Task Task;
 	typedef PGC::PGC_Promotion Promotion;

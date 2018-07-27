@@ -227,9 +227,9 @@ namespace SNI
 						text += endWorld->DisplaySN();
 					}
 				}
-				return true;
+				return skynet::True;
 			});
-			return true;
+			return skynet::True;
 		});
 
 		return "[" + text + "]";

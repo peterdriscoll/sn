@@ -11,6 +11,7 @@
 #include "logcontext.h"
 
 #include "sn_manager.h"
+#include "sn_transaction.h"
 #include "sn_thread.h"
 #include "sn_operators.h"
 #include "sn_expression.h"
@@ -44,12 +45,10 @@
 //   SNI_Variable
 //   SNI_Function
 #define SN_DECLARE(n) \
-  SN::SN_Variable n; n.SetName(#n)
-// SN::SN_Variable n(string(#n))
+    SN::SN_Variable n(string(#n))
 
 #define SN_DECLARE_VALUE(n, r) \
-  SN::SN_Variable n(r, true); n.SetName(#n)
-// SN::SN_Variable n(string(#n), r)
+    SN::SN_Variable n(string(#n), r)
 
 #define SN_DEFINE_REAL(C, B, TYPE, NAME)                       \
      SN_EXTERN template class SN_EXPORT SN::SN_Real<TYPE>;     \
@@ -59,6 +58,7 @@ namespace skynet
 {
 	// Manager
 	typedef SN::SN_Manager Manager;
+	typedef SN::SN_Transaction Transaction;
 	typedef SN::DebugAction DebugAction;
 
 	// Logging

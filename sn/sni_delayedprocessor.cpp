@@ -15,11 +15,11 @@ namespace SNI
 {
 	/*static*/ SNI_DelayedProcessor *SNI_DelayedProcessor::GetProcessor()
 	{
-		SNI_DelayedProcessor* task = dynamic_cast<SNI_DelayedProcessor *>(PGCX::Transaction::TopTransaction()->TopTask());
+		SNI_DelayedProcessor* task = dynamic_cast<SNI_DelayedProcessor *>(SN::SN_Transaction::TopTransaction()->TopTask());
 		if (!task)
 		{
 			task = new SNI_DelayedProcessor(SNI_Thread::TopManager());
-			PGCX::Transaction::TopTransaction()->SubmitTask(task);
+			SN::SN_Transaction::TopTransaction()->SubmitTask(task);
 		}
 		return task;
 	}
@@ -85,7 +85,7 @@ namespace SNI
 		return m_DelayedCallList.size() == 0;
 	}
 
-	void SNI_DelayedProcessor::Promote(PGCX::Transaction * p_Transaction)
+	void SNI_DelayedProcessor::Promote(PGC::PGC_Transaction * p_Transaction)
 	{
 	}
 

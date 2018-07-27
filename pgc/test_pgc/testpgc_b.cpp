@@ -32,7 +32,7 @@ void TestPgc_B::PromoteMembers()
 	REQUESTPROMOTION(m_TestA);
 }
 
-Base *TestPgc_B::Clone(Transaction & /*p_Transaction*/)
+Base *TestPgc_B::Clone(PGC::PGC_Transaction & /*p_Transaction*/)
 {
 	return NULL;
 }

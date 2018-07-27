@@ -484,7 +484,7 @@ namespace SNI
 
 	SNI_WorldSet * SNI_ValueSet::GetWorldSet()
 	{
-		if (!m_WorldSet && !PGC::PGC_Transaction::InWebServer())
+		if (!m_WorldSet && !SN::SN_Transaction::InWebServer())
 		{
 			m_WorldSet = new SNI_WorldSet;
 		}

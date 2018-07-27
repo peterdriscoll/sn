@@ -19,7 +19,7 @@ public:
 	void SetTestA(Ref<TestPgc_A> newVal);
 
     virtual void PromoteMembers();
-	Base *Clone(Transaction & /*p_Transaction*/);
+	Base *Clone(PGC::PGC_Transaction & /*p_Transaction*/);
 private:
 	TestPgc_A* m_TestA;
 

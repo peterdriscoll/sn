@@ -26,7 +26,7 @@ public:
 
     long CountList();
 
-	Base *Clone(Transaction & /*p_Transaction*/);
+	Base *Clone(PGC::PGC_Transaction & /*p_Transaction*/);
 private:
 	string m_Description;
 	TestPgc_A *m_next;

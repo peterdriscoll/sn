@@ -468,13 +468,13 @@ namespace SNI
 		if (manager)
 		{
 			p_Stream << "<table><tr>\n";
-			p_Stream << "<td valign='top'>\n";
+			p_Stream << "<td valign='top' max-width='60%'>\n";
 			if (!m_DebugCommand.IsQuitting())
 			{
 				WriteWebStack(p_Stream, m_StackDepth, manager->DebugFieldWidth());
 			}
 			p_Stream << "</td>\n";
-			p_Stream << "<td valign='top'>\n";
+			p_Stream << "<td valign='top' max-width='40%'>\n";
 			SNI_Log::GetLog()->LogTableToStream(p_Stream);
 			p_Stream << "</td>\n";
 			p_Stream << "</tr></table>\n";
@@ -619,17 +619,6 @@ namespace SNI
 			return m_FrameList.back();
 		}
 		return NULL;
-/*
-		if (!m_FrameList.size())
-		{
-			if (PGC::PGC_Transaction::InWebServer())
-			{
-				return NULL;
-			}
-			PushFrame(new SNI_Frame());
-		}
-		return m_FrameList.back();
-*/
 	}
 
 	void SNI_Thread::PushFrame(SNI_Frame *p_Frame)

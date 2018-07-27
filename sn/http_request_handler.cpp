@@ -46,7 +46,7 @@ namespace HTTP
 				return;
 			}
 
-			PGC::PGC_Transaction::RegisterInWebServer();
+			SN::SN_Transaction::RegisterInWebServer();
 
 			// If path ends in slash (i.e. is a directory) then add "index.html".
 			if (request_path[request_path.size() - 1] == '/')

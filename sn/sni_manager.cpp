@@ -77,7 +77,7 @@ namespace SNI
 		m_LastManager = SNI_Thread::GetThread()->GetTopManager(false);
 		if (!m_LastManager)
 		{
-			m_Transaction = new PGC::PGC_Transaction;
+			m_Transaction = new SN::SN_Transaction;
 		}
 		SNI_Thread::GetThread()->SetTopManager(this);
 	}
@@ -103,7 +103,7 @@ namespace SNI
 		m_LastManager = SNI_Thread::GetThread()->GetTopManager(false);
 		if (!m_LastManager)
 		{
-			m_Transaction = new PGC::PGC_Transaction;
+			m_Transaction = new SN::SN_Transaction;
 		}
 		SNI_Thread::GetThread()->SetTopManager(this);
 	}
@@ -130,7 +130,7 @@ namespace SNI
 		if (!m_LastManager)
 		{
 			SNI_Thread::GetThread()->Init();
-			m_Transaction = new PGC::PGC_Transaction;
+			m_Transaction = new SN::SN_Transaction;
 		}
 		SNI_Thread::GetThread()->SetTopManager(this);
 	}
@@ -173,7 +173,7 @@ namespace SNI
 		m_LastManager = SNI_Thread::TopManager();
 		if (!m_LastManager)
 		{
-			m_Transaction = new PGC::PGC_Transaction;
+			m_Transaction = new SN::SN_Transaction;
 		}
 		SNI_Thread::GetThread()->SetTopManager(this);
 	}

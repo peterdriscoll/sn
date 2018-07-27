@@ -106,7 +106,7 @@ namespace SNI
 		bool m_WebServerThreadUsed;
 		bool m_CommandServerThreadUsed;
 
-		PGC::PGC_Transaction *m_Transaction;
+		SN::SN_Transaction *m_Transaction;
 		bool m_HasDebugServer;
 		
 		size_t m_LogBufferCapacity;

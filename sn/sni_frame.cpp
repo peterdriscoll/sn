@@ -242,7 +242,7 @@ namespace SNI
 
 	void SNI_Frame::WriteWebFrame(ostream &p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth)
 	{
-		p_Stream << "<table border=\"1\">\n";
+		p_Stream << "<div style = 'overflow-x:auto;white-space:nowrap;width:900px'><table border=\"1\">\n";
 		p_Stream << "<caption>" << "Frame " << p_FrameStackPos << ":" << m_FrameNum << " " << m_Function.DisplaySN() << "</caption>\n";
 		p_Stream << "<tr>\n";
 		for (const SNI_Variable *v : m_VariableList)
@@ -284,7 +284,7 @@ namespace SNI
 			p_Stream << "</td>\n";
 		}
 		p_Stream << "</tr>\n";
-		p_Stream << "</table>\n";
+		p_Stream << "</table></div>\n";
 	}
 
 	string SNI_Frame::GetLogShortDescription(SNI_Manager *p_Manager)

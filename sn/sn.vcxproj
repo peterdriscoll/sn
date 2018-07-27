@@ -195,6 +195,7 @@
     <ClInclude Include="..\inc\sn_string.h" />
     <ClInclude Include="..\inc\sn_stringref.h" />
     <ClInclude Include="..\inc\sn_thread.h" />
+    <ClInclude Include="..\inc\sn_transaction.h" />
     <ClInclude Include="..\inc\sn_value.h" />
     <ClInclude Include="..\inc\sn_valueset.h" />
     <ClInclude Include="..\inc\sn_variable.h" />
@@ -419,6 +420,7 @@
     <ClCompile Include="sn_string.cpp" />
     <ClCompile Include="sn_stringref.cpp" />
     <ClCompile Include="sn_thread.cpp" />
+    <ClCompile Include="sn_transaction.cpp" />
     <ClCompile Include="sn_value.cpp" />
     <ClCompile Include="sn_valueset.cpp" />
     <ClCompile Include="sn_variable.cpp" />

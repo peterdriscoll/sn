@@ -52,7 +52,7 @@ long TestPgc_A::CountList()
     return 0;
 }
 
-Base *TestPgc_A::Clone(Transaction & /*p_Transaction*/)
+Base *TestPgc_A::Clone(PGC::PGC_Transaction & /*p_Transaction*/)
 {
 	return NULL;
 }
