@@ -217,6 +217,18 @@ namespace SNI
 		return ss.str();
 	}
 
+	string SNI_Thread::StackJS()
+	{
+		stringstream ss;
+		cout << "StackJS\n";
+		SNI_Manager *manager = GetTopManager(false);
+		if (manager)
+		{
+			WriteStackJS(ss, m_StackDepth, manager->DebugFieldWidth());
+		}
+		return ss.str();
+	}
+
 	SNI_Manager * SNI_Thread::GetTopManager(bool p_Create)
 	{
 		if (p_Create && !m_TopManager)
@@ -583,6 +595,26 @@ namespace SNI
 		}
 		Unlock();
 		p_Stream << "</table>\n";
+	}
+
+	void SNI_Thread::WriteStackJS(ostream &p_Stream, long p_Depth, size_t p_DebugFieldWidth)
+	{
+		p_Stream << "{\"records\":[\n";
+		size_t base = 0;
+		if (0 < p_Depth)
+		{
+			base = m_FrameList.size() - p_Depth;
+		}
+		Lock();
+		string delimeter;
+		for (size_t j = m_FrameList.size(); j > base; j--)
+		{
+			p_Stream << delimeter;
+			m_FrameList[j - 1]->WriteJS(p_Stream, j, p_DebugFieldWidth);
+			delimeter = ",";
+		}
+		Unlock();
+		p_Stream << "]}\n";
 	}
 
 	void SNI_Thread::DisplayFrameStack(long p_Depth)

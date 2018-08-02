@@ -7,7 +7,6 @@
 namespace SNI
 {
 	long m_MaxThreadNum = 0;
-	//thread_local long t_ThreadNum = -1;
 	thread_local long t_MaxFrameNum = 0;
 
 
@@ -285,6 +284,46 @@ namespace SNI
 		}
 		p_Stream << "</tr>\n";
 		p_Stream << "</table></div>\n";
+	}
+
+	void SNI_Frame::WriteJS(ostream &p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth)
+	{
+		p_Stream << "\t{\n";
+		p_Stream << "\t\t\"FramePos\" : \"" << p_FrameStackPos << "\",\n";
+		p_Stream << "\t\t\"FrameNum\" : \"" << m_FrameNum << "\",\n";
+		p_Stream << "\t\t\"variables\" : [\n";
+		string delimeter;
+		for (const SNI_Variable *v : m_VariableList)
+		{
+			p_Stream << "\t\t" << delimeter << "\t{\n";
+			p_Stream << "\t\t\t\t\"variable\" : \"" << v->FrameName() << "\"";
+			SN::SN_Expression e = v->GetSafeValue();
+			string typeText;
+			if (v->IsKnownValue())
+			{
+				typeText = e.GetSNI_Expression()->GetTypeName();
+				p_Stream << ",\n\t\t\t\t\"type\" : \"" << v->FrameName() << "\",\n";
+				p_Stream << "\t\t\t\t\"value\" : [";
+				string delimeter;
+				e.ForEach(
+					[&p_Stream, &delimeter, p_DebugFieldWidth](const SN::SN_Expression &p_Expression, SNI_World *p_World)->SN::SN_Error
+				{
+					string valueText;
+					if (!p_Expression.IsNull())
+					{
+						valueText = p_Expression.DisplaySN() + string(p_World ? "::" + p_World->DisplayShort() : "");
+					}
+					p_Stream << delimeter << DetailsFS(valueText, p_DebugFieldWidth);
+					delimeter = ",";
+					return skynet::OK;
+				});
+				p_Stream << "]";
+			}
+			p_Stream << "\n\t\t\t}\n";
+			delimeter = ",";
+		}
+		p_Stream << "\t\t]\n";
+		p_Stream << "\t}\n";
 	}
 
 	string SNI_Frame::GetLogShortDescription(SNI_Manager *p_Manager)

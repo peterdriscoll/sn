@@ -43,6 +43,7 @@ namespace SNI
 		SNI_Variable *CreateParameterByName(const string &p_ParamName);
 
 		void WriteWebFrame(ostream &p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth);
+		void WriteJS(ostream & p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth);
 	private:
 		void PromoteMembers();
 

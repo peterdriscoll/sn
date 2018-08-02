@@ -116,6 +116,10 @@ namespace HTTP
 				{
 					rep.content = l_thread->QuitWeb();
 				}
+				else if (path == "/stackjs")
+				{
+					rep.content = l_thread->StackJS();
+				}
 				else
 				{
 					// Determine the file extension.

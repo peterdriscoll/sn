@@ -78,6 +78,8 @@ namespace SNI
 		string SetThreadNumWeb();
 		string QuitWeb();
 
+		string StackJS();
+
 		void Lock();
 		void Unlock();
 
@@ -109,6 +111,8 @@ namespace SNI
 		void WriteSetMaxStackFrames(ostream & p_Stream);
 
 		void WriteWebStack(ostream & p_Stream, long p_Depth, size_t p_DebugFieldWidth);
+
+		void WriteStackJS(ostream & p_Stream, long p_Depth, size_t p_DebugFieldWidth);
 
 		size_t m_ThreadNum;
 		mutex m_Mutex;

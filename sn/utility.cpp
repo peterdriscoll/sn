@@ -156,6 +156,20 @@ namespace SNI
 		return text;
 	}
 
+	string DetailsFS(const string &p_Text, size_t p_Width)
+	{
+		size_t textWidth = p_Text.size();
+		string text;
+		if (p_Width < textWidth)
+		{
+			text =
+				"\"abbreviated\" : \"" + p_Text.substr(0, p_Width - 3) + "\",";
+		}
+		text +=
+			"\"text\" : \"" + p_Text + "\"";
+		return "{" + text + "}";
+	}
+
 	string DisplayPmValueList(const SN::SN_ValueList &p_ParameterList)
 	{
 		string result;
