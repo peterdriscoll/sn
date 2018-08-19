@@ -69,27 +69,27 @@ namespace SNI
 		p_Stream << "</head>\n";
 		p_Stream << "<body>\n";
 		p_Stream << "<h1>Skynet thread " << p_ThreadNum << " not running</h1>\n";
-/*		p_Stream << "<div><table>\n";
-		p_Stream << "<caption>Threads</caption>\n";
-		p_Stream << "<tr>\n";
-		string separator;
-		bool hasThreads = false;
-		for (size_t k = 0; k < m_ThreadList.size(); k++)
-		{
-			SNI_Thread *l_thread = m_ThreadList[k];
-			if (l_thread)
-			{
-				hasThreads = true;
-				l_thread->WriteStepCount(p_Stream);
-			}
-		}
-		p_Stream << "</tr>\n";
-		p_Stream << "</table></div>\n";
-		if (!hasThreads)
-		{
-			p_Stream << "<h1>No threads running</h1>\n";
-		}
-		*/
+		/*		p_Stream << "<div><table>\n";
+				p_Stream << "<caption>Threads</caption>\n";
+				p_Stream << "<tr>\n";
+				string separator;
+				bool hasThreads = false;
+				for (size_t k = 0; k < m_ThreadList.size(); k++)
+				{
+					SNI_Thread *l_thread = m_ThreadList[k];
+					if (l_thread)
+					{
+						hasThreads = true;
+						l_thread->WriteStepCount(p_Stream);
+					}
+				}
+				p_Stream << "</tr>\n";
+				p_Stream << "</table></div>\n";
+				if (!hasThreads)
+				{
+					p_Stream << "<h1>No threads running</h1>\n";
+				}
+				*/
 		p_Stream << "</body>\n";
 		p_Stream << "</html>\n";
 	}
@@ -103,7 +103,7 @@ namespace SNI
 	{
 		m_ThreadListMutex.unlock();
 	}
-	
+
 	SNI_Thread::SNI_Thread(size_t p_ThreadNum)
 		: m_ThreadStepCount(0)
 		, m_WebServerThreadUsed(false)
@@ -151,7 +151,7 @@ namespace SNI
 			}
 		}
 	}
-	
+
 	void SNI_Thread::DisplayStepCounts()
 	{
 		cout << "Step count: " << to_string(m_ThreadNum) << ':' << to_string(m_ThreadStepCount) << '*' << "\n";
@@ -209,11 +209,11 @@ namespace SNI
 		return m_DebugCommand.IsExiting();
 	}
 
-	string SNI_Thread::Skynet()
+	string SNI_Thread::SkynetJS()
 	{
 		stringstream ss;
-		cout << "Skynet\n";
-		WriteWebPage(ss, m_Running);
+		cout << "SkynetJS\n";
+		WriteWebPageJS(ss, m_Running);
 		return ss.str();
 	}
 
@@ -226,6 +226,46 @@ namespace SNI
 		{
 			WriteStackJS(ss, m_StackDepth, manager->DebugFieldWidth());
 		}
+		return ss.str();
+	}
+
+	string SNI_Thread::LogJS()
+	{
+		stringstream ss;
+		cout << "LogJS\n";
+		WriteLogJS(ss);
+		return ss.str();
+	}
+
+	string SNI_Thread::Test1Html()
+	{
+		stringstream ss;
+		cout << "Test1Html\n";
+		WriteTest1Html(ss);
+		return ss.str();
+	}
+
+	string SNI_Thread::Test2Html()
+	{
+		stringstream ss;
+		cout << "Test2Html\n";
+		WriteTest2Html(ss);
+		return ss.str();
+	}
+
+	string SNI_Thread::Customers()
+	{
+		stringstream ss;
+		cout << "Customers\n";
+		WriteCustomers(ss);
+		return ss.str();
+	}
+
+	string SNI_Thread::Skynet()
+	{
+		stringstream ss;
+		cout << "Skynet\n";
+		WriteWebPage(ss, m_Running);
 		return ss.str();
 	}
 
@@ -495,6 +535,94 @@ namespace SNI
 		p_Stream << "</html>\n";
 	}
 
+	void SNI_Thread::WriteWebPageJS(ostream & p_Stream, bool p_Refresh)
+	{
+		m_DebugCommand.SetRunning(p_Refresh);
+		p_Stream << "<!doctype html>\n";
+		p_Stream << "<html lang = \"en\">\n";
+		p_Stream << "<head>\n";
+
+		p_Stream << "<style>\n";
+		p_Stream << "table{ \n";
+		p_Stream << "font - family: arial, sans - serif;\n";
+		p_Stream << "border - collapse: collapse;\n";
+		p_Stream << "width: 100 % ; \n";
+		p_Stream << "}\n";
+		p_Stream << "td, th{\n";
+		p_Stream << "border: 1px solid #dddddd; \n";
+		p_Stream << "text - align: left; \n";
+		p_Stream << "padding: 8px; \n";
+		p_Stream << "}\n";
+		p_Stream << "tr:nth - child(even){\n";
+		p_Stream << "\n";
+		p_Stream << "background - color: #dddddd; \n";
+		p_Stream << "}\n";
+		p_Stream << "</style>\n";
+		p_Stream << "<meta charset = \"utf-8\">\n";
+		if (m_DebugCommand.IsRunning())
+		{
+			p_Stream << "<meta http-equiv = 'refresh' content = '1;url=/skynet'/>\n";
+		}
+		p_Stream << "<title>Skynet Dashboard</title>\n";
+		p_Stream << "<meta name = \"description\" content = \"Skynet\">\n";
+		p_Stream << "<meta name = \"author\" content = \"SitePoint\">\n";
+		p_Stream << "<link rel = \"styles,hheet\" href = \"styles.css\">\n";
+		p_Stream << "</head>\n";
+		p_Stream << "<body>\n";
+		p_Stream << "<script src = 'js/scripts.js'></script>\n";
+		p_Stream << "<script src = \"https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js\"></script>\n";
+
+		p_Stream << "<h1>Skynet Dashboard";
+		SNI_Manager *manager = GetTopManager(false);
+		if (manager)
+		{
+			p_Stream << " - " << manager->Description();
+		}
+		if (m_DebugCommand.IsQuitting())
+		{
+			p_Stream << " - Quitting";
+		}
+		else if (m_DebugCommand.IsRunning())
+		{
+			p_Stream << " - Running";
+		}
+		if (m_Ended)
+		{
+			p_Stream << " - Thread ended";
+		}
+		p_Stream << "</h1>\n";
+		WriteCommands(p_Stream);
+		WriteStepCounts(p_Stream);
+		if (manager)
+		{
+			p_Stream << "<div ng-app = \"skynetApp\" ng-controller = \"logCtrl\">\n";
+			p_Stream << "<table><tr>\n";
+			p_Stream << "<td valign='top' max-width='60%'>\n";
+			if (!m_DebugCommand.IsQuitting())
+			{
+				WriteWebStackJS(p_Stream, m_StackDepth, manager->DebugFieldWidth());
+			}
+			p_Stream << "</td>\n";
+			p_Stream << "<td valign='top' max-width='40%'>\n";
+			WriteWebLogJS(p_Stream);
+			p_Stream << "</td>\n";
+			p_Stream << "</tr></table>\n";
+		}
+		p_Stream << "<script>\n";
+		p_Stream << "   var app = angular.module('skynetApp', []);\n";
+		p_Stream << "   app.controller('framesCtrl', function($scope, $http) {\n";
+		p_Stream << "	    $http.get(\"stackjs\")\n";
+		p_Stream << "		    .then(function(response) { $scope.frames = response.data.records; });\n";
+		p_Stream << "   });\n";
+		p_Stream << "   app.controller('logCtrl', function($scope, $http) {\n";
+		p_Stream << "	    $http.get(\"logjs\")\n";
+		p_Stream << "		    .then(function(response) { $scope.logs = response.data.records; });\n";
+		p_Stream << "   });\n";
+		p_Stream << "</script>\n";
+		p_Stream << "</body>\n";
+		p_Stream << "</html>\n";
+	}
+
 	void SNI_Thread::WriteShuttingDown(ostream & p_Stream)
 	{
 		p_Stream << "<!doctype html>\n";
@@ -591,10 +719,60 @@ namespace SNI
 		{
 			p_Stream << "<tr><td align = \"center\">\n";
 			m_FrameList[j - 1]->WriteWebFrame(p_Stream, j, p_DebugFieldWidth);
-			p_Stream << "<tr><td>\n";
+			p_Stream << "</td></tr>\n";
 		}
 		Unlock();
 		p_Stream << "</table>\n";
+	}
+
+	void SNI_Thread::WriteWebStackJS(ostream &p_Stream, long p_Depth, size_t p_DebugFieldWidth)
+	{
+		p_Stream << "<div ng-controller = \"framesCtrl\">\n";
+		p_Stream << "<table>\n";
+		p_Stream << "<caption>Thread " << m_ThreadNum << "</caption>\n";
+		p_Stream << "<tr ng-repeat = \"f in frames\">\n";
+		p_Stream << "<td align = \"center\">\n";
+
+		p_Stream << "<div style = 'overflow-x:auto;white-space:nowrap;width:900px'>\n";
+		p_Stream << "<table border = \"1\">\n";
+		p_Stream << "<caption>Frame {{ f.framepos }} : {{ f.framenum }} {{ f.function }}</caption>\n";
+		p_Stream << "<tr>\n";
+		p_Stream << "<th ng-repeat = \"v in f.variables\">{{ v.name }}</th>\n";
+		p_Stream << "</tr>\n";
+		p_Stream << "<tr>\n";
+		p_Stream << "<td ng-repeat = \"v in f.variables\">{{ v.typetext }}</td>\n";
+		p_Stream << "</tr>\n";
+		p_Stream << "<tr>\n";
+		p_Stream << "<td ng-repeat = \"v in f.variables\">\n";
+		p_Stream << "<div ng-repeat = \"d in v.value\">\n";
+		p_Stream << "<details ng-if = \"d.abbreviation\">\n";
+		p_Stream << "<summary>{{d.abbreviation}}...</summary><p>{{d.text}}</p>\n";
+		p_Stream << "</details>\n";
+		p_Stream << "<div ng-if = \"!d.abbreviation\">{{d.text}}</div>\n";
+		p_Stream << "</div>\n";
+		p_Stream << "</td>\n";
+		p_Stream << "</tr>\n";
+		p_Stream << "</table>\n";
+		p_Stream << "</div>\n";
+
+		p_Stream << "</td>\n";
+		p_Stream << "</tr>\n";
+		p_Stream << "</table>\n";
+	}
+
+	void SNI_Thread::WriteWebLogJS(ostream &p_Stream)
+	{
+		p_Stream << "<div ng-controller = \"framesCtrl\">\n";
+		p_Stream << "<table>\n";
+		p_Stream << "<caption>Logging</caption>";
+		p_Stream << "<tr ng-repeat = \"l in logs\"><td>{{l.text}}</td></tr>";
+		p_Stream << "</table>\n";
+		p_Stream << "</div>\n";
+	}
+
+	void SNI_Thread::WriteLogJS(ostream &p_Stream)
+	{
+		SNI_Log::GetLog()->LogTableJS(p_Stream);
 	}
 
 	void SNI_Thread::WriteStackJS(ostream &p_Stream, long p_Depth, size_t p_DebugFieldWidth)
@@ -630,6 +808,85 @@ namespace SNI
 		}
 	}
 
+	void SNI_Thread::WriteTest1Html(ostream &p_Stream)
+	{
+		p_Stream << "<!DOCTYPE html>\n";
+		p_Stream << "<html>\n";
+		p_Stream << "<script src=\"https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js\"></script>\n";
+		p_Stream << "<body>\n";
+
+		p_Stream << "<script>\n";
+		p_Stream << "var app = angular.module(\"myShoppingList\", []);\n";
+		p_Stream << "app.controller(\"myCtrl\", function($scope) {\n";
+		p_Stream << "$scope.products = [\"Milk\", \"Bread\", \"Cheese\"];\n";
+		p_Stream << "});\n";
+		p_Stream << "</script>\n";
+
+		p_Stream << "<div ng-app=\"myShoppingList\" ng-controller=\"myCtrl\">\n";
+		p_Stream << "<ul>\n";
+		p_Stream << "<li ng-repeat=\"x in products\">{{x}}</li>\n";
+		p_Stream << "</ul>\n";
+		p_Stream << "</ul>\n";
+		p_Stream << "</div>\n";
+
+		p_Stream << "<p>So far we have made an HTML list based on the items of an array.</p>\n";
+
+		p_Stream << "</body>\n";
+		p_Stream << "</html>\n";
+	}
+
+	void SNI_Thread::WriteTest2Html(ostream &p_Stream)
+	{
+		p_Stream << "<!DOCTYPE html>\n";
+		p_Stream << "<html>\n";
+		p_Stream << "<script src=\"https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js\"></script>\n";
+		p_Stream << "<body>\n";
+
+		p_Stream << "<div ng-app=\"skynetApp\" ng-controller=\"stackCtrl\">\n";
+
+		p_Stream << "<table>\n";
+		p_Stream << "<tr ng-repeat=\"f in frames\">\n";
+		p_Stream << "<td align = \"center\"> Frame {{ f.framepos }} : {{ f.framenum }} {{ f.function }}\n";
+		p_Stream << "</td>\n";
+		p_Stream << "</tr>\n";
+		p_Stream << "</table>\n";
+
+		p_Stream << "</div>\n";
+
+		p_Stream << "<script>\n";
+		p_Stream << "var app = angular.module('skynetApp', []);\n";
+		p_Stream << "app.controller('stackCtrl', function($scope, $http) {\n";
+		p_Stream << "$http.get(\"stackjs\")\n";
+		p_Stream << ".then(function (response) {$scope.frames = response.data.records;});\n";
+		p_Stream << "});\n";
+		p_Stream << "</script>\n";
+
+		p_Stream << "</body>\n";
+		p_Stream << "</html>\n";
+	}
+
+	void SNI_Thread::WriteCustomers(ostream &p_Stream)
+	{
+		p_Stream << "{\n";
+		p_Stream << "\"records\":[\n";
+		p_Stream << "{\"Name\":\"Alfreds Futterkiste\",\"City\":\"Berlin\",\"Country\":\"Germany\"},\n";
+		p_Stream << "{\"Name\":\"Ana Trujillo Emparedados y helados\",\"City\":\"México D.F.\",\"Country\":\"Mexico\"},\n";
+		p_Stream << "{\"Name\":\"Antonio Moreno Taquería\",\"City\":\"México D.F.\",\"Country\":\"Mexico\"},\n";
+		p_Stream << "{\"Name\":\"Around the Horn\",\"City\":\"London\",\"Country\":\"UK\"},\n";
+		p_Stream << "{\"Name\":\"B's Beverages\",\"City\":\"London\",\"Country\":\"UK\"},\n";
+		p_Stream << "{\"Name\":\"Berglunds snabbköp\",\"City\":\"Luleå\",\"Country\":\"Sweden\"},\n";
+		p_Stream << "{\"Name\":\"Blauer See Delikatessen\",\"City\":\"Mannheim\",\"Country\":\"Germany\"},\n";
+		p_Stream << "{\"Name\":\"Blondel père et fils\",\"City\":\"Strasbourg\",\"Country\":\"France\"},\n";
+		p_Stream << "{\"Name\":\"Bólido Comidas preparadas\",\"City\":\"Madrid\",\"Country\":\"Spain\"},\n";
+		p_Stream << "{\"Name\":\"Bon app'\",\"City\":\"Marseille\",\"Country\":\"France\"},\n";
+		p_Stream << "{\"Name\":\"Bottom-Dollar Marketse\",\"City\":\"Tsawassen\",\"Country\":\"Canada\"},\n";
+		p_Stream << "{\"Name\":\"Cactus Comidas para llevar\",\"City\":\"Buenos Aires\",\"Country\":\"Argentina\"},\n";
+		p_Stream << "{\"Name\":\"Centro comercial Moctezuma\",\"City\":\"México D.F.\",\"Country\":\"Mexico\"},\n";
+		p_Stream << "{\"Name\":\"Chop-suey Chinese\",\"City\":\"Bern\",\"Country\":\"Switzerland\"},\n";
+		p_Stream << "{\"Name\":\"Comércio Mineiro\",\"City\":\"São Paulo\",\"Country\":\"Brazil\"}\n";
+		p_Stream << "]\n";
+		p_Stream << "}\n";
+}
 	SNI_Variable *SNI_Thread::LookupVariable(const string &p_Name)
 	{
 		for (SNI_Frame *f : m_FrameList)

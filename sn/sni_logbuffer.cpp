@@ -37,4 +37,20 @@ namespace SNI
 		p_Stream << "</table>\n";
 		m_Mutex.unlock();
 	}
+
+	void SNI_LogBuffer::LogTableJS(ostream & p_Stream)
+	{
+		p_Stream << "{\"records\":[\n";
+		m_Mutex.lock();
+		string delimeter = " ";
+		for (auto it = m_Buffer.rbegin(); it != m_Buffer.rend(); it++)
+		{
+			string quotedString = *it;
+			ReplaceAll(quotedString, "\"", "\\\"");
+			p_Stream << delimeter << "{\"text\" : \"" << quotedString << "\"}\n";
+			delimeter = ",";
+		}
+		p_Stream << "]}\n";
+		m_Mutex.unlock();
+	}
 }

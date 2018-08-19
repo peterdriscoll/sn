@@ -22,6 +22,7 @@ namespace SNI
 
 		void WriteLine(const string &p_Line);
 		void LogTableToStream(ostream & p_Stream);
+		void LogTableJS(ostream & p_Stream);
 
 	private:
 		boost::circular_buffer<string> m_Buffer;

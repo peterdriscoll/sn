@@ -148,4 +148,12 @@ namespace SNI
 			m_LogBuffer->LogTableToStream(p_Stream);
 		}
 	}
+
+	void SNI_Log::LogTableJS(ostream & p_Stream)
+	{
+		if (m_LogBuffer)
+		{
+			m_LogBuffer->LogTableJS(p_Stream);
+		}
+	}
 }

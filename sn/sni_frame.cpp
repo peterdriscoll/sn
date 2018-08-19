@@ -254,7 +254,7 @@ namespace SNI
 		{
 			SN::SN_Expression e = v->GetSafeValue();
 			string typeText;
-			if (v->IsKnownValue())
+			if (e.GetSNI_Expression())
 			{
 				typeText = e.GetSNI_Expression()->GetTypeName();
 			}
@@ -267,7 +267,7 @@ namespace SNI
 			p_Stream << "<td>\n";
 			SN::SN_Expression e = v->GetValue(false);
 			string delimeter;
-                                        			e.ForEach(
+            e.ForEach(
 				[&p_Stream, &delimeter, p_DebugFieldWidth](const SN::SN_Expression &p_Expression, SNI_World *p_World)->SN::SN_Error
 				{
 					string valueText;
@@ -289,20 +289,21 @@ namespace SNI
 	void SNI_Frame::WriteJS(ostream &p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth)
 	{
 		p_Stream << "\t{\n";
-		p_Stream << "\t\t\"FramePos\" : \"" << p_FrameStackPos << "\",\n";
-		p_Stream << "\t\t\"FrameNum\" : \"" << m_FrameNum << "\",\n";
+		p_Stream << "\t\t\"function\" : \"" << m_Function.DisplaySN() << "\",\n";
+		p_Stream << "\t\t\"framepos\" : \"" << p_FrameStackPos << "\",\n";
+		p_Stream << "\t\t\"framenum\" : \"" << m_FrameNum << "\",\n";		
 		p_Stream << "\t\t\"variables\" : [\n";
 		string delimeter;
 		for (const SNI_Variable *v : m_VariableList)
 		{
 			p_Stream << "\t\t" << delimeter << "\t{\n";
-			p_Stream << "\t\t\t\t\"variable\" : \"" << v->FrameName() << "\"";
+			p_Stream << "\t\t\t\t\"name\" : \"" << v->FrameName() << "\"";
 			SN::SN_Expression e = v->GetSafeValue();
 			string typeText;
 			if (v->IsKnownValue())
 			{
 				typeText = e.GetSNI_Expression()->GetTypeName();
-				p_Stream << ",\n\t\t\t\t\"type\" : \"" << v->FrameName() << "\",\n";
+				p_Stream << ",\n\t\t\t\t\"typetext\" : \"" << v->FrameName() << "\",\n";
 				p_Stream << "\t\t\t\t\"value\" : [";
 				string delimeter;
 				e.ForEach(

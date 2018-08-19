@@ -116,9 +116,33 @@ namespace HTTP
 				{
 					rep.content = l_thread->QuitWeb();
 				}
+				else if (path == "/skynet")
+				{
+					rep.content = l_thread->Skynet();
+				}
+				else if (path == "/skynetjs")
+				{
+					rep.content = l_thread->SkynetJS();
+				}
 				else if (path == "/stackjs")
 				{
 					rep.content = l_thread->StackJS();
+				}
+				else if (path == "/logjs")
+				{
+					rep.content = l_thread->LogJS();
+				}
+				else if (path == "/test1")
+				{
+					rep.content = l_thread->Test1Html();
+				}
+				else if (path == "/test2")
+				{
+					rep.content = l_thread->Test2Html();
+				}
+				else if (path == "/customers")
+				{
+					rep.content = l_thread->Customers();
 				}
 				else
 				{

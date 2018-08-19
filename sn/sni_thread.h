@@ -78,7 +78,12 @@ namespace SNI
 		string SetThreadNumWeb();
 		string QuitWeb();
 
+		string SkynetJS();
 		string StackJS();
+		string LogJS();
+		string Test1Html();
+		string Test2Html();
+		string Customers();
 
 		void Lock();
 		void Unlock();
@@ -90,7 +95,11 @@ namespace SNI
 		size_t GetFrameStackDepth();
 
 		void WriteWebPage(ostream &p_Stream, bool p_Refresh);
+		void WriteWebPageJS(ostream & p_Stream, bool p_Refresh);
 		void WriteShuttingDown(ostream & p_Stream);
+		void WriteTest1Html(ostream &p_Stream);
+		void WriteTest2Html(ostream &p_Stream);
+		void WriteCustomers(ostream &p_Stream);
 
 		SNI_Variable * LookupVariable(const string & p_Name);
 		void DisplayFrameStack(long p_Depth);
@@ -112,7 +121,11 @@ namespace SNI
 
 		void WriteWebStack(ostream & p_Stream, long p_Depth, size_t p_DebugFieldWidth);
 
+		void WriteWebStackJS(ostream & p_Stream, long p_Depth, size_t p_DebugFieldWidth);
+		void WriteWebLogJS(ostream & p_Stream);
+
 		void WriteStackJS(ostream & p_Stream, long p_Depth, size_t p_DebugFieldWidth);
+		void WriteLogJS(ostream & p_Stream);
 
 		size_t m_ThreadNum;
 		mutex m_Mutex;
