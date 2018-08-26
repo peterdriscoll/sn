@@ -60,6 +60,7 @@ namespace HTTP
 			long stackdepth = atol(umap["stackdepth"].c_str());
 			SNI_Thread::ThreadListLock();
 			SNI::SNI_Thread *l_thread = SNI::SNI_Thread::GetThreadByNumber(threadNum);
+			rep.content = "";
 			if (l_thread)
 			{
 				if (path == "/skynet")
@@ -70,38 +71,75 @@ namespace HTTP
 				{
 					rep.content = l_thread->RunWeb();
 				}
+				else if (path == "/runjs")
+				{
+					l_thread->Run();
+				}
 				else if (path == "/runtoend")
 				{
 					rep.content = l_thread->RunToEndWeb();
+				}
+				else if (path == "/runtoendjs")
+				{
+					l_thread->RunToEnd();
 				}
 				else if (path == "/debug")
 				{
 					rep.content = l_thread->DebugWeb();
 				}
+				else if (path == "/debugjs")
+				{
+					l_thread->Debug();
+				}
 				else if (path == "/debugbreak")
 				{
 					rep.content = l_thread->DebugBreakWeb();
+				}
+				else if (path == "/debugbreakjs")
+				{
+					l_thread->DebugBreak();
 				}
 				else if (path == "/stepover")
 				{
 					rep.content = l_thread->StepOverWeb(stackdepth);
 				}
+				else if (path == "/stepoverjs")
+				{
+					l_thread->StepOverWeb(stackdepth);
+				}
 				else if (path == "/stepinto")
 				{
 					rep.content = l_thread->StepIntoWeb();
+				}
+				else if (path == "/stepintojs")
+				{
+					l_thread->StepInto();
 				}
 				else if (path == "/stepout")
 				{
 					rep.content = l_thread->StepOutWeb(stackdepth);
 				}
+				else if (path == "/stepoutjs")
+				{
+					l_thread->StepOutWeb(stackdepth);
+				}
 				else if (path == "/stepparam")
 				{
 					rep.content = l_thread->StepParamWeb();
+				}
+				else if (path == "/stepparamjs")
+				{
+					l_thread->StepParamWeb();
 				}
 				else if (path == "/gotostepcount")
 				{
 					long stepCount = atol(umap["stepcount"].c_str());
 					rep.content = l_thread->GotoStepCountWeb(stepCount);
+				}
+				else if (path == "/gotostepcountjs")
+				{
+					long stepCount = atol(umap["stepcount"].c_str());
+					l_thread->GotoStepCount(stepCount);
 				}
 				else if (path == "/maxstackframes")
 				{
@@ -115,6 +153,10 @@ namespace HTTP
 				else if (path == "/quit")
 				{
 					rep.content = l_thread->QuitWeb();
+				}
+				else if (path == "/quitjs")
+				{
+					l_thread->Quit();
 				}
 				else if (path == "/skynet")
 				{
@@ -131,6 +173,10 @@ namespace HTTP
 				else if (path == "/logjs")
 				{
 					rep.content = l_thread->LogJS();
+				}
+				else if (path == "/stepcountjs")
+				{
+					rep.content = l_thread->StepCountJS();
 				}
 				else if (path == "/test1")
 				{

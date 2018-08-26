@@ -300,10 +300,10 @@ namespace SNI
 			p_Stream << "\t\t\t\t\"name\" : \"" << v->FrameName() << "\"";
 			SN::SN_Expression e = v->GetSafeValue();
 			string typeText;
-			if (v->IsKnownValue())
+			if (e.GetSNI_Expression())
 			{
 				typeText = e.GetSNI_Expression()->GetTypeName();
-				p_Stream << ",\n\t\t\t\t\"typetext\" : \"" << v->FrameName() << "\",\n";
+				p_Stream << ",\n\t\t\t\t\"typetext\" : \"" << typeText << "\",\n";
 				p_Stream << "\t\t\t\t\"value\" : [";
 				string delimeter;
 				e.ForEach(

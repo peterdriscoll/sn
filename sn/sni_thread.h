@@ -74,12 +74,14 @@ namespace SNI
 		string StepOutWeb(long p_StackDepth);
 		string StepParamWeb();
 		string GotoStepCountWeb(long p_StepCount);
+		void GotoStepCountJS(long p_StepCount);
 		string SetMaxStackFramesWeb(long p_StackDepth);
 		string SetThreadNumWeb();
 		string QuitWeb();
 
 		string SkynetJS();
 		string StackJS();
+		string StepCountJS();
 		string LogJS();
 		string Test1Html();
 		string Test2Html();
@@ -107,6 +109,8 @@ namespace SNI
 		void WriteStepCounts(ostream & p_Stream);
 		void WriteStepCount(ostream & p_Stream);
 
+		void WriteWebStepCountListJS(ostream & p_Stream);
+
 		ostream * CreateLogFile(SN::LoggingLevel p_LoggingLevel);
 
 		SNI_Manager *GetTopManager(bool p_Create = true);
@@ -115,17 +119,23 @@ namespace SNI
 		string StartCommand(SN::DebugAction p_DebugAction, const string & p_Description);
 
 		void WriteCommands(ostream & p_Stream);
+		void WriteWebCommandsJS(ostream & p_Stream);
 		void WriteSubmit(ostream & p_Stream, const string & p_Action, const string & p_Name, const string & p_Description);
+		void WriteSubmitJS(ostream & p_Stream, const string & p_Action, const string & p_Name, const string & p_Description);
 		void WriteGotoStepCount(ostream &p_Stream);
+		void WriteGotoStepCountJS(ostream & p_Stream);
 		void WriteSetMaxStackFrames(ostream & p_Stream);
 
 		void WriteWebStack(ostream & p_Stream, long p_Depth, size_t p_DebugFieldWidth);
 
 		void WriteWebStackJS(ostream & p_Stream, long p_Depth, size_t p_DebugFieldWidth);
 		void WriteWebLogJS(ostream & p_Stream);
+		void WriteStackJS(ostream & p_Stream);
 
 		void WriteStackJS(ostream & p_Stream, long p_Depth, size_t p_DebugFieldWidth);
 		void WriteLogJS(ostream & p_Stream);
+		void WriteStepCountListJS(ostream & p_Stream);
+		void WriteStepCountJS(ostream & p_Stream, const string &p_Delimeter);
 
 		size_t m_ThreadNum;
 		mutex m_Mutex;
