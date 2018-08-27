@@ -45,8 +45,8 @@ namespace SNI
 		void WriteFrameStack(SN::LoggingLevel p_DebugLevel, long p_Depth);
 		void WriteFrameStack(SN::LoggingLevel p_DebugLevel, long p_ThreadNum, long p_Depth);
 
-		void LogTableToStream(ostream & p_Stream);
-		void LogTableJS(ostream & p_Stream);
+		void LogTableToStream(ostream & p_Stream, long p_MaxLogEntries);
+		void LogTableJS(ostream & p_Stream, long p_MaxLogEntries);
 	private:
 		static SNI_Log *m_Log;
 

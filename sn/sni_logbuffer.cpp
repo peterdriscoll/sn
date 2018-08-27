@@ -25,12 +25,13 @@ namespace SNI
 		m_Mutex.unlock();
 	}
 
-	void SNI_LogBuffer::LogTableToStream(ostream & p_Stream)
+	void SNI_LogBuffer::LogTableToStream(ostream & p_Stream, long p_MaxLogEntries)
 	{
 		p_Stream << "<table>\n";
 		p_Stream << "<caption>Logging</caption>";
 		m_Mutex.lock();
-		for (auto it = m_Buffer.rbegin(); it != m_Buffer.rend(); it++)
+		long entries = 0;
+		for (auto it = m_Buffer.rbegin(); it != m_Buffer.rend() && (p_MaxLogEntries <= 0 || entries < p_MaxLogEntries); it++, entries++)
 		{
 			p_Stream << "<tr><td>" << *it << "</td></tr>";
 		}
@@ -38,12 +39,13 @@ namespace SNI
 		m_Mutex.unlock();
 	}
 
-	void SNI_LogBuffer::LogTableJS(ostream & p_Stream)
+	void SNI_LogBuffer::LogTableJS(ostream & p_Stream, long p_MaxLogEntries)
 	{
 		p_Stream << "{\"records\":[\n";
 		m_Mutex.lock();
 		string delimeter = " ";
-		for (auto it = m_Buffer.rbegin(); it != m_Buffer.rend(); it++)
+		long entries = 0;
+		for (auto it = m_Buffer.rbegin(); it != m_Buffer.rend() && (p_MaxLogEntries <= 0 || entries < p_MaxLogEntries); it++, entries++)
 		{
 			string quotedString = *it;
 			ReplaceAll(quotedString, "\"", "\\\"");

@@ -364,7 +364,7 @@ namespace SNI
 				}
 				case VK_F10:
 					cout << "F10 - Step over\n";
-					l_thread->StepOver(0);
+					l_thread->StepOver();
 					break;
 				case VK_F11:
 					cout << "F11 -  Step into\n";
@@ -372,7 +372,7 @@ namespace SNI
 					break;
 				case VK_SHIFT_F11:
 					cout << "Shift F11 - Step out\n";
-					l_thread->StepOut(0);
+					l_thread->StepOut();
 					break;
 				case VK_F12:
 					cout << "F12 - Step to parameter\n";

@@ -57,7 +57,6 @@ namespace HTTP
 			string_umap umap;
 			string path = extract_values(request_path, umap);
 			long threadNum = atol(umap["threadnum"].c_str());
-			long stackdepth = atol(umap["stackdepth"].c_str());
 			SNI_Thread::ThreadListLock();
 			SNI::SNI_Thread *l_thread = SNI::SNI_Thread::GetThreadByNumber(threadNum);
 			rep.content = "";
@@ -101,11 +100,11 @@ namespace HTTP
 				}
 				else if (path == "/stepover")
 				{
-					rep.content = l_thread->StepOverWeb(stackdepth);
+					rep.content = l_thread->StepOverWeb();
 				}
 				else if (path == "/stepoverjs")
 				{
-					l_thread->StepOverWeb(stackdepth);
+					l_thread->StepOverWeb();
 				}
 				else if (path == "/stepinto")
 				{
@@ -117,11 +116,11 @@ namespace HTTP
 				}
 				else if (path == "/stepout")
 				{
-					rep.content = l_thread->StepOutWeb(stackdepth);
+					rep.content = l_thread->StepOutWeb();
 				}
 				else if (path == "/stepoutjs")
 				{
-					l_thread->StepOutWeb(stackdepth);
+					l_thread->StepOutWeb();
 				}
 				else if (path == "/stepparam")
 				{
@@ -143,8 +142,8 @@ namespace HTTP
 				}
 				else if (path == "/maxstackframes")
 				{
-					long stackDepth = atol(umap["stackdepth"].c_str());
-					rep.content = l_thread->SetMaxStackFramesWeb(stackDepth);
+					long maxStackFrames = atol(umap["maxstackframes"].c_str());
+					rep.content = l_thread->SetMaxStackFramesWeb(maxStackFrames);
 				}
 				else if (path == "/thread")
 				{
@@ -168,27 +167,17 @@ namespace HTTP
 				}
 				else if (path == "/stackjs")
 				{
-					rep.content = l_thread->StackJS();
+					long maxStackFrames = atol(umap["maxstackframes"].c_str());
+					rep.content = l_thread->StackJS(maxStackFrames);
 				}
 				else if (path == "/logjs")
 				{
-					rep.content = l_thread->LogJS();
+					long maxLogEntries = atol(umap["maxlogentries"].c_str());
+					rep.content = l_thread->LogJS(maxLogEntries);
 				}
 				else if (path == "/stepcountjs")
 				{
 					rep.content = l_thread->StepCountJS();
-				}
-				else if (path == "/test1")
-				{
-					rep.content = l_thread->Test1Html();
-				}
-				else if (path == "/test2")
-				{
-					rep.content = l_thread->Test2Html();
-				}
-				else if (path == "/customers")
-				{
-					rep.content = l_thread->Customers();
 				}
 				else
 				{
@@ -221,11 +210,13 @@ namespace HTTP
 			}
 			// Fill out the reply to be sent to the client.
 			rep.status = reply::ok;
-			rep.headers.resize(2);
+			rep.headers.resize(3);
 			rep.headers[0].name = "Content-Length";
 			rep.headers[0].value = std::to_string(rep.content.size());
 			rep.headers[1].name = "Content-Type";
 			rep.headers[1].value = mime_types::extension_to_type(extension);
+			rep.headers[2].name = "Access-Control-Allow-Origin";
+			rep.headers[2].value = "*";
 		}
 
 		bool request_handler::url_decode(const std::string& in, std::string& out)

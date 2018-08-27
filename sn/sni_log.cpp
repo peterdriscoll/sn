@@ -141,19 +141,19 @@ namespace SNI
 		SNI_Frame::DisplayFrameStack(p_Depth);
 	}
 
-	void SNI_Log::LogTableToStream(ostream & p_Stream)
+	void SNI_Log::LogTableToStream(ostream & p_Stream, long p_MaxLogEntries)
 	{
 		if (m_LogBuffer)
 		{
-			m_LogBuffer->LogTableToStream(p_Stream);
+			m_LogBuffer->LogTableToStream(p_Stream, p_MaxLogEntries);
 		}
 	}
 
-	void SNI_Log::LogTableJS(ostream & p_Stream)
+	void SNI_Log::LogTableJS(ostream & p_Stream, long p_MaxLogEntries)
 	{
 		if (m_LogBuffer)
 		{
-			m_LogBuffer->LogTableJS(p_Stream);
+			m_LogBuffer->LogTableJS(p_Stream, p_MaxLogEntries);
 		}
 	}
 }

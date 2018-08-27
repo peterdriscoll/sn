@@ -21,8 +21,8 @@ namespace SNI
 		virtual ~SNI_LogBuffer();
 
 		void WriteLine(const string &p_Line);
-		void LogTableToStream(ostream & p_Stream);
-		void LogTableJS(ostream & p_Stream);
+		void LogTableToStream(ostream & p_Stream, long p_MaxLogEntries);
+		void LogTableJS(ostream & p_Stream, long p_MaxLogEntries);
 
 	private:
 		boost::circular_buffer<string> m_Buffer;
