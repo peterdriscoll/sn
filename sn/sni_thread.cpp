@@ -466,18 +466,18 @@ namespace SNI
 
 		p_Stream << "<style>\n";
 		p_Stream << "table{ \n";
-		p_Stream << "font - family: arial, sans - serif;\n";
-		p_Stream << "border - collapse: collapse;\n";
-		p_Stream << "width: 100 % ; \n";
+		p_Stream << "font-family: arial, sans-serif;\n";
+		p_Stream << "border-collapse: collapse;\n";
+		p_Stream << "width: 100% ; \n";
 		p_Stream << "}\n";
 		p_Stream << "td, th{\n";
 		p_Stream << "border: 1px solid #dddddd; \n";
-		p_Stream << "text - align: left; \n";
+		p_Stream << "text-align: left; \n";
 		p_Stream << "padding: 8px; \n";
 		p_Stream << "}\n";
-		p_Stream << "tr:nth - child(even){\n";
+		p_Stream << "tr:nth-child(even){\n";
 		p_Stream << "\n";
-		p_Stream << "background - color: #dddddd; \n";
+		p_Stream << "background-color: #dddddd; \n";
 		p_Stream << "}\n";
 		p_Stream << "</style>\n";
 		p_Stream << "<meta charset = \"utf-8\">\n";
@@ -539,18 +539,18 @@ namespace SNI
 
 		p_Stream << "<style>\n";
 		p_Stream << "table{ \n";
-		p_Stream << "font - family: arial, sans - serif;\n";
-		p_Stream << "border - collapse: collapse;\n";
-		p_Stream << "width: 100 % ; \n";
+		p_Stream << "font-family: arial, sans-serif;\n";
+		p_Stream << "border-collapse: collapse;\n";
+		p_Stream << "width: 100% ; \n";
 		p_Stream << "}\n";
 		p_Stream << "td, th{\n";
 		p_Stream << "border: 1px solid #dddddd; \n";
-		p_Stream << "text - align: left; \n";
+		p_Stream << "text-align: left; \n";
 		p_Stream << "padding: 8px; \n";
 		p_Stream << "}\n";
-		p_Stream << "tr:nth - child(even){\n";
+		p_Stream << "tr:nth-child(even){\n";
 		p_Stream << "\n";
-		p_Stream << "background - color: #dddddd; \n";
+		p_Stream << "background-color: #dddddd; \n";
 		p_Stream << "}\n";
 		p_Stream << "</style>\n";
 		p_Stream << "<meta charset = \"utf-8\">\n";
@@ -563,7 +563,7 @@ namespace SNI
 		p_Stream << "<script src = \"https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js\"></script>\n";
 
 		p_Stream << "<div ng-app = \"skynetApp\" ng-controller='commandCtrl'>\n";
-		p_Stream << "<h1>Skynet Dashboard - {{taskdescription}} {{statusdescription}}</h1>\n";
+		p_Stream << "<h1>Skynet Dashboard - {{taskdescription}} {{statusdescription}} {{pollcount}}</h1>\n";
 		WriteWebCommandsJS(p_Stream);
 		WriteWebStepCountListJS(p_Stream);
 		p_Stream << "<table><tr>\n";
@@ -576,44 +576,52 @@ namespace SNI
 		p_Stream << "</tr></table>\n";
 		p_Stream << "</div>\n";
 		p_Stream << "<script>\n";
-		p_Stream << "   var home = 'http://127.0.0.1/';\n";
-		p_Stream << "   var app = angular.module('skynetApp', []);\n";
-		p_Stream << "   app.controller('commandCtrl', function($scope, $http) {\n";
-		p_Stream << "       $scope.threadnum = 0;\n";
-		p_Stream << "       $scope.maxstackframes = 0;\n";
-		p_Stream << "       $scope.initFirst = function() {\n";
-		p_Stream << "	        $http.get(home+'stackjs?threadnum='+$scope.threadnum+'&maxstackframes='+$scope.maxstackframes)\n";
-		p_Stream << "		        .then(function(response) {\n";
-		p_Stream << "		             $scope.frames = response.data.records;";
-		p_Stream << "		             $scope.threadnum = response.data.threadnum;\n";
-		p_Stream << "		             $scope.taskdescription = response.data.taskdescription;\n";
-		p_Stream << "		             $scope.statusdescription = response.data.statusdescription;\n";
-		p_Stream << "		             $scope.quitting = response.data.quitting;\n";
-		p_Stream << "		        });\n";
-		p_Stream << "	        $http.get(home+'logjs?threadnum='+$scope.threadnum+'&maxlogentries='+$scope.maxstackframes*4)\n";
-		p_Stream << "		        .then(function(response) { $scope.logs = response.data.records; });\n";
-		p_Stream << "	        $http.get(home+\"stepcountjs\")\n";
-		p_Stream << "		        .then(function(response) { $scope.stepcounts = response.data.records; });\n";
-		p_Stream << "       };\n";
-		p_Stream << "       $scope.submit = function(action) {\n";
-		p_Stream << "	        $http.get(home+action+'?threadnum='+$scope.threadnum+'&stackdepth='+$scope.stackdepth)\n";
-		p_Stream << "		        .then(function(response) { $scope.initFirst(); });\n";
-		p_Stream << "       };\n";
-		p_Stream << "       $scope.setthread = function(newthreadnum) {\n";
-		p_Stream << "           alert('setthread'+$scope.threadnum+' '+newthreadnum);";
-		p_Stream << "           if (threadnum != newthreadnum)\n";
+		p_Stream << "    var home = 'http://127.0.0.1/';\n";
+		p_Stream << "    var app = angular.module('skynetApp', []);\n";
+		p_Stream << "    app.controller('commandCtrl', function($scope, $http, $timeout) {\n";
+		p_Stream << "        $scope.threadnum = 0;\n";
+		p_Stream << "        $scope.maxstackframes = 0;\n";
+		p_Stream << "        $scope.pollcount = 0;\n";
+		p_Stream << "        $scope.scheduled = 0;\n";
+		p_Stream << "        $scope.initFirst = function() {\n";
+		p_Stream << "            if (!$scope.scheduled) {\n";
+		p_Stream << "                $scope.scheduled = $scope.scheduled + 1;\n";
+		p_Stream << "	             $http.get(home+'stackjs?threadnum='+$scope.threadnum+'&maxstackframes='+$scope.maxstackframes)\n";
+		p_Stream << "		             .then(function(response) {\n";
+		p_Stream << "		                 $scope.frames = response.data.records;";
+		p_Stream << "		                 $scope.threadnum = response.data.threadnum;\n";
+		p_Stream << "		                 $scope.taskdescription = response.data.taskdescription;\n";
+		p_Stream << "		                 $scope.statusdescription = response.data.statusdescription;\n";
+		p_Stream << "		                 $scope.running = response.data.running;\n";
+		p_Stream << "		                 $scope.pollcount = $scope.pollcount + 1;\n";
+		p_Stream << "		                 $scope.scheduled = $scope.scheduled - 1;\n";
+		p_Stream << "		                 if ($scope.running) {\n";
+		p_Stream << "		    		         $timeout(function() {   $scope.initFirst(); }, 2000);\n";
+		p_Stream << "		                 };\n";
+		p_Stream << "		             });\n";
+		p_Stream << "            };\n";
+		p_Stream << "            $http.get(home+'logjs?threadnum='+$scope.threadnum+'&maxlogentries='+$scope.maxstackframes*4)\n";
+		p_Stream << "                .then(function(response) { $scope.logs = response.data.records; });\n";
+		p_Stream << "            $http.get(home+\"stepcountjs\")\n";
+		p_Stream << "                .then(function(response) { $scope.stepcounts = response.data.records; });\n";
+		p_Stream << "        };\n";
+		p_Stream << "        $scope.submit = function(action) {\n";
+		p_Stream << "            $http.get(home+action+'?threadnum='+$scope.threadnum+'&stackdepth='+$scope.stackdepth)\n";
+		p_Stream << "                .then(function(response) { $scope.initFirst(); });\n";
+		p_Stream << "        };\n";
+		p_Stream << "        $scope.setthread = function(newthreadnum) {\n";
+		p_Stream << "            if (threadnum != newthreadnum)\n";
 		p_Stream << "           {\n";
-		p_Stream << "               alert('change');";
-		p_Stream << "	            $scope.threadnum = newthreadnum;\n";
-		p_Stream << "               $scope.initFirst();\n";
-		p_Stream << "           }\n";
-		p_Stream << "       };\n";
-		p_Stream << "       $scope.gotostepcount = function() {\n";
+		p_Stream << "	             $scope.threadnum = newthreadnum;\n";
+		p_Stream << "                $scope.initFirst();\n";
+		p_Stream << "            }\n";
+		p_Stream << "        };\n";
+		p_Stream << "        $scope.gotostepcount = function() {\n";
 		p_Stream << "	        $http.get(home+'gotostepcountjs?threadnum='+$scope.threadnum+'&stepcount='+$scope.stepcount)\n";
 		p_Stream << "		        .then(function(response) { $scope.initFirst(); });\n";
 		p_Stream << "       };\n";
-		p_Stream << "       $scope.initFirst();\n";
-		p_Stream << "   });\n";
+		p_Stream << "        $scope.initFirst();\n";
+		p_Stream << "    });\n";
 		p_Stream << "</script>\n";
 		p_Stream << "</body>\n";
 		p_Stream << "</html>\n";
@@ -845,15 +853,15 @@ namespace SNI
 		Unlock();
 		p_Stream << "],\n";
 
-		p_Stream << "\"threadnum\" : \"" << m_ThreadNum << "\",";
+		p_Stream << "\"threadnum\" : \"" << m_ThreadNum << "\",\n";
 
 		SNI_Manager *manager = GetTopManager(false);
 		if (manager)
 		{
-			p_Stream << "\"taskdescription\" : \"" << manager->Description() << "\",";
+			p_Stream << "\"taskdescription\" : \"" << manager->Description() << "\",\n";
 		}
 		string statusDescription;
-		string running = "N";
+		int running = 0;
 		if (m_DebugCommand.IsQuitting())
 		{
 			statusDescription += " - Quitting";
@@ -861,14 +869,14 @@ namespace SNI
 		else if (m_DebugCommand.IsRunning())
 		{
 			statusDescription += " - Running";
-			running = "Y";
+			running = 1;
 		}
 		if (m_Ended)
 		{
 			statusDescription += " - Thread ended";
 		}
-		p_Stream << "\"statusdescription\" : \"" << statusDescription << "\",";
-		p_Stream << "\"running\" : \"" << running << "\"";
+		p_Stream << "\"statusdescription\" : \"" << statusDescription << "\",\n";
+		p_Stream << "\"running\" : " << running << "\n";
 		p_Stream << "}\n";
 	}
 

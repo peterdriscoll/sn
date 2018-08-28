@@ -1,33 +1,34 @@
-﻿<!doctype html>
+﻿
+<!doctype html>
 <html lang="en">
 <head>
     <style>
         table {
-            font - family: arial, sans - serif;
-            border - collapse: collapse;
-            width: 100 %;
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
         }
 
         td, th {
             border: 1px solid #dddddd;
-            text - align: left;
+            text-align: left;
             padding: 8px;
         }
 
-        tr:nth - child(even) {
-            background - color: #dddddd;
+        tr:nth-child(even) {
+            background-color: #dddddd;
         }
     </style>
     <meta charset="utf-8">
     <title>Skynet Dashboard</title>
     <meta name="description" content="Skynet">
     <meta name="author" content="SitePoint">
-    <link rel="stylesheet" type="text/css" href="http://127.0.0.1/styles.css">
+    <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
     <div ng-app="skynetApp" ng-controller='commandCtrl'>
-        <h1>Skynet Dashboard - {{taskdescription}} {{statusdescriptin}}</h1>
+        <h1>Skynet Dashboard - {{taskdescription}} {{statusdescription}} {{pollcount}}</h1>
         <table bgcolor='silver'>
             <tr>
                 <td valign='top'>
@@ -87,17 +88,16 @@
                             </summary>Step count : <br>
                             <input type='text' ng-model='stepcount' name='stepcount'>
                             <br>
-                         </details>
                     </form>
                 </td>
                 <td valign='top'>
-                    <form action='/maxstackframes' method='get'>
+                    <form ng-submit='initFirst()'>
                         <details>
                             <summary>
                                 Max stack frames<br>
                                 <input type='submit' value='Stack depth'><br>
                             </summary>Number of stack frames to display :<br>
-                            <input type='text' name='maxstackframes'>
+                            <input type='text' ng-model='maxstackframes' name='maxstackframes'>
                         </details>
                     </form>
                 </td>
@@ -165,31 +165,39 @@
     <script>
         var home = 'http://127.0.0.1/';
         var app = angular.module('skynetApp', []);
-        app.controller('commandCtrl', function ($scope, $http) {
+        app.controller('commandCtrl', function ($scope, $http, $timeout) {
             $scope.threadnum = 0;
-            $scope.stackdepth = 1;
+            $scope.maxstackframes = 0;
+            $scope.pollcount = 0;
+            $scope.scheduled = 0;
             $scope.initFirst = function () {
-                $http.get(home + 'stackjs?threadnum=' + $scope.threadnum + '&stackdepth=' + $scope.stackdepth)
-                    .then(function (response) {
-                        $scope.frames = response.data.records; $scope.threadnum = response.data.threadnum;
-                        $scope.taskdescription = response.data.taskdescription;
-                        $scope.statusdescription = response.data.statusdescription;
-                        $scope.quitting = response.data.quitting;
-                    });
-                $http.get(home + 'logjs?threadnum=' + $scope.threadnum)
+                if (!$scope.scheduled) {
+                    $scope.scheduled = $scope.scheduled + 1;
+                    $http.get(home + 'stackjs?threadnum=' + $scope.threadnum + '&maxstackframes=' + $scope.maxstackframes)
+                        .then(function (response) {
+                            $scope.frames = response.data.records; $scope.threadnum = response.data.threadnum;
+                            $scope.taskdescription = response.data.taskdescription;
+                            $scope.statusdescription = response.data.statusdescription;
+                            $scope.running = response.data.running;
+                            $scope.pollcount = $scope.pollcount + 1;
+                            $scope.scheduled = $scope.scheduled - 1;
+                            if ($scope.running) {
+                                $timeout(function () { $scope.initFirst(); }, 2000);
+                            };
+                        });
+                };
+                $http.get(home + 'logjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxstackframes * 4)
                     .then(function (response) { $scope.logs = response.data.records; });
                 $http.get(home + "stepcountjs")
                     .then(function (response) { $scope.stepcounts = response.data.records; });
             };
-            $scope.threadnum = 0;
-            $scope.stackdepth = 1;
             $scope.submit = function (action) {
                 $http.get(home + action + '?threadnum=' + $scope.threadnum + '&stackdepth=' + $scope.stackdepth)
                     .then(function (response) { $scope.initFirst(); });
             };
             $scope.setthread = function (newthreadnum) {
-                alert('setthread' + $scope.threadnum + ' ' + newthreadnum); if (threadnum != newthreadnum) {
-                    alert('change'); $scope.threadnum = newthreadnum;
+                if (threadnum != newthreadnum) {
+                    $scope.threadnum = newthreadnum;
                     $scope.initFirst();
                 }
             };

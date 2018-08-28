@@ -439,7 +439,7 @@ namespace SNI
 			SNI_Log::GetLog()->SetLogBuffer(SN::DebugLevel, m_LogBufferCapacity);
 			m_WebServerThread = new thread(RunServer, p_Address, p_Port, p_DocRoot);
 			m_WebServerThreadUsed = true;
-			OpenURLInBrowser("http://127.0.0.1/skynet");
+			OpenURLInBrowser("http://127.0.0.1/skynetjs.html");
 		}
 		m_WebServerThreadUsageCount++;
 	}
