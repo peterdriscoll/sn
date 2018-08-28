@@ -1,35 +1,19 @@
 ﻿
+
 <!doctype html>
 <html lang="en">
 <head>
-    <style>
-        table {
-            font-family: arial, sans-serif;
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        td, th {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-        }
-
-        tr:nth-child(even) {
-            background-color: #dddddd;
-        }
-    </style>
     <meta charset="utf-8">
     <title>Skynet Dashboard</title>
     <meta name="description" content="Skynet">
-    <meta name="author" content="SitePoint">
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <meta name="author" content="P.J.Driscoll">
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
     <div ng-app="skynetApp" ng-controller='commandCtrl'>
         <h1>Skynet Dashboard - {{taskdescription}} {{statusdescription}} {{pollcount}}</h1>
-        <table bgcolor='silver'>
+        <table class='command'>
             <tr>
                 <td valign='top'>
                     <form ng-submit='submit("run")'>
@@ -110,7 +94,7 @@
             </tr>
         </table>
         <div>
-            <table>
+            <table class='thread'>
                 <caption>Threads</caption>
                 <tr>
                     <td ng-repeat="sc in stepcounts">
@@ -121,15 +105,15 @@
                 </tr>
             </table>
         </div>
-        <table>
+        <table class='group'>
             <tr>
                 <td valign='top' max-width='60%'>
-                    <table>
+                    <table class='stack'>
                         <caption>Thread {{threadnum}}</caption>
                         <tr ng-repeat="f in frames">
                             <td align="center">
                                 <div style='overflow-x:auto;white-space:nowrap;width:900px'>
-                                    <table border="1">
+                                    <table class='frame'>
                                         <caption>Frame {{ f.framepos }} : {{ f.framenum }} {{ f.function }}</caption>
                                         <tr>
                                             <th ng-repeat="v in f.variables">{{ v.name }}</th>
@@ -154,13 +138,22 @@
                     </table>
                 </td>
                 <td valign='top' max-width='40%'>
-                    <table>
+                    <table class='log'>
                         <caption>Logging</caption>
                         <tr ng-repeat="l in logs"><td>{{l.text}}</td></tr>
                     </table>
                 </td>
             </tr>
         </table>
+    </div>
+    <div>
+        <p>
+            <a href='http://jigsaw.w3.org/css-validator/check/referer'>
+                <img style='border:0;width:88px;height:31px'
+                     src='http://jigsaw.w3.org/css-validator/images/vcss-blue'
+                     alt='Valid CSS!' />
+            </a>
+        </p>
     </div>
     <script>
         var home = 'http://127.0.0.1/';

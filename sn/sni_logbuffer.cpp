@@ -27,7 +27,7 @@ namespace SNI
 
 	void SNI_LogBuffer::LogTableToStream(ostream & p_Stream, long p_MaxLogEntries)
 	{
-		p_Stream << "<table>\n";
+		p_Stream << "<table class='log'>\n";
 		p_Stream << "<caption>Logging</caption>";
 		m_Mutex.lock();
 		long entries = 0;

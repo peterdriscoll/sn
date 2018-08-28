@@ -64,32 +64,11 @@ namespace SNI
 		p_Stream << "<meta charset = \"utf-8\">\n";
 		p_Stream << "<title>Skynet Dashboard</title>\n";
 		p_Stream << "<meta name = \"description\" content = \"Skynet\">\n";
-		p_Stream << "<meta name = \"author\" content = \"SitePoint\">\n";
-		p_Stream << "<link rel = \"stylesheet\" href = \"styles.css\">\n";
+		p_Stream << "<meta name = \"author\" content = \"P.J.Driscoll\">\n";
+		p_Stream << "<link rel = \"stylesheet\" type=\"text/css\" href = \"style.css\">\n";
 		p_Stream << "</head>\n";
 		p_Stream << "<body>\n";
 		p_Stream << "<h1>Skynet thread " << p_ThreadNum << " not running</h1>\n";
-		/*		p_Stream << "<div><table>\n";
-		p_Stream << "<caption>Threads</caption>\n";
-		p_Stream << "<tr>\n";
-		string separator;
-		bool hasThreads = false;
-		for (size_t k = 0; k < m_ThreadList.size(); k++)
-		{
-		SNI_Thread *l_thread = m_ThreadList[k];
-		if (l_thread)
-		{
-		hasThreads = true;
-		l_thread->WriteStepCount(p_Stream);
-		}
-		}
-		p_Stream << "</tr>\n";
-		p_Stream << "</table></div>\n";
-		if (!hasThreads)
-		{
-		p_Stream << "<h1>No threads running</h1>\n";
-		}
-		*/
 		p_Stream << "</body>\n";
 		p_Stream << "</html>\n";
 	}
@@ -159,7 +138,7 @@ namespace SNI
 
 	void SNI_Thread::WriteStepCounts(ostream &p_Stream)
 	{
-		p_Stream << "<div><table>\n";
+		p_Stream << "<div><table class='thread'>\n";
 		p_Stream << "<caption>Threads</caption>\n";
 		p_Stream << "<tr>\n";
 		string separator;
@@ -184,7 +163,7 @@ namespace SNI
 
 	/*static*/ void SNI_Thread::WriteWebStepCountListJS(ostream &p_Stream)
 	{
-		p_Stream << "<div><table>\n";
+		p_Stream << "<div><table class='thread'>\n";
 		p_Stream << "<caption>Threads</caption>\n";
 		p_Stream << "<tr>\n";
 		p_Stream << "<td ng-repeat = \"sc in stepcounts\">\n";
@@ -463,23 +442,6 @@ namespace SNI
 		p_Stream << "<!doctype html>\n";
 		p_Stream << "<html lang = \"en\">\n";
 		p_Stream << "<head>\n";
-
-		p_Stream << "<style>\n";
-		p_Stream << "table{ \n";
-		p_Stream << "font-family: arial, sans-serif;\n";
-		p_Stream << "border-collapse: collapse;\n";
-		p_Stream << "width: 100% ; \n";
-		p_Stream << "}\n";
-		p_Stream << "td, th{\n";
-		p_Stream << "border: 1px solid #dddddd; \n";
-		p_Stream << "text-align: left; \n";
-		p_Stream << "padding: 8px; \n";
-		p_Stream << "}\n";
-		p_Stream << "tr:nth-child(even){\n";
-		p_Stream << "\n";
-		p_Stream << "background-color: #dddddd; \n";
-		p_Stream << "}\n";
-		p_Stream << "</style>\n";
 		p_Stream << "<meta charset = \"utf-8\">\n";
 		if (m_DebugCommand.IsRunning())
 		{
@@ -487,8 +449,8 @@ namespace SNI
 		}
 		p_Stream << "<title>Skynet Dashboard</title>\n";
 		p_Stream << "<meta name = \"description\" content = \"Skynet\">\n";
-		p_Stream << "<meta name = \"author\" content = \"SitePoint\">\n";
-		p_Stream << "<link rel = \"stylesheet\" href = \"styles.css\">\n";
+		p_Stream << "<meta name = \"author\" content = \"P.J.Driscoll\">\n";
+		p_Stream << "<link rel = \"stylesheet\" type=\"text/css\" href = \"style.css\">\n";
 		p_Stream << "</head>\n";
 		p_Stream << "<body>\n";
 
@@ -515,7 +477,7 @@ namespace SNI
 		WriteStepCounts(p_Stream);
 		if (manager)
 		{
-			p_Stream << "<table><tr>\n";
+			p_Stream << "<table class='group'><tr>\n";
 			p_Stream << "<td valign='top' max-width='60%'>\n";
 			if (!m_DebugCommand.IsQuitting())
 			{
@@ -537,27 +499,11 @@ namespace SNI
 		p_Stream << "<html lang = \"en\">\n";
 		p_Stream << "<head>\n";
 
-		p_Stream << "<style>\n";
-		p_Stream << "table{ \n";
-		p_Stream << "font-family: arial, sans-serif;\n";
-		p_Stream << "border-collapse: collapse;\n";
-		p_Stream << "width: 100% ; \n";
-		p_Stream << "}\n";
-		p_Stream << "td, th{\n";
-		p_Stream << "border: 1px solid #dddddd; \n";
-		p_Stream << "text-align: left; \n";
-		p_Stream << "padding: 8px; \n";
-		p_Stream << "}\n";
-		p_Stream << "tr:nth-child(even){\n";
-		p_Stream << "\n";
-		p_Stream << "background-color: #dddddd; \n";
-		p_Stream << "}\n";
-		p_Stream << "</style>\n";
 		p_Stream << "<meta charset = \"utf-8\">\n";
 		p_Stream << "<title>Skynet Dashboard</title>\n";
 		p_Stream << "<meta name = \"description\" content = \"Skynet\">\n";
-		p_Stream << "<meta name = \"author\" content = \"SitePoint\">\n";
-		p_Stream << "<link rel = \"stylesheet\" type=\"text/css\" href = \"styles.css\">\n";
+		p_Stream << "<meta name = \"author\" content = \"P.J.Driscoll\">\n";
+		p_Stream << "<link rel = \"stylesheet\" type=\"text/css\" href = \"style.css\">\n";
 		p_Stream << "</head>\n";
 		p_Stream << "<body>\n";
 		p_Stream << "<script src = \"https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js\"></script>\n";
@@ -566,7 +512,7 @@ namespace SNI
 		p_Stream << "<h1>Skynet Dashboard - {{taskdescription}} {{statusdescription}} {{pollcount}}</h1>\n";
 		WriteWebCommandsJS(p_Stream);
 		WriteWebStepCountListJS(p_Stream);
-		p_Stream << "<table><tr>\n";
+		p_Stream << "<table class='group'><tr>\n";
 		p_Stream << "<td valign='top' max-width='60%'>\n";
 		WriteWebStackJS(p_Stream);
 		p_Stream << "</td>\n";
@@ -575,6 +521,13 @@ namespace SNI
 		p_Stream << "</td>\n";
 		p_Stream << "</tr></table>\n";
 		p_Stream << "</div>\n";
+		p_Stream << "<div><p>\n";
+		p_Stream << "<a href='http://jigsaw.w3.org/css-validator/check/referer'>\n";
+		p_Stream << "<img style='border:0;width:88px;height:31px'\n";
+		p_Stream << "src='http://jigsaw.w3.org/css-validator/images/vcss-blue'\n";
+		p_Stream << "alt='Valid CSS!' />\n";
+		p_Stream << "</a>\n";
+		p_Stream << "</p></div>\n";
 		p_Stream << "<script>\n";
 		p_Stream << "    var home = 'http://127.0.0.1/';\n";
 		p_Stream << "    var app = angular.module('skynetApp', []);\n";
@@ -635,8 +588,8 @@ namespace SNI
 		p_Stream << "<meta charset = \"utf-8\">\n";
 		p_Stream << "<title>Skynet Dashboard</title>\n";
 		p_Stream << "<meta name = \"description\" content = \"Skynet\">\n";
-		p_Stream << "<meta name = \"author\" content = \"SitePoint\">\n";
-		p_Stream << "<link rel = \"stylesheet\" href = \"styles.css\">\n";
+		p_Stream << "<meta name = \"author\" content = \"P.J.Driscoll\">\n";
+		p_Stream << "<link rel = \"stylesheet\" type=\"text/css\" href = \"style.css\">\n";
 		p_Stream << "</head>\n";
 		p_Stream << "<body>\n";
 		p_Stream << "<h1>Skynet shutting down</h1>\n";
@@ -646,7 +599,7 @@ namespace SNI
 
 	void SNI_Thread::WriteCommands(ostream & p_Stream)
 	{
-		p_Stream << "<div><table bgcolor='silver'><tr>\n";
+		p_Stream << "<div><table class='command'><tr>\n";
 		WriteSubmit(p_Stream, "run", "Run", "Run");
 		WriteSubmit(p_Stream, "runtoend", "End", "Run to end");
 		WriteSubmit(p_Stream, "debug", "Debug", "Run to breakpoint");
@@ -663,7 +616,7 @@ namespace SNI
 
 	/*static*/ void SNI_Thread::WriteWebCommandsJS(ostream & p_Stream)
 	{
-		p_Stream << "<table bgcolor='silver'><tr>\n";
+		p_Stream << "<table class='command'><tr>\n";
 		WriteSubmitJS(p_Stream, "run", "Run", "Run");
 		WriteSubmitJS(p_Stream, "runtoend", "End", "Run to end");
 		WriteSubmitJS(p_Stream, "debug", "Debug", "Run to breakpoint");
@@ -769,7 +722,7 @@ namespace SNI
 
 	void SNI_Thread::WriteWebStack(ostream &p_Stream, long p_Depth, size_t p_DebugFieldWidth)
 	{
-		p_Stream << "<table>\n";
+		p_Stream << "<table class='stack'>\n";
 		p_Stream << "<caption>Thread " << m_ThreadNum << "</caption>";
 		size_t base = 0;
 		if (0 < p_Depth)
@@ -789,13 +742,13 @@ namespace SNI
 
 	/*static*/ void SNI_Thread::WriteWebStackJS(ostream &p_Stream)
 	{
-		p_Stream << "<table>\n";
+		p_Stream << "<table class='stack'>\n";
 		p_Stream << "<caption>Thread {{threadnum}}</caption>\n";
 		p_Stream << "<tr ng-repeat = \"f in frames\">\n";
 		p_Stream << "<td align = \"center\">\n";
 
 		p_Stream << "<div style = 'overflow-x:auto;white-space:nowrap;width:900px'>\n";
-		p_Stream << "<table border = \"1\">\n";
+		p_Stream << "<table class='frame'>\n";
 		p_Stream << "<caption>Frame {{ f.framepos }} : {{ f.framenum }} {{ f.function }}</caption>\n";
 		p_Stream << "<tr>\n";
 		p_Stream << "<th ng-repeat = \"v in f.variables\">{{ v.name }}</th>\n";
@@ -823,7 +776,7 @@ namespace SNI
 
 	/*static*/ void SNI_Thread::WriteWebLogJS(ostream &p_Stream)
 	{
-		p_Stream << "<table>\n";
+		p_Stream << "<table class='log'>\n";
 		p_Stream << "<caption>Logging</caption>";
 		p_Stream << "<tr ng-repeat = \"l in logs\"><td>{{l.text}}</td></tr>";
 		p_Stream << "</table>\n";

@@ -1,0 +1,119 @@
+
+/* Don't forget to set a foreground and background color 
+   on the 'html' or 'body' element! */
+html, body, div, span,
+applet, object, iframe,
+p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dd, dl, dt, li, ol, ul,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+    margin: 0;
+    padding: 0;
+    border: 2px;
+    font-weight: inherit;
+    font-style: inherit;
+    font-size: 100%;
+    line-height: 1;
+    font-family: inherit;
+    text-align: left;
+    vertical-align: baseline;
+}
+
+h1 {
+    font-size: 36px;
+    line-height: 40px;
+    font-family: verdana;
+    color: darkolivegreen
+}
+
+h2 {
+    font-size: 30px;
+    line-height: 40px;
+}
+
+h3 {
+    font-size: 24px;
+    line-height: 40px;
+}
+
+h4 {
+    font-size: 18px;
+    line-height: 20px;
+}
+
+h5 {
+    font-size: 14px;
+    line-height: 20px;
+}
+
+h6 {
+    font-size: 12px;
+    line-height: 20px;
+}
+
+.command {
+    border-spacing: 2px;
+    background-color: silver;
+    border: 2px solid darkolivegreen;
+}
+
+.thread {
+    border-spacing: 2px;
+    background-color: seashell;
+    border: 1px solid darkolivegreen;
+}
+
+.group {
+    border-spacing: 2px;
+    background-color: white;
+    border: 2px solid darkolivegreen;
+}
+
+.stack {
+    border-spacing: 2px;
+    background-color: seashell;
+    border: 1px solid darkolivegreen;
+}
+
+.frame {
+    border-spacing: 2px;
+    background-color: beige;
+    border: 2px solid darkolivegreen;
+}
+
+.log {
+    border-spacing: 2px;
+    background-color: seashell;
+    border: 1px solid darkolivegreen;
+}
+
+a img, :link img, :visited img {
+    border: 0;
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+q:before, q:after,
+blockquote:before, blockquote:after {
+    content: "";
+}
+
+h2 {
+    color: red;
+}
