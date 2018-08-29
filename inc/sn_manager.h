@@ -62,6 +62,9 @@ namespace SN
 		size_t MaxCardinalityUnify();
 		void SetMaxCardinality(size_t p_MaxCardinalityCall, size_t p_MaxCardinalityUnify);
 
+		size_t MaxStackFrames();
+		void SetMaxStackFrames(size_t p_MaxStackFrame);
+
 		void StartLogging(SN::LoggingLevel p_LoggingLevel, ostream *p_Stream = NULL);
 		void StartDebugCommandLineServer(DebugAction p_DebugAction, int p_kbhit(), int p_GetCh());
 		void StartWebServer(SN::DebugAction p_DebugAction, const string& p_Address, const string& p_Port, const string& p_DocRoot, bool p_DoIt = true);

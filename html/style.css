@@ -1,7 +1,7 @@
 
 /* Don't forget to set a foreground and background color 
    on the 'html' or 'body' element! */
-html, body, div, span,
+html, body, span,
 applet, object, iframe,
 p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -58,7 +58,12 @@ h6 {
     border-spacing: 2px;
     background-color: silver;
     border: 2px solid darkolivegreen;
+    vertical-align: top;
 }
+
+    .command td {
+        vertical-align: top;
+    }
 
 .thread {
     border-spacing: 2px;
@@ -70,7 +75,19 @@ h6 {
     border-spacing: 2px;
     background-color: white;
     border: 2px solid darkolivegreen;
+    vertical-align: top;
+    width: 100%;
 }
+
+    .group td {
+        vertical-align: top;
+    }
+
+    .group div {
+        resize: both;
+        overflow: auto;
+        border: none;
+    }
 
 .stack {
     border-spacing: 2px;
@@ -78,11 +95,26 @@ h6 {
     border: 1px solid darkolivegreen;
 }
 
+    .stack td {
+        text-align: center;
+    }
+
 .frame {
     border-spacing: 2px;
     background-color: beige;
     border: 2px solid darkolivegreen;
 }
+
+    .frame td {
+        text-align: center;
+    }
+
+    .frame div {
+        resize: both;
+        overflow: auto;
+        border: none;
+    }
+
 
 .log {
     border-spacing: 2px;

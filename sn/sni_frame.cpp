@@ -241,7 +241,8 @@ namespace SNI
 
 	void SNI_Frame::WriteWebFrame(ostream &p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth)
 	{
-		p_Stream << "<div style = 'overflow-x:auto;white-space:nowrap;width:900px'><table class='frame'>\n";
+		p_Stream << "<div style = 'overflow-x:auto;white-space:nowrap;width:900px'>\n";
+		p_Stream << "<table class='frame'>\n";
 		p_Stream << "<caption>" << "Frame " << p_FrameStackPos << ":" << m_FrameNum << " " << m_Function.DisplaySN() << "</caption>\n";
 		p_Stream << "<tr>\n";
 		for (const SNI_Variable *v : m_VariableList)
@@ -264,7 +265,7 @@ namespace SNI
 		p_Stream << "<tr>\n";
 		for (const SNI_Variable *v : m_VariableList)
 		{
-			p_Stream << "<td>\n";
+			p_Stream << "<td><div class='frame'>\n";
 			SN::SN_Expression e = v->GetValue(false);
 			string delimeter;
             e.ForEach(
@@ -280,10 +281,9 @@ namespace SNI
 					return skynet::OK;
 				}
 			);
-			p_Stream << "</td>\n";
+			p_Stream << "</div></td>\n";
 		}
-		p_Stream << "</tr>\n";
-		p_Stream << "</table></div>\n";
+		p_Stream << "</tr></table></div>\n";
 	}
 
 	void SNI_Frame::WriteJS(ostream &p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth)

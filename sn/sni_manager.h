@@ -77,6 +77,9 @@ namespace SNI
 		size_t LogBufferCapacity();
 		void SetLogBufferCapacity(size_t p_LogBufferCapacity);
 
+		size_t MaxStackFrames();
+		void SetMaxStackFrames(size_t p_MaxStackFrame);
+
 	private:
 		static void DebugCommandLineServer(SNI_Thread * p_Thread, int p_KbHit(), int p_GetCh());
 		static void RunServer(const string & p_Address, const string & p_Port, const string & p_DocRoot);
@@ -110,6 +113,8 @@ namespace SNI
 		bool m_HasDebugServer;
 		
 		size_t m_LogBufferCapacity;
+
+		size_t m_MaxStackFrames;
 
 		static thread *m_CommandServerThread;
 		static long m_CommandServerThreadUsageCount;

@@ -83,12 +83,22 @@ namespace SN
 
 	void SN_Manager::SetDelayOnEvaluate(bool p_DelayOnEvaluate)
 	{
-		return m_Manager->SetDelayOnEvaluate(p_DelayOnEvaluate);
+		m_Manager->SetDelayOnEvaluate(p_DelayOnEvaluate);
 	}
 
 	void SN_Manager::SetMaxCardinality(size_t p_MaxCardinalityCall, size_t p_MaxCardinalityUnify)
 	{
-		return m_Manager->SetMaxCardinality(p_MaxCardinalityCall, p_MaxCardinalityUnify);
+		m_Manager->SetMaxCardinality(p_MaxCardinalityCall, p_MaxCardinalityUnify);
+	}
+
+	size_t SN_Manager::MaxStackFrames()
+	{
+		return m_Manager->MaxStackFrames();
+	}
+
+	void SN_Manager::SetMaxStackFrames(size_t p_MaxStackFrame)
+	{
+		m_Manager->SetMaxStackFrames(p_MaxStackFrame);
 	}
 
 	size_t SN_Manager::MaxCardinalityCall()

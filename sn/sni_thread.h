@@ -111,6 +111,7 @@ namespace SNI
 	private:
 		string StartCommand(SN::DebugAction p_DebugAction, const string & p_Description);
 
+		static void WriteW3Credentials(ostream & p_Stream);
 		void WriteCommands(ostream & p_Stream);
 		static void WriteWebCommandsJS(ostream & p_Stream);
 		void WriteSubmit(ostream & p_Stream, const string & p_Action, const string & p_Name, const string & p_Description);
@@ -143,10 +144,11 @@ namespace SNI
 		static mutex m_ThreadListMutex;
 		enum SN::DebugAction m_DebugAction;
 
-		static long m_MaxStackFrame;
+		long m_MaxStackFrames;
 		static long m_GotoThreadNum;
 		static long m_StepCount;
 		static bool m_Running;
+
 		static thread *m_WebServerThread;
 		static long m_WebServerThreadUsageCount;;
 	};

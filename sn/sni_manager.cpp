@@ -73,6 +73,7 @@ namespace SNI
 		, m_Transaction(NULL)
 		, m_HasDebugServer(false)
 		, m_LogBufferCapacity(50)
+		, m_MaxStackFrames(3)
 	{
 		m_LastManager = SNI_Thread::GetThread()->GetTopManager(false);
 		if (!m_LastManager)
@@ -99,6 +100,7 @@ namespace SNI
 		, m_Transaction(NULL)
 		, m_HasDebugServer(false)
 		, m_LogBufferCapacity(50)
+		, m_MaxStackFrames(3)
 	{
 		m_LastManager = SNI_Thread::GetThread()->GetTopManager(false);
 		if (!m_LastManager)
@@ -125,6 +127,7 @@ namespace SNI
 		, m_Transaction(NULL)
 		, m_HasDebugServer(false)
 		, m_LogBufferCapacity(50)
+		, m_MaxStackFrames(3)
 	{
 		m_LastManager = SNI_Thread::GetThread()->GetTopManager(false);
 		if (!m_LastManager)
@@ -502,5 +505,13 @@ namespace SNI
 	void SNI_Manager::SetLogBufferCapacity(size_t p_LogBufferCapacity)
 	{
 		m_LogBufferCapacity = p_LogBufferCapacity;
+	}
+	size_t SNI_Manager::MaxStackFrames()
+	{
+		return m_MaxStackFrames;
+	}
+	void SNI_Manager::SetMaxStackFrames(size_t p_MaxStackFrame)
+	{
+		m_MaxStackFrames = p_MaxStackFrame;
 	}
 }

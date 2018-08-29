@@ -1,5 +1,4 @@
 ﻿
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -15,55 +14,55 @@
         <h1>Skynet Dashboard - {{taskdescription}} {{statusdescription}} {{pollcount}}</h1>
         <table class='command'>
             <tr>
-                <td valign='top'>
+                <td>
                     <form ng-submit='submit("run")'>
                         Run<br>
                         <input type='submit' value='Run'>
                     </form>
                 </td>
-                <td valign='top'>
+                <td>
                     <form ng-submit='submit("runtoend")'>
                         Run to end<br>
                         <input type='submit' value='End'>
                     </form>
                 </td>
-                <td valign='top'>
+                <td>
                     <form ng-submit='submit("debug")'>
                         Run to breakpoint<br>
                         <input type='submit' value='Debug'>
                     </form>
                 </td>
-                <td valign='top'>
+                <td>
                     <form ng-submit='submit("debugbreak")'>
                         Debug break C++<br>
                         <input type='submit' value='Debug break'>
                     </form>
                 </td>
-                <td valign='top'>
+                <td>
                     <form ng-submit='submit("stepover")'>
                         Step over call<br>
                         <input type='submit' value='Step over'>
                     </form>
                 </td>
-                <td valign='top'>
+                <td>
                     <form ng-submit='submit("stepintojs")'>
                         Step into call<br>
                         <input type='submit' value='Step into'>
                     </form>
                 </td>
-                <td valign='top'>
+                <td>
                     <form ng-submit='submit("stepout")'>
                         Step out of call<br>
                         <input type='submit' value='Step out'>
                     </form>
                 </td>
-                <td valign='top'>
+                <td>
                     <form ng-submit='submit("stepparam")'>
                         Step into parameters<br>
                         <input type='submit' value='Step parameter'>
                     </form>
                 </td>
-                <td valign='top'>
+                <td>
                     <form ng-submit='gotostepcount()'>
                         <details>
                             <summary>
@@ -74,7 +73,7 @@
                             <br>
                     </form>
                 </td>
-                <td valign='top'>
+                <td>
                     <form ng-submit='initFirst()'>
                         <details>
                             <summary>
@@ -85,7 +84,7 @@
                         </details>
                     </form>
                 </td>
-                <td valign='top'>
+                <td>
                     <form ng-submit='submit("quit")'>
                         Abort thread<br>
                         <input type='submit' value='Quit'>
@@ -107,41 +106,47 @@
         </div>
         <table class='group'>
             <tr>
-                <td valign='top' max-width='60%'>
-                    <table class='stack'>
-                        <caption>Thread {{threadnum}}</caption>
-                        <tr ng-repeat="f in frames">
-                            <td align="center">
-                                <div style='overflow-x:auto;white-space:nowrap;width:900px'>
-                                    <table class='frame'>
-                                        <caption>Frame {{ f.framepos }} : {{ f.framenum }} {{ f.function }}</caption>
-                                        <tr>
-                                            <th ng-repeat="v in f.variables">{{ v.name }}</th>
-                                        </tr>
-                                        <tr>
-                                            <td ng-repeat="v in f.variables">{{ v.typetext }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td ng-repeat="v in f.variables">
-                                                <div ng-repeat="d in v.value">
-                                                    <details ng-if="d.abbreviation">
-                                                        <summary>{{d.abbreviation}}...</summary><p>{{d.text}}</p>
-                                                    </details>
-                                                    <div ng-if="!d.abbreviation">{{d.text}}</div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
+                <td width='60%'>
+                    <div class='group'>
+                        <table class='stack'>
+                            <caption>Thread {{threadnum}}</caption>
+                            <tr ng-repeat="f in frames">
+                                <td>
+                                    <div style='overflow-x:auto;white-space:nowrap;width:900px'>
+                                        <table class='frame'>
+                                            <caption>Frame {{ f.framepos }} : {{ f.framenum }} {{ f.function }}</caption>
+                                            <tr>
+                                                <th ng-repeat="v in f.variables">{{ v.name }}</th>
+                                            </tr>
+                                            <tr>
+                                                <td ng-repeat="v in f.variables">{{ v.typetext }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td ng-repeat="v in f.variables">
+                                                    <div class='frame'>
+                                                        <div ng-repeat="d in v.value">
+                                                            <details ng-if="d.abbreviation">
+                                                                <summary>{{d.abbreviation}}...</summary><p>{{d.text}}</p>
+                                                            </details>
+                                                            <div ng-if="!d.abbreviation">{{d.text}}<br /></div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </td>
-                <td valign='top' max-width='40%'>
-                    <table class='log'>
-                        <caption>Logging</caption>
-                        <tr ng-repeat="l in logs"><td>{{l.text}}</td></tr>
-                    </table>
+                <td width='40%'>
+                    <div class='group'>
+                        <table class='log'>
+                            <caption>Logging</caption>
+                            <tr ng-repeat="l in logs"><td>{{l.text}}</td></tr>
+                        </table>
+                    </div>
                 </td>
             </tr>
         </table>
@@ -160,7 +165,7 @@
         var app = angular.module('skynetApp', []);
         app.controller('commandCtrl', function ($scope, $http, $timeout) {
             $scope.threadnum = 0;
-            $scope.maxstackframes = 0;
+            $scope.maxstackframes = -1;
             $scope.pollcount = 0;
             $scope.scheduled = 0;
             $scope.initFirst = function () {
@@ -172,6 +177,9 @@
                             $scope.taskdescription = response.data.taskdescription;
                             $scope.statusdescription = response.data.statusdescription;
                             $scope.running = response.data.running;
+                            if ($scope.maxstackframes == -1) {
+                                $scope.maxstackframes = response.data.maxstackframes;
+                            }
                             $scope.pollcount = $scope.pollcount + 1;
                             $scope.scheduled = $scope.scheduled - 1;
                             if ($scope.running) {

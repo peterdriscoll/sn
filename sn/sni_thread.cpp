@@ -18,7 +18,6 @@ namespace SNI
 	/*static*/ vector<SNI_Thread *> SNI_Thread::m_ThreadList;
 	/*static*/ mutex SNI_Thread::m_ThreadListMutex;
 
-	/*static*/ long SNI_Thread::m_MaxStackFrame;
 	/*static*/ long SNI_Thread::m_GotoThreadNum;
 	/*static*/ long SNI_Thread::m_StepCount;
 	/*static*/ bool SNI_Thread::m_Running = false;
@@ -73,6 +72,17 @@ namespace SNI
 		p_Stream << "</html>\n";
 	}
 
+	/*static*/ void SNI_Thread::WriteW3Credentials(ostream &p_Stream)
+	{
+		p_Stream << "<div><p>\n";
+		p_Stream << "<a href='http://jigsaw.w3.org/css-validator/check/referer'>\n";
+		p_Stream << "<img style='border:0;width:88px;height:31px'\n";
+		p_Stream << "src='http://jigsaw.w3.org/css-validator/images/vcss-blue'\n";
+		p_Stream << "alt='Valid CSS!' />\n";
+		p_Stream << "</a>\n";
+		p_Stream << "</p></div>\n";
+	}
+
 	void SNI_Thread::ThreadListLock()
 	{
 		m_ThreadListMutex.lock();
@@ -88,6 +98,7 @@ namespace SNI
 		, m_WebServerThreadUsed(false)
 		, m_TopManager(NULL)
 		, m_ThreadNum(p_ThreadNum)
+		, m_MaxStackFrames(-1)
 		, m_Ended(false)
 	{
 	}
@@ -157,7 +168,7 @@ namespace SNI
 	void SNI_Thread::WriteStepCount(ostream &p_Stream)
 	{
 		p_Stream << "<td><form action = '/thread' method='get'>\n";
-		p_Stream << "<input type = 'submit' name = 'threadnum' value='" << m_ThreadNum << ":" << m_ThreadStepCount << "'/}\n";
+		p_Stream << "<input type = 'submit' name = 'threadnum' value='" << m_ThreadNum << ":" << m_ThreadStepCount << "'/>\n";
 		p_Stream << "</form></td>\n";
 	}
 
@@ -316,7 +327,7 @@ namespace SNI
 
 	void SNI_Thread::SetMaxStackFrames(long p_MaxStackFrames)
 	{
-		m_MaxStackFrame = p_MaxStackFrames;
+		m_MaxStackFrames = p_MaxStackFrames;
 	}
 
 	void SNI_Thread::Quit()
@@ -404,7 +415,7 @@ namespace SNI
 	string SNI_Thread::SetMaxStackFramesWeb(long p_MaxStackFrame)
 	{
 		stringstream ss;
-		m_MaxStackFrame = p_MaxStackFrame;
+		m_MaxStackFrames = p_MaxStackFrame;
 		cout << "Set max stack frames\n";
 		WriteWebPage(ss, true);
 		return ss.str();
@@ -459,6 +470,10 @@ namespace SNI
 		if (manager)
 		{
 			p_Stream << " - " << manager->Description();
+			if (m_MaxStackFrames == -1)
+			{
+				m_MaxStackFrames = manager->MaxStackFrames();
+			}
 		}
 		if (m_DebugCommand.IsQuitting())
 		{
@@ -478,17 +493,18 @@ namespace SNI
 		if (manager)
 		{
 			p_Stream << "<table class='group'><tr>\n";
-			p_Stream << "<td valign='top' max-width='60%'>\n";
+			p_Stream << "<td width='60%'><div class='group'>\n";
 			if (!m_DebugCommand.IsQuitting())
 			{
-				WriteWebStack(p_Stream, m_MaxStackFrame, manager->DebugFieldWidth());
+				WriteWebStack(p_Stream, m_MaxStackFrames, manager->DebugFieldWidth());
 			}
-			p_Stream << "</td>\n";
-			p_Stream << "<td valign='top' max-width='40%'>\n";
-			SNI_Log::GetLog()->LogTableToStream(p_Stream, m_MaxStackFrame*4);
-			p_Stream << "</td>\n";
+			p_Stream << "</div></td>\n";
+			p_Stream << "<td width='40%'><div class='group'>\n";
+			SNI_Log::GetLog()->LogTableToStream(p_Stream, m_MaxStackFrames*4);
+			p_Stream << "</div></td>\n";
 			p_Stream << "</tr></table>\n";
 		}
+		WriteW3Credentials(p_Stream);
 		p_Stream << "</body>\n";
 		p_Stream << "</html>\n";
 	}
@@ -513,27 +529,21 @@ namespace SNI
 		WriteWebCommandsJS(p_Stream);
 		WriteWebStepCountListJS(p_Stream);
 		p_Stream << "<table class='group'><tr>\n";
-		p_Stream << "<td valign='top' max-width='60%'>\n";
+		p_Stream << "<td width='60%'><div class='group'>\n";
 		WriteWebStackJS(p_Stream);
-		p_Stream << "</td>\n";
-		p_Stream << "<td valign='top' max-width='40%'>\n";
+		p_Stream << "</div></td>\n";
+		p_Stream << "<td width='40%'><div class='group'>\n";
 		WriteWebLogJS(p_Stream);
-		p_Stream << "</td>\n";
+		p_Stream << "</div></td>\n";
 		p_Stream << "</tr></table>\n";
 		p_Stream << "</div>\n";
-		p_Stream << "<div><p>\n";
-		p_Stream << "<a href='http://jigsaw.w3.org/css-validator/check/referer'>\n";
-		p_Stream << "<img style='border:0;width:88px;height:31px'\n";
-		p_Stream << "src='http://jigsaw.w3.org/css-validator/images/vcss-blue'\n";
-		p_Stream << "alt='Valid CSS!' />\n";
-		p_Stream << "</a>\n";
-		p_Stream << "</p></div>\n";
+		WriteW3Credentials(p_Stream);
 		p_Stream << "<script>\n";
 		p_Stream << "    var home = 'http://127.0.0.1/';\n";
 		p_Stream << "    var app = angular.module('skynetApp', []);\n";
 		p_Stream << "    app.controller('commandCtrl', function($scope, $http, $timeout) {\n";
 		p_Stream << "        $scope.threadnum = 0;\n";
-		p_Stream << "        $scope.maxstackframes = 0;\n";
+		p_Stream << "        $scope.maxstackframes = -1;\n";
 		p_Stream << "        $scope.pollcount = 0;\n";
 		p_Stream << "        $scope.scheduled = 0;\n";
 		p_Stream << "        $scope.initFirst = function() {\n";
@@ -546,6 +556,10 @@ namespace SNI
 		p_Stream << "		                 $scope.taskdescription = response.data.taskdescription;\n";
 		p_Stream << "		                 $scope.statusdescription = response.data.statusdescription;\n";
 		p_Stream << "		                 $scope.running = response.data.running;\n";
+		p_Stream << "		                 if ($scope.maxstackframes == -1)\n";
+		p_Stream << "		                 {\n";
+		p_Stream << "		                     $scope.maxstackframes = response.data.maxstackframes;\n";
+		p_Stream << "		                 }\n";
 		p_Stream << "		                 $scope.pollcount = $scope.pollcount + 1;\n";
 		p_Stream << "		                 $scope.scheduled = $scope.scheduled - 1;\n";
 		p_Stream << "		                 if ($scope.running) {\n";
@@ -611,7 +625,7 @@ namespace SNI
 		WriteGotoStepCount(p_Stream);
 		WriteSetMaxStackFrames(p_Stream);
 		WriteSubmit(p_Stream, "quit", "Quit", "Abort thread");
-		p_Stream << "</table></tr></div>\n";
+		p_Stream << "</tr></table></div>\n";
 	}
 
 	/*static*/ void SNI_Thread::WriteWebCommandsJS(ostream & p_Stream)
@@ -633,7 +647,7 @@ namespace SNI
 
 	void SNI_Thread::WriteSubmit(ostream &p_Stream, const string &p_Action, const string &p_Name, const string &p_Description)
 	{
-		p_Stream << "<td valign = 'top'>\n";
+		p_Stream << "<td>\n";
 		p_Stream << p_Description << "<br>\n";
 		p_Stream << "<form action = '/" << p_Action << "' method='get'>\n";
 		p_Stream << "<input type = 'hidden' name = 'thread' value = '" << m_ThreadNum << "'>\n";
@@ -645,7 +659,7 @@ namespace SNI
 
 	/*static*/ void SNI_Thread::WriteSubmitJS(ostream &p_Stream, const string &p_Action, const string &p_Name, const string &p_Description)
 	{
-		p_Stream << "<td valign = 'top'>\n";
+		p_Stream << "<td>\n";
 		p_Stream << "<form ng-submit = 'submit(\"" << p_Action << "\")'>\n";
 		p_Stream << p_Description << "<br>\n";
 		p_Stream << "<input type = 'submit' value = '" << p_Name << "'>\n";
@@ -655,7 +669,7 @@ namespace SNI
 
 	void SNI_Thread::WriteGotoStepCount(ostream &p_Stream)
 	{
-		p_Stream << "<td valign = 'top'>\n";
+		p_Stream << "<td>\n";
 		p_Stream << "<form action = '/gotostepcount' method='get'>\n";
 		p_Stream << "<details>";
 		p_Stream << "<summary>";
@@ -674,7 +688,7 @@ namespace SNI
 
 	/*static*/ void SNI_Thread::WriteGotoStepCountJS(ostream &p_Stream)
 	{
-		p_Stream << "<td valign = 'top'>\n";
+		p_Stream << "<td>\n";
 		p_Stream << "<form ng-submit = 'gotostepcount()'>\n";
 		p_Stream << "<details>";
 		p_Stream << "<summary>";
@@ -690,7 +704,7 @@ namespace SNI
 
 	void SNI_Thread::WriteSetMaxStackFrames(ostream &p_Stream)
 	{
-		p_Stream << "<td valign = 'top'>\n";
+		p_Stream << "<td>\n";
 		p_Stream << "<form action = '/maxstackframes' method='get'>\n";
 		p_Stream << "<details>";
 		p_Stream << "<summary>";
@@ -698,7 +712,7 @@ namespace SNI
 		p_Stream << "<input type = 'submit' value = 'Stack depth'><br>\n";
 		p_Stream << "</summary>";
 		p_Stream << "Number of stack frames to display :<br>\n";
-		p_Stream << "<input type = 'text' name = 'maxstackframes'>\n";
+		p_Stream << "<input type = 'text' name = 'maxstackframes' value = '" << m_MaxStackFrames << "'>\n";
 		p_Stream << "</details>";
 		p_Stream << "</form>\n";
 		p_Stream << "</td>\n";
@@ -706,7 +720,7 @@ namespace SNI
 
     /*static*/ void SNI_Thread::WriteSetMaxStackFramesJS(ostream &p_Stream)
 	{
-		p_Stream << "<td valign = 'top'>\n";
+		p_Stream << "<td>\n";
 		p_Stream << "<form ng-submit = 'initFirst()'>\n";
 		p_Stream << "<details>";
 		p_Stream << "<summary>";
@@ -725,14 +739,14 @@ namespace SNI
 		p_Stream << "<table class='stack'>\n";
 		p_Stream << "<caption>Thread " << m_ThreadNum << "</caption>";
 		size_t base = 0;
-		if (0 < p_Depth)
+		if (0 < p_Depth && p_Depth < m_FrameList.size())
 		{
 			base = m_FrameList.size() - p_Depth;
 		}
 		Lock();
 		for (size_t j = m_FrameList.size(); j > base; j--)
 		{
-			p_Stream << "<tr><td align = \"center\">\n";
+			p_Stream << "<tr><td>\n";
 			m_FrameList[j - 1]->WriteWebFrame(p_Stream, j, p_DebugFieldWidth);
 			p_Stream << "</td></tr>\n";
 		}
@@ -745,7 +759,7 @@ namespace SNI
 		p_Stream << "<table class='stack'>\n";
 		p_Stream << "<caption>Thread {{threadnum}}</caption>\n";
 		p_Stream << "<tr ng-repeat = \"f in frames\">\n";
-		p_Stream << "<td align = \"center\">\n";
+		p_Stream << "<td>\n";
 
 		p_Stream << "<div style = 'overflow-x:auto;white-space:nowrap;width:900px'>\n";
 		p_Stream << "<table class='frame'>\n";
@@ -757,14 +771,14 @@ namespace SNI
 		p_Stream << "<td ng-repeat = \"v in f.variables\">{{ v.typetext }}</td>\n";
 		p_Stream << "</tr>\n";
 		p_Stream << "<tr>\n";
-		p_Stream << "<td ng-repeat = \"v in f.variables\">\n";
+		p_Stream << "<td ng-repeat = \"v in f.variables\"><div class='frame'>\n";
 		p_Stream << "<div ng-repeat = \"d in v.value\">\n";
 		p_Stream << "<details ng-if = \"d.abbreviation\">\n";
 		p_Stream << "<summary>{{d.abbreviation}}...</summary><p>{{d.text}}</p>\n";
 		p_Stream << "</details>\n";
-		p_Stream << "<div ng-if = \"!d.abbreviation\">{{d.text}}</div>\n";
+		p_Stream << "<div ng-if = \"!d.abbreviation\">{{d.text}}<br/></div>\n";
 		p_Stream << "</div>\n";
-		p_Stream << "</td>\n";
+		p_Stream << "</div></td>\n";
 		p_Stream << "</tr>\n";
 		p_Stream << "</table>\n";
 		p_Stream << "</div>\n";
@@ -812,6 +826,7 @@ namespace SNI
 		if (manager)
 		{
 			p_Stream << "\"taskdescription\" : \"" << manager->Description() << "\",\n";
+			p_Stream << "\"maxstackframes\" : \"" << manager->MaxStackFrames() << "\",\n";
 		}
 		string statusDescription;
 		int running = 0;
