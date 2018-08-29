@@ -461,7 +461,8 @@ namespace SNI
 		p_Stream << "<title>Skynet Dashboard</title>\n";
 		p_Stream << "<meta name = \"description\" content = \"Skynet\">\n";
 		p_Stream << "<meta name = \"author\" content = \"P.J.Driscoll\">\n";
-		p_Stream << "<link rel = \"stylesheet\" type=\"text/css\" href = \"style.css\">\n";
+		p_Stream << "<link rel = 'icon' href = 'favicon.png' sizes = '32x32' type = 'image/png'>\n";
+		p_Stream << "<link rel = 'stylesheet' type='text/css' href = 'style.css'>\n";
 		p_Stream << "</head>\n";
 		p_Stream << "<body>\n";
 
@@ -519,7 +520,8 @@ namespace SNI
 		p_Stream << "<title>Skynet Dashboard</title>\n";
 		p_Stream << "<meta name = \"description\" content = \"Skynet\">\n";
 		p_Stream << "<meta name = \"author\" content = \"P.J.Driscoll\">\n";
-		p_Stream << "<link rel = \"stylesheet\" type=\"text/css\" href = \"style.css\">\n";
+		p_Stream << "<link rel = 'icon' href = 'favicon.png' sizes = '32x32' type = 'image/png'>\n";
+		p_Stream << "<link rel = 'stylesheet' type='text/css' href = 'style.css'>\n";
 		p_Stream << "</head>\n";
 		p_Stream << "<body>\n";
 		p_Stream << "<script src = \"https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js\"></script>\n";
@@ -603,7 +605,8 @@ namespace SNI
 		p_Stream << "<title>Skynet Dashboard</title>\n";
 		p_Stream << "<meta name = \"description\" content = \"Skynet\">\n";
 		p_Stream << "<meta name = \"author\" content = \"P.J.Driscoll\">\n";
-		p_Stream << "<link rel = \"stylesheet\" type=\"text/css\" href = \"style.css\">\n";
+		p_Stream << "<link rel = 'icon' href = 'favicon.png' sizes = '32x32' type = 'image/png'>\n";
+		p_Stream << "<link rel = 'stylesheet' type='text/css' href = 'style.css'>\n";
 		p_Stream << "</head>\n";
 		p_Stream << "<body>\n";
 		p_Stream << "<h1>Skynet shutting down</h1>\n";

@@ -105,6 +105,10 @@ h6 {
     border: 2px solid darkolivegreen;
 }
 
+    .frame th {
+        text-align: center;
+    }
+
     .frame td {
         text-align: center;
     }
