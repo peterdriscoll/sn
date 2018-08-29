@@ -493,13 +493,13 @@ namespace SNI
 		if (manager)
 		{
 			p_Stream << "<table class='group'><tr>\n";
-			p_Stream << "<td width='60%'><div class='group'>\n";
+			p_Stream << "<td><div class='group'>\n";
 			if (!m_DebugCommand.IsQuitting())
 			{
 				WriteWebStack(p_Stream, m_MaxStackFrames, manager->DebugFieldWidth());
 			}
 			p_Stream << "</div></td>\n";
-			p_Stream << "<td width='40%'><div class='group'>\n";
+			p_Stream << "<td><div class='group'>\n";
 			SNI_Log::GetLog()->LogTableToStream(p_Stream, m_MaxStackFrames*4);
 			p_Stream << "</div></td>\n";
 			p_Stream << "</tr></table>\n";
@@ -529,10 +529,10 @@ namespace SNI
 		WriteWebCommandsJS(p_Stream);
 		WriteWebStepCountListJS(p_Stream);
 		p_Stream << "<table class='group'><tr>\n";
-		p_Stream << "<td width='60%'><div class='group'>\n";
+		p_Stream << "<td><div class='group'>\n";
 		WriteWebStackJS(p_Stream);
 		p_Stream << "</div></td>\n";
-		p_Stream << "<td width='40%'><div class='group'>\n";
+		p_Stream << "<td><div class='group'>\n";
 		WriteWebLogJS(p_Stream);
 		p_Stream << "</div></td>\n";
 		p_Stream << "</tr></table>\n";
