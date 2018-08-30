@@ -91,7 +91,7 @@ namespace PGC
 
 #define REQUESTPROMOTION(member) RequestPromotion((PGC_Base **) &member)
 
-#define OVERHEAD (sizeof(long) + sizeof(short))
+#define OVERHEAD (sizeof(void *) + sizeof(short))
 
 #define NULL 0
 

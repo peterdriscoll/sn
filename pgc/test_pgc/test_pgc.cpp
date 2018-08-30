@@ -95,6 +95,9 @@ namespace test_pgc
 		//  Test multi level promotion.
 		TEST_METHOD(TestBasicPGC)
 		{
+#ifndef _DEBUG
+			return;
+#endif
 			Initialize();
 
 			{
@@ -224,6 +227,14 @@ namespace test_pgc
 		//  Test automatic transaction creation with promotion.
 		TEST_METHOD(TestRecursiveKeepPGC)
 		{
+			// This test depends on the size of objects and how many fit of A and B fit in a transaction.
+			// This varies for 64 bit and debug mode. So ony run this test in 32 bit debug.
+#ifndef _DEBUG
+				return;
+#endif
+#ifndef _M_IX86
+				return;
+#endif
 			Initialize();
 
 			Assert::IsTrue(Promotion::PromotionUsedMemory() == 0, L"Promotional memory cleared");
