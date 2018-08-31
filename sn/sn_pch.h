@@ -114,6 +114,7 @@
 #include "sni_splitter.h"
 #include "sni_debugcommand.h"
 #include "sni_thread.h"
+#include "sni_displayoptions.h"
 
 // Sets
 #include "sni_buildset.h"

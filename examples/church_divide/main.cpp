@@ -6,6 +6,8 @@
 using namespace PGCX;
 using namespace skynet; // Interface namespace for SN.
 
+string doc_root = "C:/Users/peter_driscoll/Documents/Source/Repos/skynet2/html";
+
 void TestIsInteger()
 {
 	SN_DECLARE(Digit);
@@ -229,19 +231,25 @@ void TestChurchDivide()
 	SN_DECLARE(r3);
 
 	(inc(v) == v + Long(1)).PartialAssertAction();
-	// (inc(inc(inc(Long(0)))) == Long(3)).AssertAction();
-
-	// divide = \n.divide1 (succ n)
-	(Define(divide) == Lambda(n, divide1(succ(n)))).PartialAssertAction();
+	(inc(inc(inc(Long(0)))) == Long(3)).AssertAction();
 
 	// Y = \f.(\x.x x) (\x.f (x x))
 	(Define(Y) == Lambda(f, Lambda(x, f(x(x)))(Lambda(x, f(x(x)))))).PartialAssertAction();
 
-	// divide1 == Y div
-	(Define(divide1) == Y(div)).PartialAssertAction();
+	// \n.\f.\x.n (\g.\h.h (g f)) (\u.x) (\u.u)
+	(Define(pred) == Lambda(n, Lambda(f, Lambda(x, n(Lambda(g, Lambda(h, h(g(f))))) (Lambda(u, x))(Lambda(u, u)))))).PartialAssertAction();
+
+	// minus m n = (n pred) m	
+	(Define(minus)(m)(n) == n(pred)(m)).PartialAssertAction();
 
 	// div = \c.\n.\m.\f.\x.(\d.IsZero d (0 f x) (f (c d m f x))) (minus n m)
 	(Define(div) == Lambda(c, Lambda(n, Lambda(m, Lambda(f, Lambda(x, (Lambda(d, IsZero(d)(zero(f)(x))(f(c(d)(m)(f)(x))))(minus(n)(m))))))))).PartialAssertAction();
+
+	// divide1 == Y div
+	(Define(divide1) == Y(div)).PartialAssertAction();
+
+	// divide = \n.divide1 (succ n)
+	(Define(divide) == Lambda(n, divide1(succ(n)))).PartialAssertAction();
 
 	// succ n f x = f (n f x)
 	(Define(succ)(n)(f)(x) == f(n(f)(x))).PartialAssertAction();
@@ -249,25 +257,19 @@ void TestChurchDivide()
 	// zero = \f.\x.x
 	(Define(zero) == Lambda(f, Lambda(x, x))).PartialAssertAction();
 
-	// IsZero = \n.n (\x.false) true
-	(Define(IsZero) == Lambda(n, n(Lambda(x, falseL))(trueL))).PartialAssertAction();
-
 	// trueL = \a.\b.a
 	(Define(trueL) == Lambda(a, Lambda(b, a))).PartialAssertAction();
 
 	// falseL = \a.\b.a
 	(Define(falseL) == Lambda(a, Lambda(b, b))).PartialAssertAction();
 
-	// minus m n = (n pred) m	
-	(Define(minus)(m)(n) == n(pred)(m)).PartialAssertAction();
-
-	// \n.\f.\x.n (\g.\h.h (g f)) (\u.x) (\u.u)
-	(Define(pred) == Lambda(n, Lambda(f, Lambda(x, n(Lambda(g, Lambda(h, h(g(f))))) (Lambda(u, x))(Lambda(u, u)))))).PartialAssertAction();
+	// IsZero = \n.n (\x.false) true
+	(Define(IsZero) == Lambda(n, n(Lambda(x, falseL))(trueL))).PartialAssertAction();
 
 	//(divide(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(1)).EvaluateAction();
 	(divide(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).AssertAction();
 	(r1 == Long(1)).EvaluateAction();
-	return;
+
 	(divide(Lambda(f, Lambda(x, f(f(f(f(x)))))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(2)).EvaluateAction();
 	(divide(Lambda(f, Lambda(x, f(f(f(f(x)))))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).AssertAction();
 	(r2 == Long(2)).EvaluateAction();
@@ -275,19 +277,18 @@ void TestChurchDivide()
 	(divide(Lambda(f, Lambda(x, f(f(f(f(f(f(f(f(f(x))))))))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(3)).EvaluateAction();
 	(divide(Lambda(f, Lambda(x, f(f(f(f(f(f(f(f(f(x))))))))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).AssertAction();
 	(r3 == Long(3)).EvaluateAction();
+
 }
 
 
 void main(int argc, char *argv[])
 {
-	Manager manager; // Sets up any configuration parameters for SN
-	//manager.StartDebug(SN::StepInto, _kbhit, _getch);
-	//manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", "C:/sn/html");
-	manager.StartDebugCommandLineServer(SN::StepInto, _kbhit, _getch);
-	Transaction transaction;
+	Manager manager("Test Church Divide");
+	manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root);
+	//manager.StartDebugCommandLineServer(SN::StepInto, _kbhit, _getch);
 	try
 	{
-		TestIsInteger();
+		// TestIsInteger();
 		// TestCharInValueSet();
 		// TestValueSetOfStandardFunctions();
 		// TestValueSetOfLambdaFunctions();
@@ -295,7 +296,7 @@ void main(int argc, char *argv[])
 		// TestPythagoras();
 		// TestSimple();
 		
-		// TestChurchDivide();
+		TestChurchDivide();
 	}
 	catch (Error e)
 	{

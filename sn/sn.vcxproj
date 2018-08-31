@@ -226,6 +226,7 @@
     <ClInclude Include="sni_define.h" />
     <ClInclude Include="sni_delayedcall.h" />
     <ClInclude Include="sni_delayedprocessor.h" />
+    <ClInclude Include="sni_displayoptions.h" />
     <ClInclude Include="sni_divide.h" />
     <ClInclude Include="sni_doubletostring.h" />
     <ClInclude Include="sni_equals.h" />
@@ -325,6 +326,7 @@
     <ClCompile Include="sni_define.cpp" />
     <ClCompile Include="sni_delayedcall.cpp" />
     <ClCompile Include="sni_delayedprocessor.cpp" />
+    <ClCompile Include="sni_displayoptions.cpp" />
     <ClCompile Include="sni_divide.cpp" />
     <ClCompile Include="sni_doubletostring.cpp" />
     <ClCompile Include="sni_equals.cpp" />

@@ -218,16 +218,19 @@ namespace SNI
 
 	string SNI_Variable::DisplayCpp() const
 	{
+		/*
 		string value;
 		if (m_Value)
 		{
 			//		value = m_Value->DisplayCpp();
 		}
+		*/
 		return "sn_Variable(" + FrameName() + ")";
 	}
 
 	string SNI_Variable::DisplaySN(long p_Priority, SNI_VariableConstPointerList &p_DisplayVariableList) const
 	{
+		/*
 		string value;
 		if (!m_Value)
 		{
@@ -243,6 +246,7 @@ namespace SNI
 			value = "[" + m_Value->DisplayValueSN(GetPriority(), p_DisplayVariableList) + "]";
 			p_DisplayVariableList.erase(p_DisplayVariableList.begin());
 		}
+		*/
 		return Bracket(p_Priority, FrameName() /* + value */);
 	}
 

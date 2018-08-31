@@ -43,7 +43,7 @@ namespace SN
 
 		SN_Manager();
 		SN_Manager(SNI::SNI_Manager *p_Manager);
-		SN_Manager(string p_Description, OnErrorHandler p_Handler, bool p_DelayOnEvaluate = false, size_t p_MaxCardinalityCall = 100, size_t p_MaxCardinalityUnify = 100);
+		SN_Manager(string p_Description, OnErrorHandler p_Handler = NULL, bool p_DelayOnEvaluate = false, size_t p_MaxCardinalityCall = 100, size_t p_MaxCardinalityUnify = 100);
 
 		virtual ~SN_Manager();
 
