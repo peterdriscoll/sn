@@ -34,7 +34,7 @@ namespace SNI
 		// Logging
 		string GetTypeName() const;
 		string DisplayCpp() const;
-		string DisplaySN(long priority, SNI_VariableConstPointerList &p_DisplayVariableList) const;
+		string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		long GetPriority() const;
 
 

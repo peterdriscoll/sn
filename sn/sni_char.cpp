@@ -53,7 +53,7 @@ namespace SNI
 		return "\"" + quotedString + "\"";
 	}
 
-	string SNI_Char::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
+	string SNI_Char::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		string quotedString(m_Char, 1);
 		ReplaceAll(quotedString, "\"", "\\\"");

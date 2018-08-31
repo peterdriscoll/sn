@@ -29,7 +29,7 @@ namespace SNI
 
 		virtual string GetTypeName() const;
 		virtual string DisplayCpp() const;
-		virtual string DisplaySN(long priority, SNI_VariableConstPointerList &p_DisplayVariableList) const;
+		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual long GetPriority() const;
 
 		virtual void AddNote(const SN::LogContext &p_Context, const SNI_Expression *p_Expression, const string &p_Description);

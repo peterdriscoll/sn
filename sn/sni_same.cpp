@@ -26,7 +26,7 @@ namespace SNI
 		return "SN::Same";
 	}
 
-	string SNI_Same::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
+	string SNI_Same::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "Assert equal";
 	}

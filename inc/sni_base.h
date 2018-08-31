@@ -10,6 +10,7 @@
 using namespace std;
 
 #include "../sn/sni_object.h"
+#include "../sn/sni_displayoptions.h"
 
 #define CARDINALITY_MAX ULONG_MAX
 #define CARDINALITY_SQUARE_ROOT_MAX USHRT_MAX
@@ -55,8 +56,8 @@ namespace SNI
 		//---------------------------------------------------------------
 		virtual string GetTypeName() const = 0;
 		virtual string DisplayCpp() const = 0;
-		virtual string DisplaySN(long priority, SNI_VariableConstPointerList &p_DisplayVariableList) const = 0;
-		virtual string DisplayValueSN(long, SNI_VariableConstPointerList & p_DisplayVariableList) const = 0;
+		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const = 0;
+		virtual string DisplayValueSN(long, SNI_DisplayOptions & p_DisplayOptions) const = 0;
 		virtual long GetPriority() const = 0;
 		virtual string GetOperator() const = 0;
 

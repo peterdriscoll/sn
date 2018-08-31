@@ -50,7 +50,7 @@ namespace SNI
 		return "false";
 	}
 
-	string SNI_Bool::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
+	string SNI_Bool::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		if (m_Expression)
 		{

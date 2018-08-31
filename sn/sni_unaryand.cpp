@@ -22,7 +22,7 @@ namespace SNI
 		return "SN::UnaryAnd";
 	}
 
-	string SNI_UnaryAnd::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
+	string SNI_UnaryAnd::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "UnaryAnd";
 	}

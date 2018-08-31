@@ -35,7 +35,7 @@ namespace SNI
 		return GetTypeName();
 	}
 
-	string SNI_FunctionDef::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
+	string SNI_FunctionDef::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return GetTypeName();
 	}
@@ -89,7 +89,7 @@ namespace SNI
 		return CardinalityOfUnify(depth, p_ParamList, calcPos, totalCalc);
 	}
 
-	string SNI_FunctionDef::DisplayCall(long priority, SNI_VariableConstPointerList & p_DisplayVariableList, SN::SN_ExpressionList * p_ParameterList) const
+	string SNI_FunctionDef::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList) const
 	{
 		long depth = GetNumParameters()-1;
 		string text;
@@ -105,7 +105,7 @@ namespace SNI
 			{
 				delimeter = GetOperator();
 			}
-			text = p.GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayVariableList) + del + text;
+			text = p.GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + del + text;
 		}
 		if (GetOperator().empty())
 		{

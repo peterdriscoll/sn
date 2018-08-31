@@ -72,8 +72,8 @@ namespace SNI
 		//---------------------------------------------------------------
 		virtual string GetTypeName() const;
 		virtual string DisplayCpp() const;
-		virtual string DisplaySN(long priority, SNI_VariableConstPointerList &p_DisplayVariableList) const;
-		virtual string DisplayValueSN(long, SNI_VariableConstPointerList & p_DisplayVariableList) const;
+		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
+		virtual string DisplayValueSN(long, SNI_DisplayOptions & p_DisplayOptions) const;
 		virtual long GetPriority() const;
 		virtual string GetOperator() const;
 		virtual string DisplaySN0() const;
@@ -82,7 +82,7 @@ namespace SNI
 		// Members
 		//---------------------------------------------------------------
 		virtual SNI_Expression * LoadParameters(SN::SN_ExpressionList * p_ParameterList) const;
-		virtual string DisplayCall(long priority, SNI_VariableConstPointerList & p_DisplayVariableList, SN::SN_ExpressionList * p_ParameterList) const;
+		virtual string DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList) const;
 		virtual SNI_Expression * Clone(SNI_Frame *p_Frame, bool &p_Changed);
 		virtual SNI_Expression * Clone(const SNI_Variable *p_Variable, SNI_Expression *p_Result);
 		virtual bool GetBool() const;

@@ -42,7 +42,7 @@ namespace SNI
 		return "skynet::RevAnd";
 	}
 
-	string SNI_RevAnd::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
+	string SNI_RevAnd::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "RevAnd";
 	}

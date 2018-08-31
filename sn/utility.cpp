@@ -216,13 +216,13 @@ namespace SNI
 		return result;
 	}
 
-	string DisplayPmTaggedExpressionList(const SNI_TaggedValueList &p_TaggedValueList, SNI_VariableConstPointerList & p_DisplayVariableList)
+	string DisplayPmTaggedExpressionList(const SNI_TaggedValueList &p_TaggedValueList, SNI_DisplayOptions & p_DisplayOptions)
 	{
 		string result;
 		string separator;
 		for (unsigned long j = 0; j < p_TaggedValueList.size(); j++)
 		{
-			result += separator + p_TaggedValueList[j].GetValue().GetSNI_Expression()->DisplaySN(0, p_DisplayVariableList);
+			result += separator + p_TaggedValueList[j].GetValue().GetSNI_Expression()->DisplaySN(0, p_DisplayOptions);
 
 			SNI_World *world = p_TaggedValueList[j].GetWorld();
 			if (world)

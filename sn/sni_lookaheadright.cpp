@@ -28,7 +28,7 @@ namespace SNI
 		return "SN::LookaheadRight";
 	}
 
-	string SNI_LookaheadRight::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
+	string SNI_LookaheadRight::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "LookaheadRight";
 	}

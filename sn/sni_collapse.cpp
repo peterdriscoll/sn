@@ -40,7 +40,7 @@ namespace SNI
 		return "SN::Collapse";
 	}
 
-	string SNI_Collapse::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
+	string SNI_Collapse::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "_";
 	}

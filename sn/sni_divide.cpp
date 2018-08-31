@@ -26,7 +26,7 @@ namespace SNI
 		return "SN::Divide";
 	}
 
-	string SNI_Divide::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
+	string SNI_Divide::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "(/)";
 	}

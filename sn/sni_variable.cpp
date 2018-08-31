@@ -218,39 +218,15 @@ namespace SNI
 
 	string SNI_Variable::DisplayCpp() const
 	{
-		/*
-		string value;
-		if (m_Value)
-		{
-			//		value = m_Value->DisplayCpp();
-		}
-		*/
 		return "sn_Variable(" + FrameName() + ")";
 	}
 
-	string SNI_Variable::DisplaySN(long p_Priority, SNI_VariableConstPointerList &p_DisplayVariableList) const
+	string SNI_Variable::DisplaySN(long p_Priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
-		/*
-		string value;
-		if (!m_Value)
-		{
-			value = "";
-		}
-		else if (FindVariable(p_DisplayVariableList))
-		{
-			value = "";
-		}
-		else
-		{
-			p_DisplayVariableList.insert(p_DisplayVariableList.begin(), this);
-			value = "[" + m_Value->DisplayValueSN(GetPriority(), p_DisplayVariableList) + "]";
-			p_DisplayVariableList.erase(p_DisplayVariableList.begin());
-		}
-		*/
 		return Bracket(p_Priority, FrameName() /* + value */);
 	}
 
-	string SNI_Variable::DisplayCall(long p_Priority, SNI_VariableConstPointerList & p_DisplayVariableList, SN::SN_ExpressionList * p_ParameterList) const
+	string SNI_Variable::DisplayCall(long p_Priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList) const
 	{
 		string text;
 		string delimeter;
@@ -258,9 +234,9 @@ namespace SNI
 		{
 			string del = delimeter;
 			delimeter = " ";
-			text = p.GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayVariableList) + del + text;
+			text = p.GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + del + text;
 		}
-		return DisplaySN(p_Priority, p_DisplayVariableList) + " " + text;
+		return DisplaySN(p_Priority, p_DisplayOptions) + " " + text;
 	}
 
 	long SNI_Variable::GetPriority() const
@@ -312,18 +288,6 @@ namespace SNI
 	void SNI_Variable::SetFrame(SNI_Frame *p_Frame)
 	{
 		m_Frame = p_Frame;
-	}
-
-	bool SNI_Variable::FindVariable(SNI_VariableConstPointerList &p_DisplayVariableList) const
-	{
-		for (unsigned long j = 0; j<p_DisplayVariableList.size(); j++)
-		{
-			if (p_DisplayVariableList[j] == this)
-			{
-				return true;
-			}
-		}
-		return false;
 	}
 
 	SNI_Expression * SNI_Variable::Clone(SNI_Frame *p_Frame, bool &p_Changed)

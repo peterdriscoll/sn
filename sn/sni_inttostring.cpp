@@ -26,7 +26,7 @@ namespace SNI
 		return "SN::IntToString";
 	}
 
-	string SNI_IntToString::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
+	string SNI_IntToString::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "IntToString";
 	}

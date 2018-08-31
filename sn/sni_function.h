@@ -25,7 +25,7 @@ namespace SNI
 		virtual long GetPriority() const;
 
 		virtual SNI_Expression *LoadParameters(SN::SN_ExpressionList * p_ParameterList) const;
-		virtual string DisplaySN(long priority, SNI_VariableConstPointerList &p_DisplayVariableList) const;
+		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual SNI_Expression *Clone(SNI_Frame *p_Frame, bool &p_Changed);
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 

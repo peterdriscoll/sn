@@ -28,7 +28,7 @@ namespace SNI
 		return "SN::GreaterThan";
 	}
 
-	string SNI_GreaterThan::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
+	string SNI_GreaterThan::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return ">";
 	}

@@ -94,14 +94,14 @@ namespace SNI
 		return "sn_ValueSet( [" + DisplayPmTaggedValueList(m_ValueList) + "] )";
 	}
 
-	string SNI_ValueSet::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & p_DisplayVariableList) const
+	string SNI_ValueSet::DisplaySN(long /*priority*/, SNI_DisplayOptions & p_DisplayOptions) const
 	{
 		string status;
 		if (!IsComplete())
 		{
 			status = "incomplete:";
 		}
-		return status + "[" + DisplayPmTaggedExpressionList(m_ValueList, p_DisplayVariableList) + "]";
+		return status + "[" + DisplayPmTaggedExpressionList(m_ValueList, p_DisplayOptions) + "]";
 	}
 
 	long SNI_ValueSet::GetPriority() const

@@ -40,9 +40,9 @@ namespace SNI
 		return GetTypeName() + "(" + m_Expression->DisplayCpp() + ")";
 	}
 
-	string SNI_Meta::DisplaySN(long /*priority*/, SNI_VariableConstPointerList &p_DisplayVariableList) const
+	string SNI_Meta::DisplaySN(long /*priority*/, SNI_DisplayOptions &p_DisplayOptions) const
 	{
-		string value = m_Expression->DisplaySN(GetPriority(), p_DisplayVariableList);
+		string value = m_Expression->DisplaySN(GetPriority(), p_DisplayOptions);
 		if (m_DeltaMetaLevel < 0)
 		{
 			return string(-m_DeltaMetaLevel, '}') + value + string(-m_DeltaMetaLevel, '{');

@@ -19,7 +19,7 @@ namespace SNI
 
 		virtual string GetTypeName() const;
 		virtual string DisplayCpp() const;
-		virtual string DisplaySN(long priority, SNI_VariableConstPointerList &p_DisplayVariableList) const;
+		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual long GetPriority() const;
 
 		virtual bool Equivalent(SNI_Object * p_Other) const;

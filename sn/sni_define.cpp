@@ -37,9 +37,9 @@ namespace SNI
 		return "sn_Define(" + m_Variable->DisplayCpp() + ")";
 	}
 
-	string SNI_Define::DisplaySN(long /*priority*/, SNI_VariableConstPointerList &p_DisplayVariableList) const
+	string SNI_Define::DisplaySN(long /*priority*/, SNI_DisplayOptions &p_DisplayOptions) const
 	{
-		return "$" + m_Variable->DisplaySN(GetPriority(), p_DisplayVariableList);
+		return "$" + m_Variable->DisplaySN(GetPriority(), p_DisplayOptions);
 	}
 
 	long SNI_Define::GetPriority() const

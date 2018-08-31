@@ -28,8 +28,8 @@ namespace SNI
 
 		virtual string GetTypeName() const;
 		virtual string DisplayCpp() const;
-		virtual string DisplaySN(long p_Priority, SNI_VariableConstPointerList &p_DisplayVariableList) const;
-		virtual string DisplayCall(long p_Priority, SNI_VariableConstPointerList & p_DisplayVariableList, SN::SN_ExpressionList * p_ParameterList) const;
+		virtual string DisplaySN(long p_Priority, SNI_DisplayOptions &p_DisplayOptions) const;
+		virtual string DisplayCall(long p_Priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList) const;
 		virtual long GetPriority() const;
 
 		virtual bool GetBool() const;
@@ -82,11 +82,8 @@ namespace SNI
 		virtual void PromoteMembers();
 
 	private:
-		bool FindVariable(SNI_VariableConstPointerList &p_DisplayVariableList) const;
-
 		static SN::SN_Expression AddLambdas(SN::SN_ExpressionList * p_ParameterList);
 		static SN::SN_Expression AddLambdasPartial(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
-
 
 	private:
 		SNI_Expression * m_Value;

@@ -56,14 +56,14 @@ namespace SNI
 		return GetTypeName();
 	}
 
-	string SNI_Expression::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
+	string SNI_Expression::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return GetTypeName();
 	}
 
-	string SNI_Expression::DisplayValueSN(long priority, SNI_VariableConstPointerList & p_DisplayVariableList) const
+	string SNI_Expression::DisplayValueSN(long priority, SNI_DisplayOptions & p_DisplayOptions) const
 	{
-		return DisplaySN(priority, p_DisplayVariableList);
+		return DisplaySN(priority, p_DisplayOptions);
 	}
 
 	long SNI_Expression::GetPriority() const
@@ -81,15 +81,15 @@ namespace SNI
 		return NULL;
 	}
 
-	string SNI_Expression::DisplayCall(long priority, SNI_VariableConstPointerList &p_DisplayVariableList, SN::SN_ExpressionList * p_ParameterList) const
+	string SNI_Expression::DisplayCall(long priority, SNI_DisplayOptions &p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList) const
 	{
 		string text;
 		string delimeter = "(";
 		for (SN::SN_Expression &p: *p_ParameterList)
 		{
-			text += delimeter + p.GetSNI_Expression()->DisplayValueSN(GetPriority(), p_DisplayVariableList);
+			text += delimeter + p.GetSNI_Expression()->DisplayValueSN(GetPriority(), p_DisplayOptions);
 		}
-		return DisplaySN(priority, p_DisplayVariableList) + "(" + text + ")";
+		return DisplaySN(priority, p_DisplayOptions) + "(" + text + ")";
 	}
 
 	SNI_Expression * SNI_Expression::Clone(SNI_Frame *p_Frame, bool &/*p_Changed*/)
@@ -118,8 +118,8 @@ namespace SNI
 
 	string SNI_Expression::DisplaySN0() const
 	{
-		SNI_VariableConstPointerList l_DisplayList;
-		return DisplaySN(0, l_DisplayList);
+		SNI_DisplayOptions l_DisplayOptions;
+		return DisplaySN(0, l_DisplayOptions);
 	}
 
 	//-----------------------------------------------------------------------
@@ -416,9 +416,9 @@ namespace SNI
 	void SNI_Expression::PartialAssertActionWithHandler(OnErrorHandler * p_ErrorHandler)
 	{
 		SN::LogContext context("SNI_Expression::PartialAssertAction()");
-		SNI::SNI_VariableConstPointerList l_DisplayList;
-		LOG(WriteLine(SN::DebugLevel, "Partial assert " + DisplayValueSN(0, l_DisplayList)));
-		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Partial assert " + DisplayValueSN(0, l_DisplayList));
+		SNI::SNI_DisplayOptions l_DisplayOptions;
+		LOG(WriteLine(SN::DebugLevel, "Partial assert " + DisplayValueSN(0, l_DisplayOptions)));
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Partial assert " + DisplayValueSN(0, l_DisplayOptions));
 		HandleAssertAction(context, PartialAssert(), "Partial assert", p_ErrorHandler);
 	}
 
@@ -457,9 +457,9 @@ namespace SNI
 	void SNI_Expression::PartialEvaluateActionWithHandler(OnErrorHandler *p_ErrorHandler)
 	{
 		SN::LogContext context("SNI_Expression::PartialEvaluateAction()");
-		SNI::SNI_VariableConstPointerList l_DisplayList;
-		LOG(WriteLine(SN::DebugLevel, "Partial evaluate " + DisplayValueSN(0, l_DisplayList)));
-		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Partial evaluate " + DisplayValueSN(0, l_DisplayList));
+		SNI::SNI_DisplayOptions l_DisplayOptions;
+		LOG(WriteLine(SN::DebugLevel, "Partial evaluate " + DisplayValueSN(0, l_DisplayOptions)));
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Partial evaluate " + DisplayValueSN(0, l_DisplayOptions));
 		HandleEvaluateAction(context, PartialEvaluate(), "Partial evaluate", p_ErrorHandler);
 	}
 

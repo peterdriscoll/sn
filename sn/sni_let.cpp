@@ -46,9 +46,9 @@ namespace SNI
 		return "sn_Lambda(" + m_Condition->DisplayCpp() + ", " + m_Expression->DisplayCpp() + ")";
 	}
 
-	string SNI_Let::DisplaySN(long /*priority*/, SNI_VariableConstPointerList &p_DisplayVariableList) const
+	string SNI_Let::DisplaySN(long /*priority*/, SNI_DisplayOptions &p_DisplayOptions) const
 	{
-		return "@" + m_Condition->DisplaySN(GetPriority(), p_DisplayVariableList) + "." + m_Expression->DisplaySN(GetPriority(), p_DisplayVariableList);
+		return "@" + m_Condition->DisplaySN(GetPriority(), p_DisplayOptions) + "." + m_Expression->DisplaySN(GetPriority(), p_DisplayOptions);
 	}
 
 	long SNI_Let::GetPriority() const

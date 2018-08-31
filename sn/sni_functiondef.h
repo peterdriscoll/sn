@@ -44,7 +44,7 @@ namespace SNI
 
 		virtual string GetTypeName() const;
 		virtual string DisplayCpp() const;
-		virtual string DisplaySN(long priority, SNI_VariableConstPointerList &p_DisplayVariableList) const;
+		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual long GetPriority() const;
 		virtual string GetOperator() const;
 
@@ -55,7 +55,7 @@ namespace SNI
 
 		virtual size_t Cardinality(SN::SN_Expression * p_ParameterList) const;
 
-		string DisplayCall(long priority, SNI_VariableConstPointerList & p_DisplayVariableList, SN::SN_ExpressionList * p_ParameterList) const;
+		string DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList) const;
 
 		string GetLogDescription(SN::SN_Expression * p_ParamList) const;
 

@@ -16,7 +16,7 @@ namespace SNI
 
 		virtual string GetTypeName() const = 0;
 		virtual string DisplayCpp() const = 0;
-		virtual string DisplaySN(long priority, SNI_VariableConstPointerList &p_DisplayVariableList) const = 0;
+		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const = 0;
 
 		virtual SN::SN_Value PrimaryFunctionValue(const SN::SN_Value &p_Left, const SN::SN_Value &p_Right) const = 0;
 		virtual SN::SN_Expression PrimaryFunctionExpression(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right) const = 0;

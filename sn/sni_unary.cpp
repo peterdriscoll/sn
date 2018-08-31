@@ -38,7 +38,7 @@ namespace SNI
 		return "SN::Unary";
 	}
 
-	string SNI_Unary::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
+	string SNI_Unary::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "Unary Op";
 	}

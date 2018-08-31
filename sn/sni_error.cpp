@@ -82,7 +82,7 @@ namespace SNI
 		return "Error(" + m_Description + ")";
 	}
 
-	string SNI_Error::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
+	string SNI_Error::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "Error(" + m_Description + ")";
 	}
@@ -98,8 +98,8 @@ namespace SNI
 		string s_expression;
 		if (p_Expression)
 		{
-			SNI::SNI_VariableConstPointerList l_DisplayList;
-			s_expression = p_Expression->DisplaySN(0, l_DisplayList);
+			SNI::SNI_DisplayOptions l_DisplayOptions;
+			s_expression = p_Expression->DisplaySN(0, l_DisplayOptions);
 		}
 		else
 		{

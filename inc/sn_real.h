@@ -84,8 +84,8 @@ namespace SN
 		{
 			if (m_Real)
 			{
-				SNI::SNI_VariableConstPointerList l_DisplayList;
-				return m_Real->DisplayValueSN(0, l_DisplayList);
+				SNI::SNI_DisplayOptions l_DisplayOptions;
+				return m_Real->DisplayValueSN(0, l_DisplayOptions);
 			}
 			return "NULL";
 		}

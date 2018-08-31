@@ -40,14 +40,14 @@ namespace SNI
 		return "Value";
 	}
 
-	string SNI_Value::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
+	string SNI_Value::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "Value";
 	}
 
-	string SNI_Value::DisplayValueSN(long priority, SNI_VariableConstPointerList & p_DisplayVariableList) const
+	string SNI_Value::DisplayValueSN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
-		return GetTypeName() + "(" + DisplaySN(priority, p_DisplayVariableList) + ")";
+		return GetTypeName() + "(" + DisplaySN(priority, p_DisplayOptions) + ")";
 	}
 
 	long SNI_Value::GetPriority() const

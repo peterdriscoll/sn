@@ -179,7 +179,7 @@ namespace SNI
 		}
 	}
 
-	string SNI_StringRef::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
+	string SNI_StringRef::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		const string &source = GetSourceString();
 		SN::SN_Expression end = GetEnd().Evaluate();

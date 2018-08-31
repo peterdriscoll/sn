@@ -19,7 +19,7 @@ namespace SNI
 		/// @cond
 		virtual string GetTypeName() const = 0;
 		virtual string DisplayCpp() const = 0;
-		virtual string DisplaySN(long priority, SNI_VariableConstPointerList &p_DisplayVariableList) const = 0;
+		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const = 0;
 		/// @endcond
 
 		virtual SN::SN_Expression CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel = 0) const;

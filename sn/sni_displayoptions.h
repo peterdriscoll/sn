@@ -12,10 +12,7 @@ namespace SNI
 
 		virtual ~SNI_DisplayOptions();
 
-		bool FindVariable(SNI_Variable *p_Variable) const;
-
 	private:
-		SNI_VariableConstPointerList m_DisplayVariableList;
 
 	};
 }

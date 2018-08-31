@@ -26,7 +26,7 @@ namespace SNI
 		return "SN::SubtractRight";
 	}
 
-	string SNI_SubtractRight::DisplaySN(long /*priority*/, SNI_VariableConstPointerList & /*p_DisplayVariableList*/) const
+	string SNI_SubtractRight::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "SubtractRight";
 	}
