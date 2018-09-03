@@ -106,6 +106,8 @@ namespace SNI
 
 		ostream * CreateLogFile(SN::LoggingLevel p_LoggingLevel);
 
+		void PromoteExternals(PGC::PGC_Transaction * p_Transaction);
+
 		SNI_Manager *GetTopManager(bool p_Create = true);
 		void SetTopManager(SNI_Manager *p_TopManager);
 	private:

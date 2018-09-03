@@ -379,4 +379,15 @@ namespace SNI
 	void SNI_Frame::PromoteMembers()
 	{
 	}
+
+	void SNI_Frame::PromoteExternals(PGC::PGC_Transaction *p_Transaction)
+	{
+		for (SNI_Variable *(&v) : m_VariableList)
+		{
+			PGC::PGC_Base *base = static_cast<PGC::PGC_Base *>(v);
+			p_Transaction->PromoteOrReject(&base);
+			SNI_Variable *newAddress = dynamic_cast<SNI_Variable *>(base);
+			v = newAddress;
+		}
+	}
 }

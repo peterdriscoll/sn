@@ -107,6 +107,7 @@
 #include "sni_logbuffer.h"
 #include "sni_helpers.h"
 #include "sni_manager.h"
+#include "sni_transaction.h"
 #include "sni_cartesian.h"
 #include "sni_cart.h"
 #include "sni_cartcall.h"

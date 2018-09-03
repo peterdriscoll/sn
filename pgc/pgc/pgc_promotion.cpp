@@ -180,7 +180,7 @@ namespace PGC
 		GetBase()->RetrieveDescriptor(l_pointer, l_size);
 		long offset = l_pointer - (char *)GetBase();
 		char *l_new_pointer = (char *)m_Destination->Allocate(l_size);
-		PGC_Transaction::AddTotalNetMemorySize(-((long)(l_size - OVERHEAD))); // Allocating adds the net sixe, but this is a copy, so there should be no increase.
+		PGC_Transaction::AddTotalNetMemorySize(-((long)(l_size - OVERHEAD))); // Allocating adds the net size, but this is a copy, so there should be no increase.
 		memcpy(l_new_pointer, l_pointer, l_size);
 		GetBase()->SetTransaction(NULL);
 		return (PGC_Base *)(l_new_pointer + offset);

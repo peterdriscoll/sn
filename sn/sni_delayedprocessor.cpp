@@ -15,11 +15,11 @@ namespace SNI
 {
 	/*static*/ SNI_DelayedProcessor *SNI_DelayedProcessor::GetProcessor()
 	{
-		SNI_DelayedProcessor* task = dynamic_cast<SNI_DelayedProcessor *>(SN::SN_Transaction::TopTransaction()->TopTask());
+		SNI_DelayedProcessor* task = dynamic_cast<SNI_DelayedProcessor *>(SNI::SNI_Transaction::TopTransaction()->TopTask());
 		if (!task)
 		{
 			task = new SNI_DelayedProcessor(SNI_Thread::TopManager());
-			SN::SN_Transaction::TopTransaction()->SubmitTask(task);
+			SNI::SNI_Transaction::TopTransaction()->SubmitTask(task);
 		}
 		return task;
 	}

@@ -1,0 +1,29 @@
+#include "sni_transaction.h"
+
+#include "sn_pch.h"
+
+namespace SNI
+{
+	SNI_Transaction::SNI_Transaction()
+	{
+		SNI_Thread::GetThread()->PushFrame(new SNI_Frame());
+	}
+
+	SNI_Transaction::~SNI_Transaction()
+	{
+	}
+
+	void SNI_Transaction::EndTransaction()
+	{
+		SNI_Thread::GetThread()->PopFrame();
+		PGC_Transaction::EndTransaction();
+	}
+
+	void SNI_Transaction::PromoteExternals(PGC::PGC_Transaction *p_Destination)
+	{
+		if (p_Destination)
+		{
+			SNI_Thread::GetThread()->PromoteExternals(p_Destination);
+		}
+	}
+}

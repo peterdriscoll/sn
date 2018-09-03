@@ -286,6 +286,7 @@
     <ClInclude Include="sni_subtractrightchar.h" />
     <ClInclude Include="sni_taggedvalue.h" />
     <ClInclude Include="sni_thread.h" />
+    <ClInclude Include="sni_transaction.h" />
     <ClInclude Include="sni_unary.h" />
     <ClInclude Include="sni_unaryand.h" />
     <ClInclude Include="sni_unaryor.h" />
@@ -384,6 +385,7 @@
     <ClCompile Include="sni_subtractrightchar.cpp" />
     <ClCompile Include="sni_taggedvalue.cpp" />
     <ClCompile Include="sni_thread.cpp" />
+    <ClCompile Include="sni_transaction.cpp" />
     <ClCompile Include="sni_unary.cpp" />
     <ClCompile Include="sni_unaryand.cpp" />
     <ClCompile Include="sni_unaryor.cpp" />

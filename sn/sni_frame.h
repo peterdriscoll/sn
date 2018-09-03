@@ -44,8 +44,11 @@ namespace SNI
 
 		void WriteWebFrame(ostream &p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth);
 		void WriteJS(ostream & p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth);
+
+		void PromoteExternals(PGC::PGC_Transaction * p_Transaction);
 	private:
 		void PromoteMembers();
+
 
 		SN::SN_Expression              m_Function;
 		long                           m_ThreadNum;

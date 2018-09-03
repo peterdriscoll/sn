@@ -57,7 +57,7 @@ namespace PGC
 
 		void *Allocate(size_t p_size);
 		bool *GetLiveTransactionPointer();
-		void EndTransaction();
+		virtual void EndTransaction();
 
 		void RegisterForDestruction(PGC_Base *p_Base);
 		static PGC_Transaction *RegisterLastForDestruction(PGC_Base *p_Base);
@@ -96,7 +96,15 @@ namespace PGC
 
 		static void RegisterInWebServer();
 		static bool InWebServer();
+
+		bool PromoteOrReject(PGC_Base ** p_BaseRef);
+
+		virtual void PromoteExternals(PGC_Transaction *p_Direction);
+
 	private:
+		void Promote(PGC_Base ** p_BaseRef);
+		PGC_Base * CopyMemory(PGC_Base * p_Base);
+
 		void ReleaseBlocks();
 
 		static long m_NextThreadNum;

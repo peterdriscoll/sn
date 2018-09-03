@@ -898,7 +898,6 @@ namespace SNI
 		return NULL;
 	}
 
-
 	SNI_Frame * SNI_Thread::Top()
 	{
 		if (m_FrameList.size())
@@ -925,5 +924,13 @@ namespace SNI
 	size_t SNI_Thread::GetFrameStackDepth()
 	{
 		return m_FrameList.size();
+	}
+
+	void SNI_Thread::PromoteExternals(PGC::PGC_Transaction *p_Transaction)
+	{
+		for (SNI_Frame *f : m_FrameList)
+		{
+			f->PromoteExternals(p_Transaction);
+		}
 	}
 }

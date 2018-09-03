@@ -70,10 +70,10 @@ namespace SNI
 	    , m_GetCh(NULL)
 		, m_WebServerThreadUsed(false)
 		, m_CommandServerThreadUsed(false)
-		, m_Transaction(NULL)
 		, m_HasDebugServer(false)
 		, m_LogBufferCapacity(50)
 		, m_MaxStackFrames(3)
+		, m_Transaction(false)
 	{
 		if (!m_ErrorHandler)
 		{
@@ -82,7 +82,7 @@ namespace SNI
 		m_LastManager = SNI_Thread::GetThread()->GetTopManager(false);
 		if (!m_LastManager)
 		{
-			m_Transaction = new SN::SN_Transaction;
+			m_Transaction.Init();
 		}
 		SNI_Thread::GetThread()->SetTopManager(this);
 	}
@@ -101,10 +101,10 @@ namespace SNI
 		, m_GetCh(p_Manager->m_GetCh)
 		, m_WebServerThreadUsed(false)
 		, m_CommandServerThreadUsed(false)
-		, m_Transaction(NULL)
 		, m_HasDebugServer(false)
 		, m_LogBufferCapacity(50)
 		, m_MaxStackFrames(3)
+		, m_Transaction(false)
 	{
 		if (!m_ErrorHandler)
 		{
@@ -113,7 +113,7 @@ namespace SNI
 		m_LastManager = SNI_Thread::GetThread()->GetTopManager(false);
 		if (!m_LastManager)
 		{
-			m_Transaction = new SN::SN_Transaction;
+			m_Transaction.Init();
 		}
 		SNI_Thread::GetThread()->SetTopManager(this);
 	}
@@ -132,10 +132,10 @@ namespace SNI
 		, m_GetCh(NULL)
 		, m_WebServerThreadUsed(false)
 		, m_CommandServerThreadUsed(false)
-		, m_Transaction(NULL)
 		, m_HasDebugServer(false)
 		, m_LogBufferCapacity(50)
 		, m_MaxStackFrames(3)
+		, m_Transaction(false)
 	{
 		if (!m_ErrorHandler)
 		{
@@ -145,7 +145,7 @@ namespace SNI
 		if (!m_LastManager)
 		{
 			SNI_Thread::GetThread()->Init();
-			m_Transaction = new SN::SN_Transaction;
+			m_Transaction.Init();
 		}
 		SNI_Thread::GetThread()->SetTopManager(this);
 	}
@@ -177,10 +177,6 @@ namespace SNI
 				// m_WebServerThread = NULL;
 			}
 		}
-		if (m_Transaction)
-		{
-			delete m_Transaction;
-		}
 	}
 
 	void SNI_Manager::Init()
@@ -188,7 +184,7 @@ namespace SNI
 		m_LastManager = SNI_Thread::TopManager();
 		if (!m_LastManager)
 		{
-			m_Transaction = new SN::SN_Transaction;
+			m_Transaction.Init();
 		}
 		SNI_Thread::GetThread()->SetTopManager(this);
 	}

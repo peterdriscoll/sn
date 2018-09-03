@@ -69,6 +69,7 @@ namespace PGC
 	{
 		m_Dieing = true;
 		Complete();
+		PromoteExternals(m_LastTopTransaction);
 		PGC_Promotion::PromoteRequests();  // Promote requests away from this transaction.
 		ReleaseBlocks();
 
@@ -323,5 +324,63 @@ namespace PGC
 			}
 		}
 		--m_TransactionDepth;
+	}
+
+	bool PGC_Transaction::PromoteOrReject(PGC_Base **p_BaseRef)
+	{
+		if (Dieing())
+		{
+			return true;
+		}
+		PGC_Base *base = *p_BaseRef;
+		if (base)
+		{
+			PGC_Transaction *source = base->GetTransaction();
+			if (!source || source->Dieing())
+			{
+				Promote(p_BaseRef);
+				return true;
+			}
+		}
+		else
+		{
+			return true;
+		}
+		return false;
+	}
+
+	void PGC_Transaction::PromoteExternals(PGC_Transaction *p_Direction)
+	{
+	}
+
+	void PGC_Transaction::Promote(PGC_Base **p_BaseRef)
+	{
+		PGC_Base *newBase = (*p_BaseRef)->GetNewCopyBase();
+		if (newBase)
+		{
+			*p_BaseRef = newBase;
+		}
+		else
+		{
+			PGC_Base *copy = CopyMemory(*p_BaseRef);
+			RegisterForDestruction(copy);
+			(*p_BaseRef)->SetNewCopyBase(copy);
+			copy->SetTransaction(this);
+			copy->PromoteMembers();
+			*p_BaseRef = copy;
+		}
+	}
+
+	/*static*/PGC_Base *PGC_Transaction::CopyMemory(PGC_Base *p_Base)
+	{
+		char *l_pointer;
+		long l_size;
+		p_Base->RetrieveDescriptor(l_pointer, l_size);
+		long offset = l_pointer - (char *)p_Base;
+		char *l_new_pointer = (char *)Allocate(l_size);
+		PGC_Transaction::AddTotalNetMemorySize(-((long)(l_size - OVERHEAD))); // Allocating adds the net size, but this is a copy, so there should be no increase.
+		memcpy(l_new_pointer, l_pointer, l_size);
+		p_Base->SetTransaction(NULL);
+		return (PGC_Base *)(l_new_pointer + offset);
 	}
 }
