@@ -13,10 +13,6 @@ namespace SNI
 	{
 	}
 
-	void SNI_SubtractRightChar::PromoteMembers()
-	{
-	}
-
 	string SNI_SubtractRightChar::GetTypeName() const
 	{
 		return "SubtractRightChar";

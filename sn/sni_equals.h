@@ -35,11 +35,6 @@ namespace SNI
 
 		virtual SN::SN_Error UnifyElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, long p_CalcPos, long p_TotalCalc, SNI_WorldSet * worldSet) const;
 		virtual size_t CardinalityOfUnify(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const;
-
-	private:
-		/// $cond
-		virtual void PromoteMembers();
-		/// @endcond
 	};
 }
 

@@ -16,9 +16,6 @@ namespace SNI
 		SNI_Number(const SNI_Number &p_other);
 
 		virtual ~SNI_Number();
-
-	protected:
-		virtual void PromoteMembers();
 	};
 
 	typedef vector<SNI_Number> SNI_NumberList;

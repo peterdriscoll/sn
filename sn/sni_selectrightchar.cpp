@@ -14,10 +14,6 @@ namespace SNI
 	{
 	}
 
-	void SNI_SelectRightChar::PromoteMembers()
-	{
-	}
-
 	string SNI_SelectRightChar::GetTypeName() const
 	{
 		return "SelectRightChar";

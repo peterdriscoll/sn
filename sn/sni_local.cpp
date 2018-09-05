@@ -26,6 +26,8 @@ namespace SNI
 		: m_LocalVariable(p_LocalVariable)
 		, m_Expression(p_Expression)
 	{
+		REQUESTPROMOTION(m_LocalVariable);
+		REQUESTPROMOTION(m_Expression);
 	}
 
 	SNI_Local::~SNI_Local()
@@ -35,6 +37,8 @@ namespace SNI
 
 	void SNI_Local::PromoteMembers()
 	{
+		REQUESTPROMOTION(m_LocalVariable);
+		REQUESTPROMOTION(m_Expression);
 	}
 
 	string SNI_Local::GetTypeName() const

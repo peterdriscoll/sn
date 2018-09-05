@@ -44,6 +44,10 @@ namespace SNI
 
 	void SNI_Set::PromoteMembers()
 	{
+		for (SN::SN_Value &v : m_SetList)
+		{
+			REQUESTPROMOTION(v.GetSNI_ExpressionRef());
+		}
 	}
 
 	string SNI_Set::GetTypeName() const
@@ -157,5 +161,6 @@ namespace SNI
 	void SNI_Set::AddToSet(const SN::SN_Value &p_Value)
 	{
 		m_SetList.push_back(p_Value);
+		REQUESTPROMOTION(m_SetList.back());
 	}
 }

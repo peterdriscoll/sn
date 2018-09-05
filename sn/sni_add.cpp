@@ -18,11 +18,6 @@ namespace SNI
 
 	}
 
-	/// @cond
-	void SNI_Add::PromoteMembers()
-	{
-	}
-
 	string SNI_Add::GetTypeName() const
 	{
 		return "Add";

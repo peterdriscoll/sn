@@ -55,6 +55,10 @@ namespace SNI
 
 	void SNI_ValueSet::PromoteMembers()
 	{
+		for (SNI_TaggedValue &tv : m_ValueList)
+		{
+			tv.PromoteMembersExternal(this);
+		}
 	}
 
 	void SNI_ValueSet::CheckWorldSetConsistency()

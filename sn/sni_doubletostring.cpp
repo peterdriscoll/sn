@@ -12,10 +12,6 @@ namespace SNI
 	{
 	}
 
-	void SNI_DoubleToString::PromoteMembers()
-	{
-	}
-
 	string SNI_DoubleToString::GetTypeName() const
 	{
 		return "DoubleToString";

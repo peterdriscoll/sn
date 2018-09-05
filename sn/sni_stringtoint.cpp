@@ -14,10 +14,6 @@ namespace SNI
 
 	}
 
-	void SNI_StringToInt::PromoteMembers()
-	{
-	}
-
 	string SNI_StringToInt::GetTypeName() const
 	{
 		return "StringToInt";

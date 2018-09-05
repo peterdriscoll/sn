@@ -14,10 +14,6 @@ namespace SNI
 	{
 	}
 
-	void SNI_LessThan::PromoteMembers()
-	{
-	}
-
 	string SNI_LessThan::GetTypeName() const
 	{
 		return "LessThan";

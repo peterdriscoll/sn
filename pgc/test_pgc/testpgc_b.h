@@ -4,6 +4,16 @@
 #pragma once
 
 #include "pgc.h"
+#include "ref.h"
+namespace PGCX
+{
+	template<typename T>
+	using SRef = PGC::SRef<T>;
+
+	template<typename T>
+	using Ref = PGC::Ref<T>;
+}
+
 using namespace PGCX;
 
 class TestPgc_A;

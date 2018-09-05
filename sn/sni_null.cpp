@@ -16,10 +16,6 @@ namespace SNI
 	{
 	}
 
-	void SNI_Null::PromoteMembers()
-	{
-	}
-
 	string SNI_Null::GetTypeName() const
 	{
 		return "Null";

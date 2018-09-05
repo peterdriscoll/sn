@@ -20,10 +20,6 @@ namespace SNI
 	{
 	}
 
-	void SNI_Replacement::PromoteMembers()
-	{
-	}
-
 	SNI_Variable * SNI_Replacement::ReplaceVariable(SNI_Variable *p_Variable)
 	{
 		if (p_Variable == m_From)
@@ -31,5 +27,11 @@ namespace SNI
 			return m_To;
 		}
 		return NULL;
+	}
+
+	void SNI_Replacement::PromoteMembersExternal(PGC::PGC_Base *p_Base)
+	{
+		p_Base->REQUESTPROMOTION(m_From);
+		p_Base->REQUESTPROMOTION(m_To);
 	}
 }

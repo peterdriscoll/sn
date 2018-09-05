@@ -54,6 +54,8 @@ namespace SNI
 
 	void SNI_Variable::PromoteMembers()
 	{
+		REQUESTPROMOTION(m_Value);
+		REQUESTPROMOTION(m_Frame);
 	}
 
 	bool SNI_Variable::IsComplete() const

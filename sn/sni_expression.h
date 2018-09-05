@@ -212,8 +212,6 @@ namespace SNI
 	protected:
 		string Bracket(long p_Priority, const string &p_Expression) const;
 
-		virtual void PromoteMembers();
-
 	private:
 		void HandleAssertAction(SN::LogContext & p_Context, SN::SN_Expression p_Result, string p_Text, OnErrorHandler * p_ErrorHandler);
 		void HandleEvaluateAction(SN::LogContext &p_Context, SN::SN_Expression p_Result, string p_Text, OnErrorHandler *p_ErrorHandler);

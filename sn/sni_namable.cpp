@@ -12,10 +12,6 @@ namespace SNI
 	{
 	}
 
-	void SNI_Namable::PromoteMembers()
-	{
-	}
-
 	string SNI_Namable::GetName() const
 	{
 		return m_Name;

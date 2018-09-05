@@ -12,10 +12,6 @@ namespace SNI
 	{
 	}
 
-	void SNI_Divide::PromoteMembers()
-	{
-	}
-
 	string SNI_Divide::GetTypeName() const
 	{
 		return "Divide";

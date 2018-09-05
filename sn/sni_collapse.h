@@ -26,9 +26,6 @@ namespace SNI
 
 		virtual SN::SN_Expression UnifyArray(SN::SN_Expression * p_ParamList);
 		virtual SN::SN_Error UnifyInternal(SN::SN_Expression & p_value, SN::SN_Expression & p_Result);
-
-	protected:
-		virtual void PromoteMembers();
 	};
 }
 

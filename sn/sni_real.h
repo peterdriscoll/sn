@@ -243,8 +243,6 @@ namespace SNI
 			auto result = sqrt(m_Number);
 			return SN::SN_ValueSet(MakeType(result), MakeType(-result));
 		}
-    protected:
-        virtual void PromoteMembers() {};
     };
 
 	SN_APPLY_TYPES(DUMMY, DUMMY, SNI_FORWARD)

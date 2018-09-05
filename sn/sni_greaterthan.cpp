@@ -14,10 +14,6 @@ namespace SNI
 
 	}
 
-	void SNI_GreaterThan::PromoteMembers()
-	{
-	}
-
 	string SNI_GreaterThan::GetTypeName() const
 	{
 		return "GreaterThan";

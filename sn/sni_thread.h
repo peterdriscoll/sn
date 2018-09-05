@@ -123,12 +123,12 @@ namespace SNI
 		void WriteSetMaxStackFrames(ostream & p_Stream);
 		static void WriteSetMaxStackFramesJS(ostream & p_Stream);
 
-		void WriteWebStack(ostream & p_Stream, long p_Depth, size_t p_DebugFieldWidth);
+		void WriteWebStack(ostream & p_Stream, size_t  p_Depth, size_t p_DebugFieldWidth);
 
 		static void WriteWebStackJS(ostream & p_Stream);
 		static void WriteWebLogJS(ostream & p_Stream);
 
-		void WriteStackJS(ostream & p_Stream, long p_Depth, size_t p_DebugFieldWidth);
+		void WriteStackJS(ostream & p_Stream, size_t  p_Depth, size_t p_DebugFieldWidth);
 		void WriteLogJS(ostream & p_Stream, long p_MaxLogEntries);
 		void WriteStepCountListJS(ostream & p_Stream);
 		void WriteStepCountJS(ostream & p_Stream, const string &p_Delimeter);

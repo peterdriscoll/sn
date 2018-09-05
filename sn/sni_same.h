@@ -25,7 +25,6 @@ namespace SNI
 
 	protected:
 		size_t CardinalityOfUnify(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const;
-		virtual void PromoteMembers();
 	};
 }
 

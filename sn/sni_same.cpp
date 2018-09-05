@@ -12,10 +12,6 @@ namespace SNI
 	{
 	}
 
-	void SNI_Same::PromoteMembers()
-	{
-	}
-
 	string SNI_Same::GetTypeName() const
 	{
 		return "Not";

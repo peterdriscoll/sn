@@ -737,7 +737,7 @@ namespace SNI
 		p_Stream << "</td>\n";
 	}
 
-	void SNI_Thread::WriteWebStack(ostream &p_Stream, long p_Depth, size_t p_DebugFieldWidth)
+	void SNI_Thread::WriteWebStack(ostream &p_Stream, size_t p_Depth, size_t p_DebugFieldWidth)
 	{
 		p_Stream << "<table class='stack'>\n";
 		p_Stream << "<caption>Thread " << m_ThreadNum << "</caption>";
@@ -804,7 +804,7 @@ namespace SNI
 		SNI_Log::GetLog()->LogTableJS(p_Stream, p_MaxLogEntries);
 	}
 
-	void SNI_Thread::WriteStackJS(ostream &p_Stream, long p_Depth, size_t p_DebugFieldWidth)
+	void SNI_Thread::WriteStackJS(ostream &p_Stream, size_t p_Depth, size_t p_DebugFieldWidth)
 	{
 		p_Stream << "{\"records\":[\n";
 		size_t base = 0;

@@ -26,6 +26,8 @@ namespace SNI
 		: m_Condition(p_Condition)
 		, m_Expression(p_Expression)
 	{
+		REQUESTPROMOTION(m_Condition);
+		REQUESTPROMOTION(m_Expression);
 	}
 
 	SNI_Let::~SNI_Let()
@@ -34,6 +36,8 @@ namespace SNI
 
 	void SNI_Let::PromoteMembers()
 	{
+		REQUESTPROMOTION(m_Condition);
+		REQUESTPROMOTION(m_Expression);
 	}
 
 	string SNI_Let::GetTypeName() const

@@ -12,10 +12,6 @@ namespace SNI
 	{
 	}
 
-	void SNI_VarDef::PromoteMembers()
-	{
-	}
-
 	string SNI_VarDef::GetTypeName() const
 	{
 		return "VarDef";

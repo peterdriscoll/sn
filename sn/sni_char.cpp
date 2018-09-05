@@ -20,10 +20,6 @@ namespace SNI
 
 	}
 
-	void SNI_Char::PromoteMembers()
-	{
-	}
-
 	SNI_Char::SNI_Char(const SNI_Char &p_Other)
 		: m_Char(p_Other.m_Char)
 	{

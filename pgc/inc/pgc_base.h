@@ -89,7 +89,7 @@ namespace PGC
 			p_Size = sizeof(T);                                          \
 		}
 
-#define REQUESTPROMOTION(member) RequestPromotion((PGC_Base **) &member)
+#define REQUESTPROMOTION(member) RequestPromotion((PGC::PGC_Base **) &member)
 
 #define OVERHEAD (sizeof(void *) + sizeof(short))
 
@@ -131,15 +131,11 @@ namespace PGC
 		virtual void RetrieveDescriptor(char *&p_Pointer, long &p_Size) = 0;
 		size_t Size();
 
-		static void CaptureMember(PGC_Base **p_member);
-
 		void *operator new(size_t p_size, PGC_Transaction &p_Transaction);
 		void *operator new(size_t p_size);
 		void operator delete(void *p_Object, PGC_Transaction &p_Transaction);
 		void operator delete(void *p_Object);
 	private:
-		void RecordMembers();
-
 		// Warning:  These variables are used in a strange way.
 		// if m_Offset > 0 then m_Transaction stores the transaction for this object.
 		// if m_Offset < 0 then m_Transaction stores the new location for this object, during a promotion.

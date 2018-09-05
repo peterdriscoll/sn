@@ -7,7 +7,7 @@
 #include "pgc_transaction.h"
 #include "pgc_stacktransaction.h"
 #include "pgc_task.h"
-#include "ref.h"
+//#include "ref.h"
 
 namespace PGCX
 {
@@ -17,11 +17,13 @@ namespace PGCX
 	typedef PGC::PGC_Task Task;
 	typedef PGC::PGC_Promotion Promotion;
 
+	/*
 	template<typename T>
 	using SRef = PGC::SRef<T>;
 
 	template<typename T>
 	using Ref = PGC::Ref<T>;
+	*/
 }
 
 #endif // PGC_H_INCLUDED

@@ -14,11 +14,6 @@ namespace SNI
 	{
 	}
 
-	/// @cond
-	void SNI_Concat::PromoteMembers()
-	{
-	}
-
 	string SNI_Concat::GetTypeName() const
 	{
 		return "Concat";

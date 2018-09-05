@@ -20,10 +20,6 @@ namespace SNI
 
 	}
 
-	void SNI_Bool::PromoteMembers()
-	{
-	}
-
 	SNI_Bool::SNI_Bool(const SNI_Bool &p_Other)
 		: m_Expression(p_Other.m_Expression)
 	{

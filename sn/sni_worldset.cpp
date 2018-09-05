@@ -107,6 +107,14 @@ namespace SNI
 
 	void SNI_WorldSet::PromoteMembers()
 	{
+		for (SNI_World *& w : m_WorldList)
+		{
+			REQUESTPROMOTION(w);
+		}
+		for (SNI_WorldSet *& ws : m_ChildSetList)
+		{
+			REQUESTPROMOTION(ws);
+		}
 	}
 
 	SNI_World * SNI_WorldSet::JoinWorldsArgs(AddWorldType p_AddWorld, CreateWorldType p_CreateWorld, bool &exists, SNI_World *p_World1, SNI_World *p_World2, SNI_World *p_World3, SNI_World *p_World4)

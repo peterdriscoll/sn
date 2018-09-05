@@ -89,7 +89,6 @@ namespace SNI
 		SNI_Expression * m_Value;
 		SNI_Frame      * m_Frame;
 		bool           m_Requested;
-
 	};
 
 	typedef vector<SNI_Variable> SNI_VariableList;

@@ -63,9 +63,6 @@ namespace SNI
 
 		void DoWriteFile(const SN::SN_Value & p_Contents) const;
 
-	protected:
-		virtual void PromoteMembers();
-
 	private:
 		string m_String;
 	};

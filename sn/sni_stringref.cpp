@@ -31,6 +31,9 @@ namespace SNI
 		m_Source = p_Source;
 		m_Start = p_Start;
 		m_End = p_End;
+		REQUESTPROMOTION(m_Source.GetSNI_ExpressionRef());
+		REQUESTPROMOTION(m_Start.GetSNI_ExpressionRef());
+		REQUESTPROMOTION(m_End);
 	}
 
 	SNI_StringRef::~SNI_StringRef()
@@ -272,12 +275,16 @@ namespace SNI
 		if (!m_WorldSet)
 		{
 			m_WorldSet = new SNI_WorldSet;
+			REQUESTPROMOTION(m_WorldSet);
 		}
 		return m_WorldSet;
 	}
 
 	void SNI_StringRef::PromoteMembers()
 	{
+		REQUESTPROMOTION(m_Source.GetSNI_ExpressionRef());
+		REQUESTPROMOTION(m_Start.GetSNI_ExpressionRef());
+		REQUESTPROMOTION(m_End);
 	}
 
 	SN::SN_String SNI_StringRef::GetSource() const
@@ -871,7 +878,7 @@ namespace SNI
 				SNI_DelayedProcessor::GetProcessor()->Delay(skynet::Equals, l_ParameterList);
 				endVS.AddTaggedValue(SN::SN_Long((long) (start_pos + p_Other->GetString().length())), worldTrue);
 				endVS.AddTaggedValue(endVar, worldFalse);
-				const_cast<SNI_StringRef *>(this)->m_End = endVS;
+				const_cast<SNI_StringRef *>(this)->SetEnd(endVS);
 				ws_result->Complete();
 				return result;
 			}
@@ -898,12 +905,24 @@ namespace SNI
 				SN::SN_ValueSet startVS;
 				startVS.AddTaggedValue(SN::SN_Long((long) (end_pos - p_Other->GetString().length())), worldTrue);
 				startVS.AddTaggedValue(startVar, worldFalse);
-				const_cast<SNI_StringRef *>(this)->m_Start = startVS;
+				const_cast<SNI_StringRef *>(this)->SetStart(startVS);
 				ws_result->Complete();
 				return result;
 			}
 			return skynet::Null;
 		}
 		return skynet::False;
+	}
+
+	void SNI_StringRef::SetStart(SN::SN_Expression p_Expression)
+	{
+		m_Start = p_Expression;
+		REQUESTPROMOTION(m_Start.GetSNI_ExpressionRef());
+	}
+
+	void SNI_StringRef::SetEnd(SN::SN_Expression p_Expression)
+	{
+		m_End = p_Expression;
+		REQUESTPROMOTION(m_End.GetSNI_ExpressionRef());
 	}
 }

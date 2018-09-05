@@ -12,11 +12,6 @@ namespace SNI
 	{
 	}
 
-	/// @cond
-	void SNI_Multiply::PromoteMembers()
-	{
-	}
-
 	string SNI_Multiply::GetTypeName() const
 	{
 		return "Multiply";

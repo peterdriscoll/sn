@@ -24,6 +24,8 @@ namespace SNI
 		: m_FormalParameter(p_FormalParameter)
 		, m_Expression(p_Expression)
 	{
+		REQUESTPROMOTION(m_FormalParameter);
+		REQUESTPROMOTION(m_Expression);
 	}
 
 	SNI_Lambda::~SNI_Lambda()
@@ -33,6 +35,8 @@ namespace SNI
 
 	void SNI_Lambda::PromoteMembers()
 	{
+		REQUESTPROMOTION(m_FormalParameter);
+		REQUESTPROMOTION(m_Expression);
 	}
 
 	string SNI_Lambda::GetTypeName() const

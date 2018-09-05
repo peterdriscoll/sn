@@ -26,10 +26,6 @@ namespace SNI
 	{
 	}
 
-	void SNI_Value::PromoteMembers()
-	{
-	}
-
 	string SNI_Value::GetTypeName() const
 	{
 		return "Value";

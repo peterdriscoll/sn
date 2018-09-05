@@ -86,6 +86,12 @@ namespace SNI
 
 	void SNI_World::PromoteMembers()
 	{
+		REQUESTPROMOTION(m_WorldSet);
+		for (SNI_World *& w : m_ChildList)
+		{
+			REQUESTPROMOTION(w);
+		}
+		REQUESTPROMOTION(m_CloneParent);
 	}
 
 	SNI_WorldSet * SNI_World::GetWorldSet()

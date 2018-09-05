@@ -369,6 +369,7 @@ namespace SNI
 	SNI_Variable * SNI_Frame::CreateParameterByName(const string & p_ParamName)
 	{
 		SNI_Variable * result = new SNI_Variable();
+		REQUESTPROMOTION(result);
 		result->SetName(p_ParamName + NameSuffix());
 		SNI_Thread::GetThread()->Lock();
 		m_VariableList.push_back(result);
@@ -378,6 +379,15 @@ namespace SNI
 
 	void SNI_Frame::PromoteMembers()
 	{
+		REQUESTPROMOTION(m_Function);
+		for (SNI_Replacement &r : m_ReplacementList)
+		{
+			r.PromoteMembersExternal(this);
+		}
+		for (SNI_Variable *v : m_VariableList)
+		{
+			REQUESTPROMOTION(v);
+		}
 	}
 
 	void SNI_Frame::PromoteExternals(PGC::PGC_Transaction *p_Transaction)

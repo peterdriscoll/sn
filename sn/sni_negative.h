@@ -22,9 +22,6 @@ namespace SNI
 
 		SN::SN_Value PrimaryFunctionValue(const SN::SN_Value &p_Param) const;
 		SN::SN_Expression PrimaryFunctionExpression(const SN::SN_Expression &p_Param) const;
-
-	protected:
-		virtual void PromoteMembers();
 	};
 }
 

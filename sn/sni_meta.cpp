@@ -26,10 +26,6 @@ namespace SNI
 	{
 	}
 
-	void SNI_Meta::PromoteMembers()
-	{
-	}
-
 	string SNI_Meta::GetTypeName() const
 	{
 		return "Meta";

@@ -14,10 +14,6 @@ namespace SNI
 	{
 	}
 
-	void SNI_LookaheadRight::PromoteMembers()
-	{
-	}
-
 	string SNI_LookaheadRight::GetTypeName() const
 	{
 		return "LookaheadRight";

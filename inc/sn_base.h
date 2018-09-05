@@ -45,6 +45,11 @@ namespace SN
 		{
 		}
 
+		T *& GetSNI_ExpressionRef()
+		{
+			return m_Expression;
+		}
+		
 		string DisplayCpp() const
 		{
 			return GetSNI_Base()->DisplayCpp();

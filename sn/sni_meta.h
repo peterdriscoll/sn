@@ -35,9 +35,6 @@ namespace SNI
 		virtual SN::SN_Expression Unify(SN::SN_ExpressionList * p_ParameterList);
 		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
 
-	protected:
-		virtual void PromoteMembers();
-
 	private:
 		long m_DeltaMetaLevel;
 		SNI_Expression * m_Expression;

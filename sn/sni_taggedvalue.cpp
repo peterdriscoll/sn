@@ -47,10 +47,6 @@ namespace SNI
 	{
 	}
 
-	void SNI_TaggedValue::PromoteMembers()
-	{
-	}
-
 	SN::SN_Expression SNI_TaggedValue::GetValue() const
 	{
 		return m_Value;
@@ -71,10 +67,6 @@ namespace SNI
 		m_World = p_World;
 	}
 
-	SNI_World * SNI_TaggedValue::GetParentWorld() const
-	{
-		return m_ParentWorld;
-	}
 	void SNI_TaggedValue::MarkForDeletion()
 	{
 		m_MarkedForDeletion = true;
@@ -82,5 +74,11 @@ namespace SNI
 	bool SNI_TaggedValue::IsMarkedForDeletion()
 	{
 		return m_MarkedForDeletion;
+	}
+
+	void SNI_TaggedValue::PromoteMembersExternal(PGC::PGC_Base * p_Base)
+	{
+		p_Base->REQUESTPROMOTION(m_Value.GetSNI_ExpressionRef());
+		p_Base->REQUESTPROMOTION(m_World);
 	}
 }

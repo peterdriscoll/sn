@@ -24,19 +24,17 @@ namespace SNI
 		SNI_TaggedValue(const SN::SN_Expression &p_Value, SNI_World *p_World);
 		virtual ~SNI_TaggedValue();
 
-		void PromoteMembers();
-
 		virtual SN::SN_Expression GetValue() const;
 		virtual void SetValue(const SN::SN_Expression &p_Value);
 		virtual SNI_World * GetWorld() const;
 		virtual void SetWorld(SNI_World * p_World);
-		virtual SNI_World * GetParentWorld() const;
 		void MarkForDeletion();
 		bool IsMarkedForDeletion();
+
+		void PromoteMembersExternal(PGC::PGC_Base *p_Base);
 	private:
 		SN::SN_Expression m_Value;
 		SNI_World *  m_World;
-		SNI_World *  m_ParentWorld;
 		bool m_MarkedForDeletion;
 	};
 

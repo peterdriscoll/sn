@@ -37,11 +37,6 @@ namespace SNI
 
 	}
 
-	/// @cond
-	void SNI_Equals::PromoteMembers()
-	{
-	}
-
 	string SNI_Equals::GetTypeName() const
 	{
 		return "Equals";

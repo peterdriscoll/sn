@@ -68,10 +68,6 @@ namespace SNI
 	{
 	}
 
-	void SNI_Error::PromoteMembers()
-	{
-	}
-
 	string SNI_Error::GetTypeName() const
 	{
 		return "Error";

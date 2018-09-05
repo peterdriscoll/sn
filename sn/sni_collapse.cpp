@@ -26,10 +26,6 @@ namespace SNI
 
 	}
 
-	void SNI_Collapse::PromoteMembers()
-	{
-	}
-
 	string SNI_Collapse::GetTypeName() const
 	{
 		return "Collapse";

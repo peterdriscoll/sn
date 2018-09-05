@@ -12,10 +12,6 @@ namespace SNI
 	{
 	}
 
-	void SNI_Subtract::PromoteMembers()
-	{
-	}
-
 	string SNI_Subtract::GetTypeName() const
 	{
 		return "Subtract";

@@ -12,10 +12,6 @@ namespace SNI
 	{
 	}
 
-	void SNI_GreaterEquals::PromoteMembers()
-	{
-	}
-
 	string SNI_GreaterEquals::GetTypeName() const
 	{
 		return "GreaterEquals";

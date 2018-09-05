@@ -15,8 +15,4 @@ namespace SNI
 	SNI_Number::~SNI_Number()
 	{
 	}
-
-	void SNI_Number::PromoteMembers()
-	{
-	}
 }

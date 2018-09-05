@@ -42,9 +42,6 @@ namespace SNI
 		virtual SN::SN_Value DoOr(SNI_Expression * p_Other) const;
 		virtual SN::SN_Value DoUnaryOr() const;
 		virtual SN::SN_Value DoBuildSet() const;
-
-	protected:
-		virtual void PromoteMembers();
 	};
 
 	typedef vector<SNI_Value> SNI_ValueList;

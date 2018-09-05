@@ -19,9 +19,7 @@ namespace SNI
 
 		SNI_Variable * ReplaceVariable(SNI_Variable * p_Variable);
 
-	protected:
-		virtual void PromoteMembers();
-
+		void PromoteMembersExternal(PGC::PGC_Base * p_Base);
 
 	private:
 		const SNI_Variable *m_From;

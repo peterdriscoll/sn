@@ -73,10 +73,6 @@ namespace SNI
 	// Members
 	//-----------------------------------------------------------------------
 
-	void SNI_String::PromoteMembers()
-	{
-	}
-
 	string SNI_String::GetString() const
 	{
 		return m_String;

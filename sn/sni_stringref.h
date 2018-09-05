@@ -67,6 +67,9 @@ namespace SNI
 		virtual	SN::SN_Value DoFile() const;
 		virtual	SN::SN_Value DoEquals(SNI_Value * p_Other) const;
 
+		void SetStart(SN::SN_Expression p_Expression);
+		void SetEnd(SN::SN_Expression p_Expression);
+
 		virtual SN::SN_Error AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World ** p_World, SNI_WorldSet * p_WorldSet);
 		virtual SN::SN_Error AssertValue(const SN::SN_Expression &p_Value);
 

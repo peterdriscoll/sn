@@ -45,8 +45,6 @@ namespace SNI
 		virtual void Log();
 
 	private:
-		virtual void PromoteMembers();
-
 		bool m_Success;
 		bool m_Delay;
 		string m_Description;

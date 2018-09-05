@@ -12,10 +12,6 @@ namespace SNI
 	{
 	}
 
-	void SNI_Negative::PromoteMembers()
-	{
-	}
-
 	string SNI_Negative::GetTypeName() const
 	{
 		return "Negative";

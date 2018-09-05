@@ -30,7 +30,6 @@ namespace SNI
 		virtual string::value_type GetChar() const;
 
 	private:
-		virtual void PromoteMembers();
 		string::value_type m_Char;
 	};
 

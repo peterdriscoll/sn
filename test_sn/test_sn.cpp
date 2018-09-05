@@ -1905,6 +1905,7 @@ namespace test_sn
 				SN_DECLARE(wrap);
 				SN_DECLARE(map);
 				{
+					//Transaction transaction;
 					SN_DECLARE(a);
 
 					(Define(wrap)(a) == String("{") + (f(a) + String("}"))).PartialAssertAction();

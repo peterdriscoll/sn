@@ -38,9 +38,8 @@ namespace SNI
 
 		virtual SN::SN_Value DoUnaryAnd() const;
 		virtual SN::SN_Value DoUnaryOr() const;
-	private:
-		virtual void PromoteMembers();
 
+	private:
 		bool m_Expression;
 	};
 

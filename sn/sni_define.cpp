@@ -17,6 +17,7 @@ namespace SNI
 	SNI_Define::SNI_Define(SNI_Variable *p_Variable)
 		: m_Variable(p_Variable)
 	{
+		REQUESTPROMOTION(m_Variable);
 	}
 
 	SNI_Define::~SNI_Define()
@@ -25,6 +26,7 @@ namespace SNI
 
 	void SNI_Define::PromoteMembers()
 	{
+		REQUESTPROMOTION(m_Variable);
 	}
 
 	string SNI_Define::GetTypeName() const

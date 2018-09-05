@@ -16,6 +16,7 @@ namespace SNI
 	SNI_Debug::SNI_Debug(const SN::SN_Expression &p_Expression)
 		: m_Expression(p_Expression.GetSNI_Expression())
 	{
+		REQUESTPROMOTION(m_Expression);
 	}
 
 	SNI_Debug::~SNI_Debug()
@@ -24,6 +25,7 @@ namespace SNI
 
 	void SNI_Debug::PromoteMembers()
 	{
+		REQUESTPROMOTION(m_Expression);
 	}
 
 	string SNI_Debug::GetTypeName() const

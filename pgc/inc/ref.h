@@ -156,7 +156,7 @@ namespace PGC
 		Ref(T *p_Pointer)
 			: m_Pointer(p_Pointer)
 		{
-			PGC_Base::CaptureMember((PGC_Base **)&m_Pointer);
+			//PGC_Base::CaptureMember((PGC_Base **)&m_Pointer);
 			RequestPromotion();
 		}
 		Ref<T> operator =(T *p_Pointer)

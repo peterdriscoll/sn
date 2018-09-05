@@ -20,8 +20,6 @@ namespace SNI
 		string GetName() const;
 		void SetName(const string &p_Name);
 
-		void PromoteMembers();
-
 	private:
 		string m_Name;
 	};

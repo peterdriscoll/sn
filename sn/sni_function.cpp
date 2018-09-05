@@ -22,6 +22,8 @@ namespace SNI
 		, m_Parameter(NULL)
 		, m_Condition(NULL)
 	{
+		REQUESTPROMOTION(m_Function);
+		REQUESTPROMOTION(m_Parameter);
 	}
 
 
@@ -30,6 +32,8 @@ namespace SNI
 		, m_Parameter(p_Parameter)
 		, m_Condition(NULL)
 	{
+		REQUESTPROMOTION(m_Function);
+		REQUESTPROMOTION(m_Parameter);
 	}
 
 	SNI_Function::SNI_Function(SNI_Expression *p_Function, SNI_Expression *p_Parameter, SNI_Expression *p_Condition)
@@ -37,6 +41,9 @@ namespace SNI
 		, m_Parameter(p_Parameter)
 		, m_Condition(p_Condition)
 	{
+		REQUESTPROMOTION(m_Function);
+		REQUESTPROMOTION(m_Parameter);
+		REQUESTPROMOTION(m_Condition);
 	}
 
 	SNI_Function::~SNI_Function()
@@ -46,6 +53,9 @@ namespace SNI
 
 	void SNI_Function::PromoteMembers()
 	{
+		REQUESTPROMOTION(m_Function);
+		REQUESTPROMOTION(m_Parameter);
+		REQUESTPROMOTION(m_Condition);
 	}
 
 	string SNI_Function::GetTypeName() const
