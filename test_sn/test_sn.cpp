@@ -2068,5 +2068,23 @@ namespace test_sn
 			}
 			Cleanup();
 		}
+
+		TEST_METHOD(TestSimpleTransaction)
+		{
+			Initialize();
+			{
+				Manager manager("Test Simple Transaction", AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(X);
+				{
+					Transaction transaction;
+					(X + Long(3) == Long(5)).AssertAction();
+				}
+				string X_string = X.Evaluate().DisplayValueSN();
+				Assert::IsTrue(X_string == "Long(2)");
+			}
+			Cleanup();
+		}
 	};
 }

@@ -45,6 +45,7 @@ namespace SNI
 		, m_Frame(NULL)
 		, m_Requested(false)
 	{
+		REQUESTPROMOTION(m_Value);
 	}
 
 	SNI_Variable::~SNI_Variable()
@@ -173,6 +174,7 @@ namespace SNI
 			if (!m_Value || m_Value->IsNull())
 			{
 				m_Value = new SNI_ValueSet();
+				REQUESTPROMOTION(m_Value);
 			}
 			return m_Value->AddValue(p_Value, p_NumWorlds, p_WorldList, p_WorldSet);
 		}
@@ -290,6 +292,7 @@ namespace SNI
 	void SNI_Variable::SetFrame(SNI_Frame *p_Frame)
 	{
 		m_Frame = p_Frame;
+		REQUESTPROMOTION(m_Frame);
 	}
 
 	SNI_Expression * SNI_Variable::Clone(SNI_Frame *p_Frame, bool &p_Changed)
@@ -406,6 +409,7 @@ namespace SNI
 			if (!m_Value || m_Value->IsNull())
 			{
 				m_Value = new SNI_ValueSet();
+				REQUESTPROMOTION(m_Value);
 			}
 			return m_Value->AddValue(p_Value, 0, NULL, NULL);
 		}
@@ -422,6 +426,7 @@ namespace SNI
 
 				SNI_DelayedCall *call = dynamic_cast<SNI_DelayedCall *>(m_Value);
 				m_Value = dynamic_cast<SNI_Expression *>(p_Value.GetSNI_Value());
+				REQUESTPROMOTION(m_Value);
 				if (call)
 				{
 					SNI_DelayedProcessor::GetProcessor()->Request(call);
@@ -445,10 +450,12 @@ namespace SNI
 					if (var->m_Value == NULL || var->m_Value->IsNull())
 					{
 						m_Value = p_Expression.GetSNI_Expression();
+						REQUESTPROMOTION(m_Value);
 					}
 					else
 					{
 						m_Value = var->m_Value;
+						REQUESTPROMOTION(m_Value);
 					}
 					LOG(WriteVariable(SN::DebugLevel, this));
 					return true;
@@ -458,6 +465,7 @@ namespace SNI
 			if (p_Define || SN::Is<SNI_Value*>(p_Expression))
 			{
 				m_Value = p_Expression.GetSNI_Expression();
+				REQUESTPROMOTION(m_Value);
 				LOG(WriteVariable(SN::DebugLevel, this));
 				return true;
 			}
@@ -522,6 +530,7 @@ namespace SNI
 		else
 		{
 			m_Value = AddLambdas(p_ParameterList).GetSNI_Expression();
+			REQUESTPROMOTION(m_Value);
 			return skynet::OK;
 		}
 	}
@@ -535,6 +544,7 @@ namespace SNI
 		else
 		{
 			m_Value = AddLambdasPartial(p_ParameterList, p_Result).GetSNI_Expression();
+			REQUESTPROMOTION(m_Value);
 			return true;
 		}
 	}
@@ -566,11 +576,13 @@ namespace SNI
 		if (!m_Value)
 		{
 			m_Value = p_Call;
+			REQUESTPROMOTION(m_Value);
 		}
 	}
 
 	void SNI_Variable::SetValue(const SN::SN_Expression &p_Value)
 	{
 		m_Value = dynamic_cast<SNI_Expression *>(p_Value.GetSNI_Expression());
+		REQUESTPROMOTION(m_Value);
 	}
 }
