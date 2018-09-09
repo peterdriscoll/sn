@@ -35,6 +35,7 @@
 #include "sni_variable.h"
 #include "sni_real.h"
 #include "sni_number.h"
+#include "sni_instance.h"
 
 // Exception types
 #include "sni_null.h"

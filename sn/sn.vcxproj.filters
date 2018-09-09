@@ -426,6 +426,12 @@
     <ClInclude Include="sni_transaction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sni_instance.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\sn_instance.h">
+      <Filter>Include Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -798,6 +804,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sni_transaction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_instance.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_instance.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -220,7 +220,7 @@ namespace SNI
 			splitter.Negative().Simplify();
 			paramList[0].Simplify();
 			result_param->SetValue(paramList[0]);
-			negative_param->SetValue(paramList[3]);
+			negative_param->SetValue(paramList[2]);
 		}
 		SNI_Frame::Pop();
 		return e2;

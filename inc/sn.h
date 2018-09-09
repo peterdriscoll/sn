@@ -38,6 +38,7 @@
 #include "sn_debug.h"
 #include "sn_real.h"
 #include "sn_cartesian.h"
+#include "sn_instance.h"
 
 // Declare a variable, and tell the variable its variable name.
 // When the program and the program model generated the variable will know its human readable name.

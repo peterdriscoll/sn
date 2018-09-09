@@ -179,6 +179,7 @@
     <ClInclude Include="..\inc\sn_expression.h" />
     <ClInclude Include="..\inc\sn_function.h" />
     <ClInclude Include="..\inc\sn_functiondef.h" />
+    <ClInclude Include="..\inc\sn_instance.h" />
     <ClInclude Include="..\inc\sn_lambda.h" />
     <ClInclude Include="..\inc\sn_let.h" />
     <ClInclude Include="..\inc\sn_local.h" />
@@ -241,6 +242,7 @@
     <ClInclude Include="sni_helpers.h" />
     <ClInclude Include="sni_if.h" />
     <ClInclude Include="sni_implies.h" />
+    <ClInclude Include="sni_instance.h" />
     <ClInclude Include="sni_log.h" />
     <ClInclude Include="sni_logbuffer.h" />
     <ClInclude Include="sni_revand.h" />
@@ -342,6 +344,7 @@
     <ClCompile Include="sni_helpers.cpp" />
     <ClCompile Include="sni_if.cpp" />
     <ClCompile Include="sni_implies.cpp" />
+    <ClCompile Include="sni_instance.cpp" />
     <ClCompile Include="sni_log.cpp" />
     <ClCompile Include="sni_logbuffer.cpp" />
     <ClCompile Include="sni_revand.cpp" />
@@ -404,6 +407,7 @@
     <ClCompile Include="sn_expression.cpp" />
     <ClCompile Include="sn_function.cpp" />
     <ClCompile Include="sn_functiondef.cpp" />
+    <ClCompile Include="sn_instance.cpp" />
     <ClCompile Include="sn_lambda.cpp" />
     <ClCompile Include="sn_let.cpp" />
     <ClCompile Include="sn_local.cpp" />
