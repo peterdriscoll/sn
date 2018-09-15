@@ -183,6 +183,11 @@ namespace SNI
 		return false;
 	}
 
+	bool SNI_Expression::IsKnownTypeValue() const
+	{
+		return IsKnownValue();
+	}
+
 	bool SNI_Expression::IsComplete() const
 	{
 		return true;

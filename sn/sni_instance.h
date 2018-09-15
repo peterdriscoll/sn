@@ -5,11 +5,11 @@
 
 #include <string>
 
-#include "sni_value.h"
+#include "sni_null.h"
 
 namespace SNI
 {
-	class SNI_Instance : public SNI_Value
+	class SNI_Instance : public SNI_Null
 	{
 		PGC_CLASS(SNI_Instance);
 	public:
@@ -21,6 +21,8 @@ namespace SNI
 		virtual string DisplayCpp() const;
 		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual long GetPriority() const;
+
+		virtual bool IsKnownTypeValue() const;
 
 		// Inheritance
 		virtual SN::SN_Value DoIsA(const SNI_Value * p_Parent) const;

@@ -100,6 +100,11 @@ namespace SN
 			return GetSNI_Base() && GetSNI_Base()->IsKnownValue();
 		}
 
+		bool IsKnownTypeValue() const
+		{
+			return GetSNI_Base() && GetSNI_Base()->IsKnownTypeValue();
+		}
+
 		bool IsVariable() const
 		{
 			return GetSNI_Base() && GetSNI_Base()->IsVariable();

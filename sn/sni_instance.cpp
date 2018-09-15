@@ -38,6 +38,11 @@ namespace SNI
 		return 100;
 	}
 
+	bool SNI_Instance::IsKnownTypeValue() const
+	{
+		return true;
+	}
+
 	// Inheritance
 	SN::SN_Value SNI_Instance::DoIsA(const SNI_Value * p_Parent) const
 	{

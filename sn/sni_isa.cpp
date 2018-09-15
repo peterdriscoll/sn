@@ -42,6 +42,11 @@ namespace SNI
 		return 0;
 	}
 
+	bool SNI_IsA::IsKnownValue(const SN::SN_Expression &p_Param) const
+	{
+		return p_Param.IsKnownTypeValue();
+	}
+
 	SN::SN_Value SNI_IsA::PrimaryFunctionValue(const SN::SN_Value &p_Left, const SN::SN_Value &p_Right) const
 	{
 		return p_Left.GetSNI_Value()->DoIsA(p_Right.GetSNI_Value());
