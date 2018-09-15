@@ -105,6 +105,11 @@ namespace SN
 	{
 	}
 
+	SN_Expression::SN_Expression(const SN_Instance & p_Instance)
+		: SN_Base(dynamic_cast<SNI::SNI_Expression *>(p_Instance.GetSNI_Instance()))
+	{
+	}
+
 	SN_Expression::SN_Expression(const SN_Define &p_Define)
 		: SN_Base(dynamic_cast<SNI::SNI_Expression *>(p_Define.GetSNI_Define()))
 	{
@@ -381,6 +386,16 @@ namespace SN
 	SN_Expression SN_Expression::Collapse() const
 	{
 		return SN_Operators::Collapse(*this);
+	}
+
+	SN_Expression SN_Expression::IsA(const SN_Expression & p_Parent) const
+	{
+		return SN_Operators::IsA(*this, p_Parent);
+	}
+
+	SN_Expression SN_Expression::HasA(const SN_Expression & p_Component, const SN_Expression & p_Name) const
+	{
+		return SN_Operators::HasA(*this, p_Component, p_Name);
 	}
 
 	// Sets

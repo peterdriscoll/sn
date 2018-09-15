@@ -432,6 +432,12 @@
     <ClInclude Include="..\inc\sn_instance.h">
       <Filter>Include Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sni_isa.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_hasa.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -810,6 +816,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sn_instance.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_isa.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_hasa.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

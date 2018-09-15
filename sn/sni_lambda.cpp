@@ -20,12 +20,14 @@ namespace SNI
 
 	}
 
-	SNI_Lambda::SNI_Lambda(SNI_Expression *p_FormalParameter, SNI_Expression *p_Expression)
+	SNI_Lambda::SNI_Lambda(SNI_Expression *p_FormalParameter, SNI_Expression *p_Expression, SNI_Expression *p_ConstraintValue)
 		: m_FormalParameter(p_FormalParameter)
 		, m_Expression(p_Expression)
+		, m_ConstraintValue(p_ConstraintValue)
 	{
 		REQUESTPROMOTION(m_FormalParameter);
 		REQUESTPROMOTION(m_Expression);
+		REQUESTPROMOTION(m_ConstraintValue);
 	}
 
 	SNI_Lambda::~SNI_Lambda()
@@ -86,7 +88,8 @@ namespace SNI
 			if (changed)
 			{
 				p_Changed = true;
-				return dynamic_cast<SNI_Expression *>(new SNI_Lambda(dynamic_cast<SNI_Expression *>(l_NewVariable), l_expression));
+				l_NewVariable->AssertIsA(m_ConstraintValue);
+				return dynamic_cast<SNI_Expression *>(new SNI_Lambda(dynamic_cast<SNI_Expression *>(l_NewVariable), l_expression, m_ConstraintValue));
 			}
 		}
 		else
@@ -95,7 +98,8 @@ namespace SNI
 			if (changed)
 			{
 				p_Changed = true;
-				return dynamic_cast<SNI_Expression *>(new SNI_Lambda(m_FormalParameter, l_expression));
+				m_FormalParameter->AssertIsA(m_ConstraintValue);
+				return dynamic_cast<SNI_Expression *>(new SNI_Lambda(m_FormalParameter, l_expression, m_ConstraintValue));
 			}
 		}
 		return this;

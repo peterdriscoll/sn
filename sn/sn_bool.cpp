@@ -11,6 +11,11 @@
 
 namespace SN
 {
+	/*static*/ SN_Instance SN_Bool::Instance()
+	{
+		return SNI_Bool::Instance();
+	}
+
 	SN_Bool::SN_Bool()
 		: SN_Base(NULL)
 	{
@@ -108,5 +113,10 @@ namespace SN
 	SN_Expression SN_Bool::Collapse() const
 	{
 		return SN_Operators::Collapse(*this);
+	}
+
+	SN_Expression SN_Bool::IsA(const SN_Expression &p_Parent) const
+	{
+		return SN_Operators::IsA(*this, p_Parent);
 	}
 }

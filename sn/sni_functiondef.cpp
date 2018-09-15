@@ -70,6 +70,11 @@ namespace SNI
 		return false;
 	}
 
+	bool SNI_FunctionDef::IsKnownValue(const SN::SN_Expression &p_Param) const
+	{
+		return p_Param.IsKnownValue();
+	}
+
 	size_t SNI_FunctionDef::Cardinality(SN::SN_Expression * p_ParamList) const
 	{
 		long depth = GetNumParameters();
@@ -77,7 +82,7 @@ namespace SNI
 		long totalCalc = depth;
 		for (long j = 0; j < depth; j++)
 		{
-			if (p_ParamList[j].IsKnownValue())
+			if (IsKnownValue(p_ParamList[j]))
 			{
 				totalCalc--;
 			}
@@ -134,7 +139,7 @@ namespace SNI
 					delimeter = GetOperator();
 				}
 			}
-			if (p_ParamList[j].IsKnownValue())
+			if (IsKnownValue(p_ParamList[j]))
 			{
 				text += p_ParamList[j].DisplayValueSN();
 			}
@@ -184,7 +189,7 @@ namespace SNI
 		size_t maxCard = SNI_Thread::TopManager()->MaxCardinalityCall();
 		for (long j = 0; j < depth; j++)
 		{
-			if (!p_ParamList[j].IsKnownValue() && !p_ParamList[j].IsReferableValue())
+			if (!IsKnownValue(p_ParamList[j]) && !p_ParamList[j].IsReferableValue())
 			{
 				card = CardinalityOfCall(depth, inputList);
 				if (maxCard < card)
@@ -247,7 +252,7 @@ namespace SNI
 		for (long j = 0; j < depth; j++)
 		{
 			topFrame->CreateParameter(j);
-			if (p_ParamList[j].IsKnownValue())
+			if (IsKnownValue(p_ParamList[j]))
 			{
 				inputList[j] = p_ParamList[j].GetVariableValue().SimplifyValue();
 				output[j] = false;
@@ -269,7 +274,7 @@ namespace SNI
 		for (long j = 0; j < depth; j++)
 		{
 			SN::SN_Variable v = inputList[j];
-			if (!p_ParamList[j].IsKnownValue() && !p_ParamList[j].IsReferableValue())
+			if (!IsKnownValue(p_ParamList[j]) && !p_ParamList[j].IsReferableValue())
 			{
 				card = CardinalityOfUnify(depth, inputList, (long)j, totalCalc);
 				if (p_ParamList[j].IsVariable())
@@ -316,7 +321,7 @@ namespace SNI
 				}
 			}
 			SNI_Thread::GetThread()->DebugCommand(SN::ParameterPoint, GetTypeName() + ".Unify parameter: " + inputList[j].DisplayValueSN());
-			if (inputList[j].IsKnownValue())
+			if (IsKnownValue(inputList[j]))
 			{
 				inputList[j] = inputList[j].GetVariableValue();
 				if (output[j])

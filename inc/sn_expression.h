@@ -46,6 +46,7 @@ namespace SN
 	class SN_Number;
 	class SN_Char;
 	class SN_Cartesian;
+	class SN_Instance;
 
 	class SN_Context
 	{
@@ -85,6 +86,7 @@ namespace SN
 		SN_Expression(const SN_Char &p_Char);
 		SN_Expression(const SN_Null &p_Null);
 		SN_Expression(const SN_Error &p_Error);
+		SN_Expression(const SN_Instance &p_Instance);
 
 		SN_APPLY_TYPES(SN_Expression, DUMMY, SN_CONSTRUCTOR)
 
@@ -137,6 +139,11 @@ namespace SN
 		SN_Expression UnaryAnd() const;
 		SN_Expression UnaryOr() const;
 		SN_Expression Collapse() const;
+
+		// Inheritance
+		SN_Expression IsA(const SN_Expression &p_Parent) const;
+		SN_Expression HasA(const SN_Expression &p_Component, const SN_Expression &p_Name) const;
+
 
 		// Comparison
 		SN_Expression operator ==(const SN_Expression &p_Other) const;

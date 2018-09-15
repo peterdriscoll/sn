@@ -52,6 +52,10 @@
 #include "sni_doubletostring.h"
 #include "sni_stringtodouble.h"
 
+// Inheritance
+#include "sni_isa.h"
+#include "sni_hasa.h"
+
 // Sets
 #include "sni_buildset.h"
 #include "sni_hasmember.h"
@@ -107,6 +111,10 @@ namespace skynet
 	SN::SN_FunctionDef StringToInt(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_StringToInt()));
 	SN::SN_FunctionDef DoubleToString(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_DoubleToString()));
 	SN::SN_FunctionDef StringToDouble(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_StringToDouble()));
+
+	// Inheritance
+	SN::SN_FunctionDef IsA(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_IsA()));
+	SN::SN_FunctionDef HasA(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_HasA()));
 
 	// Sets
 	SN::SN_FunctionDef BuildSet(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_BuildSet()));

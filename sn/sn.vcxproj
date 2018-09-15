@@ -239,10 +239,12 @@
     <ClInclude Include="sni_functiondef.h" />
     <ClInclude Include="sni_greaterequals.h" />
     <ClInclude Include="sni_greaterthan.h" />
+    <ClInclude Include="sni_hasa.h" />
     <ClInclude Include="sni_helpers.h" />
     <ClInclude Include="sni_if.h" />
     <ClInclude Include="sni_implies.h" />
     <ClInclude Include="sni_instance.h" />
+    <ClInclude Include="sni_isa.h" />
     <ClInclude Include="sni_log.h" />
     <ClInclude Include="sni_logbuffer.h" />
     <ClInclude Include="sni_revand.h" />
@@ -341,10 +343,12 @@
     <ClCompile Include="sni_functiondef.cpp" />
     <ClCompile Include="sni_greaterequals.cpp" />
     <ClCompile Include="sni_greaterthan.cpp" />
+    <ClCompile Include="sni_hasa.cpp" />
     <ClCompile Include="sni_helpers.cpp" />
     <ClCompile Include="sni_if.cpp" />
     <ClCompile Include="sni_implies.cpp" />
     <ClCompile Include="sni_instance.cpp" />
+    <ClCompile Include="sni_isa.cpp" />
     <ClCompile Include="sni_log.cpp" />
     <ClCompile Include="sni_logbuffer.cpp" />
     <ClCompile Include="sni_revand.cpp" />

@@ -118,6 +118,10 @@
 #include "sni_thread.h"
 #include "sni_displayoptions.h"
 
+// Inheritance
+#include "sni_isa.h"
+#include "sni_hasa.h"
+
 // Sets
 #include "sni_buildset.h"
 #include "sni_hasmember.h"

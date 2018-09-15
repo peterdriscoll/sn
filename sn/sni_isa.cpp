@@ -1,0 +1,64 @@
+#include "sni_isa.h"
+
+#include "logcontext.h"
+#include "sn_parameter.h"
+#include "sn_error.h"
+
+#include "sni_helpers.h"
+#include "sni_null.h"
+#include "sni_error.h"
+#include "sni_result.h"
+#include "utility.h"
+
+#include "sn_pch.h"
+
+namespace SNI
+{
+	SNI_IsA::SNI_IsA()
+	{
+	}
+
+	SNI_IsA::~SNI_IsA()
+	{
+	}
+
+	string SNI_IsA::GetTypeName() const
+	{
+		return "IsA";
+	}
+
+	string SNI_IsA::DisplayCpp() const
+	{
+		return "SN::IsA";
+	}
+
+	string SNI_IsA::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	{
+		return "IsA";
+	}
+
+	long SNI_IsA::GetPriority() const
+	{
+		return 0;
+	}
+
+	SN::SN_Value SNI_IsA::PrimaryFunctionValue(const SN::SN_Value &p_Left, const SN::SN_Value &p_Right) const
+	{
+		return p_Left.GetSNI_Value()->DoIsA(p_Right.GetSNI_Value());
+	}
+
+	SN::SN_Expression SNI_IsA::PrimaryFunctionExpression(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right) const
+	{
+		return p_Left.IsA(p_Right);
+	}
+
+	SN::SN_Value SNI_IsA::LeftInverseFunctionValue(const SN::SN_Value &p_Result, const SN::SN_Value &p_Left) const
+	{
+		return skynet::Null;
+	}
+
+	SN::SN_Expression SNI_IsA::LeftInverseFunctionExpression(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right) const
+	{
+		return skynet::Null;
+	}
+}

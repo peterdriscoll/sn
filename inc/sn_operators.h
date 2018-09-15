@@ -53,6 +53,10 @@ namespace SN
 		SN_EXPORT SN::SN_Expression Square(const SN::SN_Expression &p_Expression);
 		SN_EXPORT SN::SN_Expression SquareRoot(const SN::SN_Expression &p_Expression);
 
+		// Inheritance
+		SN::SN_Expression IsA(const SN::SN_Expression &p_Child, const SN::SN_Expression &p_Parent);
+		SN::SN_Expression HasA(const SN::SN_Expression &p_Parent, const SN::SN_Expression &p_Component, const SN::SN_Expression &p_Name);
+
 		// Sets
 		SN::SN_Expression BuildSet(const SN::SN_Expression &p_Expression);
 		SN::SN_Expression HasMember(const SN::SN_Expression &p_Set, const SN::SN_Expression &p_Member);

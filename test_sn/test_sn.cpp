@@ -2086,5 +2086,41 @@ namespace test_sn
 			}
 			Cleanup();
 		}
+
+		TEST_METHOD(TestSimpleInherit)
+		{
+			return;
+			Initialize();
+			{
+				Manager manager("Test Simple Inherit", AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(A);
+				SN_DECLARE(B);
+				SN_DECLARE(M);
+				SN_DECLARE(F);
+				{
+					Transaction transaction;
+					A.IsA(B).PartialAssertAction();
+					(F(B) == Long(10)).AssertAction();
+					M(B).AssertAction();
+					(F(A) == Long(10)).EvaluateAction();
+				}
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestSimpleInherit1)
+		{
+			Initialize();
+			{
+				Manager manager("Test Simple Inherit1", AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				skynet::True.IsA(Bool::Instance()).AssertAction();
+				//Long::Value().IsA(Double::Value()).AssertAction();
+			}
+			Cleanup();
+		}
 	};
 }

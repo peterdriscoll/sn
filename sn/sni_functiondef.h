@@ -53,6 +53,8 @@ namespace SNI
 
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 
+		virtual bool IsKnownValue(const SN::SN_Expression & p_Param) const;
+
 		virtual size_t Cardinality(SN::SN_Expression * p_ParameterList) const;
 
 		string DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList) const;

@@ -204,6 +204,16 @@ namespace SN
 			return SN::SN_Function(skynet::StringToDouble, p_Left);
 		}
 
+		// Inheritance
+		SN::SN_Expression IsA(const SN::SN_Expression &p_Child, const SN::SN_Expression &p_Parent)
+		{
+			return SN::SN_Function(SN::SN_Function(skynet::IsA, p_Child), p_Parent);
+		}
+
+		SN::SN_Expression HasA(const SN::SN_Expression &p_Parent, const SN::SN_Expression &p_Component, const SN::SN_Expression &p_Name)
+		{
+			return SN::SN_Function(SN::SN_Function(SN::SN_Function(skynet::HasA, p_Parent), p_Component), p_Name);
+		}
 
 		// Sets
 		SN::SN_Expression BuildSet(const SN::SN_Expression &p_Expression)

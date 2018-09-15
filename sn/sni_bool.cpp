@@ -5,11 +5,22 @@
 
 #include "sni_valueset.h"
 #include "sni_helpers.h"
+#include "sni_instance.h"
 
 #include "sn_pch.h"
 
 namespace SNI
 {
+	/*static*/ SNI_Instance *SNI_Bool::m_Instance= NULL;
+	/*static*/ SNI_Instance *SNI_Bool::Instance()
+	{
+		if (!m_Instance)
+		{
+			m_Instance = new SNI_Instance();
+		}
+		return m_Instance;
+	}
+
 	SNI_Bool::SNI_Bool()
 	{
 
@@ -64,10 +75,21 @@ namespace SNI
 	{
 		if (dynamic_cast<SNI_Bool *>(p_Other))
 		{
-			SNI_Bool *l_string = dynamic_cast<SNI_Bool*>(p_Other);
-			return m_Expression == l_string->m_Expression;
+			SNI_Bool *l_bool = dynamic_cast<SNI_Bool*>(p_Other);
+			return m_Expression == l_bool->m_Expression;
 		}
 		return false;
+	}
+
+	// Inheritance
+	SN::SN_Value SNI_Bool::DoIsA(SNI_Value * p_Parent) const
+	{
+		return m_Instance->DoIsA(p_Parent);
+	}
+
+	SN::SN_Value SNI_Bool::DoHasA(SNI_Value * p_Member, SNI_Value * p_Name) const
+	{
+		return SN::SN_Error(GetTypeName() + " HasA function not implemented.");
 	}
 
 	bool SNI_Bool::GetBool() const

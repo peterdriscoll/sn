@@ -37,4 +37,16 @@ namespace SNI
 	{
 		return 100;
 	}
+
+	// Inheritance
+	SN::SN_Value SNI_Instance::DoIsA(const SNI_Value * p_Parent) const
+	{
+		const SNI_Instance *instance = dynamic_cast<const SNI_Instance *>(p_Parent);
+		return SN::SN_Bool(this == instance);
+	}
+
+	SN::SN_Value SNI_Instance::DoHasA(SNI_Value * p_Member, SNI_Value * p_Name) const
+	{
+		return SN::SN_Error(GetTypeName() + " HasA function not implemented.");
+	}
 }

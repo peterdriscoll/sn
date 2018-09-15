@@ -5,6 +5,7 @@
 
 #include "exp_ctrl_sn.h"
 #include "sn_base.h"
+#include "sn_instance.h"
 
 namespace SNI
 {
@@ -17,6 +18,8 @@ namespace SN
 	class SN_EXPORT SN_Bool : public SN_Base<SNI::SNI_Bool, SN_Expression, SN_Error>
 	{
 	public:
+		static SN_Instance Instance();
+
 		SN_Bool();
 		SN_Bool(bool p_other);
 		SN_Bool(const SN_Bool &p_Other);
@@ -38,6 +41,8 @@ namespace SN
 		SN_Expression UnaryAnd() const;
 		SN_Expression UnaryOr() const;
 		SN_Expression Collapse() const;
+
+		SN_Expression IsA(const SN_Expression &p_Parent) const;
 
 		bool GetBool() const;
 

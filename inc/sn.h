@@ -139,6 +139,10 @@ namespace skynet
 	extern SN_EXPORT SN::SN_FunctionDef DoubleToString;
 	extern SN_EXPORT SN::SN_FunctionDef StringToDouble;
 
+	// * Inheritance
+	extern SN_EXPORT SN::SN_FunctionDef IsA;
+	extern SN_EXPORT SN::SN_FunctionDef HasA;
+
 	// * Sets
 	extern SN_EXPORT SN::SN_FunctionDef BuildSet;
 	extern SN_EXPORT SN::SN_FunctionDef HasMember;
@@ -152,6 +156,8 @@ namespace skynet
 	extern SN_EXPORT SN::SN_Error Fail;
 
 	extern SN_EXPORT SN::SN_Expression Null;
+
+	// * Types
 };
 
 #endif // SN_H_INCLUDED

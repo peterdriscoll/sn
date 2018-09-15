@@ -14,7 +14,7 @@ namespace SNI
 		PGC_CLASS(SNI_Lambda);
 	public:
 		SNI_Lambda();
-		SNI_Lambda(SNI_Expression *p_FormalParameter, SNI_Expression *p_Expresion);
+		SNI_Lambda(SNI_Expression *p_FormalParameter, SNI_Expression *p_Expresion, SNI_Expression *p_ConstraintValue);
 		virtual ~SNI_Lambda();
 
 		virtual string GetTypeName() const;
@@ -43,6 +43,7 @@ namespace SNI
 	private:
 		SNI_Expression * m_FormalParameter;
 		SNI_Expression * m_Expression;
+		SNI_Expression * m_ConstraintValue;
 
 	private:
 		static long m_Id;

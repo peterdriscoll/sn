@@ -21,6 +21,10 @@ namespace SNI
 		virtual string DisplayCpp() const;
 		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual long GetPriority() const;
+
+		// Inheritance
+		virtual SN::SN_Value DoIsA(const SNI_Value * p_Parent) const;
+		virtual SN::SN_Value DoHasA(SNI_Value * p_Member, SNI_Value * p_Name) const;
 	};
 
 	typedef vector<SNI_Instance *> SNI_InstanceList;

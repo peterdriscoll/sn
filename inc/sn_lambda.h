@@ -20,6 +20,7 @@ namespace SN
 		SN_Lambda();
 		SN_Lambda(SNI::SNI_Lambda *p_Lambda);
 		SN_Lambda(const SN_Expression &p_FormalParameter, const SN_Expression &p_Expression);
+		SN_Lambda(const SN_Expression &p_FormalParameter, const SN_Expression &p_Expression, const SN_Expression &p_ConstraintValue);
 		virtual ~SN_Lambda();
 
 		// Comparison

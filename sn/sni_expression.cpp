@@ -333,6 +333,11 @@ namespace SNI
 		return p_Value.Equivalent(thisValue);
 	}
 
+	SN::SN_Error SNI_Expression::AssertIsA(const SN::SN_Expression &p_Value)
+	{
+		return SN::SN_Error();
+	}
+
 	SN::SN_Error SNI_Expression::SelfAssert()
 	{
 		return true;
@@ -683,10 +688,21 @@ namespace SNI
 		return SN::SN_Error(GetTypeName() + " StringToDouble method not implemented.");
 	}
 
+	// Inheritance
+	SN::SN_Value SNI_Expression::DoIsA(SNI_Value * p_Parent) const
+	{
+		return SN::SN_Error(GetTypeName() + " IsA function not implemented.");
+	}
+
+	SN::SN_Value SNI_Expression::DoHasA(SNI_Value * p_Member, SNI_Value * p_Name) const
+	{
+		return SN::SN_Error(GetTypeName() + " HasA function not implemented.");
+	}
+
 	// Sets
 	SN::SN_Value SNI_Expression::DoBuildSet() const
 	{
-		return SN::SN_Error(GetTypeName() + "  BuildSet function not implemented.");
+		return SN::SN_Error(GetTypeName() + " BuildSet function not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoHasMember(SNI_Value * /*p_Member*/) const

@@ -132,6 +132,7 @@ namespace SNI
 		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Expression);
 		virtual SN::SN_Error Assert();
 		virtual SN::SN_Error AssertValue(const SN::SN_Expression &p_Value);
+		virtual SN::SN_Error AssertIsA(const SN::SN_Expression &p_Value);
 		virtual SN::SN_Error SelfAssert();
 		virtual SN::SN_Error PartialAssert();
 		virtual SN::SN_Error PartialAssertValue(const SN::SN_Expression &p_Expression, bool p_Define = false);
@@ -200,6 +201,10 @@ namespace SNI
 		virtual	SN::SN_Value DoStringToInt() const;
 		virtual	SN::SN_Value DoDoubleToString() const;
 		virtual	SN::SN_Value DoStringToDouble() const;
+
+		// Inheritance
+		virtual SN::SN_Value DoIsA(SNI_Value * p_Parent) const;
+		virtual SN::SN_Value DoHasA(SNI_Value * p_Member, SNI_Value * p_Name) const;
 
 		// Sets
 		virtual SN::SN_Value DoBuildSet() const;
