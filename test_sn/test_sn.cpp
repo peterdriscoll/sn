@@ -40,6 +40,7 @@ namespace test_sn
 	private:
 		void Initialize()
 		{
+			Manager::LogicSetup();
 			Transaction::ResetNetMemoryUsed();
 			Transaction::ResetGrossMemoryUsed();
 		}
@@ -2118,7 +2119,33 @@ namespace test_sn
 				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				skynet::True.IsA(Bool::Instance()).AssertAction();
-				//Long::Value().IsA(Double::Value()).AssertAction();
+				Short(5).IsA(Short::Instance()).AssertAction();
+				Int(5).IsA(Int::Instance()).AssertAction();
+				Long(5).IsA(Long::Instance()).AssertAction();
+				LongLong(5).IsA(LongLong::Instance()).AssertAction();
+				Float(5).IsA(Float::Instance()).AssertAction();
+				Double(5).IsA(Double::Instance()).AssertAction();
+				LongDouble(5).IsA(LongDouble::Instance()).AssertAction();
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestSimpleInherit2)
+		{
+			Initialize();
+			{
+				Manager manager("Test Simple Inherit2", AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(x);
+				(Long::Instance().IsA(Double::Instance()) == x).AssertAction();
+				bool b1 = x.GetBool();
+				Assert::IsTrue(b1);
+				SN_DECLARE(y);
+				(Long::Instance().IsA(Short::Instance()) == y).AssertAction();
+				bool b2 = y.GetBool();
+				Assert::IsTrue(!b2);
+				Long::Instance().IsA(Double::Instance()).EvaluateAction();
 			}
 			Cleanup();
 		}

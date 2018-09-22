@@ -33,6 +33,8 @@ namespace SNI
 	{
 	public:
 		static void ThrowErrorHandler(SN::SN_Error p_Result);
+		static void LogicSetup();
+
 		SNI_Manager();
 		SNI_Manager(SNI_Manager * p_Manager);
 		SNI_Manager(string p_Description, OnErrorHandler *p_ErrorHandler, bool p_DelayOnEvaluate, size_t p_MaxCardinalityCall, size_t p_MaxCardinalityUnify);
@@ -122,6 +124,7 @@ namespace SNI
 		static thread *m_WebServerThread;
 		static HTTP::server::server *m_WebServer;
 		static long m_WebServerThreadUsageCount;
+		static bool m_LogicSetupDone;
 	};
 }
 

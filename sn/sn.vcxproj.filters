@@ -438,6 +438,9 @@
     <ClInclude Include="sni_hasa.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sni_attributedef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -822,6 +825,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sni_hasa.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_attributedef.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

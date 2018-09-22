@@ -47,8 +47,7 @@ namespace SNI
 
 		void PromoteExternals(PGC::PGC_Transaction * p_Transaction);
 	private:
-		void PromoteMembers();
-
+		virtual void PromoteMembers();
 
 		SN::SN_Expression              m_Function;
 		long                           m_ThreadNum;

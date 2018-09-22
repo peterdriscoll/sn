@@ -693,8 +693,13 @@ namespace SNI
 		return SN::SN_Error(GetTypeName() + " StringToDouble method not implemented.");
 	}
 
+	SN::SN_Error  SNI_Expression::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)
+	{
+		return SN::SN_Error(GetTypeName() + " IsA function not implemented.");
+	}
+
 	// Inheritance
-	SN::SN_Value SNI_Expression::DoIsA(SNI_Value * p_Parent) const
+	SN::SN_Value SNI_Expression::DoIsA(const SNI_Value * p_Parent) const
 	{
 		return SN::SN_Error(GetTypeName() + " IsA function not implemented.");
 	}

@@ -29,6 +29,11 @@ namespace SN
 		SNI::SNI_Real<T> *m_Real;
 
 	public:
+		static SN_Instance Instance()
+		{
+			return SNI_Real<T>::Instance();
+		}
+
 		SN_Real()
 			: m_Real(NULL)
 		{
@@ -108,6 +113,12 @@ namespace SN
 		SN_Expression operator ||(const SN_Expression &p_Other) const
 		{
 			return SN_Operators::operator ||(*this, p_Other);
+		}
+
+		// Inheritance
+		SN_Expression IsA(const SN_Expression &p_Parent) const
+		{
+			return SN_Operators::IsA(*this, p_Parent);
 		}
 
 		// Sets

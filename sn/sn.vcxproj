@@ -211,6 +211,7 @@
     <ClInclude Include="http_server.h" />
     <ClInclude Include="sni_add.h" />
     <ClInclude Include="sni_and.h" />
+    <ClInclude Include="sni_attributedef.h" />
     <ClInclude Include="sni_binary.h" />
     <ClInclude Include="sni_bool.h" />
     <ClInclude Include="sni_buildset.h" />
@@ -316,6 +317,7 @@
     <ClCompile Include="sn.cpp" />
     <ClCompile Include="sni_add.cpp" />
     <ClCompile Include="sni_and.cpp" />
+    <ClCompile Include="sni_attributedef.cpp" />
     <ClCompile Include="sni_binary.cpp" />
     <ClCompile Include="sni_bool.cpp" />
     <ClCompile Include="sni_buildset.cpp" />

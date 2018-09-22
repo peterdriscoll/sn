@@ -25,6 +25,11 @@ namespace SN
 	{
 	}
 
+	SN_Expression SN_Instance::IsA(const SN_Expression &p_Parent) const
+	{
+		return SN_Operators::IsA(*this, p_Parent);
+	}
+
 	SNI::SNI_Instance *SN_Instance::GetSNI_Instance() const
 	{
 		return const_cast<SNI::SNI_Instance *>(m_Expression);

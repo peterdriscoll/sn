@@ -119,6 +119,7 @@
 #include "sni_displayoptions.h"
 
 // Inheritance
+#include "sni_attributedef.h"
 #include "sni_isa.h"
 #include "sni_hasa.h"
 

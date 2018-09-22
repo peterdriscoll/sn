@@ -36,6 +36,8 @@
 
 #define MAX_DEPTH_CHARS 20
 
+using namespace skynet;
+
 namespace SNI
 {
 	string DefaultLogFilePath = "\\log\\SN_";
@@ -46,10 +48,37 @@ namespace SNI
 	/*static*/ thread *SNI_Manager::m_WebServerThread = NULL;
 	/*static*/ HTTP::server::server *SNI_Manager::m_WebServer = NULL;
 	/*static*/ long SNI_Manager::m_WebServerThreadUsageCount = 0;
+	/*static*/ bool SNI_Manager::m_LogicSetupDone = false;
 
 	/*static*/ void SNI_Manager::ThrowErrorHandler(SN::SN_Error p_Result)
 	{
 		throw p_Result;
+	}
+	
+	/*static*/ void SNI_Manager::LogicSetup()
+	{
+		if (m_LogicSetupDone)
+		{
+			return;
+		}
+		m_LogicSetupDone = true;
+		
+		Short::Instance().GetSNI_Instance()->AssertIsAValue(Long::Instance().GetSNI_Instance(), skynet::True);
+		Long::Instance().GetSNI_Instance()->AssertIsAValue(LongLong::Instance().GetSNI_Instance(), skynet::True);
+
+		Float::Instance().GetSNI_Instance()->AssertIsAValue(Double::Instance().GetSNI_Instance(), skynet::True);
+		Double::Instance().GetSNI_Instance()->AssertIsAValue(LongDouble::Instance().GetSNI_Instance(), skynet::True);
+
+		Short::Instance().GetSNI_Instance()->AssertIsAValue(Float::Instance().GetSNI_Instance(), skynet::True);
+		Long::Instance().GetSNI_Instance()->AssertIsAValue(Double::Instance().GetSNI_Instance(), skynet::True);
+		LongLong::Instance().GetSNI_Instance()->AssertIsAValue(LongDouble::Instance().GetSNI_Instance(), skynet::True);
+
+		Short::Instance().GetSNI_Instance()->Fix();
+		Long::Instance().GetSNI_Instance()->Fix();
+		LongLong::Instance().GetSNI_Instance()->Fix();
+		Float::Instance().GetSNI_Instance()->Fix();
+		Double::Instance().GetSNI_Instance()->Fix();
+		LongDouble::Instance().GetSNI_Instance()->Fix();
 	}
 
 	bool SNI_Manager::HasDebugServer()
@@ -75,6 +104,7 @@ namespace SNI
 		, m_MaxStackFrames(3)
 		, m_Transaction(false)
 	{
+		LogicSetup();
 		if (!m_ErrorHandler)
 		{
 			m_ErrorHandler = ThrowErrorHandler;
@@ -106,6 +136,7 @@ namespace SNI
 		, m_MaxStackFrames(3)
 		, m_Transaction(false)
 	{
+		LogicSetup();
 		if (!m_ErrorHandler)
 		{
 			m_ErrorHandler = ThrowErrorHandler;
@@ -137,6 +168,7 @@ namespace SNI
 		, m_MaxStackFrames(3)
 		, m_Transaction(false)
 	{
+		LogicSetup();
 		if (!m_ErrorHandler)
 		{
 			m_ErrorHandler = ThrowErrorHandler;

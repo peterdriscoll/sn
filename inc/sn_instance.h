@@ -21,13 +21,7 @@ namespace SN
 		SN_Instance(const SN_Value &p_Other);
 		virtual ~SN_Instance();
 
-		SN_Expression operator ==(const SN_Expression &p_Other) const;
-
-		SN_Expression operator!() const;
-		SN_Expression operator &&(const SN_Expression &p_Other) const;
-		SN_Expression operator &&(const bool p_Other) const;
-		SN_Expression operator ||(const SN_Expression &p_Other) const;
-		SN_Expression operator ||(const bool p_Other) const;
+		SN_Expression IsA(const SN_Expression & p_Parent) const;
 
 		SNI::SNI_Instance *GetSNI_Instance() const;
 	};

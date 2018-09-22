@@ -25,6 +25,11 @@ namespace SN
 		}
 	}
 
+	/*static*/ void SN_Manager::LogicSetup()
+	{
+		SNI_Manager::LogicSetup();
+	}
+
 	SN_Manager::SN_Manager()
 		: m_Manager(new SNI::SNI_Manager())
 		, m_MyManager(true)

@@ -4,9 +4,40 @@
 
 namespace SNI
 {
-	SNI_Instance::SNI_Instance()
+	SNI_Inherits::SNI_Inherits(const SNI_Value * p_Parent, SNI_Value *p_Result)
+		: m_Parent(p_Parent)
+		, m_Result(p_Result)
 	{
+	}
 
+	SNI_Inherits::~SNI_Inherits()
+	{
+	}
+
+	const SNI_Value * SNI_Inherits::GetParent() const
+	{
+		return m_Parent;
+	}
+
+	const SNI_Value * SNI_Inherits::GetResult() const
+	{
+		return m_Result;
+	}
+
+	SN::SN_Error SNI_Inherits::AssertValue(SN::SN_Expression p_Result)
+	{
+		return m_Result->AssertValue(p_Result);
+	}
+
+	void SNI_Inherits::PromoteMembersExternal(PGC::PGC_Base *p_Base)
+	{
+		p_Base->REQUESTPROMOTION(m_Parent);
+		p_Base->REQUESTPROMOTION(m_Result);
+	}
+
+	SNI_Instance::SNI_Instance()
+	:	m_Fixed(false)
+	{
 	}
 
 	SNI_Instance::~SNI_Instance()
@@ -17,6 +48,7 @@ namespace SNI
 	SNI_Instance::SNI_Instance(const SNI_Instance &p_Other)
 	{
 	}
+
 
 	string SNI_Instance::GetTypeName() const
 	{
@@ -43,15 +75,76 @@ namespace SNI
 		return true;
 	}
 
+	SN::SN_Error SNI_Instance::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)
+	{
+		const SNI_Instance *instance = dynamic_cast<const SNI_Instance *>(p_Parent);
+		if (this == instance)
+		{
+			return skynet::OK;
+		}
+		for (SNI_Inherits i : m_InheritList)
+		{
+			if (i.GetParent() == p_Parent)
+			{
+				if (m_Fixed && (!i.GetResult()->IsKnownValue() || (i.GetResult()->Cardinality() > 1)))
+				{
+					return SN::SN_Error(GetTypeName() + " Inheritance of internal instance is fixed.");
+				}
+				return i.AssertValue(p_Result);
+			}
+		}
+		if (p_Result.IsKnownValue())
+		{
+			if (m_Fixed)
+			{
+				return SN::SN_Error(GetTypeName() + " Inheritance of internal instance is fixed.");
+			}
+			m_InheritList.push_back(SNI_Inherits(p_Parent, p_Result.GetSNI_Value()));
+		}
+		else
+		{
+			if (!m_Fixed)
+			{
+				m_InheritList.push_back(SNI_Inherits(p_Parent, skynet::False.GetSNI_Bool()));
+			}
+			p_Result.AssertValue(skynet::False);
+		}
+		return skynet::OK;
+	}
+
 	// Inheritance
 	SN::SN_Value SNI_Instance::DoIsA(const SNI_Value * p_Parent) const
 	{
 		const SNI_Instance *instance = dynamic_cast<const SNI_Instance *>(p_Parent);
-		return SN::SN_Bool(this == instance);
+		if (this == instance)
+		{
+			return skynet::True;
+		}
+		for (SNI_Inherits i : m_InheritList)
+		{
+			if (i.GetParent() == p_Parent)
+			{
+				return i.GetResult();
+			}
+		}
+		return skynet::False;
 	}
 
 	SN::SN_Value SNI_Instance::DoHasA(SNI_Value * p_Member, SNI_Value * p_Name) const
 	{
 		return SN::SN_Error(GetTypeName() + " HasA function not implemented.");
+	}
+
+	void SNI_Instance::Fix()
+	{
+		m_Fixed = true;
+	}
+
+	void SNI_Instance::PromoteMembers()
+	{
+		for (SNI_Inherits &r : m_InheritList)
+		{
+			r.PromoteMembersExternal(this);
+		}
 	}
 }

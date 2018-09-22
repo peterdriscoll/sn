@@ -431,7 +431,7 @@ namespace SNI
 				{
 					SNI_DelayedProcessor::GetProcessor()->Request(call);
 				}
-				return true;
+				return skynet::OK;
 			}
 
 			return m_Value->AssertValue(p_Value);
