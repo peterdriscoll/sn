@@ -14,6 +14,8 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Meta);
 	public:
+		static SNI_Instance *Instance();
+
 		SNI_Meta();
 		SNI_Meta(long p_DeltaMetaLevel, SNI_Expression *p_Expression);
 		virtual ~SNI_Meta();
@@ -35,7 +37,13 @@ namespace SNI
 		virtual SN::SN_Expression Unify(SN::SN_ExpressionList * p_ParameterList);
 		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
 
+		// Inheritance
+		virtual SN::SN_Error AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result);
+		virtual SN::SN_Value DoIsA(const SNI_Value * p_Parent) const;
+
 	private:
+		static SNI_Instance *m_Instance;
+
 		long m_DeltaMetaLevel;
 		SNI_Expression * m_Expression;
 	};

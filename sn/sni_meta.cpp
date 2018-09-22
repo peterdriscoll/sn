@@ -12,6 +12,16 @@
 
 namespace SNI
 {
+	/*static*/ SNI_Instance *SNI_Meta::m_Instance = NULL;
+	/*static*/ SNI_Instance *SNI_Meta::Instance()
+	{
+		if (!m_Instance)
+		{
+			m_Instance = new SNI_Instance();
+		}
+		return m_Instance;
+	}
+
 	SNI_Meta::SNI_Meta()
 	{
 	}
@@ -74,6 +84,17 @@ namespace SNI
 			return m_DeltaMetaLevel == other->m_DeltaMetaLevel && m_Expression->Equivalent(dynamic_cast<SNI_Object *>(other->m_Expression));
 		}
 		return false;
+	}
+
+	// Inheritance
+	SN::SN_Error  SNI_Meta::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)
+	{
+		return p_Result.AssertValue(Instance()->DoIsA(p_Parent));
+	}
+
+	SN::SN_Value SNI_Meta::DoIsA(const SNI_Value * p_Parent) const
+	{
+		return Instance()->DoIsA(p_Parent);
 	}
 
 	SN::SN_Expression SNI_Meta::Evaluate(long p_MetaLevel /* = 0 */) const

@@ -16,11 +16,15 @@ namespace SN
 	class SN_EXPORT SN_Meta : public SN_Expression
 	{
 	public:
+		static SN_Instance Instance();
+
 		SN_Meta(long p_MetaLevel, const SN_Expression &p_Expression);
 		SN_Meta(const SN_Expression &p_Expression);
 		virtual ~SN_Meta();
 
 		void AddMetaLevel(long p_DeltaMetaLevel);
+
+		SN_Expression IsA(const SN_Expression &p_Parent) const;
 
 		SNI::SNI_Meta * GetSNI_Meta() const;
 	};

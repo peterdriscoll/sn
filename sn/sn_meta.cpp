@@ -9,6 +9,11 @@
 
 namespace SN
 {
+	/*static*/ SN_Instance SN_Meta::Instance()
+	{
+		return SNI_Meta::Instance();
+	}
+
 	SN_Meta::SN_Meta(long p_MetaLevel, const SN_Expression &p_Expression)
 		: SN_Expression(new SNI::SNI_Meta(p_MetaLevel, p_Expression.GetSNI_Expression()))
 	{
@@ -26,5 +31,10 @@ namespace SN
 	SNI::SNI_Meta * SN_Meta::GetSNI_Meta() const
 	{
 		return dynamic_cast<SNI::SNI_Meta *>(m_Expression);
+	}
+
+	SN_Expression SN_Meta::IsA(const SN_Expression &p_Parent) const
+	{
+		return SN_Operators::IsA(*this, p_Parent);
 	}
 }

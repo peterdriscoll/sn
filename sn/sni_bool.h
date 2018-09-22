@@ -30,6 +30,7 @@ namespace SNI
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 		virtual bool GetBool() const;
 
+		// Inheritance
 		virtual SN::SN_Error AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result);
 		virtual SN::SN_Value DoIsA(const SNI_Value * p_Parent) const;
 		virtual SN::SN_Value DoHasA(SNI_Value * p_Member, SNI_Value * p_Name) const;

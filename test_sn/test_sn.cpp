@@ -2122,6 +2122,9 @@ namespace test_sn
 				String("woof").IsA(String::Instance()).AssertAction();
 				Char('X').IsA(Char::Instance()).AssertAction();
 				(String("DogFood") || String("CatFood")).BuildSet().IsA(Set::Instance()).AssertAction();
+
+				Meta(1, String("Vincent ") + String("Emma ")).IsA(Meta::Instance()).AssertAction();
+
 				Short(5).IsA(Short::Instance()).AssertAction();
 				Int(5).IsA(Int::Instance()).AssertAction();
 				Long(5).IsA(Long::Instance()).AssertAction();
