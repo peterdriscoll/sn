@@ -2121,6 +2121,7 @@ namespace test_sn
 				skynet::True.IsA(Bool::Instance()).AssertAction();
 				String("woof").IsA(String::Instance()).AssertAction();
 				Char('X').IsA(Char::Instance()).AssertAction();
+				(String("DogFood") || String("CatFood")).BuildSet().IsA(Set::Instance()).AssertAction();
 				Short(5).IsA(Short::Instance()).AssertAction();
 				Int(5).IsA(Int::Instance()).AssertAction();
 				Long(5).IsA(Long::Instance()).AssertAction();
@@ -2288,6 +2289,5 @@ namespace test_sn
 			}
 			Cleanup();
 		}
-
 	};
 }

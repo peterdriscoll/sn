@@ -8,6 +8,11 @@
 
 namespace SN
 {
+	/*static*/ SN_Instance SN_Set::Instance()
+	{
+		return SNI_Set::Instance();
+	}
+
 	SN_Set::SN_Set()
 		: SN_Base(new SNI::SNI_Set())
 	{
@@ -50,6 +55,11 @@ namespace SN
 	SN_Expression SN_Set::HasMember(const SN_Expression &p_Set) const
 	{
 		return SN_Operators::HasMember(*this, p_Set);
+	}
+
+	SN_Expression SN_Set::IsA(const SN_Expression &p_Parent) const
+	{
+		return SN_Operators::IsA(*this, p_Parent);
 	}
 
 	size_t SN_Set::Count()

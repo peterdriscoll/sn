@@ -17,6 +17,8 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Set);
 	public:
+		static SNI_Instance *Instance();
+
 		SNI_Set();
 		SNI_Set(const SNI_Set &p_other);
 		SNI_Set(const SN::SN_Value &p_other);
@@ -29,6 +31,9 @@ namespace SNI
 		long GetPriority() const;
 		virtual SN::SN_Expression Evaluate(long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression PartialEvaluate(long p_MetaLevel = 0) const;
+
+		virtual SN::SN_Error AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result);
+		virtual SN::SN_Value DoIsA(const SNI_Value * p_Parent) const;
 
 		virtual size_t Length() const;
 		SN::SN_Value operator[](long p_index);
@@ -48,6 +53,8 @@ namespace SNI
 		virtual void PromoteMembers();
 
 	private:
+		static SNI_Instance *m_Instance;
+
 		SN::SN_ValueList m_SetList;
 	};
 }

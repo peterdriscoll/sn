@@ -17,6 +17,8 @@ namespace SN
 	class SN_EXPORT SN_Set : public SN_Base<SNI::SNI_Set, SN_Expression, SN_Error>
 	{
 	public:
+		static SN_Instance Instance();
+
 		SN_Set();
 		SN_Set(const SN_Set &p_other);
 		SN_Set(const SN_Value &p_other);
@@ -32,6 +34,8 @@ namespace SN
 
 		size_t Count();
 		SN_Value operator[](long p_index);
+
+		SN_Expression IsA(const SN_Expression &p_Parent) const;
 
 		SNI::SNI_Set * GetSNI_Set() const;
 	};
