@@ -2207,5 +2207,23 @@ namespace test_sn
 			}
 			Cleanup();
 		}
+
+		TEST_METHOD(TestInheritLongLong)
+		{
+			Initialize();
+			{
+				Manager manager("Test Inherit Long", AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				LongLong::Instance().IsA(LongDouble::Instance()).EvaluateAction();
+				SN_DECLARE(x1);
+				(LongLong::Instance().IsA(LongDouble::Instance()) == x1).AssertAction();
+				x1.EvaluateAction();
+				bool b1 = x1.GetBool();
+				Assert::IsTrue(b1);
+
+			}
+			Cleanup();
+		}
 	};
 }
