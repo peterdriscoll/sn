@@ -91,6 +91,11 @@ namespace SNI
 		return m_Value && m_Value->IsKnownValue();
 	}
 
+	bool SNI_Variable::IsKnownTypeValue() const
+	{
+		return m_Value && m_Value->IsKnownTypeValue();
+	}
+
 	bool SNI_Variable::IsVariable() const
 	{
 		return true;

@@ -46,6 +46,7 @@ namespace SNI
 		virtual bool IsRequested() const;
 		virtual bool IsNullValue() const;
 		virtual bool IsKnownValue() const;
+		virtual bool IsKnownTypeValue() const;
 		virtual bool IsVariable() const;
 		virtual bool IsReferableValue() const;
 		virtual void Request();

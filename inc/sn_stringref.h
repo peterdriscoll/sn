@@ -28,6 +28,8 @@ namespace SN
 	class SN_EXPORT SN_StringRef : public SN_Base<SNI::SNI_StringRef, SN_Expression, SN_Error>
 	{
 	public:
+		static SN_Instance Instance();
+
 		SN_StringRef();
 		SN_StringRef(const SN_Value &p_Source, const SN_Expression &p_Start, const SN_Expression &p_End);
 		SN_StringRef(const SN_Expression &p_other);
@@ -53,6 +55,9 @@ namespace SN
 		SN_String GetSource() const;
 		SN_Expression GetStart() const;
 		SN_Expression GetEnd() const;
+
+		// Inheritance
+		SN_Expression IsA(const SN_Expression &p_Parent) const;
 
 		SNI::SNI_StringRef * GetSNI_StringRef() const;
 	};

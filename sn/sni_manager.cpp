@@ -63,6 +63,7 @@ namespace SNI
 		}
 		m_LogicSetupDone = true;
 		Char::Instance().GetSNI_Instance()->AssertIsAValue(String::Instance().GetSNI_Instance(), skynet::True);
+		StringRef::Instance().GetSNI_Instance()->AssertIsAValue(String::Instance().GetSNI_Instance(), skynet::True);
 
 		Short::Instance().GetSNI_Instance()->AssertIsAValue(Long::Instance().GetSNI_Instance(), skynet::True);
 		Long::Instance().GetSNI_Instance()->AssertIsAValue(LongLong::Instance().GetSNI_Instance(), skynet::True);

@@ -20,12 +20,15 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_StringRef);
 	public:
+		static SNI_Instance *Instance();
+
 		SNI_StringRef();
 		SNI_StringRef(const SN::SN_Value &p_Source, const SN::SN_Expression &p_Start, const SN::SN_Expression &p_End);
 		virtual ~SNI_StringRef();
 
 		virtual string GetTypeName() const;
 		virtual string DisplayCpp() const;
+		virtual bool IsKnownTypeValue() const;
 		virtual size_t Cardinality(size_t p_MaxCardinality = CARDINALITY_MAX) const;
 		virtual SN::SN_Error ForEachCart(long p_Depth, SNI_Cart * p_Cart);
 		virtual SN::SN_Error ForEach(std::function<SN::SN_Error(const SN::SN_Expression&p_Param, SNI_World*p_World)> p_Action);
@@ -73,10 +76,16 @@ namespace SNI
 		virtual SN::SN_Error AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World ** p_World, SNI_WorldSet * p_WorldSet);
 		virtual SN::SN_Error AssertValue(const SN::SN_Expression &p_Value);
 
+		// Inheritance
+		virtual SN::SN_Error AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result);
+		virtual SN::SN_Value DoIsA(const SNI_Value * p_Parent) const;
+
 	protected:
 		virtual void PromoteMembers();
 
 	private:
+		static SNI_Instance *m_Instance;
+
 		SNI_WorldSet *m_WorldSet;
 		SN::SN_String m_Source;
 		SN::SN_Expression m_Start;

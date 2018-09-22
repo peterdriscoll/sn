@@ -2129,6 +2129,12 @@ namespace test_sn
 				Float(5).IsA(Float::Instance()).AssertAction();
 				Double(5).IsA(Double::Instance()).AssertAction();
 				LongDouble(5).IsA(LongDouble::Instance()).AssertAction();
+
+				SN_DECLARE(a);
+				SN_DECLARE(b);
+				(String("dogcat") == a + b).AssertAction();
+
+				a.IsA(StringRef::Instance()).AssertAction();
 			}
 			Cleanup();
 		}
@@ -2282,6 +2288,24 @@ namespace test_sn
 				Char::Instance().IsA(String::Instance()).EvaluateAction();
 				SN_DECLARE(x1);
 				(Char::Instance().IsA(String::Instance()) == x1).AssertAction();
+				x1.EvaluateAction();
+				bool b1 = x1.GetBool();
+				Assert::IsTrue(b1);
+
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestInheritStringRef)
+		{
+			Initialize();
+			{
+				Manager manager("Test Inherit Char", AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				StringRef::Instance().IsA(String::Instance()).EvaluateAction();
+				SN_DECLARE(x1);
+				(StringRef::Instance().IsA(String::Instance()) == x1).AssertAction();
 				x1.EvaluateAction();
 				bool b1 = x1.GetBool();
 				Assert::IsTrue(b1);

@@ -13,6 +13,11 @@
 
 namespace SN
 {
+	/*static*/ SN_Instance SN_StringRef::Instance()
+	{
+		return SNI_StringRef::Instance();
+	}
+
 	SN_StringRef::SN_StringRef()
 		: SN_Base()
 	{
@@ -30,6 +35,11 @@ namespace SN
 
 	SN_StringRef::~SN_StringRef()
 	{
+	}
+
+	SN_Expression SN_StringRef::IsA(const SN_Expression &p_Parent) const
+	{
+		return SN_Operators::IsA(*this, p_Parent);
 	}
 
 	// Members
@@ -118,4 +128,5 @@ namespace SN
 	{
 		return SN_Operators::File(*this);
 	}
+
 }
