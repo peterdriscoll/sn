@@ -2225,5 +2225,49 @@ namespace test_sn
 			}
 			Cleanup();
 		}
+
+		TEST_METHOD(TestInheritFloat)
+		{
+			Initialize();
+			{
+				Manager manager("Test Inherit Short", AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				Float::Instance().IsA(Double::Instance()).EvaluateAction();
+				SN_DECLARE(x1);
+				(Float::Instance().IsA(Double::Instance()) == x1).AssertAction();
+				x1.EvaluateAction();
+				bool b1 = x1.GetBool();
+				Assert::IsTrue(b1);
+
+				Float::Instance().IsA(LongDouble::Instance()).EvaluateAction();
+				SN_DECLARE(x2);
+				(Float::Instance().IsA(LongDouble::Instance()) == x2).AssertAction();
+				x2.EvaluateAction();
+				bool b2 = x2.GetBool();
+				Assert::IsTrue(b2);
+
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestInheritDouble)
+		{
+			Initialize();
+			{
+				Manager manager("Test Inherit Short", AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				Double::Instance().IsA(LongDouble::Instance()).EvaluateAction();
+				SN_DECLARE(x1);
+				(Double::Instance().IsA(LongDouble::Instance()) == x1).AssertAction();
+				x1.EvaluateAction();
+				bool b1 = x1.GetBool();
+				Assert::IsTrue(b1);
+
+			}
+			Cleanup();
+		}
+
 	};
 }
