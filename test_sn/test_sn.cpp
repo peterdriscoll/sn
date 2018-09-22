@@ -2130,6 +2130,52 @@ namespace test_sn
 			Cleanup();
 		}
 
+		TEST_METHOD(TestInheritShort)
+		{
+			Initialize();
+			{
+				Manager manager("Test Inherit Short", AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				Short::Instance().IsA(Long::Instance()).EvaluateAction();
+				SN_DECLARE(x1);
+				(Short::Instance().IsA(Long::Instance()) == x1).AssertAction();
+				x1.EvaluateAction();
+				bool b1 = x1.GetBool();
+				Assert::IsTrue(b1);
+
+				Short::Instance().IsA(LongLong::Instance()).EvaluateAction();
+				SN_DECLARE(x2);
+				(Short::Instance().IsA(LongLong::Instance()) == x2).AssertAction();
+				x2.EvaluateAction();
+				bool b2 = x2.GetBool();
+				Assert::IsTrue(b2);
+
+				Short::Instance().IsA(Float::Instance()).EvaluateAction();
+				SN_DECLARE(x3);
+				(Short::Instance().IsA(Float::Instance()) == x3).AssertAction();
+				x3.EvaluateAction();
+				bool b3 = x3.GetBool();
+				Assert::IsTrue(b3);
+
+				Short::Instance().IsA(Double::Instance()).EvaluateAction();
+				SN_DECLARE(x4);
+				(Short::Instance().IsA(Double::Instance()) == x4).AssertAction();
+				x4.EvaluateAction();
+				bool b4 = x4.GetBool();
+				Assert::IsTrue(b4);
+
+				Short::Instance().IsA(LongDouble::Instance()).EvaluateAction();
+				SN_DECLARE(x5);
+				(Short::Instance().IsA(LongDouble::Instance()) == x5).AssertAction();
+				x5.EvaluateAction();
+				bool b5 = x5.GetBool();
+				Assert::IsTrue(b5);
+
+			}
+			Cleanup();
+		}
+
 		TEST_METHOD(TestInheritLong)
 		{
 			Initialize();
