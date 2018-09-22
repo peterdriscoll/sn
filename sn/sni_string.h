@@ -21,6 +21,8 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_String);
 	public:
+		static SNI_Instance *Instance();
+
 		SNI_String();
 		SNI_String(const SNI_String &p_Other);
 		SNI_String(const SNI_StringRef &p_Other);
@@ -47,6 +49,10 @@ namespace SNI
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 		virtual SN::SN_Error AssertValue(const SN::SN_Expression &p_Value);
 
+		// Inheritance
+		virtual SN::SN_Error AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result);
+		virtual SN::SN_Value DoIsA(const SNI_Value * p_Parent) const;
+
 		// Implementation
 		virtual SN::SN_Value DoAdd(SNI_Value * p_Other) const;
 		virtual SN::SN_Value DoSubtract(SNI_Value * p_Other) const;
@@ -64,6 +70,8 @@ namespace SNI
 		void DoWriteFile(const SN::SN_Value & p_Contents) const;
 
 	private:
+		static SNI_Instance *m_Instance;
+
 		string m_String;
 	};
 

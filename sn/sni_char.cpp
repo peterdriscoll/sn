@@ -10,6 +10,16 @@
 
 namespace SNI
 {
+	/*static*/ SNI_Instance *SNI_Char::m_Instance = NULL;
+	/*static*/ SNI_Instance *SNI_Char::Instance()
+	{
+		if (!m_Instance)
+		{
+			m_Instance = new SNI_Instance();
+		}
+		return m_Instance;
+	}
+
 	SNI_Char::SNI_Char()
 	{
 
@@ -79,6 +89,17 @@ namespace SNI
 			return l_String->GetString().size() == 1 && m_Char == l_String->GetString()[0];
 		}
 		return false;
+	}
+
+	// Inheritance
+	SN::SN_Error  SNI_Char::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)
+	{
+		return p_Result.AssertValue(Instance()->DoIsA(p_Parent));
+	}
+
+	SN::SN_Value SNI_Char::DoIsA(const SNI_Value * p_Parent) const
+	{
+		return Instance()->DoIsA(p_Parent);
 	}
 
 	SN::SN_Value SNI_Char::DoAdd(SNI_Value * p_Other) const

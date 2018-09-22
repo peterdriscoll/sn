@@ -154,12 +154,12 @@ namespace SNI
 		// Inheritance
 		SN::SN_Error  AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)
 		{
-			return p_Result.AssertValue(m_Instance->DoIsA(p_Parent));
+			return p_Result.AssertValue(Instance()->DoIsA(p_Parent));
 		}
 
 		SN::SN_Value DoIsA(SNI_Value * p_Parent) const
 		{
-			return m_Instance->DoIsA(p_Parent);
+			return Instance()->DoIsA(p_Parent);
 		}
 
 		template <typename S>

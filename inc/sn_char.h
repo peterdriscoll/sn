@@ -22,6 +22,8 @@ namespace SN
 	class SN_EXPORT SN_Char : public SN_Base<SNI::SNI_Char, SN_Expression, SN_Error>
 	{
 	public:
+		static SN_Instance Instance();
+
 		SN_Char();
 		SN_Char(const SN_Char &p_Other);
 		SN_Char(const SN_Value &p_other);
@@ -36,6 +38,8 @@ namespace SN
 		SN_Expression operator >=(const SN_Expression &p_Other) const;
 		SN_Expression operator +(const SN_Expression &p_Other) const;
 		SN_Expression operator ||(const SN_Expression &p_Other) const;
+
+		SN_Expression IsA(const SN_Expression &p_Parent) const;
 
 		string::value_type GetChar() const;
 		SNI::SNI_Char *GetSNI_Char() const;

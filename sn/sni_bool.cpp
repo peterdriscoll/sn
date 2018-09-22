@@ -84,12 +84,12 @@ namespace SNI
 	// Inheritance
 	SN::SN_Error  SNI_Bool::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)
 	{
-		return p_Result.AssertValue(m_Instance->DoIsA(p_Parent));
+		return p_Result.AssertValue(Instance()->DoIsA(p_Parent));
 	}
 
 	SN::SN_Value SNI_Bool::DoIsA(const SNI_Value * p_Parent) const
 	{
-		return m_Instance->DoIsA(p_Parent);
+		return Instance()->DoIsA(p_Parent);
 	}
 
 	SN::SN_Value SNI_Bool::DoHasA(SNI_Value * p_Member, SNI_Value * p_Name) const

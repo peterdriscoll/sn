@@ -49,6 +49,7 @@ namespace SNI
 
 	private:
 		static SNI_Instance *m_Instance;
+
 		bool m_Expression;
 	};
 

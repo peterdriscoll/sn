@@ -9,6 +9,11 @@
 
 namespace SN
 {
+	/*static*/ SN_Instance SN_Char::Instance()
+	{
+		return SNI_Char::Instance();
+	}
+
 	SN_Char::SN_Char()
 		: m_Char(NULL)
 	{
@@ -77,5 +82,10 @@ namespace SN
 	string::value_type SN_Char::GetChar() const
 	{
 		return m_Char->GetChar();
+	}
+
+	SN_Expression SN_Char::IsA(const SN_Expression &p_Parent) const
+	{
+		return SN_Operators::IsA(*this, p_Parent);
 	}
 }

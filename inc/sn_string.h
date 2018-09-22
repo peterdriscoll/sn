@@ -20,6 +20,8 @@ namespace SN
 	class SN_EXPORT SN_String : public SN_Base<SNI::SNI_String, SN_Expression, SN_Error>
 	{
 	public:
+		static SN_Instance Instance();
+
 		SN_String();
 		SN_String(const SN_String &p_Other);
 		SN_String(const SN_Expression &p_Other);
@@ -52,6 +54,8 @@ namespace SN
 
 		string GetString() const;
 		size_t Length() const;
+
+		SN_Expression IsA(const SN_Expression &p_Parent) const;
 
 		SNI::SNI_String * GetSNI_String() const;
 	};

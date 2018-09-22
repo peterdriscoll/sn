@@ -10,6 +10,11 @@
 
 namespace SN
 {
+	/*static*/ SN_Instance SN_String::Instance()
+	{
+		return SNI_String::Instance();
+	}
+
 	SN_String::SN_String()
 		: SN_Base()
 	{
@@ -144,5 +149,10 @@ namespace SN
 	SN_Expression SN_String::File() const
 	{
 		return SN_Operators::File(m_Expression);
+	}
+
+	SN_Expression SN_String::IsA(const SN_Expression &p_Parent) const
+	{
+		return SN_Operators::IsA(*this, p_Parent);
 	}
 }

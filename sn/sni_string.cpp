@@ -9,6 +9,7 @@
 #include "sni_variable.h"
 #include "sni_null.h"
 #include "sni_error.h"
+#include "sni_instance.h"
 #include "utility.h"
 
 #include <fstream>
@@ -18,6 +19,16 @@
 
 namespace SNI
 {
+	/*static*/ SNI_Instance *SNI_String::m_Instance = NULL;
+	/*static*/ SNI_Instance *SNI_String::Instance()
+	{
+		if (!m_Instance)
+		{
+			m_Instance = new SNI_Instance();
+		}
+		return m_Instance;
+	}
+
 	SNI_String::SNI_String()
 	{
 	}
@@ -149,6 +160,17 @@ namespace SNI
 			return value.AssertValue(this);
 		}
 		return Equivalent(p_Value.GetSNI_Expression());
+	}
+
+	// Inheritance
+	SN::SN_Error  SNI_String::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)
+	{
+		return p_Result.AssertValue(Instance()->DoIsA(p_Parent));
+	}
+
+	SN::SN_Value SNI_String::DoIsA(const SNI_Value * p_Parent) const
+	{
+		return Instance()->DoIsA(p_Parent);
 	}
 
 	//-----------------------------------------------------------------------

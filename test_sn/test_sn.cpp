@@ -2111,7 +2111,7 @@ namespace test_sn
 			Cleanup();
 		}
 
-		TEST_METHOD(TestSimpleInherit1)
+		TEST_METHOD(TestInheritInstance)
 		{
 			Initialize();
 			{
@@ -2119,6 +2119,8 @@ namespace test_sn
 				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				skynet::True.IsA(Bool::Instance()).AssertAction();
+				String("woof").IsA(String::Instance()).AssertAction();
+				Char('X').IsA(Char::Instance()).AssertAction();
 				Short(5).IsA(Short::Instance()).AssertAction();
 				Int(5).IsA(Int::Instance()).AssertAction();
 				Long(5).IsA(Long::Instance()).AssertAction();
@@ -2212,7 +2214,7 @@ namespace test_sn
 		{
 			Initialize();
 			{
-				Manager manager("Test Inherit Long", AssertErrorHandler);
+				Manager manager("Test Inherit LongLong", AssertErrorHandler);
 				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				LongLong::Instance().IsA(LongDouble::Instance()).EvaluateAction();
@@ -2230,7 +2232,7 @@ namespace test_sn
 		{
 			Initialize();
 			{
-				Manager manager("Test Inherit Short", AssertErrorHandler);
+				Manager manager("Test Inherit Float", AssertErrorHandler);
 				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				Float::Instance().IsA(Double::Instance()).EvaluateAction();
@@ -2255,12 +2257,30 @@ namespace test_sn
 		{
 			Initialize();
 			{
-				Manager manager("Test Inherit Short", AssertErrorHandler);
+				Manager manager("Test Inherit Double", AssertErrorHandler);
 				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				Double::Instance().IsA(LongDouble::Instance()).EvaluateAction();
 				SN_DECLARE(x1);
 				(Double::Instance().IsA(LongDouble::Instance()) == x1).AssertAction();
+				x1.EvaluateAction();
+				bool b1 = x1.GetBool();
+				Assert::IsTrue(b1);
+
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestInheritChar)
+		{
+			Initialize();
+			{
+				Manager manager("Test Inherit Char", AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				Char::Instance().IsA(String::Instance()).EvaluateAction();
+				SN_DECLARE(x1);
+				(Char::Instance().IsA(String::Instance()) == x1).AssertAction();
 				x1.EvaluateAction();
 				bool b1 = x1.GetBool();
 				Assert::IsTrue(b1);

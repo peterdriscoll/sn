@@ -11,6 +11,8 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Char);
 	public:
+		static SNI_Instance *Instance();
+
 		SNI_Char();
 		SNI_Char(const SNI_Char &p_Other);
 		SNI_Char(string::value_type p_Other);
@@ -24,12 +26,17 @@ namespace SNI
 		virtual long GetPriority() const;
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 
+		virtual SN::SN_Error AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result);
+		virtual SN::SN_Value DoIsA(const SNI_Value * p_Parent) const;
+
 		virtual SN::SN_Value DoAdd(SNI_Value * p_Other) const;
 		virtual SN::SN_Value DoConcat(SNI_Value * p_Other) const;
 
 		virtual string::value_type GetChar() const;
 
 	private:
+		static SNI_Instance *m_Instance;
+
 		string::value_type m_Char;
 	};
 
