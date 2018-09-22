@@ -49,7 +49,6 @@ namespace SNI
 	{
 	}
 
-
 	string SNI_Instance::GetTypeName() const
 	{
 		return "Instance";
@@ -78,36 +77,32 @@ namespace SNI
 	SN::SN_Error SNI_Instance::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)
 	{
 		const SNI_Instance *instance = dynamic_cast<const SNI_Instance *>(p_Parent);
-		if (this == instance)
+		if (DoIsA(instance).GetBool())
 		{
-			return skynet::OK;
+			return p_Result.AssertValue(skynet::True);
 		}
-		for (SNI_Inherits i : m_InheritList)
+		else if (m_Fixed)
 		{
-			if (i.GetParent() == p_Parent)
-			{
-				if (m_Fixed && (!i.GetResult()->IsKnownValue() || (i.GetResult()->Cardinality() > 1)))
-				{
-					return SN::SN_Error(GetTypeName() + " Inheritance of internal instance is fixed.");
-				}
-				return i.AssertValue(p_Result);
-			}
-		}
-		if (p_Result.IsKnownValue())
-		{
-			if (m_Fixed)
-			{
-				return SN::SN_Error(GetTypeName() + " Inheritance of internal instance is fixed.");
-			}
-			m_InheritList.push_back(SNI_Inherits(p_Parent, p_Result.GetSNI_Value()));
+			return p_Result.AssertValue(skynet::False);
 		}
 		else
 		{
-			if (!m_Fixed)
+			for (SNI_Inherits i : m_InheritList)
+			{
+				if (i.GetParent() == p_Parent)
+				{
+					return i.AssertValue(p_Result);
+				}
+			}
+			if (p_Result.IsKnownValue())
+			{
+				m_InheritList.push_back(SNI_Inherits(p_Parent, p_Result.GetSNI_Value()));
+			}
+			else
 			{
 				m_InheritList.push_back(SNI_Inherits(p_Parent, skynet::False.GetSNI_Bool()));
+				p_Result.AssertValue(skynet::False);
 			}
-			p_Result.AssertValue(skynet::False);
 		}
 		return skynet::OK;
 	}
@@ -122,9 +117,12 @@ namespace SNI
 		}
 		for (SNI_Inherits i : m_InheritList)
 		{
-			if (i.GetParent() == p_Parent)
+			if (i.GetParent()->DoIsA(p_Parent).GetBool())
 			{
-				return i.GetResult();
+				if (i.GetResult())
+				{
+					return skynet::True;
+				}
 			}
 		}
 		return skynet::False;
