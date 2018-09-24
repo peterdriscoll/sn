@@ -20,15 +20,15 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Instance *SNI_StringRef::m_Instance = NULL;
+	/*static*/ SNI_Class *SNI_StringRef::m_Class = NULL;
 
-	/*static*/ SNI_Instance *SNI_StringRef::Instance()
+	/*static*/ SNI_Class *SNI_StringRef::Class()
 	{
-		if (!m_Instance)
+		if (!m_Class)
 		{
-			m_Instance = new SNI_Instance();
+			m_Class = new SNI_Class();
 		}
-		return m_Instance;
+		return m_Class;
 	}
 
 	SNI_StringRef::SNI_StringRef()
@@ -945,11 +945,11 @@ namespace SNI
 	// Inheritance
 	SN::SN_Error  SNI_StringRef::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)
 	{
-		return p_Result.AssertValue(Instance()->DoIsA(p_Parent));
+		return p_Result.AssertValue(Class()->DoIsA(p_Parent));
 	}
 
 	SN::SN_Value SNI_StringRef::DoIsA(const SNI_Value * p_Parent) const
 	{
-		return Instance()->DoIsA(p_Parent);
+		return Class()->DoIsA(p_Parent);
 	}
 }

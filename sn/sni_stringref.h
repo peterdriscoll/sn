@@ -20,7 +20,7 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_StringRef);
 	public:
-		static SNI_Instance *Instance();
+		static SNI_Class *Class();
 
 		SNI_StringRef();
 		SNI_StringRef(const SN::SN_Value &p_Source, const SN::SN_Expression &p_Start, const SN::SN_Expression &p_End);
@@ -84,7 +84,7 @@ namespace SNI
 		virtual void PromoteMembers();
 
 	private:
-		static SNI_Instance *m_Instance;
+		static SNI_Class *m_Class;
 
 		SNI_WorldSet *m_WorldSet;
 		SN::SN_String m_Source;

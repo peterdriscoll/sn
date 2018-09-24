@@ -25,6 +25,8 @@
 #include "sni_variable.h"
 #include "sni_error.h"
 #include "sni_null.h"
+#include "sni_class.h"
+#include "sni_instance.h"
 
 #include "sn_pch.h"
 
@@ -102,6 +104,11 @@ namespace SN
 
 	SN_Expression::SN_Expression(const SN_Error &p_Error)
 		: SN_Base(dynamic_cast<SNI::SNI_Expression *>(p_Error.GetSNI_Error()))
+	{
+	}
+
+	SN_Expression::SN_Expression(const SN_Class & p_Class)
+		: SN_Base(dynamic_cast<SNI::SNI_Expression *>(p_Class.GetSNI_Class()))
 	{
 	}
 

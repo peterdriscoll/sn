@@ -13,9 +13,9 @@
 
 namespace SN
 {
-	/*static*/ SN_Instance SN_StringRef::Instance()
+	/*static*/ SN_Class SN_StringRef::Class()
 	{
-		return SNI_StringRef::Instance();
+		return SNI_StringRef::Class();
 	}
 
 	SN_StringRef::SN_StringRef()

@@ -8,9 +8,9 @@
 
 namespace SN
 {
-	/*static*/ SN_Instance SN_Set::Instance()
+	/*static*/ SN_Class SN_Set::Class()
 	{
-		return SNI_Set::Instance();
+		return SNI_Set::Class();
 	}
 
 	SN_Set::SN_Set()

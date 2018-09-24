@@ -29,9 +29,9 @@ namespace SN
 		SNI::SNI_Real<T> *m_Real;
 
 	public:
-		static SN_Instance Instance()
+		static SN_Class Class()
 		{
-			return SNI_Real<T>::Instance();
+			return SNI_Real<T>::Class();
 		}
 
 		SN_Real()

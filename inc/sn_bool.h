@@ -5,11 +5,11 @@
 
 #include "exp_ctrl_sn.h"
 #include "sn_base.h"
-#include "sn_instance.h"
+#include "sn_class.h"
+#include "../sn/sni_bool.h"
 
 namespace SNI
 {
-	class SNI_Bool;
 	class SNI_FunctionDef;
 }
 
@@ -18,7 +18,7 @@ namespace SN
 	class SN_EXPORT SN_Bool : public SN_Base<SNI::SNI_Bool, SN_Expression, SN_Error>
 	{
 	public:
-		static SN_Instance Instance();
+		static SN_Class Class();
 
 		SN_Bool();
 		SN_Bool(bool p_other);

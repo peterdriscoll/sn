@@ -9,7 +9,7 @@
 #include "sni_variable.h"
 #include "sni_null.h"
 #include "sni_error.h"
-#include "sni_instance.h"
+#include "sni_class.h"
 #include "utility.h"
 
 #include <fstream>
@@ -19,14 +19,14 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Instance *SNI_String::m_Instance = NULL;
-	/*static*/ SNI_Instance *SNI_String::Instance()
+	/*static*/ SNI_Class *SNI_String::m_Class = NULL;
+	/*static*/ SNI_Class *SNI_String::Class()
 	{
-		if (!m_Instance)
+		if (!m_Class)
 		{
-			m_Instance = new SNI_Instance();
+			m_Class = new SNI_Class();
 		}
-		return m_Instance;
+		return m_Class;
 	}
 
 	SNI_String::SNI_String()
@@ -165,12 +165,12 @@ namespace SNI
 	// Inheritance
 	SN::SN_Error  SNI_String::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)
 	{
-		return p_Result.AssertValue(Instance()->DoIsA(p_Parent));
+		return p_Result.AssertValue(Class()->DoIsA(p_Parent));
 	}
 
 	SN::SN_Value SNI_String::DoIsA(const SNI_Value * p_Parent) const
 	{
-		return Instance()->DoIsA(p_Parent);
+		return Class()->DoIsA(p_Parent);
 	}
 
 	//-----------------------------------------------------------------------

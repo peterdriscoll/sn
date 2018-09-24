@@ -21,7 +21,7 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_String);
 	public:
-		static SNI_Instance *Instance();
+		static SNI_Class *Class();
 
 		SNI_String();
 		SNI_String(const SNI_String &p_Other);
@@ -70,7 +70,7 @@ namespace SNI
 		void DoWriteFile(const SN::SN_Value & p_Contents) const;
 
 	private:
-		static SNI_Instance *m_Instance;
+		static SNI_Class *m_Class;
 
 		string m_String;
 	};

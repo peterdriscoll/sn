@@ -12,14 +12,14 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Instance *SNI_Meta::m_Instance = NULL;
-	/*static*/ SNI_Instance *SNI_Meta::Instance()
+	/*static*/ SNI_Class *SNI_Meta::m_Class = NULL;
+	/*static*/ SNI_Class *SNI_Meta::Class()
 	{
-		if (!m_Instance)
+		if (!m_Class)
 		{
-			m_Instance = new SNI_Instance();
+			m_Class = new SNI_Class();
 		}
-		return m_Instance;
+		return m_Class;
 	}
 
 	SNI_Meta::SNI_Meta()
@@ -89,12 +89,12 @@ namespace SNI
 	// Inheritance
 	SN::SN_Error  SNI_Meta::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)
 	{
-		return p_Result.AssertValue(Instance()->DoIsA(p_Parent));
+		return p_Result.AssertValue(Class()->DoIsA(p_Parent));
 	}
 
 	SN::SN_Value SNI_Meta::DoIsA(const SNI_Value * p_Parent) const
 	{
-		return Instance()->DoIsA(p_Parent);
+		return Class()->DoIsA(p_Parent);
 	}
 
 	SN::SN_Expression SNI_Meta::Evaluate(long p_MetaLevel /* = 0 */) const

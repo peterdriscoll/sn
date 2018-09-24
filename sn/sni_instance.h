@@ -9,26 +9,6 @@
 
 namespace SNI
 {
-	class SNI_Inherits
-	{
-	public:
-		SNI_Inherits(const SNI_Value *p_Parent, SNI_Value *p_Result);
-		virtual ~SNI_Inherits();
-
-		const SNI_Value *GetParent() const;
-		const SNI_Value *GetResult() const;
-
-		virtual SN::SN_Error AssertValue(SN::SN_Expression p_Result);
-
-		void PromoteMembersExternal(PGC::PGC_Base * p_Base);
-
-	private:
-		const SNI_Value *m_Parent;
-		SNI_Value *m_Result;
-	};
-
-	typedef vector<SNI_Inherits> SNI_Inherits_List;
-
 	class SNI_Instance : public SNI_Null
 	{
 		PGC_CLASS(SNI_Instance);
@@ -54,8 +34,7 @@ namespace SNI
 	private:
 		virtual void PromoteMembers();
 
-		bool m_Fixed;
-		SNI_Inherits_List m_InheritList;
+		SNI_Class *m_Class;
 	};
 
 	typedef vector<SNI_Instance *> SNI_InstanceList;

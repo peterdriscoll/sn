@@ -2118,26 +2118,28 @@ namespace test_sn
 				Manager manager("Test Simple Inherit1", AssertErrorHandler);
 				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
-				skynet::True.IsA(Bool::Instance()).AssertAction();
-				String("woof").IsA(String::Instance()).AssertAction();
-				Char('X').IsA(Char::Instance()).AssertAction();
-				(String("DogFood") || String("CatFood")).BuildSet().IsA(Set::Instance()).AssertAction();
+				skynet::True.IsA(Bool::Class()).AssertAction();
+				String("woof").IsA(String::Class()).AssertAction();
+				Char('X').IsA(Char::Class()).AssertAction();
+				(String("DogFood") || String("CatFood")).BuildSet().IsA(Set::Class()).AssertAction();
 
-				Meta(1, String("Vincent ") + String("Emma ")).IsA(Meta::Instance()).AssertAction();
+				Meta(1, String("Vincent ") + String("Emma ")).IsA(Meta::Class()).AssertAction();
 
-				Short(5).IsA(Short::Instance()).AssertAction();
-				Int(5).IsA(Int::Instance()).AssertAction();
-				Long(5).IsA(Long::Instance()).AssertAction();
-				LongLong(5).IsA(LongLong::Instance()).AssertAction();
-				Float(5).IsA(Float::Instance()).AssertAction();
-				Double(5).IsA(Double::Instance()).AssertAction();
-				LongDouble(5).IsA(LongDouble::Instance()).AssertAction();
+				Short(5).IsA(Short::Class()).AssertAction();
+				Int(5).IsA(Int::Class()).AssertAction();
+				Long(5).IsA(Long::Class()).AssertAction();
+				LongLong(5).IsA(LongLong::Class()).AssertAction();
+				Float(5).IsA(Float::Class()).AssertAction();
+				Double(5).IsA(Double::Class()).AssertAction();
+				LongDouble(5).IsA(LongDouble::Class()).AssertAction();
 
 				SN_DECLARE(a);
 				SN_DECLARE(b);
 				(String("dogcat") == a + b).AssertAction();
 
-				a.IsA(StringRef::Instance()).AssertAction();
+				a.IsA(StringRef::Class()).AssertAction();
+
+				skynet::True.AssertAction();
 			}
 			Cleanup();
 		}
@@ -2149,37 +2151,37 @@ namespace test_sn
 				Manager manager("Test Inherit Short", AssertErrorHandler);
 				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
-				Short::Instance().IsA(Long::Instance()).EvaluateAction();
+				Short::Class().IsA(Long::Class()).EvaluateAction();
 				SN_DECLARE(x1);
-				(Short::Instance().IsA(Long::Instance()) == x1).AssertAction();
+				(Short::Class().IsA(Long::Class()) == x1).AssertAction();
 				x1.EvaluateAction();
 				bool b1 = x1.GetBool();
 				Assert::IsTrue(b1);
 
-				Short::Instance().IsA(LongLong::Instance()).EvaluateAction();
+				Short::Class().IsA(LongLong::Class()).EvaluateAction();
 				SN_DECLARE(x2);
-				(Short::Instance().IsA(LongLong::Instance()) == x2).AssertAction();
+				(Short::Class().IsA(LongLong::Class()) == x2).AssertAction();
 				x2.EvaluateAction();
 				bool b2 = x2.GetBool();
 				Assert::IsTrue(b2);
 
-				Short::Instance().IsA(Float::Instance()).EvaluateAction();
+				Short::Class().IsA(Float::Class()).EvaluateAction();
 				SN_DECLARE(x3);
-				(Short::Instance().IsA(Float::Instance()) == x3).AssertAction();
+				(Short::Class().IsA(Float::Class()) == x3).AssertAction();
 				x3.EvaluateAction();
 				bool b3 = x3.GetBool();
 				Assert::IsTrue(b3);
 
-				Short::Instance().IsA(Double::Instance()).EvaluateAction();
+				Short::Class().IsA(Double::Class()).EvaluateAction();
 				SN_DECLARE(x4);
-				(Short::Instance().IsA(Double::Instance()) == x4).AssertAction();
+				(Short::Class().IsA(Double::Class()) == x4).AssertAction();
 				x4.EvaluateAction();
 				bool b4 = x4.GetBool();
 				Assert::IsTrue(b4);
 
-				Short::Instance().IsA(LongDouble::Instance()).EvaluateAction();
+				Short::Class().IsA(LongDouble::Class()).EvaluateAction();
 				SN_DECLARE(x5);
-				(Short::Instance().IsA(LongDouble::Instance()) == x5).AssertAction();
+				(Short::Class().IsA(LongDouble::Class()) == x5).AssertAction();
 				x5.EvaluateAction();
 				bool b5 = x5.GetBool();
 				Assert::IsTrue(b5);
@@ -2195,23 +2197,23 @@ namespace test_sn
 				Manager manager("Test Inherit Long", AssertErrorHandler);
 				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
-				Long::Instance().IsA(LongLong::Instance()).EvaluateAction();
+				Long::Class().IsA(LongLong::Class()).EvaluateAction();
 				SN_DECLARE(x1);
-				(Long::Instance().IsA(LongLong::Instance()) == x1).AssertAction();
+				(Long::Class().IsA(LongLong::Class()) == x1).AssertAction();
 				x1.EvaluateAction();
 				bool b1 = x1.GetBool();
 				Assert::IsTrue(b1);
 
-				Long::Instance().IsA(Double::Instance()).EvaluateAction();
+				Long::Class().IsA(Double::Class()).EvaluateAction();
 				SN_DECLARE(x2);
-				(Long::Instance().IsA(Double::Instance()) == x2).AssertAction();
+				(Long::Class().IsA(Double::Class()) == x2).AssertAction();
 				x2.EvaluateAction();
 				bool b2 = x2.GetBool();
 				Assert::IsTrue(b2);
 
-				Long::Instance().IsA(LongDouble::Instance()).EvaluateAction();
+				Long::Class().IsA(LongDouble::Class()).EvaluateAction();
 				SN_DECLARE(x3);
-				(Long::Instance().IsA(LongDouble::Instance()) == x3).AssertAction();
+				(Long::Class().IsA(LongDouble::Class()) == x3).AssertAction();
 				x3.EvaluateAction();
 				bool b3 = x3.GetBool();
 				Assert::IsTrue(b3);
@@ -2227,9 +2229,9 @@ namespace test_sn
 				Manager manager("Test Inherit LongLong", AssertErrorHandler);
 				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
-				LongLong::Instance().IsA(LongDouble::Instance()).EvaluateAction();
+				LongLong::Class().IsA(LongDouble::Class()).EvaluateAction();
 				SN_DECLARE(x1);
-				(LongLong::Instance().IsA(LongDouble::Instance()) == x1).AssertAction();
+				(LongLong::Class().IsA(LongDouble::Class()) == x1).AssertAction();
 				x1.EvaluateAction();
 				bool b1 = x1.GetBool();
 				Assert::IsTrue(b1);
@@ -2245,16 +2247,16 @@ namespace test_sn
 				Manager manager("Test Inherit Float", AssertErrorHandler);
 				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
-				Float::Instance().IsA(Double::Instance()).EvaluateAction();
+				Float::Class().IsA(Double::Class()).EvaluateAction();
 				SN_DECLARE(x1);
-				(Float::Instance().IsA(Double::Instance()) == x1).AssertAction();
+				(Float::Class().IsA(Double::Class()) == x1).AssertAction();
 				x1.EvaluateAction();
 				bool b1 = x1.GetBool();
 				Assert::IsTrue(b1);
 
-				Float::Instance().IsA(LongDouble::Instance()).EvaluateAction();
+				Float::Class().IsA(LongDouble::Class()).EvaluateAction();
 				SN_DECLARE(x2);
-				(Float::Instance().IsA(LongDouble::Instance()) == x2).AssertAction();
+				(Float::Class().IsA(LongDouble::Class()) == x2).AssertAction();
 				x2.EvaluateAction();
 				bool b2 = x2.GetBool();
 				Assert::IsTrue(b2);
@@ -2270,9 +2272,9 @@ namespace test_sn
 				Manager manager("Test Inherit Double", AssertErrorHandler);
 				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
-				Double::Instance().IsA(LongDouble::Instance()).EvaluateAction();
+				Double::Class().IsA(LongDouble::Class()).EvaluateAction();
 				SN_DECLARE(x1);
-				(Double::Instance().IsA(LongDouble::Instance()) == x1).AssertAction();
+				(Double::Class().IsA(LongDouble::Class()) == x1).AssertAction();
 				x1.EvaluateAction();
 				bool b1 = x1.GetBool();
 				Assert::IsTrue(b1);
@@ -2288,9 +2290,9 @@ namespace test_sn
 				Manager manager("Test Inherit Char", AssertErrorHandler);
 				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
-				Char::Instance().IsA(String::Instance()).EvaluateAction();
+				Char::Class().IsA(String::Class()).EvaluateAction();
 				SN_DECLARE(x1);
-				(Char::Instance().IsA(String::Instance()) == x1).AssertAction();
+				(Char::Class().IsA(String::Class()) == x1).AssertAction();
 				x1.EvaluateAction();
 				bool b1 = x1.GetBool();
 				Assert::IsTrue(b1);
@@ -2306,9 +2308,9 @@ namespace test_sn
 				Manager manager("Test Inherit Char", AssertErrorHandler);
 				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
-				StringRef::Instance().IsA(String::Instance()).EvaluateAction();
+				StringRef::Class().IsA(String::Class()).EvaluateAction();
 				SN_DECLARE(x1);
-				(StringRef::Instance().IsA(String::Instance()) == x1).AssertAction();
+				(StringRef::Class().IsA(String::Class()) == x1).AssertAction();
 				x1.EvaluateAction();
 				bool b1 = x1.GetBool();
 				Assert::IsTrue(b1);

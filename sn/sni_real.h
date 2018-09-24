@@ -11,7 +11,7 @@ using namespace std;
 #include "sn_bool.h"
 
 #include "sni_number.h"
-#include "sni_instance.h"
+#include "sni_class.h"
 
 #define MIN_ERROR 0.000000000001
 
@@ -76,18 +76,18 @@ namespace SNI
         PGC_CLASS(SNI_Real);
 		typedef T ThisType;
 
-		static SNI_Instance *m_Instance;
+		static SNI_Class *m_Class;
 	public:
         T m_Number;
 
     public:
-		static SNI_Instance * Instance()
+		static SNI_Class * Class()
 		{
-			if (!m_Instance)
+			if (!m_Class)
 			{
-				m_Instance = new SNI_Instance();
+				m_Class = new SNI_Class();
 			}
-			return m_Instance;
+			return m_Class;
 		}
 		
 		SNI_Real()
@@ -154,12 +154,12 @@ namespace SNI
 		// Inheritance
 		SN::SN_Error  AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)
 		{
-			return p_Result.AssertValue(Instance()->DoIsA(p_Parent));
+			return p_Result.AssertValue(Class()->DoIsA(p_Parent));
 		}
 
 		SN::SN_Value DoIsA(SNI_Value * p_Parent) const
 		{
-			return Instance()->DoIsA(p_Parent);
+			return Class()->DoIsA(p_Parent);
 		}
 
 		template <typename S>
@@ -270,7 +270,7 @@ namespace SNI
 
 	SN_APPLY_TYPES(DUMMY, DUMMY, SNI_FORWARD)
 	
-	template <typename T> SNI_Instance *SNI_Real<T>::m_Instance = NULL;
+	template <typename T> SNI_Class *SNI_Real<T>::m_Class = NULL;
 }
 
 #endif // !defined(SNI_REAL_H_INCLUDED)

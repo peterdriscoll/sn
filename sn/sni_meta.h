@@ -14,7 +14,7 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Meta);
 	public:
-		static SNI_Instance *Instance();
+		static SNI_Class *Class();
 
 		SNI_Meta();
 		SNI_Meta(long p_DeltaMetaLevel, SNI_Expression *p_Expression);
@@ -42,7 +42,7 @@ namespace SNI
 		virtual SN::SN_Value DoIsA(const SNI_Value * p_Parent) const;
 
 	private:
-		static SNI_Instance *m_Instance;
+		static SNI_Class *m_Class;
 
 		long m_DeltaMetaLevel;
 		SNI_Expression * m_Expression;

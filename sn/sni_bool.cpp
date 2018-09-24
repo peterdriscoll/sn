@@ -5,20 +5,20 @@
 
 #include "sni_valueset.h"
 #include "sni_helpers.h"
-#include "sni_instance.h"
+#include "SNI_Class.h"
 
 #include "sn_pch.h"
 
 namespace SNI
 {
-	/*static*/ SNI_Instance *SNI_Bool::m_Instance= NULL;
-	/*static*/ SNI_Instance *SNI_Bool::Instance()
+	/*static*/ SNI_Class *SNI_Bool::m_Class= NULL;
+	/*static*/ SNI_Class *SNI_Bool::Class()
 	{
-		if (!m_Instance)
+		if (!m_Class)
 		{
-			m_Instance = new SNI_Instance();
+			m_Class = new SNI_Class();
 		}
-		return m_Instance;
+		return m_Class;
 	}
 
 	SNI_Bool::SNI_Bool()
@@ -81,15 +81,21 @@ namespace SNI
 		return false;
 	}
 
+	SN::SN_Error SNI_Bool::Assert()
+	{
+		return m_Expression;
+	}
+
+
 	// Inheritance
 	SN::SN_Error  SNI_Bool::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)
 	{
-		return p_Result.AssertValue(Instance()->DoIsA(p_Parent));
+		return p_Result.AssertValue(Class()->DoIsA(p_Parent));
 	}
 
 	SN::SN_Value SNI_Bool::DoIsA(const SNI_Value * p_Parent) const
 	{
-		return Instance()->DoIsA(p_Parent);
+		return Class()->DoIsA(p_Parent);
 	}
 
 	SN::SN_Value SNI_Bool::DoHasA(SNI_Value * p_Member, SNI_Value * p_Name) const

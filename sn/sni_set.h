@@ -17,7 +17,7 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Set);
 	public:
-		static SNI_Instance *Instance();
+		static SNI_Class *Class();
 
 		SNI_Set();
 		SNI_Set(const SNI_Set &p_other);
@@ -53,7 +53,7 @@ namespace SNI
 		virtual void PromoteMembers();
 
 	private:
-		static SNI_Instance *m_Instance;
+		static SNI_Class *m_Class;
 
 		SN::SN_ValueList m_SetList;
 	};

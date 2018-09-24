@@ -10,9 +10,9 @@
 
 namespace SN
 {
-	/*static*/ SN_Instance SN_String::Instance()
+	/*static*/ SN_Class SN_String::Class()
 	{
-		return SNI_String::Instance();
+		return SNI_String::Class();
 	}
 
 	SN_String::SN_String()

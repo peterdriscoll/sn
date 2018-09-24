@@ -38,6 +38,7 @@
 #include "sn_debug.h"
 #include "sn_real.h"
 #include "sn_cartesian.h"
+#include "sn_class.h"
 #include "sn_instance.h"
 
 // Declare a variable, and tell the variable its variable name.

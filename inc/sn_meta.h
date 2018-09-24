@@ -16,7 +16,7 @@ namespace SN
 	class SN_EXPORT SN_Meta : public SN_Expression
 	{
 	public:
-		static SN_Instance Instance();
+		static SN_Class Class();
 
 		SN_Meta(long p_MetaLevel, const SN_Expression &p_Expression);
 		SN_Meta(const SN_Expression &p_Expression);

@@ -9,13 +9,13 @@
 
 namespace SNI
 {
-	class SNI_Instance;
+	class SNI_Class;
 
 	class SNI_Bool : public SNI_Value
 	{
 		PGC_CLASS(SNI_Bool);
 	public:
-		static SNI_Instance *Instance();
+		static SNI_Class *Class();
 
 		SNI_Bool();
 		SNI_Bool(const SNI_Bool &p_Other);
@@ -28,6 +28,7 @@ namespace SNI
 		virtual long GetPriority() const;
 
 		virtual bool Equivalent(SNI_Object * p_Other) const;
+		virtual SN::SN_Error Assert();
 		virtual bool GetBool() const;
 
 		// Inheritance
@@ -49,7 +50,7 @@ namespace SNI
 		virtual SN::SN_Value DoUnaryOr() const;
 
 	private:
-		static SNI_Instance *m_Instance;
+		static SNI_Class *m_Class;
 
 		bool m_Expression;
 	};

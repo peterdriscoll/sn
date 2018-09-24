@@ -20,7 +20,7 @@ namespace SN
 	class SN_EXPORT SN_String : public SN_Base<SNI::SNI_String, SN_Expression, SN_Error>
 	{
 	public:
-		static SN_Instance Instance();
+		static SN_Class Class();
 
 		SN_String();
 		SN_String(const SN_String &p_Other);

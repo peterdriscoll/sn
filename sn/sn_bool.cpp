@@ -11,9 +11,9 @@
 
 namespace SN
 {
-	/*static*/ SN_Instance SN_Bool::Instance()
+	/*static*/ SN_Class SN_Bool::Class()
 	{
-		return SNI_Bool::Instance();
+		return SNI_Bool::Class();
 	}
 
 	SN_Bool::SN_Bool()

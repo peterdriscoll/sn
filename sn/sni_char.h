@@ -11,7 +11,7 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Char);
 	public:
-		static SNI_Instance *Instance();
+		static SNI_Class *Class();
 
 		SNI_Char();
 		SNI_Char(const SNI_Char &p_Other);
@@ -35,7 +35,7 @@ namespace SNI
 		virtual string::value_type GetChar() const;
 
 	private:
-		static SNI_Instance *m_Instance;
+		static SNI_Class *m_Class;
 
 		string::value_type m_Char;
 	};

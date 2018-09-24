@@ -22,7 +22,7 @@ namespace SN
 	class SN_EXPORT SN_Char : public SN_Base<SNI::SNI_Char, SN_Expression, SN_Error>
 	{
 	public:
-		static SN_Instance Instance();
+		static SN_Class Class();
 
 		SN_Char();
 		SN_Char(const SN_Char &p_Other);

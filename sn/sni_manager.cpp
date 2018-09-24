@@ -62,25 +62,25 @@ namespace SNI
 			return;
 		}
 		m_LogicSetupDone = true;
-		Char::Instance().GetSNI_Instance()->AssertIsAValue(String::Instance().GetSNI_Instance(), skynet::True);
-		StringRef::Instance().GetSNI_Instance()->AssertIsAValue(String::Instance().GetSNI_Instance(), skynet::True);
+		Char::Class().GetSNI_Class()->AssertIsAValue(String::Class().GetSNI_Class(), skynet::True);
+		StringRef::Class().GetSNI_Class()->AssertIsAValue(String::Class().GetSNI_Class(), skynet::True);
 
-		Short::Instance().GetSNI_Instance()->AssertIsAValue(Long::Instance().GetSNI_Instance(), skynet::True);
-		Long::Instance().GetSNI_Instance()->AssertIsAValue(LongLong::Instance().GetSNI_Instance(), skynet::True);
+		Short::Class().GetSNI_Class()->AssertIsAValue(Long::Class().GetSNI_Class(), skynet::True);
+		Long::Class().GetSNI_Class()->AssertIsAValue(LongLong::Class().GetSNI_Class(), skynet::True);
 
-		Float::Instance().GetSNI_Instance()->AssertIsAValue(Double::Instance().GetSNI_Instance(), skynet::True);
-		Double::Instance().GetSNI_Instance()->AssertIsAValue(LongDouble::Instance().GetSNI_Instance(), skynet::True);
+		Float::Class().GetSNI_Class()->AssertIsAValue(Double::Class().GetSNI_Class(), skynet::True);
+		Double::Class().GetSNI_Class()->AssertIsAValue(LongDouble::Class().GetSNI_Class(), skynet::True);
 
-		Short::Instance().GetSNI_Instance()->AssertIsAValue(Float::Instance().GetSNI_Instance(), skynet::True);
-		Long::Instance().GetSNI_Instance()->AssertIsAValue(Double::Instance().GetSNI_Instance(), skynet::True);
-		LongLong::Instance().GetSNI_Instance()->AssertIsAValue(LongDouble::Instance().GetSNI_Instance(), skynet::True);
+		Short::Class().GetSNI_Class()->AssertIsAValue(Float::Class().GetSNI_Class(), skynet::True);
+		Long::Class().GetSNI_Class()->AssertIsAValue(Double::Class().GetSNI_Class(), skynet::True);
+		LongLong::Class().GetSNI_Class()->AssertIsAValue(LongDouble::Class().GetSNI_Class(), skynet::True);
 
-		Short::Instance().GetSNI_Instance()->Fix();
-		Long::Instance().GetSNI_Instance()->Fix();
-		LongLong::Instance().GetSNI_Instance()->Fix();
-		Float::Instance().GetSNI_Instance()->Fix();
-		Double::Instance().GetSNI_Instance()->Fix();
-		LongDouble::Instance().GetSNI_Instance()->Fix();
+		Short::Class().GetSNI_Class()->Fix();
+		Long::Class().GetSNI_Class()->Fix();
+		LongLong::Class().GetSNI_Class()->Fix();
+		Float::Class().GetSNI_Class()->Fix();
+		Double::Class().GetSNI_Class()->Fix();
+		LongDouble::Class().GetSNI_Class()->Fix();
 	}
 
 	bool SNI_Manager::HasDebugServer()

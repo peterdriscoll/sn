@@ -9,9 +9,9 @@
 
 namespace SN
 {
-	/*static*/ SN_Instance SN_Meta::Instance()
+	/*static*/ SN_Class SN_Meta::Class()
 	{
-		return SNI_Meta::Instance();
+		return SNI_Meta::Class();
 	}
 
 	SN_Meta::SN_Meta(long p_MetaLevel, const SN_Expression &p_Expression)

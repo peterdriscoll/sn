@@ -173,6 +173,7 @@
     <ClInclude Include="..\inc\sn_bool.h" />
     <ClInclude Include="..\inc\sn_cartesian.h" />
     <ClInclude Include="..\inc\sn_char.h" />
+    <ClInclude Include="..\inc\sn_class.h" />
     <ClInclude Include="..\inc\sn_debug.h" />
     <ClInclude Include="..\inc\sn_define.h" />
     <ClInclude Include="..\inc\sn_error.h" />
@@ -220,6 +221,7 @@
     <ClInclude Include="sni_cartcall.h" />
     <ClInclude Include="sni_cartesian.h" />
     <ClInclude Include="sni_char.h" />
+    <ClInclude Include="sni_class.h" />
     <ClInclude Include="sni_collapse.h" />
     <ClInclude Include="sni_comparison.h" />
     <ClInclude Include="sni_concat.h" />
@@ -325,6 +327,7 @@
     <ClCompile Include="sni_cartcall.cpp" />
     <ClCompile Include="sni_cartesian.cpp" />
     <ClCompile Include="sni_char.cpp" />
+    <ClCompile Include="sni_class.cpp" />
     <ClCompile Include="sni_collapse.cpp" />
     <ClCompile Include="sni_comparison.cpp" />
     <ClCompile Include="sni_concat.cpp" />
@@ -407,6 +410,7 @@
     <ClCompile Include="sn_bool.cpp" />
     <ClCompile Include="sn_cartesian.cpp" />
     <ClCompile Include="sn_char.cpp" />
+    <ClCompile Include="sn_class.cpp" />
     <ClCompile Include="sn_debug.cpp" />
     <ClCompile Include="sn_define.cpp" />
     <ClCompile Include="sn_error.cpp" />

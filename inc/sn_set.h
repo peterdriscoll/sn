@@ -17,7 +17,7 @@ namespace SN
 	class SN_EXPORT SN_Set : public SN_Base<SNI::SNI_Set, SN_Expression, SN_Error>
 	{
 	public:
-		static SN_Instance Instance();
+		static SN_Class Class();
 
 		SN_Set();
 		SN_Set(const SN_Set &p_other);

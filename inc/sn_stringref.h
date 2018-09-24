@@ -28,7 +28,7 @@ namespace SN
 	class SN_EXPORT SN_StringRef : public SN_Base<SNI::SNI_StringRef, SN_Expression, SN_Error>
 	{
 	public:
-		static SN_Instance Instance();
+		static SN_Class Class();
 
 		SN_StringRef();
 		SN_StringRef(const SN_Value &p_Source, const SN_Expression &p_Start, const SN_Expression &p_End);

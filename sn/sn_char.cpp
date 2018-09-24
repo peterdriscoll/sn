@@ -9,9 +9,9 @@
 
 namespace SN
 {
-	/*static*/ SN_Instance SN_Char::Instance()
+	/*static*/ SN_Class SN_Char::Class()
 	{
-		return SNI_Char::Instance();
+		return SNI_Char::Class();
 	}
 
 	SN_Char::SN_Char()
