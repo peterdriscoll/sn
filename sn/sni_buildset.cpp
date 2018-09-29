@@ -77,4 +77,14 @@ namespace SNI
 
 		return LOG_RETURN(context, PrimaryFunctionValue(value));
 	}
+
+	SN::SN_Expression SNI_BuildSet::UnifyArray(SN::SN_Expression * p_ParamList)
+	{
+		if (p_ParamList[PU1_First].IsNull())
+		{
+			SNI_DelayedProcessor::GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), p_ParamList);
+			return skynet::OK;
+		}
+		return p_ParamList[PU1_Result].AssertValue(PrimaryFunctionValue(p_ParamList[PU1_First].GetVariableValue()));
+	}
 }

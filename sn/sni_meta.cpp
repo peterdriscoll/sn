@@ -86,6 +86,12 @@ namespace SNI
 		return false;
 	}
 
+	size_t SNI_Meta::Hash() const
+	{
+		string data = DisplaySN0();
+		return _Hash_array_representation(data.c_str(), data.size());
+	}
+
 	// Inheritance
 	SN::SN_Error  SNI_Meta::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)
 	{

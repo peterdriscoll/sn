@@ -186,6 +186,7 @@
     <ClInclude Include="..\inc\sn_local.h" />
     <ClInclude Include="..\inc\sn_macros.h" />
     <ClInclude Include="..\inc\sn_manager.h" />
+    <ClInclude Include="..\inc\sn_mapping.h" />
     <ClInclude Include="..\inc\sn_meta.h" />
     <ClInclude Include="..\inc\sn_null.h" />
     <ClInclude Include="..\inc\sn_number.h" />
@@ -250,6 +251,7 @@
     <ClInclude Include="sni_isa.h" />
     <ClInclude Include="sni_log.h" />
     <ClInclude Include="sni_logbuffer.h" />
+    <ClInclude Include="sni_mapping.h" />
     <ClInclude Include="sni_revand.h" />
     <ClInclude Include="sni_hasmember.h" />
     <ClInclude Include="sni_inttostring.h" />
@@ -267,6 +269,7 @@
     <ClInclude Include="sni_namable.h" />
     <ClInclude Include="sni_negative.h" />
     <ClInclude Include="sni_not.h" />
+    <ClInclude Include="sni_reversesubscript.h" />
     <ClInclude Include="sni_revor.h" />
     <ClInclude Include="sni_null.h" />
     <ClInclude Include="sni_number.h" />
@@ -286,6 +289,7 @@
     <ClInclude Include="sni_stringref.h" />
     <ClInclude Include="sni_stringtodouble.h" />
     <ClInclude Include="sni_stringtoint.h" />
+    <ClInclude Include="sni_subscript.h" />
     <ClInclude Include="sni_subtract.h" />
     <ClInclude Include="sni_subtractleft.h" />
     <ClInclude Include="sni_subtractleftchar.h" />
@@ -356,6 +360,7 @@
     <ClCompile Include="sni_isa.cpp" />
     <ClCompile Include="sni_log.cpp" />
     <ClCompile Include="sni_logbuffer.cpp" />
+    <ClCompile Include="sni_mapping.cpp" />
     <ClCompile Include="sni_revand.cpp" />
     <ClCompile Include="sni_hasmember.cpp" />
     <ClCompile Include="sni_inttostring.cpp" />
@@ -372,6 +377,7 @@
     <ClCompile Include="sni_namable.cpp" />
     <ClCompile Include="sni_negative.cpp" />
     <ClCompile Include="sni_not.cpp" />
+    <ClCompile Include="sni_reversesubscript.cpp" />
     <ClCompile Include="sni_revor.cpp" />
     <ClCompile Include="sni_null.cpp" />
     <ClCompile Include="sni_number.cpp" />
@@ -390,6 +396,7 @@
     <ClCompile Include="sni_stringref.cpp" />
     <ClCompile Include="sni_stringtodouble.cpp" />
     <ClCompile Include="sni_stringtoint.cpp" />
+    <ClCompile Include="sni_subscript.cpp" />
     <ClCompile Include="sni_subtract.cpp" />
     <ClCompile Include="sni_subtractleft.cpp" />
     <ClCompile Include="sni_subtractleftchar.cpp" />
@@ -422,6 +429,7 @@
     <ClCompile Include="sn_let.cpp" />
     <ClCompile Include="sn_local.cpp" />
     <ClCompile Include="sn_manager.cpp" />
+    <ClCompile Include="sn_mapping.cpp" />
     <ClCompile Include="sn_meta.cpp" />
     <ClCompile Include="sn_null.cpp" />
     <ClCompile Include="sn_number.cpp" />

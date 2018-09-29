@@ -56,6 +56,7 @@ namespace SNI
 		virtual SN::SN_Expression SNI_StringRef::PartialEvaluate(long p_MetaLevel /* = 0 */) const;
 
 		virtual bool Equivalent(SNI_Object * p_Other) const;
+		virtual size_t Hash() const;
 
 		virtual SN::SN_Value DoAdd(SNI_Value * p_Other) const;
 		virtual SN::SN_Value DoConcat(SNI_Value * p_Other) const;

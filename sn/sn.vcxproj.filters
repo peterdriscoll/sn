@@ -447,6 +447,18 @@
     <ClInclude Include="sni_instance.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\inc\sn_mapping.h">
+      <Filter>Include Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_mapping.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_subscript.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_reversesubscript.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -840,6 +852,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sni_instance.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_mapping.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_mapping.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_subscript.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_reversesubscript.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

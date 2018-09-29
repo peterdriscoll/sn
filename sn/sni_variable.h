@@ -59,6 +59,7 @@ namespace SNI
 
 		virtual SNI_Expression * Clone(SNI_Frame *p_Frame, bool &p_Changed);
 		virtual bool Equivalent(SNI_Object * p_Other) const;
+		virtual size_t Hash() const;
 		virtual SNI_WorldSet * GetWorldSet();
 
 		virtual size_t Cardinality(size_t p_MaxCardinality = CARDINALITY_MAX) const;

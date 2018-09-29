@@ -226,6 +226,16 @@ namespace SN
 			return SN::SN_Function(SN::SN_Function(skynet::HasMember, p_Set), p_Member);
 		}
 
+		SN::SN_Expression SubscriptCall(const SN::SN_Expression & p_Mapping, const SN::SN_Expression & p_Index)
+		{
+			return SN::SN_Function(SN::SN_Function(skynet::Subscript, p_Mapping), p_Index);
+		}
+
+		SN::SN_Expression ReverseSubscript(const SN::SN_Expression & p_Mapping, const SN::SN_Expression & p_Value)
+		{
+			return SN::SN_Function(SN::SN_Function(skynet::ReverseSubscript, p_Mapping), p_Value);
+		}
+
 		// Function calls
 		SN::SN_Expression FunctionCall(const SN::SN_Expression &p_Function, const SN::SN_Expression &p_Parameter)
 		{

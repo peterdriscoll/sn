@@ -2088,29 +2088,6 @@ namespace test_sn
 			Cleanup();
 		}
 
-		TEST_METHOD(TestSimpleInherit)
-		{
-			return;
-			Initialize();
-			{
-				Manager manager("Test Simple Inherit", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
-
-				SN_DECLARE(A);
-				SN_DECLARE(B);
-				SN_DECLARE(M);
-				SN_DECLARE(F);
-				{
-					Transaction transaction;
-					A.IsA(B).PartialAssertAction();
-					(F(B) == Long(10)).AssertAction();
-					M(B).AssertAction();
-					(F(A) == Long(10)).EvaluateAction();
-				}
-			}
-			Cleanup();
-		}
-
 		TEST_METHOD(TestInheritInstance)
 		{
 			Initialize();
@@ -2132,6 +2109,7 @@ namespace test_sn
 				Float(5).IsA(Float::Class()).AssertAction();
 				Double(5).IsA(Double::Class()).AssertAction();
 				LongDouble(5).IsA(LongDouble::Class()).AssertAction();
+				Mapping().IsA(Mapping::Class()).AssertAction();
 
 				SN_DECLARE(a);
 				SN_DECLARE(b);
@@ -2315,6 +2293,85 @@ namespace test_sn
 				bool b1 = x1.GetBool();
 				Assert::IsTrue(b1);
 
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestInheritPolymorphicCall)
+		{
+			return;
+			Initialize();
+			{
+				Manager manager("Test Inherit Polymorphic Call", AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(A);
+				SN_DECLARE(B);
+				SN_DECLARE(M);
+				SN_DECLARE(F);
+				{
+					Transaction transaction;
+					A.IsA(B).PartialAssertAction();
+					(F(B) == Long(10)).AssertAction();
+					M(B).AssertAction();
+					(F(A) == Long(10)).EvaluateAction();
+				}
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestMappingForward)
+		{
+			Initialize();
+			{
+				Manager manager("Test Mapping Forward", AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(M);
+				SN_DECLARE(I);
+				SN_DECLARE(B);
+				SN_DECLARE(R);
+
+				(M == Mapping()).AssertAction();
+				(M[String("Name")] == String("Max")).AssertAction();
+				(M[String("Name")] == String("Max")).EvaluateAction();
+				(M[String("Name")] == R).AssertAction();
+				string R_text = R.GetString();
+				Assert::IsTrue(R_text == "Max");
+				(R == String("Max")).EvaluateAction();
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestMappingReverse)
+		{
+			Initialize();
+			{
+				Manager manager("Test Mapping Reverse", AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(age);
+				SN_DECLARE(I);
+				SN_DECLARE(S);
+				SN_DECLARE(K);
+				SN_DECLARE(E);
+
+				(age == Mapping()).AssertAction();
+				(age[String("Max")] == Long(43)).AssertAction();
+				(age[String("George")] == Long(55)).AssertAction();
+				(age[String("Roger")] == Long(43)).AssertAction();
+
+				(age[I] == Long(43)).AssertAction();
+				
+				(I.BuildSet() == S).AssertAction();
+				(K == (String("Max") || String("Roger"))).AssertAction();
+				(E == K.BuildSet()).AssertAction();
+				string I_text = I.GetVariableValue().DisplaySN();
+				string S_text = S.GetVariableValue().DisplaySN();
+				string K_text = K.GetVariableValue().DisplaySN();
+				string E_text = E.GetVariableValue().DisplaySN();
+				Assert::IsTrue(S_text == "{String(\"Max\"), String(\"Roger\")}");
+				(S == E).EvaluateAction();
 			}
 			Cleanup();
 		}

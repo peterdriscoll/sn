@@ -91,6 +91,11 @@ namespace SNI
 		return false;
 	}
 
+	size_t SNI_Char::Hash() const
+	{
+		return _Hash_representation(m_Char);
+	}
+
 	// Inheritance
 	SN::SN_Error  SNI_Char::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)
 	{

@@ -26,6 +26,8 @@ namespace SNI
 		virtual long GetPriority() const;
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 
+		virtual size_t Hash() const;
+
 		virtual SN::SN_Error AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result);
 		virtual SN::SN_Value DoIsA(const SNI_Value * p_Parent) const;
 

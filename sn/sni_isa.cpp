@@ -52,7 +52,6 @@ namespace SNI
 		return p_Left.GetSNI_Value()->AssertIsAValue(p_Right.GetSNI_Value(), p_Result);
 	}
 
-
 	SN::SN_Value SNI_IsA::PrimaryFunctionValue(const SN::SN_Value &p_Left, const SN::SN_Value &p_Right) const
 	{
 		return p_Left.GetSNI_Value()->DoIsA(p_Right.GetSNI_Value());
@@ -86,7 +85,6 @@ namespace SNI
 		}
 		return CARDINALITY_MAX;
 	}
-
 
 	SN::SN_Error SNI_IsA::UnifyElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, long p_CalcPos, long p_TotalCalc, SNI_WorldSet * worldSet) const
 	{

@@ -8,11 +8,6 @@
 #include "sn_class.h"
 #include "../sn/sni_bool.h"
 
-namespace SNI
-{
-	class SNI_FunctionDef;
-}
-
 namespace SN
 {
 	class SN_EXPORT SN_Bool : public SN_Base<SNI::SNI_Bool, SN_Expression, SN_Error>

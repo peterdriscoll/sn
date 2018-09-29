@@ -273,6 +273,12 @@ namespace SNI
 		return false;
 	}
 
+	size_t SNI_Expression::Hash() const
+	{
+		ASSERTM(false, GetTypeName() + " hash not implemented.");
+		return 0;
+	}
+
 	SN::SN_Expression SNI_Expression::Evaluate(long /* p_MetaLevel = 0 */) const
 	{
 		return skynet::Null;
@@ -724,6 +730,21 @@ namespace SNI
 	SN::SN_ValueSet SNI_Expression::DoRemove(const SN::SN_Value & /*p_Other*/)
 	{
 		return SN::SN_Error(GetTypeName() + " Remove not implemented.");
+	}
+
+	SN::SN_Error SNI_Expression::AssertSubscriptValue(const SNI_Value * p_Index, SN::SN_Expression p_Result)
+	{
+		return SN::SN_Error(GetTypeName() + " Subscript operator [] function not implemented on assert.");
+	}
+
+	SN::SN_Value SNI_Expression::DoSubscriptCall(const SN::SN_Value & p_Index) const
+	{
+		return SN::SN_Error(GetTypeName() + " Subscript operator [] not implemented.");
+	}
+
+	SN::SN_Value SNI_Expression::DoReverseSubscript(const SN::SN_Value & p_Result) const
+	{
+		return SN::SN_Error(GetTypeName() + " Reverse subscript operator [] not implemented.");
 	}
 
 	bool SNI_Expression::DoIsEmpty() const

@@ -52,6 +52,7 @@ namespace SNI
 		virtual long GetNumParameters() const;
 
 		virtual bool Equivalent(SNI_Object * p_Other) const;
+		virtual size_t Hash() const;
 
 		virtual bool IsKnownValue(const SN::SN_Expression & p_Param) const;
 

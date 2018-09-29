@@ -320,6 +320,11 @@ namespace SNI
 		return false;
 	}
 
+	size_t SNI_Variable::Hash() const
+	{
+		return m_Value->Hash();
+	}
+
 	SNI_WorldSet * SNI_Variable::GetWorldSet()
 	{
 		if (m_Value)

@@ -28,6 +28,7 @@ namespace SNI
 		virtual long GetPriority() const;
 
 		virtual bool Equivalent(SNI_Object * p_Other) const;
+		virtual size_t Hash() const;
 		virtual SN::SN_Error Assert();
 		virtual bool GetBool() const;
 

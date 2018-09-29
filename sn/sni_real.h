@@ -151,6 +151,11 @@ namespace SNI
 			SN_EQUIVALENT_TYPE_CASES()
 		}
 
+		size_t Hash() const
+		{
+			return _Hash_representation(m_Number);
+		}
+
 		// Inheritance
 		SN::SN_Error  AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)
 		{

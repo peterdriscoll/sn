@@ -20,6 +20,7 @@
 #include "sni_bool.h"
 #include "sni_number.h"
 #include "sni_function.h"
+#include "sni_mapping.h"
 #include "sni_meta.h"
 #include "sni_vardef.h"
 #include "sni_variable.h"
@@ -114,6 +115,11 @@ namespace SN
 
 	SN_Expression::SN_Expression(const SN_Instance & p_Instance)
 		: SN_Base(dynamic_cast<SNI::SNI_Expression *>(p_Instance.GetSNI_Instance()))
+	{
+	}
+
+	SN_Expression::SN_Expression(const SN_Mapping & p_Mapping)
+		: SN_Base(dynamic_cast<SNI::SNI_Expression *>(p_Mapping.GetSNI_Mapping()))
 	{
 	}
 
@@ -452,6 +458,16 @@ namespace SN
 	SN_Expression SN_Expression::operator()(const SN_Expression &p_Parameter, const SN_Expression &p_Condition) const
 	{
 		return SN_Operators::FunctionCall(*this, p_Parameter, p_Condition);
+	}
+
+	SN_Expression SN_Expression::operator[](const SN_Expression &p_Index) const
+	{
+		return SN_Operators::SubscriptCall(*this, p_Index);
+	}
+
+	SN_Expression SN_Expression::ReverseSubscript(const SN_Expression &p_Index) const
+	{
+		return SN_Operators::ReverseSubscript(*this, p_Index);
 	}
 
 	// Strings

@@ -81,6 +81,11 @@ namespace SNI
 		return false;
 	}
 
+	size_t SNI_Bool::Hash() const
+	{
+		return _Hash_representation(m_Expression);
+	}
+
 	SN::SN_Error SNI_Bool::Assert()
 	{
 		return m_Expression;

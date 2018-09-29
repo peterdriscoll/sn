@@ -48,6 +48,7 @@ namespace SN
 	class SN_Cartesian;
 	class SN_Class;
 	class SN_Instance;
+	class SN_Mapping;
 
 	class SN_Context
 	{
@@ -89,6 +90,7 @@ namespace SN
 		SN_Expression(const SN_Error &p_Error);
 		SN_Expression(const SN_Class &p_Class);
 		SN_Expression(const SN_Instance &p_Instance);
+		SN_Expression(const SN_Mapping &p_Mapping);
 
 		SN_APPLY_TYPES(SN_Expression, DUMMY, SN_CONSTRUCTOR)
 
@@ -157,7 +159,8 @@ namespace SN
 		// Function
 		SN_Expression operator()(const SN_Expression &p_Parameter) const;
 		SN_Expression operator()(const SN_Expression &p_Parameter, const SN_Expression &p_Condition) const;
-
+		SN_Expression operator[](const SN_Expression &p_Index) const;
+		SN_Expression ReverseSubscript(const SN_Expression & p_Index) const;
 
 		// Sets
 		SN_Expression BuildSet() const;

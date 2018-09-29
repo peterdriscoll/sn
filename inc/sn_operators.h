@@ -61,6 +61,10 @@ namespace SN
 		SN::SN_Expression BuildSet(const SN::SN_Expression &p_Expression);
 		SN::SN_Expression HasMember(const SN::SN_Expression &p_Set, const SN::SN_Expression &p_Member);
 
+		// Mapings
+		SN::SN_Expression SubscriptCall(const SN::SN_Expression &p_Mapping, const SN::SN_Expression &p_Index);
+		SN::SN_Expression ReverseSubscript(const SN::SN_Expression &p_Mapping, const SN::SN_Expression &p_Index);
+
 		// Conversions
 		SN::SN_Expression IntToString(const SN::SN_Expression &p_Left);
 		SN::SN_Expression StringToInt(const SN::SN_Expression &p_Left);

@@ -38,6 +38,7 @@
 #include "sn_debug.h"
 #include "sn_real.h"
 #include "sn_cartesian.h"
+#include "sn_mapping.h"
 #include "sn_class.h"
 #include "sn_instance.h"
 
@@ -73,6 +74,7 @@ namespace skynet
 	typedef SN::SN_Number Number;
 	typedef SN::SN_Char Char;
 	typedef SN::SN_String String;
+	typedef SN::SN_Mapping Mapping;
 	typedef SN::SN_StringRef StringRef;
 	typedef SN::SN_ValueSet ValueSet;
 	typedef SN::SN_Set Set;
@@ -143,6 +145,10 @@ namespace skynet
 	// * Inheritance
 	extern SN_EXPORT SN::SN_FunctionDef IsA;
 	extern SN_EXPORT SN::SN_FunctionDef HasA;
+
+	// * Mapping
+	extern SN_EXPORT SN::SN_FunctionDef Subscript;
+	extern SN_EXPORT SN::SN_FunctionDef ReverseSubscript;
 
 	// * Sets
 	extern SN_EXPORT SN::SN_FunctionDef BuildSet;

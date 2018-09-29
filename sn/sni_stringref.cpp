@@ -486,6 +486,12 @@ namespace SNI
 		return false;
 	}
 
+	size_t SNI_StringRef::Hash() const
+	{
+		string data = GetString();
+		return _Hash_array_representation(data.c_str(), data.size());
+	}
+
 	//-----------------------------------------------------------------------
 	// Implementation
 	//-----------------------------------------------------------------------

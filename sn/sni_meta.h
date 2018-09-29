@@ -28,6 +28,7 @@ namespace SNI
 		virtual long GetPriority() const;
 
 		virtual bool Equivalent(SNI_Object * p_Other) const;
+		virtual size_t Hash() const;
 		virtual SN::SN_Expression Evaluate(long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression PartialEvaluate(long p_MetaLevel = 0) const;
 

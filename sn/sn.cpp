@@ -56,6 +56,10 @@
 #include "sni_isa.h"
 #include "sni_hasa.h"
 
+// Mappings
+#include "sni_subscript.h"
+#include "sni_reversesubscript.h"
+
 // Sets
 #include "sni_buildset.h"
 #include "sni_hasmember.h"
@@ -115,6 +119,10 @@ namespace skynet
 	// Inheritance
 	SN::SN_FunctionDef IsA(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_IsA()));
 	SN::SN_FunctionDef HasA(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_HasA()));
+
+	// Mapping
+	SN::SN_FunctionDef Subscript(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Subscript()));
+	SN::SN_FunctionDef ReverseSubscript(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_ReverseSubscript()));
 
 	// Sets
 	SN::SN_FunctionDef BuildSet(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_BuildSet()));

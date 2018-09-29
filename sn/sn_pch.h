@@ -35,6 +35,7 @@
 #include "sni_variable.h"
 #include "sni_real.h"
 #include "sni_number.h"
+#include "sni_mapping.h"
 #include "sni_class.h"
 #include "sni_instance.h"
 
@@ -123,6 +124,10 @@
 #include "sni_attributedef.h"
 #include "sni_isa.h"
 #include "sni_hasa.h"
+
+// Mappings
+#include "sni_subscript.h"
+#include "sni_reversesubscript.h"
 
 // Sets
 #include "sni_buildset.h"

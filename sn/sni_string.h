@@ -47,6 +47,7 @@ namespace SNI
 
 		// Base
 		virtual bool Equivalent(SNI_Object * p_Other) const;
+		virtual size_t Hash() const;
 		virtual SN::SN_Error AssertValue(const SN::SN_Expression &p_Value);
 
 		// Inheritance

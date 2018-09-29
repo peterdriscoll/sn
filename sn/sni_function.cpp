@@ -126,6 +126,12 @@ namespace SNI
 		return false;
 	}
 
+	size_t SNI_Function::Hash() const
+	{
+		// return _Hash_array_representation(GetFunction()->GetTypeName().c_str(), GetFunction()->GetTypeName().size());
+		return 0;
+	}
+
 	SN::SN_Expression SNI_Function::Evaluate(long p_MetaLevel /* = 0 */) const
 	{
 		SN::SN_ExpressionList * l_ParameterList = new SN::SN_ExpressionList();

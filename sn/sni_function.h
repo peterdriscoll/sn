@@ -28,6 +28,7 @@ namespace SNI
 		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual SNI_Expression *Clone(SNI_Frame *p_Frame, bool &p_Changed);
 		virtual bool Equivalent(SNI_Object * p_Other) const;
+		virtual size_t Hash() const;
 
 		virtual SN::SN_Expression Evaluate(long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression PartialEvaluate(long p_MetaLevel = 0) const;

@@ -110,6 +110,8 @@ namespace SNI
 		virtual bool AllValues() const;
 		virtual SN::SN_Error AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World **p_World, SNI_WorldSet *p_WorldSet);
 		virtual bool MarkComplete();
+		virtual bool Equivalent(SNI_Object * p_Other) const;
+		virtual size_t Hash() const;
 
 		//---------------------------------------------------------------
 		// Cardinality
@@ -137,7 +139,6 @@ namespace SNI
 		virtual SN::SN_Error SelfAssert();
 		virtual SN::SN_Error PartialAssert();
 		virtual SN::SN_Error PartialAssertValue(const SN::SN_Expression &p_Expression, bool p_Define = false);
-		virtual bool Equivalent(SNI_Object * p_Other) const;
 
 		virtual void AssertThrow();
 		virtual void PartialAssertThrow();
@@ -215,6 +216,12 @@ namespace SNI
 		// Value sets
 		virtual bool DoIsEmpty() const;
 		virtual SN::SN_ValueSet DoRemove(const SN::SN_Value &p_Other);
+
+		virtual SN::SN_Error AssertSubscriptValue(const SNI_Value *p_Index, SN::SN_Expression p_Result);
+
+		// Mapping/vector
+		virtual SN::SN_Value DoSubscriptCall(const SN::SN_Value & p_Index) const;
+		virtual SN::SN_Value DoReverseSubscript(const SN::SN_Value & p_Result) const;
 
 	protected:
 		string Bracket(long p_Priority, const string &p_Expression) const;

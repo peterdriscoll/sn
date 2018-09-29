@@ -70,6 +70,11 @@ namespace SNI
 		return false;
 	}
 
+	size_t SNI_FunctionDef::Hash() const
+	{
+		return _Hash_representation(this);
+	}
+
 	bool SNI_FunctionDef::IsKnownValue(const SN::SN_Expression &p_Param) const
 	{
 		return p_Param.IsKnownValue();

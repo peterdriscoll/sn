@@ -152,6 +152,11 @@ namespace SNI
 		return false;
 	}
 
+	size_t SNI_String::Hash() const
+	{
+		return _Hash_array_representation(m_String.c_str(), m_String.size());
+	}
+
 	SN::SN_Error SNI_String::AssertValue(const SN::SN_Expression &p_Value)
 	{
 		if (SN::Is<SNI_StringRef*>(p_Value) || SN::Is<SNI_ValueSet*>(p_Value))
