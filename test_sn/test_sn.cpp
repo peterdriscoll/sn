@@ -2343,6 +2343,27 @@ namespace test_sn
 			Cleanup();
 		}
 
+		TEST_METHOD(TestMappingForwardValueset)
+		{
+			return;
+			Initialize();
+			{
+				Manager manager("Test Mapping Forward Valueset", AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(M);
+				SN_DECLARE(I);
+				SN_DECLARE(B);
+				SN_DECLARE(R);
+
+				(M == Mapping()).AssertAction();
+				(M[String("Name") || String("Fullname")] == String("Max")).AssertAction();
+				(M[String("Name")] == String("Max")).EvaluateAction();
+				(M[String("Fullname")] == String("Max")).EvaluateAction();
+			}
+			Cleanup();
+		}
+
 		TEST_METHOD(TestMappingReverse)
 		{
 			Initialize();
@@ -2360,6 +2381,8 @@ namespace test_sn
 				(age[String("Max")] == Long(43)).AssertAction();
 				(age[String("George")] == Long(55)).AssertAction();
 				(age[String("Roger")] == Long(43)).AssertAction();
+
+				age.Fix(String(""));
 
 				(age[I] == Long(43)).AssertAction();
 				

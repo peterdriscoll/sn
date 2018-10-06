@@ -23,6 +23,8 @@ namespace SNI
 	}
 
 	SNI_Mapping::SNI_Mapping()
+	: m_Fixed(false)
+	, m_DefaultValue(NULL)
 	{
 
 	}
@@ -39,6 +41,7 @@ namespace SNI
 			REQUESTPROMOTION(pair.first);
 			REQUESTPROMOTION(pair.second);
 		}
+		REQUESTPROMOTION(m_DefaultValue);
 	}
 
 	string SNI_Mapping::GetTypeName() const
@@ -63,22 +66,25 @@ namespace SNI
 
 	bool SNI_Mapping::Equivalent(SNI_Object * p_Other) const
 	{
-		if (dynamic_cast<SNI_Mapping *>(p_Other))
+		if (m_Fixed)
 		{
-			SNI_Mapping * l_mapping = dynamic_cast<SNI_Mapping *>(p_Other);
-			for (auto &pair : m_Map)
+			if (dynamic_cast<SNI_Mapping *>(p_Other))
 			{
-				if (!pair.second.Equivalent(l_mapping->DoSubscriptCall(pair.first.GetSNI_Expression())))
+				SNI_Mapping * l_mapping = dynamic_cast<SNI_Mapping *>(p_Other);
+				for (auto &pair : m_Map)
 				{
-					return false;
+					if (!pair.second.Equivalent(l_mapping->DoSubscriptCall(pair.first.GetSNI_Expression())))
+					{
+						return false;
+					}
 				}
-			}
-			
-			for (auto &pair : l_mapping->m_Map)
-			{
-				if (!pair.second.Equivalent(DoSubscriptCall(pair.first.GetSNI_Expression())))
+
+				for (auto &pair : l_mapping->m_Map)
 				{
-					return false;
+					if (!pair.second.Equivalent(DoSubscriptCall(pair.first.GetSNI_Expression())))
+					{
+						return false;
+					}
 				}
 			}
 		}
@@ -120,27 +126,41 @@ namespace SNI
 
 	SN::SN_Value SNI_Mapping::DoReverseSubscript(const SN::SN_Value & p_Result) const
 	{
-		if (m_Map.size())
+		if (!m_Map.size())
 		{
-			SN::SN_ValueSet vs;
-			SNI_WorldSet *worldSet = vs.GetWorldSet();
-			for (auto &pair : m_Map)
+			return SN::SN_Error(GetTypeName() + " No values in map.");
+		}
+		if (!m_Fixed)
+		{
+			return SN::SN_Error(GetTypeName() + " Default value not fixed.");
+		}
+		if (p_Result.Equivalent(m_DefaultValue))
+		{
+			return SN::SN_Error(GetTypeName() + " Undefined operation, because result matches default " + m_DefaultValue->DisplaySN0());
+		}
+		SN::SN_ValueSet vs;
+		SNI_WorldSet *worldSet = vs.GetWorldSet();
+		for (auto &pair : m_Map)
+		{
+			if (p_Result.Equivalent(pair.second))
 			{
-				if (p_Result.Equivalent(pair.second))
+				SN::SN_Error err = vs.AddValue(pair.first, 0, NULL, worldSet);
+				if (err.IsError())
 				{
-					SN::SN_Error err = vs.AddValue(pair.first, 0, NULL, worldSet);
-					if (err.IsError())
-					{
-						return err;
-					}
+					return err;
 				}
 			}
-			if (vs.Cardinality())
-			{
-				return vs;
-			}
-			return SN::SN_Error(GetTypeName() + " No matching values in map.");
 		}
-		return SN::SN_Error(GetTypeName() + " No values in map.");
+		if (vs.Cardinality())
+		{
+			return vs;
+		}
+		return SN::SN_Error(GetTypeName() + " No matching values in map.");
+	}
+
+	void SNI_Mapping::Fix(SN::SN_Expression p_Value)
+	{
+		m_Fixed = true;
+		m_DefaultValue = p_Value.GetSNI_Expression();
 	}
 }

@@ -186,22 +186,27 @@ namespace SN
 
 		void AssertAction()
 		{
-			return GetSNI_Base()->AssertAction();
+			GetSNI_Base()->AssertAction();
 		}
 
 		void PartialAssertAction()
 		{
-			return GetSNI_Base()->PartialAssertAction();
+			GetSNI_Base()->PartialAssertAction();
 		}
 
 		void EvaluateAction()
 		{
-			return GetSNI_Base()->EvaluateAction();
+			GetSNI_Base()->EvaluateAction();
 		}
 
 		void PartialEvaluateAction()
 		{
-			return GetSNI_Base()->PartialEvaluateAction();
+			GetSNI_Base()->PartialEvaluateAction();
+		}
+
+		void Fix(Exp p_Value)
+		{
+			GetSNI_Base()->Fix(p_Value);
 		}
 	};
 }

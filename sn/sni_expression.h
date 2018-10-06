@@ -40,6 +40,7 @@ namespace SNI
 	class SNI_Cart;
 	class SNI_Splitter;
 	class SNI_Frame;
+	class SNI_Class;
 
 	class SNI_Replacement;
 	typedef vector<SNI_Replacement> SNI_ReplacementList;
@@ -112,7 +113,7 @@ namespace SNI
 		virtual bool MarkComplete();
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 		virtual size_t Hash() const;
-
+		
 		//---------------------------------------------------------------
 		// Cardinality
 		//---------------------------------------------------------------
@@ -154,6 +155,7 @@ namespace SNI
 		virtual void EvaluateActionWithHandler(OnErrorHandler * p_ErrorHandler);
 		virtual void PartialEvaluateActionWithHandler(OnErrorHandler * p_ErrorHandler);
 
+		virtual void Fix(SN::SN_Expression p_Value);
 		//---------------------------------------------------------------
 		// Implementation
 		//---------------------------------------------------------------
@@ -227,7 +229,7 @@ namespace SNI
 		string Bracket(long p_Priority, const string &p_Expression) const;
 
 	private:
-		void HandleAssertAction(SN::LogContext & p_Context, SN::SN_Expression p_Result, string p_Text, OnErrorHandler * p_ErrorHandler);
+		void HandleAssertAction(SN::LogContext & p_Context, SN::SN_Error p_Result, string p_Text, OnErrorHandler * p_ErrorHandler);
 		void HandleEvaluateAction(SN::LogContext &p_Context, SN::SN_Expression p_Result, string p_Text, OnErrorHandler *p_ErrorHandler);
 	};
 }

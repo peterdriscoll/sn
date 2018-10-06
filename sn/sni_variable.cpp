@@ -158,10 +158,17 @@ namespace SNI
 		return m_Value;
 	}
 
-
 	SN::SN_Expression SNI_Variable::GetVariableValue(bool p_IfComplete)
 	{
 		return m_Value;
+	}
+
+	void SNI_Variable::Fix(SN::SN_Expression p_Value)
+	{
+		if (m_Value)
+		{
+			m_Value->Fix(p_Value);
+		}
 	}
 
 	SN::SN_Error SNI_Variable::AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World ** p_WorldList, SNI_WorldSet *p_WorldSet)

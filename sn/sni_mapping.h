@@ -15,6 +15,7 @@ namespace SN
 namespace SNI
 {
 	class SNI_Class;
+	class SNI_Expression;
 
 	struct KeyHasher
 	{
@@ -55,6 +56,8 @@ namespace SNI
 		virtual SN::SN_Value DoSubscriptCall(const SN::SN_Value &p_Index) const;
 		virtual SN::SN_Value DoReverseSubscript(const SN::SN_Value & p_Result) const;
 
+		virtual void Fix(SN::SN_Expression p_Value);
+
 	protected:
 		virtual void PromoteMembers();
 
@@ -62,6 +65,8 @@ namespace SNI
 		static SNI_Class *m_Class;
 
 		unordered_map<SN::SN_Expression, SN::SN_Expression, KeyHasher, KeyEqual> m_Map;
+		bool m_Fixed;
+		SNI_Expression *m_DefaultValue;
 	};
 
 	typedef vector<SNI_Mapping> SNI_MappingList;

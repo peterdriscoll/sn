@@ -416,8 +416,9 @@ namespace SNI
 		SN::SN_Expression clone = Clone(NULL, NULL);
 		LOG(WriteLine(SN::DebugLevel, "Assert " + clone.DisplayValueSN()));
 		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Assert " + clone.DisplayValueSN());
-		HandleAssertAction(context, clone.Assert(), "Assert", p_ErrorHandler);
+		SN::SN_Error result = clone.Assert();
 		SNI_Frame::Pop();
+		HandleAssertAction(context, result, "Assert", p_ErrorHandler);
 	}
 
 	void SNI_Expression::PartialAssertAction()
@@ -434,15 +435,14 @@ namespace SNI
 		HandleAssertAction(context, PartialAssert(), "Partial assert", p_ErrorHandler);
 	}
 
-	void SNI_Expression::HandleAssertAction(SN::LogContext & p_Context, SN::SN_Expression p_Result, string p_Text, OnErrorHandler * p_ErrorHandler)
+	void SNI_Expression::HandleAssertAction(SN::LogContext & p_Context, SN::SN_Error p_Result, string p_Text, OnErrorHandler * p_ErrorHandler)
 	{
 		SNI_DelayedProcessor::GetProcessor()->Run();
-		SN::SN_Error e = p_Result;
-		if (e.IsError())
+		if (p_Result.IsError())
 		{
-			e.AddNote(p_Context, this, p_Text);
-			e.Log();
-			p_ErrorHandler(e);
+			p_Result.AddNote(p_Context, this, p_Text);
+			p_Result.Log();
+			p_ErrorHandler(p_Result);
 		}
 	}
 
@@ -473,6 +473,10 @@ namespace SNI
 		LOG(WriteLine(SN::DebugLevel, "Partial evaluate " + DisplayValueSN(0, l_DisplayOptions)));
 		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Partial evaluate " + DisplayValueSN(0, l_DisplayOptions));
 		HandleEvaluateAction(context, PartialEvaluate(), "Partial evaluate", p_ErrorHandler);
+	}
+
+	void SNI_Expression::Fix(SN::SN_Expression p_Value)
+	{
 	}
 
 	void SNI_Expression::HandleEvaluateAction(SN::LogContext &p_Context, SN::SN_Expression p_Result, string p_Text, OnErrorHandler *p_ErrorHandler)

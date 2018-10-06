@@ -148,6 +148,10 @@ namespace SNI
 
         virtual bool Equivalent(SNI_Object * p_Other) const
         {
+			if (!p_Other)
+			{
+				return false;
+			}
 			SN_EQUIVALENT_TYPE_CASES()
 		}
 
