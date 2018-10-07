@@ -762,6 +762,11 @@ namespace SNI
 		return SN::SN_Error(GetTypeName() + " CountIf function not implemented.");
 	}
 
+	SN::SN_Value SNI_Expression::DoCountAll() const
+	{
+		return SN::SN_Error(GetTypeName() + " CountAll function not implemented.");
+	}
+
 	bool SNI_Expression::DoIsEmpty() const
 	{
 		ASSERTM(false, GetTypeName() + " IsEmpty not implemented.");

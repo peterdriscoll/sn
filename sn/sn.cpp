@@ -60,6 +60,7 @@
 #include "sni_subscript.h"
 #include "sni_reversesubscript.h"
 #include "sni_countif.h"
+#include "sni_countall.h"
 
 // Sets
 #include "sni_buildset.h"
@@ -125,6 +126,7 @@ namespace skynet
 	SN::SN_FunctionDef Subscript(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Subscript()));
 	SN::SN_FunctionDef ReverseSubscript(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_ReverseSubscript()));
 	SN::SN_FunctionDef CountIf(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_CountIf()));
+	SN::SN_FunctionDef CountAll(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_CountAll()));
 
 	// Sets
 	SN::SN_FunctionDef BuildSet(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_BuildSet()));

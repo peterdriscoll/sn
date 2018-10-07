@@ -59,6 +59,7 @@ namespace SNI
 		virtual SN::SN_Value DoReverseSubscript(const SN::SN_Value & p_Result) const;
 
 		virtual SN::SN_Value DoCountIf(SN::SN_Expression p_Value) const;
+		virtual SN::SN_Value DoCountAll() const;
 
 		virtual void Fix(SN::SN_Expression p_Value);
 

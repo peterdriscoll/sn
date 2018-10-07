@@ -475,6 +475,11 @@ namespace SN
 		return SN_Operators::CountIf(*this, p_Lambda);
 	}
 
+	SN_Expression SN_Expression::CountAll() const
+	{
+		return SN_Operators::CountAll(*this);
+	}
+
 	// Strings
 	SN_Expression SN_Expression::Concat(const SN_Expression & p_Other) const
 	{

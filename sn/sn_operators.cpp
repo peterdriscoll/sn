@@ -241,6 +241,11 @@ namespace SN
 			return SN::SN_Function(SN::SN_Function(skynet::CountIf, p_Mapping), p_Lambda);
 		}
 
+		SN::SN_Expression CountAll(const SN::SN_Expression & p_Mapping)
+		{
+			return SN::SN_Function(skynet::CountAll, p_Mapping);
+		}
+
 		// Function calls
 		SN::SN_Expression FunctionCall(const SN::SN_Expression &p_Function, const SN::SN_Expression &p_Parameter)
 		{

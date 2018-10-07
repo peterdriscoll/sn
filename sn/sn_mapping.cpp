@@ -35,6 +35,11 @@ namespace SN
 		return SN_Operators::CountIf(*this, p_Value);
 	}
 
+	SN_Expression SN_Mapping::CountAll()
+	{
+		return SN_Operators::CountAll(*this);
+	}
+
 	SN_Expression SN_Mapping::IsA(const SN_Expression & p_Parent) const
 	{
 		return SN_Operators::IsA(*this, p_Parent);

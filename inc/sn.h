@@ -150,6 +150,7 @@ namespace skynet
 	extern SN_EXPORT SN::SN_FunctionDef Subscript;
 	extern SN_EXPORT SN::SN_FunctionDef ReverseSubscript;
 	extern SN_EXPORT SN::SN_FunctionDef CountIf;
+	extern SN_EXPORT SN::SN_FunctionDef CountAll;
 
 	// * Sets
 	extern SN_EXPORT SN::SN_FunctionDef BuildSet;

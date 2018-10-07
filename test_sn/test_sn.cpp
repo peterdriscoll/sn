@@ -2403,11 +2403,13 @@ namespace test_sn
 		{
 			Initialize();
 			{
-				Manager manager("Test Mapping Reverse", AssertErrorHandler);
+				Manager manager("Test Mapping Count", AssertErrorHandler);
 				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(age);
-				SN_DECLARE(oldCount);
+				SN_DECLARE(count43);
+				SN_DECLARE(count55);
+				SN_DECLARE(countBoth);
 				SN_DECLARE(X);
 
 				(age == Mapping()).AssertAction();
@@ -2415,15 +2417,25 @@ namespace test_sn
 				(age[String("George")] == Long(55)).AssertAction();
 				(age[String("Roger")] == Long(43)).AssertAction();
 				(age[String("Bob")] == Long(43)).AssertAction();
+				(age[String("Ken")] == Long(55)).AssertAction();
 
 				age.Fix(Long(0));
 
-				(age.CountIf(Lambda(X, X == Long(43))) == oldCount).AssertAction();
+				(age.CountIf(Lambda(X, X == Long(43))) == count43).AssertAction();
+				(age.CountIf(Lambda(X, X == Long(55))) == count55).AssertAction();
+				(age.CountAll() == countBoth).AssertAction();
 
-				(oldCount == Long(3)).EvaluateAction();
+				(count43 == Long(3)).EvaluateAction();
+				(count55 == Long(2)).EvaluateAction();
+				(countBoth == count43 + count55).EvaluateAction();
 
-				string oldCount_text = oldCount.GetVariableValue().DisplaySN();
-				Assert::IsTrue(oldCount_text == "3");
+				string count43_text = count43.GetVariableValue().DisplaySN();
+				string count55_text = count55.GetVariableValue().DisplaySN();
+				string countBoth_text = countBoth.GetVariableValue().DisplaySN();
+
+				Assert::IsTrue(count43_text == "3");
+				Assert::IsTrue(count55_text == "2");
+				Assert::IsTrue(countBoth_text == "5");
 			}
 			Cleanup();
 		}

@@ -165,6 +165,10 @@ namespace SNI
 
 	SN::SN_Value SNI_Mapping::DoCountIf(SN::SN_Expression p_Value) const
 	{
+		if (!m_Fixed)
+		{
+			return SN::SN_Error(GetTypeName() + " CountIf - Number of values in map may change. Fix the map before counting.");
+		}
 		SN_DECLARE_VALUE(countCondition, p_Value);
 		long count = 0;
 		for (auto &pair : m_Map)
@@ -175,6 +179,15 @@ namespace SNI
 			}
 		}
 		return SN::SN_Long(count);
+	}
+
+	SN::SN_Value SNI_Mapping::DoCountAll() const
+	{
+		if (!m_Fixed)
+		{
+			return SN::SN_Error(GetTypeName() + " CountAll - Number of values in map may change. Fix the map before counting.");
+		}
+		return SN::SN_Long(m_Map.size());
 	}
 
 	void SNI_Mapping::Fix(SN::SN_Expression p_Value)

@@ -226,6 +226,7 @@
     <ClInclude Include="sni_collapse.h" />
     <ClInclude Include="sni_comparison.h" />
     <ClInclude Include="sni_concat.h" />
+    <ClInclude Include="sni_countall.h" />
     <ClInclude Include="sni_countif.h" />
     <ClInclude Include="sni_debug.h" />
     <ClInclude Include="sni_debugcommand.h" />
@@ -336,6 +337,7 @@
     <ClCompile Include="sni_collapse.cpp" />
     <ClCompile Include="sni_comparison.cpp" />
     <ClCompile Include="sni_concat.cpp" />
+    <ClCompile Include="sni_countall.cpp" />
     <ClCompile Include="sni_countif.cpp" />
     <ClCompile Include="sni_debug.cpp" />
     <ClCompile Include="sni_debugcommand.cpp" />

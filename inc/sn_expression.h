@@ -162,6 +162,7 @@ namespace SN
 		SN_Expression operator[](const SN_Expression &p_Index) const;
 		SN_Expression ReverseSubscript(const SN_Expression & p_Index) const;
 		SN_Expression CountIf(const SN_Expression & p_Lambda) const;
+		SN_Expression CountAll() const;
 
 		// Sets
 		SN_Expression BuildSet() const;
