@@ -459,6 +459,9 @@
     <ClInclude Include="sni_reversesubscript.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sni_countif.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -864,6 +867,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sni_reversesubscript.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_countif.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

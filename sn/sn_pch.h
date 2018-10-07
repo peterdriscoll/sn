@@ -128,6 +128,7 @@
 // Mappings
 #include "sni_subscript.h"
 #include "sni_reversesubscript.h"
+#include "sni_countif.h"
 
 // Sets
 #include "sni_buildset.h"

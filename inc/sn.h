@@ -149,6 +149,7 @@ namespace skynet
 	// * Mapping
 	extern SN_EXPORT SN::SN_FunctionDef Subscript;
 	extern SN_EXPORT SN::SN_FunctionDef ReverseSubscript;
+	extern SN_EXPORT SN::SN_FunctionDef CountIf;
 
 	// * Sets
 	extern SN_EXPORT SN::SN_FunctionDef BuildSet;

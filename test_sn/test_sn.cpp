@@ -2398,5 +2398,34 @@ namespace test_sn
 			}
 			Cleanup();
 		}
+
+		TEST_METHOD(TestMappingCount)
+		{
+			Initialize();
+			{
+				Manager manager("Test Mapping Reverse", AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(age);
+				SN_DECLARE(oldCount);
+				SN_DECLARE(X);
+
+				(age == Mapping()).AssertAction();
+				(age[String("Max")] == Long(43)).AssertAction();
+				(age[String("George")] == Long(55)).AssertAction();
+				(age[String("Roger")] == Long(43)).AssertAction();
+				(age[String("Bob")] == Long(43)).AssertAction();
+
+				age.Fix(Long(0));
+
+				(age.CountIf(Lambda(X, X == Long(43))) == oldCount).AssertAction();
+
+				(oldCount == Long(3)).EvaluateAction();
+
+				string oldCount_text = oldCount.GetVariableValue().DisplaySN();
+				Assert::IsTrue(oldCount_text == "3");
+			}
+			Cleanup();
+		}
 	};
 }

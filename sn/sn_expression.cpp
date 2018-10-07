@@ -470,6 +470,11 @@ namespace SN
 		return SN_Operators::ReverseSubscript(*this, p_Index);
 	}
 
+	SN_Expression SN_Expression::CountIf(const SN_Expression &p_Lambda) const
+	{
+		return SN_Operators::CountIf(*this, p_Lambda);
+	}
+
 	// Strings
 	SN_Expression SN_Expression::Concat(const SN_Expression & p_Other) const
 	{

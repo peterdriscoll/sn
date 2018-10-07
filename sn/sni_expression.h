@@ -108,6 +108,7 @@ namespace SNI
 		virtual bool IsReferableValue() const;
 		virtual SN::SN_Expression GetVariableValue(bool p_IfComplete);
 		virtual bool IsError() const;
+		virtual bool IsFixed() const;
 		virtual bool AllValues() const;
 		virtual SN::SN_Error AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World **p_World, SNI_WorldSet *p_WorldSet);
 		virtual bool MarkComplete();
@@ -224,6 +225,7 @@ namespace SNI
 		// Mapping/vector
 		virtual SN::SN_Value DoSubscriptCall(const SN::SN_Value & p_Index) const;
 		virtual SN::SN_Value DoReverseSubscript(const SN::SN_Value & p_Result) const;
+		virtual SN::SN_Value DoCountIf(SN::SN_Expression p_Value) const;
 
 	protected:
 		string Bracket(long p_Priority, const string &p_Expression) const;

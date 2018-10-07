@@ -49,12 +49,16 @@ namespace SNI
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 		virtual size_t Hash() const;
 
+		virtual bool IsFixed() const;
+
 		virtual SN::SN_Error AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result);
 		virtual SN::SN_Value DoIsA(const SNI_Value * p_Parent) const;
 
 		virtual SN::SN_Error AssertSubscriptValue(const SNI_Value *p_Index, SN::SN_Expression p_Result);
 		virtual SN::SN_Value DoSubscriptCall(const SN::SN_Value &p_Index) const;
 		virtual SN::SN_Value DoReverseSubscript(const SN::SN_Value & p_Result) const;
+
+		virtual SN::SN_Value DoCountIf(SN::SN_Expression p_Value) const;
 
 		virtual void Fix(SN::SN_Expression p_Value);
 

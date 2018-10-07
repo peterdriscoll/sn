@@ -506,7 +506,6 @@ namespace SNI
 		if (m_Value)
 		{
 			SNI_Expression * l_clone = m_Value->Clone(this, NULL);
-			// SNI_Expression * l_clone = CloneValue();
 			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Variable.Call");
 			SN::SN_Expression e = l_clone->Call(p_ParameterList, p_MetaLevel);
 			SNI_Frame::Pop();

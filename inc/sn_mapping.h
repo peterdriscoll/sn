@@ -29,6 +29,7 @@ namespace SN
 		SN_Expression operator [](const SN_Expression &p_Index);
 		SN_Expression ReverseSubscript(const SN_Expression & p_Value);
 		SN_Expression IsA(const SN_Expression &p_Parent) const;
+		SN_Expression CountIf(const SN_Expression & p_Value);
 
 		SNI::SNI_Mapping * GetSNI_Mapping() const;
 	};

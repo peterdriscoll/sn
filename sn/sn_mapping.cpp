@@ -30,6 +30,11 @@ namespace SN
 		return SN_Operators::ReverseSubscript(*this, p_Value);
 	}
 
+	SN_Expression SN_Mapping::CountIf(const SN_Expression & p_Value)
+	{
+		return SN_Operators::CountIf(*this, p_Value);
+	}
+
 	SN_Expression SN_Mapping::IsA(const SN_Expression & p_Parent) const
 	{
 		return SN_Operators::IsA(*this, p_Parent);

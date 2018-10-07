@@ -64,6 +64,7 @@ namespace SN
 		// Mapings
 		SN::SN_Expression SubscriptCall(const SN::SN_Expression &p_Mapping, const SN::SN_Expression &p_Index);
 		SN::SN_Expression ReverseSubscript(const SN::SN_Expression &p_Mapping, const SN::SN_Expression &p_Index);
+		SN::SN_Expression CountIf(const SN::SN_Expression &p_Mapping, const SN::SN_Expression &p_Lambda);
 
 		// Conversions
 		SN::SN_Expression IntToString(const SN::SN_Expression &p_Left);

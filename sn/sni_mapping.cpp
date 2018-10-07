@@ -96,6 +96,11 @@ namespace SNI
 		return _Hash_representation(m_Map);
 	}
 
+	bool SNI_Mapping::IsFixed() const
+	{
+		return m_Fixed;
+	}
+
 	// Inheritance
 	SN::SN_Error SNI_Mapping::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)
 	{
@@ -156,6 +161,20 @@ namespace SNI
 			return vs;
 		}
 		return SN::SN_Error(GetTypeName() + " No matching values in map.");
+	}
+
+	SN::SN_Value SNI_Mapping::DoCountIf(SN::SN_Expression p_Value) const
+	{
+		SN_DECLARE_VALUE(countCondition, p_Value);
+		long count = 0;
+		for (auto &pair : m_Map)
+		{
+			if (p_Value.IsNull() || countCondition(pair.second).Evaluate().GetBool())
+			{
+				++count;
+			}
+		}
+		return SN::SN_Long(count);
 	}
 
 	void SNI_Mapping::Fix(SN::SN_Expression p_Value)

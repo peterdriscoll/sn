@@ -207,6 +207,11 @@ namespace SNI
 		return false;
 	}
 
+	bool SNI_Expression::IsFixed() const
+	{
+		return false;
+	}
+
 	bool SNI_Expression::AllValues() const
 	{
 		return false;
@@ -457,8 +462,9 @@ namespace SNI
 		SN::SN_Expression clone = Clone(NULL, NULL);
 		LOG(WriteLine(SN::DebugLevel, "Evaluate " + clone.DisplayValueSN()));
 		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Evaluate " + clone.DisplayValueSN());
-		HandleEvaluateAction(context, clone.Evaluate(), "Evaluate", p_ErrorHandler);
+		SN::SN_Expression result = clone.Evaluate();
 		SNI_Frame::Pop();
+		HandleEvaluateAction(context, result, "Evaluate", p_ErrorHandler);
 	}
 
 	void SNI_Expression::PartialEvaluateAction()
@@ -749,6 +755,11 @@ namespace SNI
 	SN::SN_Value SNI_Expression::DoReverseSubscript(const SN::SN_Value & p_Result) const
 	{
 		return SN::SN_Error(GetTypeName() + " Reverse subscript operator [] not implemented.");
+	}
+
+	SN::SN_Value SNI_Expression::DoCountIf(SN::SN_Expression p_Value) const
+	{
+		return SN::SN_Error(GetTypeName() + " CountIf function not implemented.");
 	}
 
 	bool SNI_Expression::DoIsEmpty() const

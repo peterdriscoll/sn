@@ -236,6 +236,11 @@ namespace SN
 			return SN::SN_Function(SN::SN_Function(skynet::ReverseSubscript, p_Mapping), p_Value);
 		}
 
+		SN::SN_Expression CountIf(const SN::SN_Expression & p_Mapping, const SN::SN_Expression & p_Lambda)
+		{
+			return SN::SN_Function(SN::SN_Function(skynet::CountIf, p_Mapping), p_Lambda);
+		}
+
 		// Function calls
 		SN::SN_Expression FunctionCall(const SN::SN_Expression &p_Function, const SN::SN_Expression &p_Parameter)
 		{
