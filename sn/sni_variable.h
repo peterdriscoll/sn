@@ -55,7 +55,8 @@ namespace SNI
 		virtual void Simplify();
 		virtual SN::SN_Expression SimplifyValue();
 		virtual SN::SN_Expression GetVariableValue(bool p_IfComplete);
-		void Fix(SN::SN_Expression p_Value);
+		virtual void Fix(SN::SN_Expression p_Value);
+		virtual void Fix();
 		virtual SN::SN_Error AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World ** p_WorldList, SNI_WorldSet *p_WorldSet);
 
 		virtual SNI_Expression * Clone(SNI_Frame *p_Frame, bool &p_Changed);

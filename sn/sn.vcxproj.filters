@@ -16,14 +16,17 @@
     <Filter Include="Include Header Files">
       <UniqueIdentifier>{6431e301-79a9-4b7c-a635-00e2bf791113}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Interface Source Files">
+      <UniqueIdentifier>{6a11f37e-8f8c-44a4-8f8b-8b097ac5e9a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Function Source Files">
+      <UniqueIdentifier>{4fc75c47-a94c-4fc3-a1de-a77f82711a02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Function Header Files">
+      <UniqueIdentifier>{e07d04c9-c619-4844-9bd2-825b2ce49a79}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="sni_add.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_and.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="sni_bool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -33,16 +36,7 @@
     <ClInclude Include="sni_char.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sni_comparison.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="sni_define.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_divide.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_equals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sni_error.h">
@@ -57,25 +51,7 @@
     <ClInclude Include="sni_functiondef.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sni_greaterequals.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_greaterthan.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_if.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="sni_lambda.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_lessequals.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_lessgreater.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_lessthan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sni_local.h">
@@ -84,13 +60,7 @@
     <ClInclude Include="sni_meta.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sni_multiply.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="sni_namable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_not.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sni_null.h">
@@ -102,34 +72,16 @@
     <ClInclude Include="sni_object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sni_or.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="sni_replacement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sni_set.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sni_square.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_squareroot.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="sni_string.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sni_stringref.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_subtract.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_subtractleft.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_subtractright.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sni_taggedvalue.h">
@@ -234,35 +186,11 @@
     <ClInclude Include="sni_delayedprocessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sni_concat.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_binary.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_unary.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_selectrightchar.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_negative.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="sni_let.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\inc\sn_let.h">
       <Filter>Include Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_inttostring.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_doubletostring.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_stringtodouble.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sni_stringtoint.h">
       <Filter>Header Files</Filter>
@@ -270,19 +198,7 @@
     <ClInclude Include="..\inc\sn_base.h">
       <Filter>Include Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sni_subtractleftchar.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_selectleftchar.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="sni_subtractrightchar.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_lookaheadleft.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_lookaheadright.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sni_result.h">
@@ -293,9 +209,6 @@
     </ClInclude>
     <ClInclude Include="..\inc\sn_debug.h">
       <Filter>Include Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_collapse.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\inc\sn_cartesian.h">
       <Filter>Include Header Files</Filter>
@@ -330,38 +243,17 @@
     <ClInclude Include="..\inc\sn_macros.h">
       <Filter>Include Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sni_same.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="sni_cartesian.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sni_file.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sni_revand.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_revor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_implies.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="sni_splitter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_hasmember.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\inc\sni_base.h">
       <Filter>Include Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_unaryor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_unaryand.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sni_cartcall.h">
       <Filter>Header Files</Filter>
@@ -426,15 +318,6 @@
     <ClInclude Include="sni_transaction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sni_isa.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_hasa.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sni_attributedef.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="sni_class.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -456,14 +339,146 @@
     <ClInclude Include="sni_subscript.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sni_reversesubscript.h">
+    <ClInclude Include="sni_vector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sni_countif.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\inc\sn_vector.h">
+      <Filter>Include Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_add.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_and.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_attributedef.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_binary.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_collapse.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_comparison.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_concat.h">
+      <Filter>Function Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sni_countall.h">
-      <Filter>Header Files</Filter>
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_countif.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_divide.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_doubletostring.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_equals.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_greaterequals.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_greaterthan.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_hasa.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_hasmember.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_if.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_implies.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_isa.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_inttostring.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_lessequals.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_lessgreater.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_lessthan.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_lookaheadleft.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_lookaheadright.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_multiply.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_negative.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_not.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_or.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_revand.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_revor.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_reversesubscript.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_same.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_selectleftchar.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_selectrightchar.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_square.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_squareroot.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_stringtodouble.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_subtract.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_subtractleft.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_subtractleftchar.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_subtractright.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_unary.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_unaryand.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_unaryor.h">
+      <Filter>Function Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -473,94 +488,13 @@
     <ClCompile Include="logcontext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sn.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sn_bool.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sn_char.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sn_define.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sn_error.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sn_expression.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sn_function.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sn_functiondef.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sn_lambda.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sn_local.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sn_meta.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sn_null.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sn_number.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sn_object.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sn_parameter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sn_set.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sn_string.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sn_stringref.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sn_value.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sn_valueset.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sn_variable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_add.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_and.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sni_bool.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_buildset.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sni_char.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sni_comparison.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sni_define.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_divide.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_equals.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sni_error.cpp">
@@ -572,25 +506,7 @@
     <ClCompile Include="sni_function.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sni_functiondef.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_greaterequals.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_greaterthan.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_if.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sni_lambda.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_lessequals.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_lessthan.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sni_local.cpp">
@@ -599,13 +515,7 @@
     <ClCompile Include="sni_meta.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sni_multiply.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sni_namable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_not.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sni_null.cpp">
@@ -617,34 +527,16 @@
     <ClCompile Include="sni_object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sni_or.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sni_replacement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sni_set.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sni_square.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_squareroot.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sni_string.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sni_stringref.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_subtract.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_subtractleft.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_subtractright.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sni_taggedvalue.cpp">
@@ -677,52 +569,7 @@
     <ClCompile Include="sni_delayedprocessor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sni_binary.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_unary.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_selectleftchar.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_selectrightchar.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_negative.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sni_let.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sn_let.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_inttostring.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_stringtodouble.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_stringtoint.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_doubletostring.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_concat.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_subtractleftchar.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_subtractrightchar.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_lookaheadleft.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_lookaheadright.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sni_result.cpp">
@@ -731,31 +578,10 @@
     <ClCompile Include="sni_debug.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sni_collapse.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sn_cartesian.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sn_debug.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sni_helpers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sn_manager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sni_manager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sn_pch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sn_operators.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_same.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sni_cartesian.cpp">
@@ -764,25 +590,7 @@
     <ClCompile Include="sni_file.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sni_revand.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_revor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_implies.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sni_splitter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_hasmember.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_unaryand.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_unaryor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sni_cartcall.cpp">
@@ -824,13 +632,7 @@
     <ClCompile Include="sni_thread.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sn_thread.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sni_logbuffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sn_transaction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sni_displayoptions.cpp">
@@ -839,44 +641,263 @@
     <ClCompile Include="sni_transaction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sni_isa.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_hasa.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sni_attributedef.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sn_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sni_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sn_instance.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sni_instance.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sn_mapping.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sni_mapping.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sni_subscript.cpp">
+    <ClCompile Include="sni_vector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sni_reversesubscript.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="sn.cpp">
+      <Filter>Interface Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sni_countif.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="sn_bool.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_cartesian.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_char.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_class.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_debug.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_define.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_error.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_expression.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_function.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_functiondef.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_instance.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_lambda.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_let.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_local.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_manager.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_mapping.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_meta.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_null.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_number.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_object.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_operators.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_parameter.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_pch.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_set.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_string.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_stringref.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_thread.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_transaction.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_value.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_valueset.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_variable.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_vector.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_buildset.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_concat.cpp">
+      <Filter>Function Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sni_countall.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_countif.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_collapse.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_comparison.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_functiondef.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_divide.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_doubletostring.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_equals.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_greaterequals.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_greaterthan.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_hasa.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_hasmember.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_and.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_attributedef.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_binary.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_isa.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_lessequals.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_lessthan.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_lookaheadleft.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_lookaheadright.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_multiply.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_negative.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_not.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_or.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_revand.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_reversesubscript.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_revor.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_same.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_selectleftchar.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_selectrightchar.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_square.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_inttostring.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_squareroot.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_stringtodouble.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_stringtoint.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_subscript.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_subtract.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_subtractleft.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_subtractleftchar.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_subtractright.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_subtractrightchar.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_unary.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_unaryand.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_unaryor.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_implies.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_if.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_add.cpp">
+      <Filter>Interface Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

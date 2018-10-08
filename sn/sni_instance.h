@@ -35,6 +35,7 @@ namespace SNI
 		virtual void PromoteMembers();
 
 		SNI_Class *m_Class;
+		bool m_Fixed;
 	};
 
 	typedef vector<SNI_Instance *> SNI_InstanceList;

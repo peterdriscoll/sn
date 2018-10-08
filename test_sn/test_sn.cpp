@@ -2439,5 +2439,91 @@ namespace test_sn
 			}
 			Cleanup();
 		}
+
+		TEST_METHOD(TestMappingFixErrors)
+		{
+			Initialize();
+			{
+				Manager manager("Test Mapping Fix Errors", AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer2);
+				{
+					try
+					{
+						SN_DECLARE(age);
+						SN_DECLARE(count43);
+						SN_DECLARE(X);
+
+						(age == Mapping()).AssertAction();
+						(age[String("Max")] == Long(43)).AssertAction();
+						(age[String("George")] == Long(55)).AssertAction();
+						(age[String("Roger")] == Long(43)).AssertAction();
+						(age[String("Bob")] == Long(43)).AssertAction();
+						(age[String("Ken")] == Long(55)).AssertAction();
+
+						(age.CountIf(Lambda(X, X == Long(43))) == count43).AssertAction();
+					}
+					catch (Error e)
+					{
+						string description = e.GetDescription();
+						Assert::IsTrue(e.IsError(), wstring(description.begin(), description.end()).c_str());
+					}
+				};
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestVector)
+		{
+			Initialize();
+			{
+				Manager manager("Test Vector", AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE_VALUE(fib, Vector());
+
+				(fib[Long(0)] == Long(1)).AssertAction();
+				(fib[Long(1)] == Long(1)).AssertAction();
+				(fib[Long(2)] == Long(2)).AssertAction();
+				(fib[Long(3)] == Long(3)).AssertAction();
+				(fib[Long(4)] == Long(5)).AssertAction();
+				(fib[Long(5)] == Long(8)).AssertAction();
+				(fib[Long(6)] == Long(13)).AssertAction();
+
+				(fib[Long(0)] == Long(1)).EvaluateAction();
+				(fib[Long(1)] == Long(1)).EvaluateAction();
+				(fib[Long(2)] == Long(2)).EvaluateAction();
+				(fib[Long(3)] == Long(3)).EvaluateAction();
+				(fib[Long(4)] == Long(5)).EvaluateAction();
+				(fib[Long(5)] == Long(8)).EvaluateAction();
+				(fib[Long(6)] == Long(13)).EvaluateAction();
+
+				SN_DECLARE(Z);
+				(fib[Long(6)] == Z).AssertAction();
+				(Z == Long(13)).EvaluateAction();
+				string Z_text = Z.GetVariableValue().DisplayValueSN();
+				Assert::IsTrue(Z_text == "Long(13)");
+
+				fib.Fix();
+
+				SN_DECLARE(Y);
+				(fib[Y] == Long(1)).AssertAction();
+				(Y.BuildSet() == (Long(0) || Long(1)).BuildSet()).EvaluateAction();
+
+				string Y_text = Y.BuildSet().Evaluate().DisplaySN();
+				Assert::IsTrue(Y_text == "{Long(0), Long(1)}");
+
+				SN_DECLARE(countAll);
+
+				(fib.CountAll() == countAll).AssertAction();
+				(countAll == Long(7)).EvaluateAction();
+
+				SN_DECLARE(countGreater2);
+				SN_DECLARE(X);
+
+				(fib.CountIf(Lambda(X, X > Long(2))) == countGreater2).AssertAction();
+				(countGreater2 == Long(4)).EvaluateAction();
+			}
+			Cleanup();
+		}
 	};
 }

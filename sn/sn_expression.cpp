@@ -21,6 +21,7 @@
 #include "sni_number.h"
 #include "sni_function.h"
 #include "sni_mapping.h"
+#include "sni_vector.h"
 #include "sni_meta.h"
 #include "sni_vardef.h"
 #include "sni_variable.h"
@@ -120,6 +121,11 @@ namespace SN
 
 	SN_Expression::SN_Expression(const SN_Mapping & p_Mapping)
 		: SN_Base(dynamic_cast<SNI::SNI_Expression *>(p_Mapping.GetSNI_Mapping()))
+	{
+	}
+
+	SN_Expression::SN_Expression(const SN_Vector & p_Vector)
+		: SN_Base(dynamic_cast<SNI::SNI_Expression *>(p_Vector.GetSNI_Vector()))
 	{
 	}
 

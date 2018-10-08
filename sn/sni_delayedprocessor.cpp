@@ -87,6 +87,17 @@ namespace SNI
 
 	void SNI_DelayedProcessor::Promote(PGC::PGC_Transaction * p_Transaction)
 	{
+		/*
+		for (SNI_DelayedCall* &delayedCall : m_DelayedCallList)
+		{
+			RequestPromotion((PGC::PGC_Base **) &delayedCall)
+			REQUESTPROMOTION(delayedCall);
+		}
+		for (SNI_DelayedCall* &delayedCall : m_FailedList)
+		{
+			REQUESTPROMOTION(&delayedCall);
+		}
+		*/
 	}
 
 	unordered_map<string, SN::SN_String>& SNI_DelayedProcessor::GetPreventReread()

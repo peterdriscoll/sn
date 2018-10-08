@@ -157,6 +157,7 @@ namespace SNI
 		virtual void PartialEvaluateActionWithHandler(OnErrorHandler * p_ErrorHandler);
 
 		virtual void Fix(SN::SN_Expression p_Value);
+		virtual void Fix();
 		//---------------------------------------------------------------
 		// Implementation
 		//---------------------------------------------------------------

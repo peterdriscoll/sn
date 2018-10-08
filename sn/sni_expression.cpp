@@ -485,6 +485,10 @@ namespace SNI
 	{
 	}
 
+	void SNI_Expression::Fix()
+	{
+	}
+
 	void SNI_Expression::HandleEvaluateAction(SN::LogContext &p_Context, SN::SN_Expression p_Result, string p_Text, OnErrorHandler *p_ErrorHandler)
 	{
 		SNI_DelayedProcessor::GetProcessor()->Run();

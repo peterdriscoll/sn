@@ -171,6 +171,14 @@ namespace SNI
 		}
 	}
 
+	void SNI_Variable::Fix()
+	{
+		if (m_Value)
+		{
+			m_Value->Fix();
+		}
+	}
+
 	SN::SN_Error SNI_Variable::AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World ** p_WorldList, SNI_WorldSet *p_WorldSet)
 	{
 		if (p_Value.IsError())

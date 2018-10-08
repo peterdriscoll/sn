@@ -213,6 +213,11 @@ namespace SN
 		{
 			GetSNI_Base()->Fix(p_Value);
 		}
+
+		void Fix()
+		{
+			GetSNI_Base()->Fix();
+		}
 	};
 }
 #endif // !defined(SN_BASE_H_INCLUDED)

@@ -122,7 +122,7 @@ namespace skynet
 	SN::SN_FunctionDef IsA(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_IsA()));
 	SN::SN_FunctionDef HasA(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_HasA()));
 
-	// Mapping
+	// Mapping/Vector
 	SN::SN_FunctionDef Subscript(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Subscript()));
 	SN::SN_FunctionDef ReverseSubscript(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_ReverseSubscript()));
 	SN::SN_FunctionDef CountIf(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_CountIf()));
