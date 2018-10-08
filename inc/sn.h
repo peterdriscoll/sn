@@ -42,6 +42,7 @@
 #include "sn_vector.h"
 #include "sn_class.h"
 #include "sn_instance.h"
+#include "sn_derived.h"
 
 // Declare a variable, and tell the variable its variable name.
 // When the program and the program model generated the variable will know its human readable name.
@@ -81,6 +82,7 @@ namespace skynet
 	typedef SN::SN_ValueSet ValueSet;
 	typedef SN::SN_Set Set;
 	typedef SN::SN_Error Error;
+	typedef SN::SN_Derived Derived;
 
 	// Expressions
 	typedef SN::SN_Expression Expression;

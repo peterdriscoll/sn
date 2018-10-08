@@ -176,6 +176,7 @@
     <ClInclude Include="..\inc\sn_class.h" />
     <ClInclude Include="..\inc\sn_debug.h" />
     <ClInclude Include="..\inc\sn_define.h" />
+    <ClInclude Include="..\inc\sn_derived.h" />
     <ClInclude Include="..\inc\sn_error.h" />
     <ClInclude Include="..\inc\sn_expression.h" />
     <ClInclude Include="..\inc\sn_function.h" />
@@ -234,6 +235,7 @@
     <ClInclude Include="sni_define.h" />
     <ClInclude Include="sni_delayedcall.h" />
     <ClInclude Include="sni_delayedprocessor.h" />
+    <ClInclude Include="sni_derived.h" />
     <ClInclude Include="sni_displayoptions.h" />
     <ClInclude Include="sni_divide.h" />
     <ClInclude Include="sni_doubletostring.h" />
@@ -347,6 +349,7 @@
     <ClCompile Include="sni_define.cpp" />
     <ClCompile Include="sni_delayedcall.cpp" />
     <ClCompile Include="sni_delayedprocessor.cpp" />
+    <ClCompile Include="sni_derived.cpp" />
     <ClCompile Include="sni_displayoptions.cpp" />
     <ClCompile Include="sni_divide.cpp" />
     <ClCompile Include="sni_doubletostring.cpp" />
@@ -429,6 +432,7 @@
     <ClCompile Include="sn_class.cpp" />
     <ClCompile Include="sn_debug.cpp" />
     <ClCompile Include="sn_define.cpp" />
+    <ClCompile Include="sn_derived.cpp" />
     <ClCompile Include="sn_error.cpp" />
     <ClCompile Include="sn_expression.cpp" />
     <ClCompile Include="sn_function.cpp" />

@@ -39,6 +39,7 @@
 #include "sni_vector.h"
 #include "sni_class.h"
 #include "sni_instance.h"
+#include "sni_derived.h"
 
 // Exception types
 #include "sni_null.h"

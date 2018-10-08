@@ -9,10 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Include Header Files">
       <UniqueIdentifier>{6431e301-79a9-4b7c-a635-00e2bf791113}</UniqueIdentifier>
     </Filter>
@@ -24,6 +20,10 @@
     </Filter>
     <Filter Include="Function Header Files">
       <UniqueIdentifier>{e07d04c9-c619-4844-9bd2-825b2ce49a79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -483,6 +483,12 @@
     <ClInclude Include="sni_sum.h">
       <Filter>Function Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sni_derived.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\sn_derived.h">
+      <Filter>Interface Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -904,6 +910,12 @@
     </ClCompile>
     <ClCompile Include="sni_sum.cpp">
       <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_derived.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_derived.cpp">
+      <Filter>Interface Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
