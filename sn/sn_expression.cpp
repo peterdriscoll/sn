@@ -486,6 +486,11 @@ namespace SN
 		return SN_Operators::CountAll(*this);
 	}
 
+	SN_Expression SN_Expression::Sum() const
+	{
+		return SN_Operators::Sum(*this);
+	}
+
 	// Strings
 	SN_Expression SN_Expression::Concat(const SN_Expression & p_Other) const
 	{

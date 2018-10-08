@@ -40,6 +40,11 @@ namespace SN
 		return SN_Operators::CountAll(*this);
 	}
 
+	SN_Expression SN_Vector::Sum()
+	{
+		return SN_Operators::Sum(*this);
+	}
+
 	SN_Expression SN_Vector::IsA(const SN_Expression & p_Parent) const
 	{
 		return SN_Operators::IsA(*this, p_Parent);

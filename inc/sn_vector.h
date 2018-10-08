@@ -31,6 +31,7 @@ namespace SN
 		SN_Expression IsA(const SN_Expression &p_Parent) const;
 		SN_Expression CountIf(const SN_Expression & p_Value);
 		SN_Expression CountAll();
+		SN_Expression Sum();
 
 		SNI::SNI_Vector * GetSNI_Vector() const;
 	};

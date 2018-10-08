@@ -217,6 +217,31 @@ namespace SNI
 		return SN::SN_Long(size);
 	}
 
+	SN::SN_Value SNI_Vector::DoSum() const
+	{
+		if (!m_Fixed)
+		{
+			return SN::SN_Error(GetTypeName() + " Sum - Number of values in map may change. Fix the map before summing.");
+		}
+		SN::SN_Expression sum;
+		for (auto &item : m_Vector)
+		{
+			if (item.IsNullValue())
+			{
+				return SN::SN_Error(GetTypeName() + " Sum - Null value found.");
+			}
+			if (sum.IsNull())
+			{
+				sum = item;
+			}
+			else
+			{
+				sum = sum.GetSNI_Value()->DoAdd(item.GetSNI_Value());
+			}
+		}
+		return sum;
+	}
+
 	void SNI_Vector::Fix()
 	{
 		m_Fixed = true;

@@ -480,6 +480,9 @@
     <ClInclude Include="sni_unaryor.h">
       <Filter>Function Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sni_sum.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -898,6 +901,9 @@
     </ClCompile>
     <ClCompile Include="sni_add.cpp">
       <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_sum.cpp">
+      <Filter>Function Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

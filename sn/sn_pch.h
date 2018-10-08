@@ -131,6 +131,7 @@
 #include "sni_reversesubscript.h"
 #include "sni_countif.h"
 #include "sni_countall.h"
+#include "sni_sum.h"
 
 // Sets
 #include "sni_buildset.h"

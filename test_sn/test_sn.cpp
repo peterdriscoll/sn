@@ -2407,9 +2407,6 @@ namespace test_sn
 				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(age);
-				SN_DECLARE(count43);
-				SN_DECLARE(count55);
-				SN_DECLARE(countBoth);
 				SN_DECLARE(X);
 
 				(age == Mapping()).AssertAction();
@@ -2421,21 +2418,30 @@ namespace test_sn
 
 				age.Fix(Long(0));
 
+				SN_DECLARE(count43);
+				SN_DECLARE(count55);
+				SN_DECLARE(countBoth);
+				SN_DECLARE(sum);
+
 				(age.CountIf(Lambda(X, X == Long(43))) == count43).AssertAction();
 				(age.CountIf(Lambda(X, X == Long(55))) == count55).AssertAction();
 				(age.CountAll() == countBoth).AssertAction();
+				(age.Sum() == sum).AssertAction();
 
 				(count43 == Long(3)).EvaluateAction();
 				(count55 == Long(2)).EvaluateAction();
 				(countBoth == count43 + count55).EvaluateAction();
+				(sum == Long(239)).EvaluateAction();
 
 				string count43_text = count43.GetVariableValue().DisplaySN();
 				string count55_text = count55.GetVariableValue().DisplaySN();
 				string countBoth_text = countBoth.GetVariableValue().DisplaySN();
+				string sum_text = sum.GetVariableValue().DisplaySN();
 
 				Assert::IsTrue(count43_text == "3");
 				Assert::IsTrue(count55_text == "2");
 				Assert::IsTrue(countBoth_text == "5");
+				Assert::IsTrue(sum_text == "239");
 			}
 			Cleanup();
 		}
@@ -2522,6 +2528,11 @@ namespace test_sn
 
 				(fib.CountIf(Lambda(X, X > Long(2))) == countGreater2).AssertAction();
 				(countGreater2 == Long(4)).EvaluateAction();
+
+				SN_DECLARE(sum);
+
+				(fib.Sum() == sum).AssertAction();
+				(sum == Long(33)).EvaluateAction();
 			}
 			Cleanup();
 		}

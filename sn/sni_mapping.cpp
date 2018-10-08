@@ -190,6 +190,31 @@ namespace SNI
 		return SN::SN_Long(m_Map.size());
 	}
 
+	SN::SN_Value SNI_Mapping::DoSum() const
+	{
+		if (!m_Fixed)
+		{
+			return SN::SN_Error(GetTypeName() + " Sum - Number of values in map may change. Fix the map before summing.");
+		}
+		SN::SN_Expression sum;
+		for (auto &pair : m_Map)
+		{
+			if (pair.second.IsNullValue())
+			{
+				return SN::SN_Error(GetTypeName() + " Sum - Null value found.");
+			}
+			if (sum.IsNull())
+			{
+				sum = pair.second;
+			}
+			else
+			{
+				sum = sum.GetSNI_Value()->DoAdd(pair.second.GetSNI_Value());
+			}
+		}
+		return sum;
+	}
+
 	void SNI_Mapping::Fix(SN::SN_Expression p_Value)
 	{
 		m_Fixed = true;

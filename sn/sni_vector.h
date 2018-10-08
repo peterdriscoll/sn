@@ -45,6 +45,8 @@ namespace SNI
 		virtual SN::SN_Value DoCountIf(SN::SN_Expression p_Value) const;
 		virtual SN::SN_Value DoCountAll() const;
 
+		virtual SN::SN_Value DoSum() const;
+
 		virtual void Fix();
 
 	protected:
