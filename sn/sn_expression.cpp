@@ -225,6 +225,11 @@ namespace SN
 		return dynamic_cast<SNI::SNI_ValueSet *>(m_Expression);
 	}
 
+	SNI::SNI_Lambda * SN_Expression::GetSNI_Lambda() const
+	{
+		return dynamic_cast<SNI::SNI_Lambda *>(m_Expression);
+	}
+
 	SN_Expression SN_Expression::GetVariableValue(bool p_IfComplete)
 	{
 		SNI_Expression *exp = GetSNI_Expression();

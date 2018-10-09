@@ -86,10 +86,6 @@ namespace SNI
 		virtual void PromoteMembers();
 
 	private:
-		static SN::SN_Expression AddLambdas(SN::SN_ExpressionList * p_ParameterList);
-		static SN::SN_Expression AddLambdasPartial(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
-
-	private:
 		SNI_Expression * m_Value;
 		SNI_Frame      * m_Frame;
 		bool           m_Requested;

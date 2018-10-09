@@ -100,6 +100,28 @@ namespace SNI
 		return result;
 	}
 
+	/* static */ SN::SN_Expression SNI_Expression::AddLambdasPartial(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	{
+		if (p_ParameterList->size())
+		{
+			SN::SN_Expression param = p_ParameterList->back().GetValue();
+			p_ParameterList->pop_back();
+			return SN::SN_Lambda(param, AddLambdasPartial(p_ParameterList, p_Result));
+		}
+		return p_Result;
+	}
+
+	/* static */ SN::SN_Expression SNI_Expression::AddLambdas(SN::SN_ExpressionList * p_ParameterList)
+	{
+		if (1 < p_ParameterList->size())
+		{
+			SN::SN_Expression param = p_ParameterList->back();
+			p_ParameterList->pop_back();
+			return SN::SN_Lambda(param, AddLambdas(p_ParameterList));
+		}
+		return (*p_ParameterList)[0];
+	}
+
 	string SNI_Expression::Bracket(long p_Priority, const string &p_Expression) const
 	{
 		string bracketLeft;

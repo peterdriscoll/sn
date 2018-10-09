@@ -231,6 +231,9 @@ namespace SNI
 		virtual SN::SN_Value DoSum() const;
 
 	protected:
+		static SN::SN_Expression AddLambdasPartial(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
+		static SN::SN_Expression AddLambdas(SN::SN_ExpressionList * p_ParameterList);
+
 		string Bracket(long p_Priority, const string &p_Expression) const;
 
 	private:

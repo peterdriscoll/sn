@@ -39,13 +39,21 @@ namespace SNI
 
 		virtual void Fix();
 
+		virtual SNI_Expression * Clone(SNI_Frame * p_Frame, bool & p_Changed);
+
+		virtual SN::SN_Expression Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel) const;
+		virtual SN::SN_Expression PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel) const;
+
+		virtual SN::SN_Expression Unify(SN::SN_ExpressionList * p_ParameterList);
+		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
+
 	protected:
 		virtual void PromoteMembers();
 
 	private:
 		static SNI_Class *m_Class;
 
-		vector<SN::SN_Expression> m_Vector;
+		vector<SNI_Expression *> m_Vector;
 		bool m_Fixed;
 	};
 }

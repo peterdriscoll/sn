@@ -23,6 +23,7 @@ namespace SNI
 	class SNI_WorldSet;
 	class SNI_FunctionDef;
 	class SNI_Cartesian;
+	class SNI_Lambda;
 }
 
 namespace SN
@@ -214,6 +215,7 @@ namespace SN
 		SNI::SNI_Value * GetSNI_Value() const;
 		SNI::SNI_Error * GetSNI_Error() const;
 		SNI::SNI_ValueSet * GetSNI_ValueSet() const;
+		SNI::SNI_Lambda * GetSNI_Lambda() const;
 		SN_Expression GetVariableValue(bool p_IfComplete = true);
 		SN::SN_Error ForEach(std::function<SN::SN_Error(const SN_Expression &p_Param, SNI::SNI_World *p_World)> p_Action);
 		SN_Cartesian CartProd(long p_Index, SNI::SNI_FunctionDef *p_FunctionDef = NULL) const;

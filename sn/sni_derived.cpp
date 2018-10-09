@@ -74,7 +74,7 @@ namespace SNI
 				
 				for (size_t j =0; j < size; j++)
 				{
-					if (!m_Vector[j].Equivalent(l_vector->m_Vector[j]))
+					if (!m_Vector[j]->Equivalent(l_vector->m_Vector[j]))
 					{
 						return false;
 					}
@@ -103,5 +103,88 @@ namespace SNI
 	void SNI_Derived::Fix()
 	{
 		m_Fixed = true;
+	}
+
+	SNI_Expression * SNI_Derived::Clone(SNI_Frame *p_Frame, bool &p_Changed)
+	{
+		bool changed = false;
+
+		SNI_Derived *l_clone = new SNI_Derived();
+		for (size_t j = 0; j < m_Vector.size(); j++)
+		{
+			auto &item = m_Vector[j];
+			if (item)
+			{
+				l_clone->m_Vector[j]->Clone(p_Frame, changed);
+			}
+		}
+
+		if (changed)
+		{
+			p_Changed = true;
+			return dynamic_cast<SNI_Expression *>(l_clone);
+		}
+		return this;
+	}
+
+	SN::SN_Expression SNI_Derived::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
+	{
+		SN::LogContext context(DisplaySN0() + ".SNI_Derived::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+
+		for (auto &item : m_Vector)
+		{
+			if (item)
+			{
+				SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Derived.Call");
+				SN::SN_Expression e = item->Call(p_ParameterList, p_MetaLevel);
+				if (e.IsError())
+				{
+					return e;
+				}
+			}
+			else
+			{
+				return SN::SN_Error(GetTypeName() + " function to call is unknown.");
+			}
+		}
+	}
+
+	SN::SN_Expression SNI_Derived::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
+	{
+		SN::LogContext context(DisplaySN0() + ".SNI_Derived::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+
+		for (auto &item : m_Vector)
+		{
+			if (item)
+			{
+				if (!SN::SN_Expression(item).GetSNI_Lambda())
+				{
+					SN::SN_Error e = item->PartialCall(p_ParameterList, p_MetaLevel);
+					if (e.IsError())
+					{
+						return e;
+					}
+				}
+			}
+			else
+			{
+				return SN::SN_Error(GetTypeName() + " partial function to call is unknown.");
+			}
+		}
+		return skynet::OK;
+	}
+
+	SN::SN_Expression SNI_Derived::Unify(SN::SN_ExpressionList * p_ParameterList)
+	{
+		m_Vector.push_back(AddLambdas(p_ParameterList).GetSNI_Expression());
+		REQUESTPROMOTION(m_Vector.back());
+		return skynet::OK;
+	}
+
+	SN::SN_Error SNI_Derived::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	{
+		m_Vector.push_back(AddLambdasPartial(p_ParameterList, p_Result).GetSNI_Expression());
+		REQUESTPROMOTION(m_Vector.back());
+		return skynet::OK;
 	}
 }
