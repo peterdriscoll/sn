@@ -388,6 +388,15 @@ namespace SNI
 
 	SN::SN_Error SNI_Expression::PartialAssertValue(const SN::SN_Expression &/*p_Expression*/, bool /* p_Define */)
 	{
+
+
+
+
+
+
+
+
+
 		return false;
 	}
 
@@ -410,7 +419,7 @@ namespace SNI
 		return SN::SN_Error(GetTypeName() + " Unify not implemented.");
 	}
 
-	SN::SN_Error SNI_Expression::PartialUnify(SN::SN_ParameterList * /*p_ParameterList*/, SN::SN_Expression /*p_Expression*/)
+	SN::SN_Error SNI_Expression::PartialUnify(SN::SN_ParameterList * /*p_ParameterList*/, SN::SN_Expression /*p_Expression*/, bool /*p_Define*/)
 	{
 		return false;
 	}
@@ -459,6 +468,7 @@ namespace SNI
 		SNI::SNI_DisplayOptions l_DisplayOptions;
 		LOG(WriteLine(SN::DebugLevel, "Partial assert " + DisplayValueSN(0, l_DisplayOptions)));
 		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Partial assert " + DisplayValueSN(0, l_DisplayOptions));
+		SNI_Thread::GetThread()->UpdateIncrementId();
 		HandleAssertAction(context, PartialAssert(), "Partial assert", p_ErrorHandler);
 	}
 

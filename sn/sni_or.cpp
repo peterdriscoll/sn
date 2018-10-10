@@ -146,7 +146,7 @@ namespace SNI
 		return e2;
 	}
 
-	SN::SN_Error SNI_Or::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	SN::SN_Error SNI_Or::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
 		SN::LogContext context("SNI_Or::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
 

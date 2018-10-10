@@ -45,7 +45,7 @@ namespace SNI
 		virtual SN::SN_Expression PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel) const;
 
 		virtual SN::SN_Expression Unify(SN::SN_ExpressionList * p_ParameterList);
-		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
+		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Expression, bool p_Define = false);
 
 	protected:
 		virtual void PromoteMembers();
@@ -54,6 +54,7 @@ namespace SNI
 		static SNI_Class *m_Class;
 
 		vector<SNI_Expression *> m_Vector;
+		long m_DefineId;
 		bool m_Fixed;
 	};
 }

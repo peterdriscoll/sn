@@ -24,6 +24,7 @@ namespace SNI
 
 	SNI_Derived::SNI_Derived()
 	: m_Fixed(false)
+	, m_DefineId(0)
 	{
 	}
 
@@ -110,12 +111,13 @@ namespace SNI
 		bool changed = false;
 
 		SNI_Derived *l_clone = new SNI_Derived();
+		l_clone->m_Vector.resize(m_Vector.size());
 		for (size_t j = 0; j < m_Vector.size(); j++)
 		{
-			auto &item = m_Vector[j];
+			SNI_Expression *item = m_Vector[j];
 			if (item)
 			{
-				l_clone->m_Vector[j]->Clone(p_Frame, changed);
+				l_clone->m_Vector[j] = item->Clone(p_Frame, changed);
 			}
 		}
 
@@ -181,10 +183,20 @@ namespace SNI
 		return skynet::OK;
 	}
 
-	SN::SN_Error SNI_Derived::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	SN::SN_Error SNI_Derived::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
-		m_Vector.push_back(AddLambdasPartial(p_ParameterList, p_Result).GetSNI_Expression());
-		REQUESTPROMOTION(m_Vector.back());
+		long l_DefineId = SNI_Thread::GetThread()->GetDefineId();
+		if (m_DefineId != l_DefineId)
+		{
+			m_DefineId = l_DefineId;
+			m_Vector.push_back(AddLambdasPartial(p_ParameterList, p_Result).GetSNI_Expression());
+			REQUESTPROMOTION(m_Vector.back());
+		}
+		else if (m_Vector.back() == NULL || p_Define)
+		{
+			m_Vector.back() = AddLambdasPartial(p_ParameterList, p_Result).GetSNI_Expression();
+			REQUESTPROMOTION(m_Vector.back());
+		}
 		return skynet::OK;
 	}
 }

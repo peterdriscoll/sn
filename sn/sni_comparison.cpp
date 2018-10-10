@@ -64,7 +64,7 @@ namespace SNI
 		return LOG_RETURN(context, PrimaryFunctionExpression(left_value, right_value));
 	}
 
-	SN::SN_Error SNI_Comparison::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	SN::SN_Error SNI_Comparison::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
 		SN::LogContext context("SNI_Comparison::PartialUnifyInternal ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
 		return LOG_RETURN(context, PartialUnifyInternal((*p_ParameterList)[1].GetValue(), (*p_ParameterList)[0].GetValue(), p_Result));

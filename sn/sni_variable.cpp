@@ -559,11 +559,11 @@ namespace SNI
 		}
 	}
 
-	SN::SN_Error SNI_Variable::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	SN::SN_Error SNI_Variable::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
-		if (m_Value)
+		if (m_Value && (!p_Define || dynamic_cast<SNI_Derived *>(m_Value)))
 		{
-			return m_Value->PartialUnify(p_ParameterList, p_Result);
+			return m_Value->PartialUnify(p_ParameterList, p_Result, p_Define);
 		}
 		else
 		{

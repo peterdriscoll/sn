@@ -144,11 +144,11 @@ namespace SNI
 	/// @param p_ParameterList List of two parameters to be compared.
 	/// @param p_result The result of comparing the two values
 	/// @retval True for success,false for failure.
-	SN::SN_Error SNI_Equals::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_result)
+	SN::SN_Error SNI_Equals::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
-		SN::LogContext context("SNI_Equals::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_result.DisplaySN() + " )");
+		SN::LogContext context("SNI_Equals::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
 
-		return PartialUnifyInternal((*p_ParameterList)[1].GetValue(), (*p_ParameterList)[0].GetValue(), p_result);
+		return PartialUnifyInternal((*p_ParameterList)[1].GetValue(), (*p_ParameterList)[0].GetValue(), p_Result);
 	}
 
 	/// \brief Calculate expressions for unknown values from known values, in the expression (p_left = p_right) = p_result.

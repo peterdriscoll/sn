@@ -100,6 +100,7 @@ namespace SNI
 		, m_ThreadNum(p_ThreadNum)
 		, m_MaxStackFrames(-1)
 		, m_Ended(false)
+		, m_DefineId(0)
 	{
 	}
 
@@ -268,6 +269,16 @@ namespace SNI
 	void SNI_Thread::SetTopManager(SNI_Manager * p_TopManager)
 	{
 		m_TopManager = p_TopManager;
+	}
+
+	long SNI_Thread::GetDefineId()
+	{
+		return m_DefineId;
+	}
+
+	void SNI_Thread::UpdateIncrementId()
+	{
+		m_DefineId++;
 	}
 
 	string SNI_Thread::StartCommand(enum SN::DebugAction p_DebugAction, const string &p_Description)

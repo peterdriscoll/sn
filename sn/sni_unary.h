@@ -37,7 +37,7 @@ namespace SNI
 		virtual bool EvaluateNow(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const;
 
 	protected:
-		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
+		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Expression, bool p_Define = false);
 		virtual SN::SN_Error PartialUnifyInternal(SN::SN_Expression &p_x, SN::SN_Expression &p_Result);
 	};
 }

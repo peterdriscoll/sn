@@ -35,7 +35,7 @@ namespace SNI
 
 		virtual SN::SN_Expression PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression UnifyArray(SN::SN_Expression * p_ParameterList);
-		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
+		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Expression, bool p_Define = false);
 		virtual SN::SN_Error PartialUnifyInternal(SN::SN_Expression &p_left, SN::SN_Expression &p_right, SN::SN_Expression &p_Result);
 
 		virtual size_t CardinalityOfCall(long p_Depth, SN::SN_Expression * p_ParamList) const;

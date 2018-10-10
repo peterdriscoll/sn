@@ -214,7 +214,7 @@ namespace SNI
 	/// @param p_ParameterList List of two parameters to be "anded".
 	/// @param p_Result The result of anding the two booleans
 	/// @retval True if successful, false for failure.
-	SN::SN_Error SNI_And::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	SN::SN_Error SNI_And::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
 		SN::LogContext context("SNI_And::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
 

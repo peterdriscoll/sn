@@ -188,7 +188,7 @@ namespace SNI
 		return m_Expression->AssertValue(p_ParameterList->back());
 	}
 
-	SN::SN_Error SNI_Lambda::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	SN::SN_Error SNI_Lambda::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
 		SN::LogContext context(DisplaySN0() + ".SNI_Lambda::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
 

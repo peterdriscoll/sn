@@ -231,7 +231,7 @@ namespace SNI
 	/// @param p_ParameterList List of two parameters to be concatenated.
 	/// @param p_Result The result of concatenating the two strings
 	/// @retval True if successful.
-	SN::SN_Error SNI_If::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	SN::SN_Error SNI_If::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
 		SN::LogContext context("SNI_If::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
 		return LOG_RETURN(context, PartialUnifyInternal((*p_ParameterList)[2].GetValue(), (*p_ParameterList)[1].GetValue(), (*p_ParameterList)[0].GetValue(), p_Result));

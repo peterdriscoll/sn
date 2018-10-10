@@ -181,7 +181,7 @@ namespace SNI
 		return m_Expression->Unify(p_ParameterList);
 	}
 
-	SN::SN_Error SNI_Meta::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	SN::SN_Error SNI_Meta::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
 		return m_Expression->PartialUnify(p_ParameterList, p_Result);
 	}

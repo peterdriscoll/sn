@@ -98,7 +98,7 @@ namespace SNI
 		return LOG_RETURN(context, PrimaryFunctionExpression(value));
 	}
 
-	SN::SN_Error SNI_Unary::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	SN::SN_Error SNI_Unary::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
 		SN::LogContext context("SNI_Binary::Unify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
 		SN::SN_Error e = LOG_RETURN(context, PartialUnifyInternal((*p_ParameterList)[0].GetValue(), p_Result));

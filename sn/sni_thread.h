@@ -110,6 +110,10 @@ namespace SNI
 
 		SNI_Manager *GetTopManager(bool p_Create = true);
 		void SetTopManager(SNI_Manager *p_TopManager);
+
+		long GetDefineId();
+		void UpdateIncrementId();
+
 	private:
 		string StartCommand(SN::DebugAction p_DebugAction, const string & p_Description);
 
@@ -141,6 +145,7 @@ namespace SNI
 		bool m_WebServerThreadUsed;
 		SNI_Manager *m_TopManager;
 		bool m_Ended;
+		long m_DefineId;
 
 		static vector<SNI_Thread *> m_ThreadList;
 		static mutex m_ThreadListMutex;

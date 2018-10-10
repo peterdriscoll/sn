@@ -120,7 +120,7 @@ namespace SNI
 	/// @param p_ParameterList List of two parameters.
 	/// @param p_Result The result of operation on the two values
 	/// @retval True if successful, false for failure.
-	SN::SN_Error SNI_Binary::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	SN::SN_Error SNI_Binary::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
 		SN::LogContext context("SNI_Binary::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
 

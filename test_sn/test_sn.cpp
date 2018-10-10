@@ -2549,7 +2549,7 @@ namespace test_sn
 				SN_DECLARE(N);
 				(fib(Long(0)) == Long(1)).PartialAssertAction();
 				(fib(Long(1)) == Long(1)).PartialAssertAction();
-				(Define(fib)(N) == fib(N-(Long(1)) + fib(N-Long(2)))).PartialAssertAction();
+				(Define(fib)(N) == fib(N-Long(1)) + fib(N-Long(2))).PartialAssertAction();
 
 				(fib(Long(0)) == Long(1)).EvaluateAction();
 				(fib(Long(1)) == Long(1)).EvaluateAction();

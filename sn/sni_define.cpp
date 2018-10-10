@@ -92,9 +92,9 @@ namespace SNI
 		return m_Variable->Unify(p_ParameterList);
 	}
 
-	SN::SN_Error SNI_Define::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
+	SN::SN_Error SNI_Define::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
-		return m_Variable->PartialUnify(p_ParameterList, p_Result);
+		return m_Variable->PartialUnify(p_ParameterList, p_Result, true);
 	}
 
 	SNI_Variable* SNI_Define::GetVariable()
