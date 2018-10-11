@@ -132,16 +132,17 @@ namespace SNI
 	SN::SN_Expression SNI_Derived::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
 		SN::LogContext context(DisplaySN0() + ".SNI_Derived::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )");
-
+		SN::SN_Expression finalResult;
 		for (auto &item : m_Vector)
 		{
 			if (item)
 			{
 				SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Derived.Call");
-				SN::SN_Expression e = item->Call(p_ParameterList, p_MetaLevel);
-				if (e.IsError())
+				SN::SN_ExpressionList paramListClone = *p_ParameterList;
+				SN::SN_Expression result = item->Call(&paramListClone, p_MetaLevel);
+				if (result.IsError() || result.IsKnownValue())
 				{
-					return e;
+					return result;
 				}
 			}
 			else

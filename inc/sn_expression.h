@@ -142,6 +142,7 @@ namespace SN
 		SN_Expression operator||(const SN_Expression &right) const;
 
 		SN_Expression If(const SN_Expression &p_PositiveCase, const SN_Expression &p_NegativeCase) const;
+		SN_Expression If(const SN_Expression &p_PositiveCase) const;
 		SN_Expression Implies(const SN_Expression &p_PositiveCase) const;
 		SN_Expression RevAnd(const SN_Expression &p_PositiveCase) const;
 		SN_Expression RevOr(const SN_Expression &p_Condition) const;

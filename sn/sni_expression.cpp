@@ -386,18 +386,9 @@ namespace SNI
 		return false;
 	}
 
-	SN::SN_Error SNI_Expression::PartialAssertValue(const SN::SN_Expression &/*p_Expression*/, bool /* p_Define */)
+	SN::SN_Error SNI_Expression::PartialAssertValue(const SN::SN_Expression &p_Expression, bool /* p_Define */)
 	{
-
-
-
-
-
-
-
-
-
-		return false;
+		return Equivalent(p_Expression.GetSNI_Expression());
 	}
 
 	SN::SN_Expression SNI_Expression::Call(SN::SN_ExpressionList * p_ParameterList, long  /* p_MetaLevel = 0 */) const

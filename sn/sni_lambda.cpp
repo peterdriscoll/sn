@@ -128,13 +128,26 @@ namespace SNI
 		ASSERTM(p_ParameterList->size() >0, "Cannot call a lambda without a parameter");
 		SN::SN_Expression param = p_ParameterList->back().GetSNI_Expression();
 		p_ParameterList->pop_back();
-		m_FormalParameter->PartialAssertValue(param, true);
+		SN::SN_Error e;
+		if (!m_FormalParameter || m_FormalParameter->IsNullValue())
+		{
+			e = m_FormalParameter->PartialAssertValue(param, true);
+		}
+		else
+		{
+			e = m_FormalParameter->AssertValue(param.Evaluate());
+		}
 		LOG(WriteLine(SN::DebugLevel, DisplaySN0()));
-		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Lambda.Call");
+		if (e.IsError())
+		{	// If can't assert actual to formal, then don't make the call. But no error return.
+			return skynet::Null;
+		}
 		if (p_ParameterList->size() > 0)
 		{
+			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Lambda.Call");
 			return m_Expression->Call(p_ParameterList, p_MetaLevel);
 		}
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Lambda.Evaluate");
 		return m_Expression->Evaluate(p_MetaLevel);
 	}
 

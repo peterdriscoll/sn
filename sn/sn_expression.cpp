@@ -388,6 +388,11 @@ namespace SN
 		return SN_Operators::If(*this, p_PositiveCase, p_NegativeCase);
 	}
 
+	SN_Expression SN_Expression::If(const SN_Expression &p_PositiveCase) const
+	{
+		return SN_Operators::If(*this, p_PositiveCase, skynet::Null);
+	}
+
 	SN_Expression SN_Expression::Implies(const SN_Expression &p_PositiveCase) const
 	{
 		return SN_Operators::Implies(*this, p_PositiveCase);
