@@ -2550,7 +2550,7 @@ namespace test_sn
 				(fib(Long(1)) == Long(1)).PartialAssertAction();
 				(Define(fib)(N) == fib(N - Long(1)) + fib(N - Long(2))).PartialAssertAction();
 				// (Define(fib)(N) == (N >Long(1)).If(fib(N - Long(1)) + fib(N - Long(2)))).PartialAssertAction();
-
+				fib.Fix();
 				(fib(Long(0)) == Long(1)).EvaluateAction();
 				(fib(Long(1)) == Long(1)).EvaluateAction();
 				(fib(Long(2)) == Long(2)).EvaluateAction();
