@@ -148,7 +148,7 @@ namespace SNI
 				SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Derived.Call");
 				SN::SN_ExpressionList paramListClone = *p_ParameterList;
 				SN::SN_Expression result = item->Call(&paramListClone, p_MetaLevel);
-				if (result.IsError() || result.IsKnownValue())
+				if (!result.IsNull())
 				{
 					return result;
 				}
@@ -177,7 +177,7 @@ namespace SNI
 				{
 					SN::SN_ExpressionList paramListClone = *p_ParameterList;
 					SN::SN_Expression result = item->PartialCall(&paramListClone, p_MetaLevel);
-					if (result.IsError() || result.IsKnownValue())
+					if (!result.IsNull())
 					{
 						return result;
 					}
@@ -203,7 +203,7 @@ namespace SNI
 					SN::SN_ExpressionList paramListClone = *p_ParameterList;
 					SN::SN_Expression e = item->Unify(&paramListClone);
 					SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after unify");
-					if (e.IsError() || e.IsKnownValue())
+					if (!e.IsNull())
 					{
 						return e;
 					}
@@ -240,7 +240,7 @@ namespace SNI
 					//SNI_Variable *result = SNI_Frame::Top()->GetResult();
 					//result->SetValue((*p_ParameterList)[0].GetVariableValue());
 					SNI_Frame::Pop();
-					if (e.IsError())
+					if (!e.IsNull())
 					{
 						return e;
 					}
