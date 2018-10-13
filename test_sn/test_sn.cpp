@@ -2559,13 +2559,13 @@ namespace test_sn
 				(fib(Long(5)) == Long(8)).EvaluateAction();
 				(fib(Long(6)) == Long(13)).EvaluateAction();
 
-				//(fib(Long(0)) == Long(1)).AssertAction();
-				//(fib(Long(1)) == Long(1)).AssertAction();
-				//(fib(Long(2)) == Long(2)).AssertAction();
-				//(fib(Long(3)) == Long(3)).AssertAction();
-				//(fib(Long(4)) == Long(5)).AssertAction();
-				//(fib(Long(5)) == Long(8)).AssertAction();
-				//(fib(Long(6)) == Long(13)).AssertAction();
+				(fib(Long(0)) == Long(1)).AssertAction();
+				(fib(Long(1)) == Long(1)).AssertAction();
+				(fib(Long(2)) == Long(2)).AssertAction();
+				(fib(Long(3)) == Long(3)).AssertAction();
+				(fib(Long(4)) == Long(5)).AssertAction();
+				(fib(Long(5)) == Long(8)).AssertAction();
+				(fib(Long(6)) == Long(13)).AssertAction();
 
 			}
 			Cleanup();

@@ -517,6 +517,10 @@ namespace SNI
 			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Variable.Call");
 			SN::SN_Expression e = l_clone->Call(p_ParameterList, p_MetaLevel);
 			SNI_Frame::Pop();
+			if (e.IsNull())
+			{
+				return skynet::Fail;
+			}
 			return e;
 		}
 		return dynamic_cast<SNI_Expression *>(SN::SN_Error(GetTypeName() + " function to call is unknown.").GetSNI_Error());
@@ -549,6 +553,10 @@ namespace SNI
 			SNI_Variable *result = SNI_Frame::Top()->GetResult();
 			result->SetValue((*p_ParameterList)[0].GetVariableValue());
 			SNI_Frame::Pop();
+			if (e.IsNull())
+			{
+				return skynet::OK;
+			}
 			return e;
 		}
 		else
@@ -563,7 +571,12 @@ namespace SNI
 	{
 		if (m_Value && (!p_Define || dynamic_cast<SNI_Derived *>(m_Value)))
 		{
-			return m_Value->PartialUnify(p_ParameterList, p_Result, p_Define);
+			SN::SN_Error e = m_Value->PartialUnify(p_ParameterList, p_Result, p_Define);
+			if (e.IsNull())
+			{
+				return skynet::Fail;
+			}
+			return e;
 		}
 		else
 		{

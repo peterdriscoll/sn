@@ -130,11 +130,11 @@ namespace SNI
 		p_ParameterList->pop_back();
 		SN::SN_Error e;
 		if (!m_FormalParameter || m_FormalParameter->IsNullValue())
-		{
+		{	// Lazy evaluation. Delay until the value is needed.
 			e = m_FormalParameter->PartialAssertValue(param, true);
 		}
 		else
-		{
+		{	// The value is needed now.
 			e = m_FormalParameter->AssertValue(param.Evaluate());
 		}
 		LOG(WriteLine(SN::DebugLevel, DisplaySN0()));
@@ -181,16 +181,21 @@ namespace SNI
 	{
 		SN::LogContext context(DisplaySN0() + ".SNI_Lambda::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )");
 
-		ASSERTM(p_ParameterList->size() > 1, "Cannot call a lambda without a parameter");
-		SN::SN_Expression x = p_ParameterList->back();
+		ASSERTM(p_ParameterList->size() > 1, "Cannot unify to a lambda without a parameter");
+		SN::SN_Expression param = p_ParameterList->back();
 		p_ParameterList->pop_back();
-		SN::SN_Error e = SN::SN_Expression(m_FormalParameter).PartialAssertValue(x, true); // Lazy evaluation until needed.
-		//SN::SN_Error e = SN::SN_Expression(x).AssertValue(m_FormalParameter); // Strict evaluation until needed.
-
+		SN::SN_Error e;
+		if (!m_FormalParameter || m_FormalParameter->IsNullValue())
+		{	// Lazy evaluation. Delay until the value is needed.
+			e = SN::SN_Expression(m_FormalParameter).PartialAssertValue(param, true);
+		}
+		else
+		{	// The value is needed now.
+			e = m_FormalParameter->AssertValue(param.Evaluate());
+		}
 		if (e.IsError())
 		{
-			e.AddNote(context, this, "Assigning parameter value failed");
-			return skynet::Fail;
+			return skynet::Null; // The parameter didn't match, but there may be other polymorphic calls.
 		}
 		LOG(WriteFrame(SNI_Thread::GetThread(), SN::DebugLevel));
 		SNI_Thread::GetThread()->DebugCommand(SN::ParameterPoint, "Lambda.Unify");
@@ -206,9 +211,13 @@ namespace SNI
 		SN::LogContext context(DisplaySN0() + ".SNI_Lambda::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
 
 		ASSERTM(p_ParameterList->size() >0, "Cannot call a lambda without a parameter");
-		SNI_Expression * x = p_ParameterList->front().GetValue().GetSNI_Expression();
+		SNI_Expression * param = p_ParameterList->front().GetValue().GetSNI_Expression();
 		p_ParameterList->erase(p_ParameterList->begin());
-		SN::SN_Error e = SN::SN_Expression(m_FormalParameter).PartialAssertValue(x);
+		SN::SN_Error e = SN::SN_Expression(m_FormalParameter).PartialAssertValue(param, true);
+		if (e.IsError())
+		{
+			return skynet::Null; // The parameter didn't match, but there may be other polymorphic calls.
+		}
 		if (e.IsError())
 		{
 			e.AddNote(context, this, "Assigning parameter value failed");

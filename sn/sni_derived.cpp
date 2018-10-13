@@ -200,15 +200,15 @@ namespace SNI
 				if (item && !item->IsNull())
 				{
 					SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after clone");
-					SN::SN_Expression e = item->Unify(p_ParameterList);
+					SN::SN_ExpressionList paramListClone = *p_ParameterList;
+					SN::SN_Expression e = item->Unify(&paramListClone);
 					SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after unify");
-					SNI_Variable *result = SNI_Frame::Top()->GetResult();
-					result->SetValue((*p_ParameterList)[0].GetVariableValue());
-					SNI_Frame::Pop();
-					if (e.IsError())
+					if (e.IsError() || e.IsKnownValue())
 					{
 						return e;
 					}
+					SNI_Variable *result = SNI_Frame::Top()->GetResult();
+					result->SetValue((*p_ParameterList)[0].GetVariableValue());
 				}
 				else
 				{
@@ -234,7 +234,8 @@ namespace SNI
 				if (item && !item->IsNull())
 				{
 					SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after clone");
-					SN::SN_Expression e = item->PartialUnify(p_ParameterList, p_Result, p_Define);
+					SN::SN_ParameterList paramListClone = *p_ParameterList;
+					SN::SN_Expression e = item->PartialUnify(&paramListClone, p_Result, p_Define);
 					SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after unify");
 					//SNI_Variable *result = SNI_Frame::Top()->GetResult();
 					//result->SetValue((*p_ParameterList)[0].GetVariableValue());
