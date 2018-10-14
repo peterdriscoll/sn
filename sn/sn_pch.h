@@ -40,6 +40,7 @@
 #include "sni_class.h"
 #include "sni_instance.h"
 #include "sni_derived.h"
+#include "sni_virtual.h"
 
 // Exception types
 #include "sni_null.h"

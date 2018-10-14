@@ -43,6 +43,7 @@
 #include "sn_class.h"
 #include "sn_instance.h"
 #include "sn_derived.h"
+#include "sn_virtual.h"
 
 // Declare a variable, and tell the variable its variable name.
 // When the program and the program model generated the variable will know its human readable name.

@@ -52,6 +52,7 @@ namespace SN
 	class SN_Mapping;
 	class SN_Vector;
 	class SN_Derived;
+	class SN_Virtual;
 
 	class SN_Context
 	{
@@ -96,6 +97,7 @@ namespace SN
 		SN_Expression(const SN_Mapping &p_Mapping);
 		SN_Expression(const SN_Vector &p_Vector);
 		SN_Expression(const SN_Derived &p_Derived);
+		SN_Expression(const SN_Virtual &p_Virtual);
 
 		SN_APPLY_TYPES(SN_Expression, DUMMY, SN_CONSTRUCTOR)
 

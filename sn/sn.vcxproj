@@ -204,6 +204,7 @@
     <ClInclude Include="..\inc\sn_valueset.h" />
     <ClInclude Include="..\inc\sn_variable.h" />
     <ClInclude Include="..\inc\sn_vector.h" />
+    <ClInclude Include="..\inc\sn_virtual.h" />
     <ClInclude Include="http_connection.h" />
     <ClInclude Include="http_connection_manager.h" />
     <ClInclude Include="http_header.h" />
@@ -312,6 +313,7 @@
     <ClInclude Include="sni_vardef.h" />
     <ClInclude Include="sni_variable.h" />
     <ClInclude Include="sni_vector.h" />
+    <ClInclude Include="sni_virtual.h" />
     <ClInclude Include="sni_world.h" />
     <ClInclude Include="sni_worldset.h" />
     <ClInclude Include="sn_pch.h" />
@@ -424,6 +426,7 @@
     <ClCompile Include="sni_vardef.cpp" />
     <ClCompile Include="sni_variable.cpp" />
     <ClCompile Include="sni_vector.cpp" />
+    <ClCompile Include="sni_virtual.cpp" />
     <ClCompile Include="sni_world.cpp" />
     <ClCompile Include="sni_worldset.cpp" />
     <ClCompile Include="sn_bool.cpp" />
@@ -464,6 +467,7 @@
     <ClCompile Include="sn_valueset.cpp" />
     <ClCompile Include="sn_variable.cpp" />
     <ClCompile Include="sn_vector.cpp" />
+    <ClCompile Include="sn_virtual.cpp" />
     <ClCompile Include="utility.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

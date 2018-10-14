@@ -486,8 +486,14 @@
     <ClInclude Include="sni_derived.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\inc\sn_virtual.h">
+      <Filter>Include Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_virtual.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\inc\sn_derived.h">
-      <Filter>Interface Source Files</Filter>
+      <Filter>Include Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -915,6 +921,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sn_derived.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_virtual.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_virtual.cpp">
       <Filter>Interface Source Files</Filter>
     </ClCompile>
   </ItemGroup>

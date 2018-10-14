@@ -1,4 +1,4 @@
-#include "sni_derived.h"
+#include "sni_virtual.h"
 
 #include "logcontext.h"
 #include "sn_expression.h"
@@ -12,8 +12,8 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class *SNI_Derived::m_Class = NULL;
-	/*static*/ SNI_Class *SNI_Derived::Class()
+	/*static*/ SNI_Class *SNI_Virtual::m_Class = NULL;
+	/*static*/ SNI_Class *SNI_Virtual::Class()
 	{
 		if (!m_Class)
 		{
@@ -22,17 +22,17 @@ namespace SNI
 		return m_Class;
 	}
 
-	SNI_Derived::SNI_Derived()
+	SNI_Virtual::SNI_Virtual()
 	: m_Fixed(false)
 	, m_DefineId(0)
 	{
 	}
 
-	SNI_Derived::~SNI_Derived()
+	SNI_Virtual::~SNI_Virtual()
 	{
 	}
 
-	void SNI_Derived::PromoteMembers()
+	void SNI_Virtual::PromoteMembers()
 	{
 		for (auto &entry : m_Vector)
 		{
@@ -40,33 +40,33 @@ namespace SNI
 		}
 	}
 
-	string SNI_Derived::GetTypeName() const
+	string SNI_Virtual::GetTypeName() const
 	{
 		return "Derived";
 	}
 
-	string SNI_Derived::DisplayCpp() const
+	string SNI_Virtual::DisplayCpp() const
 	{
 		return GetTypeName() + "()";
 	}
 
-	string SNI_Derived::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
+	string SNI_Virtual::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
 		return GetTypeName() + "()";
 	}
 
-	long SNI_Derived::GetPriority() const
+	long SNI_Virtual::GetPriority() const
 	{
 		return 3;
 	}
 
-	bool SNI_Derived::Equivalent(SNI_Object * p_Other) const
+	bool SNI_Virtual::Equivalent(SNI_Object * p_Other) const
 	{
 		if (m_Fixed)
 		{
-			if (dynamic_cast<SNI_Derived *>(p_Other))
+			if (dynamic_cast<SNI_Virtual *>(p_Other))
 			{
-				SNI_Derived * l_vector = dynamic_cast<SNI_Derived *>(p_Other);
+				SNI_Virtual * l_vector = dynamic_cast<SNI_Virtual *>(p_Other);
 				size_t size = m_Vector.size();
 				if (size != l_vector->m_Vector.size())
 				{
@@ -85,32 +85,32 @@ namespace SNI
 		return false;
 	}
 
-	size_t SNI_Derived::Hash() const
+	size_t SNI_Virtual::Hash() const
 	{
 		return _Hash_representation(m_Vector);
 	}
 
-	bool SNI_Derived::IsFixed() const
+	bool SNI_Virtual::IsFixed() const
 	{
 		return m_Fixed;
 	}
 
 	// Inheritance
-	SN::SN_Value SNI_Derived::DoIsA(const SNI_Value * p_Parent) const
+	SN::SN_Value SNI_Virtual::DoIsA(const SNI_Value * p_Parent) const
 	{
 		return Class()->DoIsA(p_Parent);
 	}
 
-	void SNI_Derived::Fix()
+	void SNI_Virtual::Fix()
 	{
 		m_Fixed = true;
 	}
 
-	SNI_Expression * SNI_Derived::Clone(SNI_Frame *p_Frame, bool &p_Changed)
+	SNI_Expression * SNI_Virtual::Clone(SNI_Frame *p_Frame, bool &p_Changed)
 	{
 		bool changed = false;
 
-		SNI_Derived *l_clone = new SNI_Derived();
+		SNI_Virtual *l_clone = new SNI_Virtual();
 		if (m_Fixed)
 		{
 			l_clone->Fix();
@@ -133,9 +133,9 @@ namespace SNI
 		return this;
 	}
 
-	SN::SN_Expression SNI_Derived::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
+	SN::SN_Expression SNI_Virtual::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Derived::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		SN::LogContext context(DisplaySN0() + ".SNI_Virtual::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )");
 		if (!m_Fixed)
 		{
 			return SN::SN_Error(GetTypeName() + " Fix the derived calls. There maybe be more defines, so the call is undefined.");
@@ -148,7 +148,7 @@ namespace SNI
 				SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Derived.Call");
 				SN::SN_ExpressionList paramListClone = *p_ParameterList;
 				SN::SN_Expression result = item->Call(&paramListClone, p_MetaLevel);
-				if (result.IsKnownValue() || result.IsError())
+				if (!result.IsNull())
 				{
 					return result;
 				}
@@ -161,9 +161,9 @@ namespace SNI
 		return SN::SN_Error(GetTypeName() + " Call did not give a value.");
 	}
 
-	SN::SN_Expression SNI_Derived::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
+	SN::SN_Expression SNI_Virtual::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Derived::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		SN::LogContext context(DisplaySN0() + ".SNI_Virtual::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");
 
 		if (!m_Fixed)
 		{
@@ -177,7 +177,7 @@ namespace SNI
 				{
 					SN::SN_ExpressionList paramListClone = *p_ParameterList;
 					SN::SN_Expression result = item->PartialCall(&paramListClone, p_MetaLevel);
-					if (result.IsKnownValue() || result.IsError())
+					if (!result.IsNull())
 					{
 						return result;
 					}
@@ -191,7 +191,7 @@ namespace SNI
 		return SN::SN_Error(GetTypeName() + " PartialCall did not give a value.");
 	}
 
-	SN::SN_Expression SNI_Derived::Unify(SN::SN_ExpressionList * p_ParameterList)
+	SN::SN_Expression SNI_Virtual::Unify(SN::SN_ExpressionList * p_ParameterList)
 	{
 		if (m_Fixed)
 		{
@@ -203,7 +203,7 @@ namespace SNI
 					SN::SN_ExpressionList paramListClone = *p_ParameterList;
 					SN::SN_Expression e = item->Unify(&paramListClone);
 					SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after unify");
-					if (e.IsKnownValue() || e.IsError())
+					if (!e.IsNull())
 					{
 						return e;
 					}
@@ -225,7 +225,7 @@ namespace SNI
 		}
 	}
 
-	SN::SN_Error SNI_Derived::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
+	SN::SN_Error SNI_Virtual::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
 		if (m_Fixed)
 		{
@@ -240,7 +240,7 @@ namespace SNI
 					//SNI_Variable *result = SNI_Frame::Top()->GetResult();
 					//result->SetValue((*p_ParameterList)[0].GetVariableValue());
 					SNI_Frame::Pop();
-					if (e.IsKnownValue() || e.IsError())
+					if (!e.IsNull())
 					{
 						return e;
 					}
