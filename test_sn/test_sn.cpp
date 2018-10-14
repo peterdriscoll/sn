@@ -2548,9 +2548,43 @@ namespace test_sn
 				SN_DECLARE(N);
 				(fib(Long(0)) == Long(1)).PartialAssertAction();
 				(fib(Long(1)) == Long(1)).PartialAssertAction();
-				(Define(fib)(N) == fib(N - Long(1)) + fib(N - Long(2))).PartialAssertAction();
-				// (Define(fib)(N) == (N >Long(1)).If(fib(N - Long(1)) + fib(N - Long(2)))).PartialAssertAction();
+				(Define(fib)(N) == (N >Long(1)).If(fib(N - Long(1)) + fib(N - Long(2)))).PartialAssertAction();
 				fib.Fix();
+				(fib(Long(0)) == Long(1)).EvaluateAction();
+				(fib(Long(1)) == Long(1)).EvaluateAction();
+				(fib(Long(2)) == Long(2)).EvaluateAction();
+				(fib(Long(3)) == Long(3)).EvaluateAction();
+				(fib(Long(4)) == Long(5)).EvaluateAction();
+				(fib(Long(5)) == Long(8)).EvaluateAction();
+				(fib(Long(6)) == Long(13)).EvaluateAction();
+
+				(fib(Long(0)) == Long(1)).AssertAction();
+				(fib(Long(1)) == Long(1)).AssertAction();
+				(fib(Long(2)) == Long(2)).AssertAction();
+				(fib(Long(3)) == Long(3)).AssertAction();
+				(fib(Long(4)) == Long(5)).AssertAction();
+				(fib(Long(5)) == Long(8)).AssertAction();
+				(fib(Long(6)) == Long(13)).AssertAction();
+
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestVirtual)
+		{
+			Initialize();
+			{
+				Manager manager("Test Virtual", AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE_VALUE(fib, Virtual());
+				SN_DECLARE(N);
+				(fib(Long(0)) == Long(1)).PartialAssertAction();
+				(fib(Long(1)) == Long(1)).PartialAssertAction();
+				(Define(fib)(N) == fib(N - Long(1)) + fib(N - Long(2))).PartialAssertAction();
+
+				fib.Fix();
+
 				(fib(Long(0)) == Long(1)).EvaluateAction();
 				(fib(Long(1)) == Long(1)).EvaluateAction();
 				(fib(Long(2)) == Long(2)).EvaluateAction();

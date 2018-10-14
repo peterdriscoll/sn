@@ -42,7 +42,7 @@ namespace SNI
 
 	string SNI_Virtual::GetTypeName() const
 	{
-		return "Derived";
+		return "Virtual";
 	}
 
 	string SNI_Virtual::DisplayCpp() const
@@ -138,17 +138,17 @@ namespace SNI
 		SN::LogContext context(DisplaySN0() + ".SNI_Virtual::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )");
 		if (!m_Fixed)
 		{
-			return SN::SN_Error(GetTypeName() + " Fix the derived calls. There maybe be more defines, so the call is undefined.");
+			return SN::SN_Error(GetTypeName() + " Fix the virtual calls. There maybe be more defines, so the call is undefined.");
 		}
 		SN::SN_Expression finalResult;
 		for (auto &item : m_Vector)
 		{
 			if (item && !item->IsNull())
 			{
-				SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Derived.Call");
+				SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Virtual.Call");
 				SN::SN_ExpressionList paramListClone = *p_ParameterList;
 				SN::SN_Expression result = item->Call(&paramListClone, p_MetaLevel);
-				if (!result.IsNull())
+				if (result.IsKnownValue() || result.IsError())
 				{
 					return result;
 				}
@@ -167,7 +167,7 @@ namespace SNI
 
 		if (!m_Fixed)
 		{
-			return SN::SN_Error(GetTypeName() + " Fix the derived calls. There maybe be more defines, so the define is undefined.");
+			return SN::SN_Error(GetTypeName() + " Fix the virtual calls. There maybe be more defines, so the define is undefined.");
 		}
 		for (auto &item : m_Vector)
 		{
@@ -177,7 +177,7 @@ namespace SNI
 				{
 					SN::SN_ExpressionList paramListClone = *p_ParameterList;
 					SN::SN_Expression result = item->PartialCall(&paramListClone, p_MetaLevel);
-					if (!result.IsNull())
+					if (result.IsKnownValue() || result.IsError())
 					{
 						return result;
 					}
@@ -203,7 +203,7 @@ namespace SNI
 					SN::SN_ExpressionList paramListClone = *p_ParameterList;
 					SN::SN_Expression e = item->Unify(&paramListClone);
 					SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after unify");
-					if (!e.IsNull())
+					if (e.IsKnownValue() || e.IsError())
 					{
 						return e;
 					}
@@ -240,7 +240,7 @@ namespace SNI
 					//SNI_Variable *result = SNI_Frame::Top()->GetResult();
 					//result->SetValue((*p_ParameterList)[0].GetVariableValue());
 					SNI_Frame::Pop();
-					if (!e.IsNull())
+					if (e.IsKnownValue() || e.IsError())
 					{
 						return e;
 					}

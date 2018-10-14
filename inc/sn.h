@@ -84,6 +84,7 @@ namespace skynet
 	typedef SN::SN_Set Set;
 	typedef SN::SN_Error Error;
 	typedef SN::SN_Derived Derived;
+	typedef SN::SN_Virtual Virtual;
 
 	// Expressions
 	typedef SN::SN_Expression Expression;
