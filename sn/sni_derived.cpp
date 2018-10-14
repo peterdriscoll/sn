@@ -141,6 +141,7 @@ namespace SNI
 			return SN::SN_Error(GetTypeName() + " Fix the derived calls. There maybe be more defines, so the call is undefined.");
 		}
 		SN::SN_Expression finalResult;
+		bool resultFound = false;
 		for (auto &item : m_Vector)
 		{
 			if (item && !item->IsNull())
@@ -148,9 +149,24 @@ namespace SNI
 				SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Derived.Call");
 				SN::SN_ExpressionList paramListClone = *p_ParameterList;
 				SN::SN_Expression result = item->Call(&paramListClone, p_MetaLevel);
-				if (result.IsKnownValue() || result.IsError())
+				if (result.IsError())
 				{
 					return result;
+				}
+				if (result.IsKnownValue())
+				{
+					if (resultFound)
+					{
+						if (!finalResult.Equivalent(result.GetSNI_Expression()))
+						{
+							return SN::SN_Error(GetTypeName() + " Polymorphic calls gave different results. Did you mean to use Virtual instead of Derived?");
+						}
+					}
+					else
+					{
+						resultFound = true;
+						finalResult = result;
+					}
 				}
 			}
 			else
@@ -158,7 +174,7 @@ namespace SNI
 				return SN::SN_Error(GetTypeName() + " function to call is unknown.");
 			}
 		}
-		return SN::SN_Error(GetTypeName() + " Call did not give a value.");
+		return finalResult;
 	}
 
 	SN::SN_Expression SNI_Derived::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
@@ -169,6 +185,8 @@ namespace SNI
 		{
 			return SN::SN_Error(GetTypeName() + " Fix the derived calls. There maybe be more defines, so the define is undefined.");
 		}
+		SN::SN_Expression finalResult;
+		bool resultFound = false;
 		for (auto &item : m_Vector)
 		{
 			if (item)
@@ -177,9 +195,24 @@ namespace SNI
 				{
 					SN::SN_ExpressionList paramListClone = *p_ParameterList;
 					SN::SN_Expression result = item->PartialCall(&paramListClone, p_MetaLevel);
-					if (result.IsKnownValue() || result.IsError())
+					if (result.IsError())
 					{
 						return result;
+					}
+					if (result.IsKnownValue())
+					{
+						if (resultFound)
+						{
+							if (!finalResult.Equivalent(result.GetSNI_Expression()))
+							{
+								return SN::SN_Error(GetTypeName() + " Polymorphic calls gave different results. Did you mean to use Virtual instead of Derived?");
+							}
+						}
+						else
+						{
+							resultFound = true;
+							finalResult = result;
+						}
 					}
 				}
 			}
@@ -188,7 +221,7 @@ namespace SNI
 				return SN::SN_Error(GetTypeName() + " partial function to call is unknown.");
 			}
 		}
-		return SN::SN_Error(GetTypeName() + " PartialCall did not give a value.");
+		return finalResult;
 	}
 
 	SN::SN_Expression SNI_Derived::Unify(SN::SN_ExpressionList * p_ParameterList)
@@ -203,7 +236,7 @@ namespace SNI
 					SN::SN_ExpressionList paramListClone = *p_ParameterList;
 					SN::SN_Expression e = item->Unify(&paramListClone);
 					SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after unify");
-					if (e.IsKnownValue() || e.IsError())
+					if (e.IsError())
 					{
 						return e;
 					}
@@ -240,7 +273,7 @@ namespace SNI
 					//SNI_Variable *result = SNI_Frame::Top()->GetResult();
 					//result->SetValue((*p_ParameterList)[0].GetVariableValue());
 					SNI_Frame::Pop();
-					if (e.IsKnownValue() || e.IsError())
+					if (e.IsError())
 					{
 						return e;
 					}
