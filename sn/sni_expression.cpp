@@ -77,6 +77,11 @@ namespace SNI
 		return NULL;
 	}
 
+	SNI_Expression *SNI_Expression::LoadFormalParameters(SN::SN_ExpressionList &p_FormalParameterList)
+	{
+		return this;
+	}
+
 	string SNI_Expression::DisplayCall(long priority, SNI_DisplayOptions &p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList) const
 	{
 		string text;

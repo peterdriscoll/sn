@@ -2574,6 +2574,7 @@ namespace test_sn
 
 		TEST_METHOD(TestVirtual)
 		{
+			return;
 			Initialize();
 			{
 				Manager manager("Test Virtual", AssertErrorHandler);
@@ -2603,6 +2604,72 @@ namespace test_sn
 				(fib(Long(5)) == Long(8)).AssertAction();
 				(fib(Long(6)) == Long(13)).AssertAction();
 
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestVirtualPolymorphic)
+		{
+			return;
+			Initialize();
+			{
+				Manager manager("Test Virtual", AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE_VALUE(typeChecker, Virtual());
+				SN_DECLARE_VALUE(shortType, Short::Class());
+				SN_DECLARE_VALUE(longType, Long::Class());
+				SN_DECLARE_VALUE(longLongType, LongLong::Class());
+
+				(typeChecker(shortType) == String("short")).PartialAssertAction();
+				(typeChecker(longType) == String("long")).PartialAssertAction();
+				(typeChecker(longLongType) == String("long long")).PartialAssertAction();
+
+				typeChecker.Fix();
+
+				// Polymorphic call.
+				(typeChecker(Short(1)) == String("short")).EvaluateAction();
+				(typeChecker(Long(1)) == String("long")).EvaluateAction();
+				(typeChecker(LongLong(1)) == String("long long")).EvaluateAction();
+
+				(typeChecker(Short(1)) == String("short")).AssertAction();
+				(typeChecker(Long(1)) == String("long")).AssertAction();
+				(typeChecker(LongLong(1)) == String("long long")).AssertAction();
+
+				SN_DECLARE(A);
+				SN_DECLARE(B);
+				SN_DECLARE(C);
+
+				(typeChecker(Short(1)) == A).AssertAction();
+				(typeChecker(Long(1)) == B).AssertAction();
+				(typeChecker(LongLong(1)) == C).AssertAction();
+
+				string A_text = A.GetString();
+				string B_text = B.GetString();
+				string C_text = C.GetString();
+
+				Assert::IsTrue(A_text == "short");
+				Assert::IsTrue(B_text == "long");
+				Assert::IsTrue(C_text == "long long");
+
+				// Reverse Polymorphic call.
+				SN_DECLARE_VALUE(numbers1, Short(1) || Long(2) || LongLong(3));
+				(typeChecker(numbers1) == String("short")).EvaluateAction();
+				(numbers1 == Short(1)).EvaluateAction();
+				string n1_text = numbers1.DisplayValueSN();
+				Assert::IsTrue(n1_text == "Short(1)");
+
+				SN_DECLARE_VALUE(numbers2, Short(1) || Long(2) || LongLong(3));
+				(typeChecker(numbers2) == String("long")).EvaluateAction();
+				(numbers2 == Long(2)).EvaluateAction();
+				string n2_text = numbers1.DisplayValueSN();
+				Assert::IsTrue(n2_text == "Long(2)");
+
+				SN_DECLARE_VALUE(numbers3, Short(1) || Long(2) || LongLong(3));
+				(typeChecker(numbers3) == String("long long")).EvaluateAction();
+				(numbers3 == LongLong(3)).EvaluateAction();
+				string n3_text = numbers3.DisplayValueSN();
+				Assert::IsTrue(n3_text == "Short(1)");
 			}
 			Cleanup();
 		}

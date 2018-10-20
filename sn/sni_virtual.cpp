@@ -34,7 +34,7 @@ namespace SNI
 
 	void SNI_Virtual::PromoteMembers()
 	{
-		for (auto &entry : m_Vector)
+		for (auto &entry : m_CallList)
 		{
 			REQUESTPROMOTION(entry);
 		}
@@ -67,15 +67,15 @@ namespace SNI
 			if (dynamic_cast<SNI_Virtual *>(p_Other))
 			{
 				SNI_Virtual * l_vector = dynamic_cast<SNI_Virtual *>(p_Other);
-				size_t size = m_Vector.size();
-				if (size != l_vector->m_Vector.size())
+				size_t size = m_CallList.size();
+				if (size != l_vector->m_CallList.size())
 				{
 					return false;
 				}
 				
 				for (size_t j =0; j < size; j++)
 				{
-					if (!m_Vector[j]->Equivalent(l_vector->m_Vector[j]))
+					if (!m_CallList[j]->Equivalent(l_vector->m_CallList[j]))
 					{
 						return false;
 					}
@@ -87,7 +87,7 @@ namespace SNI
 
 	size_t SNI_Virtual::Hash() const
 	{
-		return _Hash_representation(m_Vector);
+		return _Hash_representation(m_CallList);
 	}
 
 	bool SNI_Virtual::IsFixed() const
@@ -106,6 +106,20 @@ namespace SNI
 		m_Fixed = true;
 	}
 
+	void SNI_Virtual::BuildCallList()
+	{
+		if (m_OrderedCalls.size() == m_CallList.size())
+		{
+			return;
+		}
+		m_OrderedCalls.reserve(m_CallList.size());
+		for (SNI_Expression *e : m_CallList)
+		{
+			m_OrderedCalls.push_back(ParameterizedExpression(e));
+		}
+		std::sort(m_OrderedCalls.begin(), m_OrderedCalls.end());
+	}
+
 	SNI_Expression * SNI_Virtual::Clone(SNI_Frame *p_Frame, bool &p_Changed)
 	{
 		bool changed = false;
@@ -115,13 +129,13 @@ namespace SNI
 		{
 			l_clone->Fix();
 		}
-		l_clone->m_Vector.resize(m_Vector.size());
-		for (size_t j = 0; j < m_Vector.size(); j++)
+		l_clone->m_CallList.resize(m_CallList.size());
+		for (size_t j = 0; j < m_CallList.size(); j++)
 		{
-			SNI_Expression *item = m_Vector[j];
+			SNI_Expression *item = m_CallList[j];
 			if (item)
 			{
-				l_clone->m_Vector[j] = item->Clone(p_Frame, changed);
+				l_clone->m_CallList[j] = item->Clone(p_Frame, changed);
 			}
 		}
 
@@ -141,7 +155,27 @@ namespace SNI
 			return SN::SN_Error(GetTypeName() + " Fix the virtual calls. There maybe be more defines, so the call is undefined.");
 		}
 		SN::SN_Expression finalResult;
-		for (auto &item : m_Vector)
+		enum MatchLevel bestLevel = Incompatible;
+		for (ParameterizedExpression params : m_OrderedCalls)
+		{
+			enum MatchLevel currentLevel = params.MatchParameters(p_ParameterList);
+			switch (currentLevel)
+			{
+			case Matched:
+				return params.Call(p_ParameterList);
+			case Incompatible:
+				break;
+			case Unknown:
+				bestLevel = Unknown;
+				params.BuildCall(p_ParameterList);
+			}
+		}
+		if (bestLevel == Incompatible)
+		{
+			return SN::SN_Error("No compatible polymorphic call.");
+		}
+
+		for (auto &item : m_CallList)
 		{
 			if (item && !item->IsNull())
 			{
@@ -169,7 +203,7 @@ namespace SNI
 		{
 			return SN::SN_Error(GetTypeName() + " Fix the virtual calls. There maybe be more defines, so the define is undefined.");
 		}
-		for (auto &item : m_Vector)
+		for (auto &item : m_CallList)
 		{
 			if (item)
 			{
@@ -195,7 +229,7 @@ namespace SNI
 	{
 		if (m_Fixed)
 		{
-			for (auto item : m_Vector)
+			for (auto item : m_CallList)
 			{
 				if (item && !item->IsNull())
 				{
@@ -219,8 +253,8 @@ namespace SNI
 		}
 		else
 		{
-			m_Vector.push_back(AddLambdas(p_ParameterList).GetSNI_Expression());
-			REQUESTPROMOTION(m_Vector.back());
+			m_CallList.push_back(AddLambdas(p_ParameterList).GetSNI_Expression());
+			REQUESTPROMOTION(m_CallList.back());
 			return skynet::OK;
 		}
 	}
@@ -229,7 +263,7 @@ namespace SNI
 	{
 		if (m_Fixed)
 		{
-			for (auto item : m_Vector)
+			for (auto item : m_CallList)
 			{
 				if (item && !item->IsNull())
 				{
@@ -258,13 +292,13 @@ namespace SNI
 			if (m_DefineId != l_DefineId)
 			{
 				m_DefineId = l_DefineId;
-				m_Vector.push_back(AddLambdasPartial(p_ParameterList, p_Result).GetSNI_Expression());
-				REQUESTPROMOTION(m_Vector.back());
+				m_CallList.push_back(AddLambdasPartial(p_ParameterList, p_Result).GetSNI_Expression());
+				REQUESTPROMOTION(m_CallList.back());
 			}
-			else if (m_Vector.back() == NULL || p_Define)
+			else if (m_CallList.back() == NULL || p_Define)
 			{
-				m_Vector.back() = AddLambdasPartial(p_ParameterList, p_Result).GetSNI_Expression();
-				REQUESTPROMOTION(m_Vector.back());
+				m_CallList.back() = AddLambdasPartial(p_ParameterList, p_Result).GetSNI_Expression();
+				REQUESTPROMOTION(m_CallList.back());
 			}
 			return skynet::OK;
 		}

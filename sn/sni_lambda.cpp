@@ -17,7 +17,6 @@ namespace SNI
 
 	SNI_Lambda::SNI_Lambda()
 	{
-
 	}
 
 	SNI_Lambda::SNI_Lambda(SNI_Expression *p_FormalParameter, SNI_Expression *p_Expression, SNI_Expression *p_ConstraintValue)
@@ -119,6 +118,12 @@ namespace SNI
 	size_t SNI_Lambda::Cardinality(size_t) const
 	{
 		return 1;
+	}
+
+	SNI_Expression * SNI_Lambda::LoadFormalParameters(SN::SN_ExpressionList &p_FormalParameterList)
+	{
+		p_FormalParameterList.push_back(m_FormalParameter);
+		return LoadFormalParameters(p_FormalParameterList);
 	}
 
 	SN::SN_Expression SNI_Lambda::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
