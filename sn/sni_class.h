@@ -33,7 +33,7 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Class);
 	public:
-		SNI_Class();
+		SNI_Class(const string &p_ClassName);
 		SNI_Class(const SNI_Class &p_Other);
 		virtual ~SNI_Class();
 
@@ -54,6 +54,7 @@ namespace SNI
 	private:
 		virtual void PromoteMembers();
 
+		string m_ClassName;
 		bool m_Fixed;
 		SNI_Inherits_List m_InheritList;
 	};

@@ -55,6 +55,16 @@ namespace SNI
 		return 3;
 	}
 
+	string SNI_Binary::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList) const
+	{
+		if (GetOperator().empty() || (*p_ParameterList).size() != 2)
+		{
+			return SNI_FunctionDef::DisplayCall(priority, p_DisplayOptions, p_ParameterList);
+
+		}
+		return Bracket(priority, (*p_ParameterList)[1].DisplaySN() + GetOperator() + (*p_ParameterList)[0].DisplaySN());
+	}
+
 	SN::SN_Value SNI_Binary::RightInverseFunctionValue(const SN::SN_Value &p_Left, const SN::SN_Value &p_Right) const
 	{
 		return LeftInverseFunctionValue(p_Left, p_Right);

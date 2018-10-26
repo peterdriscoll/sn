@@ -18,7 +18,7 @@ namespace SNI
 	{
 		if (!m_Class)
 		{
-			m_Class = new SNI_Class();
+			m_Class = new SNI_Class("Vector");
 		}
 		return m_Class;
 	}

@@ -85,12 +85,13 @@ namespace SNI
 	string SNI_Expression::DisplayCall(long priority, SNI_DisplayOptions &p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList) const
 	{
 		string text;
-		string delimeter = "(";
+		string delimeter;
 		for (SN::SN_Expression &p: *p_ParameterList)
 		{
-			text += delimeter + p.GetSNI_Expression()->DisplayValueSN(GetPriority(), p_DisplayOptions);
+			text += delimeter + p.GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions);
+			delimeter = ",";
 		}
-		return DisplaySN(priority, p_DisplayOptions) + "(" + text + ")";
+		return Bracket(priority, DisplaySN(GetPriority(), p_DisplayOptions)) + "(" + text + ")";
 	}
 
 	SNI_Expression * SNI_Expression::Clone(SNI_Frame *p_Frame, bool &/*p_Changed*/)
@@ -213,6 +214,11 @@ namespace SNI
 	bool SNI_Expression::IsKnownTypeValue() const
 	{
 		return IsKnownValue();
+	}
+
+	bool SNI_Expression::IsLambdaValue() const
+	{
+		return false;
 	}
 
 	bool SNI_Expression::IsComplete() const

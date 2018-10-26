@@ -29,6 +29,7 @@ namespace SNI
 		virtual string GetTypeName() const;
 		virtual string DisplayCpp() const;
 		virtual string DisplaySN(long p_Priority, SNI_DisplayOptions &p_DisplayOptions) const;
+		virtual string DisplayValueSN(long priority, SNI_DisplayOptions & p_DisplayOptions) const;
 		virtual string DisplayCall(long p_Priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList) const;
 		virtual long GetPriority() const;
 
@@ -47,6 +48,7 @@ namespace SNI
 		virtual bool IsNullValue() const;
 		virtual bool IsKnownValue() const;
 		virtual bool IsKnownTypeValue() const;
+		virtual bool IsLambdaValue() const;
 		virtual bool IsVariable() const;
 		virtual bool IsReferableValue() const;
 		virtual void Request();

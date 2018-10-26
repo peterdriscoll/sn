@@ -84,7 +84,7 @@ namespace SNI
 			function = nextFunction;
 			nextFunction = function->LoadParameters(l_ParameterList);
 		}
-		return Bracket(priority, function->DisplayCall(priority, p_DisplayOptions, l_ParameterList));
+		return Bracket(priority, function->DisplayCall(GetPriority(), p_DisplayOptions, l_ParameterList));
 	}
 
 	long SNI_Function::GetPriority() const

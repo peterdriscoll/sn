@@ -24,7 +24,7 @@ namespace SNI
 	{
 		if (!m_Class)
 		{
-			m_Class = new SNI_Class();
+			m_Class = new SNI_Class("String");
 		}
 		return m_Class;
 	}
@@ -159,9 +159,9 @@ namespace SNI
 
 	SN::SN_Error SNI_String::AssertValue(const SN::SN_Expression &p_Value)
 	{
-		if (SN::Is<SNI_StringRef*>(p_Value) || SN::Is<SNI_ValueSet*>(p_Value))
+		if (SN::Is<SNI_StringRef*>(p_Value) || SN::Is<SNI_ValueSet*>(p_Value) || SN::Is<SNI_Variable*>(p_Value))
 		{
-			SN::SN_Value value(p_Value);
+			SN::SN_Expression value(p_Value);
 			return value.AssertValue(this);
 		}
 		return Equivalent(p_Value.GetSNI_Expression());

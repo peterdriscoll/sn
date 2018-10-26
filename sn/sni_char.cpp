@@ -15,7 +15,7 @@ namespace SNI
 	{
 		if (!m_Class)
 		{
-			m_Class = new SNI_Class();
+			m_Class = new SNI_Class("Char");
 		}
 		return m_Class;
 	}

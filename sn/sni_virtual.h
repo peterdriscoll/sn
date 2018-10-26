@@ -26,11 +26,53 @@ namespace SNI
 
 	class ParameterizedExpression
 	{
+	private:
+		SN::SN_ExpressionList m_FormalParameterList;
+		SN::SN_Expression m_Expression;
+		SN::SN_Expression m_OriginalExpression;
+
 	public:
-		ParameterizedExpression(SNI_Expression *p_Expression)
+		ParameterizedExpression(SN::SN_Expression p_Expression)
 		{
-			m_Expression = p_Expression->LoadFormalParameters(m_FormalParameterList);
+			m_OriginalExpression = p_Expression;
+			m_Expression = p_Expression.GetSNI_Expression()->LoadFormalParameters(m_FormalParameterList);
 		};
+
+		size_t size()
+		{
+			return m_FormalParameterList.size();
+		}
+		SN::SN_Expression &GetExpression()
+		{
+			return m_Expression;
+		}
+
+		SN::SN_Expression &GetOriginalExpression()
+		{
+			return m_OriginalExpression;
+		}
+
+		size_t Common(ParameterizedExpression &p_right)
+		{
+			size_t minLength = m_FormalParameterList.size();
+			if (p_right.m_FormalParameterList.size() < minLength)
+			{
+				minLength = p_right.m_FormalParameterList.size();
+			}
+			size_t common = 0;
+			for (size_t j = 0; j < minLength; j++)
+			{
+				if (m_FormalParameterList[j].Equivalent(p_right.m_FormalParameterList[j]))
+				{
+					common++;
+				}
+				else
+				{
+					return common;
+				}
+			}
+			return common;
+		}
 
 		bool operator <(ParameterizedExpression &p_right)
 		{
@@ -82,6 +124,11 @@ namespace SNI
 			return skynet::Null;
 		}
 
+		SN::SN_Expression BuildCondition(size_t j, SN::SN_Expression param)
+		{
+			return param.IsA(m_FormalParameterList[j].GetVariableValue());
+		}
+
 		SN::SN_Expression BuildCondition(SN::SN_ExpressionList * p_ParameterList)
 		{
 			SN::SN_Expression condition;
@@ -110,12 +157,9 @@ namespace SNI
 		{
 			return skynet::Null;
 		}
-
-	private:
-		SN::SN_ExpressionList m_FormalParameterList;
-		SN::SN_Expression m_Expression;
 	};
 	typedef vector<ParameterizedExpression> ParameterizedExpressionList;
+	typedef vector<ParameterizedExpression &> ParameterizedExpressionRefList;
 
 	class SNI_Virtual : public SNI_Value
 	{
@@ -151,16 +195,17 @@ namespace SNI
 		virtual void PromoteMembers();
 
 	private:
-		void BuildCallList();
+		void BuildCallList(ParameterizedExpressionList &p_OrderedCalls);
+		SN::SN_Expression CreateImplementation();
+		void BuildImplementation();
 
 		static SNI_Class *m_Class;
 
-		vector<SNI_Expression *> m_CallList;
-		ParameterizedExpressionList m_OrderedCalls;
+		vector<SN::SN_Expression> m_CallList;
 		long m_DefineId;
+
 		bool m_Fixed;
-
-
+		SN::SN_Expression m_CallExpression;
 	};
 }
 

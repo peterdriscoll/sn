@@ -63,7 +63,7 @@ using namespace std;
 
 #define SN_NAME_FROM_TYPE(C, B, K, N)                                  \
 		template <>                                                    \
-		string NameFromType<K>(K) const                                \
+		static string NameFromType<K>(K)                               \
 		{                                                              \
 			return #N;                                                 \
 		};
@@ -81,15 +81,6 @@ namespace SNI
         T m_Number;
 
     public:
-		static SNI_Class * Class()
-		{
-			if (!m_Class)
-			{
-				m_Class = new SNI_Class();
-			}
-			return m_Class;
-		}
-		
 		SNI_Real()
             : m_Number(0)
         {
@@ -115,18 +106,33 @@ namespace SNI
         }
 
 		template <typename S>
-		string NameFromType(S p_Number) const
+		static string NameFromType(S p_Number)
 		{
 			return "";
 		};
 		SN_APPLY_TYPES(DUMMY, DUMMY, SN_NAME_FROM_TYPE)
 
-		virtual string GetTypeName() const
-        {
-            return NameFromType(m_Number);
-        }
+		static string GetTypeNameStatic()
+		{
+			T var = 0;
+			return NameFromType(var);
+		}
 
-        virtual string DisplayCpp() const
+		virtual string GetTypeName() const
+		{
+			return NameFromType(m_Number);
+		}
+
+		static SNI_Class * Class()
+		{
+			if (!m_Class)
+			{
+				m_Class = new SNI_Class(GetTypeNameStatic());
+			}
+			return m_Class;
+		}
+
+		virtual string DisplayCpp() const
         {
             return to_string(m_Number);
         }
@@ -166,7 +172,7 @@ namespace SNI
 			return p_Result.AssertValue(Class()->DoIsA(p_Parent));
 		}
 
-		SN::SN_Value DoIsA(SNI_Value * p_Parent) const
+		SN::SN_Value DoIsA(const SNI_Value * p_Parent) const
 		{
 			return Class()->DoIsA(p_Parent);
 		}

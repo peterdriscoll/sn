@@ -16,6 +16,8 @@ namespace SNI
 
 		virtual long GetNumParameters() const;
 
+		string DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList) const;
+
 		/// @cond
 		virtual string GetTypeName() const = 0;
 		virtual string DisplayCpp() const = 0;

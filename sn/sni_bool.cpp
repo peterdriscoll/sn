@@ -5,7 +5,7 @@
 
 #include "sni_valueset.h"
 #include "sni_helpers.h"
-#include "SNI_Class.h"
+#include "sni_class.h"
 
 #include "sn_pch.h"
 
@@ -16,7 +16,7 @@ namespace SNI
 	{
 		if (!m_Class)
 		{
-			m_Class = new SNI_Class();
+			m_Class = new SNI_Class("Bool");
 		}
 		return m_Class;
 	}

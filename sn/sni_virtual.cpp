@@ -17,7 +17,7 @@ namespace SNI
 	{
 		if (!m_Class)
 		{
-			m_Class = new SNI_Class();
+			m_Class = new SNI_Class("Virtual");
 		}
 		return m_Class;
 	}
@@ -47,12 +47,36 @@ namespace SNI
 
 	string SNI_Virtual::DisplayCpp() const
 	{
-		return GetTypeName() + "()";
+		if (m_Fixed)
+		{
+			return m_CallExpression.DisplayCpp();
+		}
+		string result = GetTypeName() + "(";
+		string delimeter;
+		for (const SN::SN_Expression &call : m_CallList)
+		{
+			result += delimeter + call.DisplayCpp();
+			delimeter = ",";
+		}
+		result += ")";
+		return result;
 	}
 
 	string SNI_Virtual::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
-		return GetTypeName() + "()";
+		if (m_Fixed)
+		{
+			return m_CallExpression.GetSNI_Expression()->DisplaySN(priority, p_DisplayOptions);
+		}
+		string result = GetTypeName() + "(";
+		string delimeter;
+		for (const SN::SN_Expression &call : m_CallList)
+		{
+			result += delimeter + call.GetSNI_Expression()->DisplaySN(priority, p_DisplayOptions);
+			delimeter = ",";
+		}
+		result += ")";
+		return result;
 	}
 
 	long SNI_Virtual::GetPriority() const
@@ -75,7 +99,7 @@ namespace SNI
 				
 				for (size_t j =0; j < size; j++)
 				{
-					if (!m_CallList[j]->Equivalent(l_vector->m_CallList[j]))
+					if (!m_CallList[j].GetSNI_Expression()->Equivalent(l_vector->m_CallList[j].GetSNI_Expression()))
 					{
 						return false;
 					}
@@ -103,39 +127,141 @@ namespace SNI
 
 	void SNI_Virtual::Fix()
 	{
+		if (!m_Fixed)
+		{
+			BuildImplementation();
+		}
 		m_Fixed = true;
 	}
 
-	void SNI_Virtual::BuildCallList()
+	void SNI_Virtual::BuildCallList(ParameterizedExpressionList &p_OrderedCalls)
 	{
-		if (m_OrderedCalls.size() == m_CallList.size())
+		if (p_OrderedCalls.size() == m_CallList.size())
 		{
 			return;
 		}
-		m_OrderedCalls.reserve(m_CallList.size());
-		for (SNI_Expression *e : m_CallList)
+		p_OrderedCalls.reserve(m_CallList.size());
+		for (SN::SN_Expression &e : m_CallList)
 		{
-			m_OrderedCalls.push_back(ParameterizedExpression(e));
+			p_OrderedCalls.push_back(ParameterizedExpression(e));
 		}
-		std::sort(m_OrderedCalls.begin(), m_OrderedCalls.end());
+		std::sort(p_OrderedCalls.begin(), p_OrderedCalls.end());
+	}
+
+	SN::SN_Expression SNI_Virtual::CreateImplementation()
+	{
+		ParameterizedExpressionList l_OrderedCalls;
+		BuildCallList(l_OrderedCalls);
+
+		if (l_OrderedCalls.size() == 0)
+		{
+			return SN::SN_Error("No function definitions.");
+		}
+		size_t id = 0;
+		if (l_OrderedCalls.size() == 1)
+		{
+			ParameterizedExpression &call = l_OrderedCalls[0];
+			vector<SN::SN_Variable> paramList(call.size());
+			SN::SN_Expression callExp = call.GetOriginalExpression();
+			for (size_t j = 0; j < call.size(); j--)
+			{
+				paramList[j].SetName(string("param_") + to_string(id++));
+				callExp = callExp(paramList[j]);
+			}
+			for (size_t j = call.size() - 1; 0 <= j; j--)
+			{
+				callExp = SN::SN_Lambda(paramList[j], call.BuildCondition(j, paramList[j]).If(callExp));
+			}
+			return callExp;
+		}
+
+		if (l_OrderedCalls.size() == 2)
+		{
+			ParameterizedExpression &last = l_OrderedCalls[1];
+			ParameterizedExpression &next = l_OrderedCalls[0];
+			size_t common = next.Common(last);
+
+			vector<SN::SN_Variable> lastParamList(last.size());
+			vector<SN::SN_Variable> nextParamList(next.size());
+
+			// Set up temporary parameter variables. Common are shared between next and last.
+			for (size_t j = 0; j <= common; j--)
+			{
+				lastParamList[j].SetName(string("param_") + to_string(id++));
+				nextParamList[j] = lastParamList[j];
+			}
+			for (size_t j = common+1; j < last.size(); j--)
+			{
+				lastParamList[j].SetName(string("param_") + to_string(id++));
+			}
+			for (size_t j = common+1; j < next.size(); j--)
+			{
+				nextParamList[j].SetName(string("param_") + to_string(id++));
+			}
+
+			// Build the calls from the temporary variables to the individual call.
+			SN::SN_Expression lastExp = last.GetOriginalExpression();
+			string sLastExp2 = lastExp.DisplayValueSN();
+			for (size_t j = 0; j < last.size(); j--)
+			{
+				lastExp = lastExp(lastParamList[j]);
+			}
+
+			SN::SN_Expression nextExp = next.GetOriginalExpression();
+			string sNextExp2 = nextExp.DisplayValueSN();
+			for (size_t j = 0; j < next.size(); j--)
+			{
+				nextExp = nextExp(nextParamList[j]);
+			}
+
+			// Build the if condition for the parameters that are not the same between last and next
+			for (size_t j = last.size() - 1; common < j; j--)
+			{
+				lastExp = SN::SN_Lambda(lastParamList[j], last.BuildCondition(j, lastParamList[j]).If(lastExp));
+			}
+			for (size_t j = next.size() - 1; common < j; j--)
+			{
+				nextExp = SN::SN_Lambda(nextParamList[j], next.BuildCondition(j, nextParamList[j]).If(nextExp));
+			}
+
+			// Form the if then else condition for the first parameter whose type is different between next and last 
+			SN::SN_Expression commonExp = SN::SN_Lambda(nextParamList[common], next.BuildCondition(common, nextParamList[common]).If(nextExp, last.BuildCondition(common, nextParamList[common]).If(lastExp, SN::SN_Error("Incompatible parameters to polymorphic call."))));
+
+			if (0 < common)
+			{
+				for (size_t j = common - 1; 0 < j; j--)
+				{
+					commonExp = SN::SN_Lambda(nextParamList[j], next.BuildCondition(j, nextParamList[j]).If(commonExp));
+				}
+			}
+
+			return commonExp;
+		}
+		return SN::SN_Error("Three or more parameters not implemented yet.");
+	}
+
+	void SNI_Virtual::BuildImplementation()
+	{
+		m_CallExpression = CreateImplementation();
 	}
 
 	SNI_Expression * SNI_Virtual::Clone(SNI_Frame *p_Frame, bool &p_Changed)
 	{
+		if (m_Fixed)
+		{
+			return m_CallExpression.GetSNI_Expression()->Clone(p_Frame, p_Changed);
+		}
+
 		bool changed = false;
 
 		SNI_Virtual *l_clone = new SNI_Virtual();
-		if (m_Fixed)
-		{
-			l_clone->Fix();
-		}
 		l_clone->m_CallList.resize(m_CallList.size());
 		for (size_t j = 0; j < m_CallList.size(); j++)
 		{
-			SNI_Expression *item = m_CallList[j];
-			if (item)
+			SN::SN_Expression item = m_CallList[j];
+			if (!item.IsNull())
 			{
-				l_clone->m_CallList[j] = item->Clone(p_Frame, changed);
+				l_clone->m_CallList[j] = item.GetSNI_Expression()->Clone(p_Frame, changed);
 			}
 		}
 
@@ -154,45 +280,7 @@ namespace SNI
 		{
 			return SN::SN_Error(GetTypeName() + " Fix the virtual calls. There maybe be more defines, so the call is undefined.");
 		}
-		SN::SN_Expression finalResult;
-		enum MatchLevel bestLevel = Incompatible;
-		for (ParameterizedExpression params : m_OrderedCalls)
-		{
-			enum MatchLevel currentLevel = params.MatchParameters(p_ParameterList);
-			switch (currentLevel)
-			{
-			case Matched:
-				return params.Call(p_ParameterList);
-			case Incompatible:
-				break;
-			case Unknown:
-				bestLevel = Unknown;
-				params.BuildCall(p_ParameterList);
-			}
-		}
-		if (bestLevel == Incompatible)
-		{
-			return SN::SN_Error("No compatible polymorphic call.");
-		}
-
-		for (auto &item : m_CallList)
-		{
-			if (item && !item->IsNull())
-			{
-				SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Virtual.Call");
-				SN::SN_ExpressionList paramListClone = *p_ParameterList;
-				SN::SN_Expression result = item->Call(&paramListClone, p_MetaLevel);
-				if (result.IsKnownValue() || result.IsError())
-				{
-					return result;
-				}
-			}
-			else
-			{
-				return SN::SN_Error(GetTypeName() + " function to call is unknown.");
-			}
-		}
-		return SN::SN_Error(GetTypeName() + " Call did not give a value.");
+		return m_CallExpression.GetSNI_Expression()->Call(p_ParameterList, p_MetaLevel);
 	}
 
 	SN::SN_Expression SNI_Virtual::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
@@ -203,53 +291,14 @@ namespace SNI
 		{
 			return SN::SN_Error(GetTypeName() + " Fix the virtual calls. There maybe be more defines, so the define is undefined.");
 		}
-		for (auto &item : m_CallList)
-		{
-			if (item)
-			{
-				if (!SN::SN_Expression(item).GetSNI_Lambda())
-				{
-					SN::SN_ExpressionList paramListClone = *p_ParameterList;
-					SN::SN_Expression result = item->PartialCall(&paramListClone, p_MetaLevel);
-					if (result.IsKnownValue() || result.IsError())
-					{
-						return result;
-					}
-				}
-			}
-			else
-			{
-				return SN::SN_Error(GetTypeName() + " partial function to call is unknown.");
-			}
-		}
-		return SN::SN_Error(GetTypeName() + " PartialCall did not give a value.");
+		return m_CallExpression.GetSNI_Expression()->PartialCall(p_ParameterList, p_MetaLevel);
 	}
 
 	SN::SN_Expression SNI_Virtual::Unify(SN::SN_ExpressionList * p_ParameterList)
 	{
 		if (m_Fixed)
 		{
-			for (auto item : m_CallList)
-			{
-				if (item && !item->IsNull())
-				{
-					SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after clone");
-					SN::SN_ExpressionList paramListClone = *p_ParameterList;
-					SN::SN_Expression e = item->Unify(&paramListClone);
-					SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after unify");
-					if (e.IsKnownValue() || e.IsError())
-					{
-						return e;
-					}
-					SNI_Variable *result = SNI_Frame::Top()->GetResult();
-					result->SetValue((*p_ParameterList)[0].GetVariableValue());
-				}
-				else
-				{
-					return SN::SN_Error(GetTypeName() + " function to unify is unknown.");
-				}
-			}
-			return skynet::OK;
+			return m_CallExpression.GetSNI_Expression()->Unify(p_ParameterList);
 		}
 		else
 		{
@@ -263,28 +312,7 @@ namespace SNI
 	{
 		if (m_Fixed)
 		{
-			for (auto item : m_CallList)
-			{
-				if (item && !item->IsNull())
-				{
-					SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after clone");
-					SN::SN_ParameterList paramListClone = *p_ParameterList;
-					SN::SN_Expression e = item->PartialUnify(&paramListClone, p_Result, p_Define);
-					SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after unify");
-					//SNI_Variable *result = SNI_Frame::Top()->GetResult();
-					//result->SetValue((*p_ParameterList)[0].GetVariableValue());
-					SNI_Frame::Pop();
-					if (e.IsKnownValue() || e.IsError())
-					{
-						return e;
-					}
-				}
-				else
-				{
-					return SN::SN_Error(GetTypeName() + " function to unify is unknown.");
-				}
-			}
-			return skynet::OK;
+			return m_CallExpression.GetSNI_Expression()->PartialUnify(p_ParameterList, p_Result, p_Define);
 		}
 		else
 		{
@@ -295,7 +323,7 @@ namespace SNI
 				m_CallList.push_back(AddLambdasPartial(p_ParameterList, p_Result).GetSNI_Expression());
 				REQUESTPROMOTION(m_CallList.back());
 			}
-			else if (m_CallList.back() == NULL || p_Define)
+			else if ((m_CallList.back().IsNull()) || p_Define)
 			{
 				m_CallList.back() = AddLambdasPartial(p_ParameterList, p_Result).GetSNI_Expression();
 				REQUESTPROMOTION(m_CallList.back());

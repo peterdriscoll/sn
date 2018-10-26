@@ -59,6 +59,23 @@ namespace SNI
 	{
 		return 4;
 	}
+
+	string SNI_If::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList) const
+	{
+		if ((*p_ParameterList).size() != 3)
+		{
+			return SNI_FunctionDef::DisplayCall(priority, p_DisplayOptions, p_ParameterList);
+
+		}
+
+		string elseClause;
+		if (!(*p_ParameterList)[0].IsNull())
+		{
+			elseClause = " else " + (*p_ParameterList)[0].DisplaySN();
+		}
+		return "if " + (*p_ParameterList)[2].DisplaySN() + " then " + (*p_ParameterList)[1].DisplaySN() + elseClause;
+	}
+
 	/// @endcond
 
 	/// \brief Evaluate if bool then value else value, and return the result.

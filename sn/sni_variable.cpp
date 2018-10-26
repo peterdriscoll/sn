@@ -96,6 +96,11 @@ namespace SNI
 		return m_Value && m_Value->IsKnownTypeValue();
 	}
 
+	bool SNI_Variable::IsLambdaValue() const
+	{
+		return m_Value && m_Value->IsLambdaValue();
+	}
+
 	bool SNI_Variable::IsVariable() const
 	{
 		return true;
@@ -249,6 +254,16 @@ namespace SNI
 	{
 		return Bracket(p_Priority, FrameName() /* + value */);
 	}
+
+	string SNI_Variable::DisplayValueSN(long priority, SNI_DisplayOptions & p_DisplayOptions) const
+	{
+		if (m_Value)
+		{
+			return m_Value->DisplaySN(priority, p_DisplayOptions);
+		}
+		return "Null";
+	}
+
 
 	string SNI_Variable::DisplayCall(long p_Priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList) const
 	{

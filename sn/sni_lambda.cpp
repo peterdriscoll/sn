@@ -45,6 +45,11 @@ namespace SNI
 		return "Lambda";
 	}
 
+	bool SNI_Lambda::IsLambdaValue() const
+	{
+		return true;
+	}
+
 	string SNI_Lambda::DisplayCpp() const
 	{
 		return "sn_Lambda(" + m_FormalParameter->DisplayCpp() + ", " + m_Expression->DisplayCpp() + ")";
@@ -52,7 +57,12 @@ namespace SNI
 
 	string SNI_Lambda::DisplaySN(long /*priority*/, SNI_DisplayOptions &p_DisplayOptions) const
 	{
-		return "@" + m_FormalParameter->DisplaySN(GetPriority(), p_DisplayOptions) + "." + m_Expression->DisplaySN(GetPriority(), p_DisplayOptions);
+		string sValue;
+		if ((m_FormalParameter->IsKnownValue() || m_FormalParameter->IsKnownTypeValue()) && !m_FormalParameter->IsLambdaValue())
+		{
+			sValue = ":" + m_FormalParameter->DisplayValueSN(GetPriority(), p_DisplayOptions);
+		}
+		return "@" + m_FormalParameter->DisplaySN(GetPriority(), p_DisplayOptions) + sValue + "." + m_Expression->DisplaySN(GetPriority(), p_DisplayOptions);
 	}
 
 	long SNI_Lambda::GetPriority() const
@@ -123,7 +133,7 @@ namespace SNI
 	SNI_Expression * SNI_Lambda::LoadFormalParameters(SN::SN_ExpressionList &p_FormalParameterList)
 	{
 		p_FormalParameterList.push_back(m_FormalParameter);
-		return LoadFormalParameters(p_FormalParameterList);
+		return m_Expression->LoadFormalParameters(p_FormalParameterList);
 	}
 
 	SN::SN_Expression SNI_Lambda::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const

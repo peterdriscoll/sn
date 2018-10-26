@@ -42,6 +42,11 @@ namespace SNI
 		return 0;
 	}
 
+	string SNI_IsA::GetOperator() const
+	{
+		return " is a ";
+	}
+
 	bool SNI_IsA::IsKnownValue(const SN::SN_Expression &p_Param) const
 	{
 		return p_Param.IsKnownTypeValue();

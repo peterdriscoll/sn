@@ -4,7 +4,7 @@
 #pragma once
 
 #include "exp_ctrl_sn.h"
-#include "sn_base.h"
+#include "sn_expression.h"
 #include "../sn/sni_lambda.h"
 
 namespace SNI
@@ -14,7 +14,7 @@ namespace SNI
 
 namespace SN
 {
-	class SN_EXPORT SN_Lambda : public SN_Base<SNI::SNI_Lambda, SN_Expression, SN_Error>
+	class SN_EXPORT SN_Lambda : public SN_Expression
 	{
 	public:
 		SN_Lambda();
@@ -22,18 +22,6 @@ namespace SN
 		SN_Lambda(const SN_Expression &p_FormalParameter, const SN_Expression &p_Expression);
 		SN_Lambda(const SN_Expression &p_FormalParameter, const SN_Expression &p_Expression, const SN_Expression &p_ConstraintValue);
 		virtual ~SN_Lambda();
-
-		// Comparison
-		SN_Expression operator ==(const SN_Expression &p_Other) const;
-
-		// Function
-		SN_Expression operator()(const SN_Expression &p_Parameter) const;
-		SN_Expression operator()(const SN_Expression &p_Parameter, const SN_Expression &p_Condition) const;
-
-		// Valuesets of functions
-		SN::SN_Expression operator ||(const SN::SN_Expression &p_Other) const;
-
-		SNI::SNI_Lambda * GetSNI_Lambda() const;
 	};
 }
 

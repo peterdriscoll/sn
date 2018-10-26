@@ -75,6 +75,7 @@ namespace SNI
 		virtual bool IsNullValue() const = 0;
 		virtual bool IsKnownValue() const = 0;
 		virtual bool IsKnownTypeValue() const = 0;
+		virtual bool IsLambdaValue() const = 0;
 		virtual bool IsVariable() const = 0;
 		virtual bool IsError() const = 0;
 		virtual bool IsFixed() const = 0;

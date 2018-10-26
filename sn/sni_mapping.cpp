@@ -17,7 +17,7 @@ namespace SNI
 	{
 		if (!m_Class)
 		{
-			m_Class = new SNI_Class();
+			m_Class = new SNI_Class("Mapping");
 		}
 		return m_Class;
 	}

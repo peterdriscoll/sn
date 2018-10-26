@@ -26,7 +26,7 @@ namespace SNI
 	{
 		if (!m_Class)
 		{
-			m_Class = new SNI_Class();
+			m_Class = new SNI_Class("StringRef");
 		}
 		return m_Class;
 	}

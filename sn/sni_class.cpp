@@ -35,8 +35,9 @@ namespace SNI
 		p_Base->REQUESTPROMOTION(m_Result);
 	}
 
-	SNI_Class::SNI_Class()
-	:	m_Fixed(false)
+	SNI_Class::SNI_Class(const string &p_ClassName)
+	    : m_ClassName(p_ClassName)
+		, m_Fixed(false)
 	{
 	}
 
@@ -56,12 +57,12 @@ namespace SNI
 
 	string SNI_Class::DisplayCpp() const
 	{
-		return to_string((unsigned long)this);
+		return m_ClassName+"::Class()";
 	}
 
 	string SNI_Class::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
-		return to_string((unsigned long)this);
+		return GetTypeName() +"(" + m_ClassName + ")";
 	}
 
 	long SNI_Class::GetPriority() const
