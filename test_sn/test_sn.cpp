@@ -2608,17 +2608,46 @@ namespace test_sn
 			Cleanup();
 		}
 
-		TEST_METHOD(TestVirtualPolymorphic)
+		TEST_METHOD(TestVirtualPolymorphic1)
 		{
 			Initialize();
 			{
-				Manager manager("Test Virtual Polymorphic", AssertErrorHandler);
+				Manager manager("Test Virtual Polymorphic2", AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE_VALUE(typeChecker, Virtual());
+				SN_DECLARE_VALUE(shortType, Short::Class());
+
+				(typeChecker(shortType) == String("short")).PartialAssertAction();
+
+				string sTypeChecker_before = typeChecker.DisplayValueSN();
+				typeChecker.Fix();
+				string sTypeChecker_after = typeChecker.DisplayValueSN();
+
+				// Polymorphic call.
+				(typeChecker(Short(1)) == String("short")).EvaluateAction();
+
+				SN_DECLARE(A);
+
+				(typeChecker(Short(1)) == A).AssertAction();
+
+				string A_text = A.GetString();
+
+				Assert::IsTrue(A_text == "short");
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestVirtualPolymorphic2)
+		{
+			Initialize();
+			{
+				Manager manager("Test Virtual Polymorphic 2", AssertErrorHandler);
 				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE_VALUE(typeChecker, Virtual());
 				SN_DECLARE_VALUE(shortType, Short::Class());
 				SN_DECLARE_VALUE(longType, Long::Class());
-				SN_DECLARE_VALUE(longLongType, LongLong::Class());
 
 				(typeChecker(shortType) == String("short")).PartialAssertAction();
 				(typeChecker(longType) == String("long")).PartialAssertAction();

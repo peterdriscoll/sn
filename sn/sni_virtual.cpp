@@ -168,10 +168,11 @@ namespace SNI
 				paramList[j].SetName(string("param_") + to_string(id++));
 				callExp = callExp(paramList[j]);
 			}
-			for (size_t j = call.size() - 1; 0 <= j; j--)
+			for (size_t j = call.size() - 1; 0 < j; j--)
 			{
 				callExp = SN::SN_Lambda(paramList[j], call.BuildCondition(j, paramList[j]).If(callExp));
 			}
+			callExp = SN::SN_Lambda(paramList[0], call.BuildCondition(0, paramList[0]).If(callExp, SN::SN_Error("Incompatible parameters to polymorphic call.")));
 			return callExp;
 		}
 
