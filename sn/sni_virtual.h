@@ -4,6 +4,7 @@
 #pragma once
 
 #include <vector>
+#include <list>
 
 #include "sni_value.h"
 
@@ -16,6 +17,30 @@ namespace SNI
 {
 	class SNI_Class;
 	class SNI_Expression;
+
+	class ConstructionTree
+	{
+	public:
+		ConstructionTree(const string &p_ParameterName);
+		ConstructionTree(const string &p_ParameterName, SN::SN_Expression p_Parameter);
+		ConstructionTree(const string &p_ParameterName, SN::SN_Expression p_Parameter, SN::SN_Expression p_CallExpression);
+		~ConstructionTree();
+
+		void AddImplementation(SN::SN_Expression p_Implementation);
+		SN::SN_Expression CreateExpression();
+
+	private:
+		SN::SN_Expression GetParameter();
+		void AddParameterList(size_t p_Base, SN::SN_ExpressionList &p_FormalParameterList, SN::SN_Expression p_ImplementationCall);
+		SN::SN_Expression BuildExpression(size_t p_Depth);
+
+		SN::SN_Expression BuildCondition(size_t p_Depth, SN::SN_Expression p_Condition, SN::SN_Variable p_ParameterVariable);
+
+		list<ConstructionTree> m_List;
+		SN::SN_Expression m_Parameter;
+		SN::SN_Variable m_ParameterVariable;
+		SN::SN_Expression m_ImplementationCall;
+	};
 
 	enum MatchLevel
 	{
@@ -195,7 +220,9 @@ namespace SNI
 		virtual void PromoteMembers();
 
 	private:
+		ConstructionTree *BuildTree();
 		void BuildCallList(ParameterizedExpressionList &p_OrderedCalls);
+		SN::SN_Expression CreateImplementation2();
 		SN::SN_Expression CreateImplementation();
 		void BuildImplementation();
 

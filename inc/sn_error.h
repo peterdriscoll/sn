@@ -26,10 +26,10 @@ namespace SN
 
 	public:
 		SN_Error();
+		SN_Error(string p_Other);
 		SN_Error(bool p_Success, bool p_Delay = false, const string &p_Description="");
 		SN_Error(const SN_Error &p_Other);
 		SN_Error(const SN_Expression & p_Expression);
-		SN_Error(string p_Other);
 		virtual ~SN_Error();
 
 		SNI::SNI_Error * GetSNI_Error() const;

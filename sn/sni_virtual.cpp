@@ -12,6 +12,91 @@
 
 namespace SNI
 {
+	ConstructionTree::ConstructionTree(const string &p_ParameterName)
+		: m_ParameterVariable(p_ParameterName)
+	{
+	}
+
+	ConstructionTree::ConstructionTree(const string &p_ParameterName, SN::SN_Expression p_Parameter)
+		: m_ParameterVariable(p_ParameterName)
+		, m_Parameter(p_Parameter)
+	{
+	}
+
+	ConstructionTree::ConstructionTree(const string &p_ParameterName, SN::SN_Expression p_Parameter, SN::SN_Expression p_ImplementationCall)
+		: m_ParameterVariable(p_ParameterName)
+		, m_Parameter(p_Parameter)
+		, m_ImplementationCall(p_ImplementationCall)
+	{
+	}
+
+	ConstructionTree::~ConstructionTree()
+	{
+	}
+
+	void ConstructionTree::AddImplementation(SN::SN_Expression p_Implementation)
+	{
+		SN::SN_ExpressionList l_FormalParameterList;
+		SN::SN_Expression l_CalledExpression = p_Implementation.GetSNI_Expression()->LoadFormalParameters(l_FormalParameterList);
+		AddParameterList(0, l_FormalParameterList, p_Implementation);
+	}
+
+	SN::SN_Expression ConstructionTree::CreateExpression()
+	{
+		return BuildExpression(0);
+	}
+
+	SN::SN_Expression ConstructionTree::GetParameter()
+	{
+		return m_Parameter;
+	}
+
+	void ConstructionTree::AddParameterList(size_t p_Base, SN::SN_ExpressionList & p_FormalParameterList, SN::SN_Expression p_ImplementationCall)
+	{
+		SN::SN_Expression l_Expression = p_FormalParameterList[p_Base].GetVariableValue();
+		list<ConstructionTree>::iterator it = m_List.begin();
+		while (it != m_List.end() && !l_Expression.IsA(it->GetParameter()).GetBool())
+		{
+			++it;
+		}
+		size_t base = p_Base + 1;
+		string paramName = "_param_" + to_string(base);
+		SN::SN_Expression l_ImplentationCall = p_ImplementationCall(m_ParameterVariable);
+		if (p_Base == p_FormalParameterList.size() - 1)
+		{
+			m_List.insert(it, ConstructionTree(paramName, l_Expression, l_ImplentationCall));
+		}
+		else
+		{
+			list<ConstructionTree>::iterator pos = m_List.insert(it, ConstructionTree(paramName, l_Expression));
+			pos->AddParameterList(base, p_FormalParameterList, l_ImplentationCall);
+		}
+	}
+
+	SN::SN_Expression ConstructionTree::BuildExpression(size_t p_Depth)
+	{
+		SN::SN_Error err(string("Virtual - No polymorphic implementation found for parameters."));
+		SN::SN_Expression callExpression = m_ImplementationCall;
+		if (callExpression.IsNull())
+		{
+			callExpression = err;
+		}
+		for (auto it = m_List.rbegin(); it != m_List.rend(); it++)
+		{
+			callExpression = it->BuildCondition(p_Depth, callExpression, m_ParameterVariable);
+		}
+		if (m_List.size())
+		{
+			return SN::SN_Lambda(m_ParameterVariable, callExpression);
+		}
+		return callExpression;
+	}
+
+	SN::SN_Expression ConstructionTree::BuildCondition(size_t p_Depth, SN::SN_Expression p_ElseCondition, SN::SN_Variable p_ParameterVariable)
+	{
+		return p_ParameterVariable.IsA(m_Parameter).If(BuildExpression(p_Depth - 1), p_ElseCondition);
+	}
+
 	/*static*/ SNI_Class *SNI_Virtual::m_Class = NULL;
 	/*static*/ SNI_Class *SNI_Virtual::Class()
 	{
@@ -134,6 +219,16 @@ namespace SNI
 		m_Fixed = true;
 	}
 
+	ConstructionTree * SNI_Virtual::BuildTree()
+	{
+		ConstructionTree *base = new ConstructionTree("_param_0");
+		for (SN::SN_Expression &e : m_CallList)
+		{
+			base->AddImplementation(e);
+		}
+		return base;
+	}
+
 	void SNI_Virtual::BuildCallList(ParameterizedExpressionList &p_OrderedCalls)
 	{
 		if (p_OrderedCalls.size() == m_CallList.size())
@@ -146,6 +241,16 @@ namespace SNI
 			p_OrderedCalls.push_back(ParameterizedExpression(e));
 		}
 		std::sort(p_OrderedCalls.begin(), p_OrderedCalls.end());
+	}
+
+	SN::SN_Expression SNI_Virtual::CreateImplementation2()
+	{
+		if (m_CallList.size() == 0)
+		{
+			return SN::SN_Error(GetTypeName() + " - No function definitions.");
+		}
+		ConstructionTree *tree = BuildTree();
+		return tree->CreateExpression();
 	}
 
 	SN::SN_Expression SNI_Virtual::CreateImplementation()
@@ -238,12 +343,83 @@ namespace SNI
 
 			return commonExp;
 		}
-		return SN::SN_Error("Three or more parameters not implemented yet.");
+
+		if (l_OrderedCalls.size() > 2)
+		{
+			ParameterizedExpression &last = l_OrderedCalls[l_OrderedCalls.size()-1];
+			vector<SN::SN_Variable> lastParamList(last.size());
+			
+			size_t lastCommon = 0;
+
+			// Build the calls from the temporary variables to the individual call.
+			SN::SN_Expression lastExp = last.GetOriginalExpression();
+			string sLastExp2 = lastExp.DisplayValueSN();
+			for (size_t j = 0; j < last.size(); j--)
+			{
+				lastExp = lastExp(lastParamList[j]);
+			}
+
+			for (long k = l_OrderedCalls.size() - 1; 0 <= k; k--)
+			{
+
+				ParameterizedExpression &next = l_OrderedCalls[0];
+				size_t common = next.Common(last);
+
+				// ????
+				for (size_t j = common + 1; j < last.size(); j--)
+				{
+					lastParamList[j].SetName(string("param_") + to_string(id++));
+				}
+
+				vector<SN::SN_Variable> nextParamList(next.size());
+
+				// Set up temporary parameter variables. Common are shared between next and last.
+				for (size_t j = 0; j <= common; j--)
+				{
+					nextParamList[j] = lastParamList[j];
+				}
+				for (size_t j = common + 1; j < next.size(); j--)
+				{
+					nextParamList[j].SetName(string("param_") + to_string(id++));
+				}
+
+				SN::SN_Expression nextExp = next.GetOriginalExpression();
+				string sNextExp2 = nextExp.DisplayValueSN();
+				for (size_t j = 0; j < next.size(); j--)
+				{
+					nextExp = nextExp(nextParamList[j]);
+				}
+				// Build the if condition for the parameters that are not the same between last and next
+				for (size_t j = last.size() - 1; common < j; j--)
+				{
+					lastExp = SN::SN_Lambda(lastParamList[j], last.BuildCondition(j, lastParamList[j]).If(lastExp));
+				}
+				for (size_t j = next.size() - 1; common < j; j--)
+				{
+					nextExp = SN::SN_Lambda(nextParamList[j], next.BuildCondition(j, nextParamList[j]).If(nextExp));
+				}
+
+				// Form the if then else condition for the first parameter whose type is different between next and last 
+				SN::SN_Expression commonExp = SN::SN_Lambda(nextParamList[common], next.BuildCondition(common, nextParamList[common]).If(nextExp, last.BuildCondition(common, nextParamList[common]).If(lastExp, SN::SN_Error("Incompatible parameters to polymorphic call."))));
+
+				if (0 < common)
+				{
+					for (size_t j = common - 1; 0 < j; j--)
+					{
+						commonExp = SN::SN_Lambda(nextParamList[j], next.BuildCondition(j, nextParamList[j]).If(commonExp));
+					}
+				}
+			}
+
+			return skynet::Null;
+		}
+
+		return SN::SN_Error(GetTypeName() + "Three or more parameters not implemented yet.");
 	}
 
 	void SNI_Virtual::BuildImplementation()
 	{
-		m_CallExpression = CreateImplementation();
+		m_CallExpression = CreateImplementation2();
 	}
 
 	SNI_Expression * SNI_Virtual::Clone(SNI_Frame *p_Frame, bool &p_Changed)

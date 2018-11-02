@@ -2680,7 +2680,6 @@ namespace test_sn
 
 		TEST_METHOD(TestVirtualPolymorphic3)
 		{
-			return;
 			Initialize();
 			{
 				Manager manager("Test Virtual Polymorphic3", AssertErrorHandler);

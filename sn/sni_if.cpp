@@ -69,7 +69,7 @@ namespace SNI
 		}
 
 		string elseClause;
-		if (!(*p_ParameterList)[0].IsNull())
+		if ((*p_ParameterList)[0].IsError() || !(*p_ParameterList)[0].IsNull())
 		{
 			elseClause = " else " + (*p_ParameterList)[0].DisplaySN();
 		}
