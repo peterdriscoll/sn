@@ -87,7 +87,7 @@ namespace SNI
 
 	SNI_Expression * SNI_Lambda::Clone(SNI_Frame *p_Frame, bool &p_Changed)
 	{
-		bool changed = false;
+		bool changed = true;
 		SNI_Variable *l_FormalParameter = dynamic_cast<SNI_Variable *>(m_FormalParameter);
 		if (l_FormalParameter)
 		{

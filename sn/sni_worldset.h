@@ -68,16 +68,20 @@ namespace SNI
 		virtual void PromoteMembers();
 
 	private:
+		void CheckRelatedWorlds(SNI_WorldSetList &p_ChangedList);
+		void CheckDependencies(SNI_WorldSetList & p_ChangedList);
 		void MarkAllWorldInChildSets(bool p_Mark);
-		void FailUnmarkedWorldsInChildSets(bool p_Mark);
+		void FailUnmarkedWorldsInChildSets(bool p_Mark, SNI_WorldSetList &p_ChangedList);
 		void MarkWorlds(bool p_Mark);
-		void FailUnmarkedWorlds(bool p_Mark);
+		void FailUnmarkedWorlds(bool p_Mark, SNI_WorldSetList &p_ChangedList);
+		void FailWorldsWithEmptyChildren(SNI_WorldSetList & p_ChangedList);
 		void MarkChildWorlds(bool p_Mark);
 
 		static long m_NextWorldSetNo;
 
 		SNI_WorldList m_WorldList;
 		SNI_WorldSetList m_ChildSetList;
+		SNI_WorldSetList m_ParentSetList;
 
 		bool m_Mark;
 		bool m_Complete;

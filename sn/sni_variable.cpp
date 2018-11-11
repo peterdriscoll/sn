@@ -259,7 +259,7 @@ namespace SNI
 	{
 		if (m_Value)
 		{
-			return m_Value->DisplaySN(priority, p_DisplayOptions);
+			return m_Value->DisplayValueSN(priority, p_DisplayOptions);
 		}
 		return "Null";
 	}

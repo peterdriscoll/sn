@@ -272,7 +272,7 @@ namespace SNI
 				[&p_Stream, &delimeter, p_DebugFieldWidth](const SN::SN_Expression &p_Expression, SNI_World *p_World)->SN::SN_Error
 				{
 					string valueText;
-					if (!p_Expression.IsNull())
+					if (!p_Expression.IsNull() || p_Expression.IsKnownTypeValue())
 					{
 						valueText = p_Expression.DisplaySN() + string(p_World ? "::" + p_World->DisplayShort() : "");
 					}

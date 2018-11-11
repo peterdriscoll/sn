@@ -249,6 +249,22 @@ namespace SNI
 		return m_IsEmpty;
 	}
 
+	bool SNI_World::HasEmptyChild() const
+	{
+		for (SNI_World *world : m_ChildList)
+		{
+			if (world->IsEmpty())
+			{
+				return true;
+			}
+			if (world->HasEmptyChild())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	bool SNI_World::Fail()
 	{
 		SN::LogContext context("SNI_World::Fail(" + DisplaySN() + ")");

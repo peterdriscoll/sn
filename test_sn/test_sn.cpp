@@ -1293,7 +1293,8 @@ namespace test_sn
 				(Define(B_Digit)(d) == (d == (String("0") || String("1") || String("2") || String("3") || String("4")
 					|| String("5") || String("6") || String("7") || String("8") || String("9")))).PartialAssertAction();
 
-				std::cout << std::endl << "Function " << B_Digit.DisplaySN() << std::endl;
+				string B_Digit_text = B_Digit.DisplayValueSN();
+
 				(B_Digit(String("0"))).AssertAction();
 				(B_Digit(String("1"))).AssertAction();
 				(B_Digit(String("2"))).AssertAction();
@@ -2726,34 +2727,66 @@ namespace test_sn
 			Cleanup();
 		}
 
-		TEST_METHOD(TestVirtualPolymorphicReverse)
+		TEST_METHOD(TestVirtualPolymorphicReverse1)
 		{
-			return;
 			Initialize();
 			{
-				Manager manager("Test Virtual Polymorphic Reverse", AssertErrorHandler);
+				Manager manager("Test Virtual Polymorphic Reverse 1", AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE_VALUE(typeChecker, Virtual());
+				SN_DECLARE_VALUE(shortType, Short::Class());
+
+				(typeChecker(shortType) == String("short")).PartialAssertAction();
+
+				string sTypeChecker_before = typeChecker.DisplayValueSN();
+				typeChecker.Fix();
+				string sTypeChecker_after = typeChecker.DisplayValueSN();
+
+				// Reverse Polymorphic call.
+				SN_DECLARE_VALUE(numbers1, Short(1) || Long(2));
+				string n1_text_before = numbers1.Evaluate().DisplayValueSN();
+
+				(typeChecker(numbers1) == String("short")).AssertAction();
+				(numbers1 == Short(1)).EvaluateAction();
+				string n1_text = numbers1.Evaluate().DisplayValueSN();
+				Assert::IsTrue(n1_text == "Short(1)");
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestVirtualPolymorphicReverse2)
+		{
+			Initialize();
+			{
+				Manager manager("Test Virtual Polymorphic Reverse 2", AssertErrorHandler);
 				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE_VALUE(typeChecker, Virtual());
 				SN_DECLARE_VALUE(shortType, Short::Class());
 				SN_DECLARE_VALUE(longType, Long::Class());
-				SN_DECLARE_VALUE(longLongType, LongLong::Class());
 
 				(typeChecker(shortType) == String("short")).PartialAssertAction();
 				(typeChecker(longType) == String("long")).PartialAssertAction();
 
-				// Reverse Polymorphic call.
-				SN_DECLARE_VALUE(numbers1, Short(1) || Long(2) || LongLong(3));
-				(typeChecker(numbers1) == String("short")).EvaluateAction();
-				(numbers1 == Short(1)).EvaluateAction();
-				string n1_text = numbers1.DisplayValueSN();
-				Assert::IsTrue(n1_text == "Short(1)");
+				string sTypeChecker_before = typeChecker.DisplayValueSN();
+				typeChecker.Fix();
+				string sTypeChecker_after = typeChecker.DisplayValueSN();
 
-				SN_DECLARE_VALUE(numbers2, Short(1) || Long(2) || LongLong(3));
-				(typeChecker(numbers2) == String("long")).EvaluateAction();
-				(numbers2 == Long(2)).EvaluateAction();
-				string n2_text = numbers1.DisplayValueSN();
+				// Reverse Polymorphic call.
+				SN_DECLARE_VALUE(numbers1, Short(1) || Long(2));
+				string n1_text_before = numbers1.Evaluate().DisplayValueSN();
+
+				(typeChecker(numbers1) == String("short")).AssertAction();
+				string n1_text = numbers1.Evaluate().DisplayValueSN();
+				Assert::IsTrue(n1_text == "Short(1)");
+				(numbers1 == Short(1)).EvaluateAction();
+
+				SN_DECLARE_VALUE(numbers2, Short(1) || Long(2));
+				(typeChecker(numbers2) == String("long")).AssertAction();
+				string n2_text = numbers2.Evaluate().DisplayValueSN();
 				Assert::IsTrue(n2_text == "Long(2)");
+				(numbers2 == Long(2)).EvaluateAction();
 			}
 			Cleanup();
 		}
@@ -2774,6 +2807,10 @@ namespace test_sn
 				(typeChecker(shortType) == String("short")).PartialAssertAction();
 				(typeChecker(longType) == String("long")).PartialAssertAction();
 				(typeChecker(longLongType) == String("long long")).PartialAssertAction();
+
+				string sTypeChecker_before = typeChecker.DisplayValueSN();
+				typeChecker.Fix();
+				string sTypeChecker_after = typeChecker.DisplayValueSN();
 
 				// Reverse Polymorphic call.
 				SN_DECLARE_VALUE(numbers1, Short(1) || Long(2) || LongLong(3));

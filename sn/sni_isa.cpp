@@ -69,26 +69,39 @@ namespace SNI
 
 	size_t SNI_IsA::CardinalityOfUnify(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const
 	{
-		if (1 < p_ParamList[PU2_First].Cardinality())
+		size_t card = 1;
+		if (p_Depth < 2)
 		{
 			return CARDINALITY_MAX;
 		}
-		if (1 < p_ParamList[PU2_Second].Cardinality())
+		if (p_ParamList[PU2_First].IsKnownValue())
+		{
+			card = p_ParamList[PU2_First].Cardinality();
+		}
+		else if (p_ParamList[PU2_First].IsKnownTypeValue())
+		{
+			card = 1;
+		}
+		else
 		{
 			return CARDINALITY_MAX;
 		}
-		if (p_TotalCalc <= 1)
+		if (p_ParamList[PU2_Second].IsKnownValue())
 		{
-			return 1;
+			card = MultiplyCardinality(card, p_ParamList[PU2_Second].Cardinality());
 		}
-		else if (p_TotalCalc <= 1)
+		else if (!p_ParamList[PU2_Second].IsKnownTypeValue())
 		{
-			if (p_CalcPos == PU2_Result)
+			return CARDINALITY_MAX;
+		}
+		if (p_Depth >= 3)
+		{
+			if (p_ParamList[PU2_Result].IsKnownValue())
 			{
-				return 1;
+				card = MultiplyCardinality(card, p_ParamList[PU2_Result].Cardinality());
 			}
 		}
-		return CARDINALITY_MAX;
+		return card;
 	}
 
 	SN::SN_Error SNI_IsA::UnifyElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, long p_CalcPos, long p_TotalCalc, SNI_WorldSet * worldSet) const
@@ -98,9 +111,7 @@ namespace SNI
 		{
 			context.LogText("World set", worldSet->DisplayLong());
 		}
-		switch (p_TotalCalc)
-		{
-		case 0:
+		if (p_ParamList[PU2_Result].IsKnownValue())
 		{
 			if (p_WorldList)
 			{
@@ -129,27 +140,40 @@ namespace SNI
 				return AssertValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue(), p_ParamList[PU2_Result]);
 			}
 		}
-		case 1:
+		else
 		{
-			if (p_CalcPos == PU2_Result)
-			{
-				return AssertValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue(), p_ParamList[PU2_Result]);
-			}
-		}
+			return AssertValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue(), p_ParamList[PU2_Result]);
 		}
 		return false;
 	}
 
 	size_t SNI_IsA::CardinalityOfCall(long p_Depth, SN::SN_Expression * p_ParamList) const
 	{
-		if (1 < p_ParamList[PC2_First].Cardinality())
+		size_t card = 1;
+		if (p_Depth < 2)
 		{
 			return CARDINALITY_MAX;
 		}
-		if (1 < p_ParamList[PC2_Second].Cardinality())
+		if (p_ParamList[PC2_First].IsKnownValue())
+		{
+			card = p_ParamList[PC2_First].Cardinality();
+		}
+		else if (p_ParamList[PC2_First].IsKnownTypeValue())
+		{
+			card = 1;
+		}
+		else
 		{
 			return CARDINALITY_MAX;
 		}
-		return 1;
+		if (p_ParamList[PC2_Second].IsKnownValue())
+		{
+			card = MultiplyCardinality(card, p_ParamList[PC2_Second].Cardinality());
+		}
+		else if (!p_ParamList[PC2_Second].IsKnownTypeValue())
+		{
+			return CARDINALITY_MAX;
+		}
+		return card;
 	}
 }

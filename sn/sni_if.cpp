@@ -216,6 +216,7 @@ namespace SNI
 			e2 = skynet::Equals.GetSNI_FunctionDef()->UnifyArray(paramList);
 			if (e2.IsError())
 			{
+				SNI_Frame::Pop();
 				return e2;
 			}
 			splitter.Positive().Simplify();
@@ -232,6 +233,7 @@ namespace SNI
 			e2 = skynet::Equals.GetSNI_FunctionDef()->UnifyArray(paramList);
 			if (e2.IsError())
 			{
+				SNI_Frame::Pop();
 				return e2;
 			}
 			splitter.Negative().Simplify();

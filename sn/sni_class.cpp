@@ -62,7 +62,7 @@ namespace SNI
 
 	string SNI_Class::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
-		return GetTypeName() +"(" + m_ClassName + ")";
+		return m_ClassName;
 	}
 
 	long SNI_Class::GetPriority() const

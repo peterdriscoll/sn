@@ -162,6 +162,7 @@ namespace SNI
 
 	SN::SN_Error SNI_Unary::UnifyElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, long p_CalcPos, long p_TotalCalc, SNI_WorldSet * worldSet) const
 	{
+		SN::LogContext context("SNI_Unary::UnifyElement(CalcPos " + to_string(p_CalcPos) + " TotalCalc " + to_string(p_TotalCalc) + " " + DisplayValues(p_Depth, p_ParamList, p_WorldList) + ")");
 		switch (p_TotalCalc)
 		{
 		case 0:
@@ -175,6 +176,10 @@ namespace SNI
 					if (PrimaryFunctionValue(p_ParamList[PU1_First].GetVariableValue()).Equivalent(p_ParamList[PU1_Result].GetVariableValue()))
 					{
 						world->AddToSetList();
+					}
+					else
+					{
+						context.LogText("fail", "Value conflict on " + DisplayValues(p_Depth, p_ParamList, p_WorldList));
 					}
 				}
 				return true;

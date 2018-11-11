@@ -56,6 +56,7 @@ namespace SNI
 		bool IsAnyActive() const;
 
 		bool IsEmpty() const;
+		bool HasEmptyChild() const;
 		bool Fail();
 		void MarkEmpty();
 		SNI_World * OneParent(SNI_WorldSet * parentWorldSet);
