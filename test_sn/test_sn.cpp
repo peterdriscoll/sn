@@ -2774,9 +2774,11 @@ namespace test_sn
 				string sTypeChecker_after = typeChecker.DisplayValueSN();
 
 				// Reverse Polymorphic call.
-				SN_DECLARE_VALUE(numbers1, Short(1) || Long(2));
-				string n1_text_before = numbers1.Evaluate().DisplayValueSN();
+				//SN_DECLARE_VALUE(numbers1, Short(1) || Long(2));
+				SN_DECLARE(numbers1);
+				(numbers1 == (Short(1) || Long(2))).PartialAssertAction();
 
+				string n1_text_before = numbers1.Evaluate().DisplayValueSN();
 				(typeChecker(numbers1) == String("short")).AssertAction();
 				string n1_text = numbers1.Evaluate().DisplayValueSN();
 				Assert::IsTrue(n1_text == "Short(1)");
@@ -2813,67 +2815,27 @@ namespace test_sn
 				string sTypeChecker_after = typeChecker.DisplayValueSN();
 
 				// Reverse Polymorphic call.
-				SN_DECLARE_VALUE(numbers1, Short(1) || Long(2) || LongLong(3));
-				(typeChecker(numbers1) == String("short")).EvaluateAction();
-				(numbers1 == Short(1)).EvaluateAction();
+				SN_DECLARE(numbers1);
+				(numbers1 == (Short(1) || Long(2) || LongLong(3))).PartialAssertAction();
+				string numbers1_text = numbers1.DisplayValueSN();
+				(typeChecker(numbers1) == String("short")).AssertAction();
 				string n1_text = numbers1.DisplayValueSN();
 				Assert::IsTrue(n1_text == "Short(1)");
+				(numbers1 == Short(1)).EvaluateAction();
 
-				SN_DECLARE_VALUE(numbers2, Short(1) || Long(2) || LongLong(3));
-				(typeChecker(numbers2) == String("long")).EvaluateAction();
-				(numbers2 == Long(2)).EvaluateAction();
-				string n2_text = numbers1.DisplayValueSN();
+				SN_DECLARE(numbers2);
+				(numbers2 == (Short(1) || Long(2) || LongLong(3))).PartialAssertAction();
+				(typeChecker(numbers2) == String("long")).AssertAction();
+				string n2_text = numbers2.DisplayValueSN();
 				Assert::IsTrue(n2_text == "Long(2)");
+				(numbers2 == Long(2)).EvaluateAction();
 
-				SN_DECLARE_VALUE(numbers3, Short(1) || Long(2) || LongLong(3));
-				(typeChecker(numbers3) == String("long long")).EvaluateAction();
-				(numbers3 == LongLong(3)).EvaluateAction();
+				SN_DECLARE(numbers3);
+				(numbers3 == (Short(1) || Long(2) || LongLong(3))).PartialAssertAction();
+				(typeChecker(numbers3) == String("long long")).AssertAction();
 				string n3_text = numbers3.DisplayValueSN();
-				Assert::IsTrue(n3_text == "Short(1)");
-			}
-			Cleanup();
-		}
-
-		TEST_METHOD(TestIfConditionsForPolymorphic)
-		{
-			Initialize();
-			{
-				Manager manager("Test If Conditions For Polymorphic", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
-
-				SN_DECLARE(tricky);
-				SN_DECLARE(param);
-
-				(Define(tricky) == 
-					Lambda(param, param.IsA(Short::Class()).If(
-						String("short"), 
-						param.IsA(Long::Class()).If(
-							String("long"), 
-							String("unknown")
-						)
-					))
-				).PartialAssertAction();
-				(tricky(Short(5)) == String("short")).EvaluateAction();
-				(tricky(Long(10)) == String("long")).EvaluateAction();
-
-				SN_DECLARE(s);
-				SN_DECLARE(l);
-				(tricky(Short(5)) == s).AssertAction();
-				(tricky(Long(10)) == l).AssertAction();
-				(s == String("short")).EvaluateAction();
-				(l == String("long")).EvaluateAction();
-
-				/*
-				SN_DECLARE_VALUE(n, Short(5) || Long(10));
-				SN_DECLARE_VALUE(m, Short(5) || Long(10));
-				(tricky(n) == String("short")).AssertAction();
-				(tricky(m) == String("long")).AssertAction();
-				(n == Short(5)).EvaluateAction();
-				(m == Long(10)).EvaluateAction();
-
-				Assert::IsTrue(n.DisplaySN() == "5");
-				Assert::IsTrue(m.DisplaySN() == "10");
-				*/
+				Assert::IsTrue(n3_text == "LongLong(1)");
+				(numbers3 == LongLong(3)).EvaluateAction();
 			}
 			Cleanup();
 		}
