@@ -126,10 +126,6 @@ namespace SNI
 		{
 			return true;
 		}
-		if (!p_World->IsActive())
-		{
-			return false;
-		}
 		p_World->Mark(false);
 		Mark(true);
 		if (!p_World->HasMutualExclusion())
@@ -267,6 +263,11 @@ namespace SNI
 
 	bool SNI_World::Fail()
 	{
+		if (SNI_World::ContextWorld() != m_WorldSet->ContextWorld())
+		{
+			return false;
+		}
+
 		SN::LogContext context("SNI_World::Fail(" + DisplaySN() + ")");
 		m_IsEmpty = true;
 		m_WorldSet->RemoveWorld(this);

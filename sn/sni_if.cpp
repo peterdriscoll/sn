@@ -195,54 +195,68 @@ namespace SNI
 		condition.AddTaggedValue(skynet::False, condition_worldSet->CreateWorld());
 		condition.AddTaggedValue(skynet::True, condition_worldSet->CreateWorld());
 		condition_worldSet->Complete();
+
 		SN::SN_Error e1 = p_ParameterList[1].AssertValue(condition);
 		if (e1.IsError())
 		{
 			return e1;
 		}
-		condition.Simplify();
-		condition_param->SetValue(condition);
-		LOG(WriteLine(SN::DebugLevel, "If condition"));
-		SNI_Splitter splitter;
-		condition.GetSNI_ValueSet()->ForEachSplit(&splitter);
-			
-		SN::SN_Error e2;
-		if (splitter.PositiveNotNull())
-		{
-			SN::SN_Expression *paramList = new SN::SN_Expression[3];
-			paramList[0] = splitter.Positive();
-			paramList[1] = p_ParameterList[0];
-			paramList[2] = p_ParameterList[2];
-			e2 = skynet::Equals.GetSNI_FunctionDef()->UnifyArray(paramList);
-			if (e2.IsError())
+
+		SN::SN_Expression sCondition = condition.SimplifyValue();
+		SNI_World *contextWorld = SNI_World::ContextWorld();
+		SN::SN_Expression *parameterList = p_ParameterList;
+		bool success = false;
+		sCondition.ForEach(
+			[contextWorld, parameterList, &success](const SN::SN_Expression &p_Param, SNI::SNI_World *p_World) -> SN::SN_Error
 			{
-				SNI_Frame::Pop();
-				return e2;
+				if (p_World)
+				{
+					SNI_World::PushContextWorld(p_World);
+				}
+				SN::SN_Error e;
+				if (p_Param.GetBool())
+				{
+					SN::SN_Expression *paramList = new SN::SN_Expression[2];
+					paramList[0] = parameterList[0];
+					paramList[1] = parameterList[2];
+					e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList);
+				}
+				else
+				{
+					SN::SN_Expression *paramList = new SN::SN_Expression[2];
+					paramList[0] = parameterList[0];
+					paramList[1] = parameterList[3];
+					e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList);
+				}
+				if (p_World)
+				{
+					SNI_World::PopContextWorld();
+				}
+				if (e.IsError())
+				{
+					if (p_World)
+					{
+						p_World->Fail();
+					}
+				}
+				else
+				{
+					success = true;
+				}
+				return true;
 			}
-			splitter.Positive().Simplify();
-			paramList[0].Simplify();
-			result_param->SetValue(paramList[0]);
-			positive_param->SetValue(paramList[2]);
-		}
-		if (splitter.NegativeNotNull())
-		{
-			SN::SN_Expression *paramList = new SN::SN_Expression[3];
-			paramList[0] = splitter.Negative();
-			paramList[1] = p_ParameterList[0];
-			paramList[2] = p_ParameterList[3];
-			e2 = skynet::Equals.GetSNI_FunctionDef()->UnifyArray(paramList);
-			if (e2.IsError())
-			{
-				SNI_Frame::Pop();
-				return e2;
-			}
-			splitter.Negative().Simplify();
-			paramList[0].Simplify();
-			result_param->SetValue(paramList[0]);
-			negative_param->SetValue(paramList[2]);
-		}
+		);
 		SNI_Frame::Pop();
-		return e2;
+		if (!success)
+		{
+			return SN::SN_Error(false, false, "Both the positive and negative cases failed in if statement.");
+		}
+		SN::SN_Error e = condition.SimplifyValue();
+		if (e.IsError())
+		{
+			return e;
+		}
+		return skynet::OK;
 	}
 
 	/// @brief Extract the condition, positive case, and negative case from the parameter list and call PartialUnifyInternal.

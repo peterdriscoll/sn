@@ -159,7 +159,11 @@ namespace SNI
 
 	SN::SN_Error SNI_String::AssertValue(const SN::SN_Expression &p_Value)
 	{
-		if (SN::Is<SNI_StringRef*>(p_Value) || SN::Is<SNI_ValueSet*>(p_Value) || SN::Is<SNI_Variable*>(p_Value))
+		if (p_Value.IsError())
+		{
+			return p_Value;
+		}
+		if (SN::Is<SNI_StringRef*>(p_Value) || SN::Is<SNI_ValueSet*>(p_Value) || SN::Is<SNI_Variable*>(p_Value) || !p_Value.IsKnownValue())
 		{
 			SN::SN_Expression value(p_Value);
 			return value.AssertValue(this);

@@ -138,17 +138,14 @@ namespace SNI
 		SNI_World *contextWorld = SNI_World::ContextWorld();
 		if (contextWorld)
 		{
-			if (IsComplete())
+			for (const SNI_TaggedValue &tv : m_ValueList)
 			{
-				for (const SNI_TaggedValue &tv : m_ValueList)
+				SNI_World *world = tv.GetWorld();
+				if (!world || !world->IsEmpty())
 				{
-					SNI_World *world = tv.GetWorld();
-					if (!world || !world->IsEmpty())
+					if (contextWorld->CompatibleWorld(world))
 					{
-						if (contextWorld->CompatibleWorld(world))
-						{
-							return true;
-						}
+						return true;
 					}
 				}
 			}

@@ -504,6 +504,13 @@ namespace SNI
 
 			if (p_Define || SN::Is<SNI_Value*>(p_Expression))
 			{
+				if (SN::Is<SNI_ValueSet *>(p_Expression))
+				{
+					SN::SN_ValueSet set(p_Expression);
+
+					set.GetSNI_ValueSet()->AssignToVariable(this);
+				}
+
 				m_Value = p_Expression.GetSNI_Expression();
 				REQUESTPROMOTION(m_Value);
 				LOG(WriteVariable(SN::DebugLevel, this));

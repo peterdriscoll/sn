@@ -58,7 +58,7 @@ namespace SNI
 
 	bool SNI_Value::IsReferableValue() const
 	{
-		return true;
+		return false;
 	}
 
 	SN::SN_Expression SNI_Value::GetVariableValue(bool p_IfComplete)

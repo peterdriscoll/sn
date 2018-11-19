@@ -63,6 +63,8 @@ namespace SNI
 		SNI_WorldSet * OneParent();
 		bool IsComplete();
 		void Complete();
+		SNI_World *ContextWorld();
+
 	protected:
 		void AddChildWorldSet(SNI_WorldSet *p_WorldSet);
 		virtual void PromoteMembers();
@@ -82,6 +84,7 @@ namespace SNI
 		SNI_WorldList m_WorldList;
 		SNI_WorldSetList m_ChildSetList;
 		SNI_WorldSetList m_ParentSetList;
+		SNI_World *m_ContextWorld;
 
 		bool m_Mark;
 		bool m_Complete;

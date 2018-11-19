@@ -2300,7 +2300,7 @@ namespace test_sn
 
 		TEST_METHOD(TestInheritPolymorphicCall)
 		{
-			return;
+			return; // bark
 			Initialize();
 			{
 				Manager manager("Test Inherit Polymorphic Call", AssertErrorHandler);
@@ -2748,9 +2748,9 @@ namespace test_sn
 				string n1_text_before = numbers1.Evaluate().DisplayValueSN();
 
 				(typeChecker(numbers1) == String("short")).AssertAction();
-				(numbers1 == Short(1)).EvaluateAction();
 				string n1_text = numbers1.Evaluate().DisplayValueSN();
 				Assert::IsTrue(n1_text == "Short(1)");
+				(numbers1 == Short(1)).EvaluateAction();
 			}
 			Cleanup();
 		}

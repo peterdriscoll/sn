@@ -19,6 +19,7 @@ namespace SNI
 		, m_Complete(false)
 		, m_WorldSetNo(++m_NextWorldSetNo)
 		, m_NextWorldNo(0)
+		, m_ContextWorld(SNI_World::ContextWorld())
 	{
 	}
 
@@ -243,6 +244,11 @@ namespace SNI
 
 	void SNI_WorldSet::CheckDependentWorlds()
 	{
+		if (SNI_World::ContextWorld() != m_ContextWorld)
+		{
+			return;
+		}
+
 		SNI_WorldSetList m_ChangedList;
 		m_ChangedList.push_back(this);
 		while (!m_ChangedList.empty())
@@ -255,6 +261,11 @@ namespace SNI
 
 	void SNI_WorldSet::CheckRelatedWorlds(SNI_WorldSetList &p_ChangedList)
 	{
+		if (SNI_World::ContextWorld() != m_ContextWorld)
+		{
+			return;
+		}
+
 		CheckDependencies(p_ChangedList);
 		for (SNI_WorldSet *worldSet : m_ParentSetList)
 		{
@@ -264,6 +275,11 @@ namespace SNI
 
 	void SNI_WorldSet::CheckDependencies(SNI_WorldSetList &p_ChangedList)
 	{
+		if (SNI_World::ContextWorld() != m_ContextWorld)
+		{
+			return;
+		}
+
 		SN::LogContext context("SNI_WorldSet::CheckDependentWorlds2(" + DisplayShort() + ")");
 		LogSN();
 		FailWorldsWithEmptyChildren(p_ChangedList);
@@ -274,6 +290,11 @@ namespace SNI
 
 	void SNI_WorldSet::MarkAllWorldInChildSets(bool p_Mark)
 	{
+		if (SNI_World::ContextWorld() != m_ContextWorld)
+		{
+			return;
+		}
+
 		MarkWorlds(p_Mark);
 		for (SNI_WorldSetList::iterator it = m_ChildSetList.begin(); it != m_ChildSetList.end(); it++)
 		{
@@ -283,6 +304,11 @@ namespace SNI
 
 	void SNI_WorldSet::FailUnmarkedWorldsInChildSets(bool p_Mark, SNI_WorldSetList &p_ChangedList)
 	{
+		if (SNI_World::ContextWorld() != m_ContextWorld)
+		{
+			return;
+		}
+
 		FailUnmarkedWorlds(p_Mark, p_ChangedList);
 		for (SNI_WorldSetList::iterator it = m_ChildSetList.begin(); it != m_ChildSetList.end(); it++)
 		{
@@ -379,5 +405,9 @@ namespace SNI
 	void SNI_WorldSet::Complete()
 	{
 		m_Complete = true;
+	}
+	SNI_World * SNI_WorldSet::ContextWorld()
+	{
+		return m_ContextWorld;
 	}
 }

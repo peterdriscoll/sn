@@ -49,10 +49,22 @@ namespace SNI
 
 	size_t SNI_Same::CardinalityOfUnify(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const
 	{
-		if (p_Depth == 2)
+		long totalCalc = p_TotalCalc;
+		long calcPos = p_CalcPos;
+		if (p_ParamList[PU1_Result].IsReferableValue() && p_ParamList[PU1_First].IsNullValue())
 		{
-			return MultiplyCardinality(p_ParamList[PU1_First].Cardinality(), p_ParamList[PU1_Result].Cardinality());
+			totalCalc--;
+			calcPos = PU1_First;
 		}
-		return CARDINALITY_MAX;
+		else if (p_ParamList[PU1_First].IsReferableValue() && p_ParamList[PU1_Result].IsNullValue())
+		{
+			totalCalc--;
+			calcPos = PU1_Result;
+		}
+		if (totalCalc > 1)
+		{
+			return CARDINALITY_MAX;
+		}
+		return SNI_Unary::CardinalityOfUnify(p_Depth, p_ParamList, calcPos, totalCalc);
 	}
 }
