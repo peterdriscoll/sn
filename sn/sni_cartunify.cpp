@@ -39,7 +39,7 @@ namespace SNI
 		m_ValueCalcPos[0] = -1;
 		if (p_TotalCalc == 0)
 		{
-			m_WorldSet = new SNI_WorldSet;
+			m_WorldSet = new SNI_WorldSet(SN::SN_FunctionDef(p_FunctionDef));
 		}
 		else
 		{
@@ -117,7 +117,11 @@ namespace SNI
 		{
 			if (m_WorldSet)
 			{
-				m_WorldSet->CheckDependentWorlds();
+				e = m_WorldSet->CheckDependentWorlds();
+				if (e.IsError())
+				{
+					return e;
+				}
 				if (m_WorldSet->IsEmpty())
 				{
 					return SN::SN_Error("SNI_Cart: World set is empty after matching values in cartesian product.");

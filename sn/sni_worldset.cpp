@@ -14,13 +14,14 @@ namespace SNI
 	typedef unordered_map<SNI_WorldSet *, SN::SN_Value> ConflictMap;
 	/*static*/ long SNI_WorldSet::m_NextWorldSetNo = 0;
 
-	SNI_WorldSet::SNI_WorldSet()
+	SNI_WorldSet::SNI_WorldSet(const SN::SN_Expression &p_Expression)
 		: m_Mark(false)
 		, m_Complete(false)
 		, m_WorldSetNo(++m_NextWorldSetNo)
 		, m_NextWorldNo(0)
 		, m_ContextWorld(SNI_World::ContextWorld())
 	{
+		AttachExpression(p_Expression);
 	}
 
 	SNI_WorldSet::~SNI_WorldSet()
@@ -104,7 +105,10 @@ namespace SNI
 			}
 		}
 		m_ChildSetList.push_back(p_WorldSet);
-		p_WorldSet->m_ParentSetList.push_back(this);
+		if (p_WorldSet->m_ContextWorld == m_ContextWorld)
+		{
+			p_WorldSet->m_ParentSetList.push_back(this);
+		}
 	}
 
 	void SNI_WorldSet::PromoteMembers()
@@ -117,6 +121,19 @@ namespace SNI
 		{
 			REQUESTPROMOTION(ws);
 		}
+	}
+
+	size_t SNI_WorldSet::CountWorlds()
+	{
+		size_t result = 0;
+		for (SNI_World *world : m_WorldList)
+		{
+			if (world->IsEmpty())
+			{
+				++result;
+			}
+		}
+		return result;
 	}
 
 	SNI_World * SNI_WorldSet::JoinWorldsArgs(AddWorldType p_AddWorld, CreateWorldType p_CreateWorld, bool &exists, SNI_World *p_World1, SNI_World *p_World2, SNI_World *p_World3, SNI_World *p_World4)
@@ -166,14 +183,17 @@ namespace SNI
 				}
 				AddChildWorldSet(p_ExtraWorld->GetWorldSet());
 			}
-			if (contextWorld && contextWorld->IsAnyActive())
+			for (SNI_World *contextWorldLoop : SNI_World::ContextWorldList())
 			{
-				if (!world->AddChildWorld(contextWorld))
+				if (contextWorldLoop && contextWorldLoop->IsAnyActive())
 				{
-					exists = false;
-					return NULL; // There is conflict between the child worlds, so the world does not exist.
+					if (!world->AddChildWorld(contextWorldLoop))
+					{
+						exists = false;
+						return NULL; // There is conflict between the child worlds, so the world does not exist.
+					}
+					AddChildWorldSet(contextWorldLoop->GetWorldSet());
 				}
-				AddChildWorldSet(contextWorld->GetWorldSet());
 			}
 			if (p_AddWorld == AutoAddWorld)
 			{
@@ -201,7 +221,7 @@ namespace SNI
 
 	SNI_WorldSet * SNI_WorldSet::Clone()
 	{
-		return new SNI_WorldSet();
+		return new SNI_WorldSet(m_Expression);
 	}
 
 	SNI_World * SNI_WorldSet::CreateCloneWorld(SNI_World * p_Parentworld)
@@ -242,42 +262,53 @@ namespace SNI
 		}
 	}
 
-	void SNI_WorldSet::CheckDependentWorlds()
+	SN::SN_Error SNI_WorldSet::CheckDependentWorlds()
 	{
 		if (SNI_World::ContextWorld() != m_ContextWorld)
 		{
-			return;
+			return skynet::OK;
 		}
 
+		SN::SN_Error result = skynet::OK;
 		SNI_WorldSetList m_ChangedList;
 		m_ChangedList.push_back(this);
 		while (!m_ChangedList.empty())
 		{
 			SNI_WorldSet *worldSet = m_ChangedList.back();
 			m_ChangedList.pop_back();
-			worldSet->CheckRelatedWorlds(m_ChangedList);
+			SN::SN_Error loopResult = worldSet->CheckRelatedWorlds(m_ChangedList);
+			if (loopResult.IsError())
+			{
+				result = loopResult;
+			}
 		}
+		return result;
 	}
 
-	void SNI_WorldSet::CheckRelatedWorlds(SNI_WorldSetList &p_ChangedList)
+	SN::SN_Error SNI_WorldSet::CheckRelatedWorlds(SNI_WorldSetList &p_ChangedList)
 	{
 		if (SNI_World::ContextWorld() != m_ContextWorld)
 		{
-			return;
+			return skynet::OK;
 		}
 
-		CheckDependencies(p_ChangedList);
+		SN::SN_Error result = CheckDependencies(p_ChangedList);
 		for (SNI_WorldSet *worldSet : m_ParentSetList)
 		{
-			worldSet->CheckDependencies(p_ChangedList);
+			SN::SN_Error loopResult = worldSet->CheckDependencies(p_ChangedList);
+			if (loopResult.IsError())
+			{
+				result = loopResult;
+			}
 		}
+		return result;
 	}
 
-	void SNI_WorldSet::CheckDependencies(SNI_WorldSetList &p_ChangedList)
+	SN::SN_Error SNI_WorldSet::CheckDependencies(SNI_WorldSetList &p_ChangedList)
 	{
 		if (SNI_World::ContextWorld() != m_ContextWorld)
 		{
-			return;
+			return skynet::OK;
 		}
 
 		SN::LogContext context("SNI_WorldSet::CheckDependentWorlds2(" + DisplayShort() + ")");
@@ -285,16 +316,11 @@ namespace SNI
 		FailWorldsWithEmptyChildren(p_ChangedList);
 		MarkAllWorldInChildSets(false);
 		MarkChildWorlds(true);
-		FailUnmarkedWorldsInChildSets(true, p_ChangedList);
+		return FailUnmarkedWorldsInChildSets(true, p_ChangedList);
 	}
 
 	void SNI_WorldSet::MarkAllWorldInChildSets(bool p_Mark)
 	{
-		if (SNI_World::ContextWorld() != m_ContextWorld)
-		{
-			return;
-		}
-
 		MarkWorlds(p_Mark);
 		for (SNI_WorldSetList::iterator it = m_ChildSetList.begin(); it != m_ChildSetList.end(); it++)
 		{
@@ -302,18 +328,31 @@ namespace SNI
 		}
 	}
 
-	void SNI_WorldSet::FailUnmarkedWorldsInChildSets(bool p_Mark, SNI_WorldSetList &p_ChangedList)
+	SN::SN_Error SNI_WorldSet::FailUnmarkedWorldsInChildSets(bool p_Mark, SNI_WorldSetList &p_ChangedList)
 	{
-		if (SNI_World::ContextWorld() != m_ContextWorld)
+		SNI_World *contextWorld = SNI_World::ContextWorld();
+		if ((contextWorld != m_ContextWorld))
 		{
-			return;
+			if (contextWorld)
+			{
+				long cat = 10;
+			}
+			if (m_ContextWorld)
+			{
+				long dog = 10;
+			}
+			return skynet::OK;
 		}
-
-		FailUnmarkedWorlds(p_Mark, p_ChangedList);
+		SN::SN_Error result = FailUnmarkedWorlds(p_Mark, p_ChangedList);
 		for (SNI_WorldSetList::iterator it = m_ChildSetList.begin(); it != m_ChildSetList.end(); it++)
 		{
-			(*it)->FailUnmarkedWorldsInChildSets(p_Mark, p_ChangedList);
+			SN::SN_Error loopResult = (*it)->FailUnmarkedWorldsInChildSets(p_Mark, p_ChangedList);
+			if (loopResult.IsError())
+			{
+				result = loopResult;
+			}
 		}
+		return result;
 	}
 
 	void SNI_WorldSet::MarkWorlds(bool p_Mark)
@@ -324,25 +363,58 @@ namespace SNI
 		}
 	}
 
-	void SNI_WorldSet::FailUnmarkedWorlds(bool p_Mark, SNI_WorldSetList &p_ChangedList)
+	SN::SN_Error SNI_WorldSet::FailUnmarkedWorlds(bool p_Mark, SNI_WorldSetList &p_ChangedList)
 	{
+		SN::SN_Error result = skynet::Fail;
+		bool found = false;
+		bool missingInResult = false;
 		for (SNI_WorldList::iterator it = m_WorldList.begin(); it != m_WorldList.end();)
 		{
 			SNI_World *world = (*it);
-			if (!world->IsEmpty() && !world->HasMark(p_Mark))
+			if (!world->IsEmpty())
 			{
-				p_ChangedList.push_back(this);
-				world->MarkEmpty();
+				if (!world->HasMark(p_Mark))
+				{
+					p_ChangedList.push_back(this);
+					world->FailNoRemove();
+				}
+				else if (world->HasEmptyChild())
+				{
+					p_ChangedList.push_back(this);
+					world->FailNoRemove();
+				}
 			}
 			if (world->IsEmpty())
 			{
 				it = m_WorldList.erase(it);
+				missingInResult = true;
 			}
 			else
 			{
 				++it;
+				result = skynet::OK;
+				found = true;
 			}
 		}
+		if (!found)
+		{
+			if (m_ContextWorld)
+			{
+				m_ContextWorld->Fail();
+			}
+			else
+			{
+				if (missingInResult)
+				{
+					return SN::SN_Error("SNI_WorldSet: World set is empty after a mising in result failure.");
+				}
+				else
+				{
+					return SN::SN_Error("SNI_WorldSet: World set is empty.");
+				}
+			}
+		}
+		return result;
 	}
 
 	void SNI_WorldSet::FailWorldsWithEmptyChildren(SNI_WorldSetList &p_ChangedList)
@@ -409,5 +481,31 @@ namespace SNI
 	SNI_World * SNI_WorldSet::ContextWorld()
 	{
 		return m_ContextWorld;
+	}
+
+	void SNI_WorldSet::ClearFailMarks()
+	{
+		for (SNI_World *world : m_WorldList)
+		{
+			world->ClearFailMark();
+		}
+	}
+
+	bool SNI_WorldSet::AllContextFailed()
+	{
+		for (SNI_World *world : m_WorldList)
+		{
+			if (!world->IsEmpty() && !world->IsFailMarked())
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	void SNI_WorldSet::AttachExpression(const SN::SN_Expression & p_Expression)
+	{
+		m_Expression = p_Expression;
+		m_ExpressionString = m_Expression.DisplaySN();
 	}
 }

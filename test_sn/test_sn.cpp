@@ -2819,21 +2819,21 @@ namespace test_sn
 				(numbers1 == (Short(1) || Long(2) || LongLong(3))).PartialAssertAction();
 				string numbers1_text = numbers1.DisplayValueSN();
 				(typeChecker(numbers1) == String("short")).AssertAction();
-				string n1_text = numbers1.DisplayValueSN();
+				string n1_text = numbers1.GetValue().DisplayValueSN();
 				Assert::IsTrue(n1_text == "Short(1)");
 				(numbers1 == Short(1)).EvaluateAction();
 
 				SN_DECLARE(numbers2);
 				(numbers2 == (Short(1) || Long(2) || LongLong(3))).PartialAssertAction();
 				(typeChecker(numbers2) == String("long")).AssertAction();
-				string n2_text = numbers2.DisplayValueSN();
+				string n2_text = numbers2.GetValue().DisplayValueSN();
 				Assert::IsTrue(n2_text == "Long(2)");
 				(numbers2 == Long(2)).EvaluateAction();
 
 				SN_DECLARE(numbers3);
 				(numbers3 == (Short(1) || Long(2) || LongLong(3))).PartialAssertAction();
 				(typeChecker(numbers3) == String("long long")).AssertAction();
-				string n3_text = numbers3.DisplayValueSN();
+				string n3_text = numbers3.GetValue().DisplayValueSN();
 				Assert::IsTrue(n3_text == "LongLong(1)");
 				(numbers3 == LongLong(3)).EvaluateAction();
 			}

@@ -20,6 +20,10 @@ namespace SNI
 		, m_World(p_World)
 		, m_MarkedForDeletion(false)
 	{
+		if (m_World)
+		{
+			m_World->AttachValue(m_Value);
+		}
 	}
 
 	SNI_TaggedValue::SNI_TaggedValue(const SN::SN_Value &p_Value)
@@ -41,6 +45,10 @@ namespace SNI
 		, m_World(p_TaggedValue.m_World)
 		, m_MarkedForDeletion(p_TaggedValue.m_MarkedForDeletion)
 	{
+		if (m_World)
+		{
+			m_World->AttachValue(m_Value);
+		}
 	}
 
 	SNI_TaggedValue::~SNI_TaggedValue()
@@ -55,6 +63,10 @@ namespace SNI
 	void SNI_TaggedValue::SetValue(const SN::SN_Expression & p_Value)
 	{
 		m_Value = p_Value;
+		if (m_World)
+		{
+			m_World->AttachValue(m_Value);
+		}
 	}
 
 	SNI_World * SNI_TaggedValue::GetWorld() const

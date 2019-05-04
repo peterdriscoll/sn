@@ -16,6 +16,7 @@ namespace SN
 namespace SNI
 {
 	class SNI_WorldSet;
+	typedef vector<SNI_WorldSet*> SNI_WorldSetList;
 
 	class SNI_World;
 	typedef vector<SNI_World*> SNI_WorldList;
@@ -26,6 +27,7 @@ namespace SNI
 		PGC_CLASS(SNI_World);
 	public:
 		static SNI_World *ContextWorld();
+		static SNI_WorldList & ContextWorldList();
 		static void PushContextWorld(SNI_World *p_Context);
 		static void PopContextWorld();
 
@@ -40,8 +42,18 @@ namespace SNI
 		SNI_WorldSet *GetWorldSet();
 		bool AddChildWorld(SNI_World *p_World);
 		void AddToSetList();
-
+		bool AddFailedContext(SNI_World *p_World);
 		bool CompatibleWorld(SNI_World * p_World);
+
+		bool CheckForWorldSetFails();
+		void BuildFailedWorldSets(SNI_WorldSetList &p_FailedWorldSetList);
+		void ClearContextFailMarks(SNI_WorldSetList &p_FailedWorldSetList);
+		void MarkContextFailMarks();
+		bool CheckFailedWorldSets(SNI_WorldSetList &p_FailedWorldSetList);
+
+		void ClearFailMark();
+		void MarkFail();
+		bool IsFailMarked();
 
 		bool Contains(SNI_World * p_World) const;
 
@@ -58,8 +70,10 @@ namespace SNI
 		bool IsEmpty() const;
 		bool HasEmptyChild() const;
 		bool Fail();
+		bool FailNoRemove();
 		void MarkEmpty();
 		SNI_World * OneParent(SNI_WorldSet * parentWorldSet);
+		void AttachValue(const SN::SN_Expression &p_Value);
 
 	protected:
 		virtual void PromoteMembers();
@@ -68,12 +82,17 @@ namespace SNI
 		SNI_WorldSet  * m_WorldSet;
 		SNI_WorldList m_ChildList;
 		SNI_World     *m_CloneParent;
+		SNI_WorldList m_FailedContextList;
 
 		bool m_Mark;
 		bool m_IsEmpty;
 		bool m_Active;
 
+		bool m_FailMark;
+
 		long m_WorldNo;
+		SN::SN_Expression m_Value;
+		string m_ValueString;
 	};
 }
 

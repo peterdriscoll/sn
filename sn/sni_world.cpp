@@ -19,6 +19,11 @@ namespace SNI
 		return NULL;
 	}
 
+	/*static*/ SNI_WorldList & SNI_World::ContextWorldList()
+	{
+		return g_ContextStack;
+	}
+
 	/*static*/ void SNI_World::PushContextWorld(SNI_World * p_Context)
 	{
 		g_ContextStack.push_back(p_Context);
@@ -104,6 +109,21 @@ namespace SNI
 		m_WorldSet->AddToSetList(this);
 	}
 
+	bool SNI_World::AddFailedContext(SNI_World * p_World)
+	{
+		ASSERTM(p_World, "Attempt to add null child world.");
+		bool found = false;
+		for (size_t j = 0; j<m_FailedContextList.size(); j++)
+		{
+			if (m_FailedContextList[j] == p_World)
+			{
+				return false;
+			}
+		}
+		m_FailedContextList.push_back(p_World);
+		return false;
+	}
+
 	bool SNI_World::AddChildWorld(SNI_World *p_World)
 	{
 		ASSERTM(p_World, "Attempt to add null child world.");
@@ -135,6 +155,78 @@ namespace SNI
 		return false;
 	}
 
+	void SNI_World::BuildFailedWorldSets(SNI_WorldSetList & p_FailedWorldSetList)
+	{
+		for (SNI_World *world : m_FailedContextList)
+		{
+			SNI_WorldSet *worldSet = world->GetWorldSet();
+			bool found = false;
+			for (SNI_WorldSet *worldSetLoop : p_FailedWorldSetList)
+			{
+				if (worldSet == worldSetLoop)
+				{
+					found = true;
+					break;
+				}
+			}
+			if (!found)
+			{
+				p_FailedWorldSetList.push_back(worldSet);
+			}
+		}
+	}
+
+	bool SNI_World::CheckForWorldSetFails()
+	{
+		SNI_WorldSetList worldSetList;
+		BuildFailedWorldSets(worldSetList);
+		ClearContextFailMarks(worldSetList);
+		MarkContextFailMarks();
+		return CheckFailedWorldSets(worldSetList);
+	}
+
+	void SNI_World::ClearContextFailMarks(SNI_WorldSetList &p_FailedWorldSetList)
+	{
+		for (SNI_WorldSet *worldSet : p_FailedWorldSetList)
+		{
+			worldSet->ClearFailMarks();
+		}
+	}
+
+	void SNI_World::MarkContextFailMarks()
+	{
+		for (SNI_World *world : m_FailedContextList)
+		{
+			world->MarkFail();
+		}
+	}
+
+	bool SNI_World::CheckFailedWorldSets(SNI_WorldSetList &p_FailedWorldSetList)
+	{
+		for (SNI_WorldSet *worldSet : p_FailedWorldSetList)
+		{
+			if (worldSet->AllContextFailed())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	void SNI_World::ClearFailMark()
+	{
+		m_FailMark = false;
+	}
+
+	void SNI_World::MarkFail()
+	{
+		m_FailMark = true;
+	}
+
+	bool SNI_World::IsFailMarked()
+	{
+		return m_FailMark;
+	}
 
 	bool SNI_World::Contains(SNI_World *p_World) const
 	{
@@ -263,9 +355,14 @@ namespace SNI
 
 	bool SNI_World::Fail()
 	{
-		if (SNI_World::ContextWorld() != m_WorldSet->ContextWorld())
+		SNI_World *contextWorld = SNI_World::ContextWorld();
+		if (contextWorld != m_WorldSet->ContextWorld())
 		{
-			return false;
+			AddFailedContext(contextWorld);
+			if (!CheckForWorldSetFails())
+			{
+				return false;
+			}
 		}
 
 		SN::LogContext context("SNI_World::Fail(" + DisplaySN() + ")");
@@ -276,6 +373,22 @@ namespace SNI
 			return false;
 		}
 		return true;
+	}
+
+	bool SNI_World::FailNoRemove()
+	{
+		SNI_World *contextWorld = SNI_World::ContextWorld();
+		if (contextWorld != m_WorldSet->ContextWorld())
+		{
+			AddFailedContext(contextWorld);
+			if (!CheckForWorldSetFails())
+			{
+				return false;
+			}
+		}
+
+		m_IsEmpty = true;
+		return !m_WorldSet->IsEmpty();
 	}
 
 	void SNI_World::MarkEmpty()
@@ -295,5 +408,11 @@ namespace SNI
 			return m_ChildList[0]->OneParent(parentWorldSet);
 		}
 		return NULL;
+	}
+
+	void SNI_World::AttachValue(const SN::SN_Expression & p_Value)
+	{
+		m_Value = p_Value;
+		m_ValueString = m_Value.DisplayValueSN();
 	}
 }

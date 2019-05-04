@@ -190,10 +190,10 @@ namespace SNI
 		SNI_Variable* negative_param = topFrame->CreateParameterByName("negative");
 		result_param->SetValue(p_ParameterList[0]);
 		SN::SN_ValueSet condition;
-		SNI_WorldSet *condition_worldSet = new SNI_WorldSet;
+		SNI_WorldSet *condition_worldSet = new SNI_WorldSet(p_ParameterList[1]);
 		condition.SetWorldSet(condition_worldSet);
-		condition.AddTaggedValue(skynet::False, condition_worldSet->CreateWorld());
 		condition.AddTaggedValue(skynet::True, condition_worldSet->CreateWorld());
+		condition.AddTaggedValue(skynet::False, condition_worldSet->CreateWorld());
 		condition_worldSet->Complete();
 
 		SN::SN_Error e1 = p_ParameterList[1].AssertValue(condition);
@@ -251,7 +251,8 @@ namespace SNI
 		{
 			return SN::SN_Error(false, false, "Both the positive and negative cases failed in if statement.");
 		}
-		SN::SN_Error e = condition.SimplifyValue();
+
+		SN::SN_Error e = condition_worldSet->CheckDependentWorlds();
 		if (e.IsError())
 		{
 			return e;

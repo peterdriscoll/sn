@@ -222,14 +222,16 @@ namespace SNI
 		string separator;
 		for (unsigned long j = 0; j < p_TaggedValueList.size(); j++)
 		{
-			result += separator + p_TaggedValueList[j].GetValue().GetSNI_Expression()->DisplaySN(0, p_DisplayOptions);
-
 			SNI_World *world = p_TaggedValueList[j].GetWorld();
-			if (world)
+			if (!world || !world->IsEmpty())
 			{
-				result += "::" + p_TaggedValueList[j].GetWorld()->DisplayShort();
+				result += separator + p_TaggedValueList[j].GetValue().GetSNI_Expression()->DisplaySN(0, p_DisplayOptions);
+				if (world)
+				{
+					result += "::" + p_TaggedValueList[j].GetWorld()->DisplayShort();
+				}
+				separator = ", ";
 			}
-			separator = ", ";
 		}
 		return result;
 	}

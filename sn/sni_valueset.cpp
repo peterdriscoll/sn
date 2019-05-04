@@ -34,6 +34,7 @@ namespace SNI
 
 	SNI_ValueSet::SNI_ValueSet(const SN::SN_Value &p_Value1, const SN::SN_Value &p_Value2)
 		: m_WorldSet(NULL)
+		, m_Variable(NULL)
 	{
 		SN::LogContext context("SNI_ValueSet::SNI_ValueSet ( " + p_Value1.DisplaySN() + ", " + p_Value2.DisplaySN() + " )");
 
@@ -43,6 +44,7 @@ namespace SNI
 
 	SNI_ValueSet::SNI_ValueSet(const SN::SN_Value &p_Value1)
 		: m_WorldSet(NULL)
+		, m_Variable(NULL)
 	{
 		SN::LogContext context("SNI_ValueSet::SNI_ValueSet ( " + p_Value1.DisplaySN() + " )");
 
@@ -259,6 +261,7 @@ namespace SNI
 			worldSet->Complete();
 			Validate();
 		}
+		m_WorldSet->AttachExpression(m_Variable);
 	}
 
 	string SNI_ValueSet::GenerateTempVariableName()
@@ -326,7 +329,7 @@ namespace SNI
 					if (vs)
 					{
 						m_ValueList[j].MarkForDeletion();
-						SNI_WorldSet *vsWorldSet = new SNI_WorldSet;
+						SNI_WorldSet *vsWorldSet = new SNI_WorldSet(SN::SN_ValueSet(this));
 						for (SNI_TaggedValueList::iterator itVS = vs->m_ValueList.begin(); itVS != vs->m_ValueList.end(); itVS++)
 						{
 							SN::SN_Expression vsValue = itVS->GetValue();
@@ -487,7 +490,7 @@ namespace SNI
 	{
 		if (!m_WorldSet && !SN::SN_Transaction::InWebServer())
 		{
-			m_WorldSet = new SNI_WorldSet;
+			m_WorldSet = new SNI_WorldSet(SN::SN_ValueSet(this));
 		}
 		return m_WorldSet;
 	}
@@ -764,13 +767,13 @@ namespace SNI
 				if (exists)
 				{
 					string worldString = DisplayWorlds(p_NumWorlds, p_WorldList);
-					SN::LogContext context("SNI_Variable::AddValue ( ok " + p_Param.DisplayValueSN() + " " + worldString + " )");
+					SN::LogContext context("SNI_ValueSet::AddValue ( ok " + p_Param.DisplayValueSN() + " " + worldString + " )");
 					valueList.push_back(SNI_TaggedValue(p_Param, world));
 				}
 				else
 				{
 					string worldString = DisplayWorlds(p_NumWorlds, p_WorldList);
-					SN::LogContext context("SNI_Variable::AddValue ( conflict " + p_Param.DisplayValueSN() + " " + worldString + " )");
+					SN::LogContext context("SNI_ValueSet::AddValue ( conflict " + p_Param.DisplayValueSN() + " " + worldString + " )");
 				}
 				return true;
 			}
@@ -818,7 +821,7 @@ namespace SNI
 		if (m_Variable)
 		{
 			result = new SNI_ValueSet;
-			SNI_WorldSet *worldSet = new SNI_WorldSet;
+			SNI_WorldSet *worldSet = new SNI_WorldSet(SN::SN_Value(this)||SN::SN_Expression(p_Other));
 			for (const SNI_TaggedValue &tv : m_ValueList)
 			{
 				bool exists = false;
@@ -833,7 +836,7 @@ namespace SNI
 		SN::SN_Expression other_expression = p_Other;
 		if (SN::Is<SNI_ValueSet *>(other_expression))
 		{
-			SNI_WorldSet *worldSet = new SNI_WorldSet;
+			SNI_WorldSet *worldSet = new SNI_WorldSet(SN::SN_Value(this)||other_expression);
 			SN::SN_ValueSet other = other_expression;
 			for (size_t j = 0; j<other.Length(); j++)
 			{
@@ -858,7 +861,8 @@ namespace SNI
 	{
 		SN::SN_Value left_value(p_Left);
 		SN::SN_Value right_value(p_Right);
-		SNI_WorldSet * worldSet = new SNI_WorldSet();
+		SN::SN_Expression source = left_value || right_value;
+		SNI_WorldSet * worldSet = new SNI_WorldSet(source);
 		SN::SN_ValueSet result;
 		result.AddTaggedValue(left_value, NULL);
 
