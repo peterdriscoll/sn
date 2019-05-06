@@ -70,7 +70,12 @@ namespace SNI
 		bool IsEmpty() const;
 		bool HasEmptyChild() const;
 		bool Fail();
+		SNI_World * GetContextWorld() const;
+		bool IsProperSubWorld(SNI_World * p_World) const;
+		bool IsSubWorld(SNI_World * p_World) const;
+		bool FailInContext(SNI_World *p_ContextWorld);
 		bool FailNoRemove();
+		bool FailNoRemoveInContext(SNI_World *p_ContextWorld);
 		void MarkEmpty();
 		SNI_World * OneParent(SNI_WorldSet * parentWorldSet);
 		void AttachValue(const SN::SN_Expression &p_Value);

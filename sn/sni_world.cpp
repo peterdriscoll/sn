@@ -121,7 +121,7 @@ namespace SNI
 			}
 		}
 		m_FailedContextList.push_back(p_World);
-		return false;
+		return true;
 	}
 
 	bool SNI_World::AddChildWorld(SNI_World *p_World)
@@ -355,10 +355,45 @@ namespace SNI
 
 	bool SNI_World::Fail()
 	{
-		SNI_World *contextWorld = SNI_World::ContextWorld();
-		if (contextWorld != m_WorldSet->ContextWorld())
+		return FailInContext(SNI_World::ContextWorld());
+	}
+
+	SNI_World *SNI_World::GetContextWorld() const
+	{
+		if (!m_WorldSet)
 		{
-			AddFailedContext(contextWorld);
+			return NULL;
+		}
+		return m_WorldSet->ContextWorld();
+	}
+
+	bool SNI_World::IsProperSubWorld(SNI_World *p_World) const
+	{
+		if (this == p_World)
+		{
+			return false;
+		}
+		return IsSubWorld(p_World);
+	}
+
+	bool SNI_World::IsSubWorld(SNI_World *p_World) const
+	{
+		if (this == p_World)
+		{
+			return true;
+		}
+		if (!p_World)
+		{
+			return true;
+		}
+		return IsSubWorld(p_World->GetContextWorld());
+	}
+
+	bool SNI_World::FailInContext(SNI_World *p_ContextWorld)
+	{
+		if (p_ContextWorld && p_ContextWorld->IsProperSubWorld(m_WorldSet->ContextWorld()))
+		{
+			AddFailedContext(p_ContextWorld);
 			if (!CheckForWorldSetFails())
 			{
 				return false;
@@ -377,10 +412,14 @@ namespace SNI
 
 	bool SNI_World::FailNoRemove()
 	{
-		SNI_World *contextWorld = SNI_World::ContextWorld();
-		if (contextWorld != m_WorldSet->ContextWorld())
+		return FailNoRemoveInContext(SNI_World::ContextWorld());
+	}
+
+	bool SNI_World::FailNoRemoveInContext(SNI_World *p_ContextWorld)
+	{
+		if (p_ContextWorld && p_ContextWorld->IsProperSubWorld(m_WorldSet->ContextWorld()))
 		{
-			AddFailedContext(contextWorld);
+			AddFailedContext(p_ContextWorld);
 			if (!CheckForWorldSetFails())
 			{
 				return false;

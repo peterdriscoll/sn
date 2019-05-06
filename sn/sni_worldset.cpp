@@ -264,11 +264,6 @@ namespace SNI
 
 	SN::SN_Error SNI_WorldSet::CheckDependentWorlds()
 	{
-		if (SNI_World::ContextWorld() != m_ContextWorld)
-		{
-			return skynet::OK;
-		}
-
 		SN::SN_Error result = skynet::OK;
 		SNI_WorldSetList m_ChangedList;
 		m_ChangedList.push_back(this);
@@ -287,11 +282,6 @@ namespace SNI
 
 	SN::SN_Error SNI_WorldSet::CheckRelatedWorlds(SNI_WorldSetList &p_ChangedList)
 	{
-		if (SNI_World::ContextWorld() != m_ContextWorld)
-		{
-			return skynet::OK;
-		}
-
 		SN::SN_Error result = CheckDependencies(p_ChangedList);
 		for (SNI_WorldSet *worldSet : m_ParentSetList)
 		{
@@ -306,17 +296,12 @@ namespace SNI
 
 	SN::SN_Error SNI_WorldSet::CheckDependencies(SNI_WorldSetList &p_ChangedList)
 	{
-		if (SNI_World::ContextWorld() != m_ContextWorld)
-		{
-			return skynet::OK;
-		}
-
 		SN::LogContext context("SNI_WorldSet::CheckDependentWorlds2(" + DisplayShort() + ")");
 		LogSN();
 		FailWorldsWithEmptyChildren(p_ChangedList);
 		MarkAllWorldInChildSets(false);
 		MarkChildWorlds(true);
-		return FailUnmarkedWorldsInChildSets(true, p_ChangedList);
+		return FailUnmarkedWorldsInChildSets(true, p_ChangedList, m_ContextWorld);
 	}
 
 	void SNI_WorldSet::MarkAllWorldInChildSets(bool p_Mark)
@@ -328,25 +313,12 @@ namespace SNI
 		}
 	}
 
-	SN::SN_Error SNI_WorldSet::FailUnmarkedWorldsInChildSets(bool p_Mark, SNI_WorldSetList &p_ChangedList)
+	SN::SN_Error SNI_WorldSet::FailUnmarkedWorldsInChildSets(bool p_Mark, SNI_WorldSetList &p_ChangedList, SNI_World *p_ContextWorld)
 	{
-		SNI_World *contextWorld = SNI_World::ContextWorld();
-		if ((contextWorld != m_ContextWorld))
-		{
-			if (contextWorld)
-			{
-				long cat = 10;
-			}
-			if (m_ContextWorld)
-			{
-				long dog = 10;
-			}
-			return skynet::OK;
-		}
-		SN::SN_Error result = FailUnmarkedWorlds(p_Mark, p_ChangedList);
+		SN::SN_Error result = FailUnmarkedWorlds(p_Mark, p_ChangedList, p_ContextWorld);
 		for (SNI_WorldSetList::iterator it = m_ChildSetList.begin(); it != m_ChildSetList.end(); it++)
 		{
-			SN::SN_Error loopResult = (*it)->FailUnmarkedWorldsInChildSets(p_Mark, p_ChangedList);
+			SN::SN_Error loopResult = (*it)->FailUnmarkedWorldsInChildSets(p_Mark, p_ChangedList, p_ContextWorld);
 			if (loopResult.IsError())
 			{
 				result = loopResult;
@@ -363,7 +335,7 @@ namespace SNI
 		}
 	}
 
-	SN::SN_Error SNI_WorldSet::FailUnmarkedWorlds(bool p_Mark, SNI_WorldSetList &p_ChangedList)
+	SN::SN_Error SNI_WorldSet::FailUnmarkedWorlds(bool p_Mark, SNI_WorldSetList &p_ChangedList, SNI_World *p_ContextWorld)
 	{
 		SN::SN_Error result = skynet::Fail;
 		bool found = false;
@@ -376,12 +348,12 @@ namespace SNI
 				if (!world->HasMark(p_Mark))
 				{
 					p_ChangedList.push_back(this);
-					world->FailNoRemove();
+					world->FailNoRemoveInContext(p_ContextWorld);
 				}
 				else if (world->HasEmptyChild())
 				{
 					p_ChangedList.push_back(this);
-					world->FailNoRemove();
+					world->FailNoRemoveInContext(p_ContextWorld);
 				}
 			}
 			if (world->IsEmpty())
@@ -400,7 +372,7 @@ namespace SNI
 		{
 			if (m_ContextWorld)
 			{
-				m_ContextWorld->Fail();
+				m_ContextWorld->FailInContext(p_ContextWorld);
 			}
 			else
 			{

@@ -78,9 +78,9 @@ namespace SNI
 		SN::SN_Error CheckRelatedWorlds(SNI_WorldSetList &p_ChangedList);
 		SN::SN_Error CheckDependencies(SNI_WorldSetList & p_ChangedList);
 		void MarkAllWorldInChildSets(bool p_Mark);
-		SN::SN_Error FailUnmarkedWorldsInChildSets(bool p_Mark, SNI_WorldSetList &p_ChangedList);
+		SN::SN_Error FailUnmarkedWorldsInChildSets(bool p_Mark, SNI_WorldSetList &p_ChangedList, SNI_World *p_ContextWorld);
 		void MarkWorlds(bool p_Mark);
-		SN::SN_Error FailUnmarkedWorlds(bool p_Mark, SNI_WorldSetList &p_ChangedList);
+		SN::SN_Error FailUnmarkedWorlds(bool p_Mark, SNI_WorldSetList &p_ChangedList, SNI_World *p_ContextWorld);
 		void FailWorldsWithEmptyChildren(SNI_WorldSetList & p_ChangedList);
 		void MarkChildWorlds(bool p_Mark);
 
