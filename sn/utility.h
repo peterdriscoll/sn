@@ -46,7 +46,7 @@ namespace SNI
 	string Pad(const string &p_Text, size_t p_Width);
 	string Trim(const string &p_Text, size_t p_Width);
 	string Details(const string &p_Text, size_t p_Width);
-	string DetailsFS(const string &p_Text, size_t p_Width);
+	string DetailsFS(const string &p_Text, const string &p_TextHTML, size_t p_Width);
 
 	string DisplayPmExpressionList(SN::SN_ExpressionList * p_ParameterList);
 	string DisplayPmValueList(const SN::SN_ValueList &p_ParameterList);

@@ -23,6 +23,9 @@ namespace SNI
 		static void DisplayName(long p_ThreadNum, const string &p_Name);
 		static SNI_Variable *LookupVariable(long p_ThreadNum, const string & p_Name);
 
+		string GetDebugId() const;
+		void SetDebugId(const string & p_DebugId);
+		string GetBreakPoint(unsigned long p_BreakId);
 		SNI_Variable * LookupVariableInFrame(const string & p_Name);
 
 		SNI_Frame();
@@ -36,14 +39,19 @@ namespace SNI
 		string NameSuffix();
 		string GetLogDescription(SNI_Manager *p_Manager);
 		string GetLogShortDescription(SNI_Manager *p_Manager);
+		string GetBreakPoint();
+		void SetBreakPoint(const string & p_BreakPoint);
+		bool HasCode() const;
 
 		SNI_Variable *CreateTemporary();
 		SNI_Variable *CreateVariable(const string & p_Name);
 		SNI_Variable *CreateParameter(size_t p_ParamNum);
 		SNI_Variable *CreateParameterByName(const string &p_ParamName);
 
-		void WriteWebFrame(ostream &p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth);
-		void WriteJS(ostream & p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth);
+		void WriteWebFrame(ostream &p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
+		void WriteJS(ostream & p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
+		void WriteStackJS(ostream & p_Stream, string &p_Delimeter, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions & p_DisplayOptions);
+		void WriteVariable(ostream & p_Stream, const SNI_Expression *p_Variable, const string &p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
 
 		void PromoteExternals(PGC::PGC_Transaction * p_Transaction);
 	private:
@@ -54,6 +62,9 @@ namespace SNI
 		long                           m_FrameNum;
 		SNI_ReplacementList            m_ReplacementList;
 		SNI_VariablePointerList        m_VariableList;
+
+		string						   m_DebugId;
+		string						   m_BreakPoint;
 	};
 }
 

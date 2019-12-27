@@ -47,6 +47,8 @@ namespace SNI
 		size_t GetThreadNum();
 		SNI_FrameList & GetFrameList();
 
+		void SetDebugId(const string & p_DebugId);
+
 		void DebugCommand(SN::InterruptPoint p_InterruptPoint, const string & p_Text);
 		void ScheduleCommand(SN::DebugAction p_DebugAction);
 		bool IsExiting();

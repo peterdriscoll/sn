@@ -142,7 +142,7 @@ namespace SNI
 
 	string SNI_Expression::DisplaySN0() const
 	{
-		SNI_DisplayOptions l_DisplayOptions;
+		SNI_DisplayOptions l_DisplayOptions(doTextOnly);
 		return DisplaySN(0, l_DisplayOptions);
 	}
 
@@ -467,7 +467,7 @@ namespace SNI
 	void SNI_Expression::PartialAssertActionWithHandler(OnErrorHandler * p_ErrorHandler)
 	{
 		SN::LogContext context("SNI_Expression::PartialAssertAction()");
-		SNI::SNI_DisplayOptions l_DisplayOptions;
+		SNI::SNI_DisplayOptions l_DisplayOptions(doTextOnly);
 		LOG(WriteLine(SN::DebugLevel, "Partial assert " + DisplayValueSN(0, l_DisplayOptions)));
 		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Partial assert " + DisplayValueSN(0, l_DisplayOptions));
 		SNI_Thread::GetThread()->UpdateIncrementId();
@@ -509,7 +509,7 @@ namespace SNI
 	void SNI_Expression::PartialEvaluateActionWithHandler(OnErrorHandler *p_ErrorHandler)
 	{
 		SN::LogContext context("SNI_Expression::PartialEvaluateAction()");
-		SNI::SNI_DisplayOptions l_DisplayOptions;
+		SNI::SNI_DisplayOptions l_DisplayOptions(doTextOnly);
 		LOG(WriteLine(SN::DebugLevel, "Partial evaluate " + DisplayValueSN(0, l_DisplayOptions)));
 		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Partial evaluate " + DisplayValueSN(0, l_DisplayOptions));
 		HandleEvaluateAction(context, PartialEvaluate(), "Partial evaluate", p_ErrorHandler);

@@ -89,7 +89,7 @@ namespace SN
 		{
 			if (m_Real)
 			{
-				SNI::SNI_DisplayOptions l_DisplayOptions;
+				SNI::SNI_DisplayOptions l_DisplayOptions(doTextOnly);
 				return m_Real->DisplayValueSN(0, l_DisplayOptions);
 			}
 			return "NULL";

@@ -126,6 +126,18 @@ h6 {
     border: 1px solid darkolivegreen;
 }
 
+.breakpointclear {
+    background-color: white;
+}
+
+.breakpointset {
+    background-color: #008000;
+}
+
+.breakpointlast {
+    background-color: red;
+}
+
 a img, :link img, :visited img {
     border: 0;
 }

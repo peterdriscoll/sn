@@ -94,7 +94,7 @@ namespace SNI
 		string s_expression;
 		if (p_Expression)
 		{
-			SNI::SNI_DisplayOptions l_DisplayOptions;
+			SNI::SNI_DisplayOptions l_DisplayOptions(doTextOnly);
 			s_expression = p_Expression->DisplaySN(0, l_DisplayOptions);
 		}
 		else

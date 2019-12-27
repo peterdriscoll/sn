@@ -156,18 +156,17 @@ namespace SNI
 		return text;
 	}
 
-	string DetailsFS(const string &p_Text, size_t p_Width)
+	string DetailsFS(const string &p_Text, const string &p_TextHTML, size_t p_Width)
 	{
-		size_t textWidth = p_Text.size();
 		string abbreviation;
-		string text = p_Text;
-		ReplaceAll(text, "\"", "\\\"");
+		string text = ReplaceAll(p_Text, "\"", "\\\"");
+		string textHTML = ReplaceAll(p_TextHTML, "\"", "\\\"");
+		size_t textWidth = text.size();
 		if (p_Width < textWidth)
 		{
-			abbreviation =p_Text.substr(0, p_Width - 3);
-			ReplaceAll(abbreviation, "\"", "\\\"");
+			abbreviation = p_Text.substr(0, p_Width - 3);
 		}
-		return "{\"abbreviation\" : \"" + abbreviation + "\",\"text\" : \"" + text + "\"}";
+		return "{\"abbreviation\" : \"" + abbreviation + "\",\"text\" : \"" + textHTML + "\"}";
 	}
 
 	string DisplayPmValueList(const SN::SN_ValueList &p_ParameterList)

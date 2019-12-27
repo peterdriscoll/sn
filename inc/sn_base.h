@@ -59,8 +59,26 @@ namespace SN
 		{
 			if (GetSNI_Base())
 			{
-				SNI::SNI_DisplayOptions l_DisplayOptions;
+				SNI::SNI_DisplayOptions l_DisplayOptions(doTextOnly);
 				return GetSNI_Base()->DisplaySN(0, l_DisplayOptions);
+			}
+			return "";
+		}
+
+		string DisplaySN(long p_Priority, SNI::SNI_DisplayOptions &p_DisplayOptions) const
+		{
+			if (GetSNI_Base())
+			{
+				return GetSNI_Base()->DisplaySN(p_Priority, p_DisplayOptions);
+			}
+			return "";
+		}
+
+		string DisplaySN(SNI::SNI_DisplayOptions &p_DisplayOptions) const
+		{
+			if (GetSNI_Base())
+			{
+				return GetSNI_Base()->DisplaySN(0, p_DisplayOptions);
 			}
 			return "";
 		}
@@ -69,7 +87,7 @@ namespace SN
 		{
 			if (GetSNI_Base())
 			{
-				SNI::SNI_DisplayOptions l_DisplayOptions;
+				SNI::SNI_DisplayOptions l_DisplayOptions(doTextOnly);
 				return GetSNI_Base()->DisplayValueSN(0, l_DisplayOptions);
 			}
 			return "NULL";
@@ -79,7 +97,7 @@ namespace SN
 		{
 			if (GetSNI_Base())
 			{
-				SNI::SNI_DisplayOptions l_DisplayOptions;
+				SNI::SNI_DisplayOptions l_DisplayOptions(doTextOnly);
 				SN::LogContext context(GetSNI_Base()->DisplaySN(0, l_DisplayOptions));
 			}
 			return "";

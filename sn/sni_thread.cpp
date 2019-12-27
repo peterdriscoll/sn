@@ -750,6 +750,7 @@ namespace SNI
 
 	void SNI_Thread::WriteWebStack(ostream &p_Stream, size_t p_Depth, size_t p_DebugFieldWidth)
 	{
+		SNI_DisplayOptions p_DisplayOptions(doTextOnly);
 		p_Stream << "<table class='stack'>\n";
 		p_Stream << "<caption>Thread " << m_ThreadNum << "</caption>";
 		size_t base = 0;
@@ -761,7 +762,7 @@ namespace SNI
 		for (size_t j = m_FrameList.size(); j > base; j--)
 		{
 			p_Stream << "<tr><td>\n";
-			m_FrameList[j - 1]->WriteWebFrame(p_Stream, j, p_DebugFieldWidth);
+			m_FrameList[j - 1]->WriteWebFrame(p_Stream, j, p_DebugFieldWidth, p_DisplayOptions);
 			p_Stream << "</td></tr>\n";
 		}
 		Unlock();
@@ -817,22 +818,22 @@ namespace SNI
 
 	void SNI_Thread::WriteStackJS(ostream &p_Stream, size_t p_Depth, size_t p_DebugFieldWidth)
 	{
+		SNI::SNI_DisplayOptions p_DisplayOptions(doTextOnly);
+		Lock();
 		p_Stream << "{\"records\":[\n";
 		size_t base = 0;
+		string delimeter;
 		if (0 < p_Depth && p_Depth < m_FrameList.size())
 		{
 			base = m_FrameList.size() - p_Depth;
 		}
-		Lock();
-		string delimeter;
 		for (size_t j = m_FrameList.size(); j > base; j--)
 		{
 			p_Stream << delimeter;
-			m_FrameList[j - 1]->WriteJS(p_Stream, j, p_DebugFieldWidth);
+			m_FrameList[j - 1]->WriteJS(p_Stream, j, p_DebugFieldWidth, p_DisplayOptions);
 			delimeter = ",";
 		}
 		Unlock();
-		p_Stream << "],\n";
 
 		p_Stream << "\"threadnum\" : \"" << m_ThreadNum << "\",\n";
 

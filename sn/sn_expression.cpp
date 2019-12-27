@@ -236,6 +236,16 @@ namespace SN
 		return dynamic_cast<SNI::SNI_Lambda *>(m_Expression);
 	}
 
+	SNI::SNI_Variable * SN_Expression::GetSNI_Variable() const
+	{
+		return dynamic_cast<SNI::SNI_Variable *>(m_Expression);
+	}
+
+	SNI::SNI_FunctionDef * SN_Expression::GetSNI_FunctionDef() const
+	{
+		return dynamic_cast<SNI::SNI_FunctionDef *>(m_Expression);
+	}
+
 	SN_Expression SN_Expression::GetVariableValue(bool p_IfComplete)
 	{
 		SNI_Expression *exp = GetSNI_Expression();
@@ -252,7 +262,7 @@ namespace SN
 		{
 			return GetSNI_Expression()->ForEach(p_Action);
 		}
-		return NULL;
+		return skynet::Fail;
 	}
 
 	SN_Cartesian SN_Expression::CartProd(long p_Index, SNI_FunctionDef *p_FunctionDef) const

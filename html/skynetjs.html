@@ -11,24 +11,26 @@
 </head>
 <body>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
     <div ng-app="skynetApp" ng-controller='commandCtrl'>
-        <h1>Skynet Dashboard - {{taskdescription}} {{statusdescription}} {{pollcount}}</h1>
+        <h1>
+            Skynet Dashboard - {{taskdescription}} {{statusdescription}} {{callstack.length}} </h1>
         <table class='command'>
             <tr>
                 <td>
-                    <form ng-submit='submit("run")'>
+                    <form ng-submit='submit("runjs")'>
                         Run<br>
                         <input type='submit' value='Run'>
                     </form>
                 </td>
                 <td>
-                    <form ng-submit='submit("runtoend")'>
+                    <form ng-submit='submit("runtoendjs")'>
                         Run to end<br>
                         <input type='submit' value='End'>
                     </form>
                 </td>
                 <td>
-                    <form ng-submit='submit("debug")'>
+                    <form ng-submit='submit("debugjs")'>
                         Run to breakpoint<br>
                         <input type='submit' value='Debug'>
                     </form>
@@ -40,7 +42,7 @@
                     </form>
                 </td>
                 <td>
-                    <form ng-submit='submit("stepover")'>
+                    <form ng-submit='submit("stepoverjs")'>
                         Step over call<br>
                         <input type='submit' value='Step over'>
                     </form>
@@ -52,13 +54,13 @@
                     </form>
                 </td>
                 <td>
-                    <form ng-submit='submit("stepout")'>
+                    <form ng-submit='submit("stepoutjs")'>
                         Step out of call<br>
                         <input type='submit' value='Step out'>
                     </form>
                 </td>
                 <td>
-                    <form ng-submit='submit("stepparam")'>
+                    <form ng-submit='submit("stepparamjs")'>
                         Step into parameters<br>
                         <input type='submit' value='Step parameter'>
                     </form>
@@ -72,6 +74,7 @@
                             </summary>Step count : <br>
                             <input type='text' ng-model='stepcount' name='stepcount'>
                             <br>
+                        </details>
                     </form>
                 </td>
                 <td>
@@ -99,12 +102,28 @@
                 <tr>
                     <td ng-repeat="sc in stepcounts">
                         <form ng-submit='setthread(sc.threadnum)'>
-                            <input type='submit' name='threadnum' value='{{sc.threadnum}} : {{sc.stepcount}}' />
-                        </form>
-                    </td>
-                </tr>
+                            <input type='submit' name='threadnum' value='{{sc.threadnum
+            }} : {{sc.stepcount}}' />
+            </form>
+            </td>
+            </tr>
             </table>
-        </div>
+</div>
+        <table class='frame'>
+            <caption>Thread {{threadnum}}</caption>
+            <tr ng-repeat="f in callstack">
+                <td>
+                    {{f.name}}
+                </td>
+                <td>
+                    <div>
+                        <div ng-repeat="d in f.value">
+                            <div ng-bind-html="trustAsHtml(d.text)" init-bind><br /></div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
         <table class='group'>
             <tr>
                 <td>
@@ -115,7 +134,7 @@
                                 <td>
                                     <div style='overflow-x:auto;white-space:nowrap;width:900px'>
                                         <table class='frame'>
-                                            <caption>Frame {{ f.framepos }} : {{ f.framenum }} {{ f.function }}</caption>
+                                            <caption>Frame {{ f.framepos }} : {{ f.framenum }} {{ f.function }} {{f.breakpoint}}</caption>
                                             <tr>
                                                 <th ng-repeat="v in f.variables">{{ v.name }}</th>
                                             </tr>
@@ -127,9 +146,9 @@
                                                     <div class='frame'>
                                                         <div ng-repeat="d in v.value">
                                                             <details ng-if="d.abbreviation">
-                                                                <summary>{{d.abbreviation}}...</summary><p>{{d.text}}</p>
+                                                                <summary>{{d.abbreviation}}...</summary><p ng-bind-html="trustAsHtml(d.text)" init-bind></p>
                                                             </details>
-                                                            <div ng-if="!d.abbreviation">{{d.text}}<br /></div>
+                                                            <div ng-if="!d.abbreviation" ng-bind-html="trustAsHtml(d.text)" init-bind><br /></div>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -163,8 +182,10 @@
     </div>
     <script>
         var home = 'http://127.0.0.1/';
-        var app = angular.module('skynetApp', []);
-        app.controller('commandCtrl', function ($scope, $http, $timeout) {
+        var app = angular.module('skynetApp', ['ngSanitize']);
+
+        app.controller('commandCtrl', function ($scope, $sce, $http, $timeout) {
+            $scope.trustAsHtml = $sce.trustAsHtml;
             $scope.threadnum = 0;
             $scope.maxstackframes = -1;
             $scope.pollcount = 0;
@@ -174,7 +195,14 @@
                     $scope.scheduled = $scope.scheduled + 1;
                     $http.get(home + 'stackjs?threadnum=' + $scope.threadnum + '&maxstackframes=' + $scope.maxstackframes)
                         .then(function (response) {
-                            $scope.frames = response.data.records; $scope.threadnum = response.data.threadnum;
+                            $scope.frames = response.data.records;
+                            $scope.callstack = [];
+                            for (var i = 0; i < $scope.frames.length; i++) {
+                                if ($scope.frames[i].hascode) {
+                                    $scope.callstack.push($scope.frames[i]);
+                                }
+                            }
+                            $scope.threadnum = response.data.threadnum;
                             $scope.taskdescription = response.data.taskdescription;
                             $scope.statusdescription = response.data.statusdescription;
                             $scope.running = response.data.running;
@@ -194,8 +222,23 @@
                     .then(function (response) { $scope.stepcounts = response.data.records; });
             };
             $scope.submit = function (action) {
-                $http.get(home + action + '?threadnum=' + $scope.threadnum + '&stackdepth=' + $scope.stackdepth)
+                $http.get(home + action + '?threadnum=' + $scope.threadnum + '&stackdepth=' + $scope.stackdepth + '&breakpoints=' + Array.from($scope.breakpointCol).join(','))
                     .then(function (response) { $scope.initFirst(); });
+            };
+            $scope.breakpointCol = new Set();
+            $scope.setbreakpoint = function (breakpoint) {
+                if ($scope.breakpointCol.has(breakpoint)) {
+                    $scope.breakpointCol.delete(breakpoint);
+                }
+                else {
+                    $scope.breakpointCol.add(breakpoint);
+                }
+            };
+            $scope.breakpointclass = function (id, b) {
+                if (id == b) {
+                    return 'breakpointlast';
+                }
+                return $scope.breakpointCol.has(id) ? 'breakpointset' : 'breakpointclear';
             };
             $scope.setthread = function (newthreadnum) {
                 if (threadnum != newthreadnum) {
@@ -208,6 +251,27 @@
                     .then(function (response) { $scope.initFirst(); });
             };
             $scope.initFirst();
+        })
+            .directive('initBind', function ($compile) {
+                return {
+                    restrict: 'A',
+                    link: function (scope, element, attr) {
+                        attr.$observe('ngBindHtml', function () {
+                            if (attr.ngBindHtml) {
+                                $compile(element[0].children)(scope);
+                            }
+                        })
+                    }
+                };
+            });
+        app.filter('code', function () {
+            return function (input) {
+                var out = [];
+                for (var i = 0; i < input.length; i++) {
+                    out.push(input[i]);
+                }
+                return out;
+            }
         });
     </script>
 </body>

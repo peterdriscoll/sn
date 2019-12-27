@@ -219,6 +219,8 @@ namespace SN
 		SNI::SNI_Error * GetSNI_Error() const;
 		SNI::SNI_ValueSet * GetSNI_ValueSet() const;
 		SNI::SNI_Lambda * GetSNI_Lambda() const;
+		SNI::SNI_Variable * GetSNI_Variable() const;
+		SNI::SNI_FunctionDef * GetSNI_FunctionDef() const;
 		SN_Expression GetVariableValue(bool p_IfComplete = true);
 		SN::SN_Error ForEach(std::function<SN::SN_Error(const SN_Expression &p_Param, SNI::SNI_World *p_World)> p_Action);
 		SN_Cartesian CartProd(long p_Index, SNI::SNI_FunctionDef *p_FunctionDef = NULL) const;
