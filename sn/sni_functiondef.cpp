@@ -99,21 +99,22 @@ namespace SNI
 		return CardinalityOfUnify(depth, p_ParamList, calcPos, totalCalc);
 	}
 
-	string SNI_FunctionDef::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList) const
+	string SNI_FunctionDef::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList, const SNI_Expression *p_DebugSource) const
 	{
 		long depth = GetNumParameters()-1;
 		string text;
 		string delimeter = "";
+		long param = 0;
 		for (SN::SN_Expression &p : *p_ParameterList)
 		{
 			string del = delimeter;
 			if (GetOperator().empty())
 			{
-				delimeter = " ";
+				delimeter = SetBreakPoint(";", p_DisplayOptions, p_DebugSource, param++) + " ";
 			}
 			else
 			{
-				delimeter = GetOperator();
+				delimeter = SetBreakPoint(GetOperator(), p_DisplayOptions, p_DebugSource, param++);
 			}
 			text = p.GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + del + text;
 		}

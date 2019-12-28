@@ -245,6 +245,11 @@ namespace SNI
 		return "Variable";
 	}
 
+	string SNI_Variable::GetReferredName() const
+	{
+		return GetName();
+	}
+	
 	string SNI_Variable::DisplayCpp() const
 	{
 		return "sn_Variable(" + FrameName() + ")";
@@ -252,7 +257,7 @@ namespace SNI
 
 	string SNI_Variable::DisplaySN(long p_Priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
-		return Bracket(p_Priority, FrameName() /* + value */);
+		return FrameName();
 	}
 
 	string SNI_Variable::DisplayValueSN(long priority, SNI_DisplayOptions & p_DisplayOptions) const
@@ -265,7 +270,7 @@ namespace SNI
 	}
 
 
-	string SNI_Variable::DisplayCall(long p_Priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList) const
+	string SNI_Variable::DisplayCall(long p_Priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList, const SNI_Expression *p_DebugSource) const
 	{
 		string text;
 		string delimeter;
@@ -275,7 +280,7 @@ namespace SNI
 			delimeter = " ";
 			text = p.GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + del + text;
 		}
-		return DisplaySN(p_Priority, p_DisplayOptions) + " " + text;
+		return Bracket(p_Priority, SetBreakPoint(FrameName(), p_DisplayOptions, p_DebugSource, 0) + " " + text, p_DisplayOptions, p_DebugSource);
 	}
 
 	long SNI_Variable::GetPriority() const

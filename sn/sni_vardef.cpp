@@ -8,6 +8,16 @@ namespace SNI
 	{
 	}
 
+	SNI_VarDef::SNI_VarDef(const SNI_VarDef & p_VarDef)
+		: SNI_Expression(p_VarDef)
+	{
+	}
+
+	SNI_VarDef::SNI_VarDef(unsigned long p_Id)
+		: SNI_Expression(p_Id)
+	{
+	}
+
 	SNI_VarDef::~SNI_VarDef()
 	{
 	}

@@ -27,10 +27,11 @@ namespace SNI
 		virtual ~SNI_Variable();
 
 		virtual string GetTypeName() const;
+		virtual string GetReferredName() const;
 		virtual string DisplayCpp() const;
 		virtual string DisplaySN(long p_Priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual string DisplayValueSN(long priority, SNI_DisplayOptions & p_DisplayOptions) const;
-		virtual string DisplayCall(long p_Priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList) const;
+		virtual string DisplayCall(long p_Priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList, const SNI_Expression *p_DebugSource) const;
 		virtual long GetPriority() const;
 
 		virtual bool GetBool() const;

@@ -60,20 +60,19 @@ namespace SNI
 		return 4;
 	}
 
-	string SNI_If::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList) const
+	string SNI_If::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList, const SNI_Expression *p_DebugSource) const
 	{
 		if ((*p_ParameterList).size() != 3)
 		{
-			return SNI_FunctionDef::DisplayCall(priority, p_DisplayOptions, p_ParameterList);
-
+			return SNI_FunctionDef::DisplayCall(priority, p_DisplayOptions, p_ParameterList, p_DebugSource);
 		}
 
 		string elseClause;
 		if ((*p_ParameterList)[0].IsError() || !(*p_ParameterList)[0].IsNull())
 		{
-			elseClause = " else " + (*p_ParameterList)[0].DisplaySN();
+			elseClause = " " + SetBreakPoint("else", p_DisplayOptions, p_DebugSource, SN::NegativeId) + " " + (*p_ParameterList)[0].DisplaySN(GetPriority(), p_DisplayOptions);
 		}
-		return "if " + (*p_ParameterList)[2].DisplaySN() + " then " + (*p_ParameterList)[1].DisplaySN() + elseClause;
+		return SetBreakPoint("if", p_DisplayOptions, p_DebugSource, SN::CallId) + " " + (*p_ParameterList)[2].DisplaySN(GetPriority(), p_DisplayOptions) + SetBreakPoint("then", p_DisplayOptions, p_DebugSource, SN::PositiveId)+ " " + (*p_ParameterList)[1].DisplaySN(GetPriority(), p_DisplayOptions) + elseClause + SetBreakPoint("end", p_DisplayOptions, p_DebugSource, SN::ReturnId);
 	}
 
 	/// @endcond
@@ -94,6 +93,8 @@ namespace SNI
 	/// @retval A value, expression (for meta code) or null.
 	SN::SN_Expression SNI_If::CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel /* = 0 */) const
 	{
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after all values", SN::CallId);
+
 		SN::SN_Value condition = p_ParamList[0].Evaluate(p_MetaLevel);
 		if (condition.IsNull())
 		{
@@ -109,6 +110,9 @@ namespace SNI
 
 		SN::SN_Value result = condition.DoIf(p_ParamList[1], p_ParamList[2]);
 		result.GetSNI_Expression()->Validate();
+
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after all values", SN::ReturnId);
+
 		return result;
 	}
 
@@ -196,6 +200,8 @@ namespace SNI
 		condition.AddTaggedValue(skynet::False, condition_worldSet->CreateWorld());
 		condition_worldSet->Complete();
 
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after all values", SN::CallId);
+
 		SN::SN_Error e1 = p_ParameterList[1].AssertValue(condition);
 		if (e1.IsError())
 		{
@@ -203,22 +209,29 @@ namespace SNI
 		}
 
 		SN::SN_Expression sCondition = condition.SimplifyValue();
+
+		condition_param->SetValue(sCondition);
+
 		SNI_World *contextWorld = SNI_World::ContextWorld();
 		SN::SN_Expression *parameterList = p_ParameterList;
 		bool success = false;
+		string typeName = GetTypeName();
 		sCondition.ForEach(
-			[contextWorld, parameterList, &success](const SN::SN_Expression &p_Param, SNI::SNI_World *p_World) -> SN::SN_Error
+			[contextWorld, parameterList, &success, &typeName](const SN::SN_Expression &p_Param, SNI::SNI_World *p_World) -> SN::SN_Error
 			{
 				if (p_World)
 				{
 					SNI_World::PushContextWorld(p_World);
 				}
+				SNI_Thread::GetThread()->SetDebugId("");
 				SN::SN_Error e;
 				if (p_Param.GetBool())
 				{
 					SN::SN_Expression *paramList = new SN::SN_Expression[2];
 					paramList[0] = parameterList[0];
 					paramList[1] = parameterList[2];
+
+					SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, typeName + ".Unify after all values", SN::PositiveId);
 					e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList);
 				}
 				else
@@ -226,6 +239,8 @@ namespace SNI
 					SN::SN_Expression *paramList = new SN::SN_Expression[2];
 					paramList[0] = parameterList[0];
 					paramList[1] = parameterList[3];
+
+					SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, typeName + ".Unify after all values", SN::NegativeId);
 					e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList);
 				}
 				if (p_World)
@@ -246,6 +261,8 @@ namespace SNI
 				return true;
 			}
 		);
+
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, typeName + ".Unify after all values", SN::ReturnId);
 		SNI_Frame::Pop();
 		if (!success)
 		{
@@ -257,6 +274,7 @@ namespace SNI
 		{
 			return e;
 		}
+
 		return skynet::OK;
 	}
 

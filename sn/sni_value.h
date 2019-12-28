@@ -15,6 +15,7 @@ namespace SNI
 		PGC_CLASS(SNI_Value);
 	public:
 		SNI_Value();
+		SNI_Value(unsigned long p_Id);
 		SNI_Value(const SNI_Value &p_other);
 		virtual ~SNI_Value();
 

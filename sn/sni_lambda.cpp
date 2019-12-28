@@ -19,10 +19,11 @@ namespace SNI
 	{
 	}
 
-	SNI_Lambda::SNI_Lambda(SNI_Expression *p_FormalParameter, SNI_Expression *p_Expression, SNI_Expression *p_ConstraintValue)
+	SNI_Lambda::SNI_Lambda(SNI_Expression *p_FormalParameter, SNI_Expression *p_Expression, SNI_Expression *p_ConstraintValue, unsigned long p_Id)
 		: m_FormalParameter(p_FormalParameter)
 		, m_Expression(p_Expression)
 		, m_ConstraintValue(p_ConstraintValue)
+		, SNI_Value(p_Id)
 	{
 		REQUESTPROMOTION(m_FormalParameter);
 		REQUESTPROMOTION(m_Expression);
@@ -45,6 +46,15 @@ namespace SNI
 		return "Lambda";
 	}
 
+	string SNI_Lambda::GetReferredName() const
+	{
+		if (m_FormalParameter)
+		{
+			return GetTypeName() + "_" + m_FormalParameter->GetReferredName();
+		}
+		return GetTypeName();
+	}
+
 	bool SNI_Lambda::IsLambdaValue() const
 	{
 		return true;
@@ -60,9 +70,9 @@ namespace SNI
 		string sValue;
 		if ((m_FormalParameter->IsKnownValue() || m_FormalParameter->IsKnownTypeValue()) && !m_FormalParameter->IsLambdaValue())
 		{
-			sValue = ":" + m_FormalParameter->DisplayValueSN(GetPriority(), p_DisplayOptions);
+			sValue = SetBreakPoint(":", p_DisplayOptions, this, SN::ValueId) + m_FormalParameter->DisplayValueSN(GetPriority(), p_DisplayOptions);
 		}
-		return "@" + m_FormalParameter->DisplaySN(GetPriority(), p_DisplayOptions) + sValue + "." + m_Expression->DisplaySN(GetPriority(), p_DisplayOptions);
+		return SetBreakPoint("@", p_DisplayOptions, this, SN::CallId) + m_FormalParameter->DisplaySN(GetPriority(), p_DisplayOptions) + sValue + SetBreakPoint(".", p_DisplayOptions, this, SN::ParameterOneId) + m_Expression->DisplaySN(GetPriority(), p_DisplayOptions) + SetBreakPoint(";", p_DisplayOptions, this, SN::ReturnId);
 	}
 
 	long SNI_Lambda::GetPriority() const
@@ -98,7 +108,7 @@ namespace SNI
 			{
 				p_Changed = true;
 				l_NewVariable->AssertIsA(m_ConstraintValue);
-				return dynamic_cast<SNI_Expression *>(new SNI_Lambda(dynamic_cast<SNI_Expression *>(l_NewVariable), l_expression, m_ConstraintValue));
+				return dynamic_cast<SNI_Expression *>(new SNI_Lambda(dynamic_cast<SNI_Expression *>(l_NewVariable), l_expression, m_ConstraintValue, m_Id));
 			}
 		}
 		else
@@ -108,7 +118,7 @@ namespace SNI
 			{
 				p_Changed = true;
 				m_FormalParameter->AssertIsA(m_ConstraintValue);
-				return dynamic_cast<SNI_Expression *>(new SNI_Lambda(m_FormalParameter, l_expression, m_ConstraintValue));
+				return dynamic_cast<SNI_Expression *>(new SNI_Lambda(m_FormalParameter, l_expression, m_ConstraintValue, m_Id));
 			}
 		}
 		return this;
@@ -227,7 +237,12 @@ namespace SNI
 		{
 			return m_Expression->Unify(p_ParameterList);
 		}
-		return m_Expression->AssertValue(p_ParameterList->back());
+		else
+		{
+			return m_Expression->AssertValue(p_ParameterList->back());
+		}
+		//SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Lambda.Unify", SN::ReturnId);
+		return e;
 	}
 
 	SN::SN_Error SNI_Lambda::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)

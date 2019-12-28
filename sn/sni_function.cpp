@@ -14,7 +14,6 @@ namespace SNI
 {
 	SNI_Function::SNI_Function()
 	{
-
 	}
 
 	SNI_Function::SNI_Function(SNI_Expression *p_Function)
@@ -36,11 +35,23 @@ namespace SNI
 		REQUESTPROMOTION(m_Parameter);
 	}
 
-	SNI_Function::SNI_Function(SNI_Expression *p_Function, SNI_Expression *p_Parameter, SNI_Expression *p_Condition)
+	SNI_Function::SNI_Function(SNI_Expression *p_Function, SNI_Expression *p_Parameter, SNI_Expression *p_Condition, unsigned long p_Id)
 		: m_Function(p_Function)
 		, m_Parameter(p_Parameter)
 		, m_Condition(p_Condition)
+		, SNI_VarDef(p_Id)
 	{
+		REQUESTPROMOTION(m_Function);
+		REQUESTPROMOTION(m_Parameter);
+		REQUESTPROMOTION(m_Condition);
+	}
+
+	SNI_Function::SNI_Function(const SNI_Function &p_Function)
+		: SNI_VarDef(p_Function)
+	{
+		m_Function = p_Function.m_Function;
+		m_Parameter = p_Function.m_Parameter;
+		m_Condition = p_Function.m_Condition;
 		REQUESTPROMOTION(m_Function);
 		REQUESTPROMOTION(m_Parameter);
 		REQUESTPROMOTION(m_Condition);
@@ -61,6 +72,15 @@ namespace SNI
 	string SNI_Function::GetTypeName() const
 	{
 		return "Function";
+	}
+
+	string SNI_Function::GetReferredName() const
+	{
+		if (m_Function)
+		{
+			return m_Function->GetReferredName();
+		}
+		return GetTypeName();
 	}
 
 	string SNI_Function::DisplayCpp() const
@@ -84,7 +104,7 @@ namespace SNI
 			function = nextFunction;
 			nextFunction = function->LoadParameters(l_ParameterList);
 		}
-		return Bracket(priority, function->DisplayCall(GetPriority(), p_DisplayOptions, l_ParameterList));
+		return function->DisplayCall(GetPriority(), p_DisplayOptions, l_ParameterList, this);
 	}
 
 	long SNI_Function::GetPriority() const
@@ -110,7 +130,7 @@ namespace SNI
 		if (changed)
 		{
 			p_Changed = true;
-			return dynamic_cast<SNI_Expression *>(new SNI_Function(l_Function, l_Parameter));
+			return dynamic_cast<SNI_Expression *>(new SNI_Function(l_Function, l_Parameter, m_Condition, GetId()));
 		}
 		return this;
 	}
@@ -134,6 +154,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_Function::Evaluate(long p_MetaLevel /* = 0 */) const
 	{
+		SNI_Thread::GetThread()->SetDebugId(GetDebugId());
 		SN::SN_ExpressionList * l_ParameterList = new SN::SN_ExpressionList();
 		l_ParameterList->push_back(m_Parameter);
 		return m_Function->Call(l_ParameterList, p_MetaLevel);
@@ -178,6 +199,7 @@ namespace SNI
 			SNI_FunctionDef *functionDef = dynamic_cast<SNI_FunctionDef *>(function);
 			if (functionDef)
 			{
+				SNI_Thread::GetThread()->SetDebugId(GetDebugId());
 				SN::SN_Expression *param_List = functionDef->LoadParametersUnify(l_ParameterList);
 				function = functionDef->UnifyArray(param_List).GetSNI_Expression();
 			}

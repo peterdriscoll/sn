@@ -237,6 +237,15 @@ namespace SNI
 		return world;
 	}
 
+	SNI_World * SNI_WorldSet::CreateWorldForValue(SN::SN_Expression& p_Value)
+	{
+		SNI_World * world = new SNI_World(this);
+		world->Activate();
+		world->AttachValue(p_Value);
+		m_WorldList.push_back(world);
+		return world;
+	}
+
 	SNI_WorldSet * SNI_WorldSet::Clone()
 	{
 		return new SNI_WorldSet(m_Expression);

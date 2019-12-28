@@ -18,6 +18,11 @@ namespace SNI
 	{
 	}
 
+	SNI_Value::SNI_Value(unsigned long p_Id)
+		: SNI_Expression(p_Id)
+	{
+	}
+
 	SNI_Value::SNI_Value(const SNI_Value &)
 	{
 	}

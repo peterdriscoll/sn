@@ -228,6 +228,8 @@ namespace SNI
 		}
 		Validate();
 		LOG(WriteLine(SN::DebugLevel, result.DisplaySN()));
+		SNI_Thread::GetThread()->SetDebugId(GetDebugId());
+		SNI_Thread::GetThread()->DebugCommand(SN::ClonePoint, GetTypeName() + ".Clone", SN::CloneId);
 		return dynamic_cast<SNI_Expression *>(result.GetSNI_ValueSet());
 	}
 
@@ -253,7 +255,7 @@ namespace SNI
 					}
 					else
 					{
-						tv.SetWorld(worldSet->CreateWorld());
+						tv.SetWorld(worldSet->CreateWorldForValue(tv.GetValue()));
 					}
 				}
 			}
@@ -536,7 +538,7 @@ namespace SNI
 			}
 			else
 			{
-				world = worldSet->CreateWorld();
+				world = worldSet->CreateWorldForValue(tv.GetValue());
 			}
 			if (!world->IsEmpty())
 			{
@@ -596,7 +598,7 @@ namespace SNI
 				SN::SN_Value l_Value = tv.GetValue().GetVariableValue();
 				if (!world && worldSet)
 				{
-					world = worldSet->CreateWorld();
+					world = worldSet->CreateWorldForValue(l_Value);
 					tv.SetWorld(world);
 				}
 				p_Action(l_Value, world);
@@ -743,6 +745,10 @@ namespace SNI
 
 	void SNI_ValueSet::AddTaggedValue(const SN::SN_Expression &p_Value, SNI_World *p_World)
 	{
+		if (p_World)
+		{
+			p_World->AttachValue(p_Value);
+		}
 		m_ValueList.push_back(SNI_TaggedValue(p_Value, p_World));
 	}
 

@@ -14,10 +14,11 @@ namespace SNI
 		PGC_CLASS(SNI_Lambda);
 	public:
 		SNI_Lambda();
-		SNI_Lambda(SNI_Expression *p_FormalParameter, SNI_Expression *p_Expresion, SNI_Expression *p_ConstraintValue);
+		SNI_Lambda(SNI_Expression *p_FormalParameter, SNI_Expression *p_Expresion, SNI_Expression *p_ConstraintValue, unsigned long p_Id);
 		virtual ~SNI_Lambda();
 
 		virtual string GetTypeName() const;
+		virtual string GetReferredName() const;
 		virtual bool IsLambdaValue() const;
 		virtual string DisplayCpp() const;
 		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;

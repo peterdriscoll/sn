@@ -64,6 +64,7 @@ namespace SNI
 
 	public:
 		SNI_Expression();
+		SNI_Expression(unsigned long p_Id);
 		SNI_Expression(const SNI_Expression &p_Expression);
 
 		virtual ~SNI_Expression();
@@ -95,9 +96,9 @@ namespace SNI
 		//---------------------------------------------------------------
 		virtual SNI_Expression * LoadParameters(SN::SN_ExpressionList * p_ParameterList) const;
 		virtual SNI_Expression * LoadFormalParameters(SN::SN_ExpressionList & p_FormalParameterList);
-		virtual string DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList) const;
+		virtual string DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList, const SNI_Expression *p_DebugSource) const;
 		virtual SNI_Expression * Clone(SNI_Frame *p_Frame, bool &p_Changed);
-		virtual SNI_Expression * Clone(const SNI_Variable *p_Variable, SNI_Expression *p_Result);
+		virtual SNI_Expression * Clone(const SNI_Expression *p_Function, SNI_Expression *p_Result);
 		virtual bool GetBool() const;
 		virtual string GetString() const;
 		virtual size_t Count() const;
@@ -247,11 +248,18 @@ namespace SNI
 		static SN::SN_Expression AddLambdasPartial(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
 		static SN::SN_Expression AddLambdas(SN::SN_ExpressionList * p_ParameterList);
 
-		string Bracket(long p_Priority, const string &p_Expression) const;
+		string Bracket(long p_Priority, const string &p_Expression, SNI_DisplayOptions & p_DisplayOptions, const SNI_Expression *p_DebugSource) const;
 
 	private:
 		void HandleAssertAction(SN::LogContext & p_Context, SN::SN_Error p_Result, string p_Text, OnErrorHandler * p_ErrorHandler);
 		void HandleEvaluateAction(SN::LogContext &p_Context, SN::SN_Expression p_Result, string p_Text, OnErrorHandler *p_ErrorHandler);
+
+	private:
+		static map<string, unsigned long> m_IdMap;
+
+	private:
+		unsigned long m_Id;
+
 	};
 }
 

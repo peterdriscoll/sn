@@ -47,8 +47,7 @@ namespace SNI
 		long entries = 0;
 		for (auto it = m_Buffer.rbegin(); it != m_Buffer.rend() && (p_MaxLogEntries <= 0 || entries < p_MaxLogEntries); it++, entries++)
 		{
-			string quotedString = *it;
-			ReplaceAll(quotedString, "\"", "\\\"");
+			string quotedString = ReplaceAll(*it, "\"", "\\\"");
 			p_Stream << delimeter << "{\"text\" : \"" << quotedString << "\"}\n";
 			delimeter = ",";
 		}

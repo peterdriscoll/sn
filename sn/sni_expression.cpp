@@ -22,9 +22,16 @@
 
 namespace SNI
 {
-	SNI_Expression::SNI_Expression()
-	{
+	map<string, unsigned long> SNI_Expression::m_IdMap;
 
+	SNI_Expression::SNI_Expression()
+		: m_Id(0)
+	{
+	}
+
+	SNI_Expression::SNI_Expression(unsigned long p_Id)
+		: m_Id(p_Id)
+	{
 	}
 
 	SNI_Expression::SNI_Expression(const SNI_Expression &p_Expression)
@@ -68,7 +75,8 @@ namespace SNI
 
 	unsigned long SNI_Expression::GetId() const
 	{
-		return 0;
+		const_cast<SNI_Expression *>(this)->CreateId();
+		return m_Id;
 	}
 
 	string SNI_Expression::GetDebugId() const
@@ -78,6 +86,19 @@ namespace SNI
 
 	void SNI_Expression::CreateId()
 	{
+		if (!m_Id)
+		{
+			string typeNameString = GetReferredName();
+			if (m_IdMap.find(typeNameString) == m_IdMap.end())
+			{
+				m_Id = 1;
+				m_IdMap[typeNameString] = m_Id;
+			}
+			else
+			{
+				m_Id = m_IdMap[typeNameString]++;
+			}
+		}
 	}
 
 	string SNI_Expression::GetBreakPoint(long p_Index) const
@@ -126,7 +147,7 @@ namespace SNI
 		return this;
 	}
 
-	string SNI_Expression::DisplayCall(long priority, SNI_DisplayOptions &p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList) const
+	string SNI_Expression::DisplayCall(long priority, SNI_DisplayOptions &p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList, const SNI_Expression *p_DebugSource) const
 	{
 		string text;
 		string delimeter;
@@ -135,7 +156,7 @@ namespace SNI
 			text += delimeter + p.GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions);
 			delimeter = ",";
 		}
-		return Bracket(priority, DisplaySN(GetPriority(), p_DisplayOptions)) + "(" + text + ")";
+		return Bracket(priority, DisplaySN(GetPriority(), p_DisplayOptions), p_DisplayOptions, p_DebugSource) + "(" + text + ")";
 	}
 
 	SNI_Expression * SNI_Expression::Clone(SNI_Frame *p_Frame, bool &/*p_Changed*/)
@@ -143,10 +164,10 @@ namespace SNI
 		return this;
 	}
 
-	SNI_Expression * SNI_Expression::Clone(const SNI_Variable *p_Variable, SNI_Expression *p_Result)
+	SNI_Expression * SNI_Expression::Clone(const SNI_Expression *p_Function, SNI_Expression *p_Result)
 	{
 		bool changed = false;
-		SNI_Expression * result = Clone(SNI_Frame::Push(p_Variable, p_Result), changed);
+		SNI_Expression * result = Clone(SNI_Frame::Push(p_Function, p_Result), changed);
 		return result;
 	}
 
@@ -172,11 +193,16 @@ namespace SNI
 		return (*p_ParameterList)[0];
 	}
 
-	string SNI_Expression::Bracket(long p_Priority, const string &p_Expression) const
+	string SNI_Expression::Bracket(long p_Priority, const string &p_Expression, SNI_DisplayOptions & p_DisplayOptions, const SNI_Expression *p_DebugSource) const
 	{
 		string bracketLeft;
 		string bracketRight;
-		if (p_Priority > GetPriority())
+		if (p_DisplayOptions.GetDebugHTML())
+		{
+			bracketLeft = SetBreakPoint("(", p_DisplayOptions, p_DebugSource, SN::CallId);
+			bracketRight = SetBreakPoint(")", p_DisplayOptions, p_DebugSource, SN::ReturnId);
+		}
+		else if (p_Priority > GetPriority())
 		{
 			bracketLeft = "(";
 			bracketRight = ")";
@@ -495,7 +521,7 @@ namespace SNI
 	void SNI_Expression::AssertActionWithHandler(OnErrorHandler * p_ErrorHandler)
 	{
 		SN::LogContext context("SNI_Expression::AssertAction()");
-		SN::SN_Expression clone = Clone(NULL, NULL);
+		SN::SN_Expression clone = Clone(this, NULL);
 		LOG(WriteLine(SN::DebugLevel, "Assert " + clone.DisplayValueSN()));
 		SN::SN_Error result = clone.Assert();
 		SNI_Frame::Pop();

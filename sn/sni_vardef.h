@@ -14,6 +14,8 @@ namespace SNI
 		PGC_CLASS(SNI_VarDef);
 	public:
 		SNI_VarDef();
+		SNI_VarDef(const SNI_VarDef &p_VarDef);
+		SNI_VarDef(unsigned long p_Id);
 		virtual ~SNI_VarDef();
 
 		virtual string GetTypeName() const;

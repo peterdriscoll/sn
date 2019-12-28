@@ -17,10 +17,12 @@ namespace SNI
 		SNI_Function();
 		SNI_Function(SNI_Expression *p_Function);
 		SNI_Function(SNI_Expression *p_Function, SNI_Expression *p_Parameter);
-		SNI_Function(SNI_Expression *p_Function, SNI_Expression *p_Parameter, SNI_Expression *p_Condition);
+		SNI_Function(SNI_Expression *p_Function, SNI_Expression *p_Parameter, SNI_Expression *p_Condition, unsigned long p_Id);
+		SNI_Function(const SNI_Function &p_Function);
 		virtual ~SNI_Function();
 
 		virtual string GetTypeName() const;
+		virtual string GetReferredName() const;
 		virtual string DisplayCpp() const;
 		virtual long GetPriority() const;
 

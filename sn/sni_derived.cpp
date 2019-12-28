@@ -141,6 +141,7 @@ namespace SNI
 			return SN::SN_Error(GetTypeName() + " Fix the derived calls. There maybe be more defines, so the call is undefined.");
 		}
 		unsigned long id = 0;
+		SNI_Thread::GetThread()->SetDebugId(GetDebugId());
 
 		SN::SN_Expression finalResult;
 		bool resultFound = false;
@@ -189,6 +190,7 @@ namespace SNI
 		}
 		SN::SN_Expression finalResult;
 		unsigned long id = 0;
+		SNI_Thread::GetThread()->SetDebugId(GetDebugId());
 		bool resultFound = false;
 		for (auto &item : m_Vector)
 		{
@@ -234,6 +236,7 @@ namespace SNI
 		if (m_Fixed)
 		{
 			unsigned long id = 0;
+			SNI_Thread::GetThread()->SetDebugId(GetDebugId());
 			for (auto item : m_Vector)
 			{
 				if (item && !item->IsNull())
@@ -269,6 +272,7 @@ namespace SNI
 		if (m_Fixed)
 		{
 			unsigned long id = 0;
+			SNI_Thread::GetThread()->SetDebugId(GetDebugId());
 
 			for (auto item : m_Vector)
 			{

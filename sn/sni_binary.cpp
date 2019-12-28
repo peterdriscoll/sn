@@ -55,14 +55,13 @@ namespace SNI
 		return 3;
 	}
 
-	string SNI_Binary::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList) const
+	string SNI_Binary::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList, const SNI_Expression *p_DebugSource) const
 	{
 		if (GetOperator().empty() || (*p_ParameterList).size() != 2)
 		{
-			return SNI_FunctionDef::DisplayCall(priority, p_DisplayOptions, p_ParameterList);
-
+			return SNI_FunctionDef::DisplayCall(priority, p_DisplayOptions, p_ParameterList, p_DebugSource);
 		}
-		return Bracket(priority, (*p_ParameterList)[1].DisplaySN() + GetOperator() + (*p_ParameterList)[0].DisplaySN());
+		return Bracket(priority, (*p_ParameterList)[1].DisplaySN(GetPriority(), p_DisplayOptions) + SetBreakPoint(GetOperator(), p_DisplayOptions, p_DebugSource, SN::ParameterOneId) + (*p_ParameterList)[0].DisplaySN(GetPriority(), p_DisplayOptions) + SetBreakPoint("~", p_DisplayOptions, p_DebugSource, SN::ParameterTwoId) + SetBreakPoint(";", p_DisplayOptions, p_DebugSource, SN::ParameterThreeId), p_DisplayOptions, p_DebugSource);
 	}
 
 	SN::SN_Value SNI_Binary::RightInverseFunctionValue(const SN::SN_Value &p_Left, const SN::SN_Value &p_Right) const
