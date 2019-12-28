@@ -112,6 +112,14 @@ namespace SNI
 		return text;
 	}
 
+	void SNI_World::WriteJS(ostream & p_Stream, const string & tabs) const
+	{
+		p_Stream << tabs << "\t\"id\" : \"" << DisplayShort() << "\",\n";
+		p_Stream << tabs << "\t\"expression\" : \"" << ReplaceAll(m_Value.DisplaySN(), "\"", "\\\"") << "\",\n";
+		p_Stream << tabs << "\t\"empty\" : " << (IsEmpty() ? "true" : "false") << ",\n";
+		p_Stream << tabs << "\t\"fail\" : " << (IsFailMarked() ? "true" : "false") << "\n";
+	}
+
 	void SNI_World::PromoteMembers()
 	{
 		REQUESTPROMOTION(m_WorldSet);
@@ -246,7 +254,7 @@ namespace SNI
 		m_FailMark = true;
 	}
 
-	bool SNI_World::IsFailMarked()
+	bool SNI_World::IsFailMarked() const
 	{
 		return m_FailMark;
 	}

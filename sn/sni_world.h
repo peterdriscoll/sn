@@ -40,6 +40,7 @@ namespace SNI
 		string DisplayCondition();
 		string DisplaySNChildWorlds() const;
 		string LogText(SN::LogContext & context, long p_Width) const;
+		void WriteJS(ostream &p_Stream, const string &tabs) const;
 
 		SNI_WorldSet *GetWorldSet();
 		bool AddChildWorld(SNI_World *p_World);
@@ -55,7 +56,7 @@ namespace SNI
 
 		void ClearFailMark();
 		void MarkFail();
-		bool IsFailMarked();
+		bool IsFailMarked() const;
 
 		bool Contains(SNI_World * p_World) const;
 

@@ -14,7 +14,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
     <div ng-app="skynetApp" ng-controller='commandCtrl'>
         <h1>
-            Skynet Dashboard - {{taskdescription}} {{statusdescription}} {{callstack.length}} </h1>
+            Skynet Dashboard - {{taskdescription}} {{statusdescription}} {{callstack.length}}
+        </h1>
         <table class='command'>
             <tr>
                 <td>
@@ -104,23 +105,42 @@
                         <form ng-submit='setthread(sc.threadnum)'>
                             <input type='submit' name='threadnum' value='{{sc.threadnum
             }} : {{sc.stepcount}}' />
-            </form>
-            </td>
-            </tr>
+                        </form>
+                    </td>
+                </tr>
             </table>
-</div>
-        <table class='frame'>
-            <caption>Thread {{threadnum}}</caption>
-            <tr ng-repeat="f in callstack">
+        </div>
+        <table class='group'>
+            <tr>
                 <td>
-                    {{f.name}}
+                    <table class='frame'>
+                        <caption>World Sets</caption>
+                        <tr ng-repeat="ws in worldsets">
+                            <td>
+                                {{ws.expression}}
+                            </td>
+                        </tr>
+                    </table>
+                    <button title='MIR' ng-click='setbreakpoint("MIR_1")' ng-class='breakpointclass("MIR_1", breakpoint)'>Check MIR</button>
                 </td>
+            </tr>
+            <tr>
                 <td>
-                    <div>
-                        <div ng-repeat="d in f.value">
-                            <div ng-bind-html="trustAsHtml(d.text)" init-bind><br /></div>
-                        </div>
-                    </div>
+                    <table class='frame'>
+                        <caption>Thread {{threadnum}}</caption>
+                        <tr ng-repeat="f in callstack">
+                            <td>
+                                {{f.name}}
+                            </td>
+                            <td>
+                                <div>
+                                    <div ng-repeat="d in f.value">
+                                        <div ng-bind-html="trustAsHtml(d.text)" init-bind><br /></div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
                 </td>
             </tr>
         </table>
@@ -195,6 +215,7 @@
                     $scope.scheduled = $scope.scheduled + 1;
                     $http.get(home + 'stackjs?threadnum=' + $scope.threadnum + '&maxstackframes=' + $scope.maxstackframes)
                         .then(function (response) {
+                            $scope.worldsets = response.data.worldsets;
                             $scope.frames = response.data.records;
                             $scope.callstack = [];
                             for (var i = 0; i < $scope.frames.length; i++) {
@@ -203,6 +224,7 @@
                                 }
                             }
                             $scope.threadnum = response.data.threadnum;
+                            $scope.breakpoint = response.data.breakpoint;
                             $scope.taskdescription = response.data.taskdescription;
                             $scope.statusdescription = response.data.statusdescription;
                             $scope.running = response.data.running;

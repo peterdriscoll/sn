@@ -36,6 +36,8 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_WorldSet);
 	public:
+		static void WriteChangedJS(ostream & p_Stream, const string &tabs);
+
 		SNI_WorldSet(const SN::SN_Expression &p_Expression);
 		virtual ~SNI_WorldSet();
 
@@ -44,6 +46,8 @@ namespace SNI
 		string DisplayLong() const;
 		string DisplayWorlds() const;
 		string DisplayVariable();
+		void WriteJS(ostream & p_Stream, const string &tabs) const;
+		void WriteUnmarkedJS(ostream & p_Stream, const string &tabs) const;
 		string LogHeading(SN::LogContext &context, long p_Width) const;
 		string LogUnderline(SN::LogContext &context, long p_Width) const;
 		void LogSN() const;
@@ -77,6 +81,9 @@ namespace SNI
 		virtual void PromoteMembers();
 
 	private:
+		static long m_NextWorldSetNo;
+		static SNI_WorldSetList m_ChangedList;
+
 		SN::SN_Error CheckRelatedWorlds(SNI_WorldSetList &p_ChangedList);
 		SN::SN_Error CheckDependencies(SNI_WorldSetList & p_ChangedList);
 		void MarkAllWorldInChildSets(bool p_Mark);
@@ -86,7 +93,6 @@ namespace SNI
 		void FailWorldsWithEmptyChildren(SNI_WorldSetList & p_ChangedList);
 		void MarkChildWorlds(bool p_Mark);
 
-		static long m_NextWorldSetNo;
 
 		SNI_WorldList m_WorldList;
 		SNI_WorldSetList m_ChildSetList;

@@ -146,8 +146,18 @@ namespace SNI
 		{
 			m_ThreadStepCount++;
 			m_DebugCommand.SetText(p_Text);
-			string breakPoint = Top()->GetBreakPoint(p_BreakId);
-			SetDeepBreakPoint(breakPoint);
+			string breakPoint;
+			if (p_InterruptPoint == SN::MirrorPoint)
+			{
+				breakPoint = "MIR_" + to_string(p_BreakId);
+				SetThreadBreakPoint(breakPoint);
+			}
+			else
+			{
+				SetThreadBreakPoint("");
+				breakPoint = Top()->GetBreakPoint(p_BreakId);
+				SetDeepBreakPoint(breakPoint);
+			}
 
 			while (m_DebugCommand.IsBreakPoint(p_InterruptPoint, m_ThreadNum, SNI_Frame::GetFrameStackDepth(), m_ThreadStepCount, breakPoint))
 			{
@@ -853,6 +863,7 @@ namespace SNI
 		p_Stream << "],\n";
 		Unlock();
 
+		SNI_WorldSet::WriteChangedJS(p_Stream, "\t");
 		p_Stream << "\"threadnum\" : \"" << m_ThreadNum << "\",\n";
 
 		SNI_Manager *manager = GetTopManager(false);
@@ -876,6 +887,7 @@ namespace SNI
 		{
 			statusDescription += " - Thread ended";
 		}
+		p_Stream << "\"breakpoint\" : \"" << m_BreakPoint << "\",\n";
 		p_Stream << "\"statusdescription\" : \"" << statusDescription << "\",\n";
 		p_Stream << "\"running\" : " << running << "\n";
 		p_Stream << "}\n";
@@ -967,6 +979,11 @@ namespace SNI
 				return;
 			}
 		}
+	}
+
+	void SNI_Thread::SetThreadBreakPoint(const string & p_BreakPoint)
+	{
+		m_BreakPoint = p_BreakPoint;
 	}
 
 	void SNI_Thread::PromoteExternals(PGC::PGC_Transaction *p_Transaction)

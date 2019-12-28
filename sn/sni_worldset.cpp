@@ -13,6 +13,18 @@ namespace SNI
 {
 	typedef unordered_map<SNI_WorldSet *, SN::SN_Value> ConflictMap;
 	/*static*/ long SNI_WorldSet::m_NextWorldSetNo = 0;
+	/*static*/ SNI_WorldSetList SNI_WorldSet::m_ChangedList;
+
+	/*static*/ void SNI_WorldSet::WriteChangedJS(ostream &p_Stream, const string &tabs)
+	{
+		p_Stream << "\"worldsets\":[\n";
+		string delimeter = " ";
+		for (SNI_WorldSet *ws: m_ChangedList)
+		{
+			ws->WriteJS(p_Stream, tabs+"\t");
+		}
+		p_Stream << "],\n";
+	}
 
 	SNI_WorldSet::SNI_WorldSet(const SN::SN_Expression &p_Expression)
 		: m_Mark(false)
@@ -74,6 +86,54 @@ namespace SNI
 			return "{" + result + "}";
 		}
 		return m_Expression.DisplaySN();
+	}
+
+	void SNI_WorldSet::WriteJS(ostream &p_Stream, const string &tabs) const
+	{
+		p_Stream << tabs << "{\n";
+		p_Stream << tabs << "\t\"id\" : \"" << DisplayShort() << "\",\n";
+		p_Stream << tabs << "\t\"expression\" : \"" << ReplaceAll(m_Expression.DisplaySN(), "\"", "\\\"") << "\",\n";
+		p_Stream << tabs << "\t\"worlds\" : [\n";
+		string delimeter;
+		for (const SNI_World *w : m_WorldList)
+		{
+			p_Stream << tabs << "\t" << delimeter << "\t{\n";
+			w->WriteJS(p_Stream, tabs+"\t\t");
+			p_Stream << tabs << "\t}\n";
+			delimeter = ",";
+		}
+		p_Stream << tabs << "\t\t],\n";
+		p_Stream << tabs << "\t\"childsets\" : [\n";
+		for (const SNI_WorldSet *ws : m_ChildSetList)
+		{
+			p_Stream << tabs << "\t" << delimeter << "\t{\n";
+			ws->WriteUnmarkedJS(p_Stream, tabs + "\t\t");
+			p_Stream << tabs << "\t}\n";
+			delimeter = ",";
+		}
+		p_Stream << tabs << "\t]\n";
+		p_Stream << tabs << "}\n";
+	}
+	
+	void SNI_WorldSet::WriteUnmarkedJS(ostream &p_Stream, const string &tabs) const
+	{
+		p_Stream << tabs << "{\n";
+		p_Stream << tabs << "\t\"id\" : \"" << DisplayShort() << "\",\n";
+		p_Stream << tabs << "\t\"expression\" : \"" << ReplaceAll(m_Expression.DisplaySN(), "\"", "\\\"") << "\",\n";
+		p_Stream << tabs << "\t\"worlds\" : [\n";
+		string delimeter;
+		for (const SNI_World *w : m_WorldList)
+		{
+			if (w->IsFailMarked())
+			{ 
+				p_Stream << tabs << "\t" << delimeter << "\t{\n";
+				w->WriteJS(p_Stream, tabs + "\t\t");
+				p_Stream << tabs << "\t}\n";
+				delimeter = ",";
+			}
+		}
+		p_Stream << tabs << "\t]\n";
+		p_Stream << tabs << "}\n";
 	}
 
 	string SNI_WorldSet::LogHeading(SN::LogContext &context, long p_Width) const
@@ -292,8 +352,8 @@ namespace SNI
 	SN::SN_Error SNI_WorldSet::CheckDependentWorlds()
 	{
 		SN::SN_Error result = skynet::OK;
-		SNI_WorldSetList m_ChangedList;
 		m_ChangedList.push_back(this);
+		SNI_Thread::GetThread()->DebugCommand(SN::MirrorPoint, "Check dependencies", SN::CallId);
 		while (!m_ChangedList.empty())
 		{
 			SNI_WorldSet *worldSet = m_ChangedList.back();

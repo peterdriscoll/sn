@@ -96,6 +96,7 @@ namespace SNI
 		size_t GetFrameStackDepth();
 
 		void SetDeepBreakPoint(const string & p_BreakPoint);
+		void SetThreadBreakPoint(const string & p_BreakPoint);
 
 		void WriteWebPage(ostream &p_Stream, bool p_Refresh, DisplayOptionType p_DebugHTML);
 		static void WriteWebPageJS(ostream & p_Stream, bool p_Refresh);
@@ -156,6 +157,7 @@ namespace SNI
 		static mutex m_ThreadListMutex;
 		enum SN::DebugAction m_DebugAction;
 		string m_DebugId;
+		string m_BreakPoint;
 
 		long m_MaxStackFrames;
 		static long m_GotoThreadNum;

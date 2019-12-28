@@ -31,7 +31,7 @@ namespace SN
 
 	enum InterruptPoint
 	{
-		BreakPoint, CallPoint, ParameterPoint, ClonePoint, ErrorPoint, EndPoint
+		BreakPoint, CallPoint, ParameterPoint, ClonePoint, ErrorPoint, EndPoint, MirrorPoint
 	};
 
 	enum BreakId
