@@ -72,9 +72,20 @@ namespace SNI
 		// Logging
 		//---------------------------------------------------------------
 		virtual string GetTypeName() const;
+		virtual string GetReferredName() const;
 		virtual string DisplayCpp() const;
 		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual string DisplayValueSN(long, SNI_DisplayOptions & p_DisplayOptions) const;
+
+		//---------------------------------------------------------------
+		// Debugging
+		//---------------------------------------------------------------
+		void CreateId();
+		virtual string GetBreakPoint(long p_Index) const;
+		virtual unsigned long GetId() const;
+		virtual string GetDebugId() const;
+		virtual string SetBreakPoint(const string &p_Caption, SNI_DisplayOptions & p_DisplayOptions, const SNI_Expression *p_DebugSource, long p_Index) const;
+
 		virtual long GetPriority() const;
 		virtual string GetOperator() const;
 		virtual string DisplaySN0() const;

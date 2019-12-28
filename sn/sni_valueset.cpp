@@ -228,7 +228,6 @@ namespace SNI
 		}
 		Validate();
 		LOG(WriteLine(SN::DebugLevel, result.DisplaySN()));
-		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Clone");
 		return dynamic_cast<SNI_Expression *>(result.GetSNI_ValueSet());
 	}
 
@@ -575,7 +574,7 @@ namespace SNI
 			}
 		}
 		worldSet->Complete();
-		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after all values");
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after all values", SN::CallId);
 		if (success)
 		{
 			return SN::SN_Error(success);

@@ -4,6 +4,7 @@
 #pragma once
 
 #include <string>
+#include <set>
 using namespace std;
 
 #include "sn_manager.h"
@@ -23,7 +24,8 @@ namespace SNI
 
 		long GetThreadNum();
 
-		bool IsBreakPoint(SN::InterruptPoint p_InterruptPoint, long p_ThreadNum, long p_FrameStackDepth, long p_StepCount);
+		bool IsBreakPoint(SN::InterruptPoint p_InterruptPoint, long p_ThreadNum, long p_FrameStackDepth, long p_StepCount, const string &p_BreakPoint);
+		void LoadBreakPoints(const string &p_BreakPointString);
 
 		bool IsRunning();
 		bool IsQuitting();
@@ -60,6 +62,7 @@ namespace SNI
 		bool m_Running;
 		string m_Text;
 
+		set<string> m_BreakPointSet;
 		mutex m_Mutex;
 		condition_variable m_ReadyForCommandCond;
 		bool m_ReadyForCommand;

@@ -25,7 +25,7 @@ namespace SNI
 		return m_ThreadNum;
 	}
 
-	bool SNI_DebugCommand::IsBreakPoint(SN::InterruptPoint p_InterruptPoint, long p_ThreadNum, long p_FrameStackDepth, long p_StepCount)
+	bool SNI_DebugCommand::IsBreakPoint(SN::InterruptPoint p_InterruptPoint, long p_ThreadNum, long p_FrameStackDepth, long p_StepCount, const string &p_BreakPoint)
 	{
 		bool breakPoint = false;
 		unique_lock<mutex> mutex_lock(m_Mutex);
@@ -48,7 +48,7 @@ namespace SNI
 			breakPoint = p_InterruptPoint == SN::EndPoint || p_InterruptPoint == SN::ErrorPoint;
 			break;
 		case SN::Debug:
-			breakPoint = baseInterrupt;
+			breakPoint = baseInterrupt || (m_BreakPointSet.find(p_BreakPoint) != m_BreakPointSet.end());
 			break;
 		case SN::StepInto:
 			breakPoint = baseInterrupt || p_InterruptPoint == SN::CallPoint;
@@ -84,6 +84,17 @@ namespace SNI
 		m_ReadyForProcessing = !(breakPoint && processCommand);
 		m_ReadyForCommandCond.notify_one();
 		return breakPoint && processCommand;
+	}
+
+	void SNI_DebugCommand::LoadBreakPoints(const string & p_BreakPointString)
+	{
+		vector<string> breakPointList;
+		Split(p_BreakPointString, ",", breakPointList);
+		m_BreakPointSet.clear();
+		for (const string &s : breakPointList)
+		{
+			m_BreakPointSet.insert(s);
+		}
 	}
 
 	bool SNI_DebugCommand::IsRunning()

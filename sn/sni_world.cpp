@@ -62,6 +62,29 @@ namespace SNI
 		return m_WorldSet->DisplayShort() + ":W" + to_string(m_WorldNo);
 	}
 
+	string SNI_World::DisplaySN(SNI_DisplayOptions & p_DisplayOptions)
+	{
+		return DisplayCondition();
+	}
+
+	string SNI_World::DisplayCondition()
+	{
+		if (m_ChildList.size())
+		{
+			string result;
+			for (SNI_World *w : m_ChildList)
+			{
+				if (!result.empty())
+				{
+					result += " && ";
+				}
+				result += w->DisplaySN();
+			}
+			return result;
+		}
+		return m_WorldSet->DisplayVariable() + " = " + m_Value.DisplaySN();
+	}
+
 	string SNI_World::DisplaySNChildWorlds() const
 	{
 		if (m_ChildList.size() == 0)
@@ -396,10 +419,12 @@ namespace SNI
 			AddFailedContext(p_ContextWorld);
 			if (!CheckForWorldSetFails())
 			{
+				LOG(WriteLine(SN::DebugLevel, "Fail " + DisplayCondition() + " in context " + p_ContextWorld->DisplayCondition()));
 				return false;
 			}
 		}
 
+		LOG(WriteLine(SN::DebugLevel, "Fail "+ DisplayCondition()));
 		SN::LogContext context("SNI_World::Fail(" + DisplaySN() + ")");
 		m_IsEmpty = true;
 		m_WorldSet->RemoveWorld(this);
@@ -426,6 +451,7 @@ namespace SNI
 			}
 		}
 
+		LOG(WriteLine(SN::DebugLevel, "Fail " + DisplayCondition()));
 		m_IsEmpty = true;
 		return !m_WorldSet->IsEmpty();
 	}

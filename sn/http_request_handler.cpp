@@ -57,6 +57,7 @@ namespace HTTP
 			string_umap umap;
 			string path = extract_values(request_path, umap);
 			long threadNum = atol(umap["threadnum"].c_str());
+			DisplayOptionType debugHTML = doDebugPointsHTML;
 			SNI_Thread::ThreadListLock();
 			SNI::SNI_Thread *l_thread = SNI::SNI_Thread::GetThreadByNumber(threadNum);
 			rep.content = "";
@@ -64,11 +65,11 @@ namespace HTTP
 			{
 				if (path == "/skynet")
 				{
-					rep.content = l_thread->Skynet();
+					rep.content = l_thread->Skynet(debugHTML);
 				}
 				else if (path == "/run")
 				{
-					rep.content = l_thread->RunWeb();
+					rep.content = l_thread->RunWeb(debugHTML);
 				}
 				else if (path == "/runjs")
 				{
@@ -76,7 +77,7 @@ namespace HTTP
 				}
 				else if (path == "/runtoend")
 				{
-					rep.content = l_thread->RunToEndWeb();
+					rep.content = l_thread->RunToEndWeb(debugHTML);
 				}
 				else if (path == "/runtoendjs")
 				{
@@ -84,15 +85,17 @@ namespace HTTP
 				}
 				else if (path == "/debug")
 				{
-					rep.content = l_thread->DebugWeb();
+					rep.content = l_thread->DebugWeb(debugHTML);
 				}
 				else if (path == "/debugjs")
 				{
+					string breakpoints = umap["breakpoints"].c_str();
+					l_thread->LoadBreakPoints(breakpoints);
 					l_thread->Debug();
 				}
 				else if (path == "/debugbreak")
 				{
-					rep.content = l_thread->DebugBreakWeb();
+					rep.content = l_thread->DebugBreakWeb(debugHTML);
 				}
 				else if (path == "/debugbreakjs")
 				{
@@ -100,15 +103,15 @@ namespace HTTP
 				}
 				else if (path == "/stepover")
 				{
-					rep.content = l_thread->StepOverWeb();
+					rep.content = l_thread->StepOverWeb(debugHTML);
 				}
 				else if (path == "/stepoverjs")
 				{
-					l_thread->StepOverWeb();
+					l_thread->StepOverWeb(debugHTML);
 				}
 				else if (path == "/stepinto")
 				{
-					rep.content = l_thread->StepIntoWeb();
+					rep.content = l_thread->StepIntoWeb(debugHTML);
 				}
 				else if (path == "/stepintojs")
 				{
@@ -116,24 +119,24 @@ namespace HTTP
 				}
 				else if (path == "/stepout")
 				{
-					rep.content = l_thread->StepOutWeb();
+					rep.content = l_thread->StepOutWeb(debugHTML);
 				}
 				else if (path == "/stepoutjs")
 				{
-					l_thread->StepOutWeb();
+					l_thread->StepOutWeb(debugHTML);
 				}
 				else if (path == "/stepparam")
 				{
-					rep.content = l_thread->StepParamWeb();
+					rep.content = l_thread->StepParamWeb(debugHTML);
 				}
 				else if (path == "/stepparamjs")
 				{
-					l_thread->StepParamWeb();
+					l_thread->StepParamWeb(debugHTML);
 				}
 				else if (path == "/gotostepcount")
 				{
 					long stepCount = atol(umap["stepcount"].c_str());
-					rep.content = l_thread->GotoStepCountWeb(stepCount);
+					rep.content = l_thread->GotoStepCountWeb(stepCount, debugHTML);
 				}
 				else if (path == "/gotostepcountjs")
 				{
@@ -143,15 +146,15 @@ namespace HTTP
 				else if (path == "/maxstackframes")
 				{
 					long maxStackFrames = atol(umap["maxstackframes"].c_str());
-					rep.content = l_thread->SetMaxStackFramesWeb(maxStackFrames);
+					rep.content = l_thread->SetMaxStackFramesWeb(maxStackFrames, debugHTML);
 				}
 				else if (path == "/thread")
 				{
-					rep.content = l_thread->Skynet();
+					rep.content = l_thread->Skynet(debugHTML);
 				}
 				else if (path == "/quit")
 				{
-					rep.content = l_thread->QuitWeb();
+					rep.content = l_thread->QuitWeb(debugHTML);
 				}
 				else if (path == "/quitjs")
 				{
@@ -159,7 +162,7 @@ namespace HTTP
 				}
 				else if (path == "/skynet")
 				{
-					rep.content = l_thread->Skynet();
+					rep.content = l_thread->Skynet(debugHTML);
 				}
 				else if (path == "/skynetjs")
 				{
@@ -168,7 +171,7 @@ namespace HTTP
 				else if (path == "/stackjs")
 				{
 					long maxStackFrames = atol(umap["maxstackframes"].c_str());
-					rep.content = l_thread->StackJS(maxStackFrames);
+					rep.content = l_thread->StackJS(maxStackFrames, doDebugPointsJS);
 				}
 				else if (path == "/logjs")
 				{
@@ -273,10 +276,13 @@ namespace HTTP
 				{
 					vector<string> tokenList;
 					Split(element, "=", tokenList);
-					string t0 = tokenList[0];
-					string t1 = tokenList[1];
-					p_Map[tokenList[0]] = tokenList[1];
-					string r1 = p_Map[tokenList[0]];
+					if (tokenList.size() == 2)
+					{
+						string t0 = tokenList[0];
+						string t1 = tokenList[1];
+						p_Map[tokenList[0]] = tokenList[1];
+						string r1 = p_Map[tokenList[0]];
+					}
 				}
 			}
 			return result;

@@ -84,13 +84,14 @@ namespace SNI
 	SN::SN_Expression SNI_Debug::Evaluate(long p_MetaLevel) const
 	{
 		SN::LogContext context(DisplaySN0() + ".Evaluate ()", LOG_DEBUG_INDEX);
-		SNI_Thread::GetThread()->DebugCommand(SN::BreakPoint, "Debug.Evaluate");
+		
 		return LOG_RETURN(context, m_Expression->Evaluate(p_MetaLevel));
 	}
 
 	SN::SN_Expression SNI_Debug::PartialEvaluate(long p_MetaLevel) const
 	{
 		SN::LogContext context(DisplaySN0() + ".PartialEvaluate ()", LOG_DEBUG_INDEX);
+
 		return LOG_RETURN(context, m_Expression->PartialEvaluate(p_MetaLevel).Debug());
 	}
 

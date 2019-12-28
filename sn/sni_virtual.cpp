@@ -75,7 +75,9 @@ namespace SNI
 
 	SN::SN_Expression ConstructionTree::BuildExpression(size_t p_Depth)
 	{
+		SNI_Error::PushHandler();
 		SN::SN_Error err(string("Virtual - No polymorphic implementation found for parameters."));
+		SNI_Error::PopHandler();
 		SN::SN_Expression callExpression = m_ImplementationCall;
 		if (callExpression.IsNull())
 		{

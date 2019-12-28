@@ -183,13 +183,13 @@ namespace SNI
 
 	SN::SN_Expression SNI_FunctionDef::CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel /* = 0 */) const
 	{
-		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName()+".Call before cardinality check");
 		long depth = GetNumParameters() - 1;
 		SN::SN_Expression *inputList = new SN::SN_Expression[depth];
 		for (long j = 0; j < depth; j++)
 		{
 			inputList[j] = p_ParamList[j].GetVariableValue();
 		}
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Call", SN::CallId);
 		size_t card = 0;
 		size_t maxCard = SNI_Thread::TopManager()->MaxCardinalityCall();
 		for (long j = 0; j < depth; j++)
@@ -201,16 +201,15 @@ namespace SNI
 				{
 					inputList[j] = p_ParamList[j].Evaluate();
 				}
-				SNI_Thread::GetThread()->DebugCommand(SN::ParameterPoint, GetTypeName() + ".Call parameter:" + inputList[j].DisplayValueSN());
+				SNI_Thread::GetThread()->DebugCommand(SN::ParameterPoint, GetTypeName() + ".Call parameter:" + inputList[j].DisplayValueSN(), SN::ParameterOneId+j);
 			}
 			else
 			{
-				SNI_Thread::GetThread()->DebugCommand(SN::ParameterPoint, GetTypeName() + ".Call parameter:" + inputList[j].DisplayValueSN());
+				SNI_Thread::GetThread()->DebugCommand(SN::ParameterPoint, GetTypeName() + ".Call parameter:" + inputList[j].DisplayValueSN(), SN::ParameterOneId + j);
 			}
 		}
 		card = CardinalityOfCall(depth, inputList);
 		SN::SN_Value result;
-		SNI_Thread::GetThread()->DebugCommand(SN::ParameterPoint, GetTypeName() + ".Call before calculation");
 		if (maxCard < card)
 		{
 			result = SN::SN_Error(true, true, "Cardinality " + to_string(card) + " exceeds max cardinality " + to_string(maxCard));
@@ -219,7 +218,7 @@ namespace SNI
 		{
 			result = ForEachCall(card, depth, inputList);
 		}
-		SNI_Thread::GetThread()->DebugCommand(SN::ParameterPoint, GetTypeName() + ".Call after calculation");
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Call after calculation", SN::ReturnId);
 		delete[] inputList;
 		result.GetSNI_Expression()->Validate();
 		return result;
@@ -244,8 +243,6 @@ namespace SNI
 
 	SN::SN_Expression SNI_FunctionDef::UnifyArray(SN::SN_Expression * p_ParamList)
 	{
-		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before cardinality check");
-
 		SN::SN_Error  e = true;
 		long depth = GetNumParameters();
 		SN::SN_Expression *inputList = new SN::SN_Expression[depth];
@@ -254,6 +251,9 @@ namespace SNI
 		long totalCalc = depth;
 		SNI_Frame::Push(this, NULL);
 		SNI_Frame *topFrame = SNI_Frame::Top();
+
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before cardinality check", SN::CallId);
+
 		for (long j = 0; j < depth; j++)
 		{
 			topFrame->CreateParameter(j);
@@ -325,7 +325,6 @@ namespace SNI
 					LOG(WriteLine(SN::DebugLevel, "Parameter " + to_string(j) + ": " + inputList[j].DisplayValueSN()));
 				}
 			}
-			SNI_Thread::GetThread()->DebugCommand(SN::ParameterPoint, GetTypeName() + ".Unify parameter: " + inputList[j].DisplayValueSN());
 			if (IsKnownValue(inputList[j]))
 			{
 				inputList[j] = inputList[j].GetVariableValue();
@@ -341,6 +340,7 @@ namespace SNI
 				calcPos = (long)j;
 				topFrame->GetVariable(j)->SetValue(p_ParamList[j]);
 			}
+			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify parameter: " + inputList[j].DisplayValueSN(), SN::ParameterOneId+j);
 		}
 		LOG(WriteLine(SN::DebugLevel, GetLogDescription(p_ParamList)));
 		if (e.GetBool())
@@ -353,7 +353,6 @@ namespace SNI
 				{
 					LOG(WriteLine(SN::DebugLevel, inputList[calcPos].DisplayValueSN()));
 				}
-				SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before calculation");
 				if (maxCard < card)
 				{
 					if (AllowDelay())
@@ -380,11 +379,11 @@ namespace SNI
 						topFrame->GetVariable(j)->SetValue(inputList[j]);
 					}
 				}
-				SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after calculation");
+				SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after calculation", SN::ReturnId);
 			}
 			else
 			{
-				SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify no constraint");
+				SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify no constraint", SN::ReturnId);
 			}
 		}
 		SNI_Frame::Pop();

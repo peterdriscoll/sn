@@ -103,7 +103,7 @@ namespace SNI
 		, m_CommandServerThreadUsed(false)
 		, m_HasDebugServer(false)
 		, m_LogBufferCapacity(50)
-		, m_MaxStackFrames(3)
+		, m_MaxStackFrames(10)
 		, m_Transaction(false)
 	{
 		LogicSetup();
@@ -135,7 +135,7 @@ namespace SNI
 		, m_CommandServerThreadUsed(false)
 		, m_HasDebugServer(false)
 		, m_LogBufferCapacity(50)
-		, m_MaxStackFrames(3)
+		, m_MaxStackFrames(10)
 		, m_Transaction(false)
 	{
 		LogicSetup();
@@ -167,7 +167,7 @@ namespace SNI
 		, m_CommandServerThreadUsed(false)
 		, m_HasDebugServer(false)
 		, m_LogBufferCapacity(50)
-		, m_MaxStackFrames(3)
+		, m_MaxStackFrames(10)
 		, m_Transaction(false)
 	{
 		LogicSetup();
@@ -186,7 +186,7 @@ namespace SNI
 	
 	SNI_Manager::~SNI_Manager()
 	{
-		SNI_Thread::GetThread()->DebugCommand(SN::EndPoint,"Exit");
+		SNI_Thread::GetThread()->DebugCommand(SN::EndPoint, "Exit", SN::ExitId);
 		SNI_Thread::GetThread()->SetTopManager(m_LastManager);
 		if (m_CommandServerThreadUsed)
 		{
@@ -485,6 +485,7 @@ namespace SNI
 			m_WebServerThread = new thread(RunServer, p_Address, p_Port, p_DocRoot);
 			m_WebServerThreadUsed = true;
 			OpenURLInBrowser("http://127.0.0.1/skynetjs.html");
+			//OpenURLInBrowser("http://127.0.0.1/skynet");
 		}
 		m_WebServerThreadUsageCount++;
 	}

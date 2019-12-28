@@ -140,13 +140,15 @@ namespace SNI
 		{
 			return SN::SN_Error(GetTypeName() + " Fix the derived calls. There maybe be more defines, so the call is undefined.");
 		}
+		unsigned long id = 0;
+
 		SN::SN_Expression finalResult;
 		bool resultFound = false;
 		for (auto &item : m_Vector)
 		{
 			if (item && !item->IsNull())
 			{
-				SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Derived.Call");
+				SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Derived.Call", id++);
 				SN::SN_ExpressionList paramListClone = *p_ParameterList;
 				SN::SN_Expression result = item->Call(&paramListClone, p_MetaLevel);
 				if (result.IsError())
@@ -186,6 +188,7 @@ namespace SNI
 			return SN::SN_Error(GetTypeName() + " Fix the derived calls. There maybe be more defines, so the define is undefined.");
 		}
 		SN::SN_Expression finalResult;
+		unsigned long id = 0;
 		bool resultFound = false;
 		for (auto &item : m_Vector)
 		{
@@ -194,6 +197,7 @@ namespace SNI
 				if (!SN::SN_Expression(item).GetSNI_Lambda())
 				{
 					SN::SN_ExpressionList paramListClone = *p_ParameterList;
+					SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after clone", id);
 					SN::SN_Expression result = item->PartialCall(&paramListClone, p_MetaLevel);
 					if (result.IsError())
 					{
@@ -221,6 +225,7 @@ namespace SNI
 				return SN::SN_Error(GetTypeName() + " partial function to call is unknown.");
 			}
 		}
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after unify", id);
 		return finalResult;
 	}
 
@@ -228,14 +233,14 @@ namespace SNI
 	{
 		if (m_Fixed)
 		{
+			unsigned long id = 0;
 			for (auto item : m_Vector)
 			{
 				if (item && !item->IsNull())
 				{
-					SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after clone");
+					SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after clone", id);
 					SN::SN_ExpressionList paramListClone = *p_ParameterList;
 					SN::SN_Expression e = item->Unify(&paramListClone);
-					SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after unify");
 					if (e.IsError())
 					{
 						return e;
@@ -248,6 +253,7 @@ namespace SNI
 					return SN::SN_Error(GetTypeName() + " function to unify is unknown.");
 				}
 			}
+			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after unify", id);
 			return skynet::OK;
 		}
 		else
@@ -262,14 +268,15 @@ namespace SNI
 	{
 		if (m_Fixed)
 		{
+			unsigned long id = 0;
+
 			for (auto item : m_Vector)
 			{
 				if (item && !item->IsNull())
 				{
-					SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after clone");
+					SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after clone", id);
 					SN::SN_ParameterList paramListClone = *p_ParameterList;
 					SN::SN_Expression e = item->PartialUnify(&paramListClone, p_Result, p_Define);
-					SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after unify");
 					//SNI_Variable *result = SNI_Frame::Top()->GetResult();
 					//result->SetValue((*p_ParameterList)[0].GetVariableValue());
 					SNI_Frame::Pop();
@@ -283,6 +290,7 @@ namespace SNI
 					return SN::SN_Error(GetTypeName() + " function to unify is unknown.");
 				}
 			}
+			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after unify", id);
 			return skynet::OK;
 		}
 		else

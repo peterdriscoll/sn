@@ -31,7 +31,12 @@ namespace SN
 
 	enum InterruptPoint
 	{
-		BreakPoint, CallPoint, ParameterPoint, ErrorPoint, EndPoint
+		BreakPoint, CallPoint, ParameterPoint, ClonePoint, ErrorPoint, EndPoint
+	};
+
+	enum BreakId
+	{
+		PartialCallId, CallId, ParameterOneId, ParameterTwoId, ParameterThreeId, ParameterFourId, ParameterFiveId, ValueId, ConditionId,  PositiveId, NegativeId, InfixId, EvaluateId, ReturnId, ErrorId, ExitId, CloneId
 	};
 
 	string GetLoggingLevelCode(LoggingLevel p_LoggingLevel);

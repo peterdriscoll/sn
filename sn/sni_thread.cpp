@@ -126,9 +126,18 @@ namespace SNI
 	{
 		return m_FrameList;
 	}
-
-	void SNI_Thread::DebugCommand(SN::InterruptPoint p_InterruptPoint, const string &p_Text)
+	
+	void SNI_Thread::SetDebugId(const string &p_DebugId)
 	{
+		m_DebugId = p_DebugId;
+	}
+
+	void SNI_Thread::DebugCommand(SN::InterruptPoint p_InterruptPoint, const string &p_Text, unsigned long p_BreakId)
+	{
+		if (Top()->GetDebugId().empty())
+		{
+			return;
+		}
 		if (p_InterruptPoint == SN::EndPoint)
 		{
 			m_Ended = true;
@@ -137,7 +146,10 @@ namespace SNI
 		{
 			m_ThreadStepCount++;
 			m_DebugCommand.SetText(p_Text);
-			while (m_DebugCommand.IsBreakPoint(p_InterruptPoint, m_ThreadNum, SNI_Frame::GetFrameStackDepth(), m_ThreadStepCount))
+			string breakPoint = Top()->GetBreakPoint(p_BreakId);
+			SetDeepBreakPoint(breakPoint);
+
+			while (m_DebugCommand.IsBreakPoint(p_InterruptPoint, m_ThreadNum, SNI_Frame::GetFrameStackDepth(), m_ThreadStepCount, breakPoint))
 			{
 			}
 		}
@@ -221,14 +233,15 @@ namespace SNI
 		return ss.str();
 	}
 
-	string SNI_Thread::StackJS(long p_MaxStackFrame)
+	string SNI_Thread::StackJS(long p_MaxStackFrame, enum DisplayOptionType p_DebugHTML)
 	{
 		stringstream ss;
 		cout << "StackJS\n";
 		SNI_Manager *manager = GetTopManager(false);
 		if (manager)
 		{
-			WriteStackJS(ss, p_MaxStackFrame, manager->DebugFieldWidth());
+			SNI_DisplayOptions l_DisplayOptions(p_DebugHTML);
+			WriteStackJS(ss, p_MaxStackFrame, manager->DebugFieldWidth(), l_DisplayOptions);
 		}
 		return ss.str();
 	}
@@ -249,11 +262,11 @@ namespace SNI
 		return ss.str();
 	}
 
-	string SNI_Thread::Skynet()
+	string SNI_Thread::Skynet(enum DisplayOptionType p_DebugHTML)
 	{
 		stringstream ss;
 		cout << "Skynet\n";
-		WriteWebPage(ss, m_Running);
+		WriteWebPage(ss, m_Running, p_DebugHTML);
 		return ss.str();
 	}
 
@@ -281,13 +294,13 @@ namespace SNI
 		m_DefineId++;
 	}
 
-	string SNI_Thread::StartCommand(enum SN::DebugAction p_DebugAction, const string &p_Description)
+	string SNI_Thread::StartCommand(enum SN::DebugAction p_DebugAction, const string &p_Description, enum DisplayOptionType p_DebugHTML)
 	{
 		stringstream ss;
 		m_DebugAction = p_DebugAction;
 		cout << p_Description << "\n";
 		std::this_thread::yield();
-		WriteWebPage(ss, true);
+		WriteWebPage(ss, true, p_DebugHTML);
 		return ss.str();
 	}
 
@@ -299,6 +312,11 @@ namespace SNI
 	void SNI_Thread::RunToEnd()
 	{
 		m_DebugCommand.RunToEnd();
+	}
+
+	void SNI_Thread::LoadBreakPoints(const string &p_BreakPointString)
+	{
+		m_DebugCommand.LoadBreakPoints(p_BreakPointString);
 	}
 
 	void SNI_Thread::Debug()
@@ -351,100 +369,100 @@ namespace SNI
 		m_DebugAction = SN::Abort;
 	}
 
-	string SNI_Thread::RunWeb()
+	string SNI_Thread::RunWeb(enum DisplayOptionType p_DebugHTML)
 	{
 		m_DebugCommand.Run();
 		stringstream ss;
-		WriteWebPage(ss, true);
+		WriteWebPage(ss, true, p_DebugHTML);
 		return ss.str();
 	}
 
-	string SNI_Thread::RunToEndWeb()
+	string SNI_Thread::RunToEndWeb(enum DisplayOptionType p_DebugHTML)
 	{
 		m_DebugCommand.RunToEnd();
 		stringstream ss;
-		WriteWebPage(ss, true);
+		WriteWebPage(ss, true, p_DebugHTML);
 		return ss.str();
 	}
 
-	string SNI_Thread::DebugWeb()
+	string SNI_Thread::DebugWeb(enum DisplayOptionType p_DebugHTML)
 	{
 		m_DebugCommand.Debug();
 		stringstream ss;
-		WriteWebPage(ss, true);
+		WriteWebPage(ss, true, p_DebugHTML);
 		return ss.str();
 	}
 
-	string SNI_Thread::DebugBreakWeb()
+	string SNI_Thread::DebugBreakWeb(enum DisplayOptionType p_DebugHTML)
 	{
 		m_DebugCommand.DebugBreak();
 		stringstream ss;
-		WriteWebPage(ss, true);
+		WriteWebPage(ss, true, p_DebugHTML);
 		return ss.str();
 	}
 
-	string SNI_Thread::StepOverWeb()
+	string SNI_Thread::StepOverWeb(enum DisplayOptionType p_DebugHTML)
 	{
 		m_DebugCommand.StepOver(m_FrameList.size());
 		stringstream ss;
-		WriteWebPage(ss, true);
+		WriteWebPage(ss, true, p_DebugHTML);
 		return ss.str();
 	}
 
-	string SNI_Thread::StepIntoWeb()
+	string SNI_Thread::StepIntoWeb(enum DisplayOptionType p_DebugHTML)
 	{
 		m_DebugCommand.StepInto();
 		stringstream ss;
-		WriteWebPage(ss, true);
+		WriteWebPage(ss, true, p_DebugHTML);
 		return ss.str();
 	}
 
-	string SNI_Thread::StepOutWeb()
+	string SNI_Thread::StepOutWeb(enum DisplayOptionType p_DebugHTML)
 	{
 		m_DebugCommand.StepOut(m_FrameList.size());
 		stringstream ss;
-		WriteWebPage(ss, true);
+		WriteWebPage(ss, true, p_DebugHTML);
 		return ss.str();
 	}
 
-	string SNI_Thread::StepParamWeb()
+	string SNI_Thread::StepParamWeb(enum DisplayOptionType p_DebugHTML)
 	{
 		m_DebugCommand.StepParam();
 		stringstream ss;
-		WriteWebPage(ss, true);
+		WriteWebPage(ss, true, p_DebugHTML);
 		return ss.str();
 	}
 
-	string SNI_Thread::GotoStepCountWeb(long p_StepCount)
+	string SNI_Thread::GotoStepCountWeb(long p_StepCount, enum DisplayOptionType p_DebugHTML)
 	{
 		m_DebugCommand.GotoStepCount(p_StepCount, m_ThreadNum);
 		stringstream ss;
-		WriteWebPage(ss, true);
+		WriteWebPage(ss, true, p_DebugHTML);
 		return ss.str();
 	}
 
-	string SNI_Thread::SetMaxStackFramesWeb(long p_MaxStackFrame)
+	string SNI_Thread::SetMaxStackFramesWeb(long p_MaxStackFrame, enum DisplayOptionType p_DebugHTML)
 	{
 		stringstream ss;
 		m_MaxStackFrames = p_MaxStackFrame;
 		cout << "Set max stack frames\n";
-		WriteWebPage(ss, true);
+		WriteWebPage(ss, true, p_DebugHTML);
 		return ss.str();
 	}
 
-	string SNI_Thread::SetThreadNumWeb()
+	string SNI_Thread::SetThreadNumWeb(enum DisplayOptionType p_DebugHTML)
 	{
 		stringstream ss;
-		WriteWebPage(ss, true);
+		WriteWebPage(ss, true, p_DebugHTML);
 		return ss.str();
 	}
 
-	string SNI_Thread::QuitWeb()
+	string SNI_Thread::QuitWeb(enum DisplayOptionType p_DebugHTML)
 	{
 		stringstream ss;
 		m_DebugCommand.Quit();
 		cout << "Quit\n";
-		WriteWebPage(ss, true);
+		WriteWebPage(ss, true, p_DebugHTML);
 		return ss.str();
 	}
 
@@ -458,7 +476,7 @@ namespace SNI
 		m_Mutex.unlock();
 	}
 
-	void SNI_Thread::WriteWebPage(ostream & p_Stream, bool p_Refresh)
+	void SNI_Thread::WriteWebPage(ostream & p_Stream, bool p_Refresh, enum DisplayOptionType p_DebugHTML)
 	{
 		m_DebugCommand.SetRunning(p_Refresh);
 		p_Stream << "<!doctype html>\n";
@@ -504,11 +522,12 @@ namespace SNI
 		WriteStepCounts(p_Stream);
 		if (manager)
 		{
+			SNI_DisplayOptions l_DisplayOptions(p_DebugHTML);
 			p_Stream << "<table class='group'><tr>\n";
 			p_Stream << "<td><div class='group'>\n";
 			if (!m_DebugCommand.IsQuitting())
 			{
-				WriteWebStack(p_Stream, m_MaxStackFrames, manager->DebugFieldWidth());
+				WriteWebStack(p_Stream, m_MaxStackFrames, manager->DebugFieldWidth(), l_DisplayOptions);
 			}
 			p_Stream << "</div></td>\n";
 			p_Stream << "<td><div class='group'>\n";
@@ -748,9 +767,8 @@ namespace SNI
 		p_Stream << "</td>\n";
 	}
 
-	void SNI_Thread::WriteWebStack(ostream &p_Stream, size_t p_Depth, size_t p_DebugFieldWidth)
+	void SNI_Thread::WriteWebStack(ostream &p_Stream, size_t p_Depth, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
 	{
-		SNI_DisplayOptions p_DisplayOptions(doTextOnly);
 		p_Stream << "<table class='stack'>\n";
 		p_Stream << "<caption>Thread " << m_ThreadNum << "</caption>";
 		size_t base = 0;
@@ -816,9 +834,8 @@ namespace SNI
 		SNI_Log::GetLog()->LogTableJS(p_Stream, p_MaxLogEntries);
 	}
 
-	void SNI_Thread::WriteStackJS(ostream &p_Stream, size_t p_Depth, size_t p_DebugFieldWidth)
+	void SNI_Thread::WriteStackJS(ostream &p_Stream, size_t p_Depth, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
 	{
-		SNI::SNI_DisplayOptions p_DisplayOptions(doTextOnly);
 		Lock();
 		p_Stream << "{\"records\":[\n";
 		size_t base = 0;
@@ -833,6 +850,7 @@ namespace SNI
 			m_FrameList[j - 1]->WriteJS(p_Stream, j, p_DebugFieldWidth, p_DisplayOptions);
 			delimeter = ",";
 		}
+		p_Stream << "],\n";
 		Unlock();
 
 		p_Stream << "\"threadnum\" : \"" << m_ThreadNum << "\",\n";
@@ -921,6 +939,7 @@ namespace SNI
 
 	void SNI_Thread::PushFrame(SNI_Frame *p_Frame)
 	{
+		p_Frame->SetDebugId(m_DebugId);
 		Lock();
 		m_FrameList.push_back(p_Frame);
 		Unlock();
@@ -936,6 +955,18 @@ namespace SNI
 	size_t SNI_Thread::GetFrameStackDepth()
 	{
 		return m_FrameList.size();
+	}
+
+	void SNI_Thread::SetDeepBreakPoint(const string & p_BreakPoint)
+	{
+		for (auto it = m_FrameList.rbegin(); it != m_FrameList.rend(); it++)
+		{
+			if ((*it)->HasCode())
+			{
+				(*it)->SetBreakPoint(p_BreakPoint);
+				return;
+			}
+		}
 	}
 
 	void SNI_Thread::PromoteExternals(PGC::PGC_Transaction *p_Transaction)

@@ -30,7 +30,6 @@ namespace SNI
 	SNI_Expression::SNI_Expression(const SNI_Expression &p_Expression)
 		: SNI_Base(p_Expression)
 	{
-
 	}
 
 	SNI_Expression::~SNI_Expression()
@@ -47,6 +46,11 @@ namespace SNI
 		return "Expression";
 	}
 
+	string SNI_Expression::GetReferredName() const
+	{
+		return GetTypeName();
+	}
+
 	string SNI_Expression::DisplayCpp() const
 	{
 		return GetTypeName();
@@ -60,6 +64,46 @@ namespace SNI
 	string SNI_Expression::DisplayValueSN(long priority, SNI_DisplayOptions & p_DisplayOptions) const
 	{
 		return DisplaySN(priority, p_DisplayOptions);
+	}
+
+	unsigned long SNI_Expression::GetId() const
+	{
+		return 0;
+	}
+
+	string SNI_Expression::GetDebugId() const
+	{
+		return GetReferredName() + "_" + to_string(GetId());
+	}
+
+	void SNI_Expression::CreateId()
+	{
+	}
+
+	string SNI_Expression::GetBreakPoint(long p_Index) const
+	{
+		return GetDebugId() + "_" + to_string(p_Index);
+	}
+
+	string SNI_Expression::SetBreakPoint(const string &p_Caption, SNI_DisplayOptions & p_DisplayOptions, const SNI_Expression *p_DebugSource, long p_Index) const
+	{
+		switch (p_DisplayOptions.GetDebugHTML())
+		{
+		case doTextOnly:
+			if (p_Caption == "~" || p_Caption == ";" || p_Caption == "end")
+			{
+				return "";
+			}
+			return p_Caption;
+		case doDebugPointsHTML:
+			return p_Caption;
+		case doDebugPointsJS:
+			{
+				string breakPoint = p_DebugSource->GetBreakPoint(p_Index);
+				return "<button title='" + breakPoint + "' ng-click='setbreakpoint(\"" + breakPoint + "\")' ng-class='breakpointclass(\"" + breakPoint + "\", f.breakpoint)'>" + p_Caption + "</button>";
+			}
+		}
+		return "";
 	}
 
 	long SNI_Expression::GetPriority() const
@@ -453,7 +497,6 @@ namespace SNI
 		SN::LogContext context("SNI_Expression::AssertAction()");
 		SN::SN_Expression clone = Clone(NULL, NULL);
 		LOG(WriteLine(SN::DebugLevel, "Assert " + clone.DisplayValueSN()));
-		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Assert " + clone.DisplayValueSN());
 		SN::SN_Error result = clone.Assert();
 		SNI_Frame::Pop();
 		HandleAssertAction(context, result, "Assert", p_ErrorHandler);
@@ -469,7 +512,6 @@ namespace SNI
 		SN::LogContext context("SNI_Expression::PartialAssertAction()");
 		SNI::SNI_DisplayOptions l_DisplayOptions(doTextOnly);
 		LOG(WriteLine(SN::DebugLevel, "Partial assert " + DisplayValueSN(0, l_DisplayOptions)));
-		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Partial assert " + DisplayValueSN(0, l_DisplayOptions));
 		SNI_Thread::GetThread()->UpdateIncrementId();
 		HandleAssertAction(context, PartialAssert(), "Partial assert", p_ErrorHandler);
 	}
@@ -495,7 +537,6 @@ namespace SNI
 		SN::LogContext context("SNI_Expression::EvaluateAction()");
 		SN::SN_Expression clone = Clone(NULL, NULL);
 		LOG(WriteLine(SN::DebugLevel, "Evaluate " + clone.DisplayValueSN()));
-		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Evaluate " + clone.DisplayValueSN());
 		SN::SN_Expression result = clone.Evaluate();
 		SNI_Frame::Pop();
 		HandleEvaluateAction(context, result, "Evaluate", p_ErrorHandler);
@@ -511,7 +552,6 @@ namespace SNI
 		SN::LogContext context("SNI_Expression::PartialEvaluateAction()");
 		SNI::SNI_DisplayOptions l_DisplayOptions(doTextOnly);
 		LOG(WriteLine(SN::DebugLevel, "Partial evaluate " + DisplayValueSN(0, l_DisplayOptions)));
-		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Partial evaluate " + DisplayValueSN(0, l_DisplayOptions));
 		HandleEvaluateAction(context, PartialEvaluate(), "Partial evaluate", p_ErrorHandler);
 	}
 

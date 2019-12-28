@@ -49,9 +49,10 @@ namespace SNI
 
 		void SetDebugId(const string & p_DebugId);
 
-		void DebugCommand(SN::InterruptPoint p_InterruptPoint, const string & p_Text);
+		void DebugCommand(SN::InterruptPoint p_InterruptPoint, const string & p_Text, unsigned long p_BreakId);
 		void ScheduleCommand(SN::DebugAction p_DebugAction);
 		bool IsExiting();
+		void LoadBreakPoints(const string &p_BreakPointString);
 
 		void Run();
 		void RunToEnd();
@@ -66,22 +67,22 @@ namespace SNI
 		void Quit();
 		void Abort();
 
-		string Skynet();
-		string RunWeb();
-		string RunToEndWeb();
-		string DebugWeb();
-		string DebugBreakWeb();
-		string StepOverWeb();
-		string StepIntoWeb();
-		string StepOutWeb();
-		string StepParamWeb();
-		string GotoStepCountWeb(long p_StepCount);
-		string SetMaxStackFramesWeb(long p_MaxStackFrame);
-		string SetThreadNumWeb();
-		string QuitWeb();
+		string Skynet(enum DisplayOptionType p_DebugHTML);
+		string RunWeb(enum DisplayOptionType p_DebugHTML);
+		string RunToEndWeb(enum DisplayOptionType p_DebugHTML);
+		string DebugWeb(enum DisplayOptionType p_DebugHTML);
+		string DebugBreakWeb(enum DisplayOptionType p_DebugHTML);
+		string StepOverWeb(enum DisplayOptionType p_DebugHTML);
+		string StepIntoWeb(enum DisplayOptionType p_DebugHTML);
+		string StepOutWeb(enum DisplayOptionType p_DebugHTML);
+		string StepParamWeb(enum DisplayOptionType p_DebugHTML);
+		string GotoStepCountWeb(long p_StepCount, enum DisplayOptionType p_DebugHTML);
+		string SetMaxStackFramesWeb(long p_MaxStackFrame, enum DisplayOptionType p_DebugHTML);
+		string SetThreadNumWeb(enum DisplayOptionType p_DebugHTML);
+		string QuitWeb(enum DisplayOptionType p_DebugHTML);
 
 		string SkynetJS();
-		string StackJS(long p_MaxStackFrame);
+		string StackJS(long p_MaxStackFrame, enum DisplayOptionType p_DebugHTML);
 		string StepCountJS();
 		string LogJS(long p_MaxLogEntries);
 
@@ -94,7 +95,9 @@ namespace SNI
 		void PopFrame();
 		size_t GetFrameStackDepth();
 
-		void WriteWebPage(ostream &p_Stream, bool p_Refresh);
+		void SetDeepBreakPoint(const string & p_BreakPoint);
+
+		void WriteWebPage(ostream &p_Stream, bool p_Refresh, DisplayOptionType p_DebugHTML);
 		static void WriteWebPageJS(ostream & p_Stream, bool p_Refresh);
 		void WriteShuttingDown(ostream & p_Stream);
 
@@ -117,7 +120,7 @@ namespace SNI
 		void UpdateIncrementId();
 
 	private:
-		string StartCommand(SN::DebugAction p_DebugAction, const string & p_Description);
+		string StartCommand(SN::DebugAction p_DebugAction, const string & p_Description, enum DisplayOptionType p_DebugHTML);
 
 		static void WriteW3Credentials(ostream & p_Stream);
 		void WriteCommands(ostream & p_Stream);
@@ -129,12 +132,12 @@ namespace SNI
 		void WriteSetMaxStackFrames(ostream & p_Stream);
 		static void WriteSetMaxStackFramesJS(ostream & p_Stream);
 
-		void WriteWebStack(ostream & p_Stream, size_t  p_Depth, size_t p_DebugFieldWidth);
+		void WriteWebStack(ostream & p_Stream, size_t  p_Depth, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
 
 		static void WriteWebStackJS(ostream & p_Stream);
 		static void WriteWebLogJS(ostream & p_Stream);
 
-		void WriteStackJS(ostream & p_Stream, size_t  p_Depth, size_t p_DebugFieldWidth);
+		void WriteStackJS(ostream & p_Stream, size_t  p_Depth, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
 		void WriteLogJS(ostream & p_Stream, long p_MaxLogEntries);
 		void WriteStepCountListJS(ostream & p_Stream);
 		void WriteStepCountJS(ostream & p_Stream, const string &p_Delimeter);
@@ -152,6 +155,7 @@ namespace SNI
 		static vector<SNI_Thread *> m_ThreadList;
 		static mutex m_ThreadListMutex;
 		enum SN::DebugAction m_DebugAction;
+		string m_DebugId;
 
 		long m_MaxStackFrames;
 		static long m_GotoThreadNum;

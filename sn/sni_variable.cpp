@@ -536,7 +536,7 @@ namespace SNI
 		if (m_Value)
 		{
 			SNI_Expression * l_clone = m_Value->Clone(this, NULL);
-			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Variable.Call");
+			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Variable.Call", SN::CallId);
 			SN::SN_Expression e = l_clone->Call(p_ParameterList, p_MetaLevel);
 			SNI_Frame::Pop();
 			if (e.IsNull())
@@ -569,9 +569,8 @@ namespace SNI
 		{
 			SNI_Expression * l_clone = m_Value->Clone(this, (*p_ParameterList)[0].GetSNI_Expression());
 
-			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after clone");
 			SN::SN_Expression e = l_clone->Unify(p_ParameterList);
-			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after unify");
+			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after unify", SN::CallId);
 			SNI_Variable *result = SNI_Frame::Top()->GetResult();
 			result->SetValue((*p_ParameterList)[0].GetVariableValue());
 			SNI_Frame::Pop();

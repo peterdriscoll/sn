@@ -58,6 +58,24 @@ namespace SNI
 		return "{" + result + "}";
 	}
 
+	string SNI_WorldSet::DisplayVariable()
+	{
+		string result;
+		if (m_ChildSetList.size())
+		{
+			for (SNI_WorldSet *ws: m_ChildSetList)
+			{
+				if (result.length())
+				{
+					result += ", ";
+				}
+				result += ws->DisplayVariable();
+			}
+			return "{" + result + "}";
+		}
+		return m_Expression.DisplaySN();
+	}
+
 	string SNI_WorldSet::LogHeading(SN::LogContext &context, long p_Width) const
 	{
 		string heading;
@@ -297,6 +315,7 @@ namespace SNI
 	SN::SN_Error SNI_WorldSet::CheckDependencies(SNI_WorldSetList &p_ChangedList)
 	{
 		SN::LogContext context("SNI_WorldSet::CheckDependentWorlds2(" + DisplayShort() + ")");
+		LOG(WriteLine(SN::DebugLevel, "Check dependencies " + DisplayVariable()));
 		LogSN();
 		FailWorldsWithEmptyChildren(p_ChangedList);
 		MarkAllWorldInChildSets(false);

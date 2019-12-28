@@ -43,6 +43,7 @@ namespace SNI
 		string DisplayShort() const;
 		string DisplayLong() const;
 		string DisplayWorlds() const;
+		string DisplayVariable();
 		string LogHeading(SN::LogContext &context, long p_Width) const;
 		string LogUnderline(SN::LogContext &context, long p_Width) const;
 		void LogSN() const;

@@ -140,6 +140,9 @@ namespace SNI
 	{
 		SN::LogContext context(DisplaySN0() + "SNI_Lambda::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )");
 
+		SNI_Thread::GetThread()->SetDebugId(GetDebugId());
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after all values", SN::CallId);
+
 		ASSERTM(p_ParameterList->size() >0, "Cannot call a lambda without a parameter");
 		SN::SN_Expression param = p_ParameterList->back().GetSNI_Expression();
 		p_ParameterList->pop_back();
@@ -157,13 +160,20 @@ namespace SNI
 		{	// If can't assert actual to formal, then don't make the call. But no error return.
 			return skynet::Null;
 		}
+		SN::SN_Expression result;
 		if (p_ParameterList->size() > 0)
 		{
-			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Lambda.Call");
-			return m_Expression->Call(p_ParameterList, p_MetaLevel);
+			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Lambda.Call", SN::ParameterOneId);
+			result = m_Expression->Call(p_ParameterList, p_MetaLevel);
 		}
-		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Lambda.Evaluate");
-		return m_Expression->Evaluate(p_MetaLevel);
+		else
+		{
+			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Lambda.Evaluate", SN::ParameterOneId);
+			result = m_Expression->Evaluate(p_MetaLevel);
+		}
+
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Lambda.Return", SN::ReturnId);
+		return result;
 	}
 
 	SN::SN_Expression SNI_Lambda::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
@@ -213,7 +223,6 @@ namespace SNI
 			return skynet::Null; // The parameter didn't match, but there may be other polymorphic calls.
 		}
 		LOG(WriteFrame(SNI_Thread::GetThread(), SN::DebugLevel));
-		SNI_Thread::GetThread()->DebugCommand(SN::ParameterPoint, "Lambda.Unify");
 		if (p_ParameterList->size() > 1)
 		{
 			return m_Expression->Unify(p_ParameterList);

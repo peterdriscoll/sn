@@ -36,6 +36,8 @@ namespace SNI
 
 		string DisplaySN() const;
 		string DisplayShort() const;
+		string DisplaySN(SNI_DisplayOptions & p_DisplayOptions);
+		string DisplayCondition();
 		string DisplaySNChildWorlds() const;
 		string LogText(SN::LogContext & context, long p_Width) const;
 

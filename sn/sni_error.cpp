@@ -37,7 +37,7 @@ namespace SNI
 			LOG(WriteLine(SN::ErrorLevel, GetLogDescription()));
 			if (!ErrorIsHandled())
 			{
-				SNI_Thread::GetThread()->DebugCommand(SN::ErrorPoint, "Error");
+				SNI_Thread::GetThread()->DebugCommand(SN::ErrorPoint, "Error", SN::ErrorId);
 			}
 		}
 	}
@@ -52,7 +52,7 @@ namespace SNI
 			LOG(WriteLine(SN::ErrorLevel, GetLogDescription()));
 			if (!ErrorIsHandled())
 			{
-				SNI_Thread::GetThread()->DebugCommand(SN::ErrorPoint, "Error");
+				SNI_Thread::GetThread()->DebugCommand(SN::ErrorPoint, "Error", SN::ErrorId);
 			}
 		}
 	}
