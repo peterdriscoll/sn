@@ -67,7 +67,7 @@ namespace SNI
 		return DisplayCondition();
 	}
 
-	string SNI_World::DisplayCondition()
+	string SNI_World::DisplayCondition() const
 	{
 		if (m_ChildList.size())
 		{
@@ -116,6 +116,7 @@ namespace SNI
 	{
 		p_Stream << tabs << "\t\"id\" : \"" << DisplayShort() << "\",\n";
 		p_Stream << tabs << "\t\"expression\" : \"" << ReplaceAll(m_Value.DisplaySN(), "\"", "\\\"") << "\",\n";
+		p_Stream << tabs << "\t\"condition\" : \"" << ReplaceAll(DisplayCondition(), "\"", "\\\"") << "\",\n";
 		p_Stream << tabs << "\t\"empty\" : " << (IsEmpty() ? "true" : "false") << ",\n";
 		p_Stream << tabs << "\t\"fail\" : " << (IsFailMarked() ? "true" : "false") << "\n";
 	}

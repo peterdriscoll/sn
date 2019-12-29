@@ -119,6 +119,12 @@
                             <td>
                                 {{ws.expression}}
                             </td>
+                            <td>
+                                <button ng-repeat="w in ws.worlds">{{w.condition}}</button>
+                            </td>
+                            <td ng-repeat="cws in ws.childsets">
+                                <button ng-repeat="u in cws.worlds">{{u.condition}}</button>
+                            </td>
                         </tr>
                     </table>
                     <button title='MIR' ng-click='setbreakpoint("MIR_1")' ng-class='breakpointclass("MIR_1", breakpoint)'>Check MIR</button>

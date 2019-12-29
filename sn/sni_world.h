@@ -37,7 +37,7 @@ namespace SNI
 		string DisplaySN() const;
 		string DisplayShort() const;
 		string DisplaySN(SNI_DisplayOptions & p_DisplayOptions);
-		string DisplayCondition();
+		string DisplayCondition() const;
 		string DisplaySNChildWorlds() const;
 		string LogText(SN::LogContext & context, long p_Width) const;
 		void WriteJS(ostream &p_Stream, const string &tabs) const;
