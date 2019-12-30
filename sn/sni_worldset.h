@@ -4,6 +4,8 @@
 #pragma once
 
 #include "sni_object.h"
+#include <unordered_map>
+using namespace std;
 
 namespace SN
 {
@@ -17,6 +19,9 @@ namespace SNI
 
 	class SNI_WorldSet;
 	typedef vector<SNI_WorldSet*> SNI_WorldSetList;
+	typedef unordered_map<long, SNI_WorldSet*> SNI_WorldSetMap;
+	typedef unordered_map<long, SNI_World*> SNI_WorldMap;
+	typedef unordered_map<SNI_World*, long> SNI_WorldCount;
 
 	enum EnumAddWorld
 	{
@@ -24,6 +29,7 @@ namespace SNI
 		ManualAddWorld
 	};
 	typedef enum EnumAddWorld AddWorldType;
+	
 	
 	enum EnumCreateWorld
 	{
@@ -36,7 +42,7 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_WorldSet);
 	public:
-		static void WriteChangedJS(ostream & p_Stream, const string &tabs);
+		static void WriteChangedJS(ostream &p_Stream, const string &tabs);
 
 		SNI_WorldSet(const SN::SN_Expression &p_Expression);
 		virtual ~SNI_WorldSet();
@@ -73,10 +79,23 @@ namespace SNI
 		SNI_World *ContextWorld();
 		void AttachExpression(const SN::SN_Expression & p_Value);
 
-		void ClearFailMarks();
 		bool AllContextFailed();
 
+		void ScheduleCheckForFails();
+
+		void ClearFailMarks();
+		void EmptyUnmarkedWorlds(SNI_World *p_ContextWorld);
+
 	protected:
+		void CheckForFails();
+
+		void AddRelated(SNI_WorldSetMap * p_ProcessMap);
+		void CheckEmptyChildren();
+		void CheckMissingInResult(SNI_World *p_ContextWorld);
+		void CheckAllNegated();
+		void ClearMarkInWorlds();
+		void RemoveFailures();
+
 		void AddChildWorldSet(SNI_WorldSet *p_WorldSet);
 		virtual void PromoteMembers();
 

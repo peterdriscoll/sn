@@ -101,6 +101,8 @@ namespace SNI
 		, m_MaxStackFrames(-1)
 		, m_Ended(false)
 		, m_DefineId(0)
+		, m_WorldSetChangedList(NULL)
+		, m_WorldSetProcessMap(NULL)
 	{
 	}
 
@@ -302,6 +304,24 @@ namespace SNI
 	void SNI_Thread::UpdateIncrementId()
 	{
 		m_DefineId++;
+	}
+
+	SNI_WorldSetList *SNI_Thread::GetWorldSetChanged()
+	{
+		if (!m_WorldSetChangedList)
+		{
+			m_WorldSetChangedList = new SNI_WorldSetList;
+		}
+		return m_WorldSetChangedList;
+	}
+	
+	SNI_WorldSetMap *SNI_Thread::GetWorldSetProcessMap()
+	{
+		if (!m_WorldSetProcessMap)
+		{
+			m_WorldSetProcessMap = new SNI_WorldSetMap;
+		}
+		return m_WorldSetProcessMap;
 	}
 
 	string SNI_Thread::StartCommand(enum SN::DebugAction p_DebugAction, const string &p_Description, enum DisplayOptionType p_DebugHTML)
@@ -913,6 +933,19 @@ namespace SNI
 	{
 		p_Stream << "{\"threadnum\" : \"" << m_ThreadNum << "\", \"stepcount\" : \"" << m_ThreadStepCount << "\"}\n";
 	}
+
+	void SNI_Thread::WriteWorldSetsJS(ostream &p_Stream, const string &tabs)
+	{
+		p_Stream << "\"worldsets\":[\n";
+		string delimeter = " ";
+		for (const auto &pair : *m_WorldSetProcessMap)
+		{
+			SNI_WorldSet *ws = pair.second;
+			ws->WriteJS(p_Stream, tabs + "\t");
+		}
+		p_Stream << "],\n";
+	}
+
 
 	void SNI_Thread::DisplayFrameStack(long p_Depth)
 	{

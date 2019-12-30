@@ -6,6 +6,7 @@
 #include "sni_object.h"
 
 #include <vector>
+#include <unordered_map>
 using namespace std;
 
 namespace SN
@@ -15,11 +16,21 @@ namespace SN
 
 namespace SNI
 {
+	enum FailReason
+	{
+		IncompatibleValue,
+		EmptyChild,
+		MissingInResult,
+		NegatedInAllValues
+	};
+
 	class SNI_WorldSet;
 	typedef vector<SNI_WorldSet*> SNI_WorldSetList;
 
 	class SNI_World;
 	typedef vector<SNI_World*> SNI_WorldList;
+	typedef unordered_map<long, SNI_World*> SNI_WorldMap;
+	typedef unordered_map<SNI_World*, long> SNI_WorldCount;
 
 	class SNI_World :public SNI_Object
 	{
@@ -30,6 +41,7 @@ namespace SNI
 		static SNI_WorldList & ContextWorldList();
 		static void PushContextWorld(SNI_World *p_Context);
 		static void PopContextWorld();
+		static string ReasonString(enum FailReason p_Reason);
 
 		SNI_World(SNI_WorldSet * p_WorldSet, SNI_World *p_CloneParent = NULL);
 		virtual ~SNI_World();
@@ -64,6 +76,7 @@ namespace SNI
 		bool HasMark(bool p_Mark);
 		void MarkWorld(bool p_Mark);
 		void MarkChildWorlds(bool p_Mark);
+		void MarkChildWorlds2();
 		bool HasMutualExclusion();
 
 		void Activate();
@@ -77,9 +90,14 @@ namespace SNI
 		bool IsProperSubWorld(SNI_World * p_World) const;
 		bool IsSubWorld(SNI_World * p_World) const;
 		bool FailInContext(SNI_World *p_ContextWorld);
+		void Negate(SNI_World * p_World);
 		bool FailNoRemove();
 		bool FailNoRemoveInContext(SNI_World *p_ContextWorld);
-		void MarkEmpty();
+		void MarkEmpty(enum FailReason p_Reason);
+		void MarkEmptyInContext(SNI_World * p_ContextWorld, enum FailReason p_Reason);
+
+		void CountNegatedMap(SNI_WorldCount &negatedMap) const;
+		
 		SNI_World * OneParent(SNI_WorldSet * parentWorldSet);
 		void AttachValue(const SN::SN_Expression &p_Value);
 
@@ -91,10 +109,12 @@ namespace SNI
 		SNI_WorldList m_ChildList;
 		SNI_World     *m_CloneParent;
 		SNI_WorldList m_FailedContextList;
+		SNI_WorldList m_NegatedList;
 
 		bool m_Mark;
 		bool m_IsEmpty;
 		bool m_Active;
+		enum FailReason m_Reason;
 
 		bool m_FailMark;
 

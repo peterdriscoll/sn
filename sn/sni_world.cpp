@@ -313,6 +313,14 @@ namespace SNI
 		}
 	}
 
+	void SNI_World::MarkChildWorlds2()
+	{
+		for (SNI_World* w: m_ChildList)
+		{
+			w->MarkWorld(true);
+		}
+	}
+
 	bool SNI_World::HasMutualExclusion()
 	{
 		if (m_Active && !m_Mark)
@@ -444,6 +452,32 @@ namespace SNI
 		return true;
 	}
 
+	void SNI_World::MarkEmptyInContext(SNI_World *p_ContextWorld, enum FailReason p_Reason)
+	{
+		if (p_ContextWorld)
+		{
+			p_ContextWorld->Negate(this);
+			return;
+		}
+
+		LOG(WriteLine(SN::DebugLevel, "Empty " + ReasonString(p_Reason) + " " + DisplayCondition()));
+		m_IsEmpty = true;
+		m_Reason = p_Reason;
+	}
+
+	void SNI_World::Negate(SNI_World * p_World)
+	{
+		ASSERTM(p_World, "Attempt to add null child world.");
+		for (SNI_World *w : m_NegatedList)
+		{
+			if (w == p_World)
+			{
+				return;
+			}
+		}
+		m_NegatedList.push_back(p_World);
+	}
+
 	bool SNI_World::FailNoRemove()
 	{
 		return FailNoRemoveInContext(SNI_World::ContextWorld());
@@ -465,10 +499,39 @@ namespace SNI
 		return !m_WorldSet->IsEmpty();
 	}
 
-	void SNI_World::MarkEmpty()
+	/*static*/ string SNI_World::ReasonString(enum FailReason p_Reason)
 	{
-		SN::LogContext context("SNI_World::MarkEmpty(" + DisplaySN() + ")");
+		switch (p_Reason)
+		{
+		case IncompatibleValue:
+			return "CONFLICT";
+		case EmptyChild:
+			return "EC";
+		case MissingInResult:
+			return "MIR";
+		case NegatedInAllValues:
+			return "NIAV";
+		}
+		return "";
+	}
+
+	void SNI_World::MarkEmpty(enum FailReason p_Reason)
+	{
+		LOG(WriteLine(SN::DebugLevel, "Empty " + ReasonString(p_Reason) + " " + DisplayCondition()));
 		m_IsEmpty = true;
+		m_Reason = p_Reason;
+	}
+
+	void SNI_World::CountNegatedMap(SNI_WorldCount &negatedMap) const
+	{
+		for (SNI_World *w : m_NegatedList)
+		{
+			if (negatedMap.find(w) == negatedMap.end())
+			{
+				negatedMap[w] = 0;
+			}
+			negatedMap[w]++;
+		}
 	}
 
 	SNI_World * SNI_World::OneParent(SNI_WorldSet *parentWorldSet)

@@ -120,6 +120,9 @@ namespace SNI
 		long GetDefineId();
 		void UpdateIncrementId();
 
+		SNI_WorldSetList *GetWorldSetChanged();
+		SNI_WorldSetMap * GetWorldSetProcessMap();
+
 	private:
 		string StartCommand(SN::DebugAction p_DebugAction, const string & p_Description, enum DisplayOptionType p_DebugHTML);
 
@@ -142,6 +145,7 @@ namespace SNI
 		void WriteLogJS(ostream & p_Stream, long p_MaxLogEntries);
 		void WriteStepCountListJS(ostream & p_Stream);
 		void WriteStepCountJS(ostream & p_Stream, const string &p_Delimeter);
+		void WriteWorldSetsJS(ostream & p_Stream, const string & tabs);
 
 		size_t m_ThreadNum;
 		mutex m_Mutex;
@@ -160,6 +164,10 @@ namespace SNI
 		string m_BreakPoint;
 
 		long m_MaxStackFrames;
+
+		SNI_WorldSetList *m_WorldSetChangedList;
+		SNI_WorldSetMap *m_WorldSetProcessMap;
+
 		static long m_GotoThreadNum;
 		static long m_StepCount;
 		static bool m_Running;

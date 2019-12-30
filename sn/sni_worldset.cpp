@@ -484,7 +484,7 @@ namespace SNI
 			if (!world->IsEmpty() && world->HasEmptyChild())
 			{
 				p_ChangedList.push_back(this);
-				world->MarkEmpty();
+				world->MarkEmpty(EmptyChild);
 			}
 			if (world->IsEmpty())
 			{
@@ -560,6 +560,172 @@ namespace SNI
 			}
 		}
 		return true;
+	}
+
+	void SNI_WorldSet::ScheduleCheckForFails()
+	{
+		SNI_Thread *thread = SNI_Thread::GetThread();
+		thread->Lock();
+		SNI_WorldSetList *changedList = SNI_Thread::GetThread()->GetWorldSetChanged();
+		changedList->push_back(this);
+		thread->Unlock();
+	}
+
+	void SNI_WorldSet::CheckForFails()
+	{
+		bool process = false;
+		SNI_Thread *thread = SNI_Thread::GetThread();
+		thread->Lock();
+		SNI_WorldSetList *changedList = SNI_Thread::GetThread()->GetWorldSetChanged();
+		SNI_WorldSetMap *processMap = SNI_Thread::GetThread()->GetWorldSetProcessMap();
+		if (!changedList->empty() && processMap->empty())
+		{
+			process = true;
+			for (SNI_WorldSet *ws : *changedList)
+			{
+				ws->AddRelated(processMap);
+			}
+			changedList->clear();
+		}
+		thread->Unlock();
+
+		if (process)
+		{
+			for (auto pair : *processMap)
+			{
+				SNI_WorldSet *ws = pair.second;
+				ws->CheckEmptyChildren();
+			}
+			for (auto pair : *processMap)
+			{
+				SNI_WorldSet *ws = pair.second;
+				ws->CheckMissingInResult(m_ContextWorld);
+			}
+			for (auto pair : *processMap)
+			{
+				SNI_WorldSet *ws = pair.second;
+				ws->CheckAllNegated();
+			}
+			SNI_Thread::GetThread()->DebugCommand(SN::MirrorPoint, "Check dependencies", SN::CallId);
+			for (auto pair : *processMap)
+			{
+				SNI_WorldSet *ws = pair.second;
+				ws->RemoveFailures();
+			}
+
+			thread->Lock();
+			processMap->clear();
+			thread->Unlock();
+		}
+	}
+
+	void SNI_WorldSet::AddRelated(SNI_WorldSetMap *p_ProcessMap)
+	{
+		if (p_ProcessMap)
+		{
+			(*p_ProcessMap)[m_WorldSetNo] = this;
+			for (SNI_WorldSet *ws : m_ChildSetList)
+			{
+				(*p_ProcessMap)[ws->m_WorldSetNo] = ws;
+			}
+			for (SNI_WorldSet *ws : m_ParentSetList)
+			{
+				(*p_ProcessMap)[ws->m_WorldSetNo] = ws;
+			}
+		}
+	}
+
+	void SNI_WorldSet::CheckEmptyChildren()
+	{
+		for (SNI_World* world: m_WorldList)
+		{
+			if (!world->IsEmpty() && world->HasEmptyChild())
+			{
+				SNI_WorldSetList *changedList = SNI_Thread::GetThread()->GetWorldSetChanged();
+				changedList->push_back(this);
+				world->MarkEmpty(EmptyChild);
+			}
+		}
+	}
+
+	void SNI_WorldSet::CheckMissingInResult(SNI_World *p_ContextWorld)
+	{
+		for (SNI_WorldSet *ws: m_ChildSetList)
+		{
+			ws->ClearMarkInWorlds();
+		}
+		for (SNI_World *w : m_WorldList)
+		{
+			w->MarkChildWorlds2();
+		}
+		for (SNI_WorldSet *ws: m_ChildSetList)
+		{
+			ws->EmptyUnmarkedWorlds(p_ContextWorld);
+		}
+	}
+
+	void SNI_WorldSet::CheckAllNegated()
+	{
+		bool first = true;
+		// find the intersection of all the negated lists in the world.
+		// If a world is negated in every world of the worldset then it has failed.
+		SNI_WorldCount negatedMap;
+		long count = 0;
+		for (SNI_World *w : m_WorldList)
+		{
+			count++;
+			w->CountNegatedMap(negatedMap);
+		}
+		for (const auto &pair : negatedMap)
+		{
+			if (pair.second == count)
+			{
+				SNI_World *w = pair.first;
+				w->MarkEmptyInContext(m_ContextWorld, NegatedInAllValues);
+			}
+		}
+	}
+
+	void SNI_WorldSet::ClearMarkInWorlds()
+	{
+		for (SNI_World *w: m_WorldList)
+		{
+			w->MarkWorld(false);
+		}
+	}
+
+	void SNI_WorldSet::EmptyUnmarkedWorlds(SNI_World *p_ContextWorld)
+	{
+		for (SNI_World *world : m_WorldList)
+		{
+			if (!world->IsEmpty())
+			{
+				if (!world->HasMark(true))
+				{
+					world->MarkEmptyInContext(p_ContextWorld, MissingInResult);
+				}
+				else if (world->HasEmptyChild())
+				{
+					world->MarkEmptyInContext(p_ContextWorld, EmptyChild);
+				}
+			}
+		}
+	}
+
+	void SNI_WorldSet::RemoveFailures()
+	{
+		for (SNI_WorldList::iterator it = m_WorldList.begin(); it != m_WorldList.end();)
+		{
+			SNI_World *world = (*it);
+			if (world->IsEmpty())
+			{
+				it = m_WorldList.erase(it);
+			}
+			else
+			{
+				++it;
+			}
+		}
 	}
 
 	void SNI_WorldSet::AttachExpression(const SN::SN_Expression & p_Expression)
