@@ -883,7 +883,7 @@ namespace SNI
 		p_Stream << "],\n";
 		Unlock();
 
-		SNI_WorldSet::WriteChangedJS(p_Stream, "\t");
+		WriteWorldSetsJS(p_Stream, "\t");
 		p_Stream << "\"threadnum\" : \"" << m_ThreadNum << "\",\n";
 
 		SNI_Manager *manager = GetTopManager(false);
@@ -936,14 +936,20 @@ namespace SNI
 
 	void SNI_Thread::WriteWorldSetsJS(ostream &p_Stream, const string &tabs)
 	{
-		p_Stream << "\"worldsets\":[\n";
-		string delimeter = " ";
-		for (const auto &pair : *m_WorldSetProcessMap)
+		if (m_WorldSetProcessMap)
 		{
-			SNI_WorldSet *ws = pair.second;
-			ws->WriteJS(p_Stream, tabs + "\t");
+			p_Stream << "\"worldsets\":[\n";
+			string delimeter = "";
+			for (const auto &pair : *m_WorldSetProcessMap)
+			{
+				SNI_WorldSet *ws = pair.second;
+				p_Stream << tabs << delimeter << "\t{\n";
+				ws->WriteJS(p_Stream, tabs + "\t");
+				p_Stream << tabs << "}\n";
+				delimeter = ",";
+			}
+			p_Stream << "],\n";
 		}
-		p_Stream << "],\n";
 	}
 
 

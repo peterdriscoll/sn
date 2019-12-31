@@ -69,20 +69,31 @@ namespace SNI
 
 	string SNI_World::DisplayCondition() const
 	{
-		if (m_ChildList.size())
+		string result;
+		if (m_ChildList.empty())
 		{
-			string result;
+			result = m_WorldSet->DisplayVariable() + "=" + m_Value.DisplaySN();
+		}
+		else
+		{
 			for (SNI_World *w : m_ChildList)
 			{
 				if (!result.empty())
 				{
-					result += " && ";
+					result += "&&";
 				}
-				result += w->DisplaySN();
+				result += w->DisplayCondition();
 			}
-			return result;
 		}
-		return m_WorldSet->DisplayVariable() + " = " + m_Value.DisplaySN();
+		for (SNI_World *w : m_NegatedList)
+		{
+			if (!result.empty())
+			{
+				result += "&&!" + w->DisplayCondition();
+			}
+			result += w->DisplayCondition();
+		}
+		return result;
 	}
 
 	string SNI_World::DisplaySNChildWorlds() const
@@ -118,7 +129,8 @@ namespace SNI
 		p_Stream << tabs << "\t\"expression\" : \"" << ReplaceAll(m_Value.DisplaySN(), "\"", "\\\"") << "\",\n";
 		p_Stream << tabs << "\t\"condition\" : \"" << ReplaceAll(DisplayCondition(), "\"", "\\\"") << "\",\n";
 		p_Stream << tabs << "\t\"empty\" : " << (IsEmpty() ? "true" : "false") << ",\n";
-		p_Stream << tabs << "\t\"fail\" : " << (IsFailMarked() ? "true" : "false") << "\n";
+		p_Stream << tabs << "\t\"fail\" : " << (IsFailMarked() ? "true" : "false") << ",\n";
+		p_Stream << tabs << "\t\"reason\" : \"" << Reason() << "\"\n";
 	}
 
 	void SNI_World::PromoteMembers()
@@ -499,6 +511,11 @@ namespace SNI
 		return !m_WorldSet->IsEmpty();
 	}
 
+	string SNI_World::Reason() const
+	{
+		return ReasonString(m_Reason);
+	}
+
 	/*static*/ string SNI_World::ReasonString(enum FailReason p_Reason)
 	{
 		switch (p_Reason)
@@ -512,7 +529,7 @@ namespace SNI
 		case NegatedInAllValues:
 			return "NIAV";
 		}
-		return "";
+		return "NONE";
 	}
 
 	void SNI_World::MarkEmpty(enum FailReason p_Reason)

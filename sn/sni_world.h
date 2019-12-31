@@ -83,6 +83,8 @@ namespace SNI
 		bool IsActive() const;
 		bool IsAnyActive() const;
 
+		string Reason() const;
+
 		bool IsEmpty() const;
 		bool HasEmptyChild() const;
 		bool Fail();

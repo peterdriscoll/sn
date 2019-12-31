@@ -90,7 +90,6 @@ namespace SNI
 
 	void SNI_WorldSet::WriteJS(ostream &p_Stream, const string &tabs) const
 	{
-		p_Stream << tabs << "{\n";
 		p_Stream << tabs << "\t\"id\" : \"" << DisplayShort() << "\",\n";
 		p_Stream << tabs << "\t\"expression\" : \"" << ReplaceAll(m_Expression.DisplaySN(), "\"", "\\\"") << "\",\n";
 		p_Stream << tabs << "\t\"worlds\" : [\n";
@@ -113,7 +112,6 @@ namespace SNI
 			delimeter = ",";
 		}
 		p_Stream << tabs << "\t]\n";
-		p_Stream << tabs << "}\n";
 	}
 	
 	void SNI_WorldSet::WriteUnmarkedJS(ostream &p_Stream, const string &tabs) const
@@ -124,13 +122,10 @@ namespace SNI
 		string delimeter;
 		for (const SNI_World *w : m_WorldList)
 		{
-			if (w->IsFailMarked())
-			{ 
-				p_Stream << tabs << "\t" << delimeter << "\t{\n";
-				w->WriteJS(p_Stream, tabs + "\t\t");
-				p_Stream << tabs << "\t}\n";
-				delimeter = ",";
-			}
+			p_Stream << tabs << "\t" << delimeter << "\t{\n";
+			w->WriteJS(p_Stream, tabs + "\t\t");
+			p_Stream << tabs << "\t}\n";
+			delimeter = ",";
 		}
 		p_Stream << tabs << "\t]\n";
 	}
@@ -350,6 +345,8 @@ namespace SNI
 
 	SN::SN_Error SNI_WorldSet::CheckDependentWorlds()
 	{
+		//ScheduleCheckForFails();
+		//return CheckForFails();
 		SN::SN_Error result = skynet::OK;
 		m_ChangedList.push_back(this);
 		SNI_Thread::GetThread()->DebugCommand(SN::MirrorPoint, "Check dependencies", SN::CallId);
@@ -571,7 +568,7 @@ namespace SNI
 		thread->Unlock();
 	}
 
-	void SNI_WorldSet::CheckForFails()
+	SN::SN_Error SNI_WorldSet::CheckForFails()
 	{
 		bool process = false;
 		SNI_Thread *thread = SNI_Thread::GetThread();
@@ -589,6 +586,7 @@ namespace SNI
 		}
 		thread->Unlock();
 
+		SN::SN_Error result = skynet::OK;
 		if (process)
 		{
 			for (auto pair : *processMap)
@@ -610,13 +608,18 @@ namespace SNI
 			for (auto pair : *processMap)
 			{
 				SNI_WorldSet *ws = pair.second;
-				ws->RemoveFailures();
+				SN::SN_Error err = ws->RemoveFailures();
+				if (err.IsError())
+				{
+					result = err;
+				}
 			}
 
 			thread->Lock();
 			processMap->clear();
 			thread->Unlock();
 		}
+		return result;
 	}
 
 	void SNI_WorldSet::AddRelated(SNI_WorldSetMap *p_ProcessMap)
@@ -626,11 +629,29 @@ namespace SNI
 			(*p_ProcessMap)[m_WorldSetNo] = this;
 			for (SNI_WorldSet *ws : m_ChildSetList)
 			{
-				(*p_ProcessMap)[ws->m_WorldSetNo] = ws;
+				ws->AddCloselyRelated(p_ProcessMap);
 			}
 			for (SNI_WorldSet *ws : m_ParentSetList)
 			{
-				(*p_ProcessMap)[ws->m_WorldSetNo] = ws;
+				ws->AddCloselyRelated(p_ProcessMap);
+			}
+			if (m_ContextWorld)
+			{
+				SNI_WorldSet *ws = m_ContextWorld->GetWorldSet();
+				ws->AddCloselyRelated(p_ProcessMap);
+			}
+		}
+	}
+
+	void SNI_WorldSet::AddCloselyRelated(SNI_WorldSetMap *p_ProcessMap)
+	{
+		if (p_ProcessMap)
+		{
+			(*p_ProcessMap)[m_WorldSetNo] = this;
+			if (m_ContextWorld)
+			{
+				SNI_WorldSet *ws = m_ContextWorld->GetWorldSet();
+				ws->AddCloselyRelated(p_ProcessMap);
 			}
 		}
 	}
@@ -712,7 +733,7 @@ namespace SNI
 		}
 	}
 
-	void SNI_WorldSet::RemoveFailures()
+	SN::SN_Error SNI_WorldSet::RemoveFailures()
 	{
 		for (SNI_WorldList::iterator it = m_WorldList.begin(); it != m_WorldList.end();)
 		{
@@ -726,6 +747,11 @@ namespace SNI
 				++it;
 			}
 		}
+		if (m_WorldList.empty())
+		{
+			return SN::SN_Error("SNI_WorldSet: World set is empty.");
+		}
+		return skynet::OK;
 	}
 
 	void SNI_WorldSet::AttachExpression(const SN::SN_Expression & p_Expression)

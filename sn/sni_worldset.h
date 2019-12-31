@@ -87,14 +87,15 @@ namespace SNI
 		void EmptyUnmarkedWorlds(SNI_World *p_ContextWorld);
 
 	protected:
-		void CheckForFails();
+		SN::SN_Error CheckForFails();
 
 		void AddRelated(SNI_WorldSetMap * p_ProcessMap);
+		void AddCloselyRelated(SNI_WorldSetMap * p_ProcessMap);
 		void CheckEmptyChildren();
 		void CheckMissingInResult(SNI_World *p_ContextWorld);
 		void CheckAllNegated();
 		void ClearMarkInWorlds();
-		void RemoveFailures();
+		SN::SN_Error RemoveFailures();
 
 		void AddChildWorldSet(SNI_WorldSet *p_WorldSet);
 		virtual void PromoteMembers();

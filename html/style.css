@@ -138,6 +138,31 @@ h6 {
     background-color: red;
 }
 
+.breakpointclear {
+    background-color: white;
+}
+
+.CONFLICT {
+    background-color: hotpink;
+}
+
+.EC {
+    background-color: magenta;
+}
+
+.MIR {
+    background-color: lightcoral;
+}
+
+.NIAV {
+    background-color: lightcoral;
+}
+
+.NONE {
+    background-color: white;
+}
+
+NONE
 a img, :link img, :visited img {
     border: 0;
 }
