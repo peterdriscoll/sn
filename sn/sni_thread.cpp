@@ -154,6 +154,10 @@ namespace SNI
 				breakPoint = "MIR_" + to_string(p_BreakId);
 				SetThreadBreakPoint(breakPoint);
 			}
+			else if (p_InterruptPoint == SN::FailPoint)
+			{
+				breakPoint = m_DebugId;
+			}
 			else
 			{
 				SetThreadBreakPoint("");
@@ -944,6 +948,7 @@ namespace SNI
 
 	void SNI_Thread::WriteWorldSetsJS(ostream &p_Stream, const string &tabs)
 	{
+		Lock();
 		if (m_WorldSetProcessMap)
 		{
 			p_Stream << "\"worldsets\":[\n";
@@ -958,6 +963,7 @@ namespace SNI
 			}
 			p_Stream << "],\n";
 		}
+		Unlock();
 	}
 
 
