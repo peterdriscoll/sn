@@ -434,9 +434,10 @@ namespace SNI
 					SNI_World * world = valueSet[i].GetWorld();
 					if (world)
 					{
-						if (!world->Fail())
+						SN::SN_Error err = world->Fail(IncompatibleValue);
+						if (err.IsError())
 						{
-							return false;
+							return err;
 						}
 					}
 				}

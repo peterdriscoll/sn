@@ -87,16 +87,15 @@ namespace SNI
 
 		bool IsEmpty() const;
 		bool HasEmptyChild() const;
-		bool Fail();
 		SNI_World * GetContextWorld() const;
 		bool IsProperSubWorld(SNI_World * p_World) const;
 		bool IsSubWorld(SNI_World * p_World) const;
-		bool FailInContext(SNI_World *p_ContextWorld);
 		void Negate(SNI_World * p_World);
 		bool FailNoRemove();
 		bool FailNoRemoveInContext(SNI_World *p_ContextWorld);
 		void MarkEmpty(enum FailReason p_Reason);
-		void MarkEmptyInContext(SNI_World * p_ContextWorld, enum FailReason p_Reason);
+		SN::SN_Error Fail(enum FailReason p_Reason);
+		SN::SN_Error FailInContext(SNI_World *p_ContextWorld, enum FailReason p_Reason);
 
 		void CountNegatedMap(SNI_WorldCount &negatedMap) const;
 		

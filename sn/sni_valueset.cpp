@@ -1000,7 +1000,11 @@ namespace SNI
 					{
 						if (SN::Is<SNI_Null *>(tv.GetValue()) || !tv.GetValue().GetBool())
 						{
-							world->Fail();
+							SN::SN_Error err = world->Fail(IncompatibleValue);
+							if (err.IsError())
+							{
+								return err;
+							}
 						}
 					}
 				}

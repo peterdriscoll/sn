@@ -456,7 +456,7 @@ namespace SNI
 		{
 			if (m_ContextWorld)
 			{
-				m_ContextWorld->FailInContext(p_ContextWorld);
+				m_ContextWorld->FailInContext(p_ContextWorld, MissingInResult);
 			}
 			else
 			{
@@ -700,7 +700,7 @@ namespace SNI
 			if (pair.second == count)
 			{
 				SNI_World *w = pair.first;
-				w->MarkEmptyInContext(m_ContextWorld, NegatedInAllValues);
+				w->FailInContext(m_ContextWorld, NegatedInAllValues);
 			}
 		}
 	}
@@ -721,11 +721,11 @@ namespace SNI
 			{
 				if (!world->HasMark(true))
 				{
-					world->MarkEmptyInContext(p_ContextWorld, MissingInResult);
+					world->FailInContext(p_ContextWorld, MissingInResult);
 				}
 				else if (world->HasEmptyChild())
 				{
-					world->MarkEmptyInContext(p_ContextWorld, EmptyChild);
+					world->FailInContext(p_ContextWorld, EmptyChild);
 				}
 			}
 		}

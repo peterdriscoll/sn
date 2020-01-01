@@ -251,7 +251,11 @@ namespace SNI
 				{
 					if (p_World)
 					{
-						p_World->Fail();
+						SN::SN_Error err = p_World->Fail(IncompatibleValue);
+						if (err.IsError())
+						{
+							return err;
+						}
 					}
 				}
 				else

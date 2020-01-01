@@ -405,11 +405,6 @@ namespace SNI
 		return false;
 	}
 
-	bool SNI_World::Fail()
-	{
-		return FailInContext(SNI_World::ContextWorld());
-	}
-
 	SNI_World *SNI_World::GetContextWorld() const
 	{
 		if (!m_WorldSet)
@@ -441,44 +436,38 @@ namespace SNI
 		return IsSubWorld(p_World->GetContextWorld());
 	}
 
-	bool SNI_World::FailInContext(SNI_World *p_ContextWorld)
+	void SNI_World::MarkEmpty(enum FailReason p_Reason)
 	{
-		if (p_ContextWorld && p_ContextWorld->IsProperSubWorld(m_WorldSet->ContextWorld()))
-		{
-			AddFailedContext(p_ContextWorld);
-			if (!CheckForWorldSetFails())
-			{
-				LOG(WriteLine(SN::DebugLevel, "Fail " + DisplayCondition() + " in context " + p_ContextWorld->DisplayCondition()));
-				return false;
-			}
-		}
-
-		LOG(WriteLine(SN::DebugLevel, "Fail "+ DisplayCondition()));
-		SN::LogContext context("SNI_World::Fail(" + DisplaySN() + ")");
+		LOG(WriteLine(SN::DebugLevel, "Fail " + ReasonString(p_Reason) + " " + DisplayCondition()));
 		m_IsEmpty = true;
-		m_WorldSet->RemoveWorld(this);
-		if (m_WorldSet->IsEmpty())
+		m_Reason = p_Reason;
+		SNI_Thread::GetThread()->SetDebugId(DisplayShort());
+		SNI_Thread::GetThread()->DebugCommand(SN::FailPoint, "Fail", SN::CallId);
+		if (m_WorldSet)
 		{
-			return false;
+			m_WorldSet->ScheduleCheckForFails();
 		}
-		return true;
 	}
 
-	void SNI_World::MarkEmptyInContext(SNI_World *p_ContextWorld, enum FailReason p_Reason)
+	SN::SN_Error SNI_World::Fail(enum FailReason p_Reason)
+	{
+		return FailInContext(SNI_World::ContextWorld(), p_Reason);
+	}
+
+	SN::SN_Error SNI_World::FailInContext(SNI_World *p_ContextWorld, enum FailReason p_Reason)
 	{
 		if (p_ContextWorld)
 		{
 			p_ContextWorld->Negate(this);
-			return;
+			return skynet::OK;
 		}
 
-		LOG(WriteLine(SN::DebugLevel, "Empty " + ReasonString(p_Reason) + " " + DisplayCondition()));
-		m_IsEmpty = true;
-		m_Reason = p_Reason;
+		MarkEmpty(p_Reason);
 		if (m_WorldSet)
 		{
-			m_WorldSet->CheckDependentWorlds();
+			return m_WorldSet->CheckForFails();
 		}
+		return skynet::OK;
 	}
 
 	void SNI_World::Negate(SNI_World * p_World)
@@ -534,17 +523,6 @@ namespace SNI
 			return "NIAV";
 		}
 		return "NONE";
-	}
-
-	void SNI_World::MarkEmpty(enum FailReason p_Reason)
-	{
-		LOG(WriteLine(SN::DebugLevel, "Empty " + ReasonString(p_Reason) + " " + DisplayCondition()));
-		m_IsEmpty = true;
-		m_Reason = p_Reason;
-		if (m_WorldSet)
-		{
-			m_WorldSet->CheckDependentWorlds();
-		}
 	}
 
 	void SNI_World::CountNegatedMap(SNI_WorldCount &negatedMap) const
