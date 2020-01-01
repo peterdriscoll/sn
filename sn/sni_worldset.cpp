@@ -570,54 +570,65 @@ namespace SNI
 
 	SN::SN_Error SNI_WorldSet::CheckForFails()
 	{
-		bool process = false;
+		SN::SN_Error result = skynet::OK;
 		SNI_Thread *thread = SNI_Thread::GetThread();
 		thread->Lock();
 		SNI_WorldSetList *changedList = SNI_Thread::GetThread()->GetWorldSetChanged();
 		SNI_WorldSetMap *processMap = SNI_Thread::GetThread()->GetWorldSetProcessMap();
-		if (!changedList->empty() && processMap->empty())
-		{
-			process = true;
-			for (SNI_WorldSet *ws : *changedList)
-			{
-				ws->AddRelated(processMap);
-			}
-			changedList->clear();
-		}
+		bool changesToProcess = !changedList->empty();
 		thread->Unlock();
 
-		SN::SN_Error result = skynet::OK;
-		if (process)
+		while (changesToProcess)
 		{
-			for (auto pair : *processMap)
-			{
-				SNI_WorldSet *ws = pair.second;
-				ws->CheckEmptyChildren();
-			}
-			for (auto pair : *processMap)
-			{
-				SNI_WorldSet *ws = pair.second;
-				ws->CheckMissingInResult(m_ContextWorld);
-			}
-			for (auto pair : *processMap)
-			{
-				SNI_WorldSet *ws = pair.second;
-				ws->CheckAllNegated();
-			}
-			SNI_Thread::GetThread()->DebugCommand(SN::MirrorPoint, "Check dependencies", SN::CallId);
-			for (auto pair : *processMap)
-			{
-				SNI_WorldSet *ws = pair.second;
-				SN::SN_Error err = ws->RemoveFailures();
-				if (err.IsError())
-				{
-					result = err;
-				}
-			}
-
+			bool process = false;
 			thread->Lock();
-			processMap->clear();
+			if (!changedList->empty() && processMap->empty())
+			{
+				process = true;
+				for (SNI_WorldSet *ws : *changedList)
+				{
+					ws->AddRelated(processMap);
+				}
+				changedList->clear();
+			}
 			thread->Unlock();
+
+			if (process)
+			{
+				for (auto pair : *processMap)
+				{
+					SNI_WorldSet *ws = pair.second;
+					ws->CheckEmptyChildren();
+				}
+				for (auto pair : *processMap)
+				{
+					SNI_WorldSet *ws = pair.second;
+					ws->CheckMissingInResult(m_ContextWorld);
+				}
+				for (auto pair : *processMap)
+				{
+					SNI_WorldSet *ws = pair.second;
+					ws->CheckAllNegated();
+				}
+				SNI_Thread::GetThread()->DebugCommand(SN::MirrorPoint, "Check dependencies", SN::CallId);
+				for (auto pair : *processMap)
+				{
+					SNI_WorldSet *ws = pair.second;
+					SN::SN_Error err = ws->RemoveFailures();
+					if (err.IsError())
+					{
+						result = err;
+					}
+				}
+				thread->Lock();
+				processMap->clear();
+				changesToProcess = !changedList->empty();
+				thread->Unlock();
+			}
+			else
+			{
+				changesToProcess = false;
+			}
 		}
 		return result;
 	}
@@ -692,8 +703,11 @@ namespace SNI
 		long count = 0;
 		for (SNI_World *w : m_WorldList)
 		{
-			count++;
-			w->CountNegatedMap(negatedMap);
+			if (!w->IsEmpty())
+			{
+				count++;
+				w->CountNegatedMap(negatedMap);
+			}
 		}
 		for (const auto &pair : negatedMap)
 		{
@@ -736,6 +750,7 @@ namespace SNI
 		for (SNI_WorldList::iterator it = m_WorldList.begin(); it != m_WorldList.end();)
 		{
 			SNI_World *world = (*it);
+			world->DeleteEmptyFromNegatedMap();
 			if (world->IsEmpty())
 			{
 				it = m_WorldList.erase(it);

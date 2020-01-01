@@ -529,11 +529,30 @@ namespace SNI
 	{
 		for (SNI_World *w : m_NegatedList)
 		{
-			if (negatedMap.find(w) == negatedMap.end())
-			{
-				negatedMap[w] = 0;
+			if (!w->IsEmpty())
+			{ 
+				if (negatedMap.find(w) == negatedMap.end())
+				{
+					negatedMap[w] = 0;
+				}
+				negatedMap[w]++;
 			}
-			negatedMap[w]++;
+		}
+	}
+
+	void SNI_World::DeleteEmptyFromNegatedMap()
+	{
+		for (auto it = m_NegatedList.begin(); it != m_NegatedList.end();)
+		{
+			SNI_World *w = *it;
+			if (w->IsEmpty())
+			{
+				it = m_NegatedList.erase(it);
+			}
+			else
+			{
+				it++;
+			}
 		}
 	}
 

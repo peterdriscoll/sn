@@ -98,6 +98,7 @@ namespace SNI
 		SN::SN_Error FailInContext(SNI_World *p_ContextWorld, enum FailReason p_Reason);
 
 		void CountNegatedMap(SNI_WorldCount &negatedMap) const;
+		void DeleteEmptyFromNegatedMap();
 		
 		SNI_World * OneParent(SNI_WorldSet * parentWorldSet);
 		void AttachValue(const SN::SN_Expression &p_Value);
