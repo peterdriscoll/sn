@@ -2795,7 +2795,6 @@ namespace test_sn
 
 		TEST_METHOD(TestVirtualPolymorphicReverse3)
 		{
-			return;
 			Initialize();
 			{
 				Manager manager("Test Virtual Polymorphic Reverse3", AssertErrorHandler);
@@ -2834,7 +2833,7 @@ namespace test_sn
 				(numbers3 == (Short(1) || Long(2) || LongLong(3))).PartialAssertAction();
 				(typeChecker(numbers3) == String("long long")).AssertAction();
 				string n3_text = numbers3.GetValue().DisplayValueSN();
-				Assert::IsTrue(n3_text == "LongLong(1)");
+				Assert::IsTrue(n3_text == "LongLong(3)");
 				(numbers3 == LongLong(3)).EvaluateAction();
 			}
 			Cleanup();
