@@ -122,6 +122,7 @@ namespace SNI
 
 		SNI_WorldSetList *GetWorldSetChanged();
 		SNI_WorldSetMap * GetWorldSetProcessMap();
+		void ClearDependencyChecks();
 
 	private:
 		string StartCommand(SN::DebugAction p_DebugAction, const string & p_Description, enum DisplayOptionType p_DebugHTML);

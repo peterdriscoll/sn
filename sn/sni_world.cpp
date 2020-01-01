@@ -475,6 +475,10 @@ namespace SNI
 		LOG(WriteLine(SN::DebugLevel, "Empty " + ReasonString(p_Reason) + " " + DisplayCondition()));
 		m_IsEmpty = true;
 		m_Reason = p_Reason;
+		if (m_WorldSet)
+		{
+			m_WorldSet->CheckDependentWorlds();
+		}
 	}
 
 	void SNI_World::Negate(SNI_World * p_World)
@@ -537,6 +541,10 @@ namespace SNI
 		LOG(WriteLine(SN::DebugLevel, "Empty " + ReasonString(p_Reason) + " " + DisplayCondition()));
 		m_IsEmpty = true;
 		m_Reason = p_Reason;
+		if (m_WorldSet)
+		{
+			m_WorldSet->CheckDependentWorlds();
+		}
 	}
 
 	void SNI_World::CountNegatedMap(SNI_WorldCount &negatedMap) const

@@ -188,6 +188,7 @@ namespace SNI
 	{
 		SNI_Thread::GetThread()->DebugCommand(SN::EndPoint, "Exit", SN::ExitId);
 		SNI_Thread::GetThread()->SetTopManager(m_LastManager);
+		SNI_Thread::GetThread()->ClearDependencyChecks();
 		if (m_CommandServerThreadUsed)
 		{
 			m_CommandServerThreadUsageCount--;

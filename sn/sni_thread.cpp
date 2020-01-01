@@ -324,6 +324,14 @@ namespace SNI
 		return m_WorldSetProcessMap;
 	}
 
+	void SNI_Thread::ClearDependencyChecks()
+	{
+		delete m_WorldSetProcessMap;
+		delete m_WorldSetChangedList;
+		m_WorldSetProcessMap = NULL;
+		m_WorldSetChangedList = NULL;
+	}
+
 	string SNI_Thread::StartCommand(enum SN::DebugAction p_DebugAction, const string &p_Description, enum DisplayOptionType p_DebugHTML)
 	{
 		stringstream ss;

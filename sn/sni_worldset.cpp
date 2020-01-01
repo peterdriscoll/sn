@@ -345,8 +345,8 @@ namespace SNI
 
 	SN::SN_Error SNI_WorldSet::CheckDependentWorlds()
 	{
-		//ScheduleCheckForFails();
-		//return CheckForFails();
+		ScheduleCheckForFails();
+		return CheckForFails();
 		SN::SN_Error result = skynet::OK;
 		m_ChangedList.push_back(this);
 		SNI_Thread::GetThread()->DebugCommand(SN::MirrorPoint, "Check dependencies", SN::CallId);
@@ -662,8 +662,6 @@ namespace SNI
 		{
 			if (!world->IsEmpty() && world->HasEmptyChild())
 			{
-				SNI_WorldSetList *changedList = SNI_Thread::GetThread()->GetWorldSetChanged();
-				changedList->push_back(this);
 				world->MarkEmpty(EmptyChild);
 			}
 		}
