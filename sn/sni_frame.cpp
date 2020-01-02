@@ -387,7 +387,7 @@ namespace SNI
 				string valueTextHTML;
 				if (!p_Expression.IsNull() || p_Expression.IsKnownTypeValue())
 				{
-					valueText = p_Expression.DisplaySN(plainText) + string(p_World ? "::" + p_World->DisplaySN(p_DisplayOptions) : "");
+					valueText = p_Expression.DisplaySN(plainText) + string(p_World ? "::" + p_World->DisplaySN(plainText) : "");
 					valueTextHTML = p_Expression.DisplaySN(p_DisplayOptions) + string(p_World ? "::" + p_World->DisplaySN(p_DisplayOptions) : "");
 				}
 				p_Stream << delimeter << DetailsFS(valueText, valueTextHTML, p_DebugFieldWidth);

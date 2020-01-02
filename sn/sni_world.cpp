@@ -64,7 +64,7 @@ namespace SNI
 
 	string SNI_World::DisplaySN(SNI_DisplayOptions & p_DisplayOptions)
 	{
-		return DisplayCondition();
+		return DisplayConditionSN(p_DisplayOptions);
 	}
 
 	string SNI_World::DisplayCondition() const
@@ -96,6 +96,11 @@ namespace SNI
 		return result;
 	}
 
+	string SNI_World::DisplayConditionSN(SNI_DisplayOptions & p_DisplayOptions) const
+	{
+		return 	SetBreakPoint(DisplayCondition(), p_DisplayOptions);
+	}
+
 	string SNI_World::DisplaySNChildWorlds() const
 	{
 		if (m_ChildList.size() == 0)
@@ -111,6 +116,27 @@ namespace SNI
 		}
 		result += "}";
 		return result;
+	}
+
+	string SNI_World::SetBreakPoint(const string &p_Caption, SNI_DisplayOptions & p_DisplayOptions) const
+	{
+		switch (p_DisplayOptions.GetDebugHTML())
+		{
+		case doTextOnly:
+			if (p_Caption == "~" || p_Caption == ";" || p_Caption == "end")
+			{
+				return "";
+			}
+			return p_Caption;
+		case doDebugPointsHTML:
+			return p_Caption;
+		case doDebugPointsJS:
+		{
+			string breakPoint = DisplayShort();
+			return "<button ' ng-click='setbreakpoint(\"" + breakPoint + "\")' ng-class='breakpointdefaultclass(\"" + breakPoint + "\", debugid, " + Reason() + ")'>" + p_Caption + "</button>";
+		}
+		}
+		return "";
 	}
 
 	string SNI_World::LogText(SN::LogContext &context, long p_Width) const
