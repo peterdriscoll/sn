@@ -442,7 +442,6 @@ namespace SNI
 		m_IsEmpty = true;
 		m_Reason = p_Reason;
 		SNI_Thread::GetThread()->SetDebugId(DisplayShort());
-		SNI_Thread::GetThread()->DebugCommand(SN::FailPoint, "Fail", SN::CallId);
 		if (m_WorldSet)
 		{
 			m_WorldSet->ScheduleCheckForFails();

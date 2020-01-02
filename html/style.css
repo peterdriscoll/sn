@@ -131,11 +131,15 @@ h6 {
 }
 
 .breakpointset {
-    background-color: #008000;
+    background-color: lightgreen;
 }
 
 .breakpointlast {
-    background-color: red;
+    background-color: pink;
+}
+
+.breakpointsetlast {
+    background-color: orange;
 }
 
 .breakpointclear {
@@ -143,23 +147,28 @@ h6 {
 }
 
 .CONFLICT {
-    background-color: hotpink;
+    border-color: hotpink;
+    border-width: thick
 }
 
 .EC {
-    background-color: magenta;
+    border-color: blue;
+    border-width: thick
 }
 
 .MIR {
-    background-color: lightcoral;
+    border-color: mediumpurple;
+    border-width: thick
 }
 
 .NIAV {
-    background-color: lightcoral;
+    border-color: red;
+    border-width: thick
 }
 
 .NONE {
-    background-color: white;
+    border-color: black;
+    border-width: thin
 }
 
 NONE

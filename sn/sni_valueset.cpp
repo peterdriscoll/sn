@@ -300,10 +300,6 @@ namespace SNI
 				++it;
 			}
 		}
-		if (worldSet)
-		{
-			worldSet->CheckDependentWorlds();
-		}
 		if (oneParent && parentWorldSet)
 		{ 
 			for (SNI_TaggedValue &tv : m_ValueList)

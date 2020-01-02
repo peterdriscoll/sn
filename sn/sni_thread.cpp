@@ -156,6 +156,10 @@ namespace SNI
 			}
 			else if (p_InterruptPoint == SN::FailPoint)
 			{
+				if (m_DebugId.empty())
+				{
+					return;
+				}
 				breakPoint = m_DebugId;
 			}
 			else
@@ -920,6 +924,7 @@ namespace SNI
 			statusDescription += " - Thread ended";
 		}
 		p_Stream << "\"breakpoint\" : \"" << m_BreakPoint << "\",\n";
+		p_Stream << "\"debugid\" : \"" << m_DebugId << "\",\n";
 		p_Stream << "\"statusdescription\" : \"" << statusDescription << "\",\n";
 		p_Stream << "\"running\" : " << running << "\n";
 		p_Stream << "}\n";

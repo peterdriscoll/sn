@@ -346,6 +346,7 @@ namespace SNI
 	SN::SN_Error SNI_WorldSet::CheckDependentWorlds()
 	{
 		ScheduleCheckForFails();
+		SNI_Thread::GetThread()->SetDebugId("");
 		return CheckForFails();
 		SN::SN_Error result = skynet::OK;
 		m_ChangedList.push_back(this);
@@ -568,7 +569,7 @@ namespace SNI
 		thread->Unlock();
 	}
 
-	SN::SN_Error SNI_WorldSet::CheckForFails()
+	/*static*/ SN::SN_Error SNI_WorldSet::CheckForFails()
 	{
 		SN::SN_Error result = skynet::OK;
 		SNI_Thread *thread = SNI_Thread::GetThread();
@@ -603,14 +604,20 @@ namespace SNI
 				for (auto pair : *processMap)
 				{
 					SNI_WorldSet *ws = pair.second;
-					ws->CheckMissingInResult(m_ContextWorld);
+					ws->CheckMissingInResult();
 				}
 				for (auto pair : *processMap)
 				{
 					SNI_WorldSet *ws = pair.second;
 					ws->CheckAllNegated();
 				}
+
+				// SetDebugId has been called in MarkEmpty to identify the breakpoint.
+				SNI_Thread::GetThread()->DebugCommand(SN::FailPoint, "Fail", SN::CallId);
+				SNI_Thread::GetThread()->SetDebugId("");
+
 				SNI_Thread::GetThread()->DebugCommand(SN::MirrorPoint, "Check dependencies", SN::CallId);
+
 				for (auto pair : *processMap)
 				{
 					SNI_WorldSet *ws = pair.second;
@@ -678,7 +685,7 @@ namespace SNI
 		}
 	}
 
-	void SNI_WorldSet::CheckMissingInResult(SNI_World *p_ContextWorld)
+	void SNI_WorldSet::CheckMissingInResult()
 	{
 		for (SNI_WorldSet *ws: m_ChildSetList)
 		{
@@ -690,7 +697,7 @@ namespace SNI
 		}
 		for (SNI_WorldSet *ws: m_ChildSetList)
 		{
-			ws->EmptyUnmarkedWorlds(p_ContextWorld);
+			ws->EmptyUnmarkedWorlds(m_ContextWorld);
 		}
 	}
 

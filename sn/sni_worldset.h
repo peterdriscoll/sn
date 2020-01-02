@@ -82,7 +82,7 @@ namespace SNI
 		bool AllContextFailed();
 
 		void ScheduleCheckForFails();
-		SN::SN_Error CheckForFails();
+		static SN::SN_Error CheckForFails();
 
 		void ClearFailMarks();
 		void EmptyUnmarkedWorlds(SNI_World *p_ContextWorld);
@@ -92,7 +92,7 @@ namespace SNI
 		void AddRelated(SNI_WorldSetMap * p_ProcessMap);
 		void AddCloselyRelated(SNI_WorldSetMap * p_ProcessMap);
 		void CheckEmptyChildren();
-		void CheckMissingInResult(SNI_World *p_ContextWorld);
+		void CheckMissingInResult();
 		void CheckAllNegated();
 		void ClearMarkInWorlds();
 		SN::SN_Error RemoveFailures();

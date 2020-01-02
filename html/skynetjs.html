@@ -120,10 +120,10 @@
                                 {{ws.expression}}
                             </td>
                             <td>
-                                <button ng-repeat="w in ws.worlds" ng-title='w.id' ng-click='setbreakpoint(w.id)' ng-class='breakpointdefaultclass(w.id, breakpoint, w.reason)'>{{w.condition}}</button>
+                                <button ng-repeat="w in ws.worlds" ng-title='w.id' ng-alt='w.id' ng-click='setbreakpoint(w.id)' ng-class='breakpointdefaultclass(w.id, debugid, w.reason)'>{{w.condition}}</button>
                             </td>
                             <td ng-repeat="cws in ws.childsets">
-                                <button ng-repeat="u in cws.worlds" ng-title='u.id' ng-click='setbreakpoint(u.id)' ng-class='breakpointdefaultclass(u.id, breakpoint, u.reason)'>{{u.condition}}</button>
+                                <button ng-repeat="u in cws.worlds" ng-title='u.id' ng-alt='u.id' ng-click='setbreakpoint(u.id)' ng-class='breakpointdefaultclass(u.id, debugid, u.reason)'>{{u.condition}}</button>
                             </td>
                         </tr>
                     </table>
@@ -133,7 +133,7 @@
             <tr>
                 <td>
                     <table class='frame'>
-                        <caption>Thread {{threadnum}}</caption>
+                        <caption>Call stack</caption>
                         <tr ng-repeat="f in callstack">
                             <td>
                                 {{f.name}}
@@ -155,7 +155,7 @@
                 <td>
                     <div class='group'>
                         <table class='stack'>
-                            <caption>Thread {{threadnum}}</caption>
+                            <caption>Detailed stack</caption>
                             <tr ng-repeat="f in frames">
                                 <td>
                                     <div style='overflow-x:auto;white-space:nowrap;width:900px'>
@@ -231,6 +231,7 @@
                             }
                             $scope.threadnum = response.data.threadnum;
                             $scope.breakpoint = response.data.breakpoint;
+                            $scope.debugid = response.data.debugid;
                             $scope.taskdescription = response.data.taskdescription;
                             $scope.statusdescription = response.data.statusdescription;
                             $scope.running = response.data.running;
@@ -264,15 +265,22 @@
             };
             $scope.breakpointclass = function (id, b) {
                 if (id == b) {
+                    if ($scope.breakpointCol.has(id))
+                    {
+                        return 'breakpointsetlast';
+                    }
                     return 'breakpointlast';
                 }
                 return $scope.breakpointCol.has(id) ? 'breakpointset' : 'breakpointclear';
             };
             $scope.breakpointdefaultclass = function (id, b, c) {
                 if (id == b) {
-                    return 'breakpointlast';
+                    if ($scope.breakpointCol.has(id)) {
+                        return 'breakpointsetlast ' + c;
+                    }
+                    return 'breakpointlast '+c;
                 }
-                return $scope.breakpointCol.has(id) ? 'breakpointset' : c;
+                return $scope.breakpointCol.has(id) ? 'breakpointset '+c : c;
             };
             $scope.setthread = function (newthreadnum) {
                 if (threadnum != newthreadnum) {
