@@ -1086,9 +1086,11 @@ namespace SNI
 					ws->CheckAllNegated();
 				}
 
-				// SetDebugId has been called in MarkEmpty to identify the breakpoint.
-				DebugCommand(SN::FailPoint, "Fail", SN::CallId);
-				SetDebugId("");
+				for (auto pair : *processMap)
+				{
+					SNI_WorldSet *ws = pair.second;
+					ws->BreakPointsForDeletedWorlds();
+				}
 				DebugCommand(SN::MirrorPoint, "Check dependencies", SN::CallId);
 
 				for (auto pair : *processMap)

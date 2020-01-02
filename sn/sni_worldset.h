@@ -92,6 +92,7 @@ namespace SNI
 		void CheckEmptyChildren();
 		void CheckMissingInResult();
 		void CheckAllNegated();
+		void BreakPointsForDeletedWorlds();
 		SN::SN_Error RemoveFailures();
 
 	protected:

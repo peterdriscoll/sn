@@ -467,7 +467,6 @@ namespace SNI
 		LOG(WriteLine(SN::DebugLevel, "Fail " + ReasonString(p_Reason) + " " + DisplayCondition()));
 		m_IsEmpty = true;
 		m_Reason = p_Reason;
-		SNI_Thread::GetThread()->SetDebugId(DisplayShort());
 		if (m_WorldSet)
 		{
 			m_WorldSet->ScheduleCheckForFails();
@@ -598,5 +597,14 @@ namespace SNI
 	{
 		m_Value = p_Value;
 		m_ValueString = m_Value.DisplayValueSN();
+	}
+
+	void SNI_World::BreakPointIfDeleted()
+	{
+		if (IsEmpty())
+		{
+			SNI_Thread::GetThread()->SetDebugId(DisplayShort());
+			SNI_Thread::GetThread()->DebugCommand(SN::FailPoint, "Deleted world", SN::CallId);
+		}
 	}
 }

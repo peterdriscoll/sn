@@ -105,6 +105,8 @@ namespace SNI
 		SNI_World * OneParent(SNI_WorldSet * parentWorldSet);
 		void AttachValue(const SN::SN_Expression &p_Value);
 
+		void BreakPointIfDeleted();
+
 	protected:
 		virtual void PromoteMembers();
 

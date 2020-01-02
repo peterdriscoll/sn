@@ -660,6 +660,14 @@ namespace SNI
 		}
 	}
 
+	void SNI_WorldSet::BreakPointsForDeletedWorlds()
+	{
+		for (SNI_World *w : m_WorldList)
+		{
+			w->BreakPointIfDeleted();
+		}
+	}
+
 	void SNI_WorldSet::ClearMarkInWorlds()
 	{
 		for (SNI_World *w: m_WorldList)
