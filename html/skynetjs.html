@@ -188,6 +188,28 @@
                 </td>
                 <td>
                     <div class='group'>
+                        <table class='noborder'>
+                            <tr>
+                                <td>Call</td>
+                                <td><button ng-click='setbreakpoint("assert_1")' ng-class='breakpointclass("assert_1", breakpoint)'>Assert</button></td>
+                                <td><button ng-click='setbreakpoint("partialassert_1")' ng-class='breakpointclass("partialassert_1", breakpoint)'>Partial Assert</button></td>
+                                <td><button ng-click='setbreakpoint("evaluate_1")' ng-class='breakpointclass("evaluate_1", breakpoint)'>Evaluate</button></td>
+                                <td><button ng-click='setbreakpoint("partialevaluate_1")' ng-class='breakpointclass("partialevaluate_1", breakpoint)'>Partial Evakuate</button></td>
+                            </tr>
+                            <tr>
+                                <td>Return</td>
+                                <td><button ng-click='setbreakpoint("assert_13")' ng-class='breakpointclass("assert_13", breakpoint)'>Assert</button></td>
+                                <td><button ng-click='setbreakpoint("partialassert_13")' ng-class='breakpointclass("partialassert_13", breakpoint)'>Partial Assert</button></td>
+                                <td><button ng-click='setbreakpoint("evaluate_13")' ng-class='breakpointclass("evaluate_13", breakpoint)'>Evaluate</button></td>
+                                <td><button ng-click='setbreakpoint("partialevaluate_13")' ng-class='breakpointclass("partialevaluate_13", breakpoint)'>Partial Evakuate</button></td>
+                            </tr>
+                        </table>
+                        <br />
+                        <table class='log'>
+                            <caption>Code</caption>
+                            <tr ng-repeat="l in logexps"><td ng-bind-html="trustAsHtml(l.expression)" init-bind></td></tr>
+                        </table>
+                        <br />
                         <table class='log'>
                             <caption>Logging</caption>
                             <tr ng-repeat="l in logs"><td>{{l.text}}</td></tr>
@@ -231,7 +253,6 @@
                             }
                             $scope.threadnum = response.data.threadnum;
                             $scope.breakpoint = response.data.breakpoint;
-                            $scope.debugid = response.data.debugid;
                             $scope.taskdescription = response.data.taskdescription;
                             $scope.statusdescription = response.data.statusdescription;
                             $scope.running = response.data.running;
@@ -247,6 +268,8 @@
                 };
                 $http.get(home + 'logjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxstackframes * 4)
                     .then(function (response) { $scope.logs = response.data.records; });
+                $http.get(home + 'logexpjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxstackframes * 4)
+                    .then(function (response) { $scope.logexps = response.data.records; });
                 $http.get(home + "stepcountjs")
                     .then(function (response) { $scope.stepcounts = response.data.records; });
             };

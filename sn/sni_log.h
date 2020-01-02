@@ -4,6 +4,7 @@
 #pragma once
 
 #include "sn_manager.h"
+#include "sn_expression.h"
 
 #include <string>
 #include <vector>
@@ -33,7 +34,7 @@ namespace SNI
 		virtual ~SNI_Log();
 
 		void AddStream(SN::LoggingLevel p_LoggingLevel, ostream *p_Stream);
-		void SetLogBuffer(SN::LoggingLevel p_LoggingLevel, size_t p_Capacity);
+		void SetLogBuffer(SN::LoggingLevel p_LoggingLevel, size_t p_Capacity, size_t p_ExpressionCapacity);
 
 		void WriteLine(SN::LoggingLevel p_DebugLevel, const string & p_line);
 
@@ -47,6 +48,9 @@ namespace SNI
 
 		void LogTableToStream(ostream & p_Stream, long p_MaxLogEntries);
 		void LogTableJS(ostream & p_Stream, long p_MaxLogEntries);
+		void LogExpTableJS(ostream & p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_DisplayOptions);
+
+		void WriteExp(SN::SN_Expression p_Expression);
 	private:
 		static SNI_Log *m_Log;
 

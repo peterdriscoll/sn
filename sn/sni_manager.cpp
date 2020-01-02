@@ -103,6 +103,7 @@ namespace SNI
 		, m_CommandServerThreadUsed(false)
 		, m_HasDebugServer(false)
 		, m_LogBufferCapacity(50)
+		, m_LogExpressionBufferCapacity(50)
 		, m_MaxStackFrames(10)
 		, m_Transaction(false)
 	{
@@ -135,6 +136,7 @@ namespace SNI
 		, m_CommandServerThreadUsed(false)
 		, m_HasDebugServer(false)
 		, m_LogBufferCapacity(50)
+		, m_LogExpressionBufferCapacity(50)
 		, m_MaxStackFrames(10)
 		, m_Transaction(false)
 	{
@@ -167,6 +169,7 @@ namespace SNI
 		, m_CommandServerThreadUsed(false)
 		, m_HasDebugServer(false)
 		, m_LogBufferCapacity(50)
+		, m_LogExpressionBufferCapacity(50)
 		, m_MaxStackFrames(10)
 		, m_Transaction(false)
 	{
@@ -482,7 +485,7 @@ namespace SNI
 		if (m_WebServerThreadUsageCount == 0 && !m_WebServerThread)
 		{
 			SNI_Thread::GetThread()->ScheduleCommand(p_DebugAction);
-			SNI_Log::GetLog()->SetLogBuffer(SN::DebugLevel, m_LogBufferCapacity);
+			SNI_Log::GetLog()->SetLogBuffer(SN::DebugLevel, m_LogBufferCapacity, m_LogExpressionBufferCapacity);
 			m_WebServerThread = new thread(RunServer, p_Address, p_Port, p_DocRoot);
 			m_WebServerThreadUsed = true;
 			OpenURLInBrowser("http://127.0.0.1/skynetjs.html");
@@ -549,6 +552,14 @@ namespace SNI
 	void SNI_Manager::SetLogBufferCapacity(size_t p_LogBufferCapacity)
 	{
 		m_LogBufferCapacity = p_LogBufferCapacity;
+	}
+	size_t SNI_Manager::LogExpressionBufferCapacity()
+	{
+		return m_LogExpressionBufferCapacity;
+	}
+	void SNI_Manager::SetLogExpressionBufferCapacity(size_t p_LogExpressionBufferCapacity)
+	{
+		m_LogExpressionBufferCapacity = p_LogExpressionBufferCapacity;
 	}
 	size_t SNI_Manager::MaxStackFrames()
 	{

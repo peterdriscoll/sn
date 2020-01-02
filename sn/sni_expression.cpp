@@ -524,9 +524,17 @@ namespace SNI
 		SN::LogContext context("SNI_Expression::AssertAction()");
 		SN::SN_Expression clone = Clone(this, NULL);
 		LOG(WriteLine(SN::DebugLevel, "Assert " + clone.DisplayValueSN()));
+		LOG(WriteExp(clone));
 		SN::SN_Error result = clone.Assert();
 		SNI_Frame::Pop();
+
+		SNI_Thread::GetThread()->SetDebugId("assert");
+		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Assert", SN::CallId);
+
 		HandleAssertAction(context, result, "Assert", p_ErrorHandler);
+
+		SNI_Thread::GetThread()->SetDebugId("assert");
+		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Assert", SN::ReturnId);
 	}
 
 	void SNI_Expression::PartialAssertAction()
@@ -538,9 +546,19 @@ namespace SNI
 	{
 		SN::LogContext context("SNI_Expression::PartialAssertAction()");
 		SNI::SNI_DisplayOptions l_DisplayOptions(doTextOnly);
+
 		LOG(WriteLine(SN::DebugLevel, "Partial assert " + DisplayValueSN(0, l_DisplayOptions)));
+		LOG(WriteExp(this));
+
 		SNI_Thread::GetThread()->UpdateIncrementId();
+
+		SNI_Thread::GetThread()->SetDebugId("partialassert");
+		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Partial assert", SN::CallId);
+
 		HandleAssertAction(context, PartialAssert(), "Partial assert", p_ErrorHandler);
+
+		SNI_Thread::GetThread()->SetDebugId("partialassert");
+		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Partial assert", SN::ReturnId);
 	}
 
 	void SNI_Expression::HandleAssertAction(SN::LogContext & p_Context, SN::SN_Error p_Result, string p_Text, OnErrorHandler * p_ErrorHandler)
@@ -564,9 +582,17 @@ namespace SNI
 		SN::LogContext context("SNI_Expression::EvaluateAction()");
 		SN::SN_Expression clone = Clone(NULL, NULL);
 		LOG(WriteLine(SN::DebugLevel, "Evaluate " + clone.DisplayValueSN()));
+		LOG(WriteExp(clone));
 		SN::SN_Expression result = clone.Evaluate();
 		SNI_Frame::Pop();
+
+		SNI_Thread::GetThread()->SetDebugId("evaluate");
+		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Evaluate", SN::CallId);
+
 		HandleEvaluateAction(context, result, "Evaluate", p_ErrorHandler);
+
+		SNI_Thread::GetThread()->SetDebugId("evaluate");
+		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Evaluate", SN::ReturnId);
 	}
 
 	void SNI_Expression::PartialEvaluateAction()
@@ -579,7 +605,15 @@ namespace SNI
 		SN::LogContext context("SNI_Expression::PartialEvaluateAction()");
 		SNI::SNI_DisplayOptions l_DisplayOptions(doTextOnly);
 		LOG(WriteLine(SN::DebugLevel, "Partial evaluate " + DisplayValueSN(0, l_DisplayOptions)));
+		LOG(WriteExp(this));
+
+		SNI_Thread::GetThread()->SetDebugId("partialevaluate");
+		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Partial Evaluate", SN::CallId);
+
 		HandleEvaluateAction(context, PartialEvaluate(), "Partial evaluate", p_ErrorHandler);
+
+		SNI_Thread::GetThread()->SetDebugId("partialevaluate");
+		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Partial Evaluate", SN::ReturnId);
 	}
 
 	void SNI_Expression::Fix(SN::SN_Expression p_Value)

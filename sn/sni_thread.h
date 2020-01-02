@@ -85,6 +85,7 @@ namespace SNI
 		string StackJS(long p_MaxStackFrame, enum DisplayOptionType p_DebugHTML);
 		string StepCountJS();
 		string LogJS(long p_MaxLogEntries);
+		string LogExpJS(long p_MaxLogEntries, enum DisplayOptionType p_DebugHTML);
 
 		void Lock();
 		void Unlock();
@@ -146,6 +147,7 @@ namespace SNI
 
 		void WriteStackJS(ostream & p_Stream, size_t  p_Depth, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
 		void WriteLogJS(ostream & p_Stream, long p_MaxLogEntries);
+		void WriteLogExpJS(ostream & p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_DisplayOptions);
 		void WriteStepCountListJS(ostream & p_Stream);
 		void WriteStepCountJS(ostream & p_Stream, const string &p_Delimeter);
 		void WriteWorldSetsJS(ostream & p_Stream, const string & tabs);

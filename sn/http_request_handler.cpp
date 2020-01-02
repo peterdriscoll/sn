@@ -58,6 +58,7 @@ namespace HTTP
 			string path = extract_values(request_path, umap);
 			long threadNum = atol(umap["threadnum"].c_str());
 			DisplayOptionType debugHTML = doDebugPointsHTML;
+			DisplayOptionType debugJS = doDebugPointsJS;
 			SNI_Thread::ThreadListLock();
 			SNI::SNI_Thread *l_thread = SNI::SNI_Thread::GetThreadByNumber(threadNum);
 			rep.content = "";
@@ -171,12 +172,17 @@ namespace HTTP
 				else if (path == "/stackjs")
 				{
 					long maxStackFrames = atol(umap["maxstackframes"].c_str());
-					rep.content = l_thread->StackJS(maxStackFrames, doDebugPointsJS);
+					rep.content = l_thread->StackJS(maxStackFrames, debugJS);
 				}
 				else if (path == "/logjs")
 				{
 					long maxLogEntries = atol(umap["maxlogentries"].c_str());
 					rep.content = l_thread->LogJS(maxLogEntries);
+				}
+				else if (path == "/logexpjs")
+				{
+					long maxLogEntries = atol(umap["maxlogentries"].c_str());
+					rep.content = l_thread->LogExpJS(maxLogEntries, debugJS);
 				}
 				else if (path == "/stepcountjs")
 				{

@@ -136,10 +136,6 @@ namespace SNI
 
 	void SNI_Thread::DebugCommand(SN::InterruptPoint p_InterruptPoint, const string &p_Text, unsigned long p_BreakId)
 	{
-		if (Top()->GetDebugId().empty())
-		{
-			return;
-		}
 		if (p_InterruptPoint == SN::EndPoint)
 		{
 			m_Ended = true;
@@ -161,9 +157,19 @@ namespace SNI
 					return;
 				}
 				breakPoint = m_DebugId;
+				SetThreadBreakPoint(breakPoint);
+			}
+			else if (p_InterruptPoint == SN::StaticPoint)
+			{
+				breakPoint = m_DebugId + "_" + to_string(p_BreakId);
+				SetThreadBreakPoint(breakPoint);
 			}
 			else
-			{
+			{				
+				if (Top()->GetDebugId().empty())
+				{
+					return;
+				}
 				SetThreadBreakPoint("");
 				breakPoint = Top()->GetBreakPoint(p_BreakId);
 				SetDeepBreakPoint(breakPoint);
@@ -279,6 +285,15 @@ namespace SNI
 		stringstream ss;
 		cout << "LogJS\n";
 		WriteLogJS(ss, p_MaxLogEntries);
+		return ss.str();
+	}
+
+	string SNI_Thread::LogExpJS(long p_MaxLogEntries, enum DisplayOptionType p_DebugHTML)
+	{
+		stringstream ss;
+		SNI_DisplayOptions displayOptions(p_DebugHTML);
+		cout << "LogJS\n";
+		WriteLogExpJS(ss, p_MaxLogEntries, displayOptions);
 		return ss.str();
 	}
 
@@ -880,6 +895,11 @@ namespace SNI
 		SNI_Log::GetLog()->LogTableJS(p_Stream, p_MaxLogEntries);
 	}
 
+	void SNI_Thread::WriteLogExpJS(ostream &p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_displayOptions)
+	{
+		SNI_Log::GetLog()->LogExpTableJS(p_Stream, p_MaxLogEntries, p_displayOptions);
+	}
+
 	void SNI_Thread::WriteStackJS(ostream &p_Stream, size_t p_Depth, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
 	{
 		Lock();
@@ -924,7 +944,6 @@ namespace SNI
 			statusDescription += " - Thread ended";
 		}
 		p_Stream << "\"breakpoint\" : \"" << m_BreakPoint << "\",\n";
-		p_Stream << "\"debugid\" : \"" << m_DebugId << "\",\n";
 		p_Stream << "\"statusdescription\" : \"" << statusDescription << "\",\n";
 		p_Stream << "\"running\" : " << running << "\n";
 		p_Stream << "}\n";

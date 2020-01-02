@@ -40,9 +40,9 @@ namespace SNI
 		m_LoggingLevelList.push_back(p_LoggingLevel);
 	}
 
-	void SNI_Log::SetLogBuffer(SN::LoggingLevel p_LoggingLevel, size_t p_Capacity)
+	void SNI_Log::SetLogBuffer(SN::LoggingLevel p_LoggingLevel, size_t p_Capacity, size_t p_ExpressionCapacity)
 	{
-		m_LogBuffer = new SNI_LogBuffer(p_Capacity);
+		m_LogBuffer = new SNI_LogBuffer(p_Capacity, p_ExpressionCapacity);
 		m_LogBufferLoggingLevel = p_LoggingLevel;
 	}
 
@@ -154,6 +154,22 @@ namespace SNI
 		if (m_LogBuffer)
 		{
 			m_LogBuffer->LogTableJS(p_Stream, p_MaxLogEntries);
+		}
+	}
+
+	void SNI_Log::LogExpTableJS(ostream & p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_DisplayOptions)
+	{
+		if (m_LogBuffer)
+		{
+			m_LogBuffer->LogExpressionTableJS(p_Stream, p_MaxLogEntries, p_DisplayOptions);
+		}
+	}
+
+	void SNI_Log::WriteExp(SN::SN_Expression p_Expression)
+	{
+		if (m_LogBuffer)
+		{
+			m_LogBuffer->WriteExpression(p_Expression);
 		}
 	}
 }
