@@ -347,7 +347,12 @@ namespace SNI
 	{
 		ScheduleCheckForFails();
 		SNI_Thread::GetThread()->SetDebugId("");
-		return CheckForFails();
+		return SNI_Thread::GetThread()->CheckForFails();
+	}
+
+	SN::SN_Error SNI_WorldSet::CheckDependentWorldsOld()
+	{
+
 		SN::SN_Error result = skynet::OK;
 		m_ChangedList.push_back(this);
 		SNI_Thread::GetThread()->DebugCommand(SN::MirrorPoint, "Check dependencies", SN::CallId);
@@ -567,77 +572,6 @@ namespace SNI
 		SNI_WorldSetList *changedList = SNI_Thread::GetThread()->GetWorldSetChanged();
 		changedList->push_back(this);
 		thread->Unlock();
-	}
-
-	/*static*/ SN::SN_Error SNI_WorldSet::CheckForFails()
-	{
-		SN::SN_Error result = skynet::OK;
-		SNI_Thread *thread = SNI_Thread::GetThread();
-		thread->Lock();
-		SNI_WorldSetList *changedList = SNI_Thread::GetThread()->GetWorldSetChanged();
-		SNI_WorldSetMap *processMap = SNI_Thread::GetThread()->GetWorldSetProcessMap();
-		bool changesToProcess = !changedList->empty();
-		thread->Unlock();
-
-		while (changesToProcess)
-		{
-			bool process = false;
-			thread->Lock();
-			if (!changedList->empty() && processMap->empty())
-			{
-				process = true;
-				for (SNI_WorldSet *ws : *changedList)
-				{
-					ws->AddRelated(processMap);
-				}
-				changedList->clear();
-			}
-			thread->Unlock();
-
-			if (process)
-			{
-				for (auto pair : *processMap)
-				{
-					SNI_WorldSet *ws = pair.second;
-					ws->CheckEmptyChildren();
-				}
-				for (auto pair : *processMap)
-				{
-					SNI_WorldSet *ws = pair.second;
-					ws->CheckMissingInResult();
-				}
-				for (auto pair : *processMap)
-				{
-					SNI_WorldSet *ws = pair.second;
-					ws->CheckAllNegated();
-				}
-
-				// SetDebugId has been called in MarkEmpty to identify the breakpoint.
-				SNI_Thread::GetThread()->DebugCommand(SN::FailPoint, "Fail", SN::CallId);
-				SNI_Thread::GetThread()->SetDebugId("");
-
-				SNI_Thread::GetThread()->DebugCommand(SN::MirrorPoint, "Check dependencies", SN::CallId);
-
-				for (auto pair : *processMap)
-				{
-					SNI_WorldSet *ws = pair.second;
-					SN::SN_Error err = ws->RemoveFailures();
-					if (err.IsError())
-					{
-						result = err;
-					}
-				}
-				thread->Lock();
-				processMap->clear();
-				changesToProcess = !changedList->empty();
-				thread->Unlock();
-			}
-			else
-			{
-				changesToProcess = false;
-			}
-		}
-		return result;
 	}
 
 	void SNI_WorldSet::AddRelated(SNI_WorldSetMap *p_ProcessMap)

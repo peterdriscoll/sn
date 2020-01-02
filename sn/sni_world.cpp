@@ -464,7 +464,7 @@ namespace SNI
 		MarkEmpty(p_Reason);
 		if (m_WorldSet)
 		{
-			return m_WorldSet->CheckForFails();
+			return SNI_Thread::GetThread()->CheckForFails();
 		}
 		return skynet::OK;
 	}

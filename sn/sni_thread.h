@@ -98,6 +98,8 @@ namespace SNI
 		void SetDeepBreakPoint(const string & p_BreakPoint);
 		void SetThreadBreakPoint(const string & p_BreakPoint);
 
+		SN::SN_Error CheckForFails();
+
 		void WriteWebPage(ostream &p_Stream, bool p_Refresh, DisplayOptionType p_DebugHTML);
 		static void WriteWebPageJS(ostream & p_Stream, bool p_Refresh);
 		void WriteShuttingDown(ostream & p_Stream);

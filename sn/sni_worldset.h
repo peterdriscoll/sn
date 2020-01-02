@@ -73,6 +73,7 @@ namespace SNI
 		bool HasMutualExclusion();
 		void RemoveWorld(SNI_World *world);
 		SN::SN_Error CheckDependentWorlds();
+		SN::SN_Error CheckDependentWorldsOld();
 		SNI_WorldSet * OneParent();
 		bool IsComplete();
 		void Complete();
@@ -82,20 +83,19 @@ namespace SNI
 		bool AllContextFailed();
 
 		void ScheduleCheckForFails();
-		static SN::SN_Error CheckForFails();
 
 		void ClearFailMarks();
 		void EmptyUnmarkedWorlds(SNI_World *p_ContextWorld);
-
-	protected:
 
 		void AddRelated(SNI_WorldSetMap * p_ProcessMap);
 		void AddCloselyRelated(SNI_WorldSetMap * p_ProcessMap);
 		void CheckEmptyChildren();
 		void CheckMissingInResult();
 		void CheckAllNegated();
-		void ClearMarkInWorlds();
 		SN::SN_Error RemoveFailures();
+
+	protected:
+		void ClearMarkInWorlds();
 
 		void AddChildWorldSet(SNI_WorldSet *p_WorldSet);
 		virtual void PromoteMembers();

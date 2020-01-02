@@ -1044,6 +1044,75 @@ namespace SNI
 		m_BreakPoint = p_BreakPoint;
 	}
 
+	SN::SN_Error SNI_Thread::CheckForFails()
+	{
+		SN::SN_Error result = skynet::OK;
+		Lock();
+		SNI_WorldSetList *changedList = GetWorldSetChanged();
+		SNI_WorldSetMap *processMap = GetWorldSetProcessMap();
+		bool changesToProcess = !changedList->empty();
+		Unlock();
+
+		while (changesToProcess)
+		{
+			bool process = false;
+			Lock();
+			if (!changedList->empty() && processMap->empty())
+			{
+				process = true;
+				for (SNI_WorldSet *ws : *changedList)
+				{
+					ws->AddRelated(processMap);
+				}
+				changedList->clear();
+			}
+			Unlock();
+
+			if (process)
+			{
+				for (auto pair : *processMap)
+				{
+					SNI_WorldSet *ws = pair.second;
+					ws->CheckEmptyChildren();
+				}
+				for (auto pair : *processMap)
+				{
+					SNI_WorldSet *ws = pair.second;
+					ws->CheckMissingInResult();
+				}
+				for (auto pair : *processMap)
+				{
+					SNI_WorldSet *ws = pair.second;
+					ws->CheckAllNegated();
+				}
+
+				// SetDebugId has been called in MarkEmpty to identify the breakpoint.
+				DebugCommand(SN::FailPoint, "Fail", SN::CallId);
+				SetDebugId("");
+				DebugCommand(SN::MirrorPoint, "Check dependencies", SN::CallId);
+
+				for (auto pair : *processMap)
+				{
+					SNI_WorldSet *ws = pair.second;
+					SN::SN_Error err = ws->RemoveFailures();
+					if (err.IsError())
+					{
+						result = err;
+					}
+				}
+				Lock();
+				processMap->clear();
+				changesToProcess = !changedList->empty();
+				Unlock();
+			}
+			else
+			{
+				changesToProcess = false;
+			}
+		}
+		return result;
+	}
+
 	void SNI_Thread::PromoteExternals(PGC::PGC_Transaction *p_Transaction)
 	{
 		for (SNI_Frame *f : m_FrameList)
