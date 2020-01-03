@@ -85,7 +85,9 @@ namespace SNI
 		virtual string GetBreakPoint(long p_Index) const;
 		virtual unsigned long GetId() const;
 		virtual string GetDebugId() const;
-		virtual string SetBreakPoint(const string &p_Caption, SNI_DisplayOptions & p_DisplayOptions, const SNI_Expression *p_DebugSource, long p_Index) const;
+
+		string SetBreakPoint(const string &p_Caption, SNI_DisplayOptions & p_DisplayOptions, const SNI_Expression *p_DebugSource, long p_Index) const;
+		string SetStaticBreakPoint(const string & p_Caption, SNI_DisplayOptions & p_DisplayOptions, const SNI_Expression * p_DebugSource, long p_Index) const;
 
 		virtual long GetPriority() const;
 		virtual string GetOperator() const;

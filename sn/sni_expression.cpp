@@ -127,6 +127,27 @@ namespace SNI
 		return "";
 	}
 
+	string SNI_Expression::SetStaticBreakPoint(const string &p_Caption, SNI_DisplayOptions & p_DisplayOptions, const SNI_Expression *p_DebugSource, long p_Index) const
+	{
+		switch (p_DisplayOptions.GetDebugHTML())
+		{
+		case doTextOnly:
+			if (p_Caption == "~" || p_Caption == ";" || p_Caption == "end")
+			{
+				return "";
+			}
+			return p_Caption;
+		case doDebugPointsHTML:
+			return p_Caption;
+		case doDebugPointsJS:
+		{
+			string breakPoint = p_DebugSource->GetBreakPoint(p_Index);
+			return "<button ' ng-click='setbreakpoint(\"" + breakPoint + "\")' ng-class='breakpointdefaultclass(\"" + breakPoint + "\", breakpoint, \"\")'>" + p_Caption + "</button>";
+		}
+		}
+		return "";
+	}
+
 	long SNI_Expression::GetPriority() const
 	{
 		return 1000;

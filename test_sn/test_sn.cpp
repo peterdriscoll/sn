@@ -9,7 +9,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace skynet;
 using namespace PGCX;
 
-bool runWebServer = false;
+bool runWebServer = true;
 bool runWebServer2 = false;
 bool runWebServer3 = false;
 

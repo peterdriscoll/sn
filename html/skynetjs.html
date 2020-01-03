@@ -120,10 +120,10 @@
                                 {{ws.expression}}
                             </td>
                             <td>
-                                <button ng-repeat="w in ws.worlds" ng-title='w.id' ng-alt='w.id' ng-click='setbreakpoint(w.id)' ng-class='breakpointdefaultclass(w.id, debugid, w.reason)'>{{w.condition}}</button>
+                                <button ng-repeat="w in ws.worlds" ng-title='w.id' ng-click='setbreakpoint(w.id)' ng-class='breakpointdefaultclass(w.id, breakpoint, w.reason)'>{{w.condition}}</button>
                             </td>
                             <td ng-repeat="cws in ws.childsets">
-                                <button ng-repeat="u in cws.worlds" ng-title='u.id' ng-alt='u.id' ng-click='setbreakpoint(u.id)' ng-class='breakpointdefaultclass(u.id, debugid, u.reason)'>{{u.condition}}</button>
+                                <button ng-repeat="u in cws.worlds" ng-title='u.id' ng-click='setbreakpoint(u.id)' ng-class='breakpointdefaultclass(u.id, breakpoint, u.reason)'>{{u.condition}}</button>
                             </td>
                         </tr>
                     </table>
