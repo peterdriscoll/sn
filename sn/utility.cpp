@@ -159,12 +159,11 @@ namespace SNI
 	string DetailsFS(const string &p_Text, const string &p_TextHTML, size_t p_Width)
 	{
 		string abbreviation;
-		string text = ReplaceAll(p_Text, "\"", "\\\"");
 		string textHTML = ReplaceAll(p_TextHTML, "\"", "\\\"");
-		size_t textWidth = text.size();
+		size_t textWidth = p_Text.size();
 		if (p_Width < textWidth)
 		{
-			abbreviation = text.substr(0, p_Width - 3);
+			abbreviation = ReplaceAll(p_Text.substr(0, p_Width - 3), "\"", "\\\"");
 		}
 		return "{\"abbreviation\" : \"" + abbreviation + "\",\"text\" : \"" + textHTML + "\"}";
 	}
