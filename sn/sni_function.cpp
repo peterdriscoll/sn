@@ -78,7 +78,7 @@ namespace SNI
 	{
 		if (m_Function)
 		{
-			return m_Function->GetReferredName();
+			return GetTypeName() + "_" +m_Function->GetReferredName();
 		}
 		return GetTypeName();
 	}
@@ -109,7 +109,7 @@ namespace SNI
 
 	long SNI_Function::GetPriority() const
 	{
-		return 3;
+		return 0;
 	}
 
 	SNI_Expression * SNI_Function::GetFunction()
@@ -205,6 +205,7 @@ namespace SNI
 			}
 			else
 			{
+				SNI_Thread::GetThread()->SetDebugId(GetDebugId());
 				function = function->Unify(l_ParameterList).GetSNI_Expression();
 			}
 			e = dynamic_cast<SNI_Error *>(function);

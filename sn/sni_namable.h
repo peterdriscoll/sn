@@ -12,7 +12,6 @@ namespace SNI
 {
 	class SNI_Namable
 	{
-		PGC_CLASS(SNI_Namable);
 	public:
 		SNI_Namable();
 		virtual ~SNI_Namable();

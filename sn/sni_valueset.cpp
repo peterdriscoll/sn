@@ -572,7 +572,7 @@ namespace SNI
 			}
 		}
 		worldSet->Complete();
-		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after all values", SN::CallId);
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after all values", SN::LeftId);
 		if (success)
 		{
 			return SN::SN_Error(success);

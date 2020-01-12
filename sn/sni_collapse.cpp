@@ -38,7 +38,7 @@ namespace SNI
 
 	string SNI_Collapse::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
-		return "_";
+		return GetTypeName();
 	}
 
 	long SNI_Collapse::GetPriority() const
@@ -80,33 +80,54 @@ namespace SNI
 	{
 		SN::LogContext context("SNI_Unary::UnifyInternal ( " + p_value.DisplaySN() + " )");
 
+		SNI_Frame::Push(this, NULL);
+		SNI_Frame *topFrame = SNI_Frame::Top();
+		SNI_Variable *resultParam = topFrame->CreateParameterByName("result"); // Result.
+		SNI_Variable *valueParam = topFrame->CreateParameterByName("param"); // Param 1.
+
 		SN::SN_Value result = p_Result.Evaluate();
+
+		resultParam->SetValue(result);
+		valueParam->SetValue(p_value);
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before cardinality check", SN::LeftId);
+
 		if (result.IsError())
 		{
+			SNI_Frame::Pop();
 			return result;
 		}
 		if (!result.IsNull())
 		{
+			resultParam->SetValue(result);
 			SN::SN_Value newValue = InverseFunctionValue(result);
 			if (!newValue.IsNull())
 			{
+				valueParam->SetValue(newValue);
 				bool ok = p_value.AssertValue(newValue).GetBool();
 				if (ok)
 				{
 					p_Result.DoCollapse();
 				}
+				resultParam->SetValue(p_Result);
+				SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify", SN::RightId);
+				SNI_Frame::Pop();
 				return ok;
 			}
 		}
 		SN::SN_Value value = p_value.Evaluate();
+		valueParam->SetValue(value);
+		SN::SN_Error err(true, true);
 		if (!value.IsNull())
 		{
 			SN::SN_Value newResult = PrimaryFunctionValue(value);
 			if (!newResult.IsNull())
 			{
-				return p_Result.AssertValue(newResult);
+				err = p_Result.AssertValue(newResult);
+				resultParam->SetValue(p_Result);
 			}
 		}
-		return SN::SN_Error(true, true);
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify", SN::RightId);
+		SNI_Frame::Pop();
+		return err;
 	}
 }

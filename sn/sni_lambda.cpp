@@ -72,12 +72,12 @@ namespace SNI
 		{
 			sValue = SetStaticBreakPoint(":", p_DisplayOptions, this, SN::ValueId) + m_FormalParameter->DisplayValueSN(GetPriority(), p_DisplayOptions);
 		}
-		return SetStaticBreakPoint("@", p_DisplayOptions, this, SN::CallId) + m_FormalParameter->DisplaySN(GetPriority(), p_DisplayOptions) + sValue + SetStaticBreakPoint(".", p_DisplayOptions, this, SN::ParameterOneId) + m_Expression->DisplaySN(GetPriority(), p_DisplayOptions) + SetStaticBreakPoint(";", p_DisplayOptions, this, SN::ReturnId);
+		return SetStaticBreakPoint("@", p_DisplayOptions, this, SN::LeftId) + m_FormalParameter->DisplaySN(GetPriority(), p_DisplayOptions) + sValue + SetStaticBreakPoint(".", p_DisplayOptions, this, SN::ParameterOneId) + m_Expression->DisplaySN(GetPriority(), p_DisplayOptions) + SetStaticBreakPoint(";", p_DisplayOptions, this, SN::RightId);
 	}
 
 	long SNI_Lambda::GetPriority() const
 	{
-		return 0;
+		return 1000;
 	}
 
 	string SNI_Lambda::GetOperator() const
@@ -151,7 +151,7 @@ namespace SNI
 		SN::LogContext context(DisplaySN0() + "SNI_Lambda::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )");
 
 		SNI_Thread::GetThread()->SetDebugId(GetDebugId());
-		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, GetTypeName() + ".Call begin", SN::CallId);
+		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, GetTypeName() + ".Call begin", SN::LeftId);
 
 		ASSERTM(p_ParameterList->size() >0, "Cannot call a lambda without a parameter");
 		SN::SN_Expression param = p_ParameterList->back().GetSNI_Expression();
@@ -185,7 +185,7 @@ namespace SNI
 		}
 
 		SNI_Thread::GetThread()->SetDebugId(GetDebugId());
-		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, GetTypeName() + ".Call return", SN::ReturnId);
+		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, GetTypeName() + ".Call return", SN::RightId);
 		return result;
 	}
 
@@ -221,7 +221,7 @@ namespace SNI
 
 		ASSERTM(p_ParameterList->size() > 1, "Cannot unify to a lambda without a parameter");
 		SNI_Thread::GetThread()->SetDebugId(GetDebugId());
-		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, GetTypeName() + ".Unify begin", SN::CallId);
+		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, GetTypeName() + ".Unify begin", SN::LeftId);
 		SN::SN_Expression param = p_ParameterList->back();
 		p_ParameterList->pop_back();
 		SN::SN_Error e;

@@ -164,7 +164,7 @@ namespace SNI
 		size_t textWidth = text.size();
 		if (p_Width < textWidth)
 		{
-			abbreviation = p_Text.substr(0, p_Width - 3);
+			abbreviation = text.substr(0, p_Width - 3);
 		}
 		return "{\"abbreviation\" : \"" + abbreviation + "\",\"text\" : \"" + textHTML + "\"}";
 	}

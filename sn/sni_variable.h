@@ -17,7 +17,7 @@ namespace SNI
 	class SNI_DelayedCall;
 	class SNI_Frame;
 
-	class SNI_Variable : virtual public SNI_VarDef, virtual public SNI_Namable
+	class SNI_Variable : public SNI_VarDef, public SNI_Namable
 	{
 		PGC_CLASS(SNI_Variable);
 	public:

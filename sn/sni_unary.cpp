@@ -43,6 +43,15 @@ namespace SNI
 		return "Unary Op";
 	}
 
+	string SNI_Unary::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList, const SNI_Expression * p_DebugSource) const
+	{
+		if (p_DisplayOptions.GetDebugHTML() == doDebugPointsJS)
+		{
+			long dog = 10;
+		}
+		return SNI_FunctionDef::DisplayCall(priority, p_DisplayOptions, p_ParameterList, p_DebugSource);
+	}
+
 	long SNI_Unary::GetPriority() const
 	{
 		return 4;

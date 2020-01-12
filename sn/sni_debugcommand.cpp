@@ -39,6 +39,11 @@ namespace SNI
 			m_ReadyForProcessingCond.wait(mutex_lock);
 		}
 		bool baseInterrupt = (p_InterruptPoint == SN::BreakPoint || p_InterruptPoint == SN::ErrorPoint || p_InterruptPoint == SN::EndPoint);
+		bool callFound = (p_InterruptPoint == SN::CallPoint) ||
+			             (p_InterruptPoint == SN::FailPoint) ||
+					     (p_InterruptPoint == SN::MirrorPoint) ||
+					     (p_InterruptPoint == SN::StaticPoint);
+
 		switch (m_DebugAction)
 		{
 		case SN::Run:
@@ -51,16 +56,16 @@ namespace SNI
 			breakPoint = baseInterrupt || (m_BreakPointSet.find(p_BreakPoint) != m_BreakPointSet.end());
 			break;
 		case SN::StepInto:
-			breakPoint = baseInterrupt || p_InterruptPoint == SN::CallPoint;
+			breakPoint = baseInterrupt || callFound;
 			break;
 		case SN::StepOver:
-			breakPoint = baseInterrupt || (p_InterruptPoint == SN::CallPoint && p_ThreadNum == m_ThreadNum && p_FrameStackDepth <= m_FrameStackDepth);
+			breakPoint = baseInterrupt || (callFound && p_ThreadNum == m_ThreadNum && p_FrameStackDepth <= m_FrameStackDepth);
 			break;
 		case SN::StepOut:
-			breakPoint = baseInterrupt || (p_InterruptPoint == SN::CallPoint && p_ThreadNum == m_ThreadNum  && (m_FrameStackDepth == 0 || p_FrameStackDepth < m_FrameStackDepth));
+			breakPoint = baseInterrupt || (callFound && p_ThreadNum == m_ThreadNum  && (m_FrameStackDepth == 0 || p_FrameStackDepth < m_FrameStackDepth));
 			break;
 		case SN::StepParameter:
-			breakPoint = p_InterruptPoint == SN::BreakPoint || p_InterruptPoint == SN::CallPoint || p_InterruptPoint == SN::ParameterPoint;
+			breakPoint = p_InterruptPoint == SN::BreakPoint || callFound || p_InterruptPoint == SN::ParameterPoint;
 			break;
 		case SN::GotoStepCount:
 			breakPoint = m_StepCount == p_StepCount;

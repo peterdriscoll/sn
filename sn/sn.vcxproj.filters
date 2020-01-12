@@ -48,9 +48,6 @@
     <ClInclude Include="sni_function.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sni_functiondef.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="sni_lambda.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -494,6 +491,9 @@
     </ClInclude>
     <ClInclude Include="..\inc\sn_derived.h">
       <Filter>Include Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_functiondef.h">
+      <Filter>Function Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -129,6 +129,10 @@ namespace SNI
 		return m_FrameList;
 	}
 	
+	string & SNI_Thread::GetDebugId()
+	{
+		return m_DebugId;
+	}
 	void SNI_Thread::SetDebugId(const string &p_DebugId)
 	{
 		m_DebugId = p_DebugId;

@@ -366,6 +366,7 @@ namespace SNI
 				result = loopResult;
 			}
 		}
+		SNI_Thread::GetThread()->DebugCommand(SN::MirrorPoint, "Check dependencies", SN::ReturnId);
 		return result;
 	}
 

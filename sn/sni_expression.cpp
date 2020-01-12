@@ -220,8 +220,25 @@ namespace SNI
 		string bracketRight;
 		if (p_DisplayOptions.GetDebugHTML())
 		{
-			bracketLeft = SetBreakPoint("(", p_DisplayOptions, p_DebugSource, SN::CallId);
-			bracketRight = SetBreakPoint(")", p_DisplayOptions, p_DebugSource, SN::ReturnId);
+			bracketLeft = SetBreakPoint("(", p_DisplayOptions, p_DebugSource, SN::LeftId);
+			bracketRight = SetBreakPoint(")", p_DisplayOptions, p_DebugSource, SN::RightId);
+		}
+		else if (p_Priority > GetPriority())
+		{
+			bracketLeft = "(";
+			bracketRight = ")";
+		}
+		return bracketLeft + p_Expression + bracketRight;
+	}
+
+	string SNI_Expression::BracketStatic(long p_Priority, const string &p_Expression, SNI_DisplayOptions & p_DisplayOptions, const SNI_Expression *p_DebugSource) const
+	{
+		string bracketLeft;
+		string bracketRight;
+		if (p_DisplayOptions.GetDebugHTML())
+		{
+			bracketLeft = SetStaticBreakPoint("(", p_DisplayOptions, p_DebugSource, SN::LeftId);
+			bracketRight = SetStaticBreakPoint(")", p_DisplayOptions, p_DebugSource, SN::RightId);
 		}
 		else if (p_Priority > GetPriority())
 		{
@@ -546,11 +563,11 @@ namespace SNI
 		SN::SN_Expression clone = Clone(this, NULL);
 		LOG(WriteLine(SN::DebugLevel, "Assert " + clone.DisplayValueSN()));
 		LOG(WriteExp(clone));
-		SN::SN_Error result = clone.Assert();
-		SNI_Frame::Pop();
-
 		SNI_Thread::GetThread()->SetDebugId("assert");
 		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Assert", SN::CallId);
+
+		SN::SN_Error result = clone.Assert();
+		SNI_Frame::Pop();
 
 		HandleAssertAction(context, result, "Assert", p_ErrorHandler);
 
@@ -604,11 +621,11 @@ namespace SNI
 		SN::SN_Expression clone = Clone(NULL, NULL);
 		LOG(WriteLine(SN::DebugLevel, "Evaluate " + clone.DisplayValueSN()));
 		LOG(WriteExp(clone));
-		SN::SN_Expression result = clone.Evaluate();
-		SNI_Frame::Pop();
-
 		SNI_Thread::GetThread()->SetDebugId("evaluate");
 		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Evaluate", SN::CallId);
+
+		SN::SN_Expression result = clone.Evaluate();
+		SNI_Frame::Pop();
 
 		HandleEvaluateAction(context, result, "Evaluate", p_ErrorHandler);
 

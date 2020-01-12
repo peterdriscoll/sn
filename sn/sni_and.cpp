@@ -182,12 +182,15 @@ namespace SNI
 		result_param->SetValue(p_ParameterList[0]);
 		left_param->SetValue(p_ParameterList[1]);
 		right_param->SetValue(p_ParameterList[2]);
-		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before calculation", SN::CallId);
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before calculation", SN::LeftId);
 
 		SN::SN_Expression * firstParamList = new SN::SN_Expression[2];
 		firstParamList[0] = p_ParameterList[0];
 		firstParamList[1] = p_ParameterList[1];
 		SN::SN_Error e1 = skynet::UnaryAnd.GetSNI_FunctionDef()->UnifyArray(firstParamList);
+
+		left_param->SetValue(p_ParameterList[1]);
+
 		if (e1.IsError())
 		{
 			SNI_Frame::Pop();
@@ -195,6 +198,7 @@ namespace SNI
 		}
 
 		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after calculation", SN::ParameterTwoId);
+		SNI_Frame::Pop();
 
 		SN::SN_Expression * secondParamList = new SN::SN_Expression[3];
 		secondParamList[0] = p_ParameterList[0];
@@ -202,11 +206,6 @@ namespace SNI
 		secondParamList[2] = p_ParameterList[2];
 		SN::SN_Error e2 = SNI_Binary::UnifyArray(secondParamList);
 
-		result_param->SetValue(secondParamList[0]);
-		left_param->SetValue(secondParamList[1]);
-		right_param->SetValue(secondParamList[2]);
-		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after calculation", SN::ReturnId);
-		SNI_Frame::Pop();
 		return e2;
 	}
 

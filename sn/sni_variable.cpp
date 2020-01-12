@@ -280,7 +280,7 @@ namespace SNI
 			delimeter = " ";
 			text = p.GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + del + text;
 		}
-		return Bracket(p_Priority, SetBreakPoint(FrameName(), p_DisplayOptions, p_DebugSource, 0) + " " + text, p_DisplayOptions, p_DebugSource);
+		return BracketStatic(p_Priority, SetStaticBreakPoint(FrameName(), p_DisplayOptions, p_DebugSource, SN::LeftId) + " " + text, p_DisplayOptions, p_DebugSource);
 	}
 
 	long SNI_Variable::GetPriority() const
@@ -541,7 +541,7 @@ namespace SNI
 		if (m_Value)
 		{
 			SNI_Expression * l_clone = m_Value->Clone(this, NULL);
-			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Variable.Call", SN::CallId);
+			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Variable.Call", SN::LeftId);
 			SN::SN_Expression e = l_clone->Call(p_ParameterList, p_MetaLevel);
 			SNI_Frame::Pop();
 			if (e.IsNull())
@@ -573,9 +573,12 @@ namespace SNI
 		if (m_Value)
 		{
 			SNI_Expression * l_clone = m_Value->Clone(this, (*p_ParameterList)[0].GetSNI_Expression());
+			string debugId = SNI_Thread::GetThread()->GetDebugId();
+			SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, GetTypeName() + ".Unify after unify", SN::LeftId);
 
 			SN::SN_Expression e = l_clone->Unify(p_ParameterList);
-			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after unify", SN::CallId);
+			SNI_Thread::GetThread()->SetDebugId(debugId);
+			SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, GetTypeName() + ".Unify after unify", SN::RightId);
 			SNI_Variable *result = SNI_Frame::Top()->GetResult();
 			result->SetValue((*p_ParameterList)[0].GetVariableValue());
 			SNI_Frame::Pop();

@@ -14,7 +14,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
     <div ng-app="skynetApp" ng-controller='commandCtrl'>
         <h1>
-            Skynet Dashboard - {{taskdescription}} {{statusdescription}} {{callstack.length}}
+            Skynet Dashboard - {{taskdescription}} {{statusdescription}} {{callstack.length}} {{breakpoint}}
         </h1>
         <table class='command'>
             <tr>
@@ -191,17 +191,17 @@
                         <table class='noborder'>
                             <tr>
                                 <td>Call</td>
-                                <td><button ng-click='setbreakpoint("assert_1")' ng-class='breakpointclass("assert_1", breakpoint)'>Assert</button></td>
-                                <td><button ng-click='setbreakpoint("partialassert_1")' ng-class='breakpointclass("partialassert_1", breakpoint)'>Partial Assert</button></td>
-                                <td><button ng-click='setbreakpoint("evaluate_1")' ng-class='breakpointclass("evaluate_1", breakpoint)'>Evaluate</button></td>
-                                <td><button ng-click='setbreakpoint("partialevaluate_1")' ng-class='breakpointclass("partialevaluate_1", breakpoint)'>Partial Evakuate</button></td>
+                                <td><button ng-click='setbreakpoint("assert_3")' ng-class='breakpointclass("assert_3", breakpoint)'>Assert</button></td>
+                                <td><button ng-click='setbreakpoint("partialassert_3")' ng-class='breakpointclass("partialassert_3", breakpoint)'>Partial Assert</button></td>
+                                <td><button ng-click='setbreakpoint("evaluate_3")' ng-class='breakpointclass("evaluate_3", breakpoint)'>Evaluate</button></td>
+                                <td><button ng-click='setbreakpoint("partialevaluate_3")' ng-class='breakpointclass("partialevaluate_3", breakpoint)'>Partial Evakuate</button></td>
                             </tr>
                             <tr>
                                 <td>Return</td>
-                                <td><button ng-click='setbreakpoint("assert_13")' ng-class='breakpointclass("assert_13", breakpoint)'>Assert</button></td>
-                                <td><button ng-click='setbreakpoint("partialassert_13")' ng-class='breakpointclass("partialassert_13", breakpoint)'>Partial Assert</button></td>
-                                <td><button ng-click='setbreakpoint("evaluate_13")' ng-class='breakpointclass("evaluate_13", breakpoint)'>Evaluate</button></td>
-                                <td><button ng-click='setbreakpoint("partialevaluate_13")' ng-class='breakpointclass("partialevaluate_13", breakpoint)'>Partial Evakuate</button></td>
+                                <td><button ng-click='setbreakpoint("assert_15")' ng-class='breakpointclass("assert_15", breakpoint)'>Assert</button></td>
+                                <td><button ng-click='setbreakpoint("partialassert_15")' ng-class='breakpointclass("partialassert_15", breakpoint)'>Partial Assert</button></td>
+                                <td><button ng-click='setbreakpoint("evaluate_15")' ng-class='breakpointclass("evaluate_15", breakpoint)'>Evaluate</button></td>
+                                <td><button ng-click='setbreakpoint("partialevaluate_15")' ng-class='breakpointclass("partialevaluate_15", breakpoint)'>Partial Evakuate</button></td>
                             </tr>
                         </table>
                         <br />
