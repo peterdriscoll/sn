@@ -26,6 +26,7 @@ namespace SNI
 		string GetDebugId() const;
 		void SetDebugId(const string & p_DebugId);
 		string GetBreakPoint(unsigned long p_BreakId);
+		string GetBreakPointJS(unsigned long p_BreakId);
 		SNI_Variable * LookupVariableInFrame(const string & p_Name);
 
 		SNI_Frame();
@@ -40,7 +41,8 @@ namespace SNI
 		string GetLogDescription(SNI_Manager *p_Manager);
 		string GetLogShortDescription(SNI_Manager *p_Manager);
 		string GetBreakPoint();
-		void SetBreakPoint(const string & p_BreakPoint);
+		string GetBreakPointJS();
+		void SetBreakPoint(const string & p_BreakPoint, const string & p_BreakPointJS);
 		bool HasCode() const;
 
 		SNI_Variable *CreateTemporary();
@@ -65,6 +67,7 @@ namespace SNI
 
 		string						   m_DebugId;
 		string						   m_BreakPoint;
+		string						   m_BreakPointJS;
 	};
 }
 

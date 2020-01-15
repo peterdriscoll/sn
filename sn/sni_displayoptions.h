@@ -27,10 +27,14 @@ namespace SNI
 
 		enum DisplayOptionType GetDebugHTML();
 
+		string GetBreakPointLocation();
+		void SetBreakPointLocation(const string &p_BreakPointLocation);
+
 	private:
 		map<string, long> m_TypeMap;
 		string m_VarName;
 		enum DisplayOptionType m_DebugHTML;
+		string m_BreakPointLocation;
 	};
 }
 

@@ -153,8 +153,16 @@ table, tr, td {
     background-color: lightgreen;
 }
 
+.breakpointgroupset {
+    background-color: lightblue;
+}
+
 .breakpointlast {
     background-color: pink;
+}
+
+.error {
+    background-color: red;
 }
 
 .breakpointsetlast {

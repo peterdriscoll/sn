@@ -74,9 +74,13 @@ namespace SNI
 
 	string SNI_Frame::GetBreakPoint(unsigned long p_BreakId)
 	{
-		return m_DebugId + "_" + to_string(p_BreakId);
+		return MakeBreakPoint(m_DebugId, p_BreakId);
 	}
 
+	string SNI_Frame::GetBreakPointJS(unsigned long p_BreakId)
+	{
+		return MakeBreakPointJS(m_DebugId, p_BreakId);
+	}
 
 	SNI_Variable *SNI_Frame::LookupVariableInFrame(const string & p_Name)
 	{
@@ -93,6 +97,7 @@ namespace SNI
 	SNI_Frame::SNI_Frame()
 		: m_ThreadNum(SNI_Thread::GetThread()->GetThreadNum())
 		, m_FrameNum(++t_MaxFrameNum)
+		, m_BreakPointJS(MakeBreakPointJS("", 0))
 	{
 	}
 
@@ -100,6 +105,7 @@ namespace SNI
 	    : m_ThreadNum(SNI_Thread::GetThread()->GetThreadNum())
 		, m_FrameNum(++t_MaxFrameNum)
 		, m_Function(p_Function)
+		, m_BreakPointJS(MakeBreakPointJS("", 0))
 	{
 	}
 
@@ -260,9 +266,15 @@ namespace SNI
 		return m_BreakPoint;
 	}
 
-	void SNI_Frame::SetBreakPoint(const string & p_BreakPoint)
+	string SNI_Frame::GetBreakPointJS()
+	{
+		return m_BreakPointJS;
+	}
+
+	void SNI_Frame::SetBreakPoint(const string & p_BreakPoint, const string & p_BreakPointJS)
 	{
 		m_BreakPoint = p_BreakPoint;
+		m_BreakPointJS = p_BreakPointJS;
 	}
 
 	bool SNI_Frame::HasCode() const
@@ -323,7 +335,7 @@ namespace SNI
 		p_Stream << "\t\t\"function\" : \"" << ReplaceAll(m_Function.DisplaySN(), "\"", "\\\"") << "\",\n";
 		p_Stream << "\t\t\"framepos\" : \"" << p_FrameStackPos << "\",\n";
 		p_Stream << "\t\t\"framenum\" : \"" << m_FrameNum << "\",\n";
-		p_Stream << "\t\t\"breakpoint\" : \"" << m_BreakPoint << "\",\n";
+		p_Stream << "\t\t\"breakpoint\" : " << m_BreakPointJS << ",\n";
 		if (HasCode())
 		{
 			p_Stream << "\t\t\"hascode\" : true,\n";

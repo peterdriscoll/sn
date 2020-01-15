@@ -103,7 +103,12 @@ namespace SNI
 
 	string SNI_Expression::GetBreakPoint(long p_Index) const
 	{
-		return GetDebugId() + "_" + to_string(p_Index);
+		return MakeBreakPoint(GetDebugId(), p_Index);
+	}
+
+	string SNI_Expression::GetBreakPointJS(long p_Index) const
+	{
+		return MakeBreakPointJS(GetDebugId(), p_Index);
 	}
 
 	string SNI_Expression::SetBreakPoint(const string &p_Caption, SNI_DisplayOptions & p_DisplayOptions, const SNI_Expression *p_DebugSource, long p_Index) const
@@ -120,8 +125,8 @@ namespace SNI
 			return p_Caption;
 		case doDebugPointsJS:
 			{
-				string breakPoint = p_DebugSource->GetBreakPoint(p_Index);
-				return "<button title='" + breakPoint + "' ng-click='setbreakpoint(\"" + breakPoint + "\")' ng-class='breakpointclass(\"" + breakPoint + "\", f.breakpoint)'>" + p_Caption + "</button>";
+				string breakPoint = p_DebugSource->GetBreakPointJS(p_Index);
+				return "<button title='" + breakPoint + "' ng-click='setbreakpoint(" + breakPoint + ")' ng-class='breakpointclass(" + breakPoint + ", " + p_DisplayOptions.GetBreakPointLocation() + "breakpoint)'>" + p_Caption + "</button>";
 			}
 		}
 		return "";
@@ -141,8 +146,8 @@ namespace SNI
 			return p_Caption;
 		case doDebugPointsJS:
 		{
-			string breakPoint = p_DebugSource->GetBreakPoint(p_Index);
-			return "<button ' ng-click='setbreakpoint(\"" + breakPoint + "\")' ng-class='breakpointdefaultclass(\"" + breakPoint + "\", breakpoint, \"\")'>" + p_Caption + "</button>";
+			string breakPoint = p_DebugSource->GetBreakPointJS(p_Index);
+			return "<button ' ng-click='setbreakpoint(" + breakPoint + ")' ng-class='breakpointdefaultclass(" + breakPoint + ", breakpoint, \"\")'>" + p_Caption + "</button>";
 		}
 		}
 		return "";

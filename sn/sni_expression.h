@@ -83,6 +83,7 @@ namespace SNI
 		//---------------------------------------------------------------
 		void CreateId();
 		virtual string GetBreakPoint(long p_Index) const;
+		virtual string GetBreakPointJS(long p_Index) const;
 		virtual unsigned long GetId() const;
 		virtual string GetDebugId() const;
 

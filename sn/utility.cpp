@@ -302,4 +302,14 @@ namespace SNI
 		}
 		return "";
 	}
+
+	string MakeBreakPoint(const string &p_DebugId, long p_Index)
+	{
+		return p_DebugId + "_" + to_string(p_Index);
+	}
+
+	string MakeBreakPointJS(const string &p_DebugId, long p_Index)
+	{
+		return "[\"" + p_DebugId + "\"," + to_string(p_Index) + "]";
+	}
 }

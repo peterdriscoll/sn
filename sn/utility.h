@@ -58,6 +58,9 @@ namespace SNI
 	string DisplayWorlds(long p_NumWorlds, SNI_World ** p_World);
 	string DisplayValues(long p_NumWorlds, SN::SN_Expression * p_ParamList, SNI_World ** p_World = NULL);
 	string DisplayWorldSet(SNI_WorldSet *p_WorldSet);
+
+	string MakeBreakPoint(const string &p_DebugId, long p_Index);
+	string MakeBreakPointJS(const string &p_DebugId, long p_Index);
 }
 
 #endif // UTILITY_H_INCLUDED
