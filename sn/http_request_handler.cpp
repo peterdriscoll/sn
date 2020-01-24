@@ -94,13 +94,13 @@ namespace HTTP
 					l_thread->LoadBreakPoints(breakpoints);
 					l_thread->Debug();
 				}
-				else if (path == "/debugbreak")
+				else if (path == "/codebreak")
 				{
-					rep.content = l_thread->DebugBreakWeb(debugHTML);
+					rep.content = l_thread->CodeBreakWeb(debugHTML);
 				}
-				else if (path == "/debugbreakjs")
+				else if (path == "/codebreakjs")
 				{
-					l_thread->DebugBreak();
+					l_thread->CodeBreak();
 				}
 				else if (path == "/stepover")
 				{

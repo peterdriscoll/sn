@@ -48,6 +48,11 @@ namespace SN
 		return m_Expression;
 	}
 
+	string SN_StringRef::GetString() const
+	{
+		return m_Expression->GetString();
+	}
+
 	SN_String SN_StringRef::GetSource() const
 	{
 		return m_Expression->GetSource();

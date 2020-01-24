@@ -97,6 +97,24 @@ namespace SNI
 		return SNI_FunctionDef::MultiplyCardinality(GetStart().Cardinality(p_MaxCardinality), GetEnd().Cardinality(p_MaxCardinality));
 	}
 
+	size_t SNI_StringRef::LeftCardinality(size_t p_MaxCardinality) const
+	{
+		if (IsNull())
+		{
+			return 1; // Slightly dubious. Needed for TestStringRefDefinition.
+		}
+		return GetStart().Cardinality(p_MaxCardinality);
+	}
+
+	size_t SNI_StringRef::RightCardinality(size_t p_MaxCardinality) const
+	{
+		if (IsNull())
+		{
+			return 1; // Slightly dubious. Needed for TestStringRefDefinition.
+		}
+		return GetEnd().Cardinality(p_MaxCardinality);
+	}
+
 	SN::SN_Error SNI_StringRef::ForEachCart(long p_Depth, SNI_Cart *p_Cart)
 	{
 		SN::SN_Expression start = GetStart().Evaluate();
@@ -198,60 +216,13 @@ namespace SNI
 		}
 	}
 
-	string SNI_StringRef::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	string SNI_StringRef::DisplaySN(long /*priority*/, SNI_DisplayOptions & p_DisplayOptions) const
 	{
-		const string &source = GetSourceString();
-		SN::SN_Expression end = GetEnd().Evaluate();
-		string text;
-		GetStart().Evaluate().ForEach(
-			[&end, &source, &text](const SN::SN_Expression &p_Param, SNI::SNI_World *p_World) -> SN::SN_Error
+		if (IsKnownValue())
 		{
-			SN::SN_Long start_long = p_Param;
-			SNI::SNI_World *startWorld = p_World;
-			end.ForEach(
-				[&source, &start_long, &text, startWorld](const SN::SN_Expression &p_Param, SNI::SNI_World *p_World) -> SN::SN_Error
-			{
-				SN::SN_Long end_long = p_Param;
-				SNI::SNI_World *endWorld = p_World;
-				string value;
-				if (!start_long.IsNullValue() && !end_long.IsNullValue())
-				{
-					size_t start_pos = start_long.GetNumber();
-					size_t end_pos = end_long.GetNumber();
-					value = source.substr(start_pos, end_pos - start_pos);
-					ReplaceAll(value, "\"", "\\\"");
-				}
-				else
-				{
-					value = "<unknown>";
-				}
-				if (text.length())
-				{
-					text += ", ";
-				}
-				text += "\"" + value + "\"";
-				if (startWorld || endWorld)
-				{
-					text += "::";
-					if (startWorld)
-					{
-						text += startWorld->DisplaySN();
-					}
-					if (endWorld)
-					{
-						if (startWorld)
-						{
-							text += "&";
-						}
-						text += endWorld->DisplaySN();
-					}
-				}
-				return skynet::True;
-			});
-			return skynet::True;
-		});
-
-		return "[" + text + "]";
+			return "\"" + GetSourceString() + "\"";
+		}
+		return "\"" + GetSourceString() + "\"[" + GetStart().GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + ".." + GetEnd().GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + "]";
 	}
 
 	long SNI_StringRef::GetPriority() const
@@ -279,6 +250,19 @@ namespace SNI
 		SN::SN_Value start_value = m_Start.Evaluate();
 		SN::SN_Value end_value = m_End.Evaluate();
 		return start_value.IsKnownValue() && end_value.IsKnownValue();
+	}
+
+
+	bool SNI_StringRef::IsLeftKnownValue() const
+	{
+		SN::SN_Value start_value = m_Start.Evaluate();
+		return start_value.IsKnownValue();
+	}
+
+	bool SNI_StringRef::IsRightKnownValue() const
+	{
+		SN::SN_Value end_value = m_End.Evaluate();
+		return end_value.IsKnownValue();
 	}
 
 	bool SNI_StringRef::IsReferableValue() const
@@ -403,10 +387,31 @@ namespace SNI
 		{
 			return p_Value;
 		}
+		string part;
+		bool found = false;
 		if (SN::Is<SNI_String *>(p_Value))
 		{
 			SN::SN_String text = p_Value;
-			string part = text.GetString();
+			part = text.GetString();
+			found = true;
+		}
+		else if (SN::Is<SNI_StringRef *>(p_Value))
+		{
+			SN::SN_StringRef text = p_Value;
+			if (text.IsKnownValue())
+			{
+				part = text.GetString();
+				found = true;
+			}
+		}
+		else if (SN::Is<SNI_Char *>(p_Value))
+		{
+			SN::SN_Char text = p_Value;
+			part = text.GetString();
+			found = true;
+		}
+		if (found)
+		{
 			long part_len = (long) part.length();
 
 			SN::SN_Value start = m_Start.Evaluate();

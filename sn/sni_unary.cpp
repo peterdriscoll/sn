@@ -45,11 +45,25 @@ namespace SNI
 
 	string SNI_Unary::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList, const SNI_Expression * p_DebugSource) const
 	{
-		if (p_DisplayOptions.GetDebugHTML() == doDebugPointsJS)
+		long param = SN::ParameterOneId;
+		string text;
+		string delimeter;
+		if (GetOperator().empty())
 		{
-			long dog = 10;
+			text = SetBreakPoint(GetTypeName(), p_DisplayOptions, p_DebugSource, SN::LeftId);
+			delimeter = " ";
 		}
-		return SNI_FunctionDef::DisplayCall(priority, p_DisplayOptions, p_ParameterList, p_DebugSource);
+		else
+		{
+			text = SetBreakPoint(GetOperator(), p_DisplayOptions, p_DebugSource, SN::LeftId);
+		}
+		for (SN::SN_Expression &p : *p_ParameterList)
+		{
+			string del = delimeter;
+			delimeter = SetBreakPoint(";", p_DisplayOptions, p_DebugSource, param++);
+			text = text + del + p.GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions);
+		}
+		return Bracket(priority, text, p_DisplayOptions, p_DebugSource);
 	}
 
 	long SNI_Unary::GetPriority() const

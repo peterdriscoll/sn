@@ -397,9 +397,9 @@ namespace SNI
 		m_DebugCommand.Debug();
 	}
 
-	void SNI_Thread::DebugBreak()
+	void SNI_Thread::CodeBreak()
 	{
-		m_DebugCommand.DebugBreak();
+		m_DebugCommand.CodeBreak();
 	}
 
 	void SNI_Thread::StepOver()
@@ -466,9 +466,9 @@ namespace SNI
 		return ss.str();
 	}
 
-	string SNI_Thread::DebugBreakWeb(enum DisplayOptionType p_OptionType)
+	string SNI_Thread::CodeBreakWeb(enum DisplayOptionType p_OptionType)
 	{
-		m_DebugCommand.DebugBreak();
+		m_DebugCommand.CodeBreak();
 		stringstream ss;
 		WriteWebPage(ss, true, p_OptionType);
 		return ss.str();
@@ -1062,9 +1062,9 @@ namespace SNI
 	{
 		for (auto it = m_FrameList.rbegin(); it != m_FrameList.rend(); it++)
 		{
+			(*it)->SetBreakPoint(p_BreakPoint, p_BreakPointJS);
 			if ((*it)->HasCode())
 			{
-				(*it)->SetBreakPoint(p_BreakPoint, p_BreakPointJS);
 				return;
 			}
 		}

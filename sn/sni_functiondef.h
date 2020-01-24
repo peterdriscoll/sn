@@ -54,7 +54,7 @@ namespace SNI
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 		virtual size_t Hash() const;
 
-		virtual bool IsKnownValue(const SN::SN_Expression & p_Param) const;
+		virtual bool IsKnownValue(const SN::SN_Expression & p_Param, long j) const;
 
 		virtual size_t Cardinality(SN::SN_Expression * p_ParameterList) const;
 

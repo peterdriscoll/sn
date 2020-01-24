@@ -23,6 +23,11 @@ namespace SNI
 		virtual SN::SN_Expression PrimaryFunctionExpression(const SN::SN_Expression &p_Left) const;
 		virtual SN::SN_Value InverseFunctionValue(const SN::SN_Value &p_Param) const;
 		virtual SN::SN_Expression InverseFunctionExpression(const SN::SN_Expression &p_Param) const;
+
+		virtual bool IsKnownValue(const SN::SN_Expression & p_Param, long) const;
+
+		virtual size_t CardinalityOfUnify(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const;
+		virtual size_t CardinalityOfCall(long p_Depth, SN::SN_Expression * p_ParamList) const;
 	};
 }
 

@@ -35,6 +35,7 @@ namespace SNI
 		virtual SN::SN_Value DoConcat(SNI_Value * p_Other) const;
 
 		virtual string::value_type GetChar() const;
+		virtual string GetString() const;
 
 	private:
 		static SNI_Class *m_Class;

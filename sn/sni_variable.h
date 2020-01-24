@@ -48,6 +48,8 @@ namespace SNI
 		virtual bool IsRequested() const;
 		virtual bool IsNullValue() const;
 		virtual bool IsKnownValue() const;
+		virtual bool IsLeftKnownValue() const;
+		virtual bool IsRightKnownValue() const;
 		virtual bool IsKnownTypeValue() const;
 		virtual bool IsLambdaValue() const;
 		virtual bool IsVariable() const;
@@ -68,6 +70,8 @@ namespace SNI
 		virtual SNI_WorldSet * GetWorldSet();
 
 		virtual size_t Cardinality(size_t p_MaxCardinality = CARDINALITY_MAX) const;
+		virtual size_t LeftCardinality(size_t p_MaxCardinality = CARDINALITY_MAX) const;
+		virtual size_t RightCardinality(size_t p_MaxCardinality = CARDINALITY_MAX) const;
 		virtual SN::SN_Error ForEach(std::function<SN::SN_Error(const SN::SN_Expression &p_Param, SNI_World*p_World)> p_Action);
 		virtual SN::SN_Error ForEachCart(long p_Depth, SNI_Cart * p_Cart);
 		virtual void ForEachSplit(SNI_Splitter * p_Splitter);

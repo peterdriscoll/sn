@@ -37,7 +37,7 @@ namespace SNI
 		void Run();
 		void RunToEnd();
 		void Debug();
-		void DebugBreak();
+		void CodeBreak();
 		void StepOver(long p_StackDepth);
 		void StepInto();
 		void StepOut(long p_StackDepth);

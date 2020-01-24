@@ -75,7 +75,7 @@ namespace SNI
 		return _Hash_representation(this);
 	}
 
-	bool SNI_FunctionDef::IsKnownValue(const SN::SN_Expression &p_Param) const
+	bool SNI_FunctionDef::IsKnownValue(const SN::SN_Expression &p_Param, long) const
 	{
 		return p_Param.IsKnownValue();
 	}
@@ -87,7 +87,7 @@ namespace SNI
 		long totalCalc = depth;
 		for (long j = 0; j < depth; j++)
 		{
-			if (IsKnownValue(p_ParamList[j]))
+			if (IsKnownValue(p_ParamList[j], j))
 			{
 				totalCalc--;
 			}
@@ -147,7 +147,7 @@ namespace SNI
 					delimeter = GetOperator();
 				}
 			}
-			if (IsKnownValue(p_ParamList[j]))
+			if (IsKnownValue(p_ParamList[j], j))
 			{
 				text += p_ParamList[j].DisplayValueSN();
 			}
@@ -197,7 +197,7 @@ namespace SNI
 		size_t maxCard = SNI_Thread::TopManager()->MaxCardinalityCall();
 		for (long j = 0; j < depth; j++)
 		{
-			if (!IsKnownValue(p_ParamList[j]) && !p_ParamList[j].IsReferableValue())
+			if (!IsKnownValue(p_ParamList[j], j) && !p_ParamList[j].IsReferableValue())
 			{
 				card = CardinalityOfCall(depth, inputList);
 				if (maxCard < card)
@@ -260,7 +260,7 @@ namespace SNI
 		for (long j = 0; j < depth; j++)
 		{
 			topFrame->CreateParameter(j);
-			if (IsKnownValue(p_ParamList[j]))
+			if (IsKnownValue(p_ParamList[j], j))
 			{
 				inputList[j] = p_ParamList[j].GetVariableValue().SimplifyValue();
 				output[j] = false;
@@ -282,7 +282,7 @@ namespace SNI
 		for (long j = 0; j < depth; j++)
 		{
 			SN::SN_Variable v = inputList[j];
-			if (!IsKnownValue(p_ParamList[j]) && !p_ParamList[j].IsReferableValue())
+			if (!IsKnownValue(p_ParamList[j], j) && !p_ParamList[j].IsReferableValue())
 			{
 				card = CardinalityOfUnify(depth, inputList, (long)j, totalCalc);
 				if (p_ParamList[j].IsVariable())
@@ -328,7 +328,7 @@ namespace SNI
 					LOG(WriteLine(SN::DebugLevel, "Parameter " + to_string(j) + ": " + inputList[j].DisplayValueSN()));
 				}
 			}
-			if (IsKnownValue(inputList[j]))
+			if (IsKnownValue(inputList[j], j))
 			{
 				inputList[j] = inputList[j].GetVariableValue();
 				if (output[j])

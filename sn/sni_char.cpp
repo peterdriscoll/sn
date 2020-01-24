@@ -47,6 +47,11 @@ namespace SNI
 		return m_Char;
 	}
 
+	string SNI_Char::GetString() const
+	{
+		return string(1, m_Char);
+	}
+
 	string SNI_Char::GetTypeName() const
 	{
 		return "Char";
@@ -54,14 +59,14 @@ namespace SNI
 
 	string SNI_Char::DisplayCpp() const
 	{
-		string quotedString(m_Char, 1);
+		string quotedString(1, m_Char);
 		ReplaceAll(quotedString, "\"", "\\\"");
 		return "\"" + quotedString + "\"";
 	}
 
 	string SNI_Char::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
-		string quotedString(m_Char, 1);
+		string quotedString(1, m_Char);
 		ReplaceAll(quotedString, "\"", "\\\"");
 		return "\"" + quotedString + "\"";
 	}

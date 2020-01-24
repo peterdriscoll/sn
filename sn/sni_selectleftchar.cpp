@@ -53,4 +53,30 @@ namespace SNI
 	{
 		return skynet::Null;
 	}
+
+	bool SNI_SelectLeftChar::IsKnownValue(const SN::SN_Expression &p_Param, long j) const
+	{
+		return j == PU1_First ? p_Param.IsLeftKnownValue() : p_Param.IsKnownValue();
+	}
+
+	size_t SNI_SelectLeftChar::CardinalityOfUnify(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const
+	{
+		if (p_Depth == 2)
+		{
+			if (p_ParamList[PU1_First].IsLeftKnownValue())
+			{
+				return p_ParamList[PU1_First].LeftCardinality();
+			}
+		}
+		return CARDINALITY_MAX;
+	}
+
+	size_t SNI_SelectLeftChar::CardinalityOfCall(long p_Depth, SN::SN_Expression * p_ParamList) const
+	{
+		if (p_ParamList[PU1_First].IsLeftKnownValue())
+		{
+			return p_ParamList[PU1_First].LeftCardinality();
+		}
+		return CARDINALITY_MAX;
+	}
 }

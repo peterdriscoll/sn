@@ -91,6 +91,16 @@ namespace SNI
 		return m_Value && m_Value->IsKnownValue();
 	}
 
+	bool SNI_Variable::IsLeftKnownValue() const
+	{
+		return m_Value && m_Value->IsLeftKnownValue();
+	}
+
+	bool SNI_Variable::IsRightKnownValue() const
+	{
+		return m_Value && m_Value->IsRightKnownValue();
+	}
+
 	bool SNI_Variable::IsKnownTypeValue() const
 	{
 		return m_Value && m_Value->IsKnownTypeValue();
@@ -380,6 +390,32 @@ namespace SNI
 			return p_MaxCardinality;
 		}
 		return m_Value->Cardinality(p_MaxCardinality);
+	}
+
+	size_t SNI_Variable::LeftCardinality(size_t p_MaxCardinality) const
+	{
+		if (!m_Value)
+		{
+			return p_MaxCardinality;
+		}
+		if (SN::Is<SNI_DelayedCall *>(m_Value))
+		{
+			return p_MaxCardinality;
+		}
+		return m_Value->LeftCardinality(p_MaxCardinality);
+	}
+
+	size_t SNI_Variable::RightCardinality(size_t p_MaxCardinality) const
+	{
+		if (!m_Value)
+		{
+			return p_MaxCardinality;
+		}
+		if (SN::Is<SNI_DelayedCall *>(m_Value))
+		{
+			return p_MaxCardinality;
+		}
+		return m_Value->RightCardinality(p_MaxCardinality);
 	}
 
 	SN::SN_Error SNI_Variable::ForEach(std::function<SN::SN_Error(const SN::SN_Expression &p_Param, SNI_World*p_World)> p_Action)

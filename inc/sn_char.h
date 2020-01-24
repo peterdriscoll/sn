@@ -42,6 +42,8 @@ namespace SN
 		SN_Expression IsA(const SN_Expression &p_Parent) const;
 
 		string::value_type GetChar() const;
+		string GetString() const;
+			
 		SNI::SNI_Char *GetSNI_Char() const;
 
 	private:

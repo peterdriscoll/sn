@@ -10,8 +10,8 @@
     <link rel='stylesheet' type='text/css' href='style.css'>
 </head>
 <body>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.0/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.0/angular-sanitize.js"></script>
     <div ng-app="skynetApp" ng-controller='commandCtrl'>
         <h1>
             Skynet Dashboard - {{taskdescription}} {{statusdescription}} {{callstack.length}} {{breakpoint}}
@@ -37,9 +37,9 @@
                     </form>
                 </td>
                 <td>
-                    <form ng-submit='submit("debugbreak")'>
-                        Debug break C++<br>
-                        <input type='submit' value='Debug break'>
+                    <form ng-submit='submit("codebreakjs")'>
+                        Code debug break C++<br>
+                        <input type='submit' value='Code break'>
                     </form>
                 </td>
                 <td>
@@ -127,6 +127,7 @@
                             </td>
                         </tr>
                     </table>
+                    <button title='Error' ng-click='setbreakpoint(["Error",6])' ng-class='breakpointclass(["Error",6], breakpoint)'>Error</button>
                     <button title='MIR' ng-click='setbreakpoint(["MIR",1])' ng-class='breakpointclass(["MIR",1], breakpoint)'>Check MIR</button>
                 </td>
             </tr>
@@ -160,7 +161,7 @@
                                 <td>
                                     <div style='overflow-x:auto;white-space:nowrap;width:900px'>
                                         <table class='frame'>
-                                            <caption>Frame {{ f.framepos }} : {{ f.framenum }} {{ f.function }} {{f.breakpoint}}</caption>
+                                            <caption>Frame {{ f.framepos }} : {{ f.framenum }} {{ f.function }}</caption>
                                             <tr>
                                                 <th ng-repeat="v in f.variables">{{ v.name }}</th>
                                             </tr>
@@ -295,6 +296,12 @@
                     $scope.breakpointGroupCol.add(breakpointCode);
                 }
             };
+            $scope.setbreakpoint(["Error", 6]);
+            $scope.setbreakpoint(["MIR", 1])
+            $scope.setbreakpoint(["assert", 3]);
+            $scope.setbreakpoint(["partialassert", 3]);
+            $scope.setbreakpoint(["evaluate", 3]);
+            $scope.setbreakpoint(["partialevaluate", 3]);
             $scope.breakpointclass = function (breakpoint, current) {
                 if (breakpoint === undefined || current === undefined) {
                     return "error";

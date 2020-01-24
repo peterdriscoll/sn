@@ -52,6 +52,7 @@ namespace SN
 		SN_Expression File() const;
 
 		// Members
+		string GetString() const;
 		SN_String GetSource() const;
 		SN_Expression GetStart() const;
 		SN_Expression GetEnd() const;

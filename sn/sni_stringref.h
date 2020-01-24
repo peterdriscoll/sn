@@ -30,6 +30,8 @@ namespace SNI
 		virtual string DisplayCpp() const;
 		virtual bool IsKnownTypeValue() const;
 		virtual size_t Cardinality(size_t p_MaxCardinality = CARDINALITY_MAX) const;
+		virtual size_t LeftCardinality(size_t p_MaxCardinality) const;
+		virtual size_t RightCardinality(size_t p_MaxCardinality) const;
 		virtual SN::SN_Error ForEachCart(long p_Depth, SNI_Cart * p_Cart);
 		virtual SN::SN_Error ForEach(std::function<SN::SN_Error(const SN::SN_Expression&p_Param, SNI_World*p_World)> p_Action);
 		virtual string DisplaySN(long, SNI_DisplayOptions &) const;
@@ -38,6 +40,8 @@ namespace SNI
 		virtual bool IsNull() const;
 		virtual bool IsNullValue() const;
 		virtual bool IsKnownValue() const;
+		virtual bool IsLeftKnownValue() const;
+		virtual bool IsRightKnownValue() const;
 		virtual bool IsReferableValue() const;
 		virtual SNI_WorldSet * GetWorldSet();
 

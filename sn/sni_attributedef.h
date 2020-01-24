@@ -19,7 +19,7 @@ namespace SNI
 		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual long GetPriority() const;
 
-		virtual bool IsKnownValue(const SN::SN_Expression & p_Param) const;
+		virtual bool IsKnownValue(const SN::SN_Expression & p_Param, long j) const;
 
 		virtual void AssertValue(const SN::SN_Value &p_Left, const SN::SN_Value &p_Right, SN::SN_Value &p_Result) const = 0;
 		virtual SN::SN_Expression PrimaryFunctionExpression(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right) const = 0;

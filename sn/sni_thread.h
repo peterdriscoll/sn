@@ -58,7 +58,7 @@ namespace SNI
 		void Run();
 		void RunToEnd();
 		void Debug();
-		void DebugBreak();
+		void CodeBreak();
 		void StepOver();
 		void StepInto();
 		void StepOut();
@@ -72,7 +72,7 @@ namespace SNI
 		string RunWeb(enum DisplayOptionType p_OptionType);
 		string RunToEndWeb(enum DisplayOptionType p_OptionType);
 		string DebugWeb(enum DisplayOptionType p_OptionType);
-		string DebugBreakWeb(enum DisplayOptionType p_OptionType);
+		string CodeBreakWeb(enum DisplayOptionType p_OptionType);
 		string StepOverWeb(enum DisplayOptionType p_OptionType);
 		string StepIntoWeb(enum DisplayOptionType p_OptionType);
 		string StepOutWeb(enum DisplayOptionType p_OptionType);

@@ -1371,7 +1371,6 @@ namespace test_sn
 
 		TEST_METHOD(TestIsInteger)
 		{
-			return;
 			Initialize();
 			{
 				Manager manager("Test Is Integer", AssertErrorHandler);
@@ -1386,21 +1385,22 @@ namespace test_sn
 				Digit.LogDisplaySN();
 
 				SN_DECLARE(IsInteger);
-				(Define(IsInteger)(i) == (Digit(i) && !Digit(i.LookaheadRight())).Collapse().If(Bool(true), Digit(i.SelectLeftChar()) && IsInteger(i.SubtractLeftChar()))).PartialAssertAction();
+				//(Define(IsInteger)(i) == (Digit(i.SelectLeftChar()) && !Digit(i.SubtractLeftChar().LookaheadLeft())).Collapse().If(Bool(true), Digit(i.SelectLeftChar()) && IsInteger(i.SubtractLeftChar()))).PartialAssertAction();
+				(Define(IsInteger)(i) == (Digit(i.SelectLeftChar()) && !Digit(i.SubtractLeftChar().LookaheadLeft())).If(i == i.SelectLeftChar(), IsInteger(i.SubtractLeftChar()))).PartialAssertAction();
 				IsInteger.LogDisplaySN();
 
-				(IsInteger(String("1")).AssertAction());
-				(IsInteger(String("12")).AssertAction());
-				(IsInteger(String("123456789")).AssertAction());
+				//(IsInteger(String("1")).AssertAction());
+				//(IsInteger(String("12")).AssertAction());
+				//(IsInteger(String("123456789")).AssertAction());
 
-				//SN_DECLARE(a);
-				//SN_DECLARE(b);
-				//(a + b == "1abc").AssertAction();
-				//IsInteger(a).AssertAction();
-				//string test_a = a.GetString();
-				//string test_b = b.GetString();
-				//Assert::IsTrue(test_a == "1");
-				//Assert::IsTrue(test_b == "abc");
+				SN_DECLARE(a);
+				SN_DECLARE(b);
+				(a + b == "1abc").AssertAction();
+				IsInteger(a).AssertAction();
+				string test_a = a.GetString();
+				string test_b = b.GetString();
+				Assert::IsTrue(test_a == "1");
+				Assert::IsTrue(test_b == "abc");
 
 				SN_DECLARE(a1);
 				SN_DECLARE(b1);

@@ -84,6 +84,12 @@ namespace SN
 		return m_Char->GetChar();
 	}
 
+	string SN_Char::GetString() const
+	{
+		return m_Char->GetString();
+	}
+
+
 	SN_Expression SN_Char::IsA(const SN_Expression &p_Parent) const
 	{
 		return SN_Operators::IsA(*this, p_Parent);

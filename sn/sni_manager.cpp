@@ -400,7 +400,7 @@ namespace SNI
 				}
 				case VK_F7:
 					cout << "F7 - Debug break into C++\n";
-					l_thread->DebugBreak();
+					l_thread->CodeBreak();
 					break;
 				case VK_F8:
 				{

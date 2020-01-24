@@ -70,6 +70,11 @@ namespace SNI
 		case SN::GotoStepCount:
 			breakPoint = m_StepCount == p_StepCount;
 			break;
+		case SN::CodeBreak:
+			_ASSERT_EXPR(false, L"Code break requested from dashboard");
+			m_DebugAction = SN::StepInto;
+			breakPoint = false;
+			break;
 		case SN::Quit:
 			breakPoint = false;
 			if (p_InterruptPoint != SN::EndPoint)
@@ -146,9 +151,9 @@ namespace SNI
 		ScheduleCommand(SN::Debug);
 	}
 
-	void SNI_DebugCommand::DebugBreak()
+	void SNI_DebugCommand::CodeBreak()
 	{
-		ScheduleCommand(SN::RunToEnd);
+		ScheduleCommand(SN::CodeBreak);
 	}
 
 	void SNI_DebugCommand::StepOver(long p_StackDepth)

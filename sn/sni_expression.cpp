@@ -324,6 +324,16 @@ namespace SNI
 		return false;
 	}
 
+	bool SNI_Expression::IsLeftKnownValue() const
+	{
+		return IsKnownValue();
+	}
+
+	bool SNI_Expression::IsRightKnownValue() const
+	{
+		return IsKnownValue();
+	}
+
 	bool SNI_Expression::IsKnownTypeValue() const
 	{
 		return IsKnownValue();
@@ -393,6 +403,16 @@ namespace SNI
 	size_t SNI_Expression::Cardinality(size_t p_MaxCardinality) const
 	{
 		return p_MaxCardinality;
+	}
+
+	size_t SNI_Expression::LeftCardinality(size_t p_MaxCardinality) const
+	{
+		return Cardinality(p_MaxCardinality);
+	}
+
+	size_t SNI_Expression::RightCardinality(size_t p_MaxCardinality) const
+	{
+		return Cardinality(p_MaxCardinality);
 	}
 
 	SN::SN_Error SNI_Expression::ForEach(std::function<SN::SN_Error(const SN::SN_Expression &p_Param, SNI_World *p_World)> p_Action)

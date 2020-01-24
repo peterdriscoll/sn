@@ -20,7 +20,7 @@ namespace SNI
 		virtual long GetPriority() const;
 		virtual string GetOperator() const;
 
-		virtual bool IsKnownValue(const SN::SN_Expression & p_Param) const;
+		virtual bool IsKnownValue(const SN::SN_Expression & p_Param, long j) const;
 
 		virtual SN::SN_Error AssertValue(const SN::SN_Value & p_Left, const SN::SN_Value & p_Right, SN::SN_Expression & p_Result) const;
 

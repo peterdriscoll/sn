@@ -65,6 +65,8 @@ namespace SNI
 		// Cardinality
 		//---------------------------------------------------------------
 		virtual size_t Cardinality(size_t p_MaxCardinality = CARDINALITY_MAX) const = 0;
+		virtual size_t LeftCardinality(size_t p_MaxCardinality = CARDINALITY_MAX) const = 0;
+		virtual size_t RightCardinality(size_t p_MaxCardinality = CARDINALITY_MAX) const = 0;
 		virtual SN::SN_Error ForEach(std::function<SN::SN_Error(const SN::SN_Expression &p_Param, SNI_World *p_World)> p_Action) = 0;
 		virtual SN::SN_Cartesian CartProd(long p_Index, SNI_FunctionDef *p_FunctionDef = NULL) = 0;
 
@@ -74,6 +76,8 @@ namespace SNI
 		virtual bool IsNull() const = 0;
 		virtual bool IsNullValue() const = 0;
 		virtual bool IsKnownValue() const = 0;
+		virtual bool IsLeftKnownValue() const = 0;
+		virtual bool IsRightKnownValue() const = 0;
 		virtual bool IsKnownTypeValue() const = 0;
 		virtual bool IsLambdaValue() const = 0;
 		virtual bool IsVariable() const = 0;

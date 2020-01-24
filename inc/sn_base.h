@@ -118,6 +118,16 @@ namespace SN
 			return GetSNI_Base() && GetSNI_Base()->IsKnownValue();
 		}
 
+		bool IsLeftKnownValue() const
+		{
+			return GetSNI_Base() && GetSNI_Base()->IsLeftKnownValue();
+		}
+
+		bool IsRightKnownValue() const
+		{
+			return GetSNI_Base() && GetSNI_Base()->IsRightKnownValue();
+		}
+
 		bool IsKnownTypeValue() const
 		{
 			return GetSNI_Base() && GetSNI_Base()->IsKnownTypeValue();
@@ -160,6 +170,24 @@ namespace SN
 				return p_MaxCardinality;
 			}
 			return GetSNI_Base()->Cardinality(p_MaxCardinality);
+		}
+
+		size_t LeftCardinality(size_t p_MaxCardinality = CARDINALITY_MAX) const
+		{
+			if (!GetSNI_Base())
+			{
+				return p_MaxCardinality;
+			}
+			return GetSNI_Base()->LeftCardinality(p_MaxCardinality);
+		}
+
+		size_t RightCardinality(size_t p_MaxCardinality = CARDINALITY_MAX) const
+		{
+			if (!GetSNI_Base())
+			{
+				return p_MaxCardinality;
+			}
+			return GetSNI_Base()->RightCardinality(p_MaxCardinality);
 		}
 
 		Exp Evaluate(long p_MetaLevel = 0) const

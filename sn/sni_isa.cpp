@@ -47,7 +47,7 @@ namespace SNI
 		return " is a ";
 	}
 
-	bool SNI_IsA::IsKnownValue(const SN::SN_Expression &p_Param) const
+	bool SNI_IsA::IsKnownValue(const SN::SN_Expression &p_Param, long) const
 	{
 		return p_Param.IsKnownTypeValue();
 	}
