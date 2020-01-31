@@ -65,14 +65,15 @@ namespace SNI
 		return "sn_Lambda(" + m_FormalParameter->DisplayCpp() + ", " + m_Expression->DisplayCpp() + ")";
 	}
 
-	string SNI_Lambda::DisplaySN(long /*priority*/, SNI_DisplayOptions &p_DisplayOptions) const
+	string SNI_Lambda::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
 		string sValue;
 		if ((m_FormalParameter->IsKnownValue() || m_FormalParameter->IsKnownTypeValue()) && !m_FormalParameter->IsLambdaValue())
 		{
 			sValue = SetStaticBreakPoint(":", p_DisplayOptions, this, SN::ValueId) + m_FormalParameter->DisplayValueSN(GetPriority(), p_DisplayOptions);
 		}
-		return SetStaticBreakPoint("@", p_DisplayOptions, this, SN::LeftId) + m_FormalParameter->DisplaySN(GetPriority(), p_DisplayOptions) + sValue + SetStaticBreakPoint(".", p_DisplayOptions, this, SN::ParameterOneId) + m_Expression->DisplaySN(GetPriority(), p_DisplayOptions) + SetStaticBreakPoint(";", p_DisplayOptions, this, SN::RightId);
+		string text = SetStaticBreakPoint("@", p_DisplayOptions, this, SN::LeftId) + m_FormalParameter->DisplaySN(GetPriority(), p_DisplayOptions) + sValue + SetStaticBreakPoint(".", p_DisplayOptions, this, SN::ParameterOneId) + m_Expression->DisplaySN(GetPriority(), p_DisplayOptions) + SetStaticBreakPoint(";", p_DisplayOptions, this, SN::RightId);
+		return Bracket(priority, text, p_DisplayOptions, this);
 	}
 
 	long SNI_Lambda::GetPriority() const

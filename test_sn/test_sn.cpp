@@ -9,7 +9,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace skynet;
 using namespace PGCX;
 
-bool runWebServer = false;
+bool runWebServer = true;
 bool runWebServer2 = false;
 bool runWebServer3 = false;
 
@@ -1385,13 +1385,28 @@ namespace test_sn
 				Digit.LogDisplaySN();
 
 				SN_DECLARE(IsInteger);
-				//(Define(IsInteger)(i) == (Digit(i.SelectLeftChar()) && !Digit(i.SubtractLeftChar().LookaheadLeft())).Collapse().If(Bool(true), Digit(i.SelectLeftChar()) && IsInteger(i.SubtractLeftChar()))).PartialAssertAction();
-				(Define(IsInteger)(i) == (Digit(i.SelectLeftChar()) && !Digit(i.SubtractLeftChar().LookaheadLeft())).If(i == i.SelectLeftChar(), IsInteger(i.SubtractLeftChar()))).PartialAssertAction();
+				(Define(IsInteger)(i) == (Digit(i.SelectLeftChar()) && !(Digit(i.SubtractLeftChar().LookaheadLeft())).Collapse()).If(i == i.SelectLeftChar(), IsInteger(i.SubtractLeftChar()))).PartialAssertAction();
 				IsInteger.LogDisplaySN();
 
-				//(IsInteger(String("1")).AssertAction());
-				//(IsInteger(String("12")).AssertAction());
-				//(IsInteger(String("123456789")).AssertAction());
+				SN_DECLARE(ConvertInteger);
+				(Define(ConvertInteger)(i) == Let(IsInteger(i), i.StringToInt())).PartialAssertAction();
+
+
+				(IsInteger(String("1")).AssertAction());
+				(IsInteger(String("12")).AssertAction());
+				(IsInteger(String("123456789")).AssertAction());
+
+				SN_DECLARE(x1);
+				(ConvertInteger(String("1")) == x1).AssertAction();
+				(x1 == Long(1)).EvaluateAction();
+
+				SN_DECLARE(x2);
+				(ConvertInteger(String("12")) == x2).AssertAction();
+				(x2 == Long(12)).EvaluateAction();
+
+				SN_DECLARE(x3);
+				(ConvertInteger(String("123456789")) == x3).AssertAction();
+				(x3 == Long(123456789)).EvaluateAction();
 
 				SN_DECLARE(a);
 				SN_DECLARE(b);

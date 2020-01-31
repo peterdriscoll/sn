@@ -63,7 +63,7 @@ namespace SNI
 			delimeter = SetBreakPoint(";", p_DisplayOptions, p_DebugSource, param++);
 			text = text + del + p.GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions);
 		}
-		return Bracket(priority, text, p_DisplayOptions, p_DebugSource);
+		return Bracket(priority, text + SetBreakPoint(";", p_DisplayOptions, p_DebugSource, param), p_DisplayOptions, p_DebugSource);
 	}
 
 	long SNI_Unary::GetPriority() const
@@ -107,15 +107,6 @@ namespace SNI
 			if (SN::Is<SNI_Value *>(value))
 			{
 				return LOG_RETURN(context, PrimaryFunctionValue(value));
-			}
-			if (SN::Is<SNI_Function *>(value))
-			{
-				SN::SN_Function function = value;
-				SN::SN_Expression op = function.GetFunction();
-				if (SN::Is<SNI_Unary *>(op))
-				{
-					return LOG_RETURN(context, function.GetParameter());
-				}
 			}
 		}
 		return LOG_RETURN(context, PrimaryFunctionExpression(value));

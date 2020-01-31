@@ -72,7 +72,7 @@ namespace SNI
 			{
 				if (world->GetWorldSet() != m_WorldSet)
 				{
-					ASSERTM(world->GetWorldSet() == m_WorldSet, "World set inconsistency");
+					//ASSERTM(world->GetWorldSet() == m_WorldSet, "World set inconsistency");
 				}
 			}
 			else
@@ -1006,8 +1006,7 @@ namespace SNI
 				}
 			}
 			RemoveFailedWorlds();
-			return SN::SN_Bool(value);
 		}
-		return this;
+		return SN::SN_Bool(value);
 	}
 }

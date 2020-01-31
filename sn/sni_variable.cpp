@@ -140,6 +140,25 @@ namespace SNI
 		return GetName();
 	}
 
+	string SNI_Variable::FramePathName() const
+	{
+		if (m_Frame)
+		{	// Main thread
+			return GetPathName() + m_Frame->NameSuffix();
+		}
+		return GetPathName();
+	}
+
+	string SNI_Variable::GetPathName() const
+	{
+		if (m_Value && m_Value->IsVariable())
+		{
+			SN::SN_Variable value = m_Value;
+			return GetName() + "/" + value.GetSNI_Variable()->GetPathName();
+		} 
+		return GetName();
+	}
+
 	SNI_Expression * SNI_Variable::GetValue(bool p_Request) const
 	{
 		if (p_Request)
@@ -175,6 +194,11 @@ namespace SNI
 
 	SN::SN_Expression SNI_Variable::GetVariableValue(bool p_IfComplete)
 	{
+		if (m_Value && m_Value->IsVariable())
+		{
+			SN::SN_Variable value = m_Value;
+			return value.GetVariableValue(p_IfComplete);
+		} 
 		return m_Value;
 	}
 
@@ -262,7 +286,7 @@ namespace SNI
 	
 	string SNI_Variable::DisplayCpp() const
 	{
-		return "sn_Variable(" + FrameName() + ")";
+		return "SN_Variable(" + FrameName() + ")";
 	}
 
 	string SNI_Variable::DisplaySN(long p_Priority, SNI_DisplayOptions &p_DisplayOptions) const
@@ -609,12 +633,8 @@ namespace SNI
 		if (m_Value)
 		{
 			SNI_Expression * l_clone = m_Value->Clone(this, (*p_ParameterList)[0].GetSNI_Expression());
-			string debugId = SNI_Thread::GetThread()->GetDebugId();
-			SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, GetTypeName() + ".Unify after unify", SN::LeftId);
 
 			SN::SN_Expression e = l_clone->Unify(p_ParameterList);
-			SNI_Thread::GetThread()->SetDebugId(debugId);
-			SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, GetTypeName() + ".Unify after unify", SN::RightId);
 			SNI_Variable *result = SNI_Frame::Top()->GetResult();
 			result->SetValue((*p_ParameterList)[0].GetVariableValue());
 			SNI_Frame::Pop();
@@ -662,7 +682,11 @@ namespace SNI
 
 	void SNI_Variable::SetValue(const SN::SN_Expression &p_Value)
 	{
-		m_Value = dynamic_cast<SNI_Expression *>(p_Value.GetSNI_Expression());
-		REQUESTPROMOTION(m_Value);
+		SNI_Expression *value = dynamic_cast<SNI_Expression *>(p_Value.GetSNI_Expression());
+		if (value != this)
+		{
+			m_Value = value;
+			REQUESTPROMOTION(m_Value);
+		}
 	}
 }

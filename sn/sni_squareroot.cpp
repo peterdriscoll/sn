@@ -62,4 +62,29 @@ namespace SNI
 	{
 		return p_Param.Square();
 	}
+
+	SN::SN_Expression SNI_SquareRoot::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
+	{
+		SN::LogContext context("SNI_Unary::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+
+		SN::SN_Expression value = (*p_ParameterList)[0].PartialEvaluate(p_MetaLevel);
+
+		if (0 == p_MetaLevel)
+		{
+			if (SN::Is<SNI_Value *>(value))
+			{
+				return LOG_RETURN(context, PrimaryFunctionValue(value));
+			}
+			if (SN::Is<SNI_Function *>(value))
+			{
+				SN::SN_Function function = value;
+				SN::SN_Expression op = function.GetFunction();
+				if (SN::Is<SNI_Square *>(op))
+				{
+					return LOG_RETURN(context, function.GetParameter());
+				}
+			}
+		}
+		return LOG_RETURN(context, PrimaryFunctionExpression(value));
+	}
 }

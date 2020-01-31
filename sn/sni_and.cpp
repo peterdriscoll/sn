@@ -176,12 +176,9 @@ namespace SNI
 	{
 		SNI_Frame::Push(this, NULL);
 		SNI_Frame *topFrame = SNI_Frame::Top();
-		SNI_Variable* result_param = topFrame->CreateParameterByName("result");
-		SNI_Variable* left_param = topFrame->CreateParameterByName("left");
-		SNI_Variable* right_param = topFrame->CreateParameterByName("right");
-		result_param->SetValue(p_ParameterList[0]);
-		left_param->SetValue(p_ParameterList[1]);
-		right_param->SetValue(p_ParameterList[2]);
+		SNI_Variable* result_param = topFrame->CreateParameterByName("result", p_ParameterList[0]);
+		SNI_Variable* left_param = topFrame->CreateParameterByName("left", p_ParameterList[1]);
+		SNI_Variable* right_param = topFrame->CreateParameterByName("right", p_ParameterList[2]);
 		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before calculation", SN::LeftId);
 
 		SN::SN_Expression * firstParamList = new SN::SN_Expression[2];

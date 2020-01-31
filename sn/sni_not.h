@@ -22,6 +22,8 @@ namespace SNI
 
 		SN::SN_Value PrimaryFunctionValue(const SN::SN_Value &p_Param) const;
 		SN::SN_Expression PrimaryFunctionExpression(const SN::SN_Expression &p_Param) const;
+
+		SN::SN_Expression PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel) const;
 	};
 }
 

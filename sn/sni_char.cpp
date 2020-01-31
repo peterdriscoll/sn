@@ -59,16 +59,24 @@ namespace SNI
 
 	string SNI_Char::DisplayCpp() const
 	{
-		string quotedString(1, m_Char);
-		ReplaceAll(quotedString, "\"", "\\\"");
-		return "\"" + quotedString + "\"";
+		if (m_Char)
+		{
+			string quotedString(1, m_Char);
+			ReplaceAll(quotedString, "\"", "\\\"");
+			return "\"" + quotedString + "\"";
+		}
+		return "\"\\\0\"";
 	}
 
 	string SNI_Char::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
-		string quotedString(1, m_Char);
-		ReplaceAll(quotedString, "\"", "\\\"");
-		return "\"" + quotedString + "\"";
+		if (m_Char)
+		{
+			string quotedString(1, m_Char);
+			ReplaceAll(quotedString, "\"", "\\\"");
+			return "\"" + quotedString + "\"";
+		}
+		return "\"\\\\0\"";
 	}
 
 	long SNI_Char::GetPriority() const

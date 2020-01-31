@@ -834,14 +834,14 @@ namespace SNI
 		SN::SN_Expression start = m_Start.PartialEvaluate();
 		if (!SN::Is<SNI_Long *>(start))
 		{
-			return skynet::Null;
+			return SN::SN_Char(0);
 		}
 		size_t start_pos = SN::SN_Long(start).GetNumber();
 		if (start_pos < GetSourceString().length())
 		{
 			return SN::SN_Char(GetSourceString()[start_pos]);
 		}
-		return skynet::Null;
+		return SN::SN_Char(0);
 	}
 
 	SN::SN_Value SNI_StringRef::DoLookaheadRight() const
@@ -849,14 +849,14 @@ namespace SNI
 		SN::SN_Expression end = m_End.PartialEvaluate();
 		if (!SN::Is<SNI_Long *>(end))
 		{
-			return skynet::Null;
+			return SN::SN_Char(0);
 		}
 		size_t end_pos = SN::SN_Long(end).GetNumber();
 		if (end_pos < GetSourceString().length())
 		{
 			return SN::SN_Char(GetSourceString()[end_pos]);
 		}
-		return skynet::Null;
+		return SN::SN_Char(0);
 	}
 
 	SN::SN_Value SNI_StringRef::DoFile() const
@@ -962,5 +962,16 @@ namespace SNI
 	SN::SN_Value SNI_StringRef::DoIsA(const SNI_Value * p_Parent) const
 	{
 		return Class()->DoIsA(p_Parent);
+	}
+
+	SN::SN_Value SNI_StringRef::DoStringToInt() const
+	{
+		string s = GetString();
+		size_t len = s.size();
+		if (len < 10)
+		{
+			return SN::SN_Long(stol(s));
+		}
+		return SN::SN_LongLong(stoll(s));
 	}
 }

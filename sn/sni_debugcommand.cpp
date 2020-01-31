@@ -71,7 +71,7 @@ namespace SNI
 			breakPoint = m_StepCount == p_StepCount;
 			break;
 		case SN::CodeBreak:
-			_ASSERT_EXPR(false, L"Code break requested from dashboard");
+			SNI_Thread::GetThread()->ScheduleCodeBreak();
 			m_DebugAction = SN::StepInto;
 			breakPoint = false;
 			break;

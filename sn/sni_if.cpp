@@ -188,10 +188,10 @@ namespace SNI
 	{
 		SNI_Frame::Push(this, NULL);
 		SNI_Frame *topFrame = SNI_Frame::Top();
-		SNI_Variable* result_param = topFrame->CreateParameterByName("result");
-		SNI_Variable* condition_param = topFrame->CreateParameterByName("condition");
-		SNI_Variable* positive_param = topFrame->CreateParameterByName("positive");
-		SNI_Variable* negative_param = topFrame->CreateParameterByName("negative");
+		SNI_Variable* result_param = topFrame->CreateParameterByName("result", p_ParameterList[0]);
+		SNI_Variable* condition_param = topFrame->CreateParameterByName("condition", p_ParameterList[1]);
+		SNI_Variable* positive_param = topFrame->CreateParameterByName("positive", p_ParameterList[2]);
+		SNI_Variable* negative_param = topFrame->CreateParameterByName("negative", p_ParameterList[3]);
 		result_param->SetValue(p_ParameterList[0]);
 		SN::SN_ValueSet condition;
 		SNI_WorldSet *condition_worldSet = new SNI_WorldSet(p_ParameterList[1]);

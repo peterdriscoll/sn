@@ -50,6 +50,15 @@ namespace SN
 			return m_Expression;
 		}
 		
+		string GetTypeName() const
+		{
+			if (GetSNI_Base())
+			{
+				return GetSNI_Base()->GetTypeName();
+			}
+			return "";
+		}
+
 		string DisplayCpp() const
 		{
 			return GetSNI_Base()->DisplayCpp();

@@ -193,8 +193,10 @@ namespace SNI
 	SNI_Expression * SNI_Expression::Clone(const SNI_Expression *p_Function, SNI_Expression *p_Result)
 	{
 		bool changed = false;
-		SNI_Expression * result = Clone(SNI_Frame::Push(p_Function, p_Result), changed);
-		return result;
+		SNI_Frame *frame = SNI_Frame::Push(p_Function, p_Result);
+		SNI_Expression *function = Clone(frame, changed);
+		frame->SetCloneFunction(function);
+		return function;
 	}
 
 	/* static */ SN::SN_Expression SNI_Expression::AddLambdasPartial(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)

@@ -42,6 +42,9 @@ namespace SNI
 		void SetFrame(SNI_Frame *p_Frame);
 		string FrameName() const;
 
+		string FramePathName() const;
+		string GetPathName() const;
+
 		virtual bool IsComplete() const;
 		virtual void Complete();
 

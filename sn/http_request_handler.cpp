@@ -66,11 +66,11 @@ namespace HTTP
 			{
 				if (path == "/skynet")
 				{
-					rep.content = l_thread->Skynet(debugHTML);
+					rep.content.append(l_thread->Skynet(debugHTML));
 				}
 				else if (path == "/run")
 				{
-					rep.content = l_thread->RunWeb(debugHTML);
+					rep.content.append(l_thread->RunWeb(debugHTML));
 				}
 				else if (path == "/runjs")
 				{
@@ -78,7 +78,7 @@ namespace HTTP
 				}
 				else if (path == "/runtoend")
 				{
-					rep.content = l_thread->RunToEndWeb(debugHTML);
+					rep.content.append(l_thread->RunToEndWeb(debugHTML));
 				}
 				else if (path == "/runtoendjs")
 				{
@@ -86,7 +86,7 @@ namespace HTTP
 				}
 				else if (path == "/debug")
 				{
-					rep.content = l_thread->DebugWeb(debugHTML);
+					rep.content.append(l_thread->DebugWeb(debugHTML));
 				}
 				else if (path == "/debugjs")
 				{
@@ -96,7 +96,7 @@ namespace HTTP
 				}
 				else if (path == "/codebreak")
 				{
-					rep.content = l_thread->CodeBreakWeb(debugHTML);
+					rep.content.append(l_thread->CodeBreakWeb(debugHTML));
 				}
 				else if (path == "/codebreakjs")
 				{
@@ -104,7 +104,7 @@ namespace HTTP
 				}
 				else if (path == "/stepover")
 				{
-					rep.content = l_thread->StepOverWeb(debugHTML);
+					rep.content.append(l_thread->StepOverWeb(debugHTML));
 				}
 				else if (path == "/stepoverjs")
 				{
@@ -112,7 +112,7 @@ namespace HTTP
 				}
 				else if (path == "/stepinto")
 				{
-					rep.content = l_thread->StepIntoWeb(debugHTML);
+					rep.content.append(l_thread->StepIntoWeb(debugHTML));
 				}
 				else if (path == "/stepintojs")
 				{
@@ -120,7 +120,7 @@ namespace HTTP
 				}
 				else if (path == "/stepout")
 				{
-					rep.content = l_thread->StepOutWeb(debugHTML);
+					rep.content.append(l_thread->StepOutWeb(debugHTML));
 				}
 				else if (path == "/stepoutjs")
 				{
@@ -128,7 +128,7 @@ namespace HTTP
 				}
 				else if (path == "/stepparam")
 				{
-					rep.content = l_thread->StepParamWeb(debugHTML);
+					rep.content.append(l_thread->StepParamWeb(debugHTML));
 				}
 				else if (path == "/stepparamjs")
 				{
@@ -137,7 +137,7 @@ namespace HTTP
 				else if (path == "/gotostepcount")
 				{
 					long stepCount = atol(umap["stepcount"].c_str());
-					rep.content = l_thread->GotoStepCountWeb(stepCount, debugHTML);
+					rep.content.append(l_thread->GotoStepCountWeb(stepCount, debugHTML));
 				}
 				else if (path == "/gotostepcountjs")
 				{
@@ -147,15 +147,15 @@ namespace HTTP
 				else if (path == "/maxstackframes")
 				{
 					long maxStackFrames = atol(umap["maxstackframes"].c_str());
-					rep.content = l_thread->SetMaxStackFramesWeb(maxStackFrames, debugHTML);
+					rep.content.append(l_thread->SetMaxStackFramesWeb(maxStackFrames, debugHTML));
 				}
 				else if (path == "/thread")
 				{
-					rep.content = l_thread->Skynet(debugHTML);
+					rep.content.append(l_thread->Skynet(debugHTML));
 				}
 				else if (path == "/quit")
 				{
-					rep.content = l_thread->QuitWeb(debugHTML);
+					rep.content.append(l_thread->QuitWeb(debugHTML));
 				}
 				else if (path == "/quitjs")
 				{
@@ -163,43 +163,47 @@ namespace HTTP
 				}
 				else if (path == "/skynet")
 				{
-					rep.content = l_thread->Skynet(debugHTML);
+					rep.content.append(l_thread->Skynet(debugHTML));
 				}
 				else if (path == "/skynetjs")
 				{
-					rep.content = l_thread->SkynetJS();
+					rep.content.append(l_thread->SkynetJS());
 				}
 				else if (path == "/stackjs")
 				{
 					long maxStackFrames = atol(umap["maxstackframes"].c_str());
-					rep.content = l_thread->StackJS(maxStackFrames, debugJS);
+					rep.content.append(l_thread->StackJS(maxStackFrames, debugJS));
+					extension = "json";
 				}
 				else if (path == "/logjs")
 				{
 					long maxLogEntries = atol(umap["maxlogentries"].c_str());
-					rep.content = l_thread->LogJS(maxLogEntries);
+					rep.content.append(l_thread->LogJS(maxLogEntries));
+					extension = "json";
 				}
 				else if (path == "/logexpjs")
 				{
 					long maxLogEntries = atol(umap["maxlogentries"].c_str());
-					rep.content = l_thread->LogExpJS(maxLogEntries, debugJS);
+					rep.content.append(l_thread->LogExpJS(maxLogEntries, debugJS));
+					extension = "json";
 				}
 				else if (path == "/stepcountjs")
 				{
-					rep.content = l_thread->StepCountJS();
+					rep.content.append(l_thread->StepCountJS());
+					extension = "json";
 				}
 				else
 				{
 					// Determine the file extension.
-					std::size_t last_slash_pos = request_path.find_last_of("/");
-					std::size_t last_dot_pos = request_path.find_last_of(".");
+					std::size_t last_slash_pos = path.find_last_of("/");
+					std::size_t last_dot_pos = path.find_last_of(".");
 					if (last_dot_pos != std::string::npos && last_dot_pos > last_slash_pos)
 					{
-						extension = request_path.substr(last_dot_pos + 1);
+						extension = path.substr(last_dot_pos + 1);
 					}
 
 					// Open the file to send back.
-					std::string full_path = doc_root_ + request_path;
+					std::string full_path = doc_root_ + path;
 					std::ifstream is(full_path.c_str(), std::ios::in | std::ios::binary);
 					if (!is)
 					{

@@ -42,17 +42,18 @@ namespace SNI
 
 	string SNI_Let::GetTypeName() const
 	{
-		return "Lambda";
+		return "Let";
 	}
 
 	string SNI_Let::DisplayCpp() const
 	{
-		return "sn_Lambda(" + m_Condition->DisplayCpp() + ", " + m_Expression->DisplayCpp() + ")";
+		return "Let(" + m_Condition->DisplayCpp() + ", " + m_Expression->DisplayCpp() + ")";
 	}
 
-	string SNI_Let::DisplaySN(long /*priority*/, SNI_DisplayOptions &p_DisplayOptions) const
+	string SNI_Let::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
-		return "@" + m_Condition->DisplaySN(GetPriority(), p_DisplayOptions) + "." + m_Expression->DisplaySN(GetPriority(), p_DisplayOptions);
+		string text = SetBreakPoint("let", p_DisplayOptions, this, SN::LeftId) + " " + m_Condition->DisplaySN(GetPriority(), p_DisplayOptions) + " " + SetBreakPoint("in", p_DisplayOptions, this, SN::CallId) + " " + m_Expression->DisplaySN(GetPriority(), p_DisplayOptions);
+		return Bracket(priority, text, p_DisplayOptions, this);
 	}
 
 	long SNI_Let::GetPriority() const
@@ -62,7 +63,7 @@ namespace SNI
 
 	string SNI_Let::GetOperator() const
 	{
-		return "@";
+		return "let";
 	}
 
 	SNI_Expression * SNI_Let::GetExpression()
@@ -97,6 +98,34 @@ namespace SNI
 				&& m_Expression->Equivalent(dynamic_cast<SNI_Object *>(l_lambda->m_Expression));
 		}
 		return false;
+	}
+
+	SN::SN_Error SNI_Let::AssertValue(const SN::SN_Expression &p_Value)
+	{
+		SN::LogContext context(DisplaySN0() + ".SNI_Let::AssertValue ( " + p_Value.DisplaySN() + " )");
+		SNI_Thread::GetThread()->SetDebugId(GetDebugId());
+		SNI_Frame *topFrame = SNI_Frame::Push(this, NULL);
+		SNI_Variable* condition_param = topFrame->CreateParameterByName("Condition", m_Condition);
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".AssertValue before condition check", SN::LeftId);
+
+		SN::SN_Error e = SN::SN_Expression(m_Condition).Assert();
+
+		condition_param->SetValue(m_Condition);
+
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".AssertValue before call", SN::CallId);
+
+		if (e.IsError())
+		{
+			SNI_Thread::GetThread()->DebugCommand(SN::ErrorPoint, GetTypeName() + ".AssertValue failed", SN::ErrorId);
+			e.AddNote(context, this, "Let condition failed");
+		}
+		else
+		{
+			e = m_Expression->AssertValue(p_Value);
+		}
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".AssertValue after call", SN::RightId);
+		SNI_Frame::Pop();
+		return e;
 	}
 
 	SN::SN_Expression SNI_Let::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
@@ -135,8 +164,17 @@ namespace SNI
 	SN::SN_Expression SNI_Let::Unify(SN::SN_ExpressionList * p_ParameterList)
 	{
 		SN::LogContext context(DisplaySN0() + ".SNI_Let::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		SNI_Thread::GetThread()->SetDebugId(GetDebugId());
+		SNI_Frame *topFrame = SNI_Frame::Push(this, NULL);
+		SNI_Variable* condition_param = topFrame->CreateParameterByName("Condition", m_Condition);
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before condition check", SN::LeftId);
 
 		SN::SN_Error e = SN::SN_Expression(m_Condition).Assert();
+
+		condition_param->SetValue(m_Condition);
+
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before call", SN::CallId);
+
 		if (e.IsError())
 		{
 			e.AddNote(context, this, "Let condition failed");
@@ -144,9 +182,15 @@ namespace SNI
 		}
 		if (p_ParameterList->size() > 0)
 		{
-			return m_Expression->Unify(p_ParameterList);
+			e = m_Expression->Unify(p_ParameterList);
 		}
-		return m_Expression->AssertValue((*p_ParameterList)[0]);
+		else
+		{
+			e = m_Expression->AssertValue((*p_ParameterList)[0]);
+		}
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after call", SN::RightId);
+		SNI_Frame::Pop();
+		return e;
 	}
 
 	SN::SN_Error SNI_Let::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)

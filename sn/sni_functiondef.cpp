@@ -121,7 +121,7 @@ namespace SNI
 
 		if (GetOperator().empty())
 		{
-			text = SetBreakPoint(GetTypeName(), p_DisplayOptions, p_DebugSource, SN::LeftId) + " " + text;
+			text = SetBreakPoint(GetTypeName(), p_DisplayOptions, p_DebugSource, SN::LeftId) + " " + text + SetBreakPoint(";", p_DisplayOptions, p_DebugSource, SN::ParameterOneId + param);
 		}
 
 		return Bracket(priority, text, p_DisplayOptions, p_DebugSource);
@@ -255,11 +255,9 @@ namespace SNI
 		SNI_Frame::Push(this, NULL);
 		SNI_Frame *topFrame = SNI_Frame::Top();
 
-		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before cardinality check", SN::LeftId);
-
 		for (long j = 0; j < depth; j++)
 		{
-			topFrame->CreateParameter(j);
+			topFrame->CreateParameter(j, p_ParamList[j]);
 			if (IsKnownValue(p_ParamList[j], j))
 			{
 				inputList[j] = p_ParamList[j].GetVariableValue().SimplifyValue();
@@ -276,6 +274,9 @@ namespace SNI
 				output[j] = true;
 			}
 		}
+
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before cardinality check", SN::LeftId);
+
 		long calcPos = -1;
 		size_t card = 0;
 		size_t maxCard = SNI_Thread::TopManager()->MaxCardinalityCall();

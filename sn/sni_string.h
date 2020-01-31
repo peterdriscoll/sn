@@ -68,7 +68,9 @@ namespace SNI
 		virtual	SN::SN_Value DoLookaheadRight() const;
 		virtual	SN::SN_Value DoFile() const;
 
-		void DoWriteFile(const SN::SN_Value & p_Contents) const;
+		virtual void DoWriteFile(const SN::SN_Value & p_Contents) const;
+
+		virtual SN::SN_Value DoStringToInt() const;
 
 	private:
 		static SNI_Class *m_Class;

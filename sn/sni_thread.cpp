@@ -103,6 +103,7 @@ namespace SNI
 		, m_DefineId(0)
 		, m_WorldSetChangedList(NULL)
 		, m_WorldSetProcessMap(NULL)
+		, m_CodeBreakScheduled(false)
 	{
 	}
 
@@ -172,6 +173,13 @@ namespace SNI
 				breakPointJS = MakeBreakPointJS(m_DebugId, p_BreakId);
 				SetThreadBreakPoint(breakPoint, breakPointJS);
 			}
+			else if (p_InterruptPoint == SN::ErrorPoint)
+			{
+				string errorId = "Error";
+				breakPoint = MakeBreakPoint(errorId, p_BreakId);
+				breakPointJS = MakeBreakPointJS(errorId, p_BreakId);
+				SetThreadBreakPoint(breakPoint, breakPointJS);
+			}
 			else
 			{				
 				if (Top()->GetDebugId().empty())
@@ -188,6 +196,15 @@ namespace SNI
 			while (m_DebugCommand.IsBreakPoint(p_InterruptPoint, m_ThreadNum, SNI_Frame::GetFrameStackDepth(), m_ThreadStepCount, breakPoint))
 			{
 			}
+		}
+		if (m_CodeBreakScheduled)
+		{
+			// Code break
+#ifdef _DEBUG
+			// DebugBreak(); // Or just set breakpoint on the next line. It is easier.
+#endif
+			m_CodeBreakScheduled = false;
+			// Shift F11 (step out) will return you to the current code.
 		}
 	}
 
@@ -365,6 +382,11 @@ namespace SNI
 		delete m_WorldSetChangedList;
 		m_WorldSetProcessMap = NULL;
 		m_WorldSetChangedList = NULL;
+	}
+
+	void SNI_Thread::ScheduleCodeBreak()
+	{
+		m_CodeBreakScheduled = true;
 	}
 
 	string SNI_Thread::StartCommand(enum SN::DebugAction p_DebugAction, const string &p_Description, enum DisplayOptionType p_OptionType)
@@ -1062,9 +1084,9 @@ namespace SNI
 	{
 		for (auto it = m_FrameList.rbegin(); it != m_FrameList.rend(); it++)
 		{
-			(*it)->SetBreakPoint(p_BreakPoint, p_BreakPointJS);
 			if ((*it)->HasCode())
 			{
+				(*it)->SetBreakPoint(p_BreakPoint, p_BreakPointJS);
 				return;
 			}
 		}

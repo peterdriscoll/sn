@@ -127,7 +127,7 @@
                             </td>
                         </tr>
                     </table>
-                    <button title='Error' ng-click='setbreakpoint(["Error",6])' ng-class='breakpointclass(["Error",6], breakpoint)'>Error</button>
+                    <button title='Error' ng-click='setbreakpoint(["Error",16])' ng-class='breakpointclass(["Error",16], breakpoint)'>Error</button>
                     <button title='MIR' ng-click='setbreakpoint(["MIR",1])' ng-class='breakpointclass(["MIR",1], breakpoint)'>Check MIR</button>
                 </td>
             </tr>
@@ -146,6 +146,9 @@
                                     </div>
                                 </div>
                             </td>
+                            <td>
+                                {{f.breakpoint}}
+                            </td>
                         </tr>
                     </table>
                 </td>
@@ -161,7 +164,7 @@
                                 <td>
                                     <div style='overflow-x:auto;white-space:nowrap;width:900px'>
                                         <table class='frame'>
-                                            <caption>Frame {{ f.framepos }} : {{ f.framenum }} {{ f.function }}</caption>
+                                            <caption>Frame {{ f.typename }} {{ f.name }} : {{ f.function }}</caption>
                                             <tr>
                                                 <th ng-repeat="v in f.variables">{{ v.name }}</th>
                                             </tr>
@@ -279,24 +282,38 @@
                     .then(function (response) { $scope.initFirst(); });
             };
             $scope.breakpointCol = new Set();
-            $scope.breakpointGroupCol = new Set();
+            $scope.breakpointGroupCol = new Map();
+            $scope.getGroupBreakpoint = function (breakpointCode) {
+                var count = $scope.breakpointGroupCol.get(breakpointCode);
+                if (count == undefined) {
+                    count = 0;
+                };
+                return count > 0
+            }
             $scope.setbreakpoint = function (breakpoint) {
                 var breakpointId = breakpoint[0] + "_" + breakpoint[1];
+                var breakpointCode = breakpoint[0];
+                var count = $scope.breakpointGroupCol.get(breakpointCode);
+                if (count == undefined) {
+                    count = 0;
+                }
                 if ($scope.breakpointCol.has(breakpointId)) {
                     $scope.breakpointCol.delete(breakpointId);
+                    count--;
+                    if (count <= 0) {
+                        $scope.breakpointGroupCol.delete(breakpointCode);
+                    }
+                    else {
+                        $scope.breakpointGroupCol.set(breakpointCode, count);
+                    }
                 }
                 else {
                     $scope.breakpointCol.add(breakpointId);
-                }
-                var breakpointCode = breakpoint[0];
-                if ($scope.breakpointGroupCol.has(breakpointCode)) {
-                    $scope.breakpointGroupCol.delete(breakpointCode);
-                }
-                else {
-                    $scope.breakpointGroupCol.add(breakpointCode);
+                    count++;
+                    $scope.breakpointGroupCol.set(breakpointCode, count);
                 }
             };
-            $scope.setbreakpoint(["Error", 6]);
+            $scope.setbreakpoint(["Error", 16]);
             $scope.setbreakpoint(["MIR", 1])
             $scope.setbreakpoint(["assert", 3]);
             $scope.setbreakpoint(["partialassert", 3]);
@@ -318,7 +335,7 @@
                     return 'breakpointset';
                 }
                 var breakpointCode = breakpoint[0];
-                if ($scope.breakpointGroupCol.has(breakpointCode)) {
+                if ($scope.getGroupBreakpoint(breakpointCode)) {
                     return 'breakpointgroupset';
                 }
                 return 'breakpointclear';
@@ -338,7 +355,7 @@
                     return 'breakpointset ' + c;
                 }
                 var breakpointCode = breakpoint[0];
-                if ($scope.breakpointGroupCol.has(breakpointCode)) {
+                if ($scope.getGroupBreakpoint(breakpointCode)) {
                     return 'breakpointgroupset ' + c;
                 }
                 return c;

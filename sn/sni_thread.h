@@ -128,6 +128,7 @@ namespace SNI
 		SNI_WorldSetMap * GetWorldSetProcessMap();
 		void ClearDependencyChecks();
 
+		void ScheduleCodeBreak();
 	private:
 		string StartCommand(SN::DebugAction p_DebugAction, const string & p_Description, enum DisplayOptionType p_OptionType);
 
@@ -174,6 +175,8 @@ namespace SNI
 
 		SNI_WorldSetList *m_WorldSetChangedList;
 		SNI_WorldSetMap *m_WorldSetProcessMap;
+
+		bool m_CodeBreakScheduled;
 
 		static long m_GotoThreadNum;
 		static long m_StepCount;

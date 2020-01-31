@@ -286,11 +286,20 @@ namespace SNI
 
 	SN::SN_Value SNI_String::DoLookaheadLeft() const
 	{
+		if (m_String.length())
+		{
+			return SN::SN_Char(m_String[0]);
+		}
 		return SN::SN_Char(0);
 	}
 
 	SN::SN_Value SNI_String::DoLookaheadRight() const
 	{
+		size_t length = m_String.length();
+		if (length)
+		{
+			return SN::SN_Char(m_String[length-1]);
+		}
 		return SN::SN_Char(0);
 	}
 
@@ -329,5 +338,16 @@ namespace SNI
 		out.close();
 		auto &preventReread = SNI_DelayedProcessor::GetProcessor()->GetPreventReread();
 		preventReread[GetString()] = p_Contents;
+	}
+
+	SN::SN_Value SNI_String::DoStringToInt() const
+	{
+		size_t len = m_String.size();
+
+		if (len < 10)
+		{
+			return SN::SN_Long(stol(m_String));
+		}
+		return SN::SN_LongLong(stoll(m_String));
 	}
 }
