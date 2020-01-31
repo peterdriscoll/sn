@@ -9,7 +9,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace skynet;
 using namespace PGCX;
 
-bool runWebServer = true;
+bool runWebServer = false;
 bool runWebServer2 = false;
 bool runWebServer3 = false;
 
@@ -1417,6 +1417,13 @@ namespace test_sn
 				Assert::IsTrue(test_a == "1");
 				Assert::IsTrue(test_b == "abc");
 
+				SN_DECLARE(c4);
+				SN_DECLARE(d4);
+				(c4 + d4 == "1abc").AssertAction();
+				SN_DECLARE(x4);
+				(ConvertInteger(c4) == x4).AssertAction();
+				(x4 == Long(1)).EvaluateAction();
+
 				SN_DECLARE(a1);
 				SN_DECLARE(b1);
 				(a1 + b1 == "12abc").AssertAction();
@@ -1425,6 +1432,13 @@ namespace test_sn
 				string test_b1 = b1.GetString();
 				Assert::IsTrue(test_a1 == "12");
 				Assert::IsTrue(test_b1 == "abc");
+
+				SN_DECLARE(c5);
+				SN_DECLARE(d5);
+				(c5 + d5 == "12abc").AssertAction();
+				SN_DECLARE(x5);
+				(ConvertInteger(c5) == x5).AssertAction();
+				(x5 == Long(12)).EvaluateAction();
 
 				SN_DECLARE(a2);
 				SN_DECLARE(b2);
@@ -1435,12 +1449,13 @@ namespace test_sn
 				Assert::IsTrue(test_a2 == "123456789");
 				Assert::IsTrue(test_b2 == "abc");
 
+				SN_DECLARE(c6);
+				SN_DECLARE(d6);
+				(c6 + d6 == "123456789abc").AssertAction();
+				SN_DECLARE(x6);
+				(ConvertInteger(c6) == x6).AssertAction();
+				(x6 == Long(123456789)).EvaluateAction();
 				SN_DECLARE(PmGenInteger);
-				SN_DECLARE(s);
-				//(Define(PmGenInteger)(d) == IsInteger(d) && .If(IsInteger(d), d.IntToString())).PartialAssertAction();
-				//(Define(PmGenInteger)(s.StringToInt())) == IsInteger(s).If(IsInteger(d), d)).PartialAssertAction();
-				//(Define(PmGenInteger)(d) == ((d = Long(s)) && IsInteger(s)).If(d)).PartialAssertAction();
-				//(Define(PmGenInteger)(d) == ((s == d.IntToString()) && IsInteger(s)).If(s)).PartialAssertAction();
 			}
 			Cleanup();
 		}
