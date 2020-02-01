@@ -204,6 +204,11 @@ namespace SN
 			return GetSNI_Base()->Evaluate(p_MetaLevel);
 		}
 
+		Exp Meta(long p_MetaLevel = 0) const
+		{
+			return GetSNI_Base()->Meta(p_MetaLevel);
+		}
+
 		Exp PartialEvaluate(long p_MetaLevel = 0) const
 		{
 			return GetSNI_Base()->PartialEvaluate(p_MetaLevel);

@@ -62,7 +62,7 @@ namespace SNI
 
 	string SNI_Lambda::DisplayCpp() const
 	{
-		return "sn_Lambda(" + m_FormalParameter->DisplayCpp() + ", " + m_Expression->DisplayCpp() + ")";
+		return "Lambda(" + m_FormalParameter->DisplayCpp() + ", " + m_Expression->DisplayCpp() + ")";
 	}
 
 	string SNI_Lambda::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const

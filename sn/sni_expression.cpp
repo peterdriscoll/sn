@@ -681,6 +681,11 @@ namespace SNI
 		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Partial Evaluate", SN::ReturnId);
 	}
 
+	SN::SN_Expression SNI_Expression::Meta(long p_MetaLevel)
+	{
+		return SN::SN_Meta(p_MetaLevel, GetVariableValue(true));
+	}
+
 	void SNI_Expression::Fix(SN::SN_Expression p_Value)
 	{
 	}

@@ -46,19 +46,35 @@ namespace SNI
 		return "Local";
 	}
 
-	string SNI_Local::DisplayCpp() const
+	string SNI_Local::GetReferredName() const
 	{
-		return "sn_Local(" + m_LocalVariable->DisplayCpp() + ", " + m_Expression->DisplayCpp() + ")";
+		if (m_LocalVariable)
+		{
+			return GetTypeName() + "_" + m_LocalVariable->GetReferredName();
+		}
+		return GetTypeName();
 	}
 
-	string SNI_Local::DisplaySN(long /*priority*/, SNI_DisplayOptions &p_DisplayOptions) const
+	string SNI_Local::DisplayCpp() const
+	{
+		return "Local(" + m_LocalVariable->DisplayCpp() + ", " + m_Expression->DisplayCpp() + ")";
+	}
+
+	string SNI_Local::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
 		return "#" + m_LocalVariable->DisplaySN(GetPriority(), p_DisplayOptions) + "." + m_Expression->DisplaySN(GetPriority(), p_DisplayOptions);
+		string sValue;
+		if ((m_LocalVariable->IsKnownValue() || m_LocalVariable->IsKnownTypeValue()) && !m_LocalVariable->IsLambdaValue())
+		{
+			sValue = SetStaticBreakPoint(":", p_DisplayOptions, this, SN::ValueId) + m_LocalVariable->DisplayValueSN(GetPriority(), p_DisplayOptions);
+		}
+		string text = SetStaticBreakPoint("#", p_DisplayOptions, this, SN::LeftId) + m_LocalVariable->DisplaySN(GetPriority(), p_DisplayOptions) + sValue + SetStaticBreakPoint(".", p_DisplayOptions, this, SN::ParameterOneId) + m_Expression->DisplaySN(GetPriority(), p_DisplayOptions);
+		return Bracket(priority, text, p_DisplayOptions, this);
 	}
 
 	long SNI_Local::GetPriority() const
 	{
-		return 0;
+		return 1000;
 	}
 
 	string SNI_Local::GetOperator() const
@@ -79,7 +95,7 @@ namespace SNI
 	SNI_Expression * SNI_Local::Clone(SNI_Frame *p_Frame, bool &p_Changed)
 	{
 		bool changed = false;
-		SNI_Variable *l_NewVariable = new SNI_Variable(m_LocalVariable);
+		SNI_Variable *l_NewVariable = new SNI_Variable(m_LocalVariable->GetName());
 		l_NewVariable->SetFrame(p_Frame);
 		SNI_Expression *l_expression = p_Frame->CloneReplace(p_Changed, m_LocalVariable, l_NewVariable, m_Expression);
 		if (changed)

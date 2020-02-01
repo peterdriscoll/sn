@@ -98,6 +98,7 @@ namespace SNI
 		virtual SN::SN_Error PartialAssert() = 0;
 		virtual SN::SN_Error PartialAssertValue(const SN::SN_Expression &p_Expression, bool p_Define = false) = 0;
 
+		virtual SN::SN_Expression Meta(long p_MetaLevel = 0) = 0;
 		virtual void Fix(SN::SN_Expression p_Value) = 0;
 		virtual void Fix() = 0;
 		virtual bool Equivalent(SNI_Object * p_Other) const = 0;

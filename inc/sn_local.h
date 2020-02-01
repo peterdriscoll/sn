@@ -12,7 +12,7 @@ namespace SN
 {
 	class SN_Value;
 
-	class SN_EXPORT SN_Local : SN_Expression
+	class SN_EXPORT SN_Local : public SN_Expression
 	{
 	public:
 		SN_Local(SNI::SNI_Local * p_Local);

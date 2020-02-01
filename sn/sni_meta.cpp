@@ -70,6 +70,20 @@ namespace SNI
 		return 0;
 	}
 
+	bool SNI_Meta::IsKnownValue() const
+	{
+		return 0 < m_DeltaMetaLevel;
+	}
+
+	size_t SNI_Meta::Cardinality(size_t p_MaxCardinality) const
+	{
+		if (0 < m_DeltaMetaLevel)
+		{
+			return 1;
+		}
+		return p_MaxCardinality;
+	}
+
 	SNI_Expression * SNI_Meta::GetExpression()
 	{
 		return m_Expression;

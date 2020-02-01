@@ -27,6 +27,9 @@ namespace SNI
 		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual long GetPriority() const;
 
+		virtual bool IsKnownValue() const;
+		virtual size_t Cardinality(size_t p_MaxCardinality) const;
+
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 		virtual size_t Hash() const;
 		virtual SN::SN_Expression Evaluate(long p_MetaLevel = 0) const;

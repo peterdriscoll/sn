@@ -1385,7 +1385,7 @@ namespace test_sn
 				Digit.LogDisplaySN();
 
 				SN_DECLARE(IsInteger);
-				(Define(IsInteger)(i) == (Digit(i.SelectLeftChar()) && !(Digit(i.SubtractLeftChar().LookaheadLeft())).Collapse()).If(i == i.SelectLeftChar(), IsInteger(i.SubtractLeftChar()))).PartialAssertAction();
+				(Define(IsInteger)(i) == (Digit(i.SelectLeftChar()) && !(Digit(i.SubtractLeftChar().LookaheadLeft()))).If(i == i.SelectLeftChar(), IsInteger(i.SubtractLeftChar()))).PartialAssertAction();
 				IsInteger.LogDisplaySN();
 
 				SN_DECLARE(ConvertInteger);
@@ -1458,6 +1458,55 @@ namespace test_sn
 				SN_DECLARE(PmGenInteger);
 			}
 			Cleanup();
+		}
+
+		TEST_METHOD(TestParseInteger)
+		{
+			Initialize();
+			{
+				Manager manager("Test Parse Integer", AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(Digit);
+				SN_DECLARE(d);
+				(Define(Digit)(d) == (d == (String("0") || String("1") || String("2") || String("3") || String("4")
+					|| String("5") || String("6") || String("7") || String("8") || String("9")))).PartialAssertAction();
+
+
+				SN_DECLARE(IsInteger);
+				SN_DECLARE(i);
+				(Define(IsInteger)(i) == (Digit(i.SelectLeftChar()) && !(Digit(i.SubtractLeftChar().LookaheadLeft()))).If(i == i.SelectLeftChar(), IsInteger(i.SubtractLeftChar()))).PartialAssertAction();
+
+				SN_DECLARE(ParseInteger);
+				SN_DECLARE(s);
+				(Define(ParseInteger)(s)(i) == Let(IsInteger(s), s.StringToInt() == i)).PartialAssertAction();
+
+				SN_DECLARE(x2);
+				(ParseInteger("13")(x2)).AssertAction();
+				(x2 == Long(13)).EvaluateAction();
+
+				SN_DECLARE(x3);
+				(ParseInteger("21")(x3)).AssertAction();
+				(x3 == Long(21)).EvaluateAction();
+
+				SN_DECLARE(ParseTerm);
+				SN_DECLARE(t);
+				SN_DECLARE(t1);
+				SN_DECLARE(t2);
+				SN_DECLARE(s1);
+				SN_DECLARE(s2);
+	
+				(Define(ParseTerm)(s)(t) == Local(t1, Local(t2, Local(s1, Local(s2, Local(t, Let(s == s1 + String("+") + s2, Let(ParseInteger(s1)(t1), Let(ParseInteger(s2)(t2), t == Meta(1, Meta(-1, t1) + Meta(-1, t2))))))))))).PartialAssertAction();
+
+				SN_DECLARE(x1);
+				SN_DECLARE(y1);
+
+				(ParseTerm("13+21")(x1)).AssertAction();
+				(x1.Evaluate(-1) == y1).AssertAction();
+				(y1 == Long(34)).EvaluateAction();
+				long y_value = Long(y1).GetNumber();
+				Assert::IsTrue(y_value == 34);
+			}
 		}
 
 		TEST_METHOD(TestParser)
