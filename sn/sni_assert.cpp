@@ -34,6 +34,13 @@ namespace SNI
 		return 1;
 	}
 
+	string SNI_Assert::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList, const SNI_Expression * p_DebugSource) const
+	{
+
+		return (*p_ParameterList)[0].GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + ".Assert()";
+	}
+
+
 	SN::SN_Value SNI_Assert::PrimaryFunctionValue(const SN::SN_Value &p_Param) const
 	{
 		return p_Param.GetSNI_Value()->DoAssert();
@@ -63,7 +70,6 @@ namespace SNI
 	{
 		SN::SN_Expression clone = p_ParamList[PU1_First].GetSNI_Expression()->Clone(this, NULL);
 		LOG(WriteLine(SN::DebugLevel, "Assert " + clone.DisplayValueSN()));
-		LOG(WriteExp(clone));
 		SNI_Thread::GetThread()->SetDebugId("assert");
 		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Assert", SN::CallId);
 

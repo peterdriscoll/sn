@@ -581,12 +581,14 @@ namespace SNI
 
 	void SNI_Expression::Do()
 	{
-		ActionWithHandler(SNI_Thread::TopManager()->ErrorHandler());
+		DoWithHandler(SNI_Thread::TopManager()->ErrorHandler());
 	}
 
-	void SNI_Expression::ActionWithHandler(OnErrorHandler * p_ErrorHandler)
+	void SNI_Expression::DoWithHandler(OnErrorHandler * p_ErrorHandler)
 	{
-		SN::LogContext context("SNI_Expression::Do()");
+		SN::LogContext context("SNI_Expression::DoWithHandler()");
+		LOG(WriteExp(this));
+
 		SN::SN_Variable resultVariable;
 		SN::SN_Error e = AssertValue(resultVariable);
 		SN::SN_Error result = resultVariable.GetVariableValue();

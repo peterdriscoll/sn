@@ -18,6 +18,7 @@ namespace SNI
 		virtual string DisplayCpp() const;
 		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual long GetPriority() const;
+		virtual string DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList, const SNI_Expression * p_DebugSource) const;
 
 		virtual SN::SN_Value PrimaryFunctionValue(const SN::SN_Value &p_Left) const;
 		virtual SN::SN_Expression PrimaryFunctionExpression(const SN::SN_Expression &p_Left) const;

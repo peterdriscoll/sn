@@ -169,7 +169,7 @@ namespace SNI
 		virtual void PartialEvaluateThrow();
 
 		virtual void Do();
-		void ActionWithHandler(OnErrorHandler * p_ErrorHandler);
+		void DoWithHandler(OnErrorHandler * p_ErrorHandler);
 		virtual void AssertAction();
 		virtual void AssertActionWithHandler(OnErrorHandler * p_ErrorHandler);
 		virtual void PartialAssertAction();
