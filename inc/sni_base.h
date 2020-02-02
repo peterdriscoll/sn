@@ -108,6 +108,7 @@ namespace SNI
 		virtual void EvaluateThrow() = 0;
 		virtual void PartialEvaluateThrow() = 0;
 
+		virtual void Action() = 0;
 		virtual void AssertAction() = 0;
 		virtual void PartialAssertAction() = 0;
 		virtual void EvaluateAction() = 0;

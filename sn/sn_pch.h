@@ -68,6 +68,9 @@
 #include "sni_square.h"
 #include "sni_squareroot.h"
 
+// Commands
+#include "sni_assert.h"
+
 // Logic
 #include "sni_not.h"
 #include "sni_or.h"

@@ -254,6 +254,11 @@ namespace SN
 			return GetSNI_Base()->PartialEvaluateThrow();
 		}
 
+		void Action()
+		{
+			GetSNI_Base()->Action();
+		}
+
 		void AssertAction()
 		{
 			GetSNI_Base()->AssertAction();

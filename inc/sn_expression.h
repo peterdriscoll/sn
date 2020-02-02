@@ -138,6 +138,9 @@ namespace SN
 		SN_Expression Square() const;
 		SN_Expression SquareRoot() const;
 
+		//Commands
+		SN_Expression AssertC() const;
+
 		// Logic
 		SN_Expression operator!() const;
 		SN_Expression operator&&(const SN_Expression &right) const;

@@ -16,6 +16,9 @@
 #include "sni_square.h"
 #include "sni_squareroot.h"
 
+// Commands
+#include "sni_assert.h"
+
 // Logic
 #include "sni_not.h"
 #include "sni_or.h"
@@ -79,6 +82,8 @@ namespace skynet
 	SN::SN_FunctionDef Multiply(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Multiply()));
 	SN::SN_FunctionDef Square(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Square()));
 	SN::SN_FunctionDef SquareRoot(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_SquareRoot()));
+
+	SN::SN_FunctionDef Assert(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Assert()));
 
 	// Logic
 	SN::SN_FunctionDef Not(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Not()));

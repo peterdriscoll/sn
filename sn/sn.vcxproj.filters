@@ -516,6 +516,9 @@
     <ClInclude Include="http_server.h">
       <Filter>HTTP Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sni_assert.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -949,6 +952,9 @@
     </ClCompile>
     <ClCompile Include="sni_mapping.cpp">
       <Filter>Type Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_assert.cpp">
+      <Filter>Function Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

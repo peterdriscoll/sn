@@ -55,6 +55,11 @@ namespace SN
 		return const_cast<SNI::SNI_Bool *>(m_Expression);
 	}
 
+	SN_Expression SN_Bool::AssertC() const
+	{
+		return SN_Operators::AssertC(*this);
+	}
+
 	SN_Expression SN_Bool::operator !() const
 	{
 		return SN_Operators::operator !(*this);

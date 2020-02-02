@@ -382,6 +382,11 @@ namespace SN
 		return SN_Operators::SquareRoot(*this);
 	}
 
+	// Command
+	SN_Expression SN_Expression::AssertC() const
+	{
+		return SN_Operators::AssertC(*this);
+	}
 
 	// Logic
 	SN_Expression SN_Expression::operator!() const

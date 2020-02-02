@@ -109,6 +109,9 @@ namespace skynet
 	extern SN_EXPORT SN::SN_FunctionDef Square;
 	extern SN_EXPORT SN::SN_FunctionDef SquareRoot;
 
+	// * Commands
+	extern SN_EXPORT SN::SN_FunctionDef Assert;
+
 	// * Logic
 	extern SN_EXPORT SN::SN_FunctionDef Not;
 	extern SN_EXPORT SN::SN_FunctionDef Or;

@@ -579,6 +579,21 @@ namespace SNI
 		PartialEvaluateActionWithHandler(SNI_Manager::ThrowErrorHandler);
 	}
 
+	void SNI_Expression::Action()
+	{
+		ActionWithHandler(SNI_Thread::TopManager()->ErrorHandler());
+	}
+
+	void SNI_Expression::ActionWithHandler(OnErrorHandler * p_ErrorHandler)
+	{
+		SN::LogContext context("SNI_Expression::Action()");
+		SN::SN_Variable resultVariable;
+		SN::SN_Error e = AssertValue(resultVariable);
+		SN::SN_Error result = resultVariable.GetVariableValue();
+
+		HandleAssertAction(context, result, "Assert", p_ErrorHandler);
+	}
+
 	void SNI_Expression::AssertAction()
 	{
 		AssertActionWithHandler(SNI_Thread::TopManager()->ErrorHandler());
