@@ -214,9 +214,9 @@ namespace SN
 			return GetSNI_Base()->PartialEvaluate(p_MetaLevel);
 		}
 
-		Err Assert()
+		Err DoAssert()
 		{
-			return GetSNI_Base()->Assert();
+			return GetSNI_Base()->DoAssert();
 		}
 
 		Err AssertValue(const SN_Expression &p_Expression)
@@ -254,9 +254,9 @@ namespace SN
 			return GetSNI_Base()->PartialEvaluateThrow();
 		}
 
-		void Action()
+		void Do()
 		{
-			GetSNI_Base()->Action();
+			GetSNI_Base()->Do();
 		}
 
 		void AssertAction()

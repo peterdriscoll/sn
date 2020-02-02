@@ -36,12 +36,12 @@ namespace SNI
 
 	SN::SN_Value SNI_Assert::PrimaryFunctionValue(const SN::SN_Value &p_Param) const
 	{
-		return p_Param.GetSNI_Value()->Assert();
+		return p_Param.GetSNI_Value()->DoAssert();
 	}
 
 	SN::SN_Expression SNI_Assert::PrimaryFunctionExpression(const SN::SN_Expression &p_Param) const
 	{
-		return p_Param.AssertC();
+		return p_Param.Assert();
 	}
 
 	SN::SN_Error SNI_Assert::PartialUnifyInternal(SN::SN_Expression &p_value, SN::SN_Expression &p_Result)
@@ -67,7 +67,7 @@ namespace SNI
 		SNI_Thread::GetThread()->SetDebugId("assert");
 		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Assert", SN::CallId);
 
-		SN::SN_Error result = clone.Assert();
+		SN::SN_Error result = clone.DoAssert();
 		SNI_Frame::Pop();
 
 		SNI_Thread::GetThread()->SetDebugId("assert");

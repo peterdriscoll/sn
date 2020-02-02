@@ -15,9 +15,9 @@ namespace SN
 			return SNI_ValueSet::GeneralDoOr(p_Left.GetSNI_Value(), p_Right.GetSNI_Value());
 		}
 
-		SN::SN_Expression AssertC(const SN::SN_Expression & p_Expression)
+		SN::SN_Expression Assert(const SN::SN_Expression & p_Expression)
 		{
-			return SN::SN_Function(skynet::Assert, p_Expression);
+			return SN::SN_Function(skynet::DoAssert, p_Expression);
 		}
 
 		// Logic

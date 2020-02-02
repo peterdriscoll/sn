@@ -23,7 +23,7 @@ namespace SN
 
 		SN_Expression operator ==(const SN_Expression &p_Other) const;
 
-		SN_Expression AssertC() const;
+		SN_Expression Assert() const;
 
 		SN_Expression operator!() const;
 		SN_Expression operator &&(const SN_Expression &p_Other) const;

@@ -383,9 +383,9 @@ namespace SN
 	}
 
 	// Command
-	SN_Expression SN_Expression::AssertC() const
+	SN_Expression SN_Expression::Assert() const
 	{
-		return SN_Operators::AssertC(*this);
+		return SN_Operators::Assert(*this);
 	}
 
 	// Logic

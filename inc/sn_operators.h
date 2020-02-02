@@ -13,7 +13,7 @@ namespace SN
 		SN_EXPORT SN::SN_Value GeneralDoOr(const SN::SN_Value &p_Left, const SN::SN_Value &p_Right);
 
 		// Commands
-		SN_EXPORT SN::SN_Expression AssertC(const SN::SN_Expression &p_Expression);
+		SN_EXPORT SN::SN_Expression Assert(const SN::SN_Expression &p_Expression);
 
 		// Logic
 		SN_EXPORT SN::SN_Expression operator !(const SN::SN_Expression &p_Other);

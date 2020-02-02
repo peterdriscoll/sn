@@ -29,7 +29,7 @@ namespace SNI
 
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 		virtual size_t Hash() const;
-		virtual SN::SN_Error Assert();
+		virtual SN::SN_Error DoAssert();
 		virtual bool GetBool() const;
 
 		// Inheritance

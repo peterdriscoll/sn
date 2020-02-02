@@ -462,7 +462,7 @@ namespace SNI
 		return this;
 	}
 
-	SN::SN_Error SNI_Expression::Assert()
+	SN::SN_Error SNI_Expression::DoAssert()
 	{
 		return false;
 	}
@@ -579,14 +579,14 @@ namespace SNI
 		PartialEvaluateActionWithHandler(SNI_Manager::ThrowErrorHandler);
 	}
 
-	void SNI_Expression::Action()
+	void SNI_Expression::Do()
 	{
 		ActionWithHandler(SNI_Thread::TopManager()->ErrorHandler());
 	}
 
 	void SNI_Expression::ActionWithHandler(OnErrorHandler * p_ErrorHandler)
 	{
-		SN::LogContext context("SNI_Expression::Action()");
+		SN::LogContext context("SNI_Expression::Do()");
 		SN::SN_Variable resultVariable;
 		SN::SN_Error e = AssertValue(resultVariable);
 		SN::SN_Error result = resultVariable.GetVariableValue();
@@ -608,7 +608,7 @@ namespace SNI
 		SNI_Thread::GetThread()->SetDebugId("assert");
 		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Assert", SN::CallId);
 
-		SN::SN_Error result = clone.Assert();
+		SN::SN_Error result = clone.DoAssert();
 		SNI_Frame::Pop();
 
 		HandleAssertAction(context, result, "Assert", p_ErrorHandler);

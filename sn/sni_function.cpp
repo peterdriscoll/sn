@@ -175,7 +175,7 @@ namespace SNI
 		return result;
 	}
 
-	SN::SN_Error SNI_Function::Assert()
+	SN::SN_Error SNI_Function::DoAssert()
 	{
 		return AssertValue(skynet::True);
 	}

@@ -86,7 +86,7 @@ namespace SNI
 		return _Hash_representation(m_Expression);
 	}
 
-	SN::SN_Error SNI_Bool::Assert()
+	SN::SN_Error SNI_Bool::DoAssert()
 	{
 		return m_Expression;
 	}

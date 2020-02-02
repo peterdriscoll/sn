@@ -63,10 +63,10 @@ namespace SNI
 		return this;
 	}
 
-	SN::SN_Error SNI_Debug::Assert()
+	SN::SN_Error SNI_Debug::DoAssert()
 	{
-		SN::LogContext context(DisplaySN0() + ".Assert ()", LOG_DEBUG_INDEX);
-		return LOG_RETURN(context, m_Expression->Assert());
+		SN::LogContext context(DisplaySN0() + ".DoAssert ()", LOG_DEBUG_INDEX);
+		return LOG_RETURN(context, m_Expression->DoAssert());
 	}
 
 	SN::SN_Error SNI_Debug::AssertValue(const SN::SN_Expression &p_Value)

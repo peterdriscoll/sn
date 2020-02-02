@@ -9,7 +9,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace skynet;
 using namespace PGCX;
 
-bool runWebServer = false;
+bool runWebServer = true;
 bool runWebServer2 = false;
 bool runWebServer3 = false;
 
@@ -129,7 +129,7 @@ namespace test_sn
 
 					SN_DECLARE(y);
 
-					(String("dog") == y).AssertC().Action();
+					(String("dog") == y).Assert().Do();
 					(String("dog") == y).EvaluateAction();
 
 					SN_DECLARE(z);

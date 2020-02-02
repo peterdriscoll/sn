@@ -93,7 +93,7 @@ namespace SNI
 		virtual SN::SN_Expression PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const = 0;
 		virtual SN::SN_Expression Unify(SN::SN_ExpressionList * p_ParameterList) = 0;
 		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Expression, bool p_Define) = 0;
-		virtual SN::SN_Error Assert() = 0;
+		virtual SN::SN_Error DoAssert() = 0;
 		virtual SN::SN_Error AssertValue(const SN::SN_Expression &p_Value) = 0;
 		virtual SN::SN_Error PartialAssert() = 0;
 		virtual SN::SN_Error PartialAssertValue(const SN::SN_Expression &p_Expression, bool p_Define = false) = 0;
@@ -108,7 +108,7 @@ namespace SNI
 		virtual void EvaluateThrow() = 0;
 		virtual void PartialEvaluateThrow() = 0;
 
-		virtual void Action() = 0;
+		virtual void Do() = 0;
 		virtual void AssertAction() = 0;
 		virtual void PartialAssertAction() = 0;
 		virtual void EvaluateAction() = 0;

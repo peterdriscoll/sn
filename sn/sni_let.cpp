@@ -108,7 +108,7 @@ namespace SNI
 		SNI_Variable* condition_param = topFrame->CreateParameterByName("Condition", m_Condition);
 		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".AssertValue before condition check", SN::LeftId);
 
-		SN::SN_Error e = SN::SN_Expression(m_Condition).Assert();
+		SN::SN_Error e = SN::SN_Expression(m_Condition).DoAssert();
 
 		condition_param->SetValue(m_Condition);
 
@@ -131,7 +131,7 @@ namespace SNI
 	SN::SN_Expression SNI_Let::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
 		SN::LogContext context(DisplaySN0() + "SNI_Let::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )");
-		SN::SN_Error e = m_Condition->Assert();
+		SN::SN_Error e = m_Condition->DoAssert();
 		if (!e.GetBool())
 		{
 			e.AddNote(context, this, "Let condition failed");
@@ -169,7 +169,7 @@ namespace SNI
 		SNI_Variable* condition_param = topFrame->CreateParameterByName("Condition", m_Condition);
 		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before condition check", SN::LeftId);
 
-		SN::SN_Error e = SN::SN_Expression(m_Condition).Assert();
+		SN::SN_Error e = SN::SN_Expression(m_Condition).DoAssert();
 
 		condition_param->SetValue(m_Condition);
 

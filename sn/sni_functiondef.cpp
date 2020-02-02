@@ -234,7 +234,7 @@ namespace SNI
 		return skynet::Null;
 	}
 
-	SN::SN_Error SNI_FunctionDef::Assert()
+	SN::SN_Error SNI_FunctionDef::DoAssert()
 	{
 		return Unify(NULL);
 	}
