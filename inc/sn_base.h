@@ -224,9 +224,9 @@ namespace SN
 			return GetSNI_Base()->AssertValue(p_Expression);
 		}
 
-		Err PartialAssert()
+		Err DoPartialAssert()
 		{
-			return GetSNI_Base()->PartialAssert();
+			return GetSNI_Base()->DoPartialAssert();
 		}
 
 		Err PartialAssertValue(const Exp &p_Expression, bool p_Define = false)

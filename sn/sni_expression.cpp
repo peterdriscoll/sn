@@ -528,7 +528,7 @@ namespace SNI
 		return true;
 	}
 
-	SN::SN_Error SNI_Expression::PartialAssert()
+	SN::SN_Error SNI_Expression::DoPartialAssert()
 	{
 		return false;
 	}
@@ -637,7 +637,7 @@ namespace SNI
 		SNI_Thread::GetThread()->SetDebugId("partialassert");
 		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Partial assert", SN::CallId);
 
-		HandleAssertAction(context, PartialAssert(), "Partial assert", p_ErrorHandler);
+		HandleAssertAction(context, DoPartialAssert(), "Partial assert", p_ErrorHandler);
 
 		SNI_Thread::GetThread()->SetDebugId("partialassert");
 		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Partial assert", SN::ReturnId);

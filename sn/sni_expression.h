@@ -160,7 +160,7 @@ namespace SNI
 		virtual SN::SN_Error AssertValue(const SN::SN_Expression &p_Value);
 		virtual SN::SN_Error AssertIsA(const SN::SN_Expression &p_Value);
 		virtual SN::SN_Error SelfAssert();
-		virtual SN::SN_Error PartialAssert();
+		virtual SN::SN_Error DoPartialAssert();
 		virtual SN::SN_Error PartialAssertValue(const SN::SN_Expression &p_Expression, bool p_Define = false);
 
 		virtual void AssertThrow();

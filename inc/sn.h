@@ -110,7 +110,8 @@ namespace skynet
 	extern SN_EXPORT SN::SN_FunctionDef SquareRoot;
 
 	// * Commands
-	extern SN_EXPORT SN::SN_FunctionDef DoAssert;
+	extern SN_EXPORT SN::SN_FunctionDef Assert;
+	extern SN_EXPORT SN::SN_FunctionDef PartialAssert;
 
 	// * Logic
 	extern SN_EXPORT SN::SN_FunctionDef Not;

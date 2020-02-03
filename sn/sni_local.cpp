@@ -126,7 +126,7 @@ namespace SNI
 		return m_Expression->AssertValue(p_Value);
 	}
 
-	SN::SN_Error SNI_Local::PartialAssert()
+	SN::SN_Error SNI_Local::DoPartialAssert()
 	{
 		return PartialAssertValue(skynet::True);
 	}

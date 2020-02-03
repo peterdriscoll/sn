@@ -388,6 +388,11 @@ namespace SN
 		return SN_Operators::Assert(*this);
 	}
 
+	SN_Expression SN_Expression::PartialAssert() const
+	{
+		return SN_Operators::PartialAssert(*this);
+	}
+
 	// Logic
 	SN_Expression SN_Expression::operator!() const
 	{

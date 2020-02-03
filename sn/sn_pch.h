@@ -70,6 +70,7 @@
 
 // Commands
 #include "sni_assert.h"
+#include "sni_partialassert.h"
 
 // Logic
 #include "sni_not.h"

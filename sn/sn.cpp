@@ -18,6 +18,7 @@
 
 // Commands
 #include "sni_assert.h"
+#include "sni_partialassert.h"
 
 // Logic
 #include "sni_not.h"
@@ -83,7 +84,8 @@ namespace skynet
 	SN::SN_FunctionDef Square(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Square()));
 	SN::SN_FunctionDef SquareRoot(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_SquareRoot()));
 
-	SN::SN_FunctionDef DoAssert(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Assert()));
+	SN::SN_FunctionDef Assert(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Assert()));
+	SN::SN_FunctionDef PartialAssert(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_PartialAssert()));
 
 	// Logic
 	SN::SN_FunctionDef Not(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Not()));

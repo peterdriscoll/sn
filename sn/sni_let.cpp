@@ -148,7 +148,7 @@ namespace SNI
 	{
 		SN::LogContext context(DisplaySN0() + ".SNI_Let::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");
 
-		SN::SN_Error e = m_Condition->PartialAssert();
+		SN::SN_Error e = m_Condition->DoPartialAssert();
 		if (e.IsError())
 		{
 			e.AddNote(context, this, "Let condition failed");
@@ -197,7 +197,7 @@ namespace SNI
 	{
 		SN::LogContext context(DisplaySN0() + ".SNI_Let::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
 
-		SN::SN_Error e = SN::SN_Expression(m_Condition).PartialAssert();
+		SN::SN_Error e = SN::SN_Expression(m_Condition).DoPartialAssert();
 		if (e.IsError())
 		{
 			e.AddNote(context, this, "Let condition failed");

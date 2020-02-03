@@ -219,7 +219,7 @@ namespace SNI
 		return AssertValue(p_Value);
 	}
 
-	SN::SN_Error SNI_Function::PartialAssert()
+	SN::SN_Error SNI_Function::DoPartialAssert()
 	{
 		return PartialAssertValue(skynet::True);
 	}

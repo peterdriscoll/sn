@@ -239,7 +239,7 @@ namespace SNI
 		return Unify(NULL);
 	}
 
-	SN::SN_Error SNI_FunctionDef::PartialAssert()
+	SN::SN_Error SNI_FunctionDef::DoPartialAssert()
 	{
 		return PartialUnify(NULL, SN::SN_Bool(true));
 	}

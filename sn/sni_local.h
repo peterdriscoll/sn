@@ -33,7 +33,7 @@ namespace SNI
 		virtual SN::SN_Expression PartialEvaluate(long p_MetaLevel = 0) const;
 		virtual SN::SN_Error DoAssert();
 		virtual SN::SN_Error AssertValue(const SN::SN_Expression &p_Value);
-		virtual SN::SN_Error PartialAssert();
+		virtual SN::SN_Error DoPartialAssert();
 		virtual SN::SN_Error PartialAssertValue(const SN::SN_Expression &p_Expression, bool p_Define = false);
 
 		virtual SN::SN_Expression Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const;

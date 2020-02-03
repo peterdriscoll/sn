@@ -17,7 +17,12 @@ namespace SN
 
 		SN::SN_Expression Assert(const SN::SN_Expression & p_Expression)
 		{
-			return SN::SN_Function(skynet::DoAssert, p_Expression);
+			return SN::SN_Function(skynet::Assert, p_Expression);
+		}
+
+		SN::SN_Expression PartialAssert(const SN::SN_Expression & p_Expression)
+		{
+			return SN::SN_Function(skynet::PartialAssert, p_Expression);
 		}
 
 		// Logic
