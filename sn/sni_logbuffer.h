@@ -23,6 +23,7 @@ namespace SNI
 
 		void WriteLine(const string &p_Line);
 		void WriteExpression(const SN::SN_Expression & p_Expression);
+		void ClearLogExpressions();
 		void LogTableToStream(ostream & p_Stream, long p_MaxLogEntries);
 		void LogExpressionTableToStream(ostream & p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_DisplayOptions);
 		void LogTableJS(ostream & p_Stream, long p_MaxLogEntries);

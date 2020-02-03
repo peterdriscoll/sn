@@ -15,7 +15,7 @@ namespace SNI
 
 	void SNI_Transaction::EndTransaction()
 	{
-		SNI_Thread::GetThread()->PopFrame();
+		SNI_Thread::GetThread()->Clear();
 		PGC_Transaction::EndTransaction();
 	}
 

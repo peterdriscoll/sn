@@ -43,6 +43,8 @@ namespace SNI
 		virtual ~SNI_Thread();
 
 		void Init();
+
+		void Clear();
 		
 		size_t GetThreadNum();
 		SNI_FrameList & GetFrameList();

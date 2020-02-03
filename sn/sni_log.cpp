@@ -172,4 +172,12 @@ namespace SNI
 			m_LogBuffer->WriteExpression(p_Expression);
 		}
 	}
+
+	void SNI_Log::ClearLogExpressions()
+	{
+		if (m_LogBuffer)
+		{
+			m_LogBuffer->ClearLogExpressions();
+		}
+	}
 }

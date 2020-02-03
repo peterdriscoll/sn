@@ -37,6 +37,11 @@ namespace SNI
 		m_Mutex.unlock();
 	}
 
+	void SNI_LogBuffer::ClearLogExpressions()
+	{
+		m_ExpressionBuffer.clear();
+	}
+
 	void SNI_LogBuffer::LogTableToStream(ostream & p_Stream, long p_MaxLogEntries)
 	{
 		p_Stream << "<table class='log'>\n";

@@ -120,6 +120,16 @@ namespace SNI
 		m_FrameList.clear();
 	}
 
+	void SNI_Thread::Clear()
+	{
+		ThreadListLock();
+		m_FrameList.clear();
+		m_WorldSetProcessMap = NULL;
+		SNI_Log::GetLog()->ClearLogExpressions();
+		ThreadListUnlock();
+	}
+
+
 	size_t SNI_Thread::GetThreadNum()
 	{
 		return m_ThreadNum;

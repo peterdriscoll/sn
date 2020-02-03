@@ -51,6 +51,7 @@ namespace SNI
 		void LogExpTableJS(ostream & p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_DisplayOptions);
 
 		void WriteExp(SN::SN_Expression p_Expression);
+		void ClearLogExpressions();
 	private:
 		static SNI_Log *m_Log;
 
