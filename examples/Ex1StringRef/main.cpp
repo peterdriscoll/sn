@@ -18,14 +18,14 @@ string YourCppFunction()
 		SN_DECLARE(c);
 		SN_DECLARE(d);
 
-		(String("ratdogcat") == a + b).AssertAction(); // SN creates a and b are string reference to "ratdogcat".
-		(a == d + c).AssertAction();
-		(d == String("rat")).AssertAction(); // c contines after "rat". "dog ..."
-		(c == String("dog")).AssertAction(); // b is the remainder of the string. So "cat".
+		(String("ratdogcat") == a + b).Assert().Do(); // SN creates a and b are string reference to "ratdogcat".
+		(a == d + c).Assert().Do();
+		(d == String("rat")).Assert().Do(); // c contines after "rat". "dog ..."
+		(c == String("dog")).Assert().Do(); // b is the remainder of the string. So "cat".
 
-		(b == String("cat")).EvaluateAction();
+		(b == String("cat")).Evaluate().Do();
 
-		(result == b).AssertAction();
+		(result == b).Assert().Do();
 	}
 
 	return result.GetString(); // result stiil exists because created in outer transaction.

@@ -22,28 +22,28 @@ void TestIsInteger()
 	(Define(IsInteger)(i) == (Digit(i) && !Digit(i.LookaheadRight())).Collapse().If(Bool(true), Digit(i.SelectLeftChar()) && IsInteger(i.SubtractLeftChar()))).PartialAssertAction();
 	IsInteger.LogDisplaySN();
 
-	//(IsInteger(String("1")).AssertAction());
-	(IsInteger(String("12")).AssertAction());
-	(IsInteger(String("123456789")).AssertAction());
+	//(IsInteger(String("1")).Assert().Do());
+	(IsInteger(String("12")).Assert().Do());
+	(IsInteger(String("123456789")).Assert().Do());
 
 	SN_DECLARE(a);
 	SN_DECLARE(b);
-	(a + b == "1abc").AssertAction();
-	IsInteger(a).AssertAction();
+	(a + b == "1abc").Assert().Do();
+	IsInteger(a).Assert().Do();
 	string test_a = a.GetString();
 	string test_b = b.GetString();
 
 	SN_DECLARE(a1);
 	SN_DECLARE(b1);
-	(a1 + b1 == "12abc").AssertAction();
-	IsInteger(a1).AssertAction();
+	(a1 + b1 == "12abc").Assert().Do();
+	IsInteger(a1).Assert().Do();
 	string test_a1 = a1.GetString();
 	string test_b1 = b1.GetString();
 
 	SN_DECLARE(a2);
 	SN_DECLARE(b2);
-	(a2 + b2 == "123456789abc").AssertAction();
-	//IsInteger(a2).AssertAction();
+	(a2 + b2 == "123456789abc").Assert().Do();
+	//IsInteger(a2).Assert().Do();
 	string test_a2 = a2.GetString();
 	string test_b2 = b2.GetString();
 
@@ -66,33 +66,33 @@ void TestCharInValueSet()
 		|| String("5") || String("6") || String("7") || String("8") || String("9")))).PartialAssertAction();
 
 /*
-	(B_Digit(String("0"))).AssertAction();
-	(B_Digit(String("1"))).AssertAction();
-	(B_Digit(String("2"))).AssertAction();
-	(B_Digit(String("3"))).AssertAction();
-	(B_Digit(String("4"))).AssertAction();
-	(B_Digit(String("5"))).AssertAction();
-	(B_Digit(String("6"))).AssertAction();
-	(B_Digit(String("7"))).AssertAction();
-	(B_Digit(String("8"))).AssertAction();
-	(B_Digit(String("9"))).AssertAction();
+	(B_Digit(String("0"))).Assert().Do();
+	(B_Digit(String("1"))).Assert().Do();
+	(B_Digit(String("2"))).Assert().Do();
+	(B_Digit(String("3"))).Assert().Do();
+	(B_Digit(String("4"))).Assert().Do();
+	(B_Digit(String("5"))).Assert().Do();
+	(B_Digit(String("6"))).Assert().Do();
+	(B_Digit(String("7"))).Assert().Do();
+	(B_Digit(String("8"))).Assert().Do();
+	(B_Digit(String("9"))).Assert().Do();
 
-	(!B_Digit(String("X"))).AssertAction();
+	(!B_Digit(String("X"))).Assert().Do();
 */
 	// These return a value set of bools.  Should this reduce to a boolean value???
 
-	(B_Digit(String("0"))).EvaluateAction();
-	(B_Digit(String("1"))).EvaluateAction();
-	(B_Digit(String("2"))).EvaluateAction();
-	(B_Digit(String("3"))).EvaluateAction();
-	(B_Digit(String("4"))).EvaluateAction();
-	(B_Digit(String("5"))).EvaluateAction();
-	(B_Digit(String("6"))).EvaluateAction();
-	(B_Digit(String("7"))).EvaluateAction();
-	(B_Digit(String("8"))).EvaluateAction();
-	(B_Digit(String("9"))).EvaluateAction();
+	(B_Digit(String("0"))).Evaluate().Do();
+	(B_Digit(String("1"))).Evaluate().Do();
+	(B_Digit(String("2"))).Evaluate().Do();
+	(B_Digit(String("3"))).Evaluate().Do();
+	(B_Digit(String("4"))).Evaluate().Do();
+	(B_Digit(String("5"))).Evaluate().Do();
+	(B_Digit(String("6"))).Evaluate().Do();
+	(B_Digit(String("7"))).Evaluate().Do();
+	(B_Digit(String("8"))).Evaluate().Do();
+	(B_Digit(String("9"))).Evaluate().Do();
 
-	(!B_Digit(String("X"))).EvaluateAction();
+	(!B_Digit(String("X"))).Evaluate().Do();
 }
 
 
@@ -101,16 +101,16 @@ void TestValueSetOfStandardFunctions()
 	Transaction transaction;
 
 	SN_DECLARE(f);
-	(f == (skynet::Add || skynet::Multiply)).AssertAction();
+	(f == (skynet::Add || skynet::Multiply)).Assert().Do();
 	string f_string = f.DisplaySN();
 
 	SN_DECLARE(x);
-	(x == f(long(8))(long(13))).AssertAction();
+	(x == f(long(8))(long(13))).Assert().Do();
 	string x_string = x.BuildSet().DoEvaluate().DisplaySN();
-	(x < long(30)).AssertAction();
+	(x < long(30)).Assert().Do();
 	string x_string2 = x.DisplaySN();
 	long x_num = Long(x).GetNumber();
-	(x == Long(21)).AssertAction();
+	(x == Long(21)).Assert().Do();
 }
 
 
@@ -138,14 +138,14 @@ void TestValueSetOfLambdaFunctions()
 	string s_plus_times2 = (plus || times).DoEvaluate().DisplaySN();
 
 	SN_DECLARE(f);
-	(f == (plus || times)).AssertAction();
+	(f == (plus || times)).Assert().Do();
 	string f_string = f.DisplaySN();
 
 	SN_DECLARE(x);
-	(x == f(long(5))(long(8))).AssertAction();
+	(x == f(long(5))(long(8))).Assert().Do();
 	string x_string = x.DisplaySN();
-	(x < long(20)).AssertAction();
-	(x == long(13)).AssertAction();
+	(x < long(20)).Assert().Do();
+	(x == long(13)).Assert().Do();
 }
 
 void TestValueSetOfStringFunctions()
@@ -172,7 +172,7 @@ void TestValueSetOfStringFunctions()
 	string f_string = f.DisplaySN();
 
 	SN_DECLARE(x);
-	(String("{{expression}}") == f(x)).AssertAction();
+	(String("{{expression}}") == f(x)).Assert().Do();
 	string x_display = x.DisplaySN();
 	string x_string = x.BuildSet().DoEvaluate().DisplaySN();
 	string x_compare_string = "{String(\"expression\"), String(\"{expression}\"), String(\"{{expression}}\")}";
@@ -185,14 +185,14 @@ void TestValueSetOfStringFunctions()
 void TestSimple()
 {
 	SN_DECLARE(result);
-	(Long(5) + Long(6) == result).AssertAction();
-	(result > Long(11)).Debug().EvaluateAction();
+	(Long(5) + Long(6) == result).Assert().Do();
+	(result > Long(11)).Debug().Evaluate().Do();
 }
 
 void TestPythagoras()
 {
 	SN_DECLARE(X);
-	(Double(245.67).Square() + X.Square() == Double(357.56).Square()).AssertAction();
+	(Double(245.67).Square() + X.Square() == Double(357.56).Square()).Assert().Do();
 	string X_string = X.BuildSet().DoEvaluate().DisplaySN();
 	ASSERTM(X_string == "{Double(259.798777), Double(-259.798777)}", "");
 }
@@ -231,7 +231,7 @@ void TestChurchDivide()
 	SN_DECLARE(r3);
 
 	(inc(v) == v + Long(1)).PartialAssertAction();
-	(inc(inc(inc(Long(0)))) == Long(3)).AssertAction();
+	(inc(inc(inc(Long(0)))) == Long(3)).Assert().Do();
 
 	// Y = \f.(\x.x x) (\x.f (x x))
 	(Define(Y) == Lambda(f, Lambda(x, f(x(x)))(Lambda(x, f(x(x)))))).PartialAssertAction();
@@ -266,17 +266,17 @@ void TestChurchDivide()
 	// IsZero = \n.n (\x.false) true
 	(Define(IsZero) == Lambda(n, n(Lambda(x, falseL))(trueL))).PartialAssertAction();
 
-	//(divide(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(1)).EvaluateAction();
-	(divide(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).AssertAction();
-	(r1 == Long(1)).EvaluateAction();
+	//(divide(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(1)).Evaluate().Do();
+	(divide(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).Assert().Do();
+	(r1 == Long(1)).Evaluate().Do();
 
-	(divide(Lambda(f, Lambda(x, f(f(f(f(x)))))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(2)).EvaluateAction();
-	(divide(Lambda(f, Lambda(x, f(f(f(f(x)))))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).AssertAction();
-	(r2 == Long(2)).EvaluateAction();
+	(divide(Lambda(f, Lambda(x, f(f(f(f(x)))))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(2)).Evaluate().Do();
+	(divide(Lambda(f, Lambda(x, f(f(f(f(x)))))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).Assert().Do();
+	(r2 == Long(2)).Evaluate().Do();
 
-	(divide(Lambda(f, Lambda(x, f(f(f(f(f(f(f(f(f(x))))))))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(3)).EvaluateAction();
-	(divide(Lambda(f, Lambda(x, f(f(f(f(f(f(f(f(f(x))))))))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).AssertAction();
-	(r3 == Long(3)).EvaluateAction();
+	(divide(Lambda(f, Lambda(x, f(f(f(f(f(f(f(f(f(x))))))))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(3)).Evaluate().Do();
+	(divide(Lambda(f, Lambda(x, f(f(f(f(f(f(f(f(f(x))))))))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).Assert().Do();
+	(r3 == Long(3)).Evaluate().Do();
 
 }
 
