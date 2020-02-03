@@ -63,15 +63,15 @@ namespace SNI
 
 	SN::SN_Expression SNI_PartialEvaluate::UnifyArray(SN::SN_Expression * p_ParamList)
 	{
-		SN::SN_Expression clone = p_ParamList[PU1_First].GetSNI_Expression()->Clone(this, NULL);
-		LOG(WriteLine(SN::DebugLevel, "Evaluate " + clone.DisplayValueSN()));
-		SNI_Thread::GetThread()->SetDebugId("evaluate");
+		SNI::SNI_DisplayOptions l_DisplayOptions(doTextOnly);
+
+		LOG(WriteLine(SN::DebugLevel, "Partial evaluate " + DisplayValueSN(0, l_DisplayOptions)));
+		SNI_Thread::GetThread()->SetDebugId("partialevaluate");
 		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "evaluate", SN::CallId);
 
-		SN::SN_Error result = clone.DoPartialEvaluate();
-		SNI_Frame::Pop();
+		SN::SN_Error result = p_ParamList[PC1_First].DoPartialEvaluate();
 
-		SNI_Thread::GetThread()->SetDebugId("evaluate");
+		SNI_Thread::GetThread()->SetDebugId("partialevaluate");
 		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Evaluate", SN::ReturnId);
 
 		return p_ParamList[PU1_Result].AssertValue(result);
