@@ -163,21 +163,9 @@ namespace SNI
 		virtual SN::SN_Error DoPartialAssert();
 		virtual SN::SN_Error PartialAssertValue(const SN::SN_Expression &p_Expression, bool p_Define = false);
 
-		virtual void AssertThrow();
-		virtual void PartialAssertThrow();
-		virtual void EvaluateThrow();
-		virtual void PartialEvaluateThrow();
-
 		virtual void Do();
-		void DoWithHandler(OnErrorHandler * p_ErrorHandler);
-		virtual void AssertAction();
-		virtual void AssertActionWithHandler(OnErrorHandler * p_ErrorHandler);
-		virtual void PartialAssertAction();
-		virtual void PartialAssertActionWithHandler(OnErrorHandler * p_ErrorHandler);
-		virtual void EvaluateAction();
-		virtual void PartialEvaluateAction();
-		virtual void EvaluateActionWithHandler(OnErrorHandler * p_ErrorHandler);
-		virtual void PartialEvaluateActionWithHandler(OnErrorHandler * p_ErrorHandler);
+		virtual void Throw();
+		virtual void DoWithHandler(OnErrorHandler * p_ErrorHandler);
 
 		virtual SN::SN_Expression Meta(long p_MetaLevel = 0);
 
@@ -264,9 +252,6 @@ namespace SNI
 
 	private:
 		void HandleAssertAction(SN::LogContext & p_Context, SN::SN_Error p_Result, string p_Text, OnErrorHandler * p_ErrorHandler);
-		void HandleEvaluateAction(SN::LogContext &p_Context, SN::SN_Expression p_Result, string p_Text, OnErrorHandler *p_ErrorHandler);
-
-	private:
 		static map<string, unsigned long> m_IdMap;
 
 	private:

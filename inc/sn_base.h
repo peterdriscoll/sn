@@ -234,49 +234,14 @@ namespace SN
 			return GetSNI_Base()->PartialAssertValue(p_Expression, p_Define);
 		}
 
-		void AssertThrow()
+		void Throw()
 		{
-			return GetSNI_Base()->AssertThrow();
-		}
-
-		void PartialAssertThrow()
-		{
-			return GetSNI_Base()->PartialAssertThrow();
-		}
-
-		void EvaluateThrow()
-		{
-			return GetSNI_Base()->EvaluateThrow();
-		}
-
-		void PartialEvaluateThrow()
-		{
-			return GetSNI_Base()->PartialEvaluateThrow();
+			return GetSNI_Base()->Throw();
 		}
 
 		void Do()
 		{
 			GetSNI_Base()->Do();
-		}
-
-		void AssertAction()
-		{
-			GetSNI_Base()->AssertAction();
-		}
-
-		void PartialAssertAction()
-		{
-			GetSNI_Base()->PartialAssertAction();
-		}
-
-		void EvaluateAction()
-		{
-			GetSNI_Base()->EvaluateAction();
-		}
-
-		void PartialEvaluateAction()
-		{
-			GetSNI_Base()->PartialEvaluateAction();
 		}
 
 		void Fix(Exp p_Value)

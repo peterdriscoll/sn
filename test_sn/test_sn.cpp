@@ -1906,7 +1906,7 @@ namespace test_sn
 				{
 					try
 					{
-						(Long(5) == Long(6)).AssertThrow();
+						(Long(5) == Long(6)).Assert().Throw();
 						Assert::IsTrue(false, L"Expected a contradiction");
 					}
 					catch (Error e)

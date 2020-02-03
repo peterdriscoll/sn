@@ -103,16 +103,8 @@ namespace SNI
 		virtual void Fix() = 0;
 		virtual bool Equivalent(SNI_Object * p_Other) const = 0;
 
-		virtual void AssertThrow() = 0;
-		virtual void PartialAssertThrow() = 0;
-		virtual void EvaluateThrow() = 0;
-		virtual void PartialEvaluateThrow() = 0;
-
+		virtual void Throw() = 0;
 		virtual void Do() = 0;
-		virtual void AssertAction() = 0;
-		virtual void PartialAssertAction() = 0;
-		virtual void EvaluateAction() = 0;
-		virtual void PartialEvaluateAction() = 0;
 	};
 }
 

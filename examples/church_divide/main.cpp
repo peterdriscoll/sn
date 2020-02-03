@@ -15,11 +15,11 @@ void TestIsInteger()
 	SN_DECLARE(i);
 
 	(Define(Digit)(d) == (d == (String("0") || String("1") || String("2") || String("3") || String("4")
-		|| String("5") || String("6") || String("7") || String("8") || String("9")))).PartialAssertAction();
+		|| String("5") || String("6") || String("7") || String("8") || String("9")))).PartialAssert().Do();
 	Digit.LogDisplaySN();
 
 	SN_DECLARE(IsInteger);
-	(Define(IsInteger)(i) == (Digit(i) && !Digit(i.LookaheadRight())).Collapse().If(Bool(true), Digit(i.SelectLeftChar()) && IsInteger(i.SubtractLeftChar()))).PartialAssertAction();
+	(Define(IsInteger)(i) == (Digit(i) && !Digit(i.LookaheadRight())).Collapse().If(Bool(true), Digit(i.SelectLeftChar()) && IsInteger(i.SubtractLeftChar()))).PartialAssert().Do();
 	IsInteger.LogDisplaySN();
 
 	//(IsInteger(String("1")).Assert().Do());
@@ -49,10 +49,10 @@ void TestIsInteger()
 
 	SN_DECLARE(PmGenInteger);
 	SN_DECLARE(s);
-	//(Define(PmGenInteger)(d) == IsInteger(d) && .If(IsInteger(d), d.IntToString())).PartialAssertAction();
-	//(Define(PmGenInteger)(s.StringToInt())) == IsInteger(s).If(IsInteger(d), d)).PartialAssertAction();
-	//(Define(PmGenInteger)(d) == ((d = Long(s)) && IsInteger(s)).If(d)).PartialAssertAction();
-	//(Define(PmGenInteger)(d) == ((s == d.IntToString()) && IsInteger(s)).If(s)).PartialAssertAction();
+	//(Define(PmGenInteger)(d) == IsInteger(d) && .If(IsInteger(d), d.IntToString())).PartialAssert().Do();
+	//(Define(PmGenInteger)(s.StringToInt())) == IsInteger(s).If(IsInteger(d), d)).PartialAssert().Do();
+	//(Define(PmGenInteger)(d) == ((d = Long(s)) && IsInteger(s)).If(d)).PartialAssert().Do();
+	//(Define(PmGenInteger)(d) == ((s == d.IntToString()) && IsInteger(s)).If(s)).PartialAssert().Do();
 }
 
 void TestCharInValueSet()
@@ -63,7 +63,7 @@ void TestCharInValueSet()
 	SN_DECLARE(d);
 
 	(Define(B_Digit)(d) == (d == (String("0") || String("1") || String("2") || String("3") || String("4")
-		|| String("5") || String("6") || String("7") || String("8") || String("9")))).PartialAssertAction();
+		|| String("5") || String("6") || String("7") || String("8") || String("9")))).PartialAssert().Do();
 
 /*
 	(B_Digit(String("0"))).Assert().Do();
@@ -125,12 +125,12 @@ void TestValueSetOfLambdaFunctions()
 		SN_DECLARE(a);
 		SN_DECLARE(b);
 
-		(Define(plus)(a)(b) == a + b).PartialAssertAction();
+		(Define(plus)(a)(b) == a + b).PartialAssert().Do();
 
 		SN_DECLARE(c);
 		SN_DECLARE(d);
 
-		(Define(times)(c)(d) == c * d).PartialAssertAction();
+		(Define(times)(c)(d) == c * d).PartialAssert().Do();
 	}
 	string s_plus = plus.DisplayValueSN();
 	string s_times = times.DisplayValueSN();
@@ -159,16 +159,16 @@ void TestValueSetOfStringFunctions()
 	{
 		SN_DECLARE(a);
 
-		(Define(wrap)(a) == String("{") + (f(a) + String("}"))).PartialAssertAction();
+		(Define(wrap)(a) == String("{") + (f(a) + String("}"))).PartialAssert().Do();
 
 		SN_DECLARE(c);
 		SN_DECLARE(d);
 
-		(Define(map)(a) == a).PartialAssertAction();
+		(Define(map)(a) == a).PartialAssert().Do();
 	}
 	string f_before_string = f.DisplaySN();
 
-	(Define(f) == (wrap || map)).PartialAssertAction();
+	(Define(f) == (wrap || map)).PartialAssert().Do();
 	string f_string = f.DisplaySN();
 
 	SN_DECLARE(x);
@@ -230,41 +230,41 @@ void TestChurchDivide()
 	SN_DECLARE(r2);
 	SN_DECLARE(r3);
 
-	(inc(v) == v + Long(1)).PartialAssertAction();
+	(inc(v) == v + Long(1)).PartialAssert().Do();
 	(inc(inc(inc(Long(0)))) == Long(3)).Assert().Do();
 
 	// Y = \f.(\x.x x) (\x.f (x x))
-	(Define(Y) == Lambda(f, Lambda(x, f(x(x)))(Lambda(x, f(x(x)))))).PartialAssertAction();
+	(Define(Y) == Lambda(f, Lambda(x, f(x(x)))(Lambda(x, f(x(x)))))).PartialAssert().Do();
 
 	// \n.\f.\x.n (\g.\h.h (g f)) (\u.x) (\u.u)
-	(Define(pred) == Lambda(n, Lambda(f, Lambda(x, n(Lambda(g, Lambda(h, h(g(f))))) (Lambda(u, x))(Lambda(u, u)))))).PartialAssertAction();
+	(Define(pred) == Lambda(n, Lambda(f, Lambda(x, n(Lambda(g, Lambda(h, h(g(f))))) (Lambda(u, x))(Lambda(u, u)))))).PartialAssert().Do();
 
 	// minus m n = (n pred) m	
-	(Define(minus)(m)(n) == n(pred)(m)).PartialAssertAction();
+	(Define(minus)(m)(n) == n(pred)(m)).PartialAssert().Do();
 
 	// div = \c.\n.\m.\f.\x.(\d.IsZero d (0 f x) (f (c d m f x))) (minus n m)
-	(Define(div) == Lambda(c, Lambda(n, Lambda(m, Lambda(f, Lambda(x, (Lambda(d, IsZero(d)(zero(f)(x))(f(c(d)(m)(f)(x))))(minus(n)(m))))))))).PartialAssertAction();
+	(Define(div) == Lambda(c, Lambda(n, Lambda(m, Lambda(f, Lambda(x, (Lambda(d, IsZero(d)(zero(f)(x))(f(c(d)(m)(f)(x))))(minus(n)(m))))))))).PartialAssert().Do();
 
 	// divide1 == Y div
-	(Define(divide1) == Y(div)).PartialAssertAction();
+	(Define(divide1) == Y(div)).PartialAssert().Do();
 
 	// divide = \n.divide1 (succ n)
-	(Define(divide) == Lambda(n, divide1(succ(n)))).PartialAssertAction();
+	(Define(divide) == Lambda(n, divide1(succ(n)))).PartialAssert().Do();
 
 	// succ n f x = f (n f x)
-	(Define(succ)(n)(f)(x) == f(n(f)(x))).PartialAssertAction();
+	(Define(succ)(n)(f)(x) == f(n(f)(x))).PartialAssert().Do();
 
 	// zero = \f.\x.x
-	(Define(zero) == Lambda(f, Lambda(x, x))).PartialAssertAction();
+	(Define(zero) == Lambda(f, Lambda(x, x))).PartialAssert().Do();
 
 	// trueL = \a.\b.a
-	(Define(trueL) == Lambda(a, Lambda(b, a))).PartialAssertAction();
+	(Define(trueL) == Lambda(a, Lambda(b, a))).PartialAssert().Do();
 
 	// falseL = \a.\b.a
-	(Define(falseL) == Lambda(a, Lambda(b, b))).PartialAssertAction();
+	(Define(falseL) == Lambda(a, Lambda(b, b))).PartialAssert().Do();
 
 	// IsZero = \n.n (\x.false) true
-	(Define(IsZero) == Lambda(n, n(Lambda(x, falseL))(trueL))).PartialAssertAction();
+	(Define(IsZero) == Lambda(n, n(Lambda(x, falseL))(trueL))).PartialAssert().Do();
 
 	//(divide(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(1)).Evaluate().Do();
 	(divide(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).Assert().Do();
