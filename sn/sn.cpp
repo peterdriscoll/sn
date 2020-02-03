@@ -20,6 +20,7 @@
 #include "sni_assert.h"
 #include "sni_partialassert.h"
 #include "sni_evaluate.h"
+#include "sni_partialevaluate.h"
 
 // Logic
 #include "sni_not.h"
@@ -88,6 +89,7 @@ namespace skynet
 	SN::SN_FunctionDef Assert(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Assert()));
 	SN::SN_FunctionDef PartialAssert(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_PartialAssert()));
 	SN::SN_FunctionDef Evaluate(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Evaluate()));
+	SN::SN_FunctionDef PartialEvaluate(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_PartialEvaluate()));
 
 	// Logic
 	SN::SN_FunctionDef Not(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Not()));

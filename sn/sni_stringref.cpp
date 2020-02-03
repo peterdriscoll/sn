@@ -466,7 +466,7 @@ namespace SNI
 		return SN::SN_String(m_Source.GetString().substr(start_pos, end_pos - start_pos + 1));
 	}
 
-	SN::SN_Expression SNI_StringRef::PartialEvaluate(long p_MetaLevel /* = 0 */) const
+	SN::SN_Expression SNI_StringRef::DoPartialEvaluate(long p_MetaLevel /* = 0 */) const
 	{
 		return DoEvaluate(p_MetaLevel);
 	}
@@ -513,8 +513,8 @@ namespace SNI
 			SN::SN_StringRef other = p_Other;
 			if (GetSource().GetSNI_String() == other.GetSource().GetSNI_String())
 			{
-				SN::SN_Expression start = other.GetStart().PartialEvaluate();
-				SN::SN_Expression end = other.GetEnd().PartialEvaluate();
+				SN::SN_Expression start = other.GetStart().DoPartialEvaluate();
+				SN::SN_Expression end = other.GetEnd().DoPartialEvaluate();
 				if (end.Equivalent(start))
 				{
 					return SN::SN_StringRef(this, m_Start, other.GetEnd());
@@ -577,7 +577,7 @@ namespace SNI
 			}
 			long start_pos = SN::SN_Long(start).GetNumber();
 
-			SN::SN_Expression end = m_End.PartialEvaluate();
+			SN::SN_Expression end = m_End.DoPartialEvaluate();
 			if (SN::Is<SNI_Value *>(end))
 			{
 				if (!SN::Is<SNI_Long *>(end))
@@ -645,7 +645,7 @@ namespace SNI
 		{
 			return SN::SN_Error("SubtractLeft: Expected a string to subtract: " + DisplayPmExpression(part));
 		}
-		SN::SN_Value start = m_Start.PartialEvaluate();
+		SN::SN_Value start = m_Start.DoPartialEvaluate();
 		if (SN::Is<SNI_Value *>(start))
 		{
 			if (start.IsNull())
@@ -727,7 +727,7 @@ namespace SNI
 			return SN::SN_Error("SubtractLeftChar: Start of string ref must be long in: " + DisplaySN0());
 		}
 		long start_pos = SN::SN_Long(start).GetNumber();
-		SN::SN_Expression end = m_End.PartialEvaluate();
+		SN::SN_Expression end = m_End.DoPartialEvaluate();
 		if (SN::Is<SNI_Value *>(end))
 		{
 			if (!SN::Is<SNI_Long *>(end))
@@ -745,7 +745,7 @@ namespace SNI
 
 	SN::SN_Value SNI_StringRef::DoSubtractRightChar() const
 	{
-		SN::SN_Expression end = m_End.PartialEvaluate();
+		SN::SN_Expression end = m_End.DoPartialEvaluate();
 		if (!SN::Is<SNI_Long *>(end))
 		{
 			return SN::SN_Error("SubtractRightChar: End of string ref must be long: " + DisplaySN0());
@@ -785,7 +785,7 @@ namespace SNI
 
 		long start_pos = SN::SN_Long(start).GetNumber();
 
-		SN::SN_Expression end = m_End.PartialEvaluate();
+		SN::SN_Expression end = m_End.DoPartialEvaluate();
 		if (SN::Is<SNI_Value *>(end))
 		{
 			if (!SN::Is<SNI_Long *>(end))
@@ -803,7 +803,7 @@ namespace SNI
 
 	SN::SN_Value SNI_StringRef::DoSelectRightChar() const
 	{
-		SN::SN_Expression end = m_End.PartialEvaluate();
+		SN::SN_Expression end = m_End.DoPartialEvaluate();
 		if (!SN::Is<SNI_Long *>(end))
 		{
 			return SN::SN_Error("SelectRightChar: End of string ref must be long: " + DisplaySN0());
@@ -831,7 +831,7 @@ namespace SNI
 
 	SN::SN_Value SNI_StringRef::DoLookaheadLeft() const
 	{
-		SN::SN_Expression start = m_Start.PartialEvaluate();
+		SN::SN_Expression start = m_Start.DoPartialEvaluate();
 		if (!SN::Is<SNI_Long *>(start))
 		{
 			return SN::SN_Char(0);
@@ -846,7 +846,7 @@ namespace SNI
 
 	SN::SN_Value SNI_StringRef::DoLookaheadRight() const
 	{
-		SN::SN_Expression end = m_End.PartialEvaluate();
+		SN::SN_Expression end = m_End.DoPartialEvaluate();
 		if (!SN::Is<SNI_Long *>(end))
 		{
 			return SN::SN_Char(0);

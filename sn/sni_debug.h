@@ -25,7 +25,7 @@ namespace SNI
 		virtual SN::SN_Error AssertValue(const SN::SN_Expression &p_Value);
 		virtual SN::SN_Error AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World ** p_World, SNI_WorldSet * p_WorldSet);
 		virtual SN::SN_Expression DoEvaluate(long p_MetaLevel = 0) const;
-		virtual SN::SN_Expression PartialEvaluate(long p_MetaLevel = 0) const;
+		virtual SN::SN_Expression DoPartialEvaluate(long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression Unify(SN::SN_ExpressionList * p_ParameterList);

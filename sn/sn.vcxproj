@@ -261,6 +261,7 @@
     <ClInclude Include="sni_logbuffer.h" />
     <ClInclude Include="sni_mapping.h" />
     <ClInclude Include="sni_partialassert.h" />
+    <ClInclude Include="sni_partialevaluate.h" />
     <ClInclude Include="sni_revand.h" />
     <ClInclude Include="sni_hasmember.h" />
     <ClInclude Include="sni_inttostring.h" />
@@ -379,6 +380,7 @@
     <ClCompile Include="sni_logbuffer.cpp" />
     <ClCompile Include="sni_mapping.cpp" />
     <ClCompile Include="sni_partialassert.cpp" />
+    <ClCompile Include="sni_partialevaluate.cpp" />
     <ClCompile Include="sni_revand.cpp" />
     <ClCompile Include="sni_hasmember.cpp" />
     <ClCompile Include="sni_inttostring.cpp" />

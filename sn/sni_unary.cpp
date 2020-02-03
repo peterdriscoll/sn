@@ -100,7 +100,7 @@ namespace SNI
 	{
 		SN::LogContext context("SNI_Unary::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");
 
-		SN::SN_Expression value = (*p_ParameterList)[0].PartialEvaluate(p_MetaLevel);
+		SN::SN_Expression value = (*p_ParameterList)[0].DoPartialEvaluate(p_MetaLevel);
 
 		if (0 == p_MetaLevel)
 		{
@@ -131,12 +131,12 @@ namespace SNI
 	{
 		SN::LogContext context("SNI_Unary::PartialUnifyInternal ( " + p_value.DisplaySN() + " = " + p_Result.DisplaySN() + " )");
 
-		SN::SN_Expression value = p_value.PartialEvaluate();
+		SN::SN_Expression value = p_value.DoPartialEvaluate();
 		if (SN::Is<SNI_Value *>(value))
 		{
 			return p_Result.PartialAssertValue(PrimaryFunctionValue(value));
 		}
-		SN::SN_Expression result = p_Result.PartialEvaluate();
+		SN::SN_Expression result = p_Result.DoPartialEvaluate();
 		if (SN::Is<SNI_Value *>(result))
 		{
 			SN::SN_Value newValue = InverseFunctionValue(result);

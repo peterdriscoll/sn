@@ -160,7 +160,7 @@ namespace SNI
 		return m_Function->Call(l_ParameterList, p_MetaLevel);
 	}
 
-	SN::SN_Expression SNI_Function::PartialEvaluate(long p_MetaLevel /* = 0 */) const
+	SN::SN_Expression SNI_Function::DoPartialEvaluate(long p_MetaLevel /* = 0 */) const
 	{
 		SN::SN_ExpressionList * l_ParameterList = new SN::SN_ExpressionList();
 		l_ParameterList->push_back(m_Parameter);

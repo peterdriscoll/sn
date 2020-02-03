@@ -203,7 +203,7 @@ namespace SNI
 		{
 			return m_Expression->PartialCall(p_ParameterList, p_MetaLevel);
 		}
-		return m_Expression->PartialEvaluate(p_MetaLevel);
+		return m_Expression->DoPartialEvaluate(p_MetaLevel);
 	}
 
 	SN::SN_Expression SNI_Lambda::DoEvaluate(long p_MetaLevel /* = 0 */) const
@@ -211,7 +211,7 @@ namespace SNI
 		return this;
 	}
 
-	SN::SN_Expression SNI_Lambda::PartialEvaluate(long p_MetaLevel /* = 0 */) const
+	SN::SN_Expression SNI_Lambda::DoPartialEvaluate(long p_MetaLevel /* = 0 */) const
 	{
 		return this;
 	}

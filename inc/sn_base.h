@@ -209,9 +209,9 @@ namespace SN
 			return GetSNI_Base()->Meta(p_MetaLevel);
 		}
 
-		Exp PartialEvaluate(long p_MetaLevel = 0) const
+		Exp DoPartialEvaluate(long p_MetaLevel = 0) const
 		{
-			return GetSNI_Base()->PartialEvaluate(p_MetaLevel);
+			return GetSNI_Base()->DoPartialEvaluate(p_MetaLevel);
 		}
 
 		Err DoAssert()

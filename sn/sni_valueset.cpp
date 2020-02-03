@@ -669,7 +669,7 @@ namespace SNI
 		return this;
 	}
 
-	SN::SN_Expression SNI_ValueSet::PartialEvaluate(long /* p_MetaLevel = 0 */) const
+	SN::SN_Expression SNI_ValueSet::DoPartialEvaluate(long /* p_MetaLevel = 0 */) const
 	{
 		return this;
 	}

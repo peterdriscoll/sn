@@ -43,7 +43,7 @@ namespace SNI
 
 	SN::SN_Value SNI_PartialEvaluate::PrimaryFunctionValue(const SN::SN_Value &p_Param) const
 	{
-		return p_Param.GetSNI_Value()->DoPartialEvaluate();
+		return p_Param.GetSNI_Value()->DoPartialEvaluate(0);
 	}
 
 	SN::SN_Expression SNI_PartialEvaluate::PrimaryFunctionExpression(const SN::SN_Expression &p_Param) const
@@ -53,7 +53,7 @@ namespace SNI
 
 	SN::SN_Error SNI_PartialEvaluate::PartialUnifyInternal(SN::SN_Expression &p_value, SN::SN_Expression &p_Result)
 	{
-		return p_Result.AssertValue(p_value.PartialEvaluate());
+		return p_Result.AssertValue(p_value.DoPartialEvaluate(0));
 	}
 
 	SN::SN_Expression SNI_PartialEvaluate::CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel /* = 0 */) const

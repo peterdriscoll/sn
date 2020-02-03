@@ -478,7 +478,7 @@ namespace SNI
 		return GetValue()->DoEvaluate(p_MetaLevel);
 	}
 
-	SN::SN_Expression SNI_Variable::PartialEvaluate(long p_MetaLevel /* = 0 */) const
+	SN::SN_Expression SNI_Variable::DoPartialEvaluate(long p_MetaLevel /* = 0 */) const
 	{
 		if (p_MetaLevel > 0)
 		{
@@ -488,7 +488,7 @@ namespace SNI
 		{
 			return this;
 		}
-		SN::SN_Expression result = m_Value->PartialEvaluate(p_MetaLevel);
+		SN::SN_Expression result = m_Value->DoPartialEvaluate(p_MetaLevel);
 		if (result.IsNull())
 		{ // Expression could not be reduced further, because a variable is unknown, or calling a lambda expression might lead to recursion.
 			return this;

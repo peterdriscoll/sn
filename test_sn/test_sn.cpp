@@ -104,16 +104,16 @@ namespace test_sn
 				SN_DECLARE(x);
 				SN_DECLARE_VALUE(z, String("dog"));
 
-				Assert::IsTrue((String("dog") == y).PartialEvaluate().Equivalent(String("dog") == y));
-				Assert::IsTrue(!(String("dog") == y).PartialEvaluate().Equivalent(String("dog") == x));
-				Assert::IsTrue((String("dog") == String("dog")).PartialEvaluate().Equivalent(Bool(true)));
-				(String("dog") == z).PartialEvaluate().Do();
+				Assert::IsTrue((String("dog") == y).DoPartialEvaluate().Equivalent(String("dog") == y));
+				Assert::IsTrue(!(String("dog") == y).DoPartialEvaluate().Equivalent(String("dog") == x));
+				Assert::IsTrue((String("dog") == String("dog")).DoPartialEvaluate().Equivalent(Bool(true)));
+				(String("dog") == z).DoPartialEvaluate().Do();
 
-				Assert::IsTrue((String("dog") + y == String("dogcat")).PartialEvaluate().Equivalent(Function(Function(Equals, Function(Function(Add, String("dog")), y)), String("dogcat"))));
-				(String("dog") + z == String("dogdog")).PartialEvaluate().Do();
+				Assert::IsTrue((String("dog") + y == String("dogcat")).DoPartialEvaluate().Equivalent(Function(Function(Equals, Function(Function(Add, String("dog")), y)), String("dogcat"))));
+				(String("dog") + z == String("dogdog")).DoPartialEvaluate().Do();
 
-				(String("dog") + z == "dogdog").PartialEvaluate().Do();
-				(String("dog") + "dog" == "dogdog").PartialEvaluate().Do();
+				(String("dog") + z == "dogdog").DoPartialEvaluate().Do();
+				(String("dog") + "dog" == "dogdog").DoPartialEvaluate().Do();
 			}
 			Cleanup();
 		}
@@ -284,46 +284,46 @@ namespace test_sn
 				SN_DECLARE_VALUE(z, Bool(true));
 
 
-				Assert::IsTrue((Bool(true) == y).PartialEvaluate().Equivalent(Bool(true) == y));
-				Assert::IsTrue(!(Bool(true) == y).PartialEvaluate().Equivalent(Bool(true) == x));
-				Assert::IsTrue((Bool(true) == Bool(true)).PartialEvaluate().Equivalent(Bool(true)));
-				(Bool(true) == z).PartialEvaluate().Do();
+				Assert::IsTrue((Bool(true) == y).DoPartialEvaluate().Equivalent(Bool(true) == y));
+				Assert::IsTrue(!(Bool(true) == y).DoPartialEvaluate().Equivalent(Bool(true) == x));
+				Assert::IsTrue((Bool(true) == Bool(true)).DoPartialEvaluate().Equivalent(Bool(true)));
+				(Bool(true) == z).DoPartialEvaluate().Do();
 
-				Assert::IsTrue((Bool(false) || y).PartialEvaluate().Equivalent(y));
-				Assert::IsTrue((y || Bool(false)).PartialEvaluate().Equivalent(y));
-				Assert::IsTrue((Bool(true) || y).PartialEvaluate().Equivalent(Bool(true)));
-				Assert::IsTrue((y || Bool(true)).PartialEvaluate().Equivalent(Bool(true)));
+				Assert::IsTrue((Bool(false) || y).DoPartialEvaluate().Equivalent(y));
+				Assert::IsTrue((y || Bool(false)).DoPartialEvaluate().Equivalent(y));
+				Assert::IsTrue((Bool(true) || y).DoPartialEvaluate().Equivalent(Bool(true)));
+				Assert::IsTrue((y || Bool(true)).DoPartialEvaluate().Equivalent(Bool(true)));
 
-				Assert::IsTrue((Bool(true) && y).PartialEvaluate().Equivalent(y));
-				Assert::IsTrue((y && Bool(true)).PartialEvaluate().Equivalent(y));
-				Assert::IsTrue((Bool(false) && y).PartialEvaluate().Equivalent(Bool(false)));
-				Assert::IsTrue((y && Bool(false)).PartialEvaluate().Equivalent(Bool(false)));
+				Assert::IsTrue((Bool(true) && y).DoPartialEvaluate().Equivalent(y));
+				Assert::IsTrue((y && Bool(true)).DoPartialEvaluate().Equivalent(y));
+				Assert::IsTrue((Bool(false) && y).DoPartialEvaluate().Equivalent(Bool(false)));
+				Assert::IsTrue((y && Bool(false)).DoPartialEvaluate().Equivalent(Bool(false)));
 
-				(Bool(false) || z).PartialEvaluate().Do();
-				(Bool(true) && true).PartialEvaluate().Do();
+				(Bool(false) || z).DoPartialEvaluate().Do();
+				(Bool(true) && true).DoPartialEvaluate().Do();
 
-				(Bool(true) && true).PartialEvaluate().Do();
+				(Bool(true) && true).DoPartialEvaluate().Do();
 
 				SN_DECLARE(i);
-				(i == i).PartialEvaluate().Do();
+				(i == i).DoPartialEvaluate().Do();
 
 				// If
 
 				SN_DECLARE(k);
 				SN_DECLARE(l);
 
-				Assert::IsTrue((k.If(False, True) == l).PartialEvaluate().Equivalent((!k == l).PartialEvaluate()));
-				Assert::IsTrue((k.If(True, False) == l).PartialEvaluate().Equivalent((k == l).PartialEvaluate()));
-				Assert::IsTrue(k.If(True, True).PartialEvaluate().Equivalent(True));
-				Assert::IsTrue(k.If(False, False).PartialEvaluate().Equivalent(False));
-				Assert::IsTrue(True.If(k, l).PartialEvaluate().Equivalent(k));
-				Assert::IsTrue(False.If(k, l).PartialEvaluate().Equivalent(l));
+				Assert::IsTrue((k.If(False, True) == l).DoPartialEvaluate().Equivalent((!k == l).DoPartialEvaluate()));
+				Assert::IsTrue((k.If(True, False) == l).DoPartialEvaluate().Equivalent((k == l).DoPartialEvaluate()));
+				Assert::IsTrue(k.If(True, True).DoPartialEvaluate().Equivalent(True));
+				Assert::IsTrue(k.If(False, False).DoPartialEvaluate().Equivalent(False));
+				Assert::IsTrue(True.If(k, l).DoPartialEvaluate().Equivalent(k));
+				Assert::IsTrue(False.If(k, l).DoPartialEvaluate().Equivalent(l));
 
-				Assert::IsTrue(True.If(True, False).PartialEvaluate().Equivalent(True));
+				Assert::IsTrue(True.If(True, False).DoPartialEvaluate().Equivalent(True));
 
 				// Not
-				Assert::IsTrue((!!k).PartialEvaluate().Equivalent(k));
-				Assert::IsTrue((!(k.If(False, True))).PartialEvaluate().Equivalent(k));
+				Assert::IsTrue((!!k).DoPartialEvaluate().Equivalent(k));
+				Assert::IsTrue((!(k.If(False, True))).DoPartialEvaluate().Equivalent(k));
 			}
 			Cleanup();
 		}
@@ -340,8 +340,8 @@ namespace test_sn
 				(z || Bool(false) == Bool(true)).Assert().Do();
 
 				(Bool(true) == z).Evaluate().Do();
-				(!(Bool(false) && z)).PartialEvaluate().Do();
-				(Bool(true) && Bool(true)).PartialEvaluate().Do();
+				(!(Bool(false) && z)).DoPartialEvaluate().Do();
+				(Bool(true) && Bool(true)).DoPartialEvaluate().Do();
 
 
 				SN_DECLARE(y);
@@ -448,16 +448,16 @@ namespace test_sn
 				SN_DECLARE_VALUE(z, Double(3.1415));
 
 
-				Assert::IsTrue((Double(3.1415) == y).PartialEvaluate().Equivalent(Double(3.1415) == y));
-				Assert::IsTrue(!(Double(9.7) == y).PartialEvaluate().Equivalent(Double(9.7) == x));
-				Assert::IsTrue((Double(9.7) == Double(9.7)).PartialEvaluate().Equivalent(Bool(true)));
-				(Double(3.1415) == z).PartialEvaluate().Do();
+				Assert::IsTrue((Double(3.1415) == y).DoPartialEvaluate().Equivalent(Double(3.1415) == y));
+				Assert::IsTrue(!(Double(9.7) == y).DoPartialEvaluate().Equivalent(Double(9.7) == x));
+				Assert::IsTrue((Double(9.7) == Double(9.7)).DoPartialEvaluate().Equivalent(Bool(true)));
+				(Double(3.1415) == z).DoPartialEvaluate().Do();
 
-				Assert::IsTrue((Double(5.5) + y == Double(10)).PartialEvaluate().Equivalent(Equals(Add(Double(5.5))(y))(Double(10))));
-				(Double(8.0) + z == Double(11.1415)).PartialEvaluate().Do();
+				Assert::IsTrue((Double(5.5) + y == Double(10)).DoPartialEvaluate().Equivalent(Equals(Add(Double(5.5))(y))(Double(10))));
+				(Double(8.0) + z == Double(11.1415)).DoPartialEvaluate().Do();
 
-				(Double(3.1415) + z == Double(3.1415)*Double(2.0)).PartialEvaluate().Do();
-				(Double(4.5) + 4.5 == 9.0).PartialEvaluate().Do();
+				(Double(3.1415) + z == Double(3.1415)*Double(2.0)).DoPartialEvaluate().Do();
+				(Double(4.5) + 4.5 == 9.0).DoPartialEvaluate().Do();
 			}
 			Cleanup();
 		}
@@ -600,9 +600,9 @@ namespace test_sn
 					std::cout << std::endl << "Variable " << RemovePrefix.DisplaySN() << std::endl;
 					string s_RemovePrefix = RemovePrefix.GetVariableValue().DisplaySN();
 					Assert::IsTrue(s_RemovePrefix == "@p.@x.SubtractLeft x p");
-					string v_RemovePrefix = Lambda(p, Lambda(x, x.SubtractLeft(p))).PartialEvaluate().DisplaySN();
+					string v_RemovePrefix = Lambda(p, Lambda(x, x.SubtractLeft(p))).DoPartialEvaluate().DisplaySN();
 					Assert::IsTrue(v_RemovePrefix == "@p.@x.SubtractLeft x p");
-					Assert::IsTrue(RemovePrefix.PartialEvaluate().Equivalent(Lambda(p, Lambda(x, x.SubtractLeft(p))).PartialEvaluate()));
+					Assert::IsTrue(RemovePrefix.DoPartialEvaluate().Equivalent(Lambda(p, Lambda(x, x.SubtractLeft(p))).DoPartialEvaluate()));
 					(RemovePrefix(String("Atl"))(String("AtlDog")) == String("Dog")).Evaluate().Do();
 				}
 				{
@@ -613,7 +613,7 @@ namespace test_sn
 					(Define(RemovePostfix) == Lambda(p, Lambda(x, x.SubtractRight(p)))).PartialAssert().Do();
 					Assert::IsTrue(RemovePostfix.GetVariableValue().DisplaySN() == "@p.@x.SubtractRight x p");
 					std::cout << std::endl << "Variable " << RemovePostfix.DisplaySN() << std::endl;
-					Assert::IsTrue(RemovePostfix.PartialEvaluate().Equivalent(Lambda(p, Lambda(x, x.SubtractRight(p))).PartialEvaluate()));
+					Assert::IsTrue(RemovePostfix.DoPartialEvaluate().Equivalent(Lambda(p, Lambda(x, x.SubtractRight(p))).DoPartialEvaluate()));
 					(RemovePostfix(String("Atl"))(String("DogAtl")) == String("Dog")).Evaluate().Do();
 				}
 			}
@@ -1645,39 +1645,39 @@ namespace test_sn
 				SN_DECLARE_VALUE(dog, String("Vincent "));
 				SN_DECLARE_VALUE(cat, String("Emma "));
 
-				Assert::IsTrue(Meta(1, String("Vincent ") + String("Emma ")).PartialEvaluate().Equivalent(Meta(1, Function(Function(Add, String("Vincent ")), String("Emma ")))));
+				Assert::IsTrue(Meta(1, String("Vincent ") + String("Emma ")).DoPartialEvaluate().Equivalent(Meta(1, Function(Function(Add, String("Vincent ")), String("Emma ")))));
 
-				std::cout << std::endl << Meta(1, dog + cat).PartialEvaluate().DisplaySN() << std::endl;
+				std::cout << std::endl << Meta(1, dog + cat).DoPartialEvaluate().DisplaySN() << std::endl;
 
-				Assert::IsTrue(Meta(1, dog + cat).PartialEvaluate().Equivalent(Meta(1, Function(Function(Add, dog), cat))));
+				Assert::IsTrue(Meta(1, dog + cat).DoPartialEvaluate().Equivalent(Meta(1, Function(Function(Add, dog), cat))));
 
-				std::cout << std::endl << Meta(1, Meta(-1, dog) + Meta(-1, cat)).PartialEvaluate().DisplaySN() << std::endl;
+				std::cout << std::endl << Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoPartialEvaluate().DisplaySN() << std::endl;
 
-				Assert::IsTrue(Meta(1, Meta(-1, dog) + Meta(-1, cat)).PartialEvaluate().Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
+				Assert::IsTrue(Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoPartialEvaluate().Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
 
-				std::cout << std::endl << Meta(-1, Meta(1, Meta(-1, dog) + Meta(-1, cat)).PartialEvaluate()).PartialEvaluate().DisplaySN() << std::endl;
+				std::cout << std::endl << Meta(-1, Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoPartialEvaluate()).DoPartialEvaluate().DisplaySN() << std::endl;
 
-				Assert::IsTrue(Meta(-1, Meta(1, Meta(-1, dog) + Meta(-1, cat)).PartialEvaluate()).PartialEvaluate().Equivalent(String("Vincent Emma ")));
+				Assert::IsTrue(Meta(-1, Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoPartialEvaluate()).DoPartialEvaluate().Equivalent(String("Vincent Emma ")));
 
-				std::cout << std::endl << Meta(1, Meta(-1, dog)).PartialEvaluate().DisplaySN() << std::endl;
+				std::cout << std::endl << Meta(1, Meta(-1, dog)).DoPartialEvaluate().DisplaySN() << std::endl;
 
-				Assert::IsTrue(Meta(1, Meta(-1, dog)).PartialEvaluate().Equivalent(Meta(1, dog.PartialEvaluate())));
+				Assert::IsTrue(Meta(1, Meta(-1, dog)).DoPartialEvaluate().Equivalent(Meta(1, dog.DoPartialEvaluate())));
 
 				SN_DECLARE_VALUE(e, Meta(2, Meta(-1, dog) + Meta(-1, cat)));
 
-				std::cout << std::endl << e.PartialEvaluate().DisplaySN() << std::endl;
+				std::cout << std::endl << e.DoPartialEvaluate().DisplaySN() << std::endl;
 
-				Assert::IsTrue(e.PartialEvaluate().Equivalent(Meta(2, Meta(-1, dog) + Meta(-1, cat))));
+				Assert::IsTrue(e.DoPartialEvaluate().Equivalent(Meta(2, Meta(-1, dog) + Meta(-1, cat))));
 
-				std::cout << std::endl << Meta(-1, e).PartialEvaluate().DisplaySN() << std::endl;
+				std::cout << std::endl << Meta(-1, e).DoPartialEvaluate().DisplaySN() << std::endl;
 
-				Assert::IsTrue(Meta(-1, e).PartialEvaluate().Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
-				Assert::IsTrue(e.PartialEvaluate(-1).Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
+				Assert::IsTrue(Meta(-1, e).DoPartialEvaluate().Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
+				Assert::IsTrue(e.DoPartialEvaluate(-1).Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
 
-				std::cout << std::endl << Meta(-1, Meta(-1, e).PartialEvaluate()).PartialEvaluate().DisplaySN() << std::endl;
+				std::cout << std::endl << Meta(-1, Meta(-1, e).DoPartialEvaluate()).DoPartialEvaluate().DisplaySN() << std::endl;
 
-				Assert::IsTrue(Meta(-1, Meta(-1, e).PartialEvaluate()).PartialEvaluate().Equivalent(String("Vincent Emma ")));
-				Assert::IsTrue(e.PartialEvaluate(-1).PartialEvaluate(-1).Equivalent(String("Vincent Emma ")));
+				Assert::IsTrue(Meta(-1, Meta(-1, e).DoPartialEvaluate()).DoPartialEvaluate().Equivalent(String("Vincent Emma ")));
+				Assert::IsTrue(e.DoPartialEvaluate(-1).DoPartialEvaluate(-1).Equivalent(String("Vincent Emma ")));
 			}
 			Cleanup();
 		}
@@ -1691,39 +1691,39 @@ namespace test_sn
 				SN_DECLARE(dog);
 				SN_DECLARE(cat);
 
-				Assert::IsTrue(Meta(1, String("Vincent ") + String("Emma ")).PartialEvaluate().Equivalent(Meta(1, Function(Function(Add, String("Vincent ")), String("Emma ")))));
+				Assert::IsTrue(Meta(1, String("Vincent ") + String("Emma ")).DoPartialEvaluate().Equivalent(Meta(1, Function(Function(Add, String("Vincent ")), String("Emma ")))));
 
-				std::cout << std::endl << Meta(1, dog + cat).PartialEvaluate().DisplaySN() << std::endl;
+				std::cout << std::endl << Meta(1, dog + cat).DoPartialEvaluate().DisplaySN() << std::endl;
 
-				Assert::IsTrue(Meta(1, dog + cat).PartialEvaluate().Equivalent(Meta(1, Function(Function(Add, dog), cat))));
+				Assert::IsTrue(Meta(1, dog + cat).DoPartialEvaluate().Equivalent(Meta(1, Function(Function(Add, dog), cat))));
 
-				std::cout << std::endl << Meta(1, Meta(-1, dog) + Meta(-1, cat)).PartialEvaluate().DisplaySN() << std::endl;
+				std::cout << std::endl << Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoPartialEvaluate().DisplaySN() << std::endl;
 
-				Assert::IsTrue(Meta(1, Meta(-1, dog) + Meta(-1, cat)).PartialEvaluate().Equivalent(Meta(1, dog + cat)));
+				Assert::IsTrue(Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoPartialEvaluate().Equivalent(Meta(1, dog + cat)));
 
-				std::cout << std::endl << Meta(-1, Meta(1, Meta(-1, dog) + Meta(-1, cat)).PartialEvaluate()).PartialEvaluate().DisplaySN() << std::endl;
+				std::cout << std::endl << Meta(-1, Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoPartialEvaluate()).DoPartialEvaluate().DisplaySN() << std::endl;
 
-				Assert::IsTrue(Meta(-1, Meta(1, Meta(-1, dog) + Meta(-1, cat)).PartialEvaluate()).PartialEvaluate().Equivalent(dog + cat));
+				Assert::IsTrue(Meta(-1, Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoPartialEvaluate()).DoPartialEvaluate().Equivalent(dog + cat));
 
-				std::cout << std::endl << Meta(1, Meta(-1, dog)).PartialEvaluate().DisplaySN() << std::endl;
+				std::cout << std::endl << Meta(1, Meta(-1, dog)).DoPartialEvaluate().DisplaySN() << std::endl;
 
-				Assert::IsTrue(Meta(1, Meta(-1, dog)).PartialEvaluate().Equivalent(Meta(1, dog.PartialEvaluate())));
+				Assert::IsTrue(Meta(1, Meta(-1, dog)).DoPartialEvaluate().Equivalent(Meta(1, dog.DoPartialEvaluate())));
 
 				SN_DECLARE_VALUE(e, Meta(2, Meta(-1, dog) + Meta(-1, cat)));
 
-				std::cout << std::endl << e.PartialEvaluate().DisplaySN() << std::endl;
+				std::cout << std::endl << e.DoPartialEvaluate().DisplaySN() << std::endl;
 
-				Assert::IsTrue(e.PartialEvaluate().Equivalent(Meta(2, Meta(-1, dog) + Meta(-1, cat))));
+				Assert::IsTrue(e.DoPartialEvaluate().Equivalent(Meta(2, Meta(-1, dog) + Meta(-1, cat))));
 
-				std::cout << std::endl << Meta(-1, e).PartialEvaluate().DisplaySN() << std::endl;
+				std::cout << std::endl << Meta(-1, e).DoPartialEvaluate().DisplaySN() << std::endl;
 
-				Assert::IsTrue(Meta(-1, e).PartialEvaluate().Equivalent(Meta(1, dog + cat)));
-				Assert::IsTrue(e.PartialEvaluate(-1).Equivalent(Meta(1, dog + cat)));
+				Assert::IsTrue(Meta(-1, e).DoPartialEvaluate().Equivalent(Meta(1, dog + cat)));
+				Assert::IsTrue(e.DoPartialEvaluate(-1).Equivalent(Meta(1, dog + cat)));
 
-				std::cout << std::endl << Meta(-1, Meta(-1, e).PartialEvaluate()).PartialEvaluate().DisplaySN() << std::endl;
+				std::cout << std::endl << Meta(-1, Meta(-1, e).DoPartialEvaluate()).DoPartialEvaluate().DisplaySN() << std::endl;
 
-				Assert::IsTrue(Meta(-1, Meta(-1, e).PartialEvaluate()).PartialEvaluate().Equivalent(dog + cat));
-				Assert::IsTrue(e.PartialEvaluate(-1).PartialEvaluate(-1).Equivalent(dog + cat));
+				Assert::IsTrue(Meta(-1, Meta(-1, e).DoPartialEvaluate()).DoPartialEvaluate().Equivalent(dog + cat));
+				Assert::IsTrue(e.DoPartialEvaluate(-1).DoPartialEvaluate(-1).Equivalent(dog + cat));
 			}
 			Cleanup();
 		}

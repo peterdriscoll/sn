@@ -30,7 +30,7 @@ namespace SNI
 		virtual SNI_Expression * Clone(SNI_Frame *p_Frame, bool &p_Changed);
 
 		virtual SN::SN_Expression DoEvaluate(long p_MetaLevel = 0) const;
-		virtual SN::SN_Expression PartialEvaluate(long p_MetaLevel = 0) const;
+		virtual SN::SN_Expression DoPartialEvaluate(long p_MetaLevel = 0) const;
 		virtual SN::SN_Error DoAssert();
 		virtual SN::SN_Error AssertValue(const SN::SN_Expression &p_Value);
 		virtual SN::SN_Error DoPartialAssert();

@@ -65,7 +65,7 @@ namespace SNI
 	{
 		SN::LogContext context("SNI_Unary::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");
 
-		SN::SN_Expression value = (*p_ParameterList)[0].PartialEvaluate(p_MetaLevel);
+		SN::SN_Expression value = (*p_ParameterList)[0].DoPartialEvaluate(p_MetaLevel);
 
 		if (0 == p_MetaLevel)
 		{

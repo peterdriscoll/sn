@@ -103,8 +103,8 @@ namespace SNI
 
 		if (0 < p_MetaLevel)
 		{
-			SN::SN_Expression positiveCase = p_ParamList[1].PartialEvaluate(p_MetaLevel);
-			SN::SN_Expression negativeCase = p_ParamList[2].PartialEvaluate(p_MetaLevel);
+			SN::SN_Expression positiveCase = p_ParamList[1].DoPartialEvaluate(p_MetaLevel);
+			SN::SN_Expression negativeCase = p_ParamList[2].DoPartialEvaluate(p_MetaLevel);
 			return condition.If(positiveCase, negativeCase);
 		}
 
@@ -142,7 +142,7 @@ namespace SNI
 	SN::SN_Expression SNI_If::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
 		SN::LogContext context("SNI_If::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");
-		SN::SN_Expression condition = (*p_ParameterList)[2].PartialEvaluate(p_MetaLevel);
+		SN::SN_Expression condition = (*p_ParameterList)[2].DoPartialEvaluate(p_MetaLevel);
 
 		if (0 == p_MetaLevel)
 		{
@@ -150,17 +150,17 @@ namespace SNI
 			{
 				if (SN::SN_Bool(condition).GetBool())
 				{
-					return LOG_RETURN(context, (*p_ParameterList)[1].PartialEvaluate(p_MetaLevel));
+					return LOG_RETURN(context, (*p_ParameterList)[1].DoPartialEvaluate(p_MetaLevel));
 				}
 				else
 				{
-					return LOG_RETURN(context, (*p_ParameterList)[0].PartialEvaluate(p_MetaLevel));
+					return LOG_RETURN(context, (*p_ParameterList)[0].DoPartialEvaluate(p_MetaLevel));
 				}
 			}
 		}
 
-		SN::SN_Expression positiveCase = (*p_ParameterList)[1].PartialEvaluate(p_MetaLevel);
-		SN::SN_Expression negativeCase = (*p_ParameterList)[0].PartialEvaluate(p_MetaLevel);
+		SN::SN_Expression positiveCase = (*p_ParameterList)[1].DoPartialEvaluate(p_MetaLevel);
+		SN::SN_Expression negativeCase = (*p_ParameterList)[0].DoPartialEvaluate(p_MetaLevel);
 
 		if (positiveCase.Equivalent(negativeCase))
 		{
@@ -334,19 +334,19 @@ namespace SNI
 	/// @retval True if successful.
 	SN::SN_Error SNI_If::PartialUnifyInternal(SN::SN_Expression &p_Condition, SN::SN_Expression &p_PositiveCase, SN::SN_Expression &p_NegativeCase, SN::SN_Expression &p_Result)
 	{
-		SN::SN_Expression condition = p_Condition.PartialEvaluate();
+		SN::SN_Expression condition = p_Condition.DoPartialEvaluate();
 		if (SN::Is<SNI_Bool *>(condition))
 		{
 			if (SN::SN_Bool(condition).GetBool())
 			{
-				SN::SN_Expression positiveCase = p_PositiveCase.PartialEvaluate();
+				SN::SN_Expression positiveCase = p_PositiveCase.DoPartialEvaluate();
 				if (SN::Is<SNI_Bool *>(positiveCase))
 				{
 					return p_Result.PartialAssertValue(SN::SN_Value(positiveCase));
 				}
 				else
 				{
-					SN::SN_Expression result = p_Result.PartialEvaluate();
+					SN::SN_Expression result = p_Result.DoPartialEvaluate();
 					if (SN::Is<SNI_Bool *>(result))
 					{
 						return p_PositiveCase.PartialAssertValue(SN::SN_Value(result));
@@ -355,14 +355,14 @@ namespace SNI
 			}
 			else
 			{
-				SN::SN_Expression negativeCase = p_NegativeCase.PartialEvaluate();
+				SN::SN_Expression negativeCase = p_NegativeCase.DoPartialEvaluate();
 				if (SN::Is<SNI_Bool *>(negativeCase))
 				{
 					return p_Result.PartialAssertValue(negativeCase);
 				}
 				else
 				{
-					SN::SN_Expression result = p_Result.PartialEvaluate();
+					SN::SN_Expression result = p_Result.DoPartialEvaluate();
 					if (SN::Is<SNI_Bool *>(result))
 					{
 						return p_NegativeCase.PartialAssertValue(SN::SN_Value(result));
@@ -372,8 +372,8 @@ namespace SNI
 		}
 		else
 		{
-			SN::SN_Expression positiveCase = p_PositiveCase.PartialEvaluate();
-			SN::SN_Expression negativeCase = p_NegativeCase.PartialEvaluate();
+			SN::SN_Expression positiveCase = p_PositiveCase.DoPartialEvaluate();
+			SN::SN_Expression negativeCase = p_NegativeCase.DoPartialEvaluate();
 			if (SN::Is<SNI_Bool *>(positiveCase) && SN::Is<SNI_Bool *>(negativeCase))
 			{
 				if (SN::SN_Bool(positiveCase).GetBool() == SN::SN_Bool(negativeCase).GetBool())
@@ -382,7 +382,7 @@ namespace SNI
 				}
 				else
 				{
-					SN::SN_Expression result = p_Result.PartialEvaluate();
+					SN::SN_Expression result = p_Result.DoPartialEvaluate();
 					if (SN::SN_Bool(positiveCase).GetBool())
 					{
 						return p_Condition.PartialAssertValue(SN::SN_Expression(result));

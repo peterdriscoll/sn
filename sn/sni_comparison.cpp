@@ -51,8 +51,8 @@ namespace SNI
 	{
 		SN::LogContext context("SNI_Comparison::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");
 
-		SN::SN_Expression left_value = (*p_ParameterList)[1].PartialEvaluate(p_MetaLevel);
-		SN::SN_Expression right_value = (*p_ParameterList)[0].PartialEvaluate(p_MetaLevel);
+		SN::SN_Expression left_value = (*p_ParameterList)[1].DoPartialEvaluate(p_MetaLevel);
+		SN::SN_Expression right_value = (*p_ParameterList)[0].DoPartialEvaluate(p_MetaLevel);
 
 		if (0 == p_MetaLevel)
 		{
@@ -72,8 +72,8 @@ namespace SNI
 
 	SN::SN_Error SNI_Comparison::PartialUnifyInternal(SN::SN_Expression &p_left, SN::SN_Expression &p_right, SN::SN_Expression &p_Result)
 	{
-		SN::SN_Expression left_evaluate = p_left.PartialEvaluate();
-		SN::SN_Expression right_evaluate = p_right.PartialEvaluate();
+		SN::SN_Expression left_evaluate = p_left.DoPartialEvaluate();
+		SN::SN_Expression right_evaluate = p_right.DoPartialEvaluate();
 		if (SN::Is<SNI_Value *>(left_evaluate) && SN::Is<SNI_Value *>(right_evaluate))
 		{
 			return p_Result.AssertValue(PrimaryFunctionValue(left_evaluate, right_evaluate));

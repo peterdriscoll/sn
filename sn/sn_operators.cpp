@@ -31,6 +31,11 @@ namespace SN
 			return SN::SN_Function(skynet::Evaluate, p_Expression);
 		}
 
+		SN::SN_Expression PartialEvaluate(const SN::SN_Expression & p_Expression)
+		{
+			return SN::SN_Function(skynet::PartialEvaluate, p_Expression);
+		}
+
 		// Logic
 		SN::SN_Expression operator !(const SN::SN_Expression &p_Condition)
 		{

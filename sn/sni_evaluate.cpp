@@ -53,7 +53,7 @@ namespace SNI
 
 	SN::SN_Error SNI_Evaluate::PartialUnifyInternal(SN::SN_Expression &p_value, SN::SN_Expression &p_Result)
 	{
-		return p_Result.AssertValue(p_value.PartialEvaluate());
+		return p_Result.AssertValue(p_value.DoPartialEvaluate());
 	}
 
 	SN::SN_Expression SNI_Evaluate::CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel /* = 0 */) const

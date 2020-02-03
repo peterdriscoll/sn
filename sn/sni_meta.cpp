@@ -144,11 +144,11 @@ namespace SNI
 		return result;
 	}
 
-	SN::SN_Expression SNI_Meta::PartialEvaluate(long p_MetaLevel /* = 0 */) const
+	SN::SN_Expression SNI_Meta::DoPartialEvaluate(long p_MetaLevel /* = 0 */) const
 	{
 		long l_DeltaMetaLevel = m_DeltaMetaLevel;
 		long this_level = p_MetaLevel + l_DeltaMetaLevel;
-		SN::SN_Expression result = m_Expression->PartialEvaluate(this_level);
+		SN::SN_Expression result = m_Expression->DoPartialEvaluate(this_level);
 		if (l_DeltaMetaLevel != 0)
 		{
 			if ((p_MetaLevel < 0) && (l_DeltaMetaLevel > 0))

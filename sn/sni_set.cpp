@@ -86,7 +86,7 @@ namespace SNI
 		return SN::SN_Expression(this);
 	}
 
-	SN::SN_Expression SNI_Set::PartialEvaluate(long /* p_MetaLevel = 0 */) const
+	SN::SN_Expression SNI_Set::DoPartialEvaluate(long /* p_MetaLevel = 0 */) const
 	{
 		return SN::SN_Expression(this);
 	}

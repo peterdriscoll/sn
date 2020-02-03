@@ -457,7 +457,7 @@ namespace SNI
 		return skynet::Null;
 	}
 
-	SN::SN_Expression SNI_Expression::PartialEvaluate(long /* p_MetaLevel = 0 */) const
+	SN::SN_Expression SNI_Expression::DoPartialEvaluate(long /* p_MetaLevel = 0 */) const
 	{
 		return this;
 	}
@@ -692,7 +692,7 @@ namespace SNI
 		SNI_Thread::GetThread()->SetDebugId("partialevaluate");
 		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Partial Evaluate", SN::CallId);
 
-		HandleEvaluateAction(context, PartialEvaluate(), "Partial evaluate", p_ErrorHandler);
+		HandleEvaluateAction(context, DoPartialEvaluate(), "Partial evaluate", p_ErrorHandler);
 
 		SNI_Thread::GetThread()->SetDebugId("partialevaluate");
 		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Partial Evaluate", SN::ReturnId);

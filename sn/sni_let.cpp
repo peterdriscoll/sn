@@ -158,7 +158,7 @@ namespace SNI
 		{
 			return m_Expression->PartialCall(p_ParameterList, p_MetaLevel);
 		}
-		return m_Expression->PartialEvaluate(p_MetaLevel);
+		return m_Expression->DoPartialEvaluate(p_MetaLevel);
 	}
 
 	SN::SN_Expression SNI_Let::Unify(SN::SN_ExpressionList * p_ParameterList)

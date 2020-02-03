@@ -103,9 +103,9 @@ namespace SN
 		return dynamic_cast<SNI::SNI_Variable*>(m_Expression);
 	}
 
-	SN_Expression SN_Variable::PartialEvaluate(long p_MetaLevel /* = 0 */) const
+	SN_Expression SN_Variable::DoPartialEvaluate(long p_MetaLevel /* = 0 */) const
 	{
-		return m_Expression->PartialEvaluate(p_MetaLevel);
+		return m_Expression->DoPartialEvaluate(p_MetaLevel);
 	}
 
 	void SN_Variable::Simplify()

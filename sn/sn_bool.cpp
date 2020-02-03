@@ -70,6 +70,11 @@ namespace SN
 		return SN_Operators::Evaluate(*this);
 	}
 
+	SN_Expression SN_Bool::PartialEvaluate() const
+	{
+		return SN_Operators::PartialEvaluate(*this);
+	}
+
 	SN_Expression SN_Bool::operator !() const
 	{
 		return SN_Operators::operator !(*this);

@@ -88,11 +88,11 @@ namespace SNI
 		return LOG_RETURN(context, m_Expression->DoEvaluate(p_MetaLevel));
 	}
 
-	SN::SN_Expression SNI_Debug::PartialEvaluate(long p_MetaLevel) const
+	SN::SN_Expression SNI_Debug::DoPartialEvaluate(long p_MetaLevel) const
 	{
-		SN::LogContext context(DisplaySN0() + ".PartialEvaluate ()", LOG_DEBUG_INDEX);
+		SN::LogContext context(DisplaySN0() + ".DoPartialEvaluate ()", LOG_DEBUG_INDEX);
 
-		return LOG_RETURN(context, m_Expression->PartialEvaluate(p_MetaLevel).Debug());
+		return LOG_RETURN(context, m_Expression->DoPartialEvaluate(p_MetaLevel).Debug());
 	}
 
 	SN::SN_Expression SNI_Debug::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const

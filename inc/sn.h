@@ -113,6 +113,7 @@ namespace skynet
 	extern SN_EXPORT SN::SN_FunctionDef Assert;
 	extern SN_EXPORT SN::SN_FunctionDef PartialAssert;
 	extern SN_EXPORT SN::SN_FunctionDef Evaluate;
+	extern SN_EXPORT SN::SN_FunctionDef PartialEvaluate;
 
 	// * Logic
 	extern SN_EXPORT SN::SN_FunctionDef Not;

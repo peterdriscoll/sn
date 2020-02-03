@@ -48,7 +48,7 @@ namespace SN
 
 		SN_Expression GetValue() const;
 
-		SN_Expression PartialEvaluate(long p_MetaLevel = 0) const;
+		SN_Expression DoPartialEvaluate(long p_MetaLevel = 0) const;
 
 		void Simplify();
 

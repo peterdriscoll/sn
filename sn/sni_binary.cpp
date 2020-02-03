@@ -111,8 +111,8 @@ namespace SNI
 	{
 		SN::LogContext context("SNI_Binary::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");
 
-		SN::SN_Expression left_value = (*p_ParameterList)[1].PartialEvaluate(p_MetaLevel);
-		SN::SN_Expression right_value = (*p_ParameterList)[0].PartialEvaluate(p_MetaLevel);
+		SN::SN_Expression left_value = (*p_ParameterList)[1].DoPartialEvaluate(p_MetaLevel);
+		SN::SN_Expression right_value = (*p_ParameterList)[0].DoPartialEvaluate(p_MetaLevel);
 
 		if (0 == p_MetaLevel)
 		{
@@ -169,8 +169,8 @@ namespace SNI
 	SN::SN_Error SNI_Binary::PartialUnifyInternal(SN::SN_Expression &p_left, SN::SN_Expression &p_right, SN::SN_Expression &p_Result)
 	{
 		SN::LogContext context("SNI_Binary::PartialUnifyInternal");
-		SN::SN_Expression left_value = p_left.PartialEvaluate();
-		SN::SN_Expression right_value = p_right.PartialEvaluate();
+		SN::SN_Expression left_value = p_left.DoPartialEvaluate();
+		SN::SN_Expression right_value = p_right.DoPartialEvaluate();
 		if (SN::Is<SNI_Value *>(left_value) && SN::Is<SNI_Value *>(right_value))
 		{
 			SN::SN_Error e = p_Result.PartialAssertValue(PrimaryFunctionValue(left_value, right_value));
@@ -180,7 +180,7 @@ namespace SNI
 			}
 			return e;
 		}
-		SN::SN_Expression result = p_Result.PartialEvaluate();
+		SN::SN_Expression result = p_Result.DoPartialEvaluate();
 		if (SN::Is<SNI_Value *>(result))
 		{
 			if (SN::Is<SNI_Variable *>(left_value) && SN::Is<SNI_Variable *>(right_value))

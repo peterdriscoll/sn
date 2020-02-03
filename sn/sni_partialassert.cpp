@@ -53,7 +53,7 @@ namespace SNI
 
 	SN::SN_Error SNI_PartialAssert::PartialUnifyInternal(SN::SN_Expression &p_value, SN::SN_Expression &p_Result)
 	{
-		SN::SN_Expression value = p_value.PartialEvaluate();
+		SN::SN_Expression value = p_value.DoPartialEvaluate();
 		if (value.IsKnownValue())
 		{
 			return p_Result.PartialAssertValue(PrimaryFunctionValue(value));

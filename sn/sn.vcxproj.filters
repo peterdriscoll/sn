@@ -525,6 +525,9 @@
     <ClInclude Include="sni_evaluate.h">
       <Filter>Function Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sni_partialevaluate.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -966,6 +969,9 @@
       <Filter>Function Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sni_evaluate.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_partialevaluate.cpp">
       <Filter>Function Source Files</Filter>
     </ClCompile>
   </ItemGroup>

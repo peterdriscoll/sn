@@ -173,7 +173,7 @@ namespace SNI
 		return this;
 	}
 
-	SN::SN_Expression SNI_FunctionDef::PartialEvaluate(long  /* = 0 */) const
+	SN::SN_Expression SNI_FunctionDef::DoPartialEvaluate(long  /* = 0 */) const
 	{
 		return this;
 	}
