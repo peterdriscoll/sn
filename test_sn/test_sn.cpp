@@ -85,11 +85,11 @@ namespace test_sn
 			{
 				Manager manager("Test String Evaluate", AssertErrorHandler);
 
-				(String("dog") == String("dog")).EvaluateAction();
-				(!(String("dog") == String("cat"))).EvaluateAction();
+				(String("dog") == String("dog")).Evaluate().Do();
+				(!(String("dog") == String("cat"))).Evaluate().Do();
 
 				SN_DECLARE_VALUE(z, String("dog"));
-				(String("dog") == z).EvaluateAction();
+				(String("dog") == z).Evaluate().Do();
 			}
 			Cleanup();
 		}
@@ -107,13 +107,13 @@ namespace test_sn
 				Assert::IsTrue((String("dog") == y).PartialEvaluate().Equivalent(String("dog") == y));
 				Assert::IsTrue(!(String("dog") == y).PartialEvaluate().Equivalent(String("dog") == x));
 				Assert::IsTrue((String("dog") == String("dog")).PartialEvaluate().Equivalent(Bool(true)));
-				(String("dog") == z).PartialEvaluateAction();
+				(String("dog") == z).PartialEvaluate().Do();
 
 				Assert::IsTrue((String("dog") + y == String("dogcat")).PartialEvaluate().Equivalent(Function(Function(Equals, Function(Function(Add, String("dog")), y)), String("dogcat"))));
-				(String("dog") + z == String("dogdog")).PartialEvaluateAction();
+				(String("dog") + z == String("dogdog")).PartialEvaluate().Do();
 
-				(String("dog") + z == "dogdog").PartialEvaluateAction();
-				(String("dog") + "dog" == "dogdog").PartialEvaluateAction();
+				(String("dog") + z == "dogdog").PartialEvaluate().Do();
+				(String("dog") + "dog" == "dogdog").PartialEvaluate().Do();
 			}
 			Cleanup();
 		}
@@ -130,7 +130,7 @@ namespace test_sn
 					SN_DECLARE(y);
 
 					(String("dog") == y).Assert().Do();
-					(String("dog") == y).EvaluateAction();
+					(String("dog") == y).Evaluate().Do();
 
 					SN_DECLARE(z);
 
@@ -138,7 +138,7 @@ namespace test_sn
 					Value cat_value = z.GetValue();
 					string s_cat_value = cat_value.GetString();
 					Assert::IsTrue(s_cat_value == "cat");
-					(String("cat") == z).EvaluateAction();
+					(String("cat") == z).Evaluate().Do();
 				}
 				{
 					Transaction transaction;
@@ -195,21 +195,21 @@ namespace test_sn
 				{
 					Transaction transaction;
 
-					(Bool(true) == Bool(true)).EvaluateAction();
-					(!(Bool(true) == Bool(false))).EvaluateAction();
+					(Bool(true) == Bool(true)).Evaluate().Do();
+					(!(Bool(true) == Bool(false))).Evaluate().Do();
 				}
 				{
 					Transaction transaction;
 
 					SN_DECLARE_VALUE(z, Bool(true));
-					(Bool(true) == z).EvaluateAction();
+					(Bool(true) == z).Evaluate().Do();
 
 					SN_DECLARE_VALUE(k, True);
 					SN_DECLARE_VALUE(l, False);
 					SN_DECLARE_VALUE(m, True);
-					(k.If(l, m) == False).EvaluateAction();
-					(True.If("dog", "cat") == "dog").EvaluateAction();
-					(False.If("dog", "cat") == "cat").EvaluateAction();
+					(k.If(l, m) == False).Evaluate().Do();
+					(True.If("dog", "cat") == "dog").Evaluate().Do();
+					(False.If("dog", "cat") == "cat").Evaluate().Do();
 				}
 			}
 			Cleanup();
@@ -224,50 +224,50 @@ namespace test_sn
 				{
 					Transaction transaction;
 					//Truth table AND
-					(!(Bool(false) && Bool(false))).EvaluateAction();
-					(!(Bool(false) && Bool(true))).EvaluateAction();
-					(!(Bool(true) && Bool(false))).EvaluateAction();
-					(Bool(true) && Bool(true)).EvaluateAction();
+					(!(Bool(false) && Bool(false))).Evaluate().Do();
+					(!(Bool(false) && Bool(true))).Evaluate().Do();
+					(!(Bool(true) && Bool(false))).Evaluate().Do();
+					(Bool(true) && Bool(true)).Evaluate().Do();
 				}
 				{
 					Transaction transaction;
 
 					// Truth table OR
-					(!(Bool(false) || Bool(false))).EvaluateAction();
-					(Bool(false) || Bool(true)).EvaluateAction();
-					(Bool(true) || Bool(false)).EvaluateAction();
-					(Bool(true) || Bool(true)).EvaluateAction();
+					(!(Bool(false) || Bool(false))).Evaluate().Do();
+					(Bool(false) || Bool(true)).Evaluate().Do();
+					(Bool(true) || Bool(false)).Evaluate().Do();
+					(Bool(true) || Bool(true)).Evaluate().Do();
 				}
 				{
 					Transaction transaction;
 
 					// Truth table AND
-					((Bool(false) && Bool(false)) == Bool(false)).EvaluateAction();
-					((Bool(false) && Bool(true)) == Bool(false)).EvaluateAction();
-					((Bool(true) && Bool(false)) == Bool(false)).EvaluateAction();
-					((Bool(true) && Bool(true)) == Bool(true)).EvaluateAction();
+					((Bool(false) && Bool(false)) == Bool(false)).Evaluate().Do();
+					((Bool(false) && Bool(true)) == Bool(false)).Evaluate().Do();
+					((Bool(true) && Bool(false)) == Bool(false)).Evaluate().Do();
+					((Bool(true) && Bool(true)) == Bool(true)).Evaluate().Do();
 				}
 				{
 					Transaction transaction;
 
 					// Truth table OR
-					((Bool(false) || Bool(false)) == Bool(false)).EvaluateAction();
-					((Bool(false) || Bool(true)) == Bool(true)).EvaluateAction();
-					((Bool(true) || Bool(false)) == Bool(true)).EvaluateAction();
-					((Bool(true) || Bool(true)) == Bool(true)).EvaluateAction();
+					((Bool(false) || Bool(false)) == Bool(false)).Evaluate().Do();
+					((Bool(false) || Bool(true)) == Bool(true)).Evaluate().Do();
+					((Bool(true) || Bool(false)) == Bool(true)).Evaluate().Do();
+					((Bool(true) || Bool(true)) == Bool(true)).Evaluate().Do();
 				}
 				{
 					Transaction transaction;
 
 					// Truth table if A then B else C
-					(False.If(False, False) == False).EvaluateAction();
-					(False.If(False, True) == True).EvaluateAction();
-					(False.If(True, False) == False).EvaluateAction();
-					(False.If(True, True) == True).EvaluateAction();
-					(True.If(False, False) == False).EvaluateAction();
-					(True.If(False, True) == False).EvaluateAction();
-					(True.If(True, False) == True).EvaluateAction();
-					(True.If(True, True) == True).EvaluateAction();
+					(False.If(False, False) == False).Evaluate().Do();
+					(False.If(False, True) == True).Evaluate().Do();
+					(False.If(True, False) == False).Evaluate().Do();
+					(False.If(True, True) == True).Evaluate().Do();
+					(True.If(False, False) == False).Evaluate().Do();
+					(True.If(False, True) == False).Evaluate().Do();
+					(True.If(True, False) == True).Evaluate().Do();
+					(True.If(True, True) == True).Evaluate().Do();
 				}
 			}
 			Cleanup();
@@ -287,7 +287,7 @@ namespace test_sn
 				Assert::IsTrue((Bool(true) == y).PartialEvaluate().Equivalent(Bool(true) == y));
 				Assert::IsTrue(!(Bool(true) == y).PartialEvaluate().Equivalent(Bool(true) == x));
 				Assert::IsTrue((Bool(true) == Bool(true)).PartialEvaluate().Equivalent(Bool(true)));
-				(Bool(true) == z).PartialEvaluateAction();
+				(Bool(true) == z).PartialEvaluate().Do();
 
 				Assert::IsTrue((Bool(false) || y).PartialEvaluate().Equivalent(y));
 				Assert::IsTrue((y || Bool(false)).PartialEvaluate().Equivalent(y));
@@ -299,13 +299,13 @@ namespace test_sn
 				Assert::IsTrue((Bool(false) && y).PartialEvaluate().Equivalent(Bool(false)));
 				Assert::IsTrue((y && Bool(false)).PartialEvaluate().Equivalent(Bool(false)));
 
-				(Bool(false) || z).PartialEvaluateAction();
-				(Bool(true) && true).PartialEvaluateAction();
+				(Bool(false) || z).PartialEvaluate().Do();
+				(Bool(true) && true).PartialEvaluate().Do();
 
-				(Bool(true) && true).PartialEvaluateAction();
+				(Bool(true) && true).PartialEvaluate().Do();
 
 				SN_DECLARE(i);
-				(i == i).PartialEvaluateAction();
+				(i == i).PartialEvaluate().Do();
 
 				// If
 
@@ -339,27 +339,27 @@ namespace test_sn
 
 				(z || Bool(false) == Bool(true)).Assert().Do();
 
-				(Bool(true) == z).EvaluateAction();
-				(!(Bool(false) && z)).PartialEvaluateAction();
-				(Bool(true) && Bool(true)).PartialEvaluateAction();
+				(Bool(true) == z).Evaluate().Do();
+				(!(Bool(false) && z)).PartialEvaluate().Do();
+				(Bool(true) && Bool(true)).PartialEvaluate().Do();
 
 
 				SN_DECLARE(y);
 
 				(Bool(true) == y.Debug()).Assert().Do();
-				(Bool(true) == y).EvaluateAction();
+				(Bool(true) == y).Evaluate().Do();
 
 				SN_DECLARE(k1);
 				SN_DECLARE_VALUE(l1, False);
 
 				(k1.Debug().If(False, True) == l1).Assert().Do();
-				(k1 == !l1).EvaluateAction();
+				(k1 == !l1).Evaluate().Do();
 
 				SN_DECLARE(k2);
 				SN_DECLARE_VALUE(l2, True);
 
 				(k2.If(False, True) == l2).Assert().Do();
-				(k2 == !l2).EvaluateAction();
+				(k2 == !l2).Evaluate().Do();
 			}
 			Cleanup();
 		}
@@ -376,11 +376,11 @@ namespace test_sn
 				SN_DECLARE(o);
 
 				(o.If(False, True) == False).Assert().Do();
-				o.EvaluateAction();
+				o.Evaluate().Do();
 				(o.If(m, n) == True).Assert().Do();
-				m.EvaluateAction();
+				m.Evaluate().Do();
 				((!o).If(m, n) == m).Assert().Do();
-				n.EvaluateAction();
+				n.Evaluate().Do();
 			}
 			Cleanup();
 		}
@@ -403,7 +403,7 @@ namespace test_sn
 				Manager manager("Test Double Equivalent", AssertErrorHandler);
 				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
-				((Long(1) + Long(2)) == Long(3)).EvaluateAction();
+				((Long(1) + Long(2)) == Long(3)).Evaluate().Do();
 
 				Assert::IsTrue((Double(5.5) == Double(7.8)).Equivalent(Equals(Double(5.5))(Double(7.8))));
 				Assert::IsTrue(!(Double(9.0) == Double(9.5)).Equivalent(Equals(Double(9.0))(Double(9.7))));
@@ -421,18 +421,18 @@ namespace test_sn
 			{
 				Manager manager("Test Double Evaluate", AssertErrorHandler);
 
-				(Double(3.3) == Double(3.3)).EvaluateAction();
-				(!(Double(5.43) == Double(6))).EvaluateAction();
+				(Double(3.3) == Double(3.3)).Evaluate().Do();
+				(!(Double(5.43) == Double(6))).Evaluate().Do();
 
 				SN_DECLARE_VALUE(z, Double(2.2));
-				(Double(3.5) + Double(5.6) == Double(9.1)).EvaluateAction();
-				(Double(2.2) == z).EvaluateAction();
+				(Double(3.5) + Double(5.6) == Double(9.1)).Evaluate().Do();
+				(Double(2.2) == z).Evaluate().Do();
 
 				SN_DECLARE_VALUE(x, Double(3));
-				(z * x == Double(6.6)).EvaluateAction();
+				(z * x == Double(6.6)).Evaluate().Do();
 
 				SN_DECLARE_VALUE(y, Double(2));
-				((z * x) / y == Double(3.3)).EvaluateAction();
+				((z * x) / y == Double(3.3)).Evaluate().Do();
 			}
 			Cleanup();
 		}
@@ -451,13 +451,13 @@ namespace test_sn
 				Assert::IsTrue((Double(3.1415) == y).PartialEvaluate().Equivalent(Double(3.1415) == y));
 				Assert::IsTrue(!(Double(9.7) == y).PartialEvaluate().Equivalent(Double(9.7) == x));
 				Assert::IsTrue((Double(9.7) == Double(9.7)).PartialEvaluate().Equivalent(Bool(true)));
-				(Double(3.1415) == z).PartialEvaluateAction();
+				(Double(3.1415) == z).PartialEvaluate().Do();
 
 				Assert::IsTrue((Double(5.5) + y == Double(10)).PartialEvaluate().Equivalent(Equals(Add(Double(5.5))(y))(Double(10))));
-				(Double(8.0) + z == Double(11.1415)).PartialEvaluateAction();
+				(Double(8.0) + z == Double(11.1415)).PartialEvaluate().Do();
 
-				(Double(3.1415) + z == Double(3.1415)*Double(2.0)).PartialEvaluateAction();
-				(Double(4.5) + 4.5 == 9.0).PartialEvaluateAction();
+				(Double(3.1415) + z == Double(3.1415)*Double(2.0)).PartialEvaluate().Do();
+				(Double(4.5) + 4.5 == 9.0).PartialEvaluate().Do();
 			}
 			Cleanup();
 		}
@@ -472,13 +472,13 @@ namespace test_sn
 				SN_DECLARE(y);
 
 				(Double(45.6) == y).Assert().Do();
-				(Double(45.6) == y).EvaluateAction();
+				(Double(45.6) == y).Evaluate().Do();
 
 				SN_DECLARE(z);
 
 				(Double(45.6) + z == 100.0).Assert().Do();
 
-				(Double(54.4) == z).EvaluateAction();
+				(Double(54.4) == z).Evaluate().Do();
 			}
 			Cleanup();
 		}
@@ -489,8 +489,8 @@ namespace test_sn
 			{
 				Manager manager("Test Long Evaluate", AssertErrorHandler);
 
-				(Long(4) * Double(1.25) == Double(5)).EvaluateAction();
-				(Double(5) / Long(4) == Double(1.25)).EvaluateAction();
+				(Long(4) * Double(1.25) == Double(5)).Evaluate().Do();
+				(Double(5) / Long(4) == Double(1.25)).Evaluate().Do();
 			}
 			Cleanup();
 		}
@@ -603,7 +603,7 @@ namespace test_sn
 					string v_RemovePrefix = Lambda(p, Lambda(x, x.SubtractLeft(p))).PartialEvaluate().DisplaySN();
 					Assert::IsTrue(v_RemovePrefix == "@p.@x.SubtractLeft x p");
 					Assert::IsTrue(RemovePrefix.PartialEvaluate().Equivalent(Lambda(p, Lambda(x, x.SubtractLeft(p))).PartialEvaluate()));
-					(RemovePrefix(String("Atl"))(String("AtlDog")) == String("Dog")).EvaluateAction();
+					(RemovePrefix(String("Atl"))(String("AtlDog")) == String("Dog")).Evaluate().Do();
 				}
 				{
 					SN_DECLARE(RemovePostfix);
@@ -614,7 +614,7 @@ namespace test_sn
 					Assert::IsTrue(RemovePostfix.GetVariableValue().DisplaySN() == "@p.@x.SubtractRight x p");
 					std::cout << std::endl << "Variable " << RemovePostfix.DisplaySN() << std::endl;
 					Assert::IsTrue(RemovePostfix.PartialEvaluate().Equivalent(Lambda(p, Lambda(x, x.SubtractRight(p))).PartialEvaluate()));
-					(RemovePostfix(String("Atl"))(String("DogAtl")) == String("Dog")).EvaluateAction();
+					(RemovePostfix(String("Atl"))(String("DogAtl")) == String("Dog")).Evaluate().Do();
 				}
 			}
 			Cleanup();
@@ -632,18 +632,18 @@ namespace test_sn
 
 				(Define(Factorial) == Lambda(n, (n == Long(0)).If(Long(1), n * Factorial(n - Long(1))))).PartialAssert().Do();
 				std::cout << std::endl << "Function " << Factorial.DisplaySN() << std::endl;
-				(Factorial(Long(3)) == Long(6)).EvaluateAction();
-				(Factorial(Long(10)) == Long(3628800)).EvaluateAction();
-				(Factorial(Long(12)) == Long(479001600)).EvaluateAction();
+				(Factorial(Long(3)) == Long(6)).Evaluate().Do();
+				(Factorial(Long(10)) == Long(3628800)).Evaluate().Do();
+				(Factorial(Long(12)) == Long(479001600)).Evaluate().Do();
 
 				SN_DECLARE(Fact);
 				SN_DECLARE(m);
 
 				(Define(Fact)(m) == (m == Long(0)).If(Long(1), m * Fact(m - Long(1)))).PartialAssert().Do();
 				std::cout << std::endl << "Function " << Fact.DisplaySN() << std::endl;
-				(Fact(Long(3)) == Long(6)).EvaluateAction();
-				(Fact(Long(10)) == Long(3628800)).EvaluateAction();
-				(Fact(Long(12)) == Long(479001600)).EvaluateAction();
+				(Fact(Long(3)) == Long(6)).Evaluate().Do();
+				(Fact(Long(10)) == Long(3628800)).Evaluate().Do();
+				(Fact(Long(12)) == Long(479001600)).Evaluate().Do();
 			}
 			Cleanup();
 		}
@@ -725,11 +725,11 @@ namespace test_sn
 
 				(Define(Fact)(g)(n) == (n == Long(0)).If(Long(1), n * g(n - Long(1)))).PartialAssert().Do();
 
-				(Y(Fact)(Long(0)) == Long(1)).EvaluateAction();
-				(Y(Fact)(Long(1)) == Long(1)).EvaluateAction();
-				(Y(Fact)(Long(3)) == Long(6)).EvaluateAction();
-				(Y(Fact)(Long(10)) == Long(3628800)).EvaluateAction();
-				(Y(Fact)(Long(12)) == Long(479001600)).EvaluateAction();
+				(Y(Fact)(Long(0)) == Long(1)).Evaluate().Do();
+				(Y(Fact)(Long(1)) == Long(1)).Evaluate().Do();
+				(Y(Fact)(Long(3)) == Long(6)).Evaluate().Do();
+				(Y(Fact)(Long(10)) == Long(3628800)).Evaluate().Do();
+				(Y(Fact)(Long(12)) == Long(479001600)).Evaluate().Do();
 
 				(Y(Fact)(Long(0)) == Long(1)).Assert().Do();
 				(Y(Fact)(Long(1)) == Long(1)).Assert().Do();
@@ -763,22 +763,22 @@ namespace test_sn
 				// succ n f x = f (n f x)
 				(Define(succ)(n)(f)(x) == f(n(f)(x))).PartialAssert().Do();
 
-				(succ(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(1)).EvaluateAction();
+				(succ(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(1)).Evaluate().Do();
 				(succ(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == r0).Assert().Do();
-				(r0 == Long(1)).EvaluateAction();
+				(r0 == Long(1)).Evaluate().Do();
 
 
-				(succ(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(2)).EvaluateAction();
+				(succ(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(2)).Evaluate().Do();
 				(succ(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).Assert().Do();
-				(r1 == Long(2)).EvaluateAction();
+				(r1 == Long(2)).Evaluate().Do();
 
-				(succ(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(3)).EvaluateAction();
+				(succ(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(3)).Evaluate().Do();
 				(succ(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).Assert().Do();
-				(r2 == Long(3)).EvaluateAction();
+				(r2 == Long(3)).Evaluate().Do();
 
-				(succ(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(4)).EvaluateAction();
+				(succ(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(4)).Evaluate().Do();
 				(succ(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).Assert().Do();
-				(r3 == Long(4)).EvaluateAction();
+				(r3 == Long(4)).Evaluate().Do();
 			}
 			Cleanup();
 		}
@@ -807,21 +807,21 @@ namespace test_sn
 				// plus m n f x = m f (n f x) 
 				(Define(plus) == Lambda(m, Lambda(n, Lambda(f, Lambda(x, m(f)((n(f)(x)))))))).PartialAssert().Do();
 
-				(plus(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(0)).EvaluateAction();
+				(plus(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(0)).Evaluate().Do();
 				(plus(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == r0).Assert().Do();
-				(r0 == Long(0)).EvaluateAction();
+				(r0 == Long(0)).Evaluate().Do();
 
-				(plus(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(2)).EvaluateAction();
+				(plus(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(2)).Evaluate().Do();
 				(plus(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).Assert().Do();
-				(r1 == Long(2)).EvaluateAction();
+				(r1 == Long(2)).Evaluate().Do();
 
-				(plus(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(4)).EvaluateAction();
+				(plus(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(4)).Evaluate().Do();
 				(plus(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).Assert().Do();
-				(r2 == Long(4)).EvaluateAction();
+				(r2 == Long(4)).Evaluate().Do();
 
-				(plus(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(6)).EvaluateAction();
+				(plus(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(6)).Evaluate().Do();
 				(plus(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).Assert().Do();
-				(r3 == Long(6)).EvaluateAction();
+				(r3 == Long(6)).Evaluate().Do();
 			}
 			Cleanup();
 		}
@@ -850,21 +850,21 @@ namespace test_sn
 				// multiply m n f x = m (n f) x
 				(Define(mult)(m)(n)(f)(x) == m(n(f))(x)).PartialAssert().Do();
 
-				(mult(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(0)).EvaluateAction();
+				(mult(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(0)).Evaluate().Do();
 				(mult(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == r0).Assert().Do();
-				(r0 == Long(0)).EvaluateAction();
+				(r0 == Long(0)).Evaluate().Do();
 
-				(mult(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(1)).EvaluateAction();
+				(mult(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(1)).Evaluate().Do();
 				(mult(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).Assert().Do();
-				(r1 == Long(1)).EvaluateAction();
+				(r1 == Long(1)).Evaluate().Do();
 
-				(mult(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(4)).EvaluateAction();
+				(mult(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(4)).Evaluate().Do();
 				(mult(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).Assert().Do();
-				(r2 == Long(4)).EvaluateAction();
+				(r2 == Long(4)).Evaluate().Do();
 
-				(mult(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(9)).EvaluateAction();
+				(mult(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(9)).Evaluate().Do();
 				(mult(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).Assert().Do();
-				(r3 == Long(9)).EvaluateAction();
+				(r3 == Long(9)).Evaluate().Do();
 			}
 			Cleanup();
 		}
@@ -893,22 +893,22 @@ namespace test_sn
 				// exp m n f x = (n m) f x 
 				(Define(exp)(m)(n)(f)(x) == m(n)(f)(x)).PartialAssert().Do();
 
-				(exp(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(1)).EvaluateAction();
+				(exp(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(1)).Evaluate().Do();
 				(exp(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == r0).Assert().Do();
-				(r0 == Long(1)).EvaluateAction();
+				(r0 == Long(1)).Evaluate().Do();
 
 
-				(exp(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(1)).EvaluateAction();
+				(exp(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(1)).Evaluate().Do();
 				(exp(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).Assert().Do();
-				(r1 == Long(1)).EvaluateAction();
+				(r1 == Long(1)).Evaluate().Do();
 
-				(exp(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(4)).EvaluateAction();
+				(exp(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(4)).Evaluate().Do();
 				(exp(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).Assert().Do();
-				(r2 == Long(4)).EvaluateAction();
+				(r2 == Long(4)).Evaluate().Do();
 
-				(exp(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(27)).EvaluateAction();
+				(exp(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(27)).Evaluate().Do();
 				(exp(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).Assert().Do();
-				(r3 == Long(27)).EvaluateAction();
+				(r3 == Long(27)).Evaluate().Do();
 			}
 			Cleanup();
 		}
@@ -940,21 +940,21 @@ namespace test_sn
 				// \n.\f.\x.n (\g.\h.h (g f)) (\u.x) (\u.u)
 				(Define(pred) == Lambda(n, Lambda(f, Lambda(x, n(Lambda(g, Lambda(h, h(g(f))))) (Lambda(u, x))(Lambda(u, u)))))).PartialAssert().Do();
 
-				(pred(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(0)).EvaluateAction();
+				(pred(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(0)).Evaluate().Do();
 				(pred(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == r0).Assert().Do();
-				(r0 == Long(0)).EvaluateAction();
+				(r0 == Long(0)).Evaluate().Do();
 
-				(pred(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(0)).EvaluateAction();
+				(pred(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(0)).Evaluate().Do();
 				(pred(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).Assert().Do();
-				(r1 == Long(0)).EvaluateAction();
+				(r1 == Long(0)).Evaluate().Do();
 
-				(pred(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(1)).EvaluateAction();
+				(pred(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(1)).Evaluate().Do();
 				(pred(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).Assert().Do();
-				(r2 == Long(1)).EvaluateAction();
+				(r2 == Long(1)).Evaluate().Do();
 
-				(pred(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(2)).EvaluateAction();
+				(pred(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(2)).Evaluate().Do();
 				(pred(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).Assert().Do();
-				(r3 == Long(2)).EvaluateAction();
+				(r3 == Long(2)).Evaluate().Do();
 			}
 			Cleanup();
 		}
@@ -993,21 +993,21 @@ namespace test_sn
 				// This works too.
 				// (Define(minus)(m)(n)(f)(x) == n(pred)(m)(f)(x)).PartialAssert().Do();
 
-				(minus(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(1)).EvaluateAction();
+				(minus(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(1)).Evaluate().Do();
 				(minus(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == r0).Assert().Do();
-				(r0 == Long(1)).EvaluateAction();
+				(r0 == Long(1)).Evaluate().Do();
 
-				(minus(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(2)).EvaluateAction();
+				(minus(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(2)).Evaluate().Do();
 				(minus(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).Assert().Do();
-				(r1 == Long(2)).EvaluateAction();
+				(r1 == Long(2)).Evaluate().Do();
 
-				(minus(Lambda(f, Lambda(x, f(f(f(f(f(x))))))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(3)).EvaluateAction();
+				(minus(Lambda(f, Lambda(x, f(f(f(f(f(x))))))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(3)).Evaluate().Do();
 				(minus(Lambda(f, Lambda(x, f(f(f(f(f(x))))))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).Assert().Do();
-				(r2 == Long(3)).EvaluateAction();
+				(r2 == Long(3)).Evaluate().Do();
 
-				(minus(Lambda(f, Lambda(x, f(f(f(f(f(f(f(f(x)))))))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(5)).EvaluateAction();
+				(minus(Lambda(f, Lambda(x, f(f(f(f(f(f(f(f(x)))))))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(5)).Evaluate().Do();
 				(minus(Lambda(f, Lambda(x, f(f(f(f(f(f(f(f(x)))))))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).Assert().Do();
-				(r3 == Long(5)).EvaluateAction();
+				(r3 == Long(5)).Evaluate().Do();
 			}
 			Cleanup();
 		}
@@ -1087,17 +1087,17 @@ namespace test_sn
 				// IsZero = \n.n (\x.false) true
 				(Define(IsZero) == Lambda(n, n(Lambda(x, falseL))(trueL))).PartialAssert().Do();
 
-				(divide(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(1)).EvaluateAction();
+				(divide(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(1)).Evaluate().Do();
 				(divide(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).Assert().Do();
-				(r1 == Long(1)).EvaluateAction();
+				(r1 == Long(1)).Evaluate().Do();
 
-				(divide(Lambda(f, Lambda(x, f(f(f(f(x)))))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(2)).EvaluateAction();
+				(divide(Lambda(f, Lambda(x, f(f(f(f(x)))))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(2)).Evaluate().Do();
 				(divide(Lambda(f, Lambda(x, f(f(f(f(x)))))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).Assert().Do();
-				(r2 == Long(2)).EvaluateAction();
+				(r2 == Long(2)).Evaluate().Do();
 
-				(divide(Lambda(f, Lambda(x, f(f(f(f(f(f(f(f(f(x))))))))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(3)).EvaluateAction();
+				(divide(Lambda(f, Lambda(x, f(f(f(f(f(f(f(f(f(x))))))))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(3)).Evaluate().Do();
 				(divide(Lambda(f, Lambda(x, f(f(f(f(f(f(f(f(f(x))))))))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).Assert().Do();
-				(r3 == Long(3)).EvaluateAction();
+				(r3 == Long(3)).Evaluate().Do();
 			}
 			Cleanup();
 		}
@@ -1149,7 +1149,7 @@ namespace test_sn
 				string x_string = x.GetVariableValue().DisplayValueSN();
 
 				Assert::IsTrue(x_string == "Long(3)");
-				(x == Long(3)).EvaluateAction();
+				(x == Long(3)).Evaluate().Do();
 			}
 			Cleanup();
 		}
@@ -1174,8 +1174,8 @@ namespace test_sn
 				string y_valueset = y.DoEvaluate().DisplaySN();
 				string y_buildset = y.BuildSet().DoEvaluate().DisplaySN();
 
-				(x.BuildSet() == y.BuildSet()).EvaluateAction();
-				(x.BuildSet() == (Long(3) || Long(4)).BuildSet()).EvaluateAction();
+				(x.BuildSet() == y.BuildSet()).Evaluate().Do();
+				(x.BuildSet() == (Long(3) || Long(4)).BuildSet()).Evaluate().Do();
 				cout << x.DisplaySN();
 			}
 			Cleanup();
@@ -1197,7 +1197,7 @@ namespace test_sn
 				x.DoEvaluate().LogDisplaySN();
 				x.BuildSet().DoEvaluate().LogDisplaySN();
 
-				(x.BuildSet() == (Long(3) || Long(4) || Long(5)).BuildSet()).EvaluateAction();
+				(x.BuildSet() == (Long(3) || Long(4) || Long(5)).BuildSet()).Evaluate().Do();
 				cout << x.DisplaySN();
 			}
 			Cleanup();
@@ -1216,7 +1216,7 @@ namespace test_sn
 				string x_valueset = x.DoEvaluate().DisplaySN();
 				string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
 
-				(x.BuildSet() == (Long(3) || Long(4) || Long(5) || Long(6)).BuildSet()).EvaluateAction();
+				(x.BuildSet() == (Long(3) || Long(4) || Long(5) || Long(6)).BuildSet()).Evaluate().Do();
 				cout << x.DisplaySN();
 			}
 
@@ -1236,7 +1236,7 @@ namespace test_sn
 				string x_valueset = x.DoEvaluate().DisplaySN();
 				string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
 
-				(x.BuildSet() == (Long(3)+Long(3) || Long(4)+Long(4) || Long(5)+Long(5) || Long(6)+Long(6)).BuildSet()).EvaluateAction();
+				(x.BuildSet() == (Long(3)+Long(3) || Long(4)+Long(4) || Long(5)+Long(5) || Long(6)+Long(6)).BuildSet()).Evaluate().Do();
 				cout << x.DisplaySN();
 			}
 			Cleanup();
@@ -1255,7 +1255,7 @@ namespace test_sn
 				string x_valueset = x.DoEvaluate().DisplaySN();
 				string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
 
-				(x.BuildSet() == (Long(3) + Long(3) || Long(4) + Long(4) || Long(5) + Long(5) || Long(6) + Long(6)).BuildSet()).EvaluateAction();
+				(x.BuildSet() == (Long(3) + Long(3) || Long(4) + Long(4) || Long(5) + Long(5) || Long(6) + Long(6)).BuildSet()).Evaluate().Do();
 				cout << x.DisplaySN();
 			}
 			Cleanup();
@@ -1274,7 +1274,7 @@ namespace test_sn
 				string x_valueset = x.DoEvaluate().DisplaySN();
 				string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
 
-				(x.BuildSet() == (Long(3) || Long(4) || Long(5) || Long(6)).BuildSet()).EvaluateAction();
+				(x.BuildSet() == (Long(3) || Long(4) || Long(5) || Long(6)).BuildSet()).Evaluate().Do();
 				cout << x.DisplaySN();
 			}
 			Cleanup();
@@ -1310,18 +1310,18 @@ namespace test_sn
 
 				// These return a value set of bools.  Should this reduce to a boolean value???
 
-				(B_Digit(String("0"))).EvaluateAction();
-				(B_Digit(String("1"))).EvaluateAction();
-				(B_Digit(String("2"))).EvaluateAction();
-				(B_Digit(String("3"))).EvaluateAction();
-				(B_Digit(String("4"))).EvaluateAction();
-				(B_Digit(String("5"))).EvaluateAction();
-				(B_Digit(String("6"))).EvaluateAction();
-				(B_Digit(String("7"))).EvaluateAction();
-				(B_Digit(String("8"))).EvaluateAction();
-				(B_Digit(String("9"))).EvaluateAction();
+				(B_Digit(String("0"))).Evaluate().Do();
+				(B_Digit(String("1"))).Evaluate().Do();
+				(B_Digit(String("2"))).Evaluate().Do();
+				(B_Digit(String("3"))).Evaluate().Do();
+				(B_Digit(String("4"))).Evaluate().Do();
+				(B_Digit(String("5"))).Evaluate().Do();
+				(B_Digit(String("6"))).Evaluate().Do();
+				(B_Digit(String("7"))).Evaluate().Do();
+				(B_Digit(String("8"))).Evaluate().Do();
+				(B_Digit(String("9"))).Evaluate().Do();
 
-				(!B_Digit(String("X"))).EvaluateAction();
+				(!B_Digit(String("X"))).Evaluate().Do();
 			}
 			Cleanup();
 		}
@@ -1353,18 +1353,18 @@ namespace test_sn
 
 				(!(B_Digit2(String("X")))).Assert().Do();
 
-				(B_Digit2(String("0"))).EvaluateAction();
-				(B_Digit2(String("1"))).EvaluateAction();
-				(B_Digit2(String("2"))).EvaluateAction();
-				(B_Digit2(String("3"))).EvaluateAction();
-				(B_Digit2(String("4"))).EvaluateAction();
-				(B_Digit2(String("5"))).EvaluateAction();
-				(B_Digit2(String("6"))).EvaluateAction();
-				(B_Digit2(String("7"))).EvaluateAction();
-				(B_Digit2(String("8"))).EvaluateAction();
-				(B_Digit2(String("9"))).EvaluateAction();
+				(B_Digit2(String("0"))).Evaluate().Do();
+				(B_Digit2(String("1"))).Evaluate().Do();
+				(B_Digit2(String("2"))).Evaluate().Do();
+				(B_Digit2(String("3"))).Evaluate().Do();
+				(B_Digit2(String("4"))).Evaluate().Do();
+				(B_Digit2(String("5"))).Evaluate().Do();
+				(B_Digit2(String("6"))).Evaluate().Do();
+				(B_Digit2(String("7"))).Evaluate().Do();
+				(B_Digit2(String("8"))).Evaluate().Do();
+				(B_Digit2(String("9"))).Evaluate().Do();
 
-				(!B_Digit2(String("X"))).EvaluateAction();
+				(!B_Digit2(String("X"))).Evaluate().Do();
 			}
 			Cleanup();
 		}
@@ -1398,15 +1398,15 @@ namespace test_sn
 
 				SN_DECLARE(x1);
 				(ConvertInteger(String("1")) == x1).Assert().Do();
-				(x1 == Long(1)).EvaluateAction();
+				(x1 == Long(1)).Evaluate().Do();
 
 				SN_DECLARE(x2);
 				(ConvertInteger(String("12")) == x2).Assert().Do();
-				(x2 == Long(12)).EvaluateAction();
+				(x2 == Long(12)).Evaluate().Do();
 
 				SN_DECLARE(x3);
 				(ConvertInteger(String("123456789")) == x3).Assert().Do();
-				(x3 == Long(123456789)).EvaluateAction();
+				(x3 == Long(123456789)).Evaluate().Do();
 
 				SN_DECLARE(a);
 				SN_DECLARE(b);
@@ -1422,7 +1422,7 @@ namespace test_sn
 				(c4 + d4 == "1abc").Assert().Do();
 				SN_DECLARE(x4);
 				(ConvertInteger(c4) == x4).Assert().Do();
-				(x4 == Long(1)).EvaluateAction();
+				(x4 == Long(1)).Evaluate().Do();
 
 				SN_DECLARE(a1);
 				SN_DECLARE(b1);
@@ -1438,7 +1438,7 @@ namespace test_sn
 				(c5 + d5 == "12abc").Assert().Do();
 				SN_DECLARE(x5);
 				(ConvertInteger(c5) == x5).Assert().Do();
-				(x5 == Long(12)).EvaluateAction();
+				(x5 == Long(12)).Evaluate().Do();
 
 				SN_DECLARE(a2);
 				SN_DECLARE(b2);
@@ -1454,7 +1454,7 @@ namespace test_sn
 				(c6 + d6 == "123456789abc").Assert().Do();
 				SN_DECLARE(x6);
 				(ConvertInteger(c6) == x6).Assert().Do();
-				(x6 == Long(123456789)).EvaluateAction();
+				(x6 == Long(123456789)).Evaluate().Do();
 				SN_DECLARE(PmGenInteger);
 			}
 			Cleanup();
@@ -1483,11 +1483,11 @@ namespace test_sn
 
 				SN_DECLARE(x2);
 				(ParseInteger("13")(x2)).Assert().Do();
-				(x2 == Long(13)).EvaluateAction();
+				(x2 == Long(13)).Evaluate().Do();
 
 				SN_DECLARE(x3);
 				(ParseInteger("21")(x3)).Assert().Do();
-				(x3 == Long(21)).EvaluateAction();
+				(x3 == Long(21)).Evaluate().Do();
 
 				SN_DECLARE(ParseTerm);
 				SN_DECLARE(t);
@@ -1503,7 +1503,7 @@ namespace test_sn
 
 				(ParseTerm("13+21")(x1)).Assert().Do();
 				(x1.DoEvaluate(-1) == y1).Assert().Do();
-				(y1 == Long(34)).EvaluateAction();
+				(y1 == Long(34)).Evaluate().Do();
 				long y_value = Long(y1).GetNumber();
 				Assert::IsTrue(y_value == 34);
 			}
@@ -1564,11 +1564,11 @@ namespace test_sn
 
 				SN_DECLARE(x2);
 				(ParseInteger("13")(x2)).Assert().Do();
-				(x2 == Long(13)).EvaluateAction();
+				(x2 == Long(13)).Evaluate().Do();
 
 				SN_DECLARE(x3);
 				(ParseInteger("21")(x3)).Assert().Do();
-				(x3 == Long(21)).EvaluateAction();
+				(x3 == Long(21)).Evaluate().Do();
 
 				SN_DECLARE(ParseTerm);
 				SN_DECLARE(t);
@@ -1584,7 +1584,7 @@ namespace test_sn
 
 				(ParseTerm("13+21")(x1)).Assert().Do();
 				(x1.DoEvaluate(-1) == y1).Assert().Do();
-				(y1 == Long(34)).EvaluateAction();
+				(y1 == Long(34)).Evaluate().Do();
 				long y_value = Long(y1).GetNumber();
 				Assert::IsTrue(y_value == 34);
 			}
@@ -1781,7 +1781,7 @@ namespace test_sn
 
 				Assert::IsTrue(((Long(2) || Long(-2)) + (Long(2) || Long(-2))).DoEvaluate().DoRemove(Long(4)).DoRemove(Long(0)).DoRemove(Long(-4)).DoIsEmpty());
 
-				(two_or_minus_two + two_or_minus_two).BuildSet().HasMember(Long(-4)).EvaluateAction();
+				(two_or_minus_two + two_or_minus_two).BuildSet().HasMember(Long(-4)).Evaluate().Do();
 			}
 			Cleanup();
 		}
@@ -1792,14 +1792,14 @@ namespace test_sn
 			{
 				Manager manager("Test Value Set Equivalency Evaluate", AssertErrorHandler);
 
-				(((String("Dog") || String("Cat")) + String("Food")).BuildSet() == ((String("DogFood") || String("CatFood")).BuildSet())).EvaluateAction();
+				(((String("Dog") || String("Cat")) + String("Food")).BuildSet() == ((String("DogFood") || String("CatFood")).BuildSet())).Evaluate().Do();
 
-				(((String("Dog") || String("Cat")) + String("Food")).BuildSet() == ((String("CatFood") || String("DogFood")).BuildSet())).EvaluateAction();
-				(((String("Dog") || String("Pig")) + String("Food")).BuildSet() == ((String("DogFood") || String("PigFood")).BuildSet())).EvaluateAction();
+				(((String("Dog") || String("Cat")) + String("Food")).BuildSet() == ((String("CatFood") || String("DogFood")).BuildSet())).Evaluate().Do();
+				(((String("Dog") || String("Pig")) + String("Food")).BuildSet() == ((String("DogFood") || String("PigFood")).BuildSet())).Evaluate().Do();
 
-				(((Long(10) || Long(9)) + Long(1)).BuildSet() == (Long(11) || Long(10)).BuildSet()).EvaluateAction();
+				(((Long(10) || Long(9)) + Long(1)).BuildSet() == (Long(11) || Long(10)).BuildSet()).Evaluate().Do();
 
-				(((Double(10) || Double(9)) + Double(1)).BuildSet() == (Double(11) || Double(10)).BuildSet()).EvaluateAction();
+				(((Double(10) || Double(9)) + Double(1)).BuildSet() == (Double(11) || Double(10)).BuildSet()).Evaluate().Do();
 
 
 				// mixed value sets
@@ -1818,9 +1818,9 @@ namespace test_sn
 				Manager manager("Test Set Evaluate", AssertErrorHandler);
 
 				Expression a;
-				(((Long(2) || Long(-2))*(Long(3) || Long(-3))).BuildSet() == ((Long(6) || Long(-6)).BuildSet())).EvaluateAction();
+				(((Long(2) || Long(-2))*(Long(3) || Long(-3))).BuildSet() == ((Long(6) || Long(-6)).BuildSet())).Evaluate().Do();
 
-				((Long(4).SquareRoot()).BuildSet() == (Long(2) || Long(-2)).BuildSet()).EvaluateAction();
+				((Long(4).SquareRoot()).BuildSet() == (Long(2) || Long(-2)).BuildSet()).Evaluate().Do();
 				string my_exp4 = (Long(4)).BuildSet().DoEvaluate().DisplaySN();
 				std::cout << std::endl << ((Long(4)).BuildSet()).DoEvaluate().DisplaySN() << std::endl;
 				Assert::IsTrue(((Long(4)).BuildSet()).DoEvaluate().DisplaySN() == "{Long(4)}");
@@ -1830,7 +1830,7 @@ namespace test_sn
 
 				SN_DECLARE_VALUE(x, Long(2) || Long(-2));
 
-				(((x < Long(0)).If(x || Long(5), Long(0))).BuildSet() == (Long(0) || Long(5) || Long(-2)).BuildSet()).EvaluateAction();
+				(((x < Long(0)).If(x || Long(5), Long(0))).BuildSet() == (Long(0) || Long(5) || Long(-2)).BuildSet()).Evaluate().Do();
 			}
 			Cleanup();
 		}
@@ -1845,15 +1845,15 @@ namespace test_sn
 				SN_DECLARE(x);
 				SN_DECLARE(z);
 				(x.Square() == Long(4)).Assert().Do();
-				((x.BuildSet()) == (Long(2) || Long(-2)).BuildSet()).EvaluateAction();
+				((x.BuildSet()) == (Long(2) || Long(-2)).BuildSet()).Evaluate().Do();
 				(z == (Long(2) || Long(-2))).Assert().Do();
 
 				// This is not true. The expression is a value set with true and false in it.
-				//(x == (Long(2) || Long(-2))).EvaluateAction();
+				//(x == (Long(2) || Long(-2))).Evaluate().Do();
 
 				SN_DECLARE(y);
 				(y*y == Long(4)).Assert().Do();   // recognise that y*y = y.Square() in the * operator in SNI_Expression.
-				((y.BuildSet()) == (Long(2) || Long(-2)).BuildSet()).EvaluateAction();
+				((y.BuildSet()) == (Long(2) || Long(-2)).BuildSet()).Evaluate().Do();
 			}
 			Cleanup();
 		}
@@ -2288,38 +2288,38 @@ namespace test_sn
 				Manager manager("Test Inherit Short", AssertErrorHandler);
 				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
-				Short::Class().IsA(Long::Class()).EvaluateAction();
+				Short::Class().IsA(Long::Class()).Evaluate().Do();
 				SN_DECLARE(x1);
 				(Short::Class().IsA(Long::Class()) == x1).Assert().Do();
-				x1.EvaluateAction();
+				x1.Evaluate().Do();
 				bool b1 = x1.GetBool();
 				Assert::IsTrue(b1);
 
-				Short::Class().IsA(LongLong::Class()).EvaluateAction();
+				Short::Class().IsA(LongLong::Class()).Evaluate().Do();
 				SN_DECLARE(x2);
 				(Short::Class().IsA(LongLong::Class()) == x2).Assert().Do();
-				x2.EvaluateAction();
+				x2.Evaluate().Do();
 				bool b2 = x2.GetBool();
 				Assert::IsTrue(b2);
 
-				Short::Class().IsA(Float::Class()).EvaluateAction();
+				Short::Class().IsA(Float::Class()).Evaluate().Do();
 				SN_DECLARE(x3);
 				(Short::Class().IsA(Float::Class()) == x3).Assert().Do();
-				x3.EvaluateAction();
+				x3.Evaluate().Do();
 				bool b3 = x3.GetBool();
 				Assert::IsTrue(b3);
 
-				Short::Class().IsA(Double::Class()).EvaluateAction();
+				Short::Class().IsA(Double::Class()).Evaluate().Do();
 				SN_DECLARE(x4);
 				(Short::Class().IsA(Double::Class()) == x4).Assert().Do();
-				x4.EvaluateAction();
+				x4.Evaluate().Do();
 				bool b4 = x4.GetBool();
 				Assert::IsTrue(b4);
 
-				Short::Class().IsA(LongDouble::Class()).EvaluateAction();
+				Short::Class().IsA(LongDouble::Class()).Evaluate().Do();
 				SN_DECLARE(x5);
 				(Short::Class().IsA(LongDouble::Class()) == x5).Assert().Do();
-				x5.EvaluateAction();
+				x5.Evaluate().Do();
 				bool b5 = x5.GetBool();
 				Assert::IsTrue(b5);
 
@@ -2334,24 +2334,24 @@ namespace test_sn
 				Manager manager("Test Inherit Long", AssertErrorHandler);
 				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
-				Long::Class().IsA(LongLong::Class()).EvaluateAction();
+				Long::Class().IsA(LongLong::Class()).Evaluate().Do();
 				SN_DECLARE(x1);
 				(Long::Class().IsA(LongLong::Class()) == x1).Assert().Do();
-				x1.EvaluateAction();
+				x1.Evaluate().Do();
 				bool b1 = x1.GetBool();
 				Assert::IsTrue(b1);
 
-				Long::Class().IsA(Double::Class()).EvaluateAction();
+				Long::Class().IsA(Double::Class()).Evaluate().Do();
 				SN_DECLARE(x2);
 				(Long::Class().IsA(Double::Class()) == x2).Assert().Do();
-				x2.EvaluateAction();
+				x2.Evaluate().Do();
 				bool b2 = x2.GetBool();
 				Assert::IsTrue(b2);
 
-				Long::Class().IsA(LongDouble::Class()).EvaluateAction();
+				Long::Class().IsA(LongDouble::Class()).Evaluate().Do();
 				SN_DECLARE(x3);
 				(Long::Class().IsA(LongDouble::Class()) == x3).Assert().Do();
-				x3.EvaluateAction();
+				x3.Evaluate().Do();
 				bool b3 = x3.GetBool();
 				Assert::IsTrue(b3);
 
@@ -2366,10 +2366,10 @@ namespace test_sn
 				Manager manager("Test Inherit LongLong", AssertErrorHandler);
 				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
-				LongLong::Class().IsA(LongDouble::Class()).EvaluateAction();
+				LongLong::Class().IsA(LongDouble::Class()).Evaluate().Do();
 				SN_DECLARE(x1);
 				(LongLong::Class().IsA(LongDouble::Class()) == x1).Assert().Do();
-				x1.EvaluateAction();
+				x1.Evaluate().Do();
 				bool b1 = x1.GetBool();
 				Assert::IsTrue(b1);
 
@@ -2384,17 +2384,17 @@ namespace test_sn
 				Manager manager("Test Inherit Float", AssertErrorHandler);
 				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
-				Float::Class().IsA(Double::Class()).EvaluateAction();
+				Float::Class().IsA(Double::Class()).Evaluate().Do();
 				SN_DECLARE(x1);
 				(Float::Class().IsA(Double::Class()) == x1).Assert().Do();
-				x1.EvaluateAction();
+				x1.Evaluate().Do();
 				bool b1 = x1.GetBool();
 				Assert::IsTrue(b1);
 
-				Float::Class().IsA(LongDouble::Class()).EvaluateAction();
+				Float::Class().IsA(LongDouble::Class()).Evaluate().Do();
 				SN_DECLARE(x2);
 				(Float::Class().IsA(LongDouble::Class()) == x2).Assert().Do();
-				x2.EvaluateAction();
+				x2.Evaluate().Do();
 				bool b2 = x2.GetBool();
 				Assert::IsTrue(b2);
 
@@ -2409,10 +2409,10 @@ namespace test_sn
 				Manager manager("Test Inherit Double", AssertErrorHandler);
 				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
-				Double::Class().IsA(LongDouble::Class()).EvaluateAction();
+				Double::Class().IsA(LongDouble::Class()).Evaluate().Do();
 				SN_DECLARE(x1);
 				(Double::Class().IsA(LongDouble::Class()) == x1).Assert().Do();
-				x1.EvaluateAction();
+				x1.Evaluate().Do();
 				bool b1 = x1.GetBool();
 				Assert::IsTrue(b1);
 
@@ -2427,10 +2427,10 @@ namespace test_sn
 				Manager manager("Test Inherit Char", AssertErrorHandler);
 				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
-				Char::Class().IsA(String::Class()).EvaluateAction();
+				Char::Class().IsA(String::Class()).Evaluate().Do();
 				SN_DECLARE(x1);
 				(Char::Class().IsA(String::Class()) == x1).Assert().Do();
-				x1.EvaluateAction();
+				x1.Evaluate().Do();
 				bool b1 = x1.GetBool();
 				Assert::IsTrue(b1);
 
@@ -2445,10 +2445,10 @@ namespace test_sn
 				Manager manager("Test Inherit Char", AssertErrorHandler);
 				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
-				StringRef::Class().IsA(String::Class()).EvaluateAction();
+				StringRef::Class().IsA(String::Class()).Evaluate().Do();
 				SN_DECLARE(x1);
 				(StringRef::Class().IsA(String::Class()) == x1).Assert().Do();
-				x1.EvaluateAction();
+				x1.Evaluate().Do();
 				bool b1 = x1.GetBool();
 				Assert::IsTrue(b1);
 
@@ -2473,7 +2473,7 @@ namespace test_sn
 					A.IsA(B).PartialAssert().Do();
 					(F(B) == Long(10)).Assert().Do();
 					M(B).Assert().Do();
-					(F(A) == Long(10)).EvaluateAction();
+					(F(A) == Long(10)).Evaluate().Do();
 				}
 			}
 			Cleanup();
@@ -2493,11 +2493,11 @@ namespace test_sn
 
 				(M == Mapping()).Assert().Do();
 				(M[String("Name")] == String("Max")).Assert().Do();
-				(M[String("Name")] == String("Max")).EvaluateAction();
+				(M[String("Name")] == String("Max")).Evaluate().Do();
 				(M[String("Name")] == R).Assert().Do();
 				string R_text = R.GetString();
 				Assert::IsTrue(R_text == "Max");
-				(R == String("Max")).EvaluateAction();
+				(R == String("Max")).Evaluate().Do();
 			}
 			Cleanup();
 		}
@@ -2517,8 +2517,8 @@ namespace test_sn
 
 				(M == Mapping()).Assert().Do();
 				(M[String("Name") || String("Fullname")] == String("Max")).Assert().Do();
-				(M[String("Name")] == String("Max")).EvaluateAction();
-				(M[String("Fullname")] == String("Max")).EvaluateAction();
+				(M[String("Name")] == String("Max")).Evaluate().Do();
+				(M[String("Fullname")] == String("Max")).Evaluate().Do();
 			}
 			Cleanup();
 		}
@@ -2553,7 +2553,7 @@ namespace test_sn
 				string K_text = K.GetVariableValue().DisplaySN();
 				string E_text = E.GetVariableValue().DisplaySN();
 				Assert::IsTrue(S_text == "{String(\"Max\"), String(\"Roger\")}");
-				(S == E).EvaluateAction();
+				(S == E).Evaluate().Do();
 			}
 			Cleanup();
 		}
@@ -2587,10 +2587,10 @@ namespace test_sn
 				(age.CountAll() == countBoth).Assert().Do();
 				(age.Sum() == sum).Assert().Do();
 
-				(count43 == Long(3)).EvaluateAction();
-				(count55 == Long(2)).EvaluateAction();
-				(countBoth == count43 + count55).EvaluateAction();
-				(sum == Long(239)).EvaluateAction();
+				(count43 == Long(3)).Evaluate().Do();
+				(count55 == Long(2)).Evaluate().Do();
+				(countBoth == count43 + count55).Evaluate().Do();
+				(sum == Long(239)).Evaluate().Do();
 
 				string count43_text = count43.GetVariableValue().DisplaySN();
 				string count55_text = count55.GetVariableValue().DisplaySN();
@@ -2654,17 +2654,17 @@ namespace test_sn
 				(fib[Long(5)] == Long(8)).Assert().Do();
 				(fib[Long(6)] == Long(13)).Assert().Do();
 
-				(fib[Long(0)] == Long(1)).EvaluateAction();
-				(fib[Long(1)] == Long(1)).EvaluateAction();
-				(fib[Long(2)] == Long(2)).EvaluateAction();
-				(fib[Long(3)] == Long(3)).EvaluateAction();
-				(fib[Long(4)] == Long(5)).EvaluateAction();
-				(fib[Long(5)] == Long(8)).EvaluateAction();
-				(fib[Long(6)] == Long(13)).EvaluateAction();
+				(fib[Long(0)] == Long(1)).Evaluate().Do();
+				(fib[Long(1)] == Long(1)).Evaluate().Do();
+				(fib[Long(2)] == Long(2)).Evaluate().Do();
+				(fib[Long(3)] == Long(3)).Evaluate().Do();
+				(fib[Long(4)] == Long(5)).Evaluate().Do();
+				(fib[Long(5)] == Long(8)).Evaluate().Do();
+				(fib[Long(6)] == Long(13)).Evaluate().Do();
 
 				SN_DECLARE(Z);
 				(fib[Long(6)] == Z).Assert().Do();
-				(Z == Long(13)).EvaluateAction();
+				(Z == Long(13)).Evaluate().Do();
 				string Z_text = Z.GetVariableValue().DisplayValueSN();
 				Assert::IsTrue(Z_text == "Long(13)");
 
@@ -2672,7 +2672,7 @@ namespace test_sn
 
 				SN_DECLARE(Y);
 				(fib[Y] == Long(1)).Assert().Do();
-				(Y.BuildSet() == (Long(0) || Long(1)).BuildSet()).EvaluateAction();
+				(Y.BuildSet() == (Long(0) || Long(1)).BuildSet()).Evaluate().Do();
 
 				string Y_text = Y.BuildSet().DoEvaluate().DisplaySN();
 				Assert::IsTrue(Y_text == "{Long(0), Long(1)}");
@@ -2680,18 +2680,18 @@ namespace test_sn
 				SN_DECLARE(countAll);
 
 				(fib.CountAll() == countAll).Assert().Do();
-				(countAll == Long(7)).EvaluateAction();
+				(countAll == Long(7)).Evaluate().Do();
 
 				SN_DECLARE(countGreater2);
 				SN_DECLARE(X);
 
 				(fib.CountIf(Lambda(X, X > Long(2))) == countGreater2).Assert().Do();
-				(countGreater2 == Long(4)).EvaluateAction();
+				(countGreater2 == Long(4)).Evaluate().Do();
 
 				SN_DECLARE(sum);
 
 				(fib.Sum() == sum).Assert().Do();
-				(sum == Long(33)).EvaluateAction();
+				(sum == Long(33)).Evaluate().Do();
 			}
 			Cleanup();
 		}
@@ -2711,13 +2711,13 @@ namespace test_sn
 				
 				fib.Fix();
 
-				(fib(Long(0)) == Long(1)).EvaluateAction();
-				(fib(Long(1)) == Long(1)).EvaluateAction();
-				(fib(Long(2)) == Long(2)).EvaluateAction();
-				(fib(Long(3)) == Long(3)).EvaluateAction();
-				(fib(Long(4)) == Long(5)).EvaluateAction();
-				(fib(Long(5)) == Long(8)).EvaluateAction();
-				(fib(Long(6)) == Long(13)).EvaluateAction();
+				(fib(Long(0)) == Long(1)).Evaluate().Do();
+				(fib(Long(1)) == Long(1)).Evaluate().Do();
+				(fib(Long(2)) == Long(2)).Evaluate().Do();
+				(fib(Long(3)) == Long(3)).Evaluate().Do();
+				(fib(Long(4)) == Long(5)).Evaluate().Do();
+				(fib(Long(5)) == Long(8)).Evaluate().Do();
+				(fib(Long(6)) == Long(13)).Evaluate().Do();
 
 				(fib(Long(0)) == Long(1)).Assert().Do();
 				(fib(Long(1)) == Long(1)).Assert().Do();
@@ -2747,13 +2747,13 @@ namespace test_sn
 
 				fib.Fix();
 
-				(fib(Long(0)) == Long(1)).EvaluateAction();
-				(fib(Long(1)) == Long(1)).EvaluateAction();
-				(fib(Long(2)) == Long(2)).EvaluateAction();
-				(fib(Long(3)) == Long(3)).EvaluateAction();
-				(fib(Long(4)) == Long(5)).EvaluateAction();
-				(fib(Long(5)) == Long(8)).EvaluateAction();
-				(fib(Long(6)) == Long(13)).EvaluateAction();
+				(fib(Long(0)) == Long(1)).Evaluate().Do();
+				(fib(Long(1)) == Long(1)).Evaluate().Do();
+				(fib(Long(2)) == Long(2)).Evaluate().Do();
+				(fib(Long(3)) == Long(3)).Evaluate().Do();
+				(fib(Long(4)) == Long(5)).Evaluate().Do();
+				(fib(Long(5)) == Long(8)).Evaluate().Do();
+				(fib(Long(6)) == Long(13)).Evaluate().Do();
 
 				(fib(Long(0)) == Long(1)).Assert().Do();
 				(fib(Long(1)) == Long(1)).Assert().Do();
@@ -2784,7 +2784,7 @@ namespace test_sn
 				string sTypeChecker_after = typeChecker.DisplayValueSN();
 
 				// Polymorphic call.
-				(typeChecker(Short(1)) == String("short")).EvaluateAction();
+				(typeChecker(Short(1)) == String("short")).Evaluate().Do();
 
 				SN_DECLARE(A);
 
@@ -2816,8 +2816,8 @@ namespace test_sn
 				string sTypeChecker_after = typeChecker.DisplayValueSN();
 
 				// Polymorphic call.
-				(typeChecker(Short(1)) == String("short")).EvaluateAction();
-				(typeChecker(Long(1)) == String("long")).EvaluateAction();
+				(typeChecker(Short(1)) == String("short")).Evaluate().Do();
+				(typeChecker(Long(1)) == String("long")).Evaluate().Do();
 
 				(typeChecker(Short(1)) == String("short")).Assert().Do();
 				(typeChecker(Long(1)) == String("long")).Assert().Do();
@@ -2858,9 +2858,9 @@ namespace test_sn
 				string sTypeChecker_after = typeChecker.DisplayValueSN();
 
 				// Polymorphic call.
-				(typeChecker(Short(1)) == String("short")).EvaluateAction();
-				(typeChecker(Long(1)) == String("long")).EvaluateAction();
-				(typeChecker(LongLong(1)) == String("long long")).EvaluateAction();
+				(typeChecker(Short(1)) == String("short")).Evaluate().Do();
+				(typeChecker(Long(1)) == String("long")).Evaluate().Do();
+				(typeChecker(LongLong(1)) == String("long long")).Evaluate().Do();
 
 				(typeChecker(Short(1)) == String("short")).Assert().Do();
 				(typeChecker(Long(1)) == String("long")).Assert().Do();
@@ -2908,7 +2908,7 @@ namespace test_sn
 				(typeChecker(numbers1) == String("short")).Assert().Do();
 				string n1_text = numbers1.DoEvaluate().DisplayValueSN();
 				Assert::IsTrue(n1_text == "Short(1)");
-				(numbers1 == Short(1)).EvaluateAction();
+				(numbers1 == Short(1)).Evaluate().Do();
 			}
 			Cleanup();
 		}
@@ -2940,13 +2940,13 @@ namespace test_sn
 				(typeChecker(numbers1) == String("short")).Assert().Do();
 				string n1_text = numbers1.DoEvaluate().DisplayValueSN();
 				Assert::IsTrue(n1_text == "Short(1)");
-				(numbers1 == Short(1)).EvaluateAction();
+				(numbers1 == Short(1)).Evaluate().Do();
 
 				SN_DECLARE_VALUE(numbers2, Short(1) || Long(2));
 				(typeChecker(numbers2) == String("long")).Assert().Do();
 				string n2_text = numbers2.DoEvaluate().DisplayValueSN();
 				Assert::IsTrue(n2_text == "Long(2)");
-				(numbers2 == Long(2)).EvaluateAction();
+				(numbers2 == Long(2)).Evaluate().Do();
 			}
 			Cleanup();
 		}
@@ -2978,21 +2978,21 @@ namespace test_sn
 				(typeChecker(numbers1) == String("short")).Assert().Do();
 				string n1_text = numbers1.GetValue().DisplayValueSN();
 				Assert::IsTrue(n1_text == "Short(1)");
-				(numbers1 == Short(1)).EvaluateAction();
+				(numbers1 == Short(1)).Evaluate().Do();
 
 				SN_DECLARE(numbers2);
 				(numbers2 == (Short(1) || Long(2) || LongLong(3))).PartialAssert().Do();
 				(typeChecker(numbers2) == String("long")).Assert().Do();
 				string n2_text = numbers2.GetValue().DisplayValueSN();
 				Assert::IsTrue(n2_text == "Long(2)");
-				(numbers2 == Long(2)).EvaluateAction();
+				(numbers2 == Long(2)).Evaluate().Do();
 
 				SN_DECLARE(numbers3);
 				(numbers3 == (Short(1) || Long(2) || LongLong(3))).PartialAssert().Do();
 				(typeChecker(numbers3) == String("long long")).Assert().Do();
 				string n3_text = numbers3.GetValue().DisplayValueSN();
 				Assert::IsTrue(n3_text == "LongLong(3)");
-				(numbers3 == LongLong(3)).EvaluateAction();
+				(numbers3 == LongLong(3)).Evaluate().Do();
 			}
 			Cleanup();
 		}
