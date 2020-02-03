@@ -243,6 +243,7 @@
     <ClInclude Include="sni_doubletostring.h" />
     <ClInclude Include="sni_equals.h" />
     <ClInclude Include="sni_error.h" />
+    <ClInclude Include="sni_evaluate.h" />
     <ClInclude Include="sni_expression.h" />
     <ClInclude Include="sni_file.h" />
     <ClInclude Include="sni_frame.h" />
@@ -360,6 +361,7 @@
     <ClCompile Include="sni_doubletostring.cpp" />
     <ClCompile Include="sni_equals.cpp" />
     <ClCompile Include="sni_error.cpp" />
+    <ClCompile Include="sni_evaluate.cpp" />
     <ClCompile Include="sni_expression.cpp" />
     <ClCompile Include="sni_file.cpp" />
     <ClCompile Include="sni_frame.cpp" />

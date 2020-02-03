@@ -71,6 +71,7 @@
 // Commands
 #include "sni_assert.h"
 #include "sni_partialassert.h"
+#include "sni_evaluate.h"
 
 // Logic
 #include "sni_not.h"

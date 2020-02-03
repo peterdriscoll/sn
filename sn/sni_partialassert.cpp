@@ -68,17 +68,18 @@ namespace SNI
 
 	SN::SN_Expression SNI_PartialAssert::UnifyArray(SN::SN_Expression * p_ParamList)
 	{
-		SN::SN_Expression clone = p_ParamList[PU1_First].GetSNI_Expression()->Clone(this, NULL);
-		LOG(WriteLine(SN::DebugLevel, "PartialAssert " + clone.DisplayValueSN()));
+		LOG(WriteLine(SN::DebugLevel, "Partial assert " + p_ParamList[PU1_First].DisplayValueSN()));
+
+		SNI_Thread::GetThread()->UpdateIncrementId();
+
 		SNI_Thread::GetThread()->SetDebugId("partialassert");
 		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Partial assert", SN::CallId);
 
-		SN::SN_Error result = clone.DoPartialAssert();
-		SNI_Frame::Pop();
+		SN::SN_Error result = p_ParamList[PU1_First].DoPartialAssert();
 
 		SNI_Thread::GetThread()->SetDebugId("partialassert");
 		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Partial assert", SN::ReturnId);
 
-		return p_ParamList[PU1_Result].PartialAssertValue(result);
+		return p_ParamList[PU1_Result].AssertValue(result);
 	}
 }
