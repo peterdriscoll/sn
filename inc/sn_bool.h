@@ -25,6 +25,7 @@ namespace SN
 
 		SN_Expression Assert() const;
 		SN_Expression PartialAssert() const;
+		SN_Expression Evaluate() const;
 
 		SN_Expression operator!() const;
 		SN_Expression operator &&(const SN_Expression &p_Other) const;

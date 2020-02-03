@@ -164,7 +164,7 @@ namespace SNI
 		}
 		else
 		{	// The value is needed now.
-			e = m_FormalParameter->AssertValue(param.Evaluate());
+			e = m_FormalParameter->AssertValue(param.DoEvaluate());
 		}
 		LOG(WriteLine(SN::DebugLevel, DisplaySN0()));
 		if (e.IsError())
@@ -182,7 +182,7 @@ namespace SNI
 		{
 			SNI_Thread::GetThread()->SetDebugId(GetDebugId());
 			SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, GetTypeName() + ".Call before evaluate", SN::ParameterOneId);
-			result = m_Expression->Evaluate(p_MetaLevel);
+			result = m_Expression->DoEvaluate(p_MetaLevel);
 		}
 
 		SNI_Thread::GetThread()->SetDebugId(GetDebugId());
@@ -206,7 +206,7 @@ namespace SNI
 		return m_Expression->PartialEvaluate(p_MetaLevel);
 	}
 
-	SN::SN_Expression SNI_Lambda::Evaluate(long p_MetaLevel /* = 0 */) const
+	SN::SN_Expression SNI_Lambda::DoEvaluate(long p_MetaLevel /* = 0 */) const
 	{
 		return this;
 	}
@@ -232,7 +232,7 @@ namespace SNI
 		}
 		else
 		{	// The value is needed now.
-			e = m_FormalParameter->AssertValue(param.Evaluate());
+			e = m_FormalParameter->AssertValue(param.DoEvaluate());
 		}
 		if (e.IsError())
 		{

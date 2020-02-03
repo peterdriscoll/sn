@@ -65,6 +65,11 @@ namespace SN
 		return SN_Operators::PartialAssert(*this);
 	}
 
+	SN_Expression SN_Bool::Evaluate() const
+	{
+		return SN_Operators::Evaluate(*this);
+	}
+
 	SN_Expression SN_Bool::operator !() const
 	{
 		return SN_Operators::operator !(*this);

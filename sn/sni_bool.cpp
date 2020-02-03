@@ -153,11 +153,11 @@ namespace SNI
 	{
 		if (m_Expression)
 		{
-			return p_PositiveCase->Evaluate();
+			return p_PositiveCase->DoEvaluate();
 		}
 		else
 		{
-			return p_NegativeCase->Evaluate();
+			return p_NegativeCase->DoEvaluate();
 		}
 	}
 

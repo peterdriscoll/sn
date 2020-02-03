@@ -106,7 +106,7 @@ void TestValueSetOfStandardFunctions()
 
 	SN_DECLARE(x);
 	(x == f(long(8))(long(13))).AssertAction();
-	string x_string = x.BuildSet().Evaluate().DisplaySN();
+	string x_string = x.BuildSet().DoEvaluate().DisplaySN();
 	(x < long(30)).AssertAction();
 	string x_string2 = x.DisplaySN();
 	long x_num = Long(x).GetNumber();
@@ -134,8 +134,8 @@ void TestValueSetOfLambdaFunctions()
 	}
 	string s_plus = plus.DisplayValueSN();
 	string s_times = times.DisplayValueSN();
-	string s_plus_times = (plus || times).Evaluate().DisplaySN();
-	string s_plus_times2 = (plus || times).Evaluate().DisplaySN();
+	string s_plus_times = (plus || times).DoEvaluate().DisplaySN();
+	string s_plus_times2 = (plus || times).DoEvaluate().DisplaySN();
 
 	SN_DECLARE(f);
 	(f == (plus || times)).AssertAction();
@@ -174,7 +174,7 @@ void TestValueSetOfStringFunctions()
 	SN_DECLARE(x);
 	(String("{{expression}}") == f(x)).AssertAction();
 	string x_display = x.DisplaySN();
-	string x_string = x.BuildSet().Evaluate().DisplaySN();
+	string x_string = x.BuildSet().DoEvaluate().DisplaySN();
 	string x_compare_string = "{String(\"expression\"), String(\"{expression}\"), String(\"{{expression}}\")}";
 
 	ASSERTM(x_string == x_compare_string, "compare strings");
@@ -193,7 +193,7 @@ void TestPythagoras()
 {
 	SN_DECLARE(X);
 	(Double(245.67).Square() + X.Square() == Double(357.56).Square()).AssertAction();
-	string X_string = X.BuildSet().Evaluate().DisplaySN();
+	string X_string = X.BuildSet().DoEvaluate().DisplaySN();
 	ASSERTM(X_string == "{Double(259.798777), Double(-259.798777)}", "");
 }
 

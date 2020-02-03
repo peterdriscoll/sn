@@ -393,6 +393,11 @@ namespace SN
 		return SN_Operators::PartialAssert(*this);
 	}
 
+	SN_Expression SN_Expression::Evaluate() const
+	{
+		return SN_Operators::Evaluate(*this);
+	}
+
 	// Logic
 	SN_Expression SN_Expression::operator!() const
 	{

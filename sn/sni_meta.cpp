@@ -117,11 +117,11 @@ namespace SNI
 		return Class()->DoIsA(p_Parent);
 	}
 
-	SN::SN_Expression SNI_Meta::Evaluate(long p_MetaLevel /* = 0 */) const
+	SN::SN_Expression SNI_Meta::DoEvaluate(long p_MetaLevel /* = 0 */) const
 	{
 		long l_DeltaMetaLevel = m_DeltaMetaLevel;
 		long this_level = p_MetaLevel + l_DeltaMetaLevel;
-		SN::SN_Expression result = m_Expression->Evaluate(this_level);
+		SN::SN_Expression result = m_Expression->DoEvaluate(this_level);
 		if (l_DeltaMetaLevel != 0)
 		{
 			if ((p_MetaLevel < 0) && (l_DeltaMetaLevel > 0))

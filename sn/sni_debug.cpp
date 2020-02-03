@@ -81,11 +81,11 @@ namespace SNI
 		return LOG_RETURN(context, m_Expression->AddValue(p_Value, p_NumWorlds, p_World, p_WorldSet));
 	}
 
-	SN::SN_Expression SNI_Debug::Evaluate(long p_MetaLevel) const
+	SN::SN_Expression SNI_Debug::DoEvaluate(long p_MetaLevel) const
 	{
 		SN::LogContext context(DisplaySN0() + ".Evaluate ()", LOG_DEBUG_INDEX);
 		
-		return LOG_RETURN(context, m_Expression->Evaluate(p_MetaLevel));
+		return LOG_RETURN(context, m_Expression->DoEvaluate(p_MetaLevel));
 	}
 
 	SN::SN_Expression SNI_Debug::PartialEvaluate(long p_MetaLevel) const

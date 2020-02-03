@@ -141,7 +141,7 @@ namespace SNI
 		return value.AssertValue(this);
 	}
 
-	SN::SN_Expression SNI_Value::Evaluate(long /* p_MetaLevel = 0 */) const
+	SN::SN_Expression SNI_Value::DoEvaluate(long /* p_MetaLevel = 0 */) const
 	{
 		return this;
 	}

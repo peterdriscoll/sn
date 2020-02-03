@@ -464,7 +464,7 @@ namespace SNI
 		}
 	}
 
-	SN::SN_Expression SNI_Variable::Evaluate(long p_MetaLevel /* = 0 */) const
+	SN::SN_Expression SNI_Variable::DoEvaluate(long p_MetaLevel /* = 0 */) const
 	{
 		if (p_MetaLevel > 0)
 		{
@@ -475,7 +475,7 @@ namespace SNI
 		{
 			SNI_DelayedProcessor::GetProcessor()->Request(call);
 		}
-		return GetValue()->Evaluate(p_MetaLevel);
+		return GetValue()->DoEvaluate(p_MetaLevel);
 	}
 
 	SN::SN_Expression SNI_Variable::PartialEvaluate(long p_MetaLevel /* = 0 */) const

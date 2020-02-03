@@ -173,7 +173,7 @@ namespace SNI
 		long count = 0;
 		for (auto &pair : m_Map)
 		{
-			if (p_Value.IsNull() || countCondition(pair.second).Evaluate().GetBool())
+			if (p_Value.IsNull() || countCondition(pair.second).DoEvaluate().GetBool())
 			{
 				++count;
 			}

@@ -664,7 +664,7 @@ namespace SNI
 		return p_MaxCardinality;
 	}
 
-	SN::SN_Expression SNI_ValueSet::Evaluate(long /* p_MetaLevel /* = 0 */) const
+	SN::SN_Expression SNI_ValueSet::DoEvaluate(long /* p_MetaLevel /* = 0 */) const
 	{
 		return this;
 	}
@@ -900,7 +900,7 @@ namespace SNI
 			if (m_ValueList[i].GetValue().GetBool())
 			{   // Positive case
 
-				SN::SN_Expression l_PositiveExpression = p_PositiveCase->Evaluate();
+				SN::SN_Expression l_PositiveExpression = p_PositiveCase->DoEvaluate();
 
 				if (SN::Is<SNI_ValueSet *>(l_PositiveExpression))
 				{
@@ -929,7 +929,7 @@ namespace SNI
 			else
 			{   // Negative case.
 
-				SN::SN_Expression l_NegativeExpression = p_NegativeCase->Evaluate();
+				SN::SN_Expression l_NegativeExpression = p_NegativeCase->DoEvaluate();
 
 				if (SN::Is<SNI_ValueSet *>(l_NegativeExpression))
 				{

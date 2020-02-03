@@ -23,7 +23,7 @@ namespace SNI
 		virtual long GetPriority() const;
 
 		virtual bool Equivalent(SNI_Object * p_Other) const;
-		virtual SN::SN_Expression Evaluate(long p_MetaLevel = 0) const;
+		virtual SN::SN_Expression DoEvaluate(long p_MetaLevel = 0) const;
 
 		SN::SN_Expression Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const;

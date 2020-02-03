@@ -29,7 +29,7 @@ namespace SNI
 		string DisplayCpp() const;
 		string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		long GetPriority() const;
-		virtual SN::SN_Expression Evaluate(long p_MetaLevel = 0) const;
+		virtual SN::SN_Expression DoEvaluate(long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression PartialEvaluate(long p_MetaLevel = 0) const;
 
 		virtual SN::SN_Error AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result);

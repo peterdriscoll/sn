@@ -81,7 +81,7 @@ namespace SNI
 	}
 
 
-	SN::SN_Expression SNI_Set::Evaluate(long /* p_MetaLevel /* = 0 */) const
+	SN::SN_Expression SNI_Set::DoEvaluate(long /* p_MetaLevel /* = 0 */) const
 	{
 		return SN::SN_Expression(this);
 	}

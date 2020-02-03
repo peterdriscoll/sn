@@ -27,7 +27,7 @@ namespace SN
 	SN_Variable::SN_Variable(const SN_Expression &p_Value, bool)
 		: SN_Expression(new SNI::SNI_Variable())
 	{
-		GetSNI_Variable()->AssertValue(p_Value.Evaluate(0));
+		GetSNI_Variable()->AssertValue(p_Value.DoEvaluate(0));
 	}
 
 	SN_Variable::SN_Variable(const string &p_Name)
@@ -38,7 +38,7 @@ namespace SN
 	SN_Variable::SN_Variable(const string &p_Name, const SN_Expression &p_Value)
 		: SN_Expression(SNI_Frame::Top()->CreateVariable(p_Name))
 	{
-		GetSNI_Variable()->AssertValue(p_Value.Evaluate(0));
+		GetSNI_Variable()->AssertValue(p_Value.DoEvaluate(0));
 	}
 
 	SN_Variable::SN_Variable(const SN_Expression &p_Value)

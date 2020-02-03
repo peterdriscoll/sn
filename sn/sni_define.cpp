@@ -60,9 +60,9 @@ namespace SNI
 		return false;
 	}
 
-	SN::SN_Expression SNI_Define::Evaluate(long p_MetaLevel /* = 0 */) const
+	SN::SN_Expression SNI_Define::DoEvaluate(long p_MetaLevel /* = 0 */) const
 	{
-		return m_Variable->Evaluate(p_MetaLevel);
+		return m_Variable->DoEvaluate(p_MetaLevel);
 	}
 
 	SN::SN_Expression SNI_Define::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const

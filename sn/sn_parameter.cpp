@@ -38,6 +38,6 @@ namespace SN
 
 	void SN_Parameter::UpdateValue()
 	{
-		m_Value = m_Value.Evaluate();
+		m_Value = m_Value.DoEvaluate();
 	}
 }

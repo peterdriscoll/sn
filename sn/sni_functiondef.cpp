@@ -168,7 +168,7 @@ namespace SNI
 		return text;
 	}
 
-	SN::SN_Expression SNI_FunctionDef::Evaluate(long  /* = 0 */) const
+	SN::SN_Expression SNI_FunctionDef::DoEvaluate(long  /* = 0 */) const
 	{
 		return this;
 	}
@@ -202,7 +202,7 @@ namespace SNI
 				card = CardinalityOfCall(depth, inputList);
 				if (maxCard < card)
 				{
-					inputList[j] = p_ParamList[j].Evaluate();
+					inputList[j] = p_ParamList[j].DoEvaluate();
 				}
 				SNI_Thread::GetThread()->DebugCommand(SN::ParameterPoint, GetTypeName() + ".Call parameter:" + inputList[j].DisplayValueSN(), SN::ParameterOneId+j);
 			}

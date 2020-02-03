@@ -63,7 +63,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_Assert::CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel /* = 0 */) const
 	{
-		return p_ParamList[PU1_First].Evaluate();
+		return p_ParamList[PC1_First].DoEvaluate();
 	}
 
 	SN::SN_Expression SNI_Assert::UnifyArray(SN::SN_Expression * p_ParamList)

@@ -1113,7 +1113,7 @@ namespace test_sn
 				SN_DECLARE(y);
 				(String("dogcat") == x + y).Assert().Do();
 				(x == "dog").Assert().Do();
-				y.Evaluate().Equivalent(String("cat")));
+				y.DoEvaluate().Equivalent(String("cat")));
 				*/
 				SN_DECLARE(a);
 				SN_DECLARE(b);
@@ -1130,7 +1130,7 @@ namespace test_sn
 				string c_string = c.GetString();
 				Assert::IsTrue(c_string == "dog");
 
-				Assert::IsTrue(b.Evaluate().Equivalent(String("cat")));
+				Assert::IsTrue(b.DoEvaluate().Equivalent(String("cat")));
 				string b_string = b.GetString();
 				Assert::IsTrue(b_string == "cat");
 			}
@@ -1164,15 +1164,15 @@ namespace test_sn
 				SN_DECLARE(x);
 				(x == Long(3) || x == Long(4)).Assert().Do();
 				string x_string = x.DisplaySN();
-				string x_valueset = x.Evaluate().DisplaySN();
-				string x_buildset = x.BuildSet().Evaluate().DisplaySN();
-				string t_valueset = (Long(3) || Long(4)).Evaluate().DisplaySN();
-				string t_buildset = (Long(3) || Long(4)).BuildSet().Evaluate().DisplaySN();
+				string x_valueset = x.DoEvaluate().DisplaySN();
+				string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
+				string t_valueset = (Long(3) || Long(4)).DoEvaluate().DisplaySN();
+				string t_buildset = (Long(3) || Long(4)).BuildSet().DoEvaluate().DisplaySN();
 				SN_DECLARE(y);
 				(y == (Long(3) || Long(4))).Assert().Do();
 				string y_string = y.DisplaySN();
-				string y_valueset = y.Evaluate().DisplaySN();
-				string y_buildset = y.BuildSet().Evaluate().DisplaySN();
+				string y_valueset = y.DoEvaluate().DisplaySN();
+				string y_buildset = y.BuildSet().DoEvaluate().DisplaySN();
 
 				(x.BuildSet() == y.BuildSet()).EvaluateAction();
 				(x.BuildSet() == (Long(3) || Long(4)).BuildSet()).EvaluateAction();
@@ -1191,11 +1191,11 @@ namespace test_sn
 				SN_DECLARE(x);
 				(x == Long(3) || x == Long(4) || x == Long(5)).Assert().Do();
 				string x_string = x.DisplaySN();
-				string x_valueset = x.Evaluate().DisplaySN();
-				string x_buildset = x.BuildSet().Evaluate().DisplaySN();
+				string x_valueset = x.DoEvaluate().DisplaySN();
+				string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
 				x.LogDisplaySN();
-				x.Evaluate().LogDisplaySN();
-				x.BuildSet().Evaluate().LogDisplaySN();
+				x.DoEvaluate().LogDisplaySN();
+				x.BuildSet().DoEvaluate().LogDisplaySN();
 
 				(x.BuildSet() == (Long(3) || Long(4) || Long(5)).BuildSet()).EvaluateAction();
 				cout << x.DisplaySN();
@@ -1213,8 +1213,8 @@ namespace test_sn
 				SN_DECLARE(x);
 				(x == Long(3) || x == Long(4) || x == Long(5) || x == Long(6)).Assert().Do();
 				string x_string = x.DisplaySN();
-				string x_valueset = x.Evaluate().DisplaySN();
-				string x_buildset = x.BuildSet().Evaluate().DisplaySN();
+				string x_valueset = x.DoEvaluate().DisplaySN();
+				string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
 
 				(x.BuildSet() == (Long(3) || Long(4) || Long(5) || Long(6)).BuildSet()).EvaluateAction();
 				cout << x.DisplaySN();
@@ -1233,8 +1233,8 @@ namespace test_sn
 				SN_DECLARE(x);
 				(x == Long(3)+Long(3) || x == Long(4)+Long(4) || x == Long(5)+Long(5) || x == Long(6)+Long(6)).Assert().Do();
 				string x_string = x.DisplaySN();
-				string x_valueset = x.Evaluate().DisplaySN();
-				string x_buildset = x.BuildSet().Evaluate().DisplaySN();
+				string x_valueset = x.DoEvaluate().DisplaySN();
+				string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
 
 				(x.BuildSet() == (Long(3)+Long(3) || Long(4)+Long(4) || Long(5)+Long(5) || Long(6)+Long(6)).BuildSet()).EvaluateAction();
 				cout << x.DisplaySN();
@@ -1252,8 +1252,8 @@ namespace test_sn
 				SN_DECLARE(x);
 				(Long(3) + Long(3) == x || Long(4) + Long(4) == x || Long(5) + Long(5) == x || Long(6) + Long(6) == x).Assert().Do();
 				string x_string = x.DisplaySN();
-				string x_valueset = x.Evaluate().DisplaySN();
-				string x_buildset = x.BuildSet().Evaluate().DisplaySN();
+				string x_valueset = x.DoEvaluate().DisplaySN();
+				string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
 
 				(x.BuildSet() == (Long(3) + Long(3) || Long(4) + Long(4) || Long(5) + Long(5) || Long(6) + Long(6)).BuildSet()).EvaluateAction();
 				cout << x.DisplaySN();
@@ -1271,8 +1271,8 @@ namespace test_sn
 				SN_DECLARE(x);
 				(Long(6) == x + Long(3) || Long(8) == x + Long(4) || Long(10) == x + Long(5) || Long(12) == x + Long(6)).Assert().Do();
 				string x_string = x.DisplaySN();
-				string x_valueset = x.Evaluate().DisplaySN();
-				string x_buildset = x.BuildSet().Evaluate().DisplaySN();
+				string x_valueset = x.DoEvaluate().DisplaySN();
+				string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
 
 				(x.BuildSet() == (Long(3) || Long(4) || Long(5) || Long(6)).BuildSet()).EvaluateAction();
 				cout << x.DisplaySN();
@@ -1502,7 +1502,7 @@ namespace test_sn
 				SN_DECLARE(y1);
 
 				(ParseTerm("13+21")(x1)).Assert().Do();
-				(x1.Evaluate(-1) == y1).Assert().Do();
+				(x1.DoEvaluate(-1) == y1).Assert().Do();
 				(y1 == Long(34)).EvaluateAction();
 				long y_value = Long(y1).GetNumber();
 				Assert::IsTrue(y_value == 34);
@@ -1583,7 +1583,7 @@ namespace test_sn
 				SN_DECLARE(y1);
 
 				(ParseTerm("13+21")(x1)).Assert().Do();
-				(x1.Evaluate(-1) == y1).Assert().Do();
+				(x1.DoEvaluate(-1) == y1).Assert().Do();
 				(y1 == Long(34)).EvaluateAction();
 				long y_value = Long(y1).GetNumber();
 				Assert::IsTrue(y_value == 34);
@@ -1599,39 +1599,39 @@ namespace test_sn
 				SN_DECLARE_VALUE(dog, String("Vincent "));
 				SN_DECLARE_VALUE(cat, String("Emma "));
 
-				Assert::IsTrue(Meta(1, String("Vincent ") + String("Emma ")).Evaluate().Equivalent(Meta(1, Function(Function(Add, String("Vincent ")), String("Emma ")))));
-				Assert::IsTrue(Meta(1, dog + cat).Evaluate().Equivalent(Meta(1, Function(Function(Add, dog), cat))));
+				Assert::IsTrue(Meta(1, String("Vincent ") + String("Emma ")).DoEvaluate().Equivalent(Meta(1, Function(Function(Add, String("Vincent ")), String("Emma ")))));
+				Assert::IsTrue(Meta(1, dog + cat).DoEvaluate().Equivalent(Meta(1, Function(Function(Add, dog), cat))));
 
-				std::cout << std::endl << Meta(1, Meta(-1, dog) + Meta(-1, cat)).Evaluate().DisplaySN() << std::endl;
+				std::cout << std::endl << Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoEvaluate().DisplaySN() << std::endl;
 
-				Assert::IsTrue(Meta(1, Meta(-1, dog) + Meta(-1, cat)).Evaluate().Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
+				Assert::IsTrue(Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoEvaluate().Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
 
-				std::cout << std::endl << Meta(-1, Meta(1, Meta(-1, dog) + Meta(-1, cat)).Evaluate()).Evaluate().DisplaySN() << std::endl;
+				std::cout << std::endl << Meta(-1, Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoEvaluate()).DoEvaluate().DisplaySN() << std::endl;
 
-				Assert::IsTrue(Meta(-1, Meta(1, Meta(-1, dog) + Meta(-1, cat)).Evaluate()).Evaluate().Equivalent(String("Vincent Emma ")));
+				Assert::IsTrue(Meta(-1, Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoEvaluate()).DoEvaluate().Equivalent(String("Vincent Emma ")));
 
-				std::cout << std::endl << Meta(1, Meta(-1, dog)).Evaluate().DisplaySN() << std::endl;
+				std::cout << std::endl << Meta(1, Meta(-1, dog)).DoEvaluate().DisplaySN() << std::endl;
 
-				Assert::IsTrue(Meta(1, Meta(-1, dog)).Evaluate().Equivalent(Meta(1, dog.Evaluate())));
+				Assert::IsTrue(Meta(1, Meta(-1, dog)).DoEvaluate().Equivalent(Meta(1, dog.DoEvaluate())));
 
 				SN_DECLARE_VALUE(e, Meta(2, Meta(-1, dog) + Meta(-1, cat)));
 
-				std::cout << std::endl << e.Evaluate().DisplaySN() << std::endl;
+				std::cout << std::endl << e.DoEvaluate().DisplaySN() << std::endl;
 
-				Assert::IsTrue(e.Evaluate().Equivalent(Meta(2, Meta(-1, dog) + Meta(-1, cat))));
+				Assert::IsTrue(e.DoEvaluate().Equivalent(Meta(2, Meta(-1, dog) + Meta(-1, cat))));
 
-				std::cout << std::endl << Meta(-1, e).Evaluate().DisplaySN() << std::endl;
+				std::cout << std::endl << Meta(-1, e).DoEvaluate().DisplaySN() << std::endl;
 
 
-				Assert::IsTrue(Meta(-1, e).Evaluate().Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
-				Assert::IsTrue(e.Evaluate(-1).Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
+				Assert::IsTrue(Meta(-1, e).DoEvaluate().Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
+				Assert::IsTrue(e.DoEvaluate(-1).Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
 
-				std::cout << std::endl << Meta(-1, Meta(-1, e).Evaluate()).Evaluate().DisplaySN() << std::endl;
+				std::cout << std::endl << Meta(-1, Meta(-1, e).DoEvaluate()).DoEvaluate().DisplaySN() << std::endl;
 
-				Assert::IsTrue(Meta(-1, Meta(-1, e).Evaluate()).Evaluate().Equivalent(String("Vincent Emma ")));
-				Assert::IsTrue(e.Evaluate(-1).Evaluate(-1).Equivalent(String("Vincent Emma ")));
+				Assert::IsTrue(Meta(-1, Meta(-1, e).DoEvaluate()).DoEvaluate().Equivalent(String("Vincent Emma ")));
+				Assert::IsTrue(e.DoEvaluate(-1).DoEvaluate(-1).Equivalent(String("Vincent Emma ")));
 
-				Assert::IsTrue(Meta(1, Meta(-1, dog)).Evaluate().Equivalent(Meta(1, dog.Evaluate())));
+				Assert::IsTrue(Meta(1, Meta(-1, dog)).DoEvaluate().Equivalent(Meta(1, dog.DoEvaluate())));
 			}
 			Cleanup();
 		}
@@ -1736,38 +1736,38 @@ namespace test_sn
 
 				// || operator applied to values other than bool, creates a value set.
 				// ValueSet has Constructors for up to 5 parameters.  This will be mainly for testing. 
-				Assert::IsTrue((Long(5) || Long(7)).Evaluate().DoRemove(Long(5)).DoRemove(Long(7)).DoIsEmpty());
+				Assert::IsTrue((Long(5) || Long(7)).DoEvaluate().DoRemove(Long(5)).DoRemove(Long(7)).DoIsEmpty());
 
-				Assert::IsTrue((String("dog") || String("cat")).Evaluate().DoRemove(String("dog")).DoRemove(String("cat")).DoIsEmpty());
+				Assert::IsTrue((String("dog") || String("cat")).DoEvaluate().DoRemove(String("dog")).DoRemove(String("cat")).DoIsEmpty());
 
-				Assert::IsTrue((Char('d') || Char('c')).Evaluate().DoRemove(Char('d')).DoRemove(Char('c')).DoIsEmpty());
+				Assert::IsTrue((Char('d') || Char('c')).DoEvaluate().DoRemove(Char('d')).DoRemove(Char('c')).DoIsEmpty());
 
-				Assert::IsTrue((((String("catdograt") || String("pigdograt")) - (String("dograt") || String("rat")))).Evaluate().DoRemove(String("cat")).DoRemove(String("pig")).DoRemove(String("catdog")).DoRemove(String("pigdog")).DoIsEmpty());
+				Assert::IsTrue((((String("catdograt") || String("pigdograt")) - (String("dograt") || String("rat")))).DoEvaluate().DoRemove(String("cat")).DoRemove(String("pig")).DoRemove(String("catdog")).DoRemove(String("pigdog")).DoIsEmpty());
 
 
-				Assert::IsTrue((((String("cat") || String("dog")) + (String("food") || String("awesomefood")))).Evaluate().DoRemove(String("catfood")).DoRemove(String("catawesomefood")).DoRemove(String("dogfood")).DoRemove(String("dogawesomefood")).DoIsEmpty());
+				Assert::IsTrue((((String("cat") || String("dog")) + (String("food") || String("awesomefood")))).DoEvaluate().DoRemove(String("catfood")).DoRemove(String("catawesomefood")).DoRemove(String("dogfood")).DoRemove(String("dogawesomefood")).DoIsEmpty());
 
-				Assert::IsTrue((Double(5) || Double(7)).Evaluate().DoRemove(Double(5)).DoRemove(Double(7)).DoIsEmpty());
+				Assert::IsTrue((Double(5) || Double(7)).DoEvaluate().DoRemove(Double(5)).DoRemove(Double(7)).DoIsEmpty());
 
-				Assert::IsTrue((((Double(5) || Double(7)) + (Double(8) || Double(9)))).Evaluate().DoRemove(Double(13)).DoRemove(Double(14)).DoRemove(Double(15)).DoRemove(Double(16)).DoIsEmpty());
+				Assert::IsTrue((((Double(5) || Double(7)) + (Double(8) || Double(9)))).DoEvaluate().DoRemove(Double(13)).DoRemove(Double(14)).DoRemove(Double(15)).DoRemove(Double(16)).DoIsEmpty());
 				// The order does not matter
-				Assert::IsTrue((Long(-4) || Long(4)).Evaluate().DoRemove(Long(4)).DoRemove(Long(-4)).DoIsEmpty());
+				Assert::IsTrue((Long(-4) || Long(4)).DoEvaluate().DoRemove(Long(4)).DoRemove(Long(-4)).DoIsEmpty());
 
 				// Value sets behave like values.  an operator or function applied to value set, generates the cardesian product of the values, with the function applied.
-				Assert::IsTrue((((Long(5) || Long(7)) + (Long(8) || Long(9)))).Evaluate().DoRemove(Long(13)).DoRemove(Long(14)).DoRemove(Long(15)).DoRemove(Long(16)).DoIsEmpty());
+				Assert::IsTrue((((Long(5) || Long(7)) + (Long(8) || Long(9)))).DoEvaluate().DoRemove(Long(13)).DoRemove(Long(14)).DoRemove(Long(15)).DoRemove(Long(16)).DoIsEmpty());
 
 				//added for subtraction
-				Assert::IsTrue((((Long(9) || Long(11)) - (Long(3) || Long(4)))).Evaluate().DoRemove(Long(6)).DoRemove(Long(5)).DoRemove(Long(8)).DoRemove(Long(7)).DoIsEmpty());
+				Assert::IsTrue((((Long(9) || Long(11)) - (Long(3) || Long(4)))).DoEvaluate().DoRemove(Long(6)).DoRemove(Long(5)).DoRemove(Long(8)).DoRemove(Long(7)).DoIsEmpty());
 
-				Assert::IsTrue((((Long(1) || Long(2)) * (Long(3) || Long(4)))).Evaluate().DoRemove(Long(3)).DoRemove(Long(4)).DoRemove(Long(6)).DoRemove(Long(8)).DoIsEmpty());
+				Assert::IsTrue((((Long(1) || Long(2)) * (Long(3) || Long(4)))).DoEvaluate().DoRemove(Long(3)).DoRemove(Long(4)).DoRemove(Long(6)).DoRemove(Long(8)).DoIsEmpty());
 
-				Assert::IsTrue((((Long(5) || Long(10)) / (Long(1) || Long(5)))).Evaluate().DoRemove(Double(5)).DoRemove(Double(1)).DoRemove(Double(10)).DoRemove(Double(2)).DoIsEmpty());
+				Assert::IsTrue((((Long(5) || Long(10)) / (Long(1) || Long(5)))).DoEvaluate().DoRemove(Double(5)).DoRemove(Double(1)).DoRemove(Double(10)).DoRemove(Double(2)).DoIsEmpty());
 
 				// If the values are tagged with worlds from different world sets then all the values from the cardesian product are created. 
 				// first    2 || -2 = [2:A, -2:B]
 				// second   2 || -2 = [2:C, -2:D]
 				// first+second = [2+2:AC, 0:AD, 0:BC, -2:BD]
-				Assert::IsTrue((((Long(2) || Long(-2)) + (Long(2) || Long(-2)))).Evaluate().DoRemove(Long(4)).DoRemove(Long(0)).DoRemove(Long(-4)).DoIsEmpty());
+				Assert::IsTrue((((Long(2) || Long(-2)) + (Long(2) || Long(-2)))).DoEvaluate().DoRemove(Long(4)).DoRemove(Long(0)).DoRemove(Long(-4)).DoIsEmpty());
 
 				// If using the same value set twice then must use the same value each time.
 				// This is because the intersection of different worlds from the same value set is always empty.
@@ -1775,11 +1775,11 @@ namespace test_sn
 				//     2 || -2 = [2:A, -2:B]
 				// where A and B are worlds. Worlds are sets.
 				// A intersection B is empty.
-				SN_DECLARE_VALUE(two_or_minus_two, (Long(2) || Long(-2)).Evaluate());
+				SN_DECLARE_VALUE(two_or_minus_two, (Long(2) || Long(-2)).DoEvaluate());
 
-				Assert::IsTrue((two_or_minus_two + two_or_minus_two).Evaluate().DoRemove(Long(4)).DoRemove(Long(-4)).DoIsEmpty());
+				Assert::IsTrue((two_or_minus_two + two_or_minus_two).DoEvaluate().DoRemove(Long(4)).DoRemove(Long(-4)).DoIsEmpty());
 
-				Assert::IsTrue(((Long(2) || Long(-2)) + (Long(2) || Long(-2))).Evaluate().DoRemove(Long(4)).DoRemove(Long(0)).DoRemove(Long(-4)).DoIsEmpty());
+				Assert::IsTrue(((Long(2) || Long(-2)) + (Long(2) || Long(-2))).DoEvaluate().DoRemove(Long(4)).DoRemove(Long(0)).DoRemove(Long(-4)).DoIsEmpty());
 
 				(two_or_minus_two + two_or_minus_two).BuildSet().HasMember(Long(-4)).EvaluateAction();
 			}
@@ -1803,10 +1803,10 @@ namespace test_sn
 
 
 				// mixed value sets
-				Assert::IsTrue((String("dog") || Long(9)).Evaluate().DoRemove(String("dog")).DoRemove(Long(9)).DoIsEmpty());
+				Assert::IsTrue((String("dog") || Long(9)).DoEvaluate().DoRemove(String("dog")).DoRemove(Long(9)).DoIsEmpty());
 
 				//NESTED OR CASE
-				Assert::IsTrue(((String("dog") || Long(9)) || String("Cat")).Evaluate().DoRemove(String("dog")).DoRemove(Long(9)).DoRemove(String("Cat")).DoIsEmpty());
+				Assert::IsTrue(((String("dog") || Long(9)) || String("Cat")).DoEvaluate().DoRemove(String("dog")).DoRemove(Long(9)).DoRemove(String("Cat")).DoIsEmpty());
 			}
 			Cleanup();
 		}
@@ -1821,12 +1821,12 @@ namespace test_sn
 				(((Long(2) || Long(-2))*(Long(3) || Long(-3))).BuildSet() == ((Long(6) || Long(-6)).BuildSet())).EvaluateAction();
 
 				((Long(4).SquareRoot()).BuildSet() == (Long(2) || Long(-2)).BuildSet()).EvaluateAction();
-				string my_exp4 = (Long(4)).BuildSet().Evaluate().DisplaySN();
-				std::cout << std::endl << ((Long(4)).BuildSet()).Evaluate().DisplaySN() << std::endl;
-				Assert::IsTrue(((Long(4)).BuildSet()).Evaluate().DisplaySN() == "{Long(4)}");
+				string my_exp4 = (Long(4)).BuildSet().DoEvaluate().DisplaySN();
+				std::cout << std::endl << ((Long(4)).BuildSet()).DoEvaluate().DisplaySN() << std::endl;
+				Assert::IsTrue(((Long(4)).BuildSet()).DoEvaluate().DisplaySN() == "{Long(4)}");
 
-				string my_exp5 = ((Long(2) || Long(-2)) + (Long(2) || Long(-2))).Evaluate().DisplaySN();
-				Assert::IsTrue(((Long(2) || Long(-2)) + (Long(2) || Long(-2))).Evaluate().DoRemove(Long(4)).DoRemove(Long(0)).DoRemove(Long(-4)).DoIsEmpty());
+				string my_exp5 = ((Long(2) || Long(-2)) + (Long(2) || Long(-2))).DoEvaluate().DisplaySN();
+				Assert::IsTrue(((Long(2) || Long(-2)) + (Long(2) || Long(-2))).DoEvaluate().DoRemove(Long(4)).DoRemove(Long(0)).DoRemove(Long(-4)).DoIsEmpty());
 
 				SN_DECLARE_VALUE(x, Long(2) || Long(-2));
 
@@ -2013,8 +2013,8 @@ namespace test_sn
 				}
 				string s_plus = plus.DisplayValueSN();
 				string s_times = times.DisplayValueSN();
-				string s_plus_times = (plus || times).Evaluate().DisplaySN();
-				string s_plus_times2 = (plus || times).Evaluate().DisplaySN();
+				string s_plus_times = (plus || times).DoEvaluate().DisplaySN();
+				string s_plus_times2 = (plus || times).DoEvaluate().DisplaySN();
 
 				SN_DECLARE(f);
 				(f == (plus || times)).Assert().Do();
@@ -2042,7 +2042,7 @@ namespace test_sn
 
 				SN_DECLARE(x);
 				(x == f(long(8))(long(13))).Assert().Do();
-				string x_string = x.BuildSet().Evaluate().DisplaySN();
+				string x_string = x.BuildSet().DoEvaluate().DisplaySN();
 				Assert::IsTrue(x_string == "{Long(21), Long(104)}");
 				(x < long(30)).Assert().Do();
 				string x_string2 = x.DisplaySN();
@@ -2083,7 +2083,7 @@ namespace test_sn
 				SN_DECLARE(x);
 				(String("{{expression}}") == f(x)).Assert().Do();
 				string x_display = x.DisplaySN();
-				string x_string = x.BuildSet().Evaluate().DisplaySN();
+				string x_string = x.BuildSet().DoEvaluate().DisplaySN();
 				string x_compare_string = "{String(\"expression\"), String(\"{expression}\"), String(\"{{expression}}\")}";
 
 				Assert::IsTrue(x_string == x_compare_string);
@@ -2201,8 +2201,8 @@ namespace test_sn
 				string firstClause_string_vs = firstClause.DisplaySN();
 				string secondClause_string_vs = secondClause.DisplaySN();
 				
-				string firstClause_string = firstClause.BuildSet().Evaluate().DisplaySN();
-				string secondClause_string = secondClause.BuildSet().Evaluate().DisplaySN();
+				string firstClause_string = firstClause.BuildSet().DoEvaluate().DisplaySN();
+				string secondClause_string = secondClause.BuildSet().DoEvaluate().DisplaySN();
 				Assert::IsTrue(firstClause_string == "{String(\"I love dogs\"), String(\"I love dogs and cats\")}");
 				Assert::IsTrue(secondClause_string == "{String(\"cats and dogs love me.\"), String(\"dogs love me.\")}");
 				
@@ -2223,7 +2223,7 @@ namespace test_sn
 
 				SN_DECLARE(X);
 				(Double(245.67).Square() + X.Square() == Double(357.56).Square()).Assert().Do();
-				string X_string = X.BuildSet().Evaluate().DisplaySN();
+				string X_string = X.BuildSet().DoEvaluate().DisplaySN();
 				Assert::IsTrue(X_string == "{Double(259.798777), Double(-259.798777)}");
 			}
 			Cleanup();
@@ -2241,7 +2241,7 @@ namespace test_sn
 					Transaction transaction;
 					(X + Long(3) == Long(5)).Assert().Do();
 				}
-				string X_string = X.Evaluate().DisplayValueSN();
+				string X_string = X.DoEvaluate().DisplayValueSN();
 				Assert::IsTrue(X_string == "Long(2)");
 			}
 			Cleanup();
@@ -2674,7 +2674,7 @@ namespace test_sn
 				(fib[Y] == Long(1)).Assert().Do();
 				(Y.BuildSet() == (Long(0) || Long(1)).BuildSet()).EvaluateAction();
 
-				string Y_text = Y.BuildSet().Evaluate().DisplaySN();
+				string Y_text = Y.BuildSet().DoEvaluate().DisplaySN();
 				Assert::IsTrue(Y_text == "{Long(0), Long(1)}");
 
 				SN_DECLARE(countAll);
@@ -2903,10 +2903,10 @@ namespace test_sn
 
 				// Reverse Polymorphic call.
 				SN_DECLARE_VALUE(numbers1, Short(1) || Long(2));
-				string n1_text_before = numbers1.Evaluate().DisplayValueSN();
+				string n1_text_before = numbers1.DoEvaluate().DisplayValueSN();
 
 				(typeChecker(numbers1) == String("short")).Assert().Do();
-				string n1_text = numbers1.Evaluate().DisplayValueSN();
+				string n1_text = numbers1.DoEvaluate().DisplayValueSN();
 				Assert::IsTrue(n1_text == "Short(1)");
 				(numbers1 == Short(1)).EvaluateAction();
 			}
@@ -2936,15 +2936,15 @@ namespace test_sn
 				SN_DECLARE(numbers1);
 				(numbers1 == (Short(1) || Long(2))).PartialAssert().Do();
 
-				string n1_text_before = numbers1.Evaluate().DisplayValueSN();
+				string n1_text_before = numbers1.DoEvaluate().DisplayValueSN();
 				(typeChecker(numbers1) == String("short")).Assert().Do();
-				string n1_text = numbers1.Evaluate().DisplayValueSN();
+				string n1_text = numbers1.DoEvaluate().DisplayValueSN();
 				Assert::IsTrue(n1_text == "Short(1)");
 				(numbers1 == Short(1)).EvaluateAction();
 
 				SN_DECLARE_VALUE(numbers2, Short(1) || Long(2));
 				(typeChecker(numbers2) == String("long")).Assert().Do();
-				string n2_text = numbers2.Evaluate().DisplayValueSN();
+				string n2_text = numbers2.DoEvaluate().DisplayValueSN();
 				Assert::IsTrue(n2_text == "Long(2)");
 				(numbers2 == Long(2)).EvaluateAction();
 			}

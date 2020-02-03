@@ -90,7 +90,7 @@ namespace SNI
 	{
 		if (0 < p_MetaLevel)
 		{
-			return PrimaryFunctionExpression(p_ParamList[0].Evaluate(p_MetaLevel));
+			return PrimaryFunctionExpression(p_ParamList[0].DoEvaluate(p_MetaLevel));
 		}
 
 		return SNI_FunctionDef::CallArray(p_ParamList, p_MetaLevel);

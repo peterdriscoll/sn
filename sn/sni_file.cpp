@@ -58,13 +58,13 @@ namespace SNI
 
 	SN::SN_Expression SNI_File::UnifyArray(SN::SN_Expression * p_ParamList)
 	{
-		SN::SN_String name = p_ParamList[1].Evaluate();
+		SN::SN_String name = p_ParamList[1].DoEvaluate();
 		if (!name.IsNull())
 		{
 			SN::SN_Value file = name.GetSNI_String()->DoFile();
 			if (file.IsNull())
 			{
-				SN::SN_String contents = p_ParamList[0].Evaluate();
+				SN::SN_String contents = p_ParamList[0].DoEvaluate();
 				if (!contents.IsNull())
 				{
 					name.GetSNI_String()->DoWriteFile(contents);

@@ -152,7 +152,7 @@ namespace SNI
 		return 0;
 	}
 
-	SN::SN_Expression SNI_Function::Evaluate(long p_MetaLevel /* = 0 */) const
+	SN::SN_Expression SNI_Function::DoEvaluate(long p_MetaLevel /* = 0 */) const
 	{
 		SNI_Thread::GetThread()->SetDebugId(GetDebugId());
 		SN::SN_ExpressionList * l_ParameterList = new SN::SN_ExpressionList();

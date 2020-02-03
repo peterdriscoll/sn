@@ -141,6 +141,7 @@ namespace SN
 		//Commands
 		SN_Expression Assert() const;
 		SN_Expression PartialAssert() const;
+		SN_Expression Evaluate() const;
 
 		// Logic
 		SN_Expression operator!() const;

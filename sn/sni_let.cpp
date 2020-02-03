@@ -141,7 +141,7 @@ namespace SNI
 		{
 			return m_Expression->Call(p_ParameterList, p_MetaLevel);
 		}
-		return m_Expression->Evaluate(p_MetaLevel);
+		return m_Expression->DoEvaluate(p_MetaLevel);
 	}
 
 	SN::SN_Expression SNI_Let::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const

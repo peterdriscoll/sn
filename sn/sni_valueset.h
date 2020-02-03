@@ -79,7 +79,7 @@ namespace SNI
 
 		// Base    
 		virtual bool Equivalent(SNI_Object * p_Other) const;
-		virtual SN::SN_Expression Evaluate(long p_MetaLevel = 0) const;
+		virtual SN::SN_Expression DoEvaluate(long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression PartialEvaluate(long p_MetaLevel = 0) const;
 
 		// General

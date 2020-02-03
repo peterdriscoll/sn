@@ -16,17 +16,17 @@ namespace SNI
 
 	string SNI_PartialAssert::GetTypeName() const
 	{
-		return "Assert";
+		return "PartialAssert";
 	}
 
 	string SNI_PartialAssert::DisplayCpp() const
 	{
-		return "Assert";
+		return "PartialAssert";
 	}
 
 	string SNI_PartialAssert::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
-		return "Assert";
+		return "PartialAssert";
 	}
 
 	long SNI_PartialAssert::GetPriority() const
@@ -63,7 +63,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_PartialAssert::CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel /* = 0 */) const
 	{
-		return p_ParamList[PU1_First].Evaluate();
+		return p_ParamList[PU1_First].DoEvaluate();
 	}
 
 	SN::SN_Expression SNI_PartialAssert::UnifyArray(SN::SN_Expression * p_ParamList)

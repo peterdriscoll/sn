@@ -95,7 +95,7 @@ namespace SNI
 	{
 		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Call", SN::LeftId);
 
-		SN::SN_Value condition = p_ParamList[0].Evaluate(p_MetaLevel);
+		SN::SN_Value condition = p_ParamList[0].DoEvaluate(p_MetaLevel);
 		if (condition.IsNull())
 		{
 			return condition;

@@ -199,7 +199,7 @@ namespace SNI
 		long count = 0;
 		for (auto &item : m_Vector)
 		{
-			if (p_Value.IsNull() || countCondition(item).Evaluate().GetBool())
+			if (p_Value.IsNull() || countCondition(item).DoEvaluate().GetBool())
 			{
 				++count;
 			}

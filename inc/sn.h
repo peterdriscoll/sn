@@ -112,6 +112,7 @@ namespace skynet
 	// * Commands
 	extern SN_EXPORT SN::SN_FunctionDef Assert;
 	extern SN_EXPORT SN::SN_FunctionDef PartialAssert;
+	extern SN_EXPORT SN::SN_FunctionDef Evaluate;
 
 	// * Logic
 	extern SN_EXPORT SN::SN_FunctionDef Not;

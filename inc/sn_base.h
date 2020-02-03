@@ -199,9 +199,9 @@ namespace SN
 			return GetSNI_Base()->RightCardinality(p_MaxCardinality);
 		}
 
-		Exp Evaluate(long p_MetaLevel = 0) const
+		Exp DoEvaluate(long p_MetaLevel = 0) const
 		{
-			return GetSNI_Base()->Evaluate(p_MetaLevel);
+			return GetSNI_Base()->DoEvaluate(p_MetaLevel);
 		}
 
 		Exp Meta(long p_MetaLevel = 0) const

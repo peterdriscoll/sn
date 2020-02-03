@@ -67,7 +67,7 @@ namespace SNI
 			const string & source = GetSourceString();
 			ReplaceAll(source, "\"", "\\\"");
 			SN::SN_Expression end = GetEnd().GetVariableValue();
-			SN::SN_Long l_long = end.Evaluate();
+			SN::SN_Long l_long = end.DoEvaluate();
 			if (l_long.IsNull())
 			{
 				end = GetEnd();
@@ -117,8 +117,8 @@ namespace SNI
 
 	SN::SN_Error SNI_StringRef::ForEachCart(long p_Depth, SNI_Cart *p_Cart)
 	{
-		SN::SN_Expression start = GetStart().Evaluate();
-		SN::SN_Expression end = GetEnd().Evaluate();
+		SN::SN_Expression start = GetStart().DoEvaluate();
+		SN::SN_Expression end = GetEnd().DoEvaluate();
 		if (Cardinality() == 1)
 		{
 			return p_Cart->ProcessValue(p_Depth, this, NULL);
@@ -167,8 +167,8 @@ namespace SNI
 
 	SN::SN_Error SNI_StringRef::ForEach(std::function<SN::SN_Error(const SN::SN_Expression &p_Param, SNI_World *p_World)> p_Action)
 	{
-		SN::SN_Expression start = GetStart().Evaluate();
-		SN::SN_Expression end = GetEnd().Evaluate();
+		SN::SN_Expression start = GetStart().DoEvaluate();
+		SN::SN_Expression end = GetEnd().DoEvaluate();
 		if (Cardinality() == 1)
 		{
 			return p_Action(this, NULL);
@@ -235,8 +235,8 @@ namespace SNI
 
 	bool SNI_StringRef::IsNull() const
 	{
-		SN::SN_Value start_value = m_Start.Evaluate();
-		SN::SN_Value end_value = m_End.Evaluate();
+		SN::SN_Value start_value = m_Start.DoEvaluate();
+		SN::SN_Value end_value = m_End.DoEvaluate();
 		return start_value.IsNull() || end_value.IsNull();
 	}
 
@@ -247,21 +247,21 @@ namespace SNI
 
 	bool SNI_StringRef::IsKnownValue() const
 	{
-		SN::SN_Value start_value = m_Start.Evaluate();
-		SN::SN_Value end_value = m_End.Evaluate();
+		SN::SN_Value start_value = m_Start.DoEvaluate();
+		SN::SN_Value end_value = m_End.DoEvaluate();
 		return start_value.IsKnownValue() && end_value.IsKnownValue();
 	}
 
 
 	bool SNI_StringRef::IsLeftKnownValue() const
 	{
-		SN::SN_Value start_value = m_Start.Evaluate();
+		SN::SN_Value start_value = m_Start.DoEvaluate();
 		return start_value.IsKnownValue();
 	}
 
 	bool SNI_StringRef::IsRightKnownValue() const
 	{
-		SN::SN_Value end_value = m_End.Evaluate();
+		SN::SN_Value end_value = m_End.DoEvaluate();
 		return end_value.IsKnownValue();
 	}
 
@@ -299,7 +299,7 @@ namespace SNI
 
 	long SNI_StringRef::GetLeftMostPos() const
 	{
-		SN::SN_Long start = m_Start.Evaluate();
+		SN::SN_Long start = m_Start.DoEvaluate();
 		if (start.IsNullValue())
 		{
 			return m_Source.GetSNI_String()->GetLeftMostPos();
@@ -309,7 +309,7 @@ namespace SNI
 
 	long SNI_StringRef::GetRightMostPos() const
 	{
-		SN::SN_Long end = m_End.Evaluate();
+		SN::SN_Long end = m_End.DoEvaluate();
 		if (end.IsNullValue())
 		{
 			return m_Source.GetSNI_String()->GetRightMostPos();
@@ -329,13 +329,13 @@ namespace SNI
 
 	string SNI_StringRef::GetString() const
 	{
-		SN::SN_Value start = m_Start.Evaluate();
+		SN::SN_Value start = m_Start.DoEvaluate();
 		if (start.IsNullValue())
 		{
 			return "";
 		}
 		long start_pos = SN::SN_Long(start).GetNumber();
-		SN::SN_Value end = m_End.Evaluate();
+		SN::SN_Value end = m_End.DoEvaluate();
 		if (end.IsNullValue())
 		{
 			return "";
@@ -346,13 +346,13 @@ namespace SNI
 
 	size_t SNI_StringRef::Length() const
 	{
-		SN::SN_Value start = m_Start.Evaluate();
+		SN::SN_Value start = m_Start.DoEvaluate();
 		if (start.IsNullValue())
 		{
 			return 0;
 		}
 		long start_pos = SN::SN_Long(start).GetNumber();
-		SN::SN_Value end = m_End.Evaluate();
+		SN::SN_Value end = m_End.DoEvaluate();
 		if (end.IsNullValue())
 		{
 			return 0;
@@ -414,7 +414,7 @@ namespace SNI
 		{
 			long part_len = (long) part.length();
 
-			SN::SN_Value start = m_Start.Evaluate();
+			SN::SN_Value start = m_Start.DoEvaluate();
 			if (start.IsNull())
 			{
 				return false;
@@ -438,9 +438,9 @@ namespace SNI
 		return false;
 	}
 
-	SN::SN_Expression SNI_StringRef::Evaluate(long p_MetaLevel /* = 0 */) const
+	SN::SN_Expression SNI_StringRef::DoEvaluate(long p_MetaLevel /* = 0 */) const
 	{
-		SN::SN_Value start = m_Start.Evaluate(p_MetaLevel);
+		SN::SN_Value start = m_Start.DoEvaluate(p_MetaLevel);
 		if (start.IsNull())
 		{
 			return this;
@@ -452,7 +452,7 @@ namespace SNI
 
 		long start_pos = SN::SN_Long(start).GetNumber();
 
-		SN::SN_Value end = m_End.Evaluate(p_MetaLevel);
+		SN::SN_Value end = m_End.DoEvaluate(p_MetaLevel);
 		if (end.IsNull())
 		{
 			return this;
@@ -468,7 +468,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_StringRef::PartialEvaluate(long p_MetaLevel /* = 0 */) const
 	{
-		return Evaluate(p_MetaLevel);
+		return DoEvaluate(p_MetaLevel);
 	}
 
 	bool SNI_StringRef::Equivalent(SNI_Object * p_Other) const
@@ -520,10 +520,10 @@ namespace SNI
 					return SN::SN_StringRef(this, m_Start, other.GetEnd());
 				}
 			}
-			SN::SN_Value this_value = Evaluate(0);
+			SN::SN_Value this_value = DoEvaluate(0);
 			if (SN::Is<SNI_String *>(this_value))
 			{
-				SN::SN_Value other_value = p_Other->Evaluate(0);
+				SN::SN_Value other_value = p_Other->DoEvaluate(0);
 				if (SN::Is<SNI_String *>(other_value))
 				{
 					return this_value.GetSNI_Value()->DoConcat(other_value.GetSNI_Value());
@@ -532,7 +532,7 @@ namespace SNI
 		}
 		if (dynamic_cast<SNI_String *>(p_Other))
 		{
-			SN::SN_Value value = Evaluate(0);
+			SN::SN_Value value = DoEvaluate(0);
 			if (SN::Is<SNI_String *>(value))
 			{
 				return SN::SN_String(value.GetString() + p_Other->GetString());
@@ -540,7 +540,7 @@ namespace SNI
 		}
 		if (dynamic_cast<SNI_String *>(p_Other))
 		{
-			SN::SN_Value value = Evaluate(0);
+			SN::SN_Value value = DoEvaluate(0);
 			if (SN::Is<SNI_String *>(value))
 			{
 				SNI_Char * l_char = dynamic_cast<SNI_Char *>(p_Other);
@@ -553,7 +553,7 @@ namespace SNI
 
 	SN::SN_Value SNI_StringRef::DoSubtractLeft(SNI_Value * p_Part) const
 	{
-		SN::SN_Value part = p_Part->Evaluate();
+		SN::SN_Value part = p_Part->DoEvaluate();
 		if (part.IsNull())
 		{
 			return skynet::Null;
@@ -568,7 +568,7 @@ namespace SNI
 		{
 			return SN::SN_Error("StringRef.SubtractLeft: Expected a string to subtract: " + DisplayPmExpression(part));
 		}
-		SN::SN_Value start = m_Start.Evaluate();
+		SN::SN_Value start = m_Start.DoEvaluate();
 		if (!start.IsNull())
 		{
 			if (!SN::Is<SNI_Long *>(start))
@@ -584,7 +584,7 @@ namespace SNI
 				{
 					return SN::SN_Error("StringRef.SubtractLeft: End of string ref must be long: " + DisplaySN0());
 				}
-				SN::SN_Long end = m_End.Evaluate();
+				SN::SN_Long end = m_End.DoEvaluate();
 				if (end.IsNullValue())
 				{
 					return SN::SN_Error("StringRef.SubtractLeft: End is not known: " + DisplaySN0() + " < " + DisplayPmExpression(part));
@@ -636,7 +636,7 @@ namespace SNI
 
 	SN::SN_Value SNI_StringRef::DoSubtractRight(SNI_Value * p_Part) const
 	{
-		SN::SN_Value part = p_Part->Evaluate();
+		SN::SN_Value part = p_Part->DoEvaluate();
 		if (part.IsNull())
 		{
 			return skynet::Null;
@@ -663,7 +663,7 @@ namespace SNI
 		{
 			return SN::SN_Error("StringRef.SubtractLeft: Expected a string to subtract: " + DisplayPmExpression(part));
 		}
-		SN::SN_Value end = m_End.Evaluate();
+		SN::SN_Value end = m_End.DoEvaluate();
 		if (!end.IsNull())
 		{
 			if (!SN::Is<SNI_Long *>(end))
@@ -717,7 +717,7 @@ namespace SNI
 
 	SN::SN_Value SNI_StringRef::DoSubtractLeftChar() const
 	{
-		SN::SN_Value start = m_Start.Evaluate();
+		SN::SN_Value start = m_Start.DoEvaluate();
 		if (start.IsNull())
 		{
 			return skynet::Null;
@@ -751,7 +751,7 @@ namespace SNI
 			return SN::SN_Error("SubtractRightChar: End of string ref must be long: " + DisplaySN0());
 		}
 		long end_pos = SN::SN_Long(end).GetNumber();
-		SN::SN_Value start = m_Start.Evaluate();
+		SN::SN_Value start = m_Start.DoEvaluate();
 		if (SN::Is<SNI_Value *>(start))
 		{
 			if (start.IsNull())
@@ -773,7 +773,7 @@ namespace SNI
 
 	SN::SN_Value SNI_StringRef::DoSelectLeftChar() const
 	{
-		SN::SN_Value start = m_Start.Evaluate();
+		SN::SN_Value start = m_Start.DoEvaluate();
 		if (start.IsNull())
 		{
 			return skynet::Null;
@@ -809,7 +809,7 @@ namespace SNI
 			return SN::SN_Error("SelectRightChar: End of string ref must be long: " + DisplaySN0());
 		}
 		long end_pos = SN::SN_Long(end).GetNumber();
-		SN::SN_Value start = m_Start.Evaluate();
+		SN::SN_Value start = m_Start.DoEvaluate();
 		if (SN::Is<SNI_Value *>(start))
 		{
 			if (start.IsNull())
@@ -866,8 +866,8 @@ namespace SNI
 
 	SN::SN_Value SNI_StringRef::DoEquals(SNI_Value *p_Other) const
 	{
-		SN::SN_Value start = m_Start.Evaluate();
-		SN::SN_Value end = m_End.Evaluate();
+		SN::SN_Value start = m_Start.DoEvaluate();
+		SN::SN_Value end = m_End.DoEvaluate();
 		if (dynamic_cast<SNI_StringRef *>(p_Other))
 		{
 			if (!start.IsNullValue() && !end.IsNullValue())

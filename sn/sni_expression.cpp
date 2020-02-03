@@ -452,7 +452,7 @@ namespace SNI
 		return 0;
 	}
 
-	SN::SN_Expression SNI_Expression::Evaluate(long /* p_MetaLevel = 0 */) const
+	SN::SN_Expression SNI_Expression::DoEvaluate(long /* p_MetaLevel = 0 */) const
 	{
 		return skynet::Null;
 	}
@@ -668,7 +668,7 @@ namespace SNI
 		SNI_Thread::GetThread()->SetDebugId("evaluate");
 		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Evaluate", SN::CallId);
 
-		SN::SN_Expression result = clone.Evaluate();
+		SN::SN_Expression result = clone.DoEvaluate();
 		SNI_Frame::Pop();
 
 		HandleEvaluateAction(context, result, "Evaluate", p_ErrorHandler);

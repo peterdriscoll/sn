@@ -106,9 +106,9 @@ namespace SNI
 		return this;
 	}
 
-	SN::SN_Expression SNI_Local::Evaluate(long p_MetaLevel /* = 0 */) const
+	SN::SN_Expression SNI_Local::DoEvaluate(long p_MetaLevel /* = 0 */) const
 	{
-		return m_Expression->Evaluate(p_MetaLevel);
+		return m_Expression->DoEvaluate(p_MetaLevel);
 	}
 
 	SN::SN_Expression SNI_Local::PartialEvaluate(long p_MetaLevel /* = 0 */) const

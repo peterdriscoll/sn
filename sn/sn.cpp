@@ -87,6 +87,7 @@ namespace skynet
 
 	SN::SN_FunctionDef Assert(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Assert()));
 	SN::SN_FunctionDef PartialAssert(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_PartialAssert()));
+	SN::SN_FunctionDef Evaluate(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Evaluate()));
 
 	// Logic
 	SN::SN_FunctionDef Not(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Not()));
