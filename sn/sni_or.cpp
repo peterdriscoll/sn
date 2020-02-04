@@ -202,7 +202,7 @@ namespace SNI
 				return e2;
 			}
 		}
-		return SN::SN_Error(false, false, "Shouldn't be here");
+		return SN::SN_Error(false, false);
 	}
 	size_t SNI_Or::CardinalityOfCall(long p_Depth, SN::SN_Expression * p_ParamList) const
 	{

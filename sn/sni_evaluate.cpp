@@ -68,7 +68,7 @@ namespace SNI
 		SNI_Thread::GetThread()->SetDebugId("evaluate");
 		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "evaluate", SN::CallId);
 
-		SN::SN_Error result = clone.DoEvaluate();
+		SN::SN_Expression result = clone.DoEvaluate();
 		SNI_Frame::Pop();
 
 		SNI_Thread::GetThread()->SetDebugId("evaluate");

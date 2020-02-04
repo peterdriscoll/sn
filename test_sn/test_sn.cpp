@@ -15,18 +15,6 @@ bool runWebServer3 = false;
 
 string doc_root = "C:/Users/peter_driscoll/Documents/Source/Repos/skynet2/html";
 
-class TestEnd
-{
-public:
-	TestEnd() {};
-	~TestEnd()
-	{
-	};
-
-};
-
-//TestEnd TE;
-
 namespace test_sn
 {
 	void AssertErrorHandler(SN::SN_Error p_Result)
@@ -1538,11 +1526,23 @@ namespace test_sn
 
 				SN_DECLARE(Alpha);
 				SN_DECLARE(a);
-				(Define(Alpha)(a) == AlphaLower(a) || AlphaUpper(a)).PartialAssert().Do();
+				(Define(Alpha)(a) == (AlphaLower(a) || AlphaUpper(a))).PartialAssert().Do();
 
 				SN_DECLARE(AlphaNumeric);
 				SN_DECLARE(k);
-				(Define(AlphaNumeric)(k) == Alpha(k) || Digit(k)).PartialAssert().Do();
+				(Define(AlphaNumeric)(k) == (Alpha(k) || Digit(k))).PartialAssert().Do();
+
+				SN_DECLARE(a1);
+				(Alpha(String("g")) == a1).Assert().Do();
+				a1.Evaluate().Do();
+
+				SN_DECLARE(a2);
+				(Alpha(String("6")) == a2).Assert().Do();
+				(!a2).Evaluate().Do();
+
+				SN_DECLARE(a3);
+				(AlphaNumeric(String("6")) == a3).Assert().Do();
+				a3.Evaluate().Do();
 
 				SN_DECLARE(IsInteger);
 				SN_DECLARE(i);
@@ -1569,6 +1569,10 @@ namespace test_sn
 				SN_DECLARE(x3);
 				(ParseInteger("21")(x3)).Assert().Do();
 				(x3 == Long(21)).Evaluate().Do();
+
+				SN_DECLARE(n3);
+				(ParseName(String("Peter1"))(n3)).Assert().Do();
+				(n3 == String("Peter1")).Evaluate().Do();
 
 				SN_DECLARE(ParseTerm);
 				SN_DECLARE(t);

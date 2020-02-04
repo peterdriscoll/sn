@@ -574,24 +574,37 @@ namespace SNI
 
 	void SNI_Expression::DoWithHandler(OnErrorHandler * p_ErrorHandler)
 	{
-		SN::LogContext context("SNI_Expression::DoWithHandler()");
 		LOG(WriteExp(this));
 
 		SN::SN_Variable resultVariable;
 		SN::SN_Error e = AssertValue(resultVariable);
-		SN::SN_Error result = resultVariable.GetVariableValue();
-
-		HandleAssertAction(context, result, "Assert", p_ErrorHandler);
+		HandleAction(e, p_ErrorHandler);
+		HandleAction(resultVariable.GetVariableValue(), p_ErrorHandler);
 	}
 
-	void SNI_Expression::HandleAssertAction(SN::LogContext & p_Context, SN::SN_Error p_Result, string p_Text, OnErrorHandler * p_ErrorHandler)
+	void SNI_Expression::HandleAction(SN::SN_Expression p_Result, OnErrorHandler *p_ErrorHandler)
 	{
 		SNI_DelayedProcessor::GetProcessor()->Run();
-		if (p_Result.IsError())
+		SN::SN_Error e = p_Result;
+		SN::SN_Bool b = p_Result;
+		if (b.IsNull())
 		{
-			p_Result.AddNote(p_Context, this, p_Text);
-			p_Result.Log();
-			p_ErrorHandler(p_Result);
+			if (!e.GetSNI_Error())
+			{
+				e = SN::SN_Error("Expected bool or error, returned " + p_Result.DisplayValueSN() + " from " + SN::SN_Expression(this).DisplayValueSN());
+			}
+		}
+		else
+		{
+			if (!b.GetBool())
+			{
+				e = SN::SN_Error("Expected true, returned " + p_Result.DisplayValueSN() + " from " + SN::SN_Expression(this).DisplayValueSN());
+			}
+		}
+		if (e.IsError())
+		{
+			e.Log();
+			p_ErrorHandler(e);
 		}
 	}
 

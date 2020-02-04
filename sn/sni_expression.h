@@ -251,7 +251,7 @@ namespace SNI
 		string BracketStatic(long p_Priority, const string &p_Expression, SNI_DisplayOptions & p_DisplayOptions, const SNI_Expression *p_DebugSource) const;
 
 	private:
-		void HandleAssertAction(SN::LogContext & p_Context, SN::SN_Error p_Result, string p_Text, OnErrorHandler * p_ErrorHandler);
+		void HandleAction(SN::SN_Expression p_Result, OnErrorHandler * p_ErrorHandler);
 		static map<string, unsigned long> m_IdMap;
 
 	private:
