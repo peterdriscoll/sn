@@ -1560,7 +1560,7 @@ namespace test_sn
 				(Define(ParseInteger)(s)(i) == Let(IsInteger(s), s.StringToInt() == i)).PartialAssert().Do();
 
 				SN_DECLARE(ParseName);
-				(Define(ParseName)(s)(i) == Let(IsName(s), s.StringToInt() == i)).PartialAssert().Do();
+				(Define(ParseName)(s)(i) == Let(IsName(s), i == Meta(Variable(s)))).PartialAssert().Do();
 
 				SN_DECLARE(x2);
 				(ParseInteger("13")(x2)).Assert().Do();

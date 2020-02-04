@@ -194,11 +194,15 @@ namespace SNI
 
 	SN::SN_Expression SNI_Variable::GetVariableValue(bool p_IfComplete)
 	{
-		if (m_Value && m_Value->IsVariable())
+		if (m_Value)
 		{
-			SN::SN_Variable value = m_Value;
-			return value.GetVariableValue(p_IfComplete);
-		} 
+			if (m_Value->IsVariable())
+			{
+				SN::SN_Variable value = m_Value;
+				return value.GetVariableValue(p_IfComplete);
+			}
+			Simplify();
+		}
 		return m_Value;
 	}
 
