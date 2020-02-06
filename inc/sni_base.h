@@ -55,6 +55,7 @@ namespace SNI
 		// Logging
 		//---------------------------------------------------------------
 		virtual string GetTypeName() const = 0;
+		virtual string GetValueTypeName() const = 0;
 		virtual string DisplayCpp() const = 0;
 		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const = 0;
 		virtual string DisplayValueSN(long, SNI_DisplayOptions & p_DisplayOptions) const = 0;

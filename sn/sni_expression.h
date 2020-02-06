@@ -73,6 +73,7 @@ namespace SNI
 		// Logging
 		//---------------------------------------------------------------
 		virtual string GetTypeName() const;
+		virtual string GetValueTypeName() const;
 		virtual string GetReferredName() const;
 		virtual string DisplayCpp() const;
 		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;

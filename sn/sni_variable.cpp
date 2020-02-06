@@ -283,6 +283,15 @@ namespace SNI
 		return "Variable";
 	}
 
+	string SNI_Variable::GetValueTypeName() const
+	{
+		if (m_Value)
+		{
+			return m_Value->GetValueTypeName();
+		}
+		return GetTypeName();
+	}
+
 	string SNI_Variable::GetReferredName() const
 	{
 		return GetName();

@@ -53,6 +53,11 @@ namespace SNI
 		return "Expression";
 	}
 
+	string SNI_Expression::GetValueTypeName() const
+	{
+		return GetTypeName();
+	}
+
 	string SNI_Expression::GetReferredName() const
 	{
 		return GetTypeName();
@@ -399,7 +404,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_Expression::GetVariableValue(bool p_IfComplete)
 	{
-		return skynet::Null;
+		return this;
 	}
 
 	SN::SN_Expression SNI_Expression::GetSafeValue()

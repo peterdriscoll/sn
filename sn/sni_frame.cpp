@@ -188,12 +188,8 @@ namespace SNI
 		{
 			size_t fixedWidth = minFixedWidth;
 			string name = v->FrameName();
-			SN::SN_Expression e = v->GetValue(false);
-			string typeText;
-			if (v->IsKnownValue())
-			{
-				typeText = e.GetSNI_Expression()->GetTypeName();
-			}
+			SN::SN_Expression e = v->GetSafeValue();
+			string typeText = v->GetValueTypeName();
 			if (fixedWidth < name.size())
 			{
 				fixedWidth = name.size();
@@ -304,12 +300,7 @@ namespace SNI
 		p_Stream << "<tr>\n";
 		for (const SNI_Variable *v : m_VariableList)
 		{
-			SN::SN_Expression e = v->GetSafeValue();
-			string typeText;
-			if (e.GetSNI_Expression())
-			{
-				typeText = e.GetSNI_Expression()->GetTypeName();
-			}
+			string typeText = v->GetValueTypeName();
 			p_Stream << "<td>" << typeText << "</td>\n";
 		}
 		p_Stream << "</tr>\n";
@@ -352,7 +343,7 @@ namespace SNI
 		p_Stream << "\t\t\"function\" : \"" << ReplaceAll(function, "\"", "\\\"") << "\",\n";
 		p_Stream << "\t\t\"framepos\" : \"" << p_FrameStackPos << "\",\n";
 		p_Stream << "\t\t\"framenum\" : \"" << m_FrameNum << "\",\n";
-		p_Stream << "\t\t\"typename\" : \"" << m_Function.GetTypeName() << "\",\n";
+		p_Stream << "\t\t\"typename\" : \"" << m_Function.GetValueTypeName() << "\",\n";
 		p_Stream << "\t\t\"breakpoint\" : " << m_BreakPointJS << ",\n";
 		if (HasCode())
 		{
@@ -415,7 +406,7 @@ namespace SNI
 		{
 			p_Stream << "\t\t\t\t\"name\" : \"\"";
 		}
-		p_Stream << ",\n\t\t\t\t\"typetext\" : \"" << p_Variable.GetTypeName() << "\"\n";
+		p_Stream << ",\n\t\t\t\t\"typetext\" : \"" << p_Variable.GetValueTypeName() << "\"\n";
 		if (p_Value.GetSNI_Expression())
 		{
 			p_Stream << ",\t\t\t\t\"value\" : [";
@@ -426,7 +417,7 @@ namespace SNI
 				SNI::SNI_DisplayOptions plainText(doTextOnly);
 				string valueText;
 				string valueTextHTML;
-				if (!p_Expression.IsNull() || p_Expression.IsKnownTypeValue())
+				if (!p_Expression.IsNull())
 				{
 					valueText = p_Expression.DisplaySN(plainText) + string(p_World ? "::" + p_World->DisplaySN(plainText) : "");
 					valueTextHTML = p_Expression.DisplaySN(p_DisplayOptions) + string(p_World ? "::" + p_World->DisplaySN(p_DisplayOptions) : "");

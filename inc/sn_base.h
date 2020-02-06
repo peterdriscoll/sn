@@ -59,6 +59,15 @@ namespace SN
 			return "";
 		}
 
+		string GetValueTypeName() const
+		{
+			if (GetSNI_Base())
+			{
+				return GetSNI_Base()->GetValueTypeName();
+			}
+			return "";
+		}
+
 		string DisplayCpp() const
 		{
 			return GetSNI_Base()->DisplayCpp();

@@ -80,7 +80,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_BuildSet::UnifyArray(SN::SN_Expression * p_ParamList)
 	{
-		if (p_ParamList[PU1_First].IsNull())
+		if (!p_ParamList[PU1_First].IsKnownValue())
 		{
 			SNI_DelayedProcessor::GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), p_ParamList);
 			return skynet::OK;

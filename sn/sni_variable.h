@@ -27,6 +27,7 @@ namespace SNI
 		virtual ~SNI_Variable();
 
 		virtual string GetTypeName() const;
+		virtual string GetValueTypeName() const;
 		virtual string GetReferredName() const;
 		virtual string DisplayCpp() const;
 		virtual string DisplaySN(long p_Priority, SNI_DisplayOptions &p_DisplayOptions) const;
