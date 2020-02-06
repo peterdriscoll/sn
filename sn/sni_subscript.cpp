@@ -38,6 +38,15 @@ namespace SNI
 		return "Subscript";
 	}
 
+	string SNI_Subscript::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList, const SNI_Expression *p_DebugSource) const
+	{
+		if ((*p_ParameterList).size() != 2)
+		{
+			return SNI_FunctionDef::DisplayCall(priority, p_DisplayOptions, p_ParameterList, p_DebugSource);
+		}
+		return Bracket(priority, (*p_ParameterList)[1].DisplaySN(GetPriority(), p_DisplayOptions) + SetBreakPoint("[", p_DisplayOptions, p_DebugSource, SN::LeftId) + (*p_ParameterList)[0].DisplaySN(GetPriority(), p_DisplayOptions) + SetBreakPoint("]", p_DisplayOptions, p_DebugSource, SN::RightId), p_DisplayOptions, p_DebugSource);
+	}
+
 	long SNI_Subscript::GetPriority() const
 	{
 		return 0;

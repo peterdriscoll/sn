@@ -87,18 +87,19 @@ namespace SNI
 		//---------------------------------------------------------------
 		// Base
 		//---------------------------------------------------------------
+		virtual SN::SN_Error DoAssert() = 0;
+		virtual SN::SN_Error DoPartialAssert() = 0;
 		virtual SN::SN_Expression DoEvaluate(long p_MetaLevel = 0) const = 0;
 		virtual SN::SN_Expression DoPartialEvaluate(long p_MetaLevel = 0) const = 0;
+		virtual SN::SN_Expression DoMeta(long p_MetaLevel = 0) = 0;
+
 		virtual SN::SN_Expression Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const = 0;
 		virtual SN::SN_Expression PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const = 0;
 		virtual SN::SN_Expression Unify(SN::SN_ExpressionList * p_ParameterList) = 0;
 		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Expression, bool p_Define) = 0;
-		virtual SN::SN_Error DoAssert() = 0;
 		virtual SN::SN_Error AssertValue(const SN::SN_Expression &p_Value) = 0;
-		virtual SN::SN_Error DoPartialAssert() = 0;
 		virtual SN::SN_Error PartialAssertValue(const SN::SN_Expression &p_Expression, bool p_Define = false) = 0;
 
-		virtual SN::SN_Expression Meta(long p_MetaLevel = 0) = 0;
 		virtual void Fix(SN::SN_Expression p_Value) = 0;
 		virtual void Fix() = 0;
 		virtual bool Equivalent(SNI_Object * p_Other) const = 0;

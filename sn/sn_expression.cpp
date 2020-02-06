@@ -31,6 +31,7 @@
 #include "sni_null.h"
 #include "sni_class.h"
 #include "sni_instance.h"
+#include "sni_domain.h"
 
 #include "sn_pch.h"
 
@@ -158,6 +159,11 @@ namespace SN
 
 	SN_Expression::SN_Expression(const SN_Number &p_Number)
 		: SN_Base(dynamic_cast<SNI::SNI_Expression *>(p_Number.GetSNI_Number()))
+	{
+	}
+
+	SN_Expression::SN_Expression(const SN_Domain & p_Domain)
+		: SN_Base(dynamic_cast<SNI::SNI_Expression *>(p_Domain.GetSNI_Domain()))
 	{
 	}
 
@@ -519,6 +525,11 @@ namespace SN
 	}
 
 	SN_Expression SN_Expression::operator[](const SN_Expression &p_Index) const
+	{
+		return SN_Operators::SubscriptCall(*this, p_Index);
+	}
+
+	SN_Expression SN_Expression::CreateMetaVariable(const SN_Expression & p_Index)
 	{
 		return SN_Operators::SubscriptCall(*this, p_Index);
 	}

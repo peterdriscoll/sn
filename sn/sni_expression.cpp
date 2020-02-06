@@ -402,6 +402,11 @@ namespace SNI
 		return skynet::Null;
 	}
 
+	SN::SN_Expression SNI_Expression::GetSafeValue()
+	{
+		return this;
+	}
+
 	size_t SNI_Expression::Cardinality(size_t p_MaxCardinality) const
 	{
 		return p_MaxCardinality;
@@ -531,6 +536,12 @@ namespace SNI
 	SN::SN_Error SNI_Expression::DoPartialAssert()
 	{
 		return false;
+	}
+
+	SN::SN_Expression SNI_Expression::DoMeta(long p_MetaLevel)
+	{
+		SN::SN_Expression expression(this);
+		return SN::SN_Meta(p_MetaLevel, expression);
 	}
 
 	SN::SN_Error SNI_Expression::PartialAssertValue(const SN::SN_Expression &p_Expression, bool /* p_Define */)

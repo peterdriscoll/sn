@@ -44,6 +44,7 @@
 #include "sn_instance.h"
 #include "sn_derived.h"
 #include "sn_virtual.h"
+#include "sn_domain.h"
 
 // Declare a variable, and tell the variable its variable name.
 // When the program and the program model generated the variable will know its human readable name.
@@ -55,6 +56,9 @@
 
 #define SN_DECLARE_VALUE(n, r) \
     SN::SN_Variable n(string(#n), r)
+
+#define SN_DOMAIN(n) \
+    SN::SN_Domain n(string(#n))
 
 #define SN_DEFINE_REAL(C, B, TYPE, NAME)                       \
      SN_EXTERN template class SN_EXPORT SN::SN_Real<TYPE>;     \
@@ -85,6 +89,7 @@ namespace skynet
 	typedef SN::SN_Error Error;
 	typedef SN::SN_Derived Derived;
 	typedef SN::SN_Virtual Virtual;
+	typedef SN::SN_Domain Domain;
 
 	// Expressions
 	typedef SN::SN_Expression Expression;
@@ -114,6 +119,7 @@ namespace skynet
 	extern SN_EXPORT SN::SN_FunctionDef PartialAssert;
 	extern SN_EXPORT SN::SN_FunctionDef Evaluate;
 	extern SN_EXPORT SN::SN_FunctionDef PartialEvaluate;
+	extern SN_EXPORT SN::SN_FunctionDef MetaLevel;
 
 	// * Logic
 	extern SN_EXPORT SN::SN_FunctionDef Not;

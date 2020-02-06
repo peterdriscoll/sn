@@ -126,6 +126,7 @@ namespace SNI
 		virtual bool IsNullValue() const;
 		virtual bool IsReferableValue() const;
 		virtual SN::SN_Expression GetVariableValue(bool p_IfComplete);
+		virtual SN::SN_Expression GetSafeValue();
 		virtual bool IsError() const;
 		virtual bool IsFixed() const;
 		virtual bool AllValues() const;
@@ -150,17 +151,19 @@ namespace SNI
 		//---------------------------------------------------------------
 		// Base
 		//---------------------------------------------------------------
+		virtual SN::SN_Error DoAssert();
+		virtual SN::SN_Error DoPartialAssert();
 		virtual SN::SN_Expression DoEvaluate(long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression DoPartialEvaluate(long p_MetaLevel = 0) const;
+		virtual SN::SN_Expression DoMeta(long p_MetaLevel = 0);
+
 		virtual SN::SN_Expression Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression Unify(SN::SN_ExpressionList * p_ParameterList);
 		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Expression, bool p_Define = false);
-		virtual SN::SN_Error DoAssert();
 		virtual SN::SN_Error AssertValue(const SN::SN_Expression &p_Value);
 		virtual SN::SN_Error AssertIsA(const SN::SN_Expression &p_Value);
 		virtual SN::SN_Error SelfAssert();
-		virtual SN::SN_Error DoPartialAssert();
 		virtual SN::SN_Error PartialAssertValue(const SN::SN_Expression &p_Expression, bool p_Define = false);
 
 		virtual void Do();

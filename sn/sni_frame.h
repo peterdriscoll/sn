@@ -47,7 +47,7 @@ namespace SNI
 		void SetCloneFunction(const SNI_Expression *p_Function);
 
 		SNI_Variable *CreateTemporary();
-		SNI_Variable *CreateVariable(const string & p_Name);
+		SNI_Variable *CreateVariable(const string & p_Name, const string & p_DomainName);
 		SNI_Variable *CreateParameter(size_t p_ParamNum, SN::SN_Expression p_Value);
 		SNI_Variable *CreateParameterByName(const string &p_ParamName, SN::SN_Expression p_Value);
 

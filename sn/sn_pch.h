@@ -41,6 +41,7 @@
 #include "sni_instance.h"
 #include "sni_derived.h"
 #include "sni_virtual.h"
+#include "sni_domain.h"
 
 // Exception types
 #include "sni_null.h"
@@ -73,6 +74,7 @@
 #include "sni_partialassert.h"
 #include "sni_evaluate.h"
 #include "sni_partialevaluate.h"
+#include "sni_metalevel.h"
 
 // Logic
 #include "sni_not.h"

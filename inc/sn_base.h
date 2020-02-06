@@ -172,6 +172,12 @@ namespace SN
 			return SN_Operators::HasMember(p_Set, m_Expression);
 		}
 
+		Exp Meta(const Exp p_MetaLevel) const
+		{
+			return SN_Operators::Meta(m_Expression, p_MetaLevel);
+		}
+
+
 		size_t Cardinality(size_t p_MaxCardinality = CARDINALITY_MAX) const
 		{
 			if (!GetSNI_Base())
@@ -204,11 +210,6 @@ namespace SN
 			return GetSNI_Base()->DoEvaluate(p_MetaLevel);
 		}
 
-		Exp Meta(long p_MetaLevel = 0) const
-		{
-			return GetSNI_Base()->Meta(p_MetaLevel);
-		}
-
 		Exp DoPartialEvaluate(long p_MetaLevel = 0) const
 		{
 			return GetSNI_Base()->DoPartialEvaluate(p_MetaLevel);
@@ -227,6 +228,11 @@ namespace SN
 		Err DoPartialAssert()
 		{
 			return GetSNI_Base()->DoPartialAssert();
+		}
+
+		Err DoMeta(long p_MetaLevel = 0)
+		{
+			return GetSNI_Base()->DoMeta(p_MetaLevel);
 		}
 
 		Err PartialAssertValue(const Exp &p_Expression, bool p_Define = false)

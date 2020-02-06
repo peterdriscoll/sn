@@ -534,7 +534,7 @@ namespace SNI
 				}
 
 				SNI_DelayedCall *call = dynamic_cast<SNI_DelayedCall *>(m_Value);
-				m_Value = dynamic_cast<SNI_Expression *>(p_Value.GetSNI_Value());
+				m_Value = p_Value.GetSNI_Expression();
 				REQUESTPROMOTION(m_Value);
 				if (call)
 				{
@@ -692,5 +692,11 @@ namespace SNI
 			m_Value = value;
 			REQUESTPROMOTION(m_Value);
 		}
+	}
+
+	SN::SN_Expression SNI_Variable::DoMeta(long p_MetaLevel)
+	{
+		SN::SN_Expression expression(this);
+		return SN::SN_Meta(p_MetaLevel, expression);
 	}
 }

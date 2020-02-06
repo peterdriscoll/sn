@@ -243,13 +243,17 @@ namespace SNI
 		{
 			SNI_Thread::GetThread()->SetDebugId(GetDebugId());
 			SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, GetTypeName() + ".Unify before unify", SN::ParameterOneId);
-			return m_Expression->Unify(p_ParameterList);
+			e = m_Expression->Unify(p_ParameterList);
 		}
 		else
 		{
 			SNI_Thread::GetThread()->SetDebugId(GetDebugId());
 			SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, GetTypeName() + ".Unify before assert", SN::ParameterOneId);
-			return m_Expression->AssertValue(p_ParameterList->back());
+			e = m_Expression->AssertValue(p_ParameterList->back());
+		}
+		if (e.IsError())
+		{
+			// e = param.AssertValue(m_FormalParameter);
 		}
 
 		SNI_Thread::GetThread()->SetDebugId(GetDebugId());

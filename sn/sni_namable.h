@@ -19,8 +19,12 @@ namespace SNI
 		string GetName() const;
 		void SetName(const string &p_Name);
 
+		string GetDomainName() const;
+		void SetDomainName(const string &p_DomainName);
+
 	private:
 		string m_Name;
+		string m_DomainName;
 	};
 }
 

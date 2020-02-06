@@ -53,6 +53,7 @@ namespace SN
 	class SN_Vector;
 	class SN_Derived;
 	class SN_Virtual;
+	class SN_Domain;
 
 	class SN_Context
 	{
@@ -98,6 +99,7 @@ namespace SN
 		SN_Expression(const SN_Vector &p_Vector);
 		SN_Expression(const SN_Derived &p_Derived);
 		SN_Expression(const SN_Virtual &p_Virtual);
+		SN_Expression(const SN_Domain &p_Domain);
 
 		SN_APPLY_TYPES(SN_Expression, DUMMY, SN_CONSTRUCTOR)
 
@@ -174,6 +176,7 @@ namespace SN
 		SN_Expression operator()(const SN_Expression &p_Parameter) const;
 		SN_Expression operator()(const SN_Expression &p_Parameter, const SN_Expression &p_Condition) const;
 		SN_Expression operator[](const SN_Expression &p_Index) const;
+		SN_Expression CreateMetaVariable(const SN_Expression &p_Index);
 		SN_Expression ReverseSubscript(const SN_Expression & p_Index) const;
 		SN_Expression CountIf(const SN_Expression & p_Lambda) const;
 		SN_Expression CountAll() const;

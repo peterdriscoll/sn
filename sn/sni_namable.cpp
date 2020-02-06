@@ -21,4 +21,14 @@ namespace SNI
 	{
 		m_Name = p_Name;
 	}
+
+	string SNI_Namable::GetDomainName() const
+	{
+		return m_DomainName;
+	}
+
+	void SNI_Namable::SetDomainName(const string &p_DomainName)
+	{
+		m_DomainName = p_DomainName;
+	}
 }

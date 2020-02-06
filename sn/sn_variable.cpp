@@ -30,13 +30,13 @@ namespace SN
 		GetSNI_Variable()->AssertValue(p_Value.DoEvaluate(0));
 	}
 
-	SN_Variable::SN_Variable(const string &p_Name)
-		: SN_Expression(SNI_Frame::Top()->CreateVariable(p_Name))
+	SN_Variable::SN_Variable(const string &p_Name, const string &p_DomainName)
+		: SN_Expression(SNI_Frame::Top()->CreateVariable(p_Name, p_DomainName))
 	{
 	}
 
 	SN_Variable::SN_Variable(const string &p_Name, const SN_Expression &p_Value)
-		: SN_Expression(SNI_Frame::Top()->CreateVariable(p_Name))
+		: SN_Expression(SNI_Frame::Top()->CreateVariable(p_Name, ""))
 	{
 		GetSNI_Variable()->AssertValue(p_Value.DoEvaluate(0));
 	}

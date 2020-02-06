@@ -458,10 +458,11 @@ namespace SNI
 		return result;
 	}
 
-	SNI_Variable * SNI_Frame::CreateVariable(const string &p_Name)
+	SNI_Variable * SNI_Frame::CreateVariable(const string &p_Name, const string & p_DomainName)
 	{
 		SNI_Variable * result = new SNI_Variable();
 		result->SetName(p_Name);
+		result->SetDomainName(p_DomainName);
 		SNI_Thread::GetThread()->Lock();
 		m_VariableList.push_back(result);
 		SNI_Thread::GetThread()->Unlock();

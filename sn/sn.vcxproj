@@ -177,6 +177,7 @@
     <ClInclude Include="..\inc\sn_debug.h" />
     <ClInclude Include="..\inc\sn_define.h" />
     <ClInclude Include="..\inc\sn_derived.h" />
+    <ClInclude Include="..\inc\sn_domain.h" />
     <ClInclude Include="..\inc\sn_error.h" />
     <ClInclude Include="..\inc\sn_expression.h" />
     <ClInclude Include="..\inc\sn_function.h" />
@@ -240,6 +241,7 @@
     <ClInclude Include="sni_derived.h" />
     <ClInclude Include="sni_displayoptions.h" />
     <ClInclude Include="sni_divide.h" />
+    <ClInclude Include="sni_domain.h" />
     <ClInclude Include="sni_doubletostring.h" />
     <ClInclude Include="sni_equals.h" />
     <ClInclude Include="sni_error.h" />
@@ -260,6 +262,7 @@
     <ClInclude Include="sni_log.h" />
     <ClInclude Include="sni_logbuffer.h" />
     <ClInclude Include="sni_mapping.h" />
+    <ClInclude Include="sni_metalevel.h" />
     <ClInclude Include="sni_partialassert.h" />
     <ClInclude Include="sni_partialevaluate.h" />
     <ClInclude Include="sni_revand.h" />
@@ -359,6 +362,7 @@
     <ClCompile Include="sni_derived.cpp" />
     <ClCompile Include="sni_displayoptions.cpp" />
     <ClCompile Include="sni_divide.cpp" />
+    <ClCompile Include="sni_domain.cpp" />
     <ClCompile Include="sni_doubletostring.cpp" />
     <ClCompile Include="sni_equals.cpp" />
     <ClCompile Include="sni_error.cpp" />
@@ -379,6 +383,7 @@
     <ClCompile Include="sni_log.cpp" />
     <ClCompile Include="sni_logbuffer.cpp" />
     <ClCompile Include="sni_mapping.cpp" />
+    <ClCompile Include="sni_metalevel.cpp" />
     <ClCompile Include="sni_partialassert.cpp" />
     <ClCompile Include="sni_partialevaluate.cpp" />
     <ClCompile Include="sni_revand.cpp" />
@@ -444,6 +449,7 @@
     <ClCompile Include="sn_debug.cpp" />
     <ClCompile Include="sn_define.cpp" />
     <ClCompile Include="sn_derived.cpp" />
+    <ClCompile Include="sn_domain.cpp" />
     <ClCompile Include="sn_error.cpp" />
     <ClCompile Include="sn_expression.cpp" />
     <ClCompile Include="sn_function.cpp" />

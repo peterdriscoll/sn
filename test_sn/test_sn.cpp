@@ -1499,7 +1499,6 @@ namespace test_sn
 
 		TEST_METHOD(TestParseName)
 		{
-			return;
 			Initialize();
 			{
 				Manager manager("Test Parse Name", AssertErrorHandler);
@@ -1548,6 +1547,10 @@ namespace test_sn
 				SN_DECLARE(i);
 				(Define(IsInteger)(i) == (Digit(i.SelectLeftChar()) && !(Digit(i.SubtractLeftChar().LookaheadLeft()))).If(i == i.SelectLeftChar(), IsInteger(i.SubtractLeftChar()))).PartialAssert().Do();
 
+				SN_DECLARE(z1);
+				(IsInteger(String("456666")) == z1).Assert().Do();
+				(z1).Evaluate().Do();
+
 				SN_DECLARE(IsName);
 				SN_DECLARE(IsNameContinuation);
 				SN_DECLARE(n);
@@ -1555,42 +1558,32 @@ namespace test_sn
 
 				(Define(IsNameContinuation)(i) == (AlphaNumeric(i.SelectLeftChar()) && !(AlphaNumeric(i.SubtractLeftChar().LookaheadLeft()))).If(i == i.SelectLeftChar(), IsNameContinuation(i.SubtractLeftChar()))).PartialAssert().Do();
 
+				SN_DECLARE(z2);
+				(IsName(String("Peter1")) == z2).Assert().Do();
+				(z2).Evaluate().Do();
+
 				SN_DECLARE(ParseInteger);
 				SN_DECLARE(s);
 				(Define(ParseInteger)(s)(i) == Let(IsInteger(s), s.StringToInt() == i)).PartialAssert().Do();
 
 				SN_DECLARE(ParseName);
-				(Define(ParseName)(s)(i) == Let(IsName(s), i == Meta(Variable(s)))).PartialAssert().Do();
-
-				SN_DECLARE(x2);
-				(ParseInteger("13")(x2)).Assert().Do();
-				(x2 == Long(13)).Evaluate().Do();
+				(Define(ParseName)(d)(s)(i) == Let(IsName(s), i == d.CreateMetaVariable(s))).PartialAssert().Do();
 
 				SN_DECLARE(x3);
 				(ParseInteger("21")(x3)).Assert().Do();
 				(x3 == Long(21)).Evaluate().Do();
 
-				SN_DECLARE(n3);
-				(ParseName(String("Peter1"))(n3)).Assert().Do();
-				(n3 == String("Peter1")).Evaluate().Do();
+				SN_DOMAIN(MyDomain);
+				SN_DECLARE(i3);
+				(ParseName(MyDomain)(String("Peter1"))(i3)).Assert().Do();
 
-				SN_DECLARE(ParseTerm);
-				SN_DECLARE(t);
-				SN_DECLARE(t1);
-				SN_DECLARE(t2);
-				SN_DECLARE(s1);
-				SN_DECLARE(s2);
+				SN_DECLARE(i4);
+				(i4 == Meta(1, MyDomain["Peter1"])).Assert().Do();
+				(i3 == i4).Evaluate().Do();
 
-				(Define(ParseTerm)(s)(t) == Local(t1, Local(t2, Local(s1, Local(s2, Local(t, Let(s == s1 + String("+") + s2, Let(ParseInteger(s1)(t1), Let(ParseInteger(s2)(t2), t == Meta(1, Meta(-1, t1) + Meta(-1, t2))))))))))).PartialAssert().Do();
-
-				SN_DECLARE(x1);
-				SN_DECLARE(y1);
-
-				(ParseTerm("13+21")(x1)).Assert().Do();
-				(x1.DoEvaluate(-1) == y1).Assert().Do();
-				(y1 == Long(34)).Evaluate().Do();
-				long y_value = Long(y1).GetNumber();
-				Assert::IsTrue(y_value == 34);
+				string i3_string = i3.DisplayValueSN();
+				string i4_string = i4.DisplayValueSN();
+				Assert::IsTrue(i3_string == i4_string);
 			}
 		}
 
