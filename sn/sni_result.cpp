@@ -1,6 +1,9 @@
 #include "sni_result.h"
 
+#ifdef USE_LOGGING
 #include "logcontext.h"
+#endif
+
 #include "sni_delayedprocessor.h"
 #include "sni_world.h"
 #include "sni_error.h"

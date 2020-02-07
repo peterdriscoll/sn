@@ -17,8 +17,9 @@ namespace SNI
 {
 	class SNI_Expression;
 	class SNI_Error;
+	class SNI_Variable;
 	class SNI_Value;
-    class SNI_ValueSet;
+	class SNI_ValueSet;
 	class SNI_World;
 	class SNI_WorldSet;
 	class SNI_FunctionDef;

@@ -1,6 +1,9 @@
 #include "sni_helpers.h"
 
+#ifdef USE_LOGGING
 #include "logcontext.h"
+#endif
+
 #include "sn.h"
 
 #include "sni_null.h"
@@ -17,7 +20,7 @@ namespace SNI
 
 	/*static*/ SN::SN_Error SNI_Helpers::PartialAssertValue(SN::SN_Expression p_Left, SN::SN_Expression p_Right)
 	{
-		SN::LogContext context("SNI::PartialAssertValue ( " + SN::SN_Expression(p_Left).DisplaySN() + ", " + SN::SN_Expression(p_Right).DisplaySN() + " )");
+		LOGGING(SN::LogContext context("SNI::PartialAssertValue ( " + SN::SN_Expression(p_Left).DisplaySN() + ", " + SN::SN_Expression(p_Right).DisplaySN() + " )"));
 
 		bool ok = true;
 		if (SN::Is<SNI_Expression *>(p_Left))

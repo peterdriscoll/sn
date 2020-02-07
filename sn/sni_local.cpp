@@ -1,6 +1,9 @@
 #include "sni_local.h"
 
+#ifdef USE_LOGGING
 #include "logcontext.h"
+#endif
+
 #include "sn_value.h"
 #include "sn_variable.h"
 #include "sn_error.h"
@@ -149,29 +152,29 @@ namespace SNI
 
 	SN::SN_Expression SNI_Local::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Local::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Local::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
-		return m_Expression->Call(p_ParameterList, p_MetaLevel);
+		return LOG_RETURN(context, m_Expression->Call(p_ParameterList, p_MetaLevel));
 	}
 
 	SN::SN_Expression SNI_Local::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel  /* = 0 */) const
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Local::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Local::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
-		return m_Expression->PartialCall(p_ParameterList, p_MetaLevel);
+		return LOG_RETURN(context, m_Expression->PartialCall(p_ParameterList, p_MetaLevel));
 	}
 
 	SN::SN_Expression SNI_Local::Unify(SN::SN_ExpressionList * p_ParameterList)
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Local::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Local::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
-		return m_Expression->AssertValue((*p_ParameterList)[0]);
+		return LOG_RETURN(context, m_Expression->AssertValue((*p_ParameterList)[0]));
 	}
 
 	SN::SN_Error SNI_Local::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Local::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Local::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )"));
 
-		return m_Expression->PartialUnify(p_ParameterList, p_Result);
+		return LOG_RETURN(context, m_Expression->PartialUnify(p_ParameterList, p_Result));
 	}
 }

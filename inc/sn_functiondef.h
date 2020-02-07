@@ -28,7 +28,6 @@ namespace SN
 	class SN_EXPORT SN_FunctionDef
 	{
 	public:
-		SN_FunctionDef();
 		SN_FunctionDef(const SN_FunctionDef &p_Function);
 		SN_FunctionDef(const SNI::SNI_FunctionDef *p_Function);
 		virtual ~SN_FunctionDef();

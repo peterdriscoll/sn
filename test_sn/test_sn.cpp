@@ -1,11 +1,13 @@
 #include "sn.h"
 
 #include <cstdio>
+#include <fstream>
 
 #include "test_sn_pch.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
+using namespace std;
 using namespace skynet;
 using namespace PGCX;
 
@@ -1928,7 +1930,7 @@ namespace test_sn
 				remove(s_name_1.data());
 				remove(s_name_2.data());
 				{
-					std::ofstream out(s_name_1);
+					ofstream out(s_name_1);
 					out << s_contents_1;
 					out.close();
 				}
@@ -1944,7 +1946,7 @@ namespace test_sn
 					(name_1.File() == contents_1).Assert().Do();
 
 					{
-						std::ofstream out(s_name_1);
+						ofstream out(s_name_1);
 						out << s_contents_1;
 						out.close();
 					}

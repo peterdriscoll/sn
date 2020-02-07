@@ -1,6 +1,9 @@
 #include "sni_unary.h"
 
+#ifdef USE_LOGGING
 #include "logcontext.h"
+#endif
+
 #include "sn_function.h"
 #include "sn_cartesian.h"
 #include "sn_error.h"
@@ -98,7 +101,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_Unary::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		SN::LogContext context("SNI_Unary::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		LOGGING(SN::LogContext context("SNI_Unary::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
 		SN::SN_Expression value = (*p_ParameterList)[0].DoPartialEvaluate(p_MetaLevel);
 
@@ -114,22 +117,21 @@ namespace SNI
 
 	SN::SN_Error SNI_Unary::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
-		SN::LogContext context("SNI_Binary::Unify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
+		LOGGING(SN::LogContext context("SNI_Unary::Unify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )"));
+
 		SN::SN_Error e = LOG_RETURN(context, PartialUnifyInternal((*p_ParameterList)[0].GetValue(), p_Result));
-		if (e.GetDelay())
-		{
-			// SNI_DelayedProcessor::GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), p_ParameterList, p_Result);
-		}
 		if (e.IsError())
 		{
-			e.AddNote(context, this, "Cartesian product returned error");
+			SNI_CallRecord *callRecord = new SNI_CallRecord("Partial unify.", this);
+			LOGGING(callRecord->SetLogContext(context));
+			e.GetSNI_Error()->AddNote(callRecord);
 		}
 		return e;
 	}
 
 	SN::SN_Error SNI_Unary::PartialUnifyInternal(SN::SN_Expression &p_value, SN::SN_Expression &p_Result)
 	{
-		SN::LogContext context("SNI_Unary::PartialUnifyInternal ( " + p_value.DisplaySN() + " = " + p_Result.DisplaySN() + " )");
+		LOGGING(SN::LogContext context("SNI_Unary::PartialUnifyInternal ( " + p_value.DisplaySN() + " = " + p_Result.DisplaySN() + " )"));
 
 		SN::SN_Expression value = p_value.DoPartialEvaluate();
 		if (SN::Is<SNI_Value *>(value))
@@ -176,7 +178,8 @@ namespace SNI
 
 	SN::SN_Error SNI_Unary::UnifyElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, long p_CalcPos, long p_TotalCalc, SNI_WorldSet * worldSet) const
 	{
-		SN::LogContext context("SNI_Unary::UnifyElement(CalcPos " + to_string(p_CalcPos) + " TotalCalc " + to_string(p_TotalCalc) + " " + DisplayValues(p_Depth, p_ParamList, p_WorldList) + ")");
+		LOGGING(SN::LogContext context("SNI_Unary::UnifyElement(CalcPos " + to_string(p_CalcPos) + " TotalCalc " + to_string(p_TotalCalc) + " " + DisplayValues(p_Depth, p_ParamList, p_WorldList) + ")"));
+
 		switch (p_TotalCalc)
 		{
 		case 0:
@@ -193,7 +196,7 @@ namespace SNI
 					}
 					else
 					{
-						context.LogText("fail", "Value conflict on " + DisplayValues(p_Depth, p_ParamList, p_WorldList));
+						LOGGING(context.LogText("fail", "Value conflict on " + DisplayValues(p_Depth, p_ParamList, p_WorldList)));
 					}
 				}
 				return true;

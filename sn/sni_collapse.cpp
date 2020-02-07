@@ -1,6 +1,9 @@
 #include "sni_collapse.h"
 
+#ifdef USE_LOGGING
 #include "logcontext.h"
+#endif
+
 #include "sn_expression.h"
 #include "sn_parameter.h"
 #include "sn_functiondef.h"
@@ -83,7 +86,7 @@ namespace SNI
 
 	SN::SN_Error SNI_Collapse::UnifyInternal(SN::SN_Expression &p_value, SN::SN_Expression &p_Result)
 	{
-		SN::LogContext context("SNI_Unary::UnifyInternal ( " + p_value.DisplaySN() + " )");
+		LOGGING(SN::LogContext context("SNI_Unary::UnifyInternal ( " + p_value.DisplaySN() + " )"));
 
 		SNI_Frame::Push(this, NULL);
 		SNI_Frame *topFrame = SNI_Frame::Top();
@@ -101,6 +104,6 @@ namespace SNI
 		resultParam->SetValue(p_Result.GetVariableValue().GetSNI_Expression()->DoCollapse());
 		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after collapse", SN::RightId);
 		SNI_Frame::Pop();
-		return err;
+		return LOG_RETURN(context, err);
 	}
 }

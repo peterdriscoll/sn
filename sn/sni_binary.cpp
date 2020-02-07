@@ -19,7 +19,10 @@
 
 #include "sni_binary.h"
 
+#ifdef USE_LOGGING
 #include "logcontext.h"
+#endif
+
 #include "sn.h"
 #include "sn_cartesian.h"
 
@@ -109,7 +112,7 @@ namespace SNI
 	/// @retval An expression or value for the operation on two values
 	SN::SN_Expression SNI_Binary::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		SN::LogContext context("SNI_Binary::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		LOGGING(SN::LogContext context("SNI_Binary::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
 		SN::SN_Expression left_value = (*p_ParameterList)[1].DoPartialEvaluate(p_MetaLevel);
 		SN::SN_Expression right_value = (*p_ParameterList)[0].DoPartialEvaluate(p_MetaLevel);
@@ -131,13 +134,9 @@ namespace SNI
 	/// @retval True if successful, false for failure.
 	SN::SN_Error SNI_Binary::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
-		SN::LogContext context("SNI_Binary::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
+		LOGGING(SN::LogContext context("SNI_Binary::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )"));
 
 		SN::SN_Error e = LOG_RETURN(context, PartialUnifyInternal((*p_ParameterList)[1].GetValue(), (*p_ParameterList)[0].GetValue(), p_Result));
-		if (e.GetDelay())
-		{
-			//SNI_DelayedProcessor::GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), p_ParameterList, p_Result);
-		}
 		return e;
 	}
 
@@ -168,7 +167,8 @@ namespace SNI
 	/// @retval True if successful, false for failure.
 	SN::SN_Error SNI_Binary::PartialUnifyInternal(SN::SN_Expression &p_left, SN::SN_Expression &p_right, SN::SN_Expression &p_Result)
 	{
-		SN::LogContext context("SNI_Binary::PartialUnifyInternal");
+		LOGGING(SN::LogContext context("SNI_Binary::PartialUnifyInternal"));
+
 		SN::SN_Expression left_value = p_left.DoPartialEvaluate();
 		SN::SN_Expression right_value = p_right.DoPartialEvaluate();
 		if (SN::Is<SNI_Value *>(left_value) && SN::Is<SNI_Value *>(right_value))
@@ -176,7 +176,9 @@ namespace SNI
 			SN::SN_Error e = p_Result.PartialAssertValue(PrimaryFunctionValue(left_value, right_value));
 			if (e.IsError())
 			{
-				e.AddNote(context, this, "Primary function value");
+				SNI_CallRecord *callRecord = new SNI_CallRecord("Assert to primary function value.", this);
+				LOGGING(callRecord->SetLogContext(context));
+				e.GetSNI_Error()->AddNote(callRecord);
 			}
 			return e;
 		}
@@ -201,14 +203,18 @@ namespace SNI
 					SN::SN_Error e = left_value.PartialAssertValue(RightInverseFunctionValue(result, right_value));
 					if (e.IsError())
 					{
-						e.AddNote(context, this, "Right inverse function value");
+						SNI_CallRecord *callRecord = new SNI_CallRecord("Partial assert to right inverse function value.", this);
+						LOGGING(callRecord->SetLogContext(context));
+						e.GetSNI_Error()->AddNote(callRecord);
 					}
 					return e;
 				}
 				SN::SN_Error e = left_value.PartialAssertValue(RightInverseFunctionExpression(result, right_value));
 				if (e.IsError())
 				{
-					e.AddNote(context, this, "Right inverse function expression");
+					SNI_CallRecord *callRecord = new SNI_CallRecord("Partial assert to right inverse function expression.", this);
+					LOGGING(callRecord->SetLogContext(context));
+					e.GetSNI_Error()->AddNote(callRecord);
 				}
 				return e;
 			}
@@ -219,14 +225,18 @@ namespace SNI
 					SN::SN_Error e = right_value.PartialAssertValue(LeftInverseFunctionValue(result, left_value));
 					if (e.IsError())
 					{
-						e.AddNote(context, this, "Left inverse function value");
+						SNI_CallRecord *callRecord = new SNI_CallRecord("Partial assert to left inverse function value.", this);
+						LOGGING(callRecord->SetLogContext(context));
+						e.GetSNI_Error()->AddNote(callRecord);
 					}
 					return e;
 				}
 				SN::SN_Error e = right_value.PartialAssertValue(LeftInverseFunctionExpression(result, left_value));
 				if (e.IsError())
 				{
-					e.AddNote(context, this, "Left inverse function expression");
+					SNI_CallRecord *callRecord = new SNI_CallRecord("Partial assert to left inverse function expression.", this);
+					LOGGING(callRecord->SetLogContext(context));
+					e.GetSNI_Error()->AddNote(callRecord);
 				}
 				return e;
 			}

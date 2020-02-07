@@ -1,6 +1,9 @@
 #include "sni_mapping.h"
 
+#ifdef USE_LOGGING
 #include "logcontext.h"
+#endif
+
 #include "sn_expression.h"
 #include "sn_parameter.h"
 #include "sn_value.h"

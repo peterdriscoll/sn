@@ -1,6 +1,9 @@
 #include "sni_functiondef.h"
 
+#ifdef USE_LOGGING
 #include "logcontext.h"
+#endif
+
 #include "sn.h"
 
 #include "sni_object.h"
@@ -227,13 +230,6 @@ namespace SNI
 		return result;
 	}
 
-	SN::SN_Expression SNI_FunctionDef::PartialCall(SN::SN_ExpressionList * p_ParameterList, long  /* = 0 */) const
-	{
-		SN::LogContext context(DisplaySN0() + ".SNI_FunctionDef::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");
-
-		return skynet::Null;
-	}
-
 	SN::SN_Error SNI_FunctionDef::DoAssert()
 	{
 		return Unify(NULL);
@@ -393,13 +389,6 @@ namespace SNI
 		SNI_Frame::Pop();
 		delete[] output;
 		return e;
-	}
-
-	SN::SN_Error SNI_FunctionDef::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
-	{
-		SN::LogContext context(DisplaySN0() + ".SNI_FunctionDef::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
-
-		return false;
 	}
 
 	size_t SNI_FunctionDef::CardinalityOfUnify(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const

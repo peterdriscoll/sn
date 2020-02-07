@@ -1,6 +1,9 @@
 #include "sni_expression.h"
 
+#ifdef USE_LOGGING
 #include "logcontext.h"
+#endif
+
 #include "sn.h"
 #include "sn_cartesian.h"
 #include "sn_error.h"
@@ -382,9 +385,9 @@ namespace SNI
 
 	SN::SN_Error SNI_Expression::AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World ** p_World, SNI_WorldSet * p_WorldSet)
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Expression::AddValue ( )");
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Expression::AddValue ( )"));
 
-		return SN::SN_Error(GetTypeName() + " AddValue not implemented .");
+		return LOG_RETURN(context, SN::SN_Error(GetTypeName() + " AddValue not implemented ."));
 	}
 
 	bool SNI_Expression::MarkComplete()
@@ -434,14 +437,14 @@ namespace SNI
 
 	SN::SN_Error SNI_Expression::ForEachCart(long p_Depth, SNI_Cart * p_Cart)
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Expression::ForEachCart ( cartesian )");
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Expression::ForEachCart ( cartesian )"));
 
-		return SN::SN_Error(GetTypeName() + " ForEachCart not implemented .");
+		return LOG_RETURN(context, SN::SN_Error(GetTypeName() + " ForEachCart not implemented ."));
 	}
 
 	void SNI_Expression::ForEachSplit(SNI_Splitter * p_Splitter)
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Expression::ForEachSplit ( splitter )");
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Expression::ForEachSplit ( splitter )"));
 
 		FORCE_ASSERTM(GetTypeName() + " ForEachSplit not implemented .");
 	}
@@ -483,7 +486,9 @@ namespace SNI
 		if (SN::Is<SNI_ValueSet *>(p_Value))
 		{
 			SN::SN_ValueSet valueSet(p_Value, 0);
-			SN::LogContext context(DisplaySN0() + "SNI_Expression::AssertValue ( " + valueSet.DisplaySN() + " )");
+
+			LOGGING(SN::LogContext context(DisplaySN0() + "SNI_Expression::AssertValue ( " + valueSet.DisplaySN() + " )"));
+
 			bool result = false;
 			for (size_t i = 0; i < valueSet.Length(); i++)
 			{
@@ -556,16 +561,16 @@ namespace SNI
 
 	SN::SN_Expression SNI_Expression::Call(SN::SN_ExpressionList * p_ParameterList, long  /* p_MetaLevel = 0 */) const
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Expression::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Expression::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
-		return SN::SN_Error(GetTypeName() + " Call not implemented.");
+		return LOG_RETURN(context, SN::SN_Error(GetTypeName() + " Call not implemented."));
 	}
 
 	SN::SN_Expression SNI_Expression::PartialCall(SN::SN_ExpressionList * p_ParameterList, long  /* p_MetaLevel = 0 */) const
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Concat::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Concat::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
-		return SN::SN_Error(GetTypeName() + " Partial Call not implemented.");
+		return LOG_RETURN(context, SN::SN_Error(GetTypeName() + " Partial Call not implemented."));
 	}
 
 	SN::SN_Expression SNI_Expression::Unify(SN::SN_ExpressionList * /*p_ParameterList*/)

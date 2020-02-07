@@ -36,6 +36,7 @@ namespace SN
 
 namespace SNI
 {
+	class SNI_World;
 	class SNI_FunctionDef;
 
 	class SNI_Variable;

@@ -49,11 +49,6 @@ namespace SN
 		return m_Error;
 	}
 
-	void SN_Error::AddNote(const LogContext &p_Context, const SNI::SNI_Expression * p_Expression, const string & p_Description)
-	{
-		m_Error->AddNote(p_Context, p_Expression, p_Description);
-	}
-
 	bool SN_Error::IsError()
 	{
 		return m_Error && m_Error->IsError();

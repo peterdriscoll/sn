@@ -34,7 +34,6 @@ namespace SN
 
 		SNI::SNI_Error * GetSNI_Error() const;
 
-		void AddNote(const LogContext &p_Context, const SNI::SNI_Expression *p_Expression, const string &p_Description);
 		bool IsError();
 		bool IsNull();
 		bool GetBool();

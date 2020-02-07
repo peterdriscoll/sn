@@ -6,5 +6,6 @@
 #include "CppUnitTest.h"
 
 #include <cstdio>
+#include <fstream>
 
 #include "sn.h"

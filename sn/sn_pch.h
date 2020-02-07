@@ -117,7 +117,11 @@
 #include "utility.h"
 #include "sni_log.h"
 #include "log.h"
+
+#ifdef USE_LOGGING
 #include "logcontext.h"
+#endif
+
 #include "sni_logbuffer.h"
 #include "sni_helpers.h"
 #include "sni_manager.h"

@@ -1,10 +1,10 @@
 #include "sni_domain.h"
 
+#ifdef USE_LOGGING
 #include "logcontext.h"
-//#include "sn_expression.h"
-//#include "sn_parameter.h"
+#endif
+
 #include "sn_value.h"
-//#include "sn_error.h"
 
 #include "utility.h"
 

@@ -1,6 +1,9 @@
 #include "sni_cartunify.h"
 
+#ifdef USE_LOGGING
 #include "logcontext.h"
+#endif
+
 #include "sn.h"
 #include "sn_value.h"
 #include "sn_valueset.h"

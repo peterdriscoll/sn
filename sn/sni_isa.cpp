@@ -1,6 +1,9 @@
 #include "sni_isa.h"
 
+#ifdef USE_LOGGING
 #include "logcontext.h"
+#endif
+
 #include "sn_parameter.h"
 #include "sn_error.h"
 
@@ -106,10 +109,10 @@ namespace SNI
 
 	SN::SN_Error SNI_IsA::UnifyElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, long p_CalcPos, long p_TotalCalc, SNI_WorldSet * worldSet) const
 	{
-		SN::LogContext context("SNI_IsA::UnifyElement(CalcPos " + to_string(p_CalcPos) + " TotalCalc " + to_string(p_TotalCalc) + " " + DisplayValues(p_Depth, p_ParamList, p_WorldList) + ")");
+		LOGGING(SN::LogContext context("SNI_IsA::UnifyElement(CalcPos " + to_string(p_CalcPos) + " TotalCalc " + to_string(p_TotalCalc) + " " + DisplayValues(p_Depth, p_ParamList, p_WorldList) + ")"));
 		if (worldSet)
 		{
-			context.LogText("World set", worldSet->DisplayLong());
+			LOGGING(context.LogText("World set", worldSet->DisplayLong()));
 		}
 		if (p_ParamList[PU2_Result].IsKnownValue())
 		{
@@ -126,12 +129,12 @@ namespace SNI
 					}
 					else
 					{
-						context.LogText("fail", "Value conflict on " + DisplayValues(p_Depth, p_ParamList, p_WorldList));
+						LOGGING(context.LogText("fail", "Value conflict on " + DisplayValues(p_Depth, p_ParamList, p_WorldList)));
 					}
 				}
 				else
 				{
-					context.LogText("fail", "Join worlds failed on " + DisplayWorlds(p_Depth, p_WorldList));
+					LOGGING(context.LogText("fail", "Join worlds failed on " + DisplayWorlds(p_Depth, p_WorldList)));
 				}
 				return true;
 			}

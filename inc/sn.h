@@ -7,9 +7,22 @@
 
 #include <string>
 
+//#define USE_LOGGING
+
+#ifdef USE_LOGGING
+#define LOGGING(l) l
+#define LOG_RETURN(context, result) context.LogReturn(result)
+#else
+#define LOGGING(l)
+#define LOG_RETURN(context, result) result
+#endif
+
+#ifdef USE_LOGGING
 #include "log.h"
 #include "logcontext.h"
+#endif
 
+#include "sn_error.h"
 #include "sn_manager.h"
 #include "sn_transaction.h"
 #include "sn_thread.h"
@@ -72,8 +85,10 @@ namespace skynet
 	typedef SN::DebugAction DebugAction;
 
 	// Logging
+#ifdef USE_LOGGING
 	typedef SN::Log Log;
 	typedef SN::LogContext LogContext;
+#endif
 
 	// types
 	typedef SN::SN_Value Value;

@@ -1,6 +1,8 @@
 #include "sni_world.h"
 
+#ifdef USE_LOGGING
 #include "logcontext.h"
+#endif
 
 #include "sni_worldset.h"
 
@@ -142,10 +144,12 @@ namespace SNI
 	string SNI_World::LogText(SN::LogContext &context, long p_Width) const
 	{
 		string text;
+#ifdef USE_LOGGING
 		for (size_t j = 0; j < m_ChildList.size(); j++)
 		{
 			text += context.PadWidth(DisplayShort(), p_Width, '.') + m_ChildList[j]->LogText(context, p_Width);
 		}
+#endif
 		return text;
 	}
 

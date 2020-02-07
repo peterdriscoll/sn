@@ -6,6 +6,8 @@
 #include <string>
 
 #include "sni_value.h"
+#include "sni_callrecord.h"
+
 namespace SN
 {
 	class LogContext;
@@ -32,7 +34,7 @@ namespace SNI
 		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual long GetPriority() const;
 
-		virtual void AddNote(const SN::LogContext &p_Context, const SNI_Expression *p_Expression, const string &p_Description);
+		virtual void AddNote(SNI_CallRecord *p_CallRecord);
 
 		virtual bool IsNull() const;
 		virtual bool IsError() const;
@@ -48,9 +50,7 @@ namespace SNI
 		bool m_Success;
 		bool m_Delay;
 		string m_Description;
-		vector<string> m_NoteList;
-		vector<string> m_ContextList;
-		vector<string> m_ExpressionList;
+		SNI_CallRecordList m_CallHistory;
 	};
 
 	typedef vector<SNI_Error> SNI_ErrorList;

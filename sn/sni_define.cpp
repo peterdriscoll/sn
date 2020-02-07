@@ -1,6 +1,9 @@
 #include "sni_define.h"
 
+#ifdef USE_LOGGING
 #include "logcontext.h"
+#endif
+
 #include "sn_error.h"
 
 #include "sni_variable.h"
@@ -67,18 +70,19 @@ namespace SNI
 
 	SN::SN_Expression SNI_Define::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Define::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Define::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
 		ASSERTM(m_Variable && dynamic_cast<SNI_Variable *>(m_Variable), "The defined expression must be a variable.");
-		return m_Variable->Call(p_ParameterList, p_MetaLevel);
+
+		return LOG_RETURN(context, m_Variable->Call(p_ParameterList, p_MetaLevel));
 	}
 
 	SN::SN_Expression SNI_Define::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Define::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Define::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
 		ASSERTM(m_Variable && dynamic_cast<SNI_Variable *>(m_Variable), "The defined expression must be a variable.");
-		return m_Variable->PartialCall(p_ParameterList, p_MetaLevel);
+		return LOG_RETURN(context, m_Variable->PartialCall(p_ParameterList, p_MetaLevel));
 	}
 
 	SN::SN_Error SNI_Define::PartialAssertValue(const SN::SN_Expression &p_Expression, bool /* p_Define = false */)

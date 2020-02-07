@@ -1,6 +1,9 @@
 #include "sni_variable.h"
 
+#ifdef USE_LOGGING
 #include "logcontext.h"
+#endif
+
 #include "sn_expression.h"
 #include "sn_value.h"
 #include "sn_valueset.h"
@@ -246,7 +249,7 @@ namespace SNI
 			if (p_WorldList)
 			{
 				string worldString = DisplayWorlds(p_NumWorlds, p_WorldList);
-				SN::LogContext context("SNI_Variable::AddValue (" + SN::SN_Expression(this).DisplayValueSN() + " := " + p_Value.DisplayValueSN() + " worlds " + worldString + " set " + DisplayWorldSet(p_WorldSet) + " )");
+				LOGGING(SN::LogContext context("SNI_Variable::AddValue (" + SN::SN_Expression(this).DisplayValueSN() + " := " + p_Value.DisplayValueSN() + " worlds " + worldString + " set " + DisplayWorldSet(p_WorldSet) + " )"));
 				bool exists = false;
 				SNI_WorldSet *l_WorldSet = p_WorldSet;
 				if (!l_WorldSet)
@@ -256,18 +259,18 @@ namespace SNI
 				SNI_World *world = l_WorldSet->JoinWorldsArray(ManualAddWorld, AlwaysCreateWorld, exists, p_NumWorlds, p_WorldList);
 				if (exists)
 				{
-					context.LogExpression(world->DisplaySN(), p_Value);
+					LOGGING(context.LogExpression(world->DisplaySN(), p_Value));
 					SN::SN_Error e = AssertValue(p_Value);
 					if (e.GetBool())
 					{
 						l_WorldSet->AddToSetList(world);
 					}
-					return e;
+					return LOG_RETURN(context, e);
 				}
 				else
 				{
-					context.LogText("Fail", "JoinWorlds failed on " + worldString);
-					return SN::SN_Error("SNI_Variable::AddValue: JoinWorlds failed on " + worldString);
+					LOGGING(context.LogText("Fail", "JoinWorlds failed on " + worldString));
+					return LOG_RETURN(context, SN::SN_Error("SNI_Variable::AddValue: JoinWorlds failed on " + worldString));
 				}
 
 			}
@@ -609,7 +612,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_Variable::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Variable::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Variable::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
 		if (m_Value)
 		{
@@ -619,26 +622,26 @@ namespace SNI
 			SNI_Frame::Pop();
 			if (e.IsNull())
 			{
-				return skynet::Fail;
+				return LOG_RETURN(context, skynet::Fail);
 			}
-			return e;
+			return LOG_RETURN(context, e);
 		}
-		return dynamic_cast<SNI_Expression *>(SN::SN_Error(GetTypeName() + " function to call is unknown.").GetSNI_Error());
+		return LOG_RETURN(context, dynamic_cast<SNI_Expression *>(SN::SN_Error(GetTypeName() + " function to call is unknown.").GetSNI_Error()));
 	}
 
 	SN::SN_Expression SNI_Variable::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Variable::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Variable::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
 		if (m_Value)
 		{
 			if (dynamic_cast<SNI_Lambda*>(m_Value))
 			{
-				return skynet::Null; // Don't want to do a partial call because it might lead to recursion.
+				return LOG_RETURN(context, skynet::Null); // Don't want to do a partial call because it might lead to recursion.
 			}
-			return m_Value->PartialCall(p_ParameterList, p_MetaLevel);
+			return LOG_RETURN(context, m_Value->PartialCall(p_ParameterList, p_MetaLevel));
 		}
-		return SN::SN_Error(GetTypeName() + " partial function to call is unknown.");
+		return LOG_RETURN(context, SN::SN_Error(GetTypeName() + " partial function to call is unknown."));
 	}
 
 	SN::SN_Expression SNI_Variable::Unify(SN::SN_ExpressionList * p_ParameterList)

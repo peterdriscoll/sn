@@ -222,6 +222,7 @@
     <ClInclude Include="sni_binary.h" />
     <ClInclude Include="sni_bool.h" />
     <ClInclude Include="sni_buildset.h" />
+    <ClInclude Include="sni_callrecord.h" />
     <ClInclude Include="sni_cart.h" />
     <ClInclude Include="sni_cartunify.h" />
     <ClInclude Include="sni_cartcall.h" />
@@ -344,6 +345,7 @@
     <ClCompile Include="sni_binary.cpp" />
     <ClCompile Include="sni_bool.cpp" />
     <ClCompile Include="sni_buildset.cpp" />
+    <ClCompile Include="sni_callrecord.cpp" />
     <ClCompile Include="sni_cartunify.cpp" />
     <ClCompile Include="sni_cartcall.cpp" />
     <ClCompile Include="sni_cartesian.cpp" />

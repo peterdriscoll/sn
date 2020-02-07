@@ -1,6 +1,9 @@
 #include "sni_stringref.h"
 
+#ifdef USE_LOGGING
 #include "logcontext.h"
+#endif
+
 #include "sn.h"
 
 #include "sni_delayedprocessor.h"
@@ -376,7 +379,6 @@ namespace SNI
 		else
 		{
 			string worldString = DisplayWorlds(p_NumWorlds, p_World);
-			SN::LogContext context("SNI_StringRef::AddValue ( conflict " + p_Value.DisplaySN() + worldString + " )");
 			return SN::SN_Error("SNI_StringRef::AddValue: Value conflict.");
 		}
 	}

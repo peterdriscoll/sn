@@ -1,6 +1,9 @@
 #include "sni_lambda.h"
 
+#ifdef USE_LOGGING
 #include "logcontext.h"
+#endif
+
 #include "sn_parameter.h"
 #include "sn_value.h"
 #include "sn_error.h"
@@ -149,7 +152,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_Lambda::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		SN::LogContext context(DisplaySN0() + "SNI_Lambda::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		LOGGING(SN::LogContext context(DisplaySN0() + "SNI_Lambda::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
 		SNI_Thread::GetThread()->SetDebugId(GetDebugId());
 		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, GetTypeName() + ".Call begin", SN::LeftId);
@@ -187,12 +190,13 @@ namespace SNI
 
 		SNI_Thread::GetThread()->SetDebugId(GetDebugId());
 		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, GetTypeName() + ".Call return", SN::RightId);
-		return result;
+
+		return LOG_RETURN(context, result);
 	}
 
 	SN::SN_Expression SNI_Lambda::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Lambda::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Lambda::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
 		ASSERTM(p_ParameterList->size() >0, "Cannot call a lambda without a parameter");
 
@@ -203,7 +207,7 @@ namespace SNI
 		{
 			return m_Expression->PartialCall(p_ParameterList, p_MetaLevel);
 		}
-		return m_Expression->DoPartialEvaluate(p_MetaLevel);
+		return LOG_RETURN(context, m_Expression->DoPartialEvaluate(p_MetaLevel));
 	}
 
 	SN::SN_Expression SNI_Lambda::DoEvaluate(long p_MetaLevel /* = 0 */) const
@@ -218,7 +222,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_Lambda::Unify(SN::SN_ExpressionList * p_ParameterList)
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Lambda::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Lambda::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
 		ASSERTM(p_ParameterList->size() > 1, "Cannot unify to a lambda without a parameter");
 		SNI_Thread::GetThread()->SetDebugId(GetDebugId());
@@ -236,7 +240,7 @@ namespace SNI
 		}
 		if (e.IsError())
 		{
-			return skynet::Null; // The parameter didn't match, but there may be other polymorphic calls.
+			return LOG_RETURN(context, skynet::Null); // The parameter didn't match, but there may be other polymorphic calls.
 		}
 		LOG(WriteFrame(SNI_Thread::GetThread(), SN::DebugLevel));
 		if (p_ParameterList->size() > 1)
@@ -251,19 +255,15 @@ namespace SNI
 			SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, GetTypeName() + ".Unify before assert", SN::ParameterOneId);
 			e = m_Expression->AssertValue(p_ParameterList->back());
 		}
-		if (e.IsError())
-		{
-			// e = param.AssertValue(m_FormalParameter);
-		}
 
 		SNI_Thread::GetThread()->SetDebugId(GetDebugId());
 		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, GetTypeName() + ".Unify return", SN::ReturnId);
-		return e;
+		return LOG_RETURN(context, e);
 	}
 
 	SN::SN_Error SNI_Lambda::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Lambda::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Lambda::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )"));
 
 		ASSERTM(p_ParameterList->size() >0, "Cannot call a lambda without a parameter");
 		SNI_Expression * param = p_ParameterList->front().GetValue().GetSNI_Expression();
@@ -271,17 +271,19 @@ namespace SNI
 		SN::SN_Error e = SN::SN_Expression(m_FormalParameter).PartialAssertValue(param, true);
 		if (e.IsError())
 		{
-			return skynet::Null; // The parameter didn't match, but there may be other polymorphic calls.
+			return LOG_RETURN(context, skynet::Null); // The parameter didn't match, but there may be other polymorphic calls.
 		}
 		if (e.IsError())
 		{
-			e.AddNote(context, this, "Assigning parameter value failed");
-			return false;
+			SNI_CallRecord *callRecord = new SNI_CallRecord("Assigning parameter value.", this);
+			LOGGING(callRecord->SetLogContext(context));
+			e.GetSNI_Error()->AddNote(callRecord);
+			return LOG_RETURN(context, e);
 		}
 		if (p_ParameterList->size() > 0)
 		{
-			return m_Expression->PartialUnify(p_ParameterList, p_Result);
+			return LOG_RETURN(context, m_Expression->PartialUnify(p_ParameterList, p_Result));
 		}
-		return m_Expression->PartialAssertValue(p_Result);
+		return LOG_RETURN(context, m_Expression->PartialAssertValue(p_Result));
 	}
 }

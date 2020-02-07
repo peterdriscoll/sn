@@ -1,6 +1,9 @@
 #include "sni_comparison.h"
 
+#ifdef USE_LOGGING
 #include "logcontext.h"
+#endif
+
 #include "sn_error.h"
 #include "sn_parameter.h"
 #include "sn_functiondef.h"
@@ -49,7 +52,7 @@ namespace SNI
 	/// @retval An expression or value for the operation on two values
 	SN::SN_Expression SNI_Comparison::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		SN::LogContext context("SNI_Comparison::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		LOGGING(SN::LogContext context("SNI_Comparison::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
 		SN::SN_Expression left_value = (*p_ParameterList)[1].DoPartialEvaluate(p_MetaLevel);
 		SN::SN_Expression right_value = (*p_ParameterList)[0].DoPartialEvaluate(p_MetaLevel);
@@ -66,7 +69,8 @@ namespace SNI
 
 	SN::SN_Error SNI_Comparison::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
-		SN::LogContext context("SNI_Comparison::PartialUnifyInternal ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
+		LOGGING(SN::LogContext context("SNI_Comparison::PartialUnifyInternal ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )"));
+
 		return LOG_RETURN(context, PartialUnifyInternal((*p_ParameterList)[1].GetValue(), (*p_ParameterList)[0].GetValue(), p_Result));
 	}
 
@@ -99,11 +103,14 @@ namespace SNI
 
 	SN::SN_Error SNI_Comparison::UnifyElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, long p_CalcPos, long p_TotalCalc, SNI_WorldSet * worldSet) const
 	{
-		SN::LogContext context("SNI_Comparison::UnifyElement(CalcPos " + to_string(p_CalcPos) + " TotalCalc " + to_string(p_TotalCalc) + " " + DisplayValues(p_Depth, p_ParamList, p_WorldList) + ")");
+		LOGGING(SN::LogContext context("SNI_Comparison::UnifyElement(CalcPos " + to_string(p_CalcPos) + " TotalCalc " + to_string(p_TotalCalc) + " " + DisplayValues(p_Depth, p_ParamList, p_WorldList) + ")"));
+
+#ifdef USE_LOGGING
 		if (worldSet)
 		{
-			context.LogText("World set", worldSet->DisplayLong());
+			LOGGING(context.LogText("World set", worldSet->DisplayLong()));
 		}
+#endif
 		switch (p_TotalCalc)
 		{
 		case 0:
@@ -118,30 +125,34 @@ namespace SNI
 					{
 						world->AddToSetList();
 					}
+#ifdef USE_LOGGING
 					else
 					{
-						context.LogText("fail", "Value conflict on " + DisplayValues(p_Depth, p_ParamList, p_WorldList));
+						LOGGING(context.LogText("fail", "Value conflict on " + DisplayValues(p_Depth, p_ParamList, p_WorldList)));
 					}
+#endif
 				}
+#ifdef USE_LOGGING
 				else
 				{
-					context.LogText("fail", "Join worlds failed on " + DisplayWorlds(p_Depth, p_WorldList));
+					LOGGING(context.LogText("fail", "Join worlds failed on " + DisplayWorlds(p_Depth, p_WorldList)));
 				}
-				return true;
+#endif
+				return LOG_RETURN(context, true);
 			}
 			else
 			{
-				return PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()).Equivalent(p_ParamList[PU2_Result].GetVariableValue());
+				return LOG_RETURN(context, PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()).Equivalent(p_ParamList[PU2_Result].GetVariableValue()));
 			}
 		}
 		case 1:
 		{
 			if (p_CalcPos == PU2_Result)
 			{
-				return p_ParamList[p_CalcPos].AddValue(PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()), p_Depth, p_WorldList, worldSet);
+				return LOG_RETURN(context, p_ParamList[p_CalcPos].AddValue(PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()), p_Depth, p_WorldList, worldSet));
 			}
 		}
 		}
-		return false;
+		return LOG_RETURN(context, false);
 	}
 }

@@ -17,8 +17,6 @@ namespace SNI
 	class SNI_World;
 }
 
-#define LOG_RETURN(context, result) context.LogReturn(result)
-
 namespace SN
 {
 	class LogContext

@@ -1,6 +1,9 @@
 #include "sni_function.h"
 
+#ifdef USE_LOGGING
 #include "logcontext.h"
+#endif
+
 #include "sn_expression.h"
 #include "sn_parameter.h"
 #include "sn_value.h"
@@ -187,7 +190,9 @@ namespace SNI
 		{
 			return p_Value;
 		}
-		SN::LogContext context(DisplaySN0() + ".SNI_Function::AssertValue ( " + p_Value.DisplaySN() + " )");
+
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Function::AssertValue ( " + p_Value.DisplaySN() + " )"));
+
 		SN::SN_ExpressionList * l_ParameterList = new SN::SN_ExpressionList();
 		l_ParameterList->push_back(p_Value);
 		l_ParameterList->push_back(m_Parameter);
@@ -210,7 +215,7 @@ namespace SNI
 			}
 			e = dynamic_cast<SNI_Error *>(function);
 		}
-		return SN::SN_Expression(e);
+		return LOG_RETURN(context, SN::SN_Expression(e));
 	}
 
 	SN::SN_Error SNI_Function::AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World ** p_WorldList, SNI_WorldSet * p_WorldSet)
@@ -226,43 +231,48 @@ namespace SNI
 
 	SN::SN_Error SNI_Function::PartialAssertValue(const SN::SN_Expression &p_Expression, bool /* p_Define = false */)
 	{
-		SN::LogContext context(DisplaySN0() + "SNI_Function::PartialAssertValue ( " + p_Expression.DisplaySN() + " )");
+		LOGGING(SN::LogContext context(DisplaySN0() + "SNI_Function::PartialAssertValue ( " + p_Expression.DisplaySN() + " )"));
 
 		SN::SN_ParameterList * l_ParameterList = new SN::SN_ParameterList();
 		l_ParameterList->push_back(SN::SN_Parameter(m_Parameter, m_Condition));
-		return m_Function->PartialUnify(l_ParameterList, p_Expression);
+
+		return LOG_RETURN(context, m_Function->PartialUnify(l_ParameterList, p_Expression));
 	}
 
 	SN::SN_Expression SNI_Function::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Function::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Function::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
 		p_ParameterList->push_back(m_Parameter);
-		return m_Function->Call(p_ParameterList, p_MetaLevel);
+	
+		return LOG_RETURN(context, m_Function->Call(p_ParameterList, p_MetaLevel));
 	}
 
 	SN::SN_Expression SNI_Function::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Function::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Function::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
 		p_ParameterList->push_back(m_Parameter);
-		return m_Function->PartialCall(p_ParameterList, p_MetaLevel);
+
+		return LOG_RETURN(context, m_Function->PartialCall(p_ParameterList, p_MetaLevel));
 	}
 
 	SN::SN_Expression SNI_Function::Unify(SN::SN_ExpressionList * p_ParameterList)
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Function::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Function::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
 		p_ParameterList->push_back(m_Parameter);
-		return m_Function;
+
+		return LOG_RETURN(context, m_Function);
 	}
 
 	SN::SN_Error SNI_Function::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Function::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Function::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )"));
 
 		p_ParameterList->push_back(SN::SN_Parameter(m_Parameter, m_Condition));
-		return m_Function->PartialUnify(p_ParameterList, p_Result);
+
+		return LOG_RETURN(context, m_Function->PartialUnify(p_ParameterList, p_Result));
 	}
 
 }

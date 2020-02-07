@@ -3,6 +3,8 @@
 
 #pragma once
 
+// #define USE_LOGGING
+
 #define MAX_LOG_INDEX 2
 #define LOG_STANDARD_INDEX 0
 #define LOG_DEBUG_INDEX 1

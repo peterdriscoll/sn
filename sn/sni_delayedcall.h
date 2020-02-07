@@ -19,7 +19,6 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_DelayedCall)
 	public:
-		SNI_DelayedCall();
 		SNI_DelayedCall(SN::SN_FunctionDef p_Function, SN::SN_Expression*p_ParameterList, SNI_Frame *p_Frame, SNI_World * p_World = NULL);
 		virtual ~SNI_DelayedCall();
 

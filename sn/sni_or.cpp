@@ -1,6 +1,9 @@
 #include "sni_or.h"
 
+#ifdef USE_LOGGING
 #include "logcontext.h"
+#endif
+
 #include "sn.h"
 #include "sn_cartesian.h"
 
@@ -90,7 +93,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_Or::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		SN::LogContext context("SNI_Or::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		LOGGING(SN::LogContext context("SNI_Or::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
 		SN::SN_Expression left_value = (*p_ParameterList)[1].DoPartialEvaluate(p_MetaLevel);
 		SN::SN_Expression right_value = (*p_ParameterList)[0].DoPartialEvaluate(p_MetaLevel);
@@ -135,6 +138,8 @@ namespace SNI
 		SN::SN_Error e1 = skynet::UnaryOr.GetSNI_FunctionDef()->UnifyArray(firstParamList);
 		if (e1.IsError())
 		{
+			SNI_CallRecord *callRecord = new SNI_CallRecord("Or of first parameter.", this);
+			e1.GetSNI_Error()->AddNote(callRecord);
 			return e1;
 		}
 
@@ -143,19 +148,25 @@ namespace SNI
 		secondParamList[1] = firstParamList[1];
 		secondParamList[2] = p_ParameterList[2];
 		SN::SN_Error e2 = SNI_Binary::UnifyArray(secondParamList);
+		if (e2.IsError())
+		{
+			SNI_CallRecord *callRecord = new SNI_CallRecord("Or of second parameter with first result.", this);
+			e2.GetSNI_Error()->AddNote(callRecord);
+		}
 		return e2;
 	}
 
 	SN::SN_Error SNI_Or::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
-		SN::LogContext context("SNI_Or::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
+		LOGGING(SN::LogContext context("SNI_Or::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )"));
 
 		return LOG_RETURN(context, PartialUnifyInternal((*p_ParameterList)[1].GetValue(), (*p_ParameterList)[0].GetValue(), p_Result));
 	}
 
 	SN::SN_Error SNI_Or::PartialUnifyInternal(SN::SN_Expression &p_left, SN::SN_Expression &p_right, SN::SN_Expression &p_Result)
 	{
-		SN::LogContext context("SNI_Or::PartialUnifyInternal");
+		LOGGING(SN::LogContext context("SNI_Or::PartialUnifyInternal"));
+
 		SN::SN_Expression left_value = p_left.DoPartialEvaluate();
 		SN::SN_Expression right_value = p_right.DoPartialEvaluate();
 		if (SN::Is<SNI_Value *>(left_value) && SN::Is<SNI_Value *>(right_value))
@@ -172,7 +183,9 @@ namespace SNI
 					SN::SN_Error e = p_left.PartialAssertValue(SN::SN_Bool(true));
 					if (e.IsError())
 					{
-						e.AddNote(context, this, "Partial Assert left condition true");
+						SNI_CallRecord *callRecord = new SNI_CallRecord("Partial Assert left condition true.", this);
+						LOGGING(callRecord->SetLogContext(context));
+						e.GetSNI_Error()->AddNote(callRecord);
 					}
 					return e;
 				}
@@ -181,7 +194,9 @@ namespace SNI
 					SN::SN_Error e = p_right.PartialAssertValue(SN::SN_Bool(true));
 					if (e.IsError())
 					{
-						e.AddNote(context, this, "Partial Assert right condition true");
+						SNI_CallRecord *callRecord = new SNI_CallRecord("Partial Assert right condition true.", this);
+						LOGGING(callRecord->SetLogContext(context));
+						e.GetSNI_Error()->AddNote(callRecord);
 					}
 					return e;
 				}
@@ -191,13 +206,17 @@ namespace SNI
 				SN::SN_Error e1 = p_left.PartialAssertValue(SN::SN_Bool(false));
 				if (e1.IsError())
 				{
-					e1.AddNote(context, this, "Partial Assert left condition false");
+					SNI_CallRecord *callRecord = new SNI_CallRecord("Partial Assert left condition false.", this);
+					LOGGING(callRecord->SetLogContext(context));
+					e1.GetSNI_Error()->AddNote(callRecord);
 					return e1;
 				}
 				SN::SN_Error e2 = p_right.PartialAssertValue(SN::SN_Bool(false));
 				if (e2.IsError())
 				{
-					e2.AddNote(context, this, "Partial Assert right condition false");
+					SNI_CallRecord *callRecord = new SNI_CallRecord("Partial Assert right condition false.", this);
+					LOGGING(callRecord->SetLogContext(context));
+					e1.GetSNI_Error()->AddNote(callRecord);
 				}
 				return e2;
 			}

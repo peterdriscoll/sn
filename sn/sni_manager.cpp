@@ -3,7 +3,9 @@
 #include "sn_error.h"
 #include "sn_manager.h"
 
+#ifdef USE_LOGGING
 #include "logcontext.h"
+#endif
 
 #include <chrono>
 #include <thread>

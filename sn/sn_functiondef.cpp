@@ -14,11 +14,6 @@
 
 namespace SN
 {
-	SN_FunctionDef::SN_FunctionDef()
-		: m_FunctionDef(new SNI::SNI_FunctionDef())
-	{
-	}
-
 	SN_FunctionDef::SN_FunctionDef(const SN_FunctionDef &p_FunctionDef)
 		: m_FunctionDef(p_FunctionDef.m_FunctionDef)
 	{

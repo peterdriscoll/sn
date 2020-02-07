@@ -96,7 +96,7 @@ namespace SNI
 		if (SN::Is<SNI_ValueSet *>(p_Value))
 		{
 			SN::SN_ValueSet valueSet(p_Value, 0);
-			SN::LogContext context(DisplaySN0() + "SNI_Expression::AssertValue ( " + valueSet.DisplaySN() + " )");
+			LOGGING(SN::LogContext context(DisplaySN0() + "SNI_Expression::AssertValue ( " + valueSet.DisplaySN() + " )"));
 			bool result = false;
 			for (size_t i = 0; i < valueSet.Length(); i++)
 			{

@@ -1,6 +1,9 @@
 #include "sni_set.h"
 
+#ifdef USE_LOGGING
 #include "logcontext.h"
+#endif
+
 #include "sn_value.h"
 #include "sn_set.h"
 
@@ -33,7 +36,7 @@ namespace SNI
 
 	SNI_Set::SNI_Set(const SN::SN_Value &p_Value)
 	{
-		SN::LogContext context("SNI_Set::SNI_Set ( " + p_Value.DisplaySN() + " )");
+		LOGGING(SN::LogContext context("SNI_Set::SNI_Set ( " + p_Value.DisplaySN() + " )"));
 		SN::SN_Value value = p_Value;
 		SNI_Set *local_this = this;
 		value.ForEach(
@@ -93,7 +96,7 @@ namespace SNI
 
 	SN::SN_Set SNI_Set::Remove(const SN::SN_Value &p_Other)
 	{
-		SN::LogContext context("SNI_Set::DoRemove ( " + DisplayPmValueList(m_SetList) + " )");
+		LOGGING(SN::LogContext context("SNI_Set::DoRemove ( " + DisplayPmValueList(m_SetList) + " )"));
 
 		SN::SN_Set Set;
 		for (size_t i = 0; i<m_SetList.size(); i++)

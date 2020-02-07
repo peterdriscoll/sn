@@ -4,6 +4,7 @@
 #pragma once
 
 #include "sni_object.h"
+#include "sn_expression.h"
 
 #include <vector>
 #include <unordered_map>

@@ -115,8 +115,8 @@ namespace SN
 		{
 			if (GetSNI_Base())
 			{
-				SNI::SNI_DisplayOptions l_DisplayOptions(doTextOnly);
-				SN::LogContext context(GetSNI_Base()->DisplaySN(0, l_DisplayOptions));
+				LOGGING(SNI::SNI_DisplayOptions l_DisplayOptions(doTextOnly));
+				LOGGING(SN::LogContext context(GetSNI_Base()->DisplaySN(0, l_DisplayOptions)));
 			}
 			return "";
 		}

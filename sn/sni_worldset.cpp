@@ -1,6 +1,8 @@
 #include "sni_worldset.h"
 
+#ifdef USE_LOGGING
 #include "logcontext.h"
+#endif
 
 #include "sni_world.h"
 #include "utility.h"
@@ -133,33 +135,39 @@ namespace SNI
 	string SNI_WorldSet::LogHeading(SN::LogContext &context, long p_Width) const
 	{
 		string heading;
+#ifdef USE_LOGGING
 		for (size_t j = 0; j < m_ChildSetList.size(); j++)
 		{
 			heading += context.PadWidth(m_ChildSetList[j]->DisplaySN(), p_Width, '.') + m_ChildSetList[j]->LogHeading(context, p_Width);
 		}
+#endif
 		return heading;
 	}
 
 	string SNI_WorldSet::LogUnderline(SN::LogContext &context, long p_Width) const
 	{
 		string underline;
+#ifdef USE_LOGGING
 		for (size_t j = 0; j < m_ChildSetList.size(); j++)
 		{
 			underline += context.PadWidth("", p_Width, '-') + m_ChildSetList[j]->LogUnderline(context, p_Width);
 		}
+#endif
 		return underline;
 	}
 
 	void SNI_WorldSet::LogSN() const
 	{
-		SN::LogContext context("Worldset " + DisplaySN());
+#ifdef USE_LOGGING
+		LOGGING(SN::LogContext context("Worldset " + DisplaySN()));
 		long width = 10;
-		context.LogText("World Set", LogHeading(context, width));
-		context.LogText("", LogUnderline(context, width));
+		LOGGING(context.LogText("World Set", LogHeading(context, width)));
+		LOGGING(context.LogText("", LogUnderline(context, width)));
 		for (size_t j = 0; j < m_WorldList.size(); j++)
 		{
-			context.LogText("", m_WorldList[j]->LogText(context, width));
+			LOGGING(context.LogText("", m_WorldList[j]->LogText(context, width)));
 		}
+#endif
 	}
 
 	long SNI_WorldSet::NextWorldNo()
@@ -386,7 +394,7 @@ namespace SNI
 
 	SN::SN_Error SNI_WorldSet::CheckDependencies(SNI_WorldSetList &p_ChangedList)
 	{
-		SN::LogContext context("SNI_WorldSet::CheckDependentWorlds2(" + DisplayShort() + ")");
+		LOGGING(SN::LogContext context("SNI_WorldSet::CheckDependentWorlds2(" + DisplayShort() + ")"));
 		LOG(WriteLine(SN::DebugLevel, "Check dependencies " + DisplayVariable()));
 		LogSN();
 		FailWorldsWithEmptyChildren(p_ChangedList);

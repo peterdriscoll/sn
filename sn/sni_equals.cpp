@@ -1,6 +1,9 @@
 #include "sni_equals.h"
 
+#ifdef USE_LOGGING
 #include "logcontext.h"
+#endif
+
 #include "sn.h"
 #include "sn_valueset.h"
 #include "sn_bool.h"
@@ -119,7 +122,7 @@ namespace SNI
 	/// @retval An expression or value for the equality of two values
 	SN::SN_Expression SNI_Equals::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		SN::LogContext context("SNI_Equals::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		LOGGING(SN::LogContext context("SNI_Equals::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
 		SN::SN_Expression left_value = (*p_ParameterList)[1].DoPartialEvaluate(p_MetaLevel);
 		SN::SN_Expression right_value = (*p_ParameterList)[0].DoPartialEvaluate(p_MetaLevel);
@@ -146,9 +149,9 @@ namespace SNI
 	/// @retval True for success,false for failure.
 	SN::SN_Error SNI_Equals::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
-		SN::LogContext context("SNI_Equals::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
+		LOGGING(SN::LogContext context("SNI_Equals::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )"));
 
-		return PartialUnifyInternal((*p_ParameterList)[1].GetValue(), (*p_ParameterList)[0].GetValue(), p_Result);
+		return LOG_RETURN(context, PartialUnifyInternal((*p_ParameterList)[1].GetValue(), (*p_ParameterList)[0].GetValue(), p_Result));
 	}
 
 	/// \brief Calculate expressions for unknown values from known values, in the expression (p_left = p_right) = p_result.
@@ -178,8 +181,6 @@ namespace SNI
 	{
 		SN::SN_Expression left_value = p_left.DoPartialEvaluate();
 		SN::SN_Expression right_value = p_right.DoPartialEvaluate();
-
-		SN::LogContext context2("SNI_Equals::PartialUnifyInternal 2 ( " + left_value.DisplaySN() + ", " + right_value.DisplaySN() + " )");
 
 		if (SN::Is<SNI_Value *>(left_value) && SN::Is<SNI_Value *>(right_value))
 		{
@@ -253,11 +254,12 @@ namespace SNI
 
 	SN::SN_Error SNI_Equals::UnifyElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, long p_CalcPos, long p_TotalCalc, SNI_WorldSet * worldSet) const
 	{
-		SN::LogContext context("SNI_Equals::UnifyElement(CalcPos " + to_string(p_CalcPos) + " TotalCalc " + to_string(p_TotalCalc) + " " + DisplayValues(p_Depth, p_ParamList, p_WorldList) + ")");
+		LOGGING(SN::LogContext context("SNI_Equals::UnifyElement(CalcPos " + to_string(p_CalcPos) + " TotalCalc " + to_string(p_TotalCalc) + " " + DisplayValues(p_Depth, p_ParamList, p_WorldList) + ")"));
 		if (worldSet)
 		{
-			context.LogText("World set", worldSet->DisplayLong());
+			LOGGING(context.LogText("World set", worldSet->DisplayLong()));
 		}
+
 		switch (p_TotalCalc)
 		{
 		case 0:
@@ -274,18 +276,18 @@ namespace SNI
 					}
 					else
 					{
-						context.LogText("fail", "Value conflict on " + DisplayValues(p_Depth, p_ParamList, p_WorldList));
+						LOGGING(context.LogText("fail", "Value conflict on " + DisplayValues(p_Depth, p_ParamList, p_WorldList)));
 					}
 				}
 				else
 				{
-					context.LogText("fail", "Join worlds failed on " + DisplayWorlds(p_Depth, p_WorldList));
+					LOGGING(context.LogText("fail", "Join worlds failed on " + DisplayWorlds(p_Depth, p_WorldList)));
 				}
-				return true;
+				return LOG_RETURN(context, true);
 			}
 			else
 			{
-				return PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()).Equivalent(p_ParamList[PU2_Result].GetVariableValue());
+				return LOG_RETURN(context, PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()).Equivalent(p_ParamList[PU2_Result].GetVariableValue()));
 			}
 		}
 		break;
@@ -312,7 +314,7 @@ namespace SNI
 					l_ParamList[2] = p_ParamList[PU2_Second];
 					SNI_DelayedProcessor::GetProcessor()->Delay(this, l_ParamList);
 				}
-				return e;
+				return LOG_RETURN(context, e);
 			}
 			case PU2_Second:
 			{
@@ -333,12 +335,12 @@ namespace SNI
 					l_ParamList[2] = p_ParamList[PU2_First];
 					SNI_DelayedProcessor::GetProcessor()->Delay(this, l_ParamList);
 				}
-				return e;
+				return LOG_RETURN(context, e);
 			}
 			case PU2_Result:
 			{
 				SN::SN_Value value = PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue());
-				return p_ParamList[p_CalcPos].AddValue(value, p_Depth, p_WorldList, worldSet);
+				return LOG_RETURN(context, p_ParamList[p_CalcPos].AddValue(value, p_Depth, p_WorldList, worldSet));
 			}
 			}
 		}
@@ -357,6 +359,6 @@ namespace SNI
 			}
 		}
 		}
-		return SN::SN_Error("SNI_Equals::UnifyElement: Nothing to unify.");
+		return LOG_RETURN(context, SN::SN_Error("SNI_Equals::UnifyElement: Nothing to unify."));
 	}
 }

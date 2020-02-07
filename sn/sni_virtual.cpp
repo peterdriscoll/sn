@@ -1,6 +1,9 @@
 #include "sni_virtual.h"
 
+#ifdef USE_LOGGING
 #include "logcontext.h"
+#endif
+
 #include "sn_expression.h"
 #include "sn_parameter.h"
 #include "sn_value.h"
@@ -276,23 +279,23 @@ namespace SNI
 
 	SN::SN_Expression SNI_Virtual::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Virtual::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Virtual::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 		if (!m_Fixed)
 		{
-			return SN::SN_Error(GetTypeName() + " Fix the virtual calls. There maybe be more defines, so the call is undefined.");
+			return LOG_RETURN(context, SN::SN_Error(GetTypeName() + " Fix the virtual calls. There maybe be more defines, so the call is undefined."));
 		}
-		return m_CallExpression.GetSNI_Expression()->Call(p_ParameterList, p_MetaLevel);
+		return LOG_RETURN(context, m_CallExpression.GetSNI_Expression()->Call(p_ParameterList, p_MetaLevel));
 	}
 
 	SN::SN_Expression SNI_Virtual::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Virtual::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Virtual::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
 		if (!m_Fixed)
 		{
-			return SN::SN_Error(GetTypeName() + " Fix the virtual calls. There maybe be more defines, so the define is undefined.");
+			return LOG_RETURN(context, SN::SN_Error(GetTypeName() + " Fix the virtual calls. There maybe be more defines, so the define is undefined."));
 		}
-		return m_CallExpression.GetSNI_Expression()->PartialCall(p_ParameterList, p_MetaLevel);
+		return LOG_RETURN(context, m_CallExpression.GetSNI_Expression()->PartialCall(p_ParameterList, p_MetaLevel));
 	}
 
 	SN::SN_Expression SNI_Virtual::Unify(SN::SN_ExpressionList * p_ParameterList)

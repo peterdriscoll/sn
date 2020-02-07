@@ -1,6 +1,9 @@
 #include "sni_let.h"
 
+#ifdef USE_LOGGING
 #include "logcontext.h"
+#endif
+
 #include "sn_expression.h"
 #include "sn_parameter.h"
 #include "sn_value.h"
@@ -102,7 +105,8 @@ namespace SNI
 
 	SN::SN_Error SNI_Let::AssertValue(const SN::SN_Expression &p_Value)
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Let::AssertValue ( " + p_Value.DisplaySN() + " )");
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Let::AssertValue ( " + p_Value.DisplaySN() + " )"));
+
 		SNI_Thread::GetThread()->SetDebugId(GetDebugId());
 		SNI_Frame *topFrame = SNI_Frame::Push(this, NULL);
 		SNI_Variable* condition_param = topFrame->CreateParameterByName("Condition", m_Condition);
@@ -117,7 +121,9 @@ namespace SNI
 		if (e.IsError())
 		{
 			SNI_Thread::GetThread()->DebugCommand(SN::ErrorPoint, GetTypeName() + ".AssertValue failed", SN::ErrorId);
-			e.AddNote(context, this, "Let condition failed");
+			SNI_CallRecord *callRecord = new SNI_CallRecord("Asserting let condition.", this);
+			LOGGING(callRecord->SetLogContext(context));
+			e.GetSNI_Error()->AddNote(callRecord);
 		}
 		else
 		{
@@ -130,11 +136,14 @@ namespace SNI
 
 	SN::SN_Expression SNI_Let::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		SN::LogContext context(DisplaySN0() + "SNI_Let::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		LOGGING(SN::LogContext context(DisplaySN0() + "SNI_Let::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
+
 		SN::SN_Error e = m_Condition->DoAssert();
 		if (!e.GetBool())
 		{
-			e.AddNote(context, this, "Let condition failed");
+			SNI_CallRecord *callRecord = new SNI_CallRecord("Calling let condition.", this);
+			LOGGING(callRecord->SetLogContext(context));
+			e.GetSNI_Error()->AddNote(callRecord);
 			return e;
 		}
 		if (p_ParameterList->size() > 0)
@@ -146,12 +155,14 @@ namespace SNI
 
 	SN::SN_Expression SNI_Let::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Let::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Let::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
 		SN::SN_Error e = m_Condition->DoPartialAssert();
 		if (e.IsError())
 		{
-			e.AddNote(context, this, "Let condition failed");
+			SNI_CallRecord *callRecord = new SNI_CallRecord("Partial calling let condition.", this);
+			LOGGING(callRecord->SetLogContext(context));
+			e.GetSNI_Error()->AddNote(callRecord);
 			return e;
 		}
 		if (p_ParameterList->size() > 0)
@@ -163,7 +174,8 @@ namespace SNI
 
 	SN::SN_Expression SNI_Let::Unify(SN::SN_ExpressionList * p_ParameterList)
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Let::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Let::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
+
 		SNI_Thread::GetThread()->SetDebugId(GetDebugId());
 		SNI_Frame *topFrame = SNI_Frame::Push(this, NULL);
 		SNI_Variable* condition_param = topFrame->CreateParameterByName("Condition", m_Condition);
@@ -177,7 +189,9 @@ namespace SNI
 
 		if (e.IsError())
 		{
-			e.AddNote(context, this, "Let condition failed");
+			SNI_CallRecord *callRecord = new SNI_CallRecord("Unifying let condition.", this);
+			LOGGING(callRecord->SetLogContext(context));
+			e.GetSNI_Error()->AddNote(callRecord);
 			return e;
 		}
 		if (p_ParameterList->size() > 0)
@@ -195,12 +209,14 @@ namespace SNI
 
 	SN::SN_Error SNI_Let::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
-		SN::LogContext context(DisplaySN0() + ".SNI_Let::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )");
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Let::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )"));
 
 		SN::SN_Error e = SN::SN_Expression(m_Condition).DoPartialAssert();
 		if (e.IsError())
 		{
-			e.AddNote(context, this, "Let condition failed");
+			SNI_CallRecord *callRecord = new SNI_CallRecord("Partial unify of let condition.", this);
+			LOGGING(callRecord->SetLogContext(context));
+			e.GetSNI_Error()->AddNote(callRecord);
 			return e;
 		}
 		if (p_ParameterList->size() > 0)

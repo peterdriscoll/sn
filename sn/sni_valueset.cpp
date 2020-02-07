@@ -1,6 +1,9 @@
 #include "sni_valueset.h"
 
+#ifdef USE_LOGGING
 #include "logcontext.h"
+#endif
+
 #include "sn.h"
 #include "sn_cartesian.h"
 
@@ -36,7 +39,7 @@ namespace SNI
 		: m_WorldSet(NULL)
 		, m_Variable(NULL)
 	{
-		SN::LogContext context("SNI_ValueSet::SNI_ValueSet ( " + p_Value1.DisplaySN() + ", " + p_Value2.DisplaySN() + " )");
+		LOGGING(SN::LogContext context("SNI_ValueSet::SNI_ValueSet ( " + p_Value1.DisplaySN() + ", " + p_Value2.DisplaySN() + " )"));
 
 		m_ValueList.push_back(SNI_TaggedValue(p_Value1, NULL));
 		m_ValueList.push_back(SNI_TaggedValue(p_Value2, NULL));
@@ -46,7 +49,7 @@ namespace SNI
 		: m_WorldSet(NULL)
 		, m_Variable(NULL)
 	{
-		SN::LogContext context("SNI_ValueSet::SNI_ValueSet ( " + p_Value1.DisplaySN() + " )");
+		LOGGING(SN::LogContext context("SNI_ValueSet::SNI_ValueSet ( " + p_Value1.DisplaySN() + " )"));
 
 		m_ValueList.push_back(SNI_TaggedValue(p_Value1, NULL));
 	}
@@ -471,14 +474,17 @@ namespace SNI
 
 	SN::SN_Error SNI_ValueSet::AssertValue(const SN::SN_Expression &p_Value)
 	{
-		SN::LogContext context("SNI_ValueSet::AssertValue ( " + p_Value.DisplayValueSN() + " )");
+		LOGGING(SN::LogContext context("SNI_ValueSet::AssertValue ( " + p_Value.DisplayValueSN() + " )"));
+
 		SN::SN_Expression *paramList = new SN::SN_Expression[2];
 		paramList[0] = p_Value;
 		paramList[1] = this;
 		SN::SN_Error e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList);
 		if (e.IsError())
 		{
-			e.AddNote(context, this, "Assert by cartesian product failed");
+			SNI_CallRecord *callRecord = new SNI_CallRecord("Assert value set to value.", this);
+			LOGGING(callRecord->SetLogContext(context));
+			e.GetSNI_Error()->AddNote(callRecord);
 		}
 		return e;
 	}
@@ -519,7 +525,8 @@ namespace SNI
 
 	SN::SN_Expression SNI_ValueSet::Unify(SN::SN_ExpressionList * p_ParameterList)
 	{
-		SN::LogContext context("SNI_ValueSet::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )");
+		LOGGING(SN::LogContext context("SNI_ValueSet::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
+		
 		Validate();
 		SN::SN_Error err(true);
 		bool success = false;
@@ -577,7 +584,9 @@ namespace SNI
 		{
 			return SN::SN_Error(success);
 		}
-		err.AddNote(context, this, "No function from the valueset unified successfully.");
+		SNI_CallRecord *callRecord = new SNI_CallRecord("No function from the valueset unified successfully.", this);
+		LOGGING(callRecord->SetLogContext(context));
+		err.GetSNI_Error()->AddNote(callRecord);
 		return err;
 	}
 
@@ -676,7 +685,7 @@ namespace SNI
 
 	SN::SN_ValueSet SNI_ValueSet::DoRemove(const SN::SN_Value &p_Other)
 	{
-		SN::LogContext context("SNI_ValueSet::DoRemove ( " + DisplayPmTaggedValueList(m_ValueList) + " )");
+		LOGGING(SN::LogContext context("SNI_ValueSet::DoRemove ( " + DisplayPmTaggedValueList(m_ValueList) + " )"));
 
 		SN::SN_ValueSet valueSet;
 		SNI_World *contextWorld = SNI_World::ContextWorld();
@@ -768,13 +777,13 @@ namespace SNI
 				if (exists)
 				{
 					string worldString = DisplayWorlds(p_NumWorlds, p_WorldList);
-					SN::LogContext context("SNI_ValueSet::AddValue ( ok " + p_Param.DisplayValueSN() + " " + worldString + " )");
+					LOGGING(SN::LogContext context("SNI_ValueSet::AddValue ( ok " + p_Param.DisplayValueSN() + " " + worldString + " )"));
 					valueList.push_back(SNI_TaggedValue(p_Param, world));
 				}
 				else
 				{
 					string worldString = DisplayWorlds(p_NumWorlds, p_WorldList);
-					SN::LogContext context("SNI_ValueSet::AddValue ( conflict " + p_Param.DisplayValueSN() + " " + worldString + " )");
+					LOGGING(SN::LogContext context("SNI_ValueSet::AddValue ( conflict " + p_Param.DisplayValueSN() + " " + worldString + " )"));
 				}
 				return true;
 			}
@@ -890,7 +899,7 @@ namespace SNI
 
 	SN::SN_Value SNI_ValueSet::DoIf(SNI_Expression * p_PositiveCase, SNI_Expression *p_NegativeCase) const
 	{
-		SN::LogContext context(DisplaySN0() + "SNI_ValueSet::DoIf ( " + SN::SN_Expression(p_PositiveCase).DisplaySN() + SN::SN_Expression(p_NegativeCase).DisplaySN() + " )");
+		LOGGING(SN::LogContext context(DisplaySN0() + "SNI_ValueSet::DoIf ( " + SN::SN_Expression(p_PositiveCase).DisplaySN() + SN::SN_Expression(p_NegativeCase).DisplaySN() + " )"));
 
 		SN::SN_ValueSet result;
 		SNI_WorldSet * worldSet = result.GetSNI_ValueSet()->GetWorldSet();

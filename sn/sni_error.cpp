@@ -88,21 +88,9 @@ namespace SNI
 		return 100;
 	}
 
-	void SNI_Error::AddNote(const SN::LogContext & p_Context, const SNI_Expression * p_Expression, const string & p_Description)
+	void SNI_Error::AddNote(SNI_CallRecord * p_CallRecord)
 	{
-		m_ContextList.push_back(p_Context.GetSimpleDescription());
-		string s_expression;
-		if (p_Expression)
-		{
-			SNI::SNI_DisplayOptions l_DisplayOptions(doTextOnly);
-			s_expression = p_Expression->DisplaySN(0, l_DisplayOptions);
-		}
-		else
-		{
-			s_expression = "No expression";
-		}
-		m_ExpressionList.push_back(s_expression);
-		m_NoteList.push_back(p_Description);
+		m_CallHistory.push_back(p_CallRecord);
 	}
 
 	bool SNI_Error::IsNull() const
@@ -137,13 +125,15 @@ namespace SNI
 
 	void SNI_Error::Log()
 	{
+#ifdef USE_LOGGING
 		SN::LogContext context((GetDelay() ? string("Delayed ") : string("")) + (GetBool() ? string("Error") : string("Success")) + string(" Report"));
 		context.LogText("Description ", GetDescription());
-		for (size_t j = 0; j < m_NoteList.size(); j++)
+		for (SNI_CallRecord *callRecord : m_CallHistory)
 		{
-			context.LogText("Note "+ to_string(j), m_NoteList[j]);
-			context.LogText("Context", m_ContextList[j]);
-			context.LogText("Exp", m_ExpressionList[j]);
+			context.LogText("Note", callRecord->GetPurpose());
+			context.LogText("Exp", callRecord->GetExpression().DisplaySN());
+			context.LogText("Context", callRecord->GetLogContext());
 		}
+#endif
 	}
 }

@@ -91,7 +91,8 @@ namespace SN
 	void Log::VerifyForce(const string &p_description)
 	{
 		string title = "DAGEN Error Found";
-		string description = p_description + SN::LogContext::GetContextDescription(LOG_STANDARD_INDEX);
+		string description = p_description;
+		LOGGING(description += SN::LogContext::GetContextDescription(LOG_STANDARD_INDEX));
 		WriteLine("---------- Error found ----------");
 		WriteLine(description);
 		ASSERTM(false, "description");
