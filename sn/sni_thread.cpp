@@ -106,6 +106,7 @@ namespace SNI
 		, m_WorldSetChangedList(NULL)
 		, m_WorldSetProcessMap(NULL)
 		, m_CodeBreakScheduled(false)
+		, m_Error(NULL)
 	{
 	}
 
@@ -338,6 +339,20 @@ namespace SNI
 		return ss.str();
 	}
 
+	string SNI_Thread::ErrorJS(DisplayOptionType p_OptionType)
+	{
+		if (m_Error)
+		{
+			Lock();
+			stringstream ss;
+			SNI_DisplayOptions displayOptions(p_OptionType);
+			m_Error->WriteJS(ss, displayOptions);
+			Unlock();
+			return ss.str();
+		}
+		return "{\"description\":\"\",\"callhistory\":[]}";
+	}
+
 	string SNI_Thread::Skynet(enum DisplayOptionType p_OptionType)
 	{
 		stringstream ss;
@@ -424,6 +439,12 @@ namespace SNI
 	void SNI_Thread::LoadBreakPoints(const string &p_BreakPointString)
 	{
 		m_DebugCommand.LoadBreakPoints(p_BreakPointString);
+	}
+
+	void SNI_Thread::RegisterError(SNI_Error *p_Error)
+	{
+		m_Error = p_Error;
+		DebugCommand(SN::ErrorPoint, "Error", SN::ErrorId);
 	}
 
 	void SNI_Thread::Debug()

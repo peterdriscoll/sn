@@ -9,7 +9,7 @@
 
 namespace SN
 {
-	LOGGING(class LogContext);
+	class LogContext;
 
 	class SN_Expression;
 }

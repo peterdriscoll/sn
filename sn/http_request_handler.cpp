@@ -192,6 +192,11 @@ namespace HTTP
 					rep.content.append(l_thread->StepCountJS());
 					extension = "json";
 				}
+				else if (path == "/errorjs")
+				{
+					rep.content.append(l_thread->ErrorJS(debugJS));
+					extension = "json";
+				}
 				else
 				{
 					// Determine the file extension.

@@ -43,6 +43,7 @@ namespace SNI
 		virtual bool GetDelay();
 		virtual string GetDescription();
 
+		void WriteJS(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions);
 		string GetLogDescription();
 		virtual void Log();
 

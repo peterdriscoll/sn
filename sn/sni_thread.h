@@ -20,6 +20,7 @@ namespace SNI
 	typedef void OnErrorHandler(SN::SN_Error p_Result);
 
 	class SNI_Variable;
+	class SNI_Error;
 	class SNI_Frame;
 	typedef vector<SNI_Frame *> SNI_FrameList;
 
@@ -56,7 +57,7 @@ namespace SNI
 		void ScheduleCommand(SN::DebugAction p_DebugAction);
 		bool IsExiting();
 		void LoadBreakPoints(const string &p_BreakPointString);
-
+		void RegisterError(SNI_Error *p_Error);
 		void Run();
 		void RunToEnd();
 		void Debug();
@@ -89,6 +90,7 @@ namespace SNI
 		string StepCountJS();
 		string LogJS(long p_MaxLogEntries);
 		string LogExpJS(long p_MaxLogEntries, enum DisplayOptionType p_OptionType);
+		string ErrorJS(enum DisplayOptionType p_OptionType);
 
 		void Lock();
 		void Unlock();
@@ -165,6 +167,8 @@ namespace SNI
 		SNI_Manager *m_TopManager;
 		bool m_Ended;
 		long m_DefineId;
+
+		SNI_Error *m_Error;
 
 		static vector<SNI_Thread *> m_ThreadList;
 		static mutex m_ThreadListMutex;

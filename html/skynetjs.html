@@ -128,6 +128,20 @@
                         </tr>
                     </table>
                     <button title='Error' ng-click='setbreakpoint(["Error",16])' ng-class='breakpointclass(["Error",16], breakpoint)'>Error</button>
+                    <table class='frame'>
+                        <caption>{{error.description}}</caption>
+                        <tr ng-repeat="ch in error.callhistory">
+                            <td>
+                                {{ch.purpose}}
+                            </td>
+                            <td>
+                                {{ch.expression}}
+                            </td>
+                            <td>
+                                {{ch.logcontext}}
+                            </td>
+                        </tr>
+                    </table>
                     <button title='MIR' ng-click='setbreakpoint(["MIR",1])' ng-class='breakpointclass(["MIR",1], breakpoint)'>Check MIR</button>
                 </td>
             </tr>
@@ -276,6 +290,8 @@
                     .then(function (response) { $scope.logexps = response.data.records; });
                 $http.get(home + "stepcountjs")
                     .then(function (response) { $scope.stepcounts = response.data.records; });
+                $http.get(home + 'errorjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxstackframes * 4)
+                    .then(function (response) { $scope.error = response.data; });
             };
             $scope.submit = function (action) {
                 $http.get(home + action + '?threadnum=' + $scope.threadnum + '&stackdepth=' + $scope.stackdepth + '&breakpoints=' + Array.from($scope.breakpointCol).join(','))

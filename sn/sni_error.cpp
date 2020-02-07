@@ -37,7 +37,7 @@ namespace SNI
 			LOG(WriteLine(SN::ErrorLevel, GetLogDescription()));
 			if (!ErrorIsHandled())
 			{
-				SNI_Thread::GetThread()->DebugCommand(SN::ErrorPoint, "Error", SN::ErrorId);
+				SNI_Thread::GetThread()->RegisterError(this);
 			}
 		}
 	}
@@ -52,7 +52,7 @@ namespace SNI
 			LOG(WriteLine(SN::ErrorLevel, GetLogDescription()));
 			if (!ErrorIsHandled())
 			{
-				SNI_Thread::GetThread()->DebugCommand(SN::ErrorPoint, "Error", SN::ErrorId);
+				SNI_Thread::GetThread()->RegisterError(this);
 			}
 		}
 	}
@@ -121,6 +121,23 @@ namespace SNI
 	string SNI_Error::GetLogDescription()
 	{
 		return "Error: " + m_Description;
+	}
+
+	void SNI_Error::WriteJS(ostream &p_Stream, SNI::SNI_DisplayOptions &p_DisplayOptions)
+	{
+		p_Stream << "{\n";
+		p_Stream << "\t\"description\" : \"" << ReplaceAll(m_Description, "\"", "\\\"") << "\",";
+		p_Stream << "\t\"callhistory\" : [\n";
+		for (SNI_CallRecord *callRecord : m_CallHistory)
+		{
+			p_Stream << "\t{\n";
+			p_Stream << "\t\t\"purpose\" : \"" << ReplaceAll(callRecord->GetPurpose(), "\"", "\\\"") << "\",";
+			p_Stream << "\t\t\"expression\" : \"" << ReplaceAll(callRecord->GetExpression().DisplaySN(p_DisplayOptions), "\"", "\\\"") << "\",";
+			p_Stream << "\t\t\"logcontext\" : \"" << ReplaceAll(callRecord->GetLogContext(), "\"", "\\\"") << "\"";
+			p_Stream << "\t}\n";
+		}
+		p_Stream << "\t]\n";
+		p_Stream << "}\n";
 	}
 
 	void SNI_Error::Log()
