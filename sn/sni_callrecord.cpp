@@ -22,7 +22,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_CallRecord::GetExpression()
 	{
-		return SN::SN_Expression();
+		return m_Expression;
 	}
 
 	string SNI_CallRecord::GetLogContext()

@@ -129,6 +129,7 @@ namespace SNI
 		m_FrameList.clear();
 		m_WorldSetProcessMap = NULL;
 		SNI_Log::GetLog()->ClearLogExpressions();
+		m_Error = NULL;
 		ThreadListUnlock();
 	}
 

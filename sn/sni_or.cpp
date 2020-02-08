@@ -221,7 +221,14 @@ namespace SNI
 				return e2;
 			}
 		}
-		return SN::SN_Error(false, false);
+		SN::SN_Error e(false, false, "Partial assert failure.");
+		if (e.IsError())
+		{
+			SNI_CallRecord *callRecord = new SNI_CallRecord("Could not partial assert a sub expression as either true or false.", this);
+			LOGGING(callRecord->SetLogContext(context));
+			e.GetSNI_Error()->AddNote(callRecord);
+		}
+		return e;
 	}
 	size_t SNI_Or::CardinalityOfCall(long p_Depth, SN::SN_Expression * p_ParamList) const
 	{

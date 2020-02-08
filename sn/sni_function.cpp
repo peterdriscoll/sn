@@ -215,6 +215,14 @@ namespace SNI
 			}
 			e = dynamic_cast<SNI_Error *>(function);
 		}
+		SN::SN_Error err(e);
+		if (err.IsError())
+		{
+			SNI_CallRecord *callRecord = new SNI_CallRecord("Function call.", this);
+			LOGGING(callRecord->SetLogContext(context));
+			err.GetSNI_Error()->AddNote(callRecord);
+			SNI_Thread::GetThread()->DebugCommand(SN::ErrorPoint, "Error", SN::ErrorId);
+		}
 		return LOG_RETURN(context, SN::SN_Expression(e));
 	}
 

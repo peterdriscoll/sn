@@ -1589,6 +1589,41 @@ namespace test_sn
 			}
 		}
 
+		TEST_METHOD(TestError)
+		{
+			Initialize();
+			{
+				Manager manager("Test Error", AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				try
+				{
+					SN_DECLARE(a);
+					SN_DECLARE(b);
+					SN_DECLARE(c);
+					(a || (b(String("dog")) == c)).PartialAssert().Throw();
+
+					Assert::IsTrue(false, L"Expected a partial assert error.");
+				}
+				catch (Error e)
+				{
+					string description = e.GetDescription();
+					Assert::IsTrue(e.IsError(), wstring(description.begin(), description.end()).c_str());
+				}
+				try
+				{
+					Function(Function(skynet::And, Long(5)), Long(6)).Assert().Throw();
+
+					Assert::IsTrue(false, L"Expected an operator not implemented.");
+				}
+				catch (Error e)
+				{
+					string description = e.GetDescription();
+					Assert::IsTrue(e.IsError(), wstring(description.begin(), description.end()).c_str());
+				}
+			}
+		}
+
 		TEST_METHOD(TestMetaEvaluate)
 		{
 			Initialize();

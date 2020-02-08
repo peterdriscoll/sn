@@ -114,7 +114,20 @@
             <tr>
                 <td>
                     <table class='frame'>
-                        <caption>World Sets</caption>
+                        <caption><pre>{{error.description}}</pre></caption>
+                        <tr ng-repeat="ch in error.callhistory">
+                            <td>
+                                {{ch.purpose}}
+                            </td>
+                            <td ng-bind-html="trustAsHtml(ch.expression)" init-bind></td>
+                            <td>
+                                {{ch.logcontext}}
+                            </td>
+                        </tr>
+                    </table>
+                    <button title='Error' ng-click='setbreakpoint(["Error",16])' ng-class='breakpointclass(["Error",16], breakpoint)'>Error</button>
+                    <table class='frame'>
+                        <caption><pre>World Sets</pre></caption>
                         <tr ng-repeat="ws in worldsets">
                             <td>
                                 {{ws.expression}}
@@ -124,21 +137,6 @@
                             </td>
                             <td ng-repeat="cws in ws.childsets">
                                 <button ng-repeat="u in cws.worlds" ng-title='u.breakpoint' ng-click='setbreakpoint(u.breakpoint)' ng-class='breakpointdefaultclass(u.breakpoint, breakpoint, u.reason)'>{{u.condition}}</button>
-                            </td>
-                        </tr>
-                    </table>
-                    <button title='Error' ng-click='setbreakpoint(["Error",16])' ng-class='breakpointclass(["Error",16], breakpoint)'>Error</button>
-                    <table class='frame'>
-                        <caption>{{error.description}}</caption>
-                        <tr ng-repeat="ch in error.callhistory">
-                            <td>
-                                {{ch.purpose}}
-                            </td>
-                            <td>
-                                {{ch.expression}}
-                            </td>
-                            <td>
-                                {{ch.logcontext}}
                             </td>
                         </tr>
                     </table>
