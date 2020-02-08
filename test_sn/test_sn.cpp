@@ -1471,9 +1471,17 @@ namespace test_sn
 				SN_DECLARE(s);
 				(Define(ParseInteger)(s)(i) == Let(IsInteger(s), s.StringToInt() == i)).PartialAssert().Do();
 
+				SN_DECLARE(ParseInteger2);
+				(Define(ParseInteger2)(s)(i) == (IsInteger(s) && (s.StringToInt() == i))).PartialAssert().Do();
+
+
 				SN_DECLARE(x2);
 				(ParseInteger("13")(x2)).Assert().Do();
 				(x2 == Long(13)).Evaluate().Do();
+
+				SN_DECLARE(y2);
+				(ParseInteger2("13")(y2)).Assert().Do();
+				(y2 == Long(13)).Evaluate().Do();
 
 				SN_DECLARE(x3);
 				(ParseInteger("21")(x3)).Assert().Do();
