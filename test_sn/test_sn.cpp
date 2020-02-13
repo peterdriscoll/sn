@@ -1372,15 +1372,12 @@ namespace test_sn
 
 				(Define(Digit)(d) == (d == (String("0") || String("1") || String("2") || String("3") || String("4")
 					|| String("5") || String("6") || String("7") || String("8") || String("9")))).PartialAssert().Do();
-				Digit.LogDisplaySN();
 
 				SN_DECLARE(IsInteger);
-				(Define(IsInteger)(i) == (Digit(i.SelectLeftChar()) && !(Digit(i.SubtractLeftChar().LookaheadLeft()))).If(i == i.SelectLeftChar(), IsInteger(i.SubtractLeftChar()))).PartialAssert().Do();
-				IsInteger.LogDisplaySN();
+				(Define(IsInteger)(i) == (Digit(i.SelectLeftChar()) && (!Digit(i.SubtractLeftChar().LookaheadLeft())).If(i == i.SelectLeftChar(), IsInteger(i.SubtractLeftChar())))).PartialAssert().Do();
 
 				SN_DECLARE(ConvertInteger);
 				(Define(ConvertInteger)(i) == Let(IsInteger(i), i.StringToInt())).PartialAssert().Do();
-
 
 				(IsInteger(String("1")).Assert().Do());
 				(IsInteger(String("12")).Assert().Do());
@@ -1461,7 +1458,6 @@ namespace test_sn
 				SN_DECLARE(d);
 				(Define(Digit)(d) == (d == (String("0") || String("1") || String("2") || String("3") || String("4")
 					|| String("5") || String("6") || String("7") || String("8") || String("9")))).PartialAssert().Do();
-
 
 				SN_DECLARE(IsInteger);
 				SN_DECLARE(i);
@@ -1555,7 +1551,7 @@ namespace test_sn
 
 				SN_DECLARE(IsInteger);
 				SN_DECLARE(i);
-				(Define(IsInteger)(i) == (Digit(i.SelectLeftChar()) && !(Digit(i.SubtractLeftChar().LookaheadLeft()))).If(i == i.SelectLeftChar(), IsInteger(i.SubtractLeftChar()))).PartialAssert().Do();
+				(Define(IsInteger)(i) == (Digit(i.SelectLeftChar()) && (!Digit(i.SubtractLeftChar().LookaheadLeft())).If(i == i.SelectLeftChar(), IsInteger(i.SubtractLeftChar())))).PartialAssert().Do();
 
 				SN_DECLARE(z1);
 				(IsInteger(String("456666")) == z1).Assert().Do();
@@ -1564,9 +1560,9 @@ namespace test_sn
 				SN_DECLARE(IsName);
 				SN_DECLARE(IsNameContinuation);
 				SN_DECLARE(n);
-				(Define(IsName)(i) == (Alpha(i.SelectLeftChar()) && !(Alpha(i.SubtractLeftChar().LookaheadLeft()))).If(i == i.SelectLeftChar(), IsNameContinuation(i.SubtractLeftChar()))).PartialAssert().Do();
 
-				(Define(IsNameContinuation)(i) == (AlphaNumeric(i.SelectLeftChar()) && !(AlphaNumeric(i.SubtractLeftChar().LookaheadLeft()))).If(i == i.SelectLeftChar(), IsNameContinuation(i.SubtractLeftChar()))).PartialAssert().Do();
+				(Define(IsName)(i) == (Alpha(i.SelectLeftChar()) && (!Alpha(i.SubtractLeftChar().LookaheadLeft())).If(i == i.SelectLeftChar(), IsNameContinuation(i.SubtractLeftChar())))).PartialAssert().Do();
+				(Define(IsNameContinuation)(i) == (AlphaNumeric(i.SelectLeftChar()) && (!AlphaNumeric(i.SubtractLeftChar().LookaheadLeft())).If(i == i.SelectLeftChar(), IsNameContinuation(i.SubtractLeftChar())))).PartialAssert().Do();
 
 				SN_DECLARE(z2);
 				(IsName(String("Peter1")) == z2).Assert().Do();
@@ -1574,10 +1570,10 @@ namespace test_sn
 
 				SN_DECLARE(ParseInteger);
 				SN_DECLARE(s);
-				(Define(ParseInteger)(s)(i) == Let(IsInteger(s), s.StringToInt() == i)).PartialAssert().Do();
+				(Define(ParseInteger)(s)(i) == (IsInteger(s) && (s.StringToInt() == i))).PartialAssert().Do();
 
 				SN_DECLARE(ParseName);
-				(Define(ParseName)(d)(s)(i) == Let(IsName(s), i == d.CreateMetaVariable(s))).PartialAssert().Do();
+				(Define(ParseName)(d)(s)(i) == (IsName(s) && (i == d.CreateMetaVariable(s)))).PartialAssert().Do();
 
 				SN_DECLARE(x3);
 				(ParseInteger("21")(x3)).Assert().Do();
@@ -1594,6 +1590,86 @@ namespace test_sn
 				string i3_string = i3.DisplayValueSN();
 				string i4_string = i4.DisplayValueSN();
 				Assert::IsTrue(i3_string == i4_string);
+			}
+		}
+
+		TEST_METHOD(TestParsePart)
+		{
+			Initialize();
+			{
+				Manager manager("Test Parse Part", AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(Digit);
+				SN_DECLARE(d);
+				(Define(Digit)(d) == (d == (String("0") || String("1") || String("2") || String("3") || String("4")
+					|| String("5") || String("6") || String("7") || String("8") || String("9")))).PartialAssert().Do();
+
+				SN_DECLARE(AlphaLower);
+				SN_DECLARE(l);
+				(Define(AlphaLower)(l) == (l == (String("a") || String("b") || String("c") || String("d") || String("e")
+					|| String("f") || String("g") || String("h") || String("i") || String("j") || String("k") || String("l")
+					|| String("m") || String("n") || String("o") || String("p") || String("q") || String("r") || String("s")
+					|| String("t") || String("u") || String("v") || String("w") || String("x") || String("y") || String("z")))).PartialAssert().Do();
+
+				SN_DECLARE(AlphaUpper);
+				SN_DECLARE(u);
+				(Define(AlphaUpper)(u) == (u == (String("A") || String("B") || String("C") || String("D") || String("E")
+					|| String("F") || String("G") || String("H") || String("I") || String("J") || String("K") || String("L")
+					|| String("M") || String("N") || String("O") || String("P") || String("Q") || String("R") || String("S")
+					|| String("T") || String("U") || String("V") || String("W") || String("X") || String("Y") || String("Z")))).PartialAssert().Do();
+
+				SN_DECLARE(Alpha);
+				SN_DECLARE(a);
+				(Define(Alpha)(a) == (AlphaLower(a) || AlphaUpper(a))).PartialAssert().Do();
+
+				SN_DECLARE(AlphaNumeric);
+				SN_DECLARE(k);
+				(Define(AlphaNumeric)(k) == (Alpha(k) || Digit(k))).PartialAssert().Do();
+
+				SN_DECLARE(IsInteger);
+				SN_DECLARE(i);
+				(Define(IsInteger)(i) == (Digit(i.SelectLeftChar()) && (!Digit(i.SubtractLeftChar().LookaheadLeft())).If(i == i.SelectLeftChar(), IsInteger(i.SubtractLeftChar())))).PartialAssert().Do();
+
+				SN_DECLARE(IsName);
+				SN_DECLARE(IsNameContinuation);
+				SN_DECLARE(n);
+
+				(Define(IsName)(i) == (Alpha(i.SelectLeftChar()) && (!AlphaNumeric(i.SubtractLeftChar().LookaheadLeft())).If(i == i.SelectLeftChar(), Alpha(i.SelectLeftChar()) && IsNameContinuation(i.SubtractLeftChar())))).PartialAssert().Do();
+				(Define(IsNameContinuation)(i) == (AlphaNumeric(i.SelectLeftChar()) && (!AlphaNumeric(i.SubtractLeftChar().LookaheadLeft())).If(i == i.SelectLeftChar(), AlphaNumeric(i.SelectLeftChar()) && IsNameContinuation(i.SubtractLeftChar())))).PartialAssert().Do();
+
+				SN_DECLARE(ParseInteger);
+				SN_DECLARE(s);
+				(Define(ParseInteger)(s)(i) == (IsInteger(s) && (s.StringToInt() == i))).PartialAssert().Do();
+
+				SN_DECLARE(ParseName);
+				(Define(ParseName)(d)(s)(i) == (IsName(s) && (i == d.CreateMetaVariable(s)))).PartialAssert().Do();
+
+				SN_DECLARE(ParsePart);
+				(Define(ParsePart)(d)(s)(i) == (ParseName(d)(s)(i) || ParseInteger(s)(i))).PartialAssert().Do();
+
+				SN_DOMAIN(MyDomain);
+				SN_DECLARE(i1);
+				(ParsePart(MyDomain)(String("Peter1"))(i1)).Assert().Do();
+
+				SN_DECLARE(j1);
+				(j1 == Meta(1, MyDomain["Peter1"])).Assert().Do();
+				(i1 == j1).Evaluate().Do();
+
+				string i1_string = i1.DisplayValueSN();
+				string j1_string = j1.DisplayValueSN();
+				Assert::IsTrue(i1_string == j1_string);
+
+				SN_DECLARE(i2);
+				(ParsePart(MyDomain)(String("543"))(i2)).Assert().Do();
+
+				SN_DECLARE(j2);
+				(j2 == Long(543)).Assert().Do();
+				(i2 == j2).Evaluate().Do();
+
+				string i2_string = i2.DisplayValueSN();
+				string j2_string = j2.DisplayValueSN();
+				Assert::IsTrue(i2_string == j2_string);
 			}
 		}
 

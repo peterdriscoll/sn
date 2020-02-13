@@ -1003,5 +1003,13 @@
     <None Include="..\html\skynetjs.html">
       <Filter>HTML Files</Filter>
     </None>
+    <None Include="..\html\style.css">
+      <Filter>HTML Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\html\favicon.ico">
+      <Filter>HTML Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

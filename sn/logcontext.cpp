@@ -118,7 +118,8 @@ namespace SN
 		string worldtext;
 		if (p_world)
 		{
-			worldtext = " :: " + p_world->DisplaySN();
+			SNI_DisplayOptions displayOptions(doTextOnly);
+			worldtext = " :: " + p_world->DisplaySN(displayOptions);
 		}
 		Log::GetLog(m_LogIndex)->WriteLine("\nValue     " + Pad(name) + p_expression.DisplayValueSN());
 	}

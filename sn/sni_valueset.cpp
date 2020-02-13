@@ -100,7 +100,8 @@ namespace SNI
 
 	string SNI_ValueSet::DisplayCpp() const
 	{
-		return "sn_ValueSet( [" + DisplayPmTaggedValueList(m_ValueList) + "] )";
+		SNI_DisplayOptions displayOptions(doTextOnly);
+		return "sn_ValueSet( [" + DisplayPmTaggedValueList(m_ValueList, displayOptions) + "] )";
 	}
 
 	string SNI_ValueSet::DisplaySN(long /*priority*/, SNI_DisplayOptions & p_DisplayOptions) const
@@ -329,7 +330,7 @@ namespace SNI
 					if (vs)
 					{
 						m_ValueList[j].MarkForDeletion();
-						SNI_WorldSet *vsWorldSet = new SNI_WorldSet(SN::SN_ValueSet(this));
+						SNI_WorldSet *vsWorldSet = new SNI_WorldSet();
 						for (SNI_TaggedValueList::iterator itVS = vs->m_ValueList.begin(); itVS != vs->m_ValueList.end(); itVS++)
 						{
 							SN::SN_Expression vsValue = itVS->GetValue();
@@ -480,7 +481,7 @@ namespace SNI
 		paramList[0] = p_Value;
 		paramList[1] = this;
 		SN::SN_Error e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList);
-		if (e.IsError())
+		if (e.IsSignificantError())
 		{
 			SNI_CallRecord *callRecord = new SNI_CallRecord("Assert value set to value.", this);
 			LOGGING(callRecord->SetLogContext(context));
@@ -493,7 +494,7 @@ namespace SNI
 	{
 		if (!m_WorldSet && !SN::SN_Transaction::InWebServer())
 		{
-			m_WorldSet = new SNI_WorldSet(SN::SN_ValueSet(this));
+			m_WorldSet = new SNI_WorldSet();
 		}
 		return m_WorldSet;
 	}
@@ -584,9 +585,12 @@ namespace SNI
 		{
 			return SN::SN_Error(success);
 		}
-		SNI_CallRecord *callRecord = new SNI_CallRecord("No function from the valueset unified successfully.", this);
-		LOGGING(callRecord->SetLogContext(context));
-		err.GetSNI_Error()->AddNote(callRecord);
+		if (err.IsSignificantError())
+		{
+			SNI_CallRecord *callRecord = new SNI_CallRecord("No function from the valueset unified successfully.", this);
+			LOGGING(callRecord->SetLogContext(context));
+			err.GetSNI_Error()->AddNote(callRecord);
+		}
 		return err;
 	}
 
@@ -776,14 +780,12 @@ namespace SNI
 				SNI_World *world = l_WorldSet->JoinWorldsArray(AutoAddWorld, AlwaysCreateWorld, exists, p_NumWorlds, p_WorldList, p_World);
 				if (exists)
 				{
-					string worldString = DisplayWorlds(p_NumWorlds, p_WorldList);
-					LOGGING(SN::LogContext context("SNI_ValueSet::AddValue ( ok " + p_Param.DisplayValueSN() + " " + worldString + " )"));
+					LOGGING(SN::LogContext context("SNI_ValueSet::AddValue ( ok " + p_Param.DisplayValueSN() + " " + DisplayWorlds(p_NumWorlds, p_WorldList) + " )"));
 					valueList.push_back(SNI_TaggedValue(p_Param, world));
 				}
 				else
 				{
-					string worldString = DisplayWorlds(p_NumWorlds, p_WorldList);
-					LOGGING(SN::LogContext context("SNI_ValueSet::AddValue ( conflict " + p_Param.DisplayValueSN() + " " + worldString + " )"));
+					LOGGING(SN::LogContext context("SNI_ValueSet::AddValue ( conflict " + p_Param.DisplayValueSN() + " " + DisplayWorlds(p_NumWorlds, p_WorldList) + " )"));
 				}
 				return true;
 			}
@@ -831,7 +833,7 @@ namespace SNI
 		if (m_Variable)
 		{
 			result = new SNI_ValueSet;
-			SNI_WorldSet *worldSet = new SNI_WorldSet(SN::SN_Value(this)||SN::SN_Expression(p_Other));
+			SNI_WorldSet *worldSet = new SNI_WorldSet();
 			for (const SNI_TaggedValue &tv : m_ValueList)
 			{
 				bool exists = false;
@@ -846,7 +848,7 @@ namespace SNI
 		SN::SN_Expression other_expression = p_Other;
 		if (SN::Is<SNI_ValueSet *>(other_expression))
 		{
-			SNI_WorldSet *worldSet = new SNI_WorldSet(SN::SN_Value(this)||other_expression);
+			SNI_WorldSet *worldSet = new SNI_WorldSet();
 			SN::SN_ValueSet other = other_expression;
 			for (size_t j = 0; j<other.Length(); j++)
 			{
@@ -871,8 +873,7 @@ namespace SNI
 	{
 		SN::SN_Value left_value(p_Left);
 		SN::SN_Value right_value(p_Right);
-		SN::SN_Expression source = left_value || right_value;
-		SNI_WorldSet * worldSet = new SNI_WorldSet(source);
+		SNI_WorldSet * worldSet = new SNI_WorldSet();
 		SN::SN_ValueSet result;
 		result.AddTaggedValue(left_value, NULL);
 

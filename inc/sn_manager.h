@@ -31,12 +31,12 @@ namespace SN
 
 	enum InterruptPoint
 	{
-		BreakPoint, CallPoint, ParameterPoint, ClonePoint, ErrorPoint, EndPoint, MirrorPoint, FailPoint, StaticPoint
+		BreakPoint, CallPoint, ParameterPoint, ClonePoint, ErrorPoint, WarningPoint, EndPoint, MirrorPoint, FailPoint, StaticPoint
 	};
 
 	enum BreakId
 	{
-		LeftId, RightId, PartialCallId, CallId, ParameterOneId, ParameterTwoId, ParameterThreeId, ParameterFourId, ParameterFiveId, ValueId, ConditionId,  PositiveId, NegativeId, InfixId, EvaluateId, ReturnId, ErrorId, ExitId, CloneId
+		LeftId, RightId, PartialCallId, CallId, ParameterOneId, ParameterTwoId, ParameterThreeId, ParameterFourId, ParameterFiveId, ValueId, ConditionId,  PositiveId, NegativeId, InfixId, EvaluateId, ReturnId, ErrorId, ExitId, CloneId, NoConstraintId, DelayId
 	};
 
 	string GetLoggingLevelCode(LoggingLevel p_LoggingLevel);

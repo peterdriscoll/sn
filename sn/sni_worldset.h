@@ -42,18 +42,20 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_WorldSet);
 	public:
-		static void WriteChangedJS(ostream &p_Stream, const string &tabs);
+		static void WriteChangedJS(ostream &p_Stream, const string &tabs, SNI_DisplayOptions &p_DisplayOptions);
 
+		SNI_WorldSet();
 		SNI_WorldSet(const SN::SN_Expression &p_Expression);
 		virtual ~SNI_WorldSet();
 
 		string DisplaySN() const;
 		string DisplayShort() const;
 		string DisplayLong() const;
-		string DisplayWorlds() const;
-		string DisplayVariable();
-		void WriteJS(ostream & p_Stream, const string &tabs) const;
-		void WriteUnmarkedJS(ostream & p_Stream, const string &tabs) const;
+		string DisplayWorlds(SNI_DisplayOptions & p_DisplayOptions) const;
+		string DisplayVariable(SNI_DisplayOptions & p_DisplayOptions) const;
+		string DisplayCondition(SNI_DisplayOptions & p_DisplayOptions, const SN::SN_Expression &p_Value) const;
+		void WriteJS(ostream & p_Stream, const string &tabs, SNI_DisplayOptions & p_DisplayOptions) const;
+		void WriteUnmarkedJS(ostream & p_Stream, const string &tabs, SNI_DisplayOptions & p_DisplayOptions) const;
 		string LogHeading(SN::LogContext &context, long p_Width) const;
 		string LogUnderline(SN::LogContext &context, long p_Width) const;
 		void LogSN() const;

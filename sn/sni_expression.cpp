@@ -155,7 +155,7 @@ namespace SNI
 		case doDebugPointsJS:
 		{
 			string breakPoint = p_DebugSource->GetBreakPointJS(p_Index);
-			return "<button ' ng-click='setbreakpoint(" + breakPoint + ")' ng-class='breakpointdefaultclass(" + breakPoint + ", breakpoint, \"\")'>" + p_Caption + "</button>";
+			return "<button title='" + breakPoint + "' ng-click='setbreakpoint(" + breakPoint + ")' ng-class='breakpointclass(" + breakPoint + ", breakpoint)'>" + p_Caption + "</button>";
 		}
 		}
 		return "";

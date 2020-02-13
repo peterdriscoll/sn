@@ -5,8 +5,11 @@
 namespace SNI
 {
 	SNI_DisplayOptions::SNI_DisplayOptions(enum DisplayOptionType p_DebugHTML)
+		: m_Level(0)
+		, m_MaxLevel(2)
 	{
 		m_DebugHTML = p_DebugHTML;
+
 	}
 
 	SNI_DisplayOptions::~SNI_DisplayOptions()
@@ -46,5 +49,20 @@ namespace SNI
 	void SNI_DisplayOptions::SetBreakPointLocation(const string &p_BreakPointLocation)
 	{
 		m_BreakPointLocation = p_BreakPointLocation;
+	}
+
+	void SNI_DisplayOptions::IncrementLevel()
+	{
+		++m_Level;
+	}
+
+	void SNI_DisplayOptions::DecrementLevel()
+	{
+		--m_Level;
+	}
+
+	bool SNI_DisplayOptions::CheckLevel()
+	{
+		return m_Level < m_MaxLevel;
 	}
 }

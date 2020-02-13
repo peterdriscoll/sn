@@ -47,15 +47,15 @@ namespace SNI
 		SNI_World(SNI_WorldSet * p_WorldSet, SNI_World *p_CloneParent = NULL);
 		virtual ~SNI_World();
 
-		string DisplaySN() const;
 		string DisplayShort() const;
+		string DisplayShortJS() const;
 		string DisplaySN(SNI_DisplayOptions & p_DisplayOptions);
-		string DisplayCondition() const;
+		string DisplayCondition(SNI_DisplayOptions & p_DisplayOptions) const;
 		string DisplayConditionSN(SNI_DisplayOptions & p_DisplayOptions) const;
-		string DisplaySNChildWorlds() const;
+		string DisplaySNChildWorlds(SNI_DisplayOptions & p_DisplayOptions) const;
 		string SetBreakPoint(const string & p_Caption, SNI_DisplayOptions & p_DisplayOptions) const;
 		string LogText(SN::LogContext & context, long p_Width) const;
-		void WriteJS(ostream &p_Stream, const string &tabs) const;
+		void WriteJS(ostream &p_Stream, const string &tabs, SNI_DisplayOptions & p_DisplayOptions) const;
 
 		SNI_WorldSet *GetWorldSet();
 		bool AddChildWorld(SNI_World *p_World);

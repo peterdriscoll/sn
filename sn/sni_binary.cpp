@@ -64,7 +64,7 @@ namespace SNI
 		{
 			return SNI_FunctionDef::DisplayCall(priority, p_DisplayOptions, p_ParameterList, p_DebugSource);
 		}
-		return Bracket(priority, (*p_ParameterList)[1].DisplaySN(GetPriority(), p_DisplayOptions) + SetBreakPoint(GetOperator(), p_DisplayOptions, p_DebugSource, SN::ParameterOneId) + (*p_ParameterList)[0].DisplaySN(GetPriority(), p_DisplayOptions) + SetBreakPoint("~", p_DisplayOptions, p_DebugSource, SN::ParameterTwoId) + SetBreakPoint(";", p_DisplayOptions, p_DebugSource, SN::ParameterThreeId), p_DisplayOptions, p_DebugSource);
+		return Bracket(priority, (*p_ParameterList)[1].DisplaySN(GetPriority(), p_DisplayOptions) + SetBreakPoint(GetOperator(), p_DisplayOptions, p_DebugSource, SN::ParameterTwoId) + (*p_ParameterList)[0].DisplaySN(GetPriority(), p_DisplayOptions) + SetBreakPoint(";", p_DisplayOptions, p_DebugSource, SN::ParameterThreeId), p_DisplayOptions, p_DebugSource);
 	}
 
 	SN::SN_Value SNI_Binary::RightInverseFunctionValue(const SN::SN_Value &p_Left, const SN::SN_Value &p_Right) const
@@ -174,7 +174,7 @@ namespace SNI
 		if (SN::Is<SNI_Value *>(left_value) && SN::Is<SNI_Value *>(right_value))
 		{
 			SN::SN_Error e = p_Result.PartialAssertValue(PrimaryFunctionValue(left_value, right_value));
-			if (e.IsError())
+			if (e.IsSignificantError())
 			{
 				SNI_CallRecord *callRecord = new SNI_CallRecord("Assert to primary function value.", this);
 				LOGGING(callRecord->SetLogContext(context));
@@ -201,7 +201,7 @@ namespace SNI
 				if (SN::Is<SNI_Value *>(right_value))
 				{
 					SN::SN_Error e = left_value.PartialAssertValue(RightInverseFunctionValue(result, right_value));
-					if (e.IsError())
+					if (e.IsSignificantError())
 					{
 						SNI_CallRecord *callRecord = new SNI_CallRecord("Partial assert to right inverse function value.", this);
 						LOGGING(callRecord->SetLogContext(context));
@@ -210,7 +210,7 @@ namespace SNI
 					return e;
 				}
 				SN::SN_Error e = left_value.PartialAssertValue(RightInverseFunctionExpression(result, right_value));
-				if (e.IsError())
+				if (e.IsSignificantError())
 				{
 					SNI_CallRecord *callRecord = new SNI_CallRecord("Partial assert to right inverse function expression.", this);
 					LOGGING(callRecord->SetLogContext(context));
@@ -223,7 +223,7 @@ namespace SNI
 				if (SN::Is<SNI_Value *>(left_value))
 				{
 					SN::SN_Error e = right_value.PartialAssertValue(LeftInverseFunctionValue(result, left_value));
-					if (e.IsError())
+					if (e.IsSignificantError())
 					{
 						SNI_CallRecord *callRecord = new SNI_CallRecord("Partial assert to left inverse function value.", this);
 						LOGGING(callRecord->SetLogContext(context));
@@ -232,7 +232,7 @@ namespace SNI
 					return e;
 				}
 				SN::SN_Error e = right_value.PartialAssertValue(LeftInverseFunctionExpression(result, left_value));
-				if (e.IsError())
+				if (e.IsSignificantError())
 				{
 					SNI_CallRecord *callRecord = new SNI_CallRecord("Partial assert to left inverse function expression.", this);
 					LOGGING(callRecord->SetLogContext(context));

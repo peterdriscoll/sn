@@ -30,11 +30,16 @@ namespace SNI
 		string GetBreakPointLocation();
 		void SetBreakPointLocation(const string &p_BreakPointLocation);
 
+		void IncrementLevel();
+		void DecrementLevel();
+		bool CheckLevel();
 	private:
 		map<string, long> m_TypeMap;
 		string m_VarName;
 		enum DisplayOptionType m_DebugHTML;
 		string m_BreakPointLocation;
+		long m_Level;
+		long m_MaxLevel;
 	};
 }
 

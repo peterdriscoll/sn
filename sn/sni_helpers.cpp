@@ -23,6 +23,7 @@ namespace SNI
 		LOGGING(SN::LogContext context("SNI::PartialAssertValue ( " + SN::SN_Expression(p_Left).DisplaySN() + ", " + SN::SN_Expression(p_Right).DisplaySN() + " )"));
 
 		bool ok = true;
+		SNI_Error::PushHandler();
 		if (SN::Is<SNI_Expression *>(p_Left))
 		{
 			ok |= p_Left.PartialAssertValue(p_Right).GetBool();
@@ -31,6 +32,14 @@ namespace SNI
 		{
 			ok |= p_Right.PartialAssertValue(p_Left).GetBool();
 		}
-		return ok;
+		SNI_Error::PopHandler();
+		SN::SN_Error e(ok, false, "Partial assert left to right, and right to left both failed.");
+		if (e.IsSignificantError())
+		{
+			SNI_CallRecord *callRecord = new SNI_CallRecord("Searching for equation definition.", NULL);
+			LOGGING(callRecord->SetLogContext(context));
+			e.GetSNI_Error()->AddNote(callRecord);
+		}
+		return e;
 	}
 }

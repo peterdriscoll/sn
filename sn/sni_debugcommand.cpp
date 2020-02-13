@@ -68,7 +68,7 @@ namespace SNI
 			breakPoint = p_InterruptPoint == SN::BreakPoint || callFound || p_InterruptPoint == SN::ParameterPoint;
 			break;
 		case SN::GotoStepCount:
-			breakPoint = m_StepCount == p_StepCount;
+			breakPoint = baseInterrupt || (m_StepCount == p_StepCount);
 			break;
 		case SN::CodeBreak:
 			SNI_Thread::GetThread()->ScheduleCodeBreak();

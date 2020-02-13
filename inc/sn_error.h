@@ -35,6 +35,7 @@ namespace SN
 		SNI::SNI_Error * GetSNI_Error() const;
 
 		bool IsError();
+		bool IsSignificantError();
 		bool IsNull();
 		bool GetBool();
 		bool GetDelay();

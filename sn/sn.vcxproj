@@ -488,6 +488,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\html\skynetjs.html" />
+    <None Include="..\html\style.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\html\favicon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

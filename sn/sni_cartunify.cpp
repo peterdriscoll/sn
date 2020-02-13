@@ -42,7 +42,7 @@ namespace SNI
 		m_ValueCalcPos[0] = -1;
 		if (p_TotalCalc == 0)
 		{
-			m_WorldSet = new SNI_WorldSet(SN::SN_FunctionDef(p_FunctionDef));
+			m_WorldSet = new SNI_WorldSet();
 		}
 		else
 		{
@@ -153,7 +153,6 @@ namespace SNI
 			m_InputList[j].GetSNI_Expression()->Complete();
 			if (m_Output[j])
 			{
-
 				SN::SN_Value simple = m_InputList[j].SimplifyValue();
 				SN::SN_Error  e = m_ParamList[j].AssertValue(simple);
 				if (e.IsError())

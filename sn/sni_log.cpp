@@ -122,7 +122,8 @@ namespace SNI
 		SNI_World *world = SNI_World::ContextWorld();
 		if (world)
 		{
-			WriteLine(p_DebugLevel, p_Text + world->DisplayShort());
+			SNI_DisplayOptions displayOptions(doTextOnly);
+			WriteLine(p_DebugLevel, p_Text + world->DisplaySN(displayOptions));
 		}
 		else
 		{

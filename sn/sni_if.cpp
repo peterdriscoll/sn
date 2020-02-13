@@ -198,7 +198,7 @@ namespace SNI
 		SNI_Variable* negative_param = topFrame->CreateParameterByName("negative", p_ParameterList[3]);
 		result_param->SetValue(p_ParameterList[0]);
 		SN::SN_ValueSet condition;
-		SNI_WorldSet *condition_worldSet = new SNI_WorldSet(p_ParameterList[1]);
+		SNI_WorldSet *condition_worldSet = new SNI_WorldSet();
 		condition.SetWorldSet(condition_worldSet);
 		condition.AddTaggedValue(skynet::True, condition_worldSet->CreateWorld());
 		condition.AddTaggedValue(skynet::False, condition_worldSet->CreateWorld());

@@ -156,7 +156,7 @@ namespace SNI
 		void WriteLogExpJS(ostream & p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_DisplayOptions);
 		void WriteStepCountListJS(ostream & p_Stream);
 		void WriteStepCountJS(ostream & p_Stream, const string &p_Delimeter);
-		void WriteWorldSetsJS(ostream & p_Stream, const string & tabs);
+		void WriteWorldSetsJS(ostream & p_Stream, const string & tabs, SNI_DisplayOptions &p_DisplayOptions);
 
 		size_t m_ThreadNum;
 		mutex m_Mutex;

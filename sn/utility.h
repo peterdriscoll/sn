@@ -7,6 +7,7 @@
 #include <vector>
 using namespace std;
 
+
 namespace SN
 {
 	class SN_Expression;
@@ -22,6 +23,7 @@ namespace SN
 namespace SNI
 {
 	class SNI_Expression;
+	class SNI_DisplayOptions;
 
 	class SNI_TaggedValue;
 	typedef vector<SNI_TaggedValue> SNI_TaggedValueList;
@@ -51,12 +53,14 @@ namespace SNI
 	string DisplayPmExpressionList(SN::SN_ExpressionList * p_ParameterList);
 	string DisplayPmValueList(const SN::SN_ValueList &p_ParameterList);
 	string DisplayPmParameterList(SN::SN_ParameterList * p_ParameterList);
-	string DisplayPmTaggedValueList(const SNI_TaggedValueList &p_TaggedValueList);
+	string DisplayPmTaggedValueList(const SNI_TaggedValueList &p_TaggedValueList, SNI_DisplayOptions & p_DisplayOptions);
 	string DisplayPmTaggedExpressionList(const SNI_TaggedValueList &p_TaggedValueList, SNI_DisplayOptions & p_DisplayOptions);
 	string DisplayPmExpression(SNI_Expression *p_Expression);
 	string DisplayPmExpression(const SN::SN_Expression &p_Expression);
 	string DisplayWorlds(long p_NumWorlds, SNI_World ** p_World);
+	string DisplayWorldsD(SNI_DisplayOptions & p_DisplayOptions, long p_NumWorlds, SNI_World ** p_World);
 	string DisplayValues(long p_NumWorlds, SN::SN_Expression * p_ParamList, SNI_World ** p_World = NULL);
+	string DisplayValuesD(SNI_DisplayOptions &p_DisplayOptions, long p_NumWorlds, SN::SN_Expression * p_ParamList, SNI_World ** p_World = NULL);
 	string DisplayWorldSet(SNI_WorldSet *p_WorldSet);
 
 	string MakeBreakPoint(const string &p_DebugId, long p_Index);

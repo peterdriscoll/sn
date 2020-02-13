@@ -66,7 +66,7 @@ namespace SNI
 			{
 				if (result.GetBool())
 				{
-					if (p_ParamList[PU1_First].IsNull())
+					if (p_ParamList[PU1_First].IsNullValue())
 					{
 						return 1;
 					}
@@ -79,7 +79,7 @@ namespace SNI
 			{
 				if (!first.GetBool())
 				{
-					if (p_ParamList[PU1_Result].IsNull())
+					if (p_ParamList[PU1_Result].IsNullValue())
 					{
 						return 1;
 					}

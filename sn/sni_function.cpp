@@ -215,21 +215,26 @@ namespace SNI
 			}
 			e = dynamic_cast<SNI_Error *>(function);
 		}
-		SN::SN_Error err(e);
-		if (err.IsError())
+		SN::SN_Expression exp(e);
+		SN::SN_Error err(exp);
+		ASSERTM(e == err.GetSNI_Error(), "Must be equal.");
+		if (err.IsSignificantError())
 		{
 			SNI_CallRecord *callRecord = new SNI_CallRecord("Function call.", this);
 			LOGGING(callRecord->SetLogContext(context));
 			err.GetSNI_Error()->AddNote(callRecord);
-			SNI_Thread::GetThread()->DebugCommand(SN::ErrorPoint, "Error", SN::ErrorId);
 		}
-		return LOG_RETURN(context, SN::SN_Expression(e));
+		return LOG_RETURN(context, exp);
 	}
 
 	SN::SN_Error SNI_Function::AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World ** p_WorldList, SNI_WorldSet * p_WorldSet)
 	{
 		ASSERTM(p_WorldList == 0, "Called only with a cardinality of 1, so no worlds.");
-		return AssertValue(p_Value);
+		if (p_Value.IsKnownValue() || p_Value.IsReferableValue())
+		{
+			return AssertValue(p_Value);
+		}
+		return skynet::OK;
 	}
 
 	SN::SN_Error SNI_Function::DoPartialAssert()

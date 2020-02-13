@@ -74,12 +74,11 @@ namespace SNI
 		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Assert", SN::CallId);
 
 		SN::SN_Error result = clone.DoAssert();
-		if (result.IsError())
+		if (result.IsSignificantError())
 		{
 			SNI_CallRecord *callRecord = new SNI_CallRecord("Assert.", clone.GetSNI_Expression());
 			LOGGING(callRecord->SetLogContext(context));
 			result.GetSNI_Error()->AddNote(callRecord);
-			SNI_Thread::GetThread()->DebugCommand(SN::ErrorPoint, "Error", SN::ErrorId);
 		}
 		SNI_Frame::Pop();
 

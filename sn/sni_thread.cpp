@@ -167,8 +167,8 @@ namespace SNI
 			string breakPointJS;
 			if (p_InterruptPoint == SN::MirrorPoint)
 			{
-				breakPoint = MakeBreakPoint("MIR_", p_BreakId);
-				breakPointJS = MakeBreakPointJS("MIR_", p_BreakId);
+				breakPoint = MakeBreakPoint("MIR", p_BreakId);
+				breakPointJS = MakeBreakPointJS("MIR", p_BreakId);
 				SetThreadBreakPoint(breakPoint, breakPointJS);
 			}
 			else if (p_InterruptPoint == SN::FailPoint)
@@ -177,8 +177,8 @@ namespace SNI
 				{
 					return;
 				}
-				breakPoint = MakeBreakPoint(m_DebugId, 0);
-				breakPointJS = MakeBreakPointJS(m_DebugId, 0);
+				breakPoint = MakeBreakPoint(m_DebugId, p_BreakId);
+				breakPointJS = MakeBreakPointJS(m_DebugId, p_BreakId);
 				SetThreadBreakPoint(breakPoint, breakPointJS);
 			}
 			else if (p_InterruptPoint == SN::StaticPoint)
@@ -190,6 +190,13 @@ namespace SNI
 			else if (p_InterruptPoint == SN::ErrorPoint)
 			{
 				string errorId = "Error";
+				breakPoint = MakeBreakPoint(errorId, p_BreakId);
+				breakPointJS = MakeBreakPointJS(errorId, p_BreakId);
+				SetThreadBreakPoint(breakPoint, breakPointJS);
+			}
+			else if (p_InterruptPoint == SN::WarningPoint)
+			{
+				string errorId = "Warning";
 				breakPoint = MakeBreakPoint(errorId, p_BreakId);
 				breakPointJS = MakeBreakPointJS(errorId, p_BreakId);
 				SetThreadBreakPoint(breakPoint, breakPointJS);
@@ -987,7 +994,7 @@ namespace SNI
 		p_Stream << "],\n";
 		Unlock();
 
-		WriteWorldSetsJS(p_Stream, "\t");
+		WriteWorldSetsJS(p_Stream, "\t", p_DisplayOptions);
 		p_Stream << "\"threadnum\" : \"" << m_ThreadNum << "\",\n";
 
 		SNI_Manager *manager = GetTopManager(false);
@@ -1038,7 +1045,7 @@ namespace SNI
 		p_Stream << "{\"threadnum\" : \"" << m_ThreadNum << "\", \"stepcount\" : \"" << m_ThreadStepCount << "\"}\n";
 	}
 
-	void SNI_Thread::WriteWorldSetsJS(ostream &p_Stream, const string &tabs)
+	void SNI_Thread::WriteWorldSetsJS(ostream &p_Stream, const string &tabs, SNI_DisplayOptions &p_DisplayOptions)
 	{
 		Lock();
 		if (m_WorldSetProcessMap)
@@ -1049,7 +1056,7 @@ namespace SNI
 			{
 				SNI_WorldSet *ws = pair.second;
 				p_Stream << tabs << delimeter << "\t{\n";
-				ws->WriteJS(p_Stream, tabs + "\t");
+				ws->WriteJS(p_Stream, tabs + "\t", p_DisplayOptions);
 				p_Stream << tabs << "}\n";
 				delimeter = ",";
 			}

@@ -43,7 +43,9 @@ namespace SNI
 		virtual bool IsLeftKnownValue() const;
 		virtual bool IsRightKnownValue() const;
 		virtual bool IsReferableValue() const;
+	private:
 		virtual SNI_WorldSet * GetWorldSet();
+	public:
 
 		virtual SN::SN_String GetSource() const;
 		virtual	SN::SN_Expression GetStart() const;

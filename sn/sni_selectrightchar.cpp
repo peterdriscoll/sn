@@ -65,6 +65,10 @@ namespace SNI
 		{
 			if (p_ParamList[PU1_First].IsLeftKnownValue())
 			{
+				if (p_ParamList[PU1_Result].IsKnownValue())
+				{
+					return MultiplyCardinality(p_ParamList[PU1_Result].Cardinality(), p_ParamList[PU1_First].Cardinality());
+				}
 				return p_ParamList[PU1_First].LeftCardinality();
 			}
 		}

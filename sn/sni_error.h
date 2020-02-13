@@ -38,6 +38,7 @@ namespace SNI
 
 		virtual bool IsNull() const;
 		virtual bool IsError() const;
+		bool IsSignificantError() const;
 
 		virtual bool GetBool();
 		virtual bool GetDelay();

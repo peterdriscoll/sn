@@ -120,7 +120,7 @@ namespace SNI
 		LOGGING(SN::LogContext context("SNI_Unary::Unify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )"));
 
 		SN::SN_Error e = LOG_RETURN(context, PartialUnifyInternal((*p_ParameterList)[0].GetValue(), p_Result));
-		if (e.IsError())
+		if (e.IsSignificantError())
 		{
 			SNI_CallRecord *callRecord = new SNI_CallRecord("Partial unify.", this);
 			LOGGING(callRecord->SetLogContext(context));

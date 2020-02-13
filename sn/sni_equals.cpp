@@ -196,6 +196,7 @@ namespace SNI
 			bool ok = false;
 			if (SN::SN_Bool(result).GetBool())
 			{
+				SNI_Error::PushHandler();
 				if (SN::Is<SNI_VarDef *>(left_value))
 				{
 					ok |= SNI_Helpers::PartialAssertValue(left_value, right_value).GetBool();
@@ -204,8 +205,16 @@ namespace SNI
 				{
 					ok = SNI_Helpers::PartialAssertValue(right_value, left_value).GetBool();
 				}
+				SNI_Error::PopHandler();
 			}
-			return ok;
+			SN::SN_Error e(ok, false, "Neither left or right parameter was a variable.");
+			if (e.IsSignificantError())
+			{
+				SNI_CallRecord *callRecord = new SNI_CallRecord("Checking for variable equals expression.", NULL);
+				LOGGING(callRecord->SetLogContext(context));
+				e.GetSNI_Error()->AddNote(callRecord);
+			}
+			return e;
 		}
 		return false;
 	}
@@ -216,7 +225,9 @@ namespace SNI
 		{
 			long totalCalc = p_TotalCalc;
 			long calcPos = p_CalcPos;
-			if (p_ParamList[PU2_Result].GetBool())
+			SN::SN_Bool result = p_ParamList[PU2_Result].GetVariableValue();
+
+			if (!result.IsNull() && result.GetBool())
 			{
 				if (p_ParamList[PU2_Second].IsReferableValue() && p_ParamList[PU2_Second].IsNullValue())
 				{

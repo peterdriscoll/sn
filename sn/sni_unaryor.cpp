@@ -62,16 +62,32 @@ namespace SNI
 		if (p_TotalCalc <= 1)
 		{
 			SN::SN_Bool result = p_ParamList[PU1_Result].GetVariableValue();
-			if (result.IsKnownValue() && !result.GetBool())
+			if (!result.IsNull())
 			{
-				return 1;
+				if (!result.GetBool())
+				{
+					if (p_ParamList[PU1_First].IsNullValue())
+					{
+						return 1;
+					}
+					return p_ParamList[PU1_First].Cardinality();
+				}
+				return 0;
 			}
 			SN::SN_Bool first = p_ParamList[PU1_First].GetVariableValue();
-			if (first.IsKnownValue() && first.GetBool())
+			if (!first.IsNull())
 			{
-				return 1;
+				if (first.GetBool())
+				{
+					if (p_ParamList[PU1_Result].IsNullValue())
+					{
+						return 1;
+					}
+					return p_ParamList[PU1_Result].Cardinality();
+				}
+				return 0;
 			}
-			return MultiplyCardinality(p_ParamList[PU1_First].Cardinality(2), p_ParamList[PU1_Result].Cardinality(2));
+			return MultiplyCardinality(p_ParamList[PU1_First].Cardinality(), p_ParamList[PU1_Result].Cardinality());
 		}
 		return CARDINALITY_MAX;
 	}

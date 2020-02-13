@@ -17,15 +17,24 @@ namespace SNI
 	/*static*/ long SNI_WorldSet::m_NextWorldSetNo = 0;
 	/*static*/ SNI_WorldSetList SNI_WorldSet::m_ChangedList;
 
-	/*static*/ void SNI_WorldSet::WriteChangedJS(ostream &p_Stream, const string &tabs)
+	/*static*/ void SNI_WorldSet::WriteChangedJS(ostream &p_Stream, const string &tabs, SNI_DisplayOptions &p_DisplayOptions)
 	{
 		p_Stream << "\"worldsets\":[\n";
 		string delimeter = " ";
 		for (SNI_WorldSet *ws: m_ChangedList)
 		{
-			ws->WriteJS(p_Stream, tabs+"\t");
+			ws->WriteJS(p_Stream, tabs+"\t", p_DisplayOptions);
 		}
 		p_Stream << "],\n";
+	}
+
+	SNI_WorldSet::SNI_WorldSet()
+		: m_Mark(false)
+		, m_Complete(false)
+		, m_WorldSetNo(++m_NextWorldSetNo)
+		, m_NextWorldNo(0)
+		, m_ContextWorld(SNI_World::ContextWorld())
+	{
 	}
 
 	SNI_WorldSet::SNI_WorldSet(const SN::SN_Expression &p_Expression)
@@ -55,10 +64,11 @@ namespace SNI
 
 	string SNI_WorldSet::DisplayLong() const
 	{
-		return "S" + to_string(m_WorldSetNo) + " " + DisplayWorlds();
+		SNI_DisplayOptions displayOptions(doTextOnly);
+		return "S" + to_string(m_WorldSetNo) + " " + DisplayWorlds(displayOptions);
 	}
 
-	string SNI_WorldSet::DisplayWorlds() const
+	string SNI_WorldSet::DisplayWorlds(SNI_DisplayOptions & p_DisplayOptions) const
 	{
 		string result;
 		for (size_t j = 0; j < m_WorldList.size(); j++)
@@ -67,12 +77,12 @@ namespace SNI
 			{
 				result += ", ";
 			}
-			result += m_WorldList[j]->DisplaySN();
+			result += m_WorldList[j]->DisplaySN(p_DisplayOptions);
 		}
 		return "{" + result + "}";
 	}
 
-	string SNI_WorldSet::DisplayVariable()
+	string SNI_WorldSet::DisplayVariable(SNI_DisplayOptions & p_DisplayOptions) const
 	{
 		string result;
 		if (m_ChildSetList.size())
@@ -83,14 +93,27 @@ namespace SNI
 				{
 					result += ", ";
 				}
-				result += ws->DisplayVariable();
+				result += ws->DisplayVariable(p_DisplayOptions);
 			}
 			return "{" + result + "}";
 		}
-		return m_Expression.DisplaySN();
+		if (m_Expression.IsVariable())
+		{
+			return m_Expression.DisplaySN(p_DisplayOptions);
+		}
+		return "";
 	}
 
-	void SNI_WorldSet::WriteJS(ostream &p_Stream, const string &tabs) const
+	string SNI_WorldSet::DisplayCondition(SNI_DisplayOptions & p_DisplayOptions, const SN::SN_Expression & p_Value) const
+	{
+		if (m_Expression.IsVariable())
+		{
+			return m_Expression.DisplaySN(p_DisplayOptions) + "=" + p_Value.DisplaySN(p_DisplayOptions);
+		}
+		return DisplayShort() + "=" + p_Value.DisplaySN(p_DisplayOptions);
+	}
+
+	void SNI_WorldSet::WriteJS(ostream &p_Stream, const string &tabs, SNI_DisplayOptions & p_DisplayOptions) const
 	{
 		p_Stream << tabs << "\t\"id\" : \"" << DisplayShort() << "\",\n";
 		p_Stream << tabs << "\t\"expression\" : \"" << ReplaceAll(m_Expression.DisplaySN(), "\"", "\\\"") << "\",\n";
@@ -99,7 +122,7 @@ namespace SNI
 		for (const SNI_World *w : m_WorldList)
 		{
 			p_Stream << tabs << "\t" << delimeter << "\t{\n";
-			w->WriteJS(p_Stream, tabs+"\t\t");
+			w->WriteJS(p_Stream, tabs+"\t\t", p_DisplayOptions);
 			p_Stream << tabs << "\t}\n";
 			delimeter = ",";
 		}
@@ -109,14 +132,14 @@ namespace SNI
 		for (const SNI_WorldSet *ws : m_ChildSetList)
 		{
 			p_Stream << tabs << "\t" << delimeter << "\t{\n";
-			ws->WriteUnmarkedJS(p_Stream, tabs + "\t\t");
+			ws->WriteUnmarkedJS(p_Stream, tabs + "\t\t", p_DisplayOptions);
 			p_Stream << tabs << "\t}\n";
 			delimeter = ",";
 		}
 		p_Stream << tabs << "\t]\n";
 	}
 	
-	void SNI_WorldSet::WriteUnmarkedJS(ostream &p_Stream, const string &tabs) const
+	void SNI_WorldSet::WriteUnmarkedJS(ostream &p_Stream, const string &tabs, SNI_DisplayOptions &p_DisplayOptions) const
 	{
 		p_Stream << tabs << "\t\"id\" : \"" << DisplayShort() << "\",\n";
 		p_Stream << tabs << "\t\"expression\" : \"" << ReplaceAll(m_Expression.DisplaySN(), "\"", "\\\"") << "\",\n";
@@ -125,7 +148,7 @@ namespace SNI
 		for (const SNI_World *w : m_WorldList)
 		{
 			p_Stream << tabs << "\t" << delimeter << "\t{\n";
-			w->WriteJS(p_Stream, tabs + "\t\t");
+			w->WriteJS(p_Stream, tabs + "\t\t", p_DisplayOptions);
 			p_Stream << tabs << "\t}\n";
 			delimeter = ",";
 		}
@@ -395,7 +418,8 @@ namespace SNI
 	SN::SN_Error SNI_WorldSet::CheckDependencies(SNI_WorldSetList &p_ChangedList)
 	{
 		LOGGING(SN::LogContext context("SNI_WorldSet::CheckDependentWorlds2(" + DisplayShort() + ")"));
-		LOG(WriteLine(SN::DebugLevel, "Check dependencies " + DisplayVariable()));
+		SNI_DisplayOptions displayOptions(doTextOnly);
+		LOG(WriteLine(SN::DebugLevel, "Check dependencies " + DisplayVariable(displayOptions)));
 		LogSN();
 		FailWorldsWithEmptyChildren(p_ChangedList);
 		MarkAllWorldInChildSets(false);
@@ -729,5 +753,6 @@ namespace SNI
 	{
 		m_Expression = p_Expression;
 		m_ExpressionString = m_Expression.DisplaySN();
+		ASSERTM(m_Expression.IsNull()|| m_Expression.IsVariable(), "Expected variable.");
 	}
 }

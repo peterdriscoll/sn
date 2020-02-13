@@ -125,7 +125,9 @@
                             </td>
                         </tr>
                     </table>
-                    <button title='Error' ng-click='setbreakpoint(["Error",16])' ng-class='breakpointclass(["Error",16], breakpoint)'>Error</button>
+                    <button title='Error' ng-click='setbreakpoint(["Error",16])' ng-class='breakpointdefaultclass(["Error",16], breakpoint, "NONE")'>Error</button>
+                    <button title='Delay' ng-click='setbreakpoint(["Warning",20])' ng-class='breakpointdefaultclass(["Warning",20], breakpoint, "NONE")'>Delay</button>
+                    <button title='No constraint' ng-click='setbreakpoint(["Warning",19])' ng-class='breakpointdefaultclass(["Warning",19], breakpoint, "NONE")'>No constraint</button>
                     <table class='frame'>
                         <caption><pre>World Sets</pre></caption>
                         <tr ng-repeat="ws in worldsets">
@@ -140,7 +142,7 @@
                             </td>
                         </tr>
                     </table>
-                    <button title='MIR' ng-click='setbreakpoint(["MIR",1])' ng-class='breakpointclass(["MIR",1], breakpoint)'>Check MIR</button>
+                    <button title='MIR' ng-click='setbreakpoint(["MIR",3])' ng-class='breakpointclass(["MIR",3], breakpoint)'>Check MIR</button>
                 </td>
             </tr>
             <tr>
@@ -328,7 +330,9 @@
                 }
             };
             $scope.setbreakpoint(["Error", 16]);
-            $scope.setbreakpoint(["MIR", 1])
+            $scope.setbreakpoint(["Warning", 20]);
+            $scope.setbreakpoint(["Warning", 19]);
+            $scope.setbreakpoint(["MIR", 3])
             $scope.setbreakpoint(["assert", 3]);
             $scope.setbreakpoint(["partialassert", 3]);
             $scope.setbreakpoint(["evaluate", 3]);
@@ -339,8 +343,7 @@
                 }
                 var breakpointId = breakpoint[0] + "_" + breakpoint[1];
                 if ((breakpoint[0] == current[0]) && (breakpoint[1] == current[1])) {
-                    if ($scope.breakpointCol.has(breakpointId))
-                    {
+                    if ($scope.breakpointCol.has(breakpointId)) {
                         return 'breakpointsetlast';
                     }
                     return 'breakpointlast';
@@ -363,7 +366,7 @@
                     if ($scope.breakpointCol.has(breakpointId)) {
                         return 'breakpointsetlast ' + c;
                     }
-                    return 'breakpointlast '+c;
+                    return 'breakpointlast ' + c;
                 }
                 if ($scope.breakpointCol.has(breakpointId)) {
                     return 'breakpointset ' + c;

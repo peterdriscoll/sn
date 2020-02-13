@@ -204,7 +204,8 @@ namespace SNI
 					string valueText;
 					if (!p_Expression.IsNull())
 					{
-						valueText = p_Expression.DisplaySN() + string(p_World ? "::" + p_World->DisplayShort() : "");
+						SNI_DisplayOptions displayOptions(doTextOnly);
+						valueText = p_Expression.DisplaySN() + string(p_World ? "::" + p_World->DisplaySN(displayOptions) : "");
 					}
 					if (fixedWidth < valueText.size())
 					{
@@ -226,7 +227,8 @@ namespace SNI
 					string valueText;
 					if (!p_Expression.IsNull())
 					{
-						valueText = p_Expression.DisplaySN() + string(p_World ? "::" + p_World->DisplayShort() : "");
+						SNI_DisplayOptions displayOptions(doTextOnly);
+						valueText = p_Expression.DisplaySN() + string(p_World ? "::" + p_World->DisplaySN(displayOptions) : "");
 					}
 					row++;
 					if (data.size() < row)
@@ -417,7 +419,7 @@ namespace SNI
 				SNI::SNI_DisplayOptions plainText(doTextOnly);
 				string valueText;
 				string valueTextHTML;
-				if (!p_Expression.IsNull())
+				if (p_Expression.GetSNI_Expression())
 				{
 					valueText = p_Expression.DisplaySN(plainText) + string(p_World ? "::" + p_World->DisplaySN(plainText) : "");
 					valueTextHTML = p_Expression.DisplaySN(p_DisplayOptions) + string(p_World ? "::" + p_World->DisplaySN(p_DisplayOptions) : "");

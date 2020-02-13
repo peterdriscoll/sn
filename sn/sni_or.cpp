@@ -132,23 +132,28 @@ namespace SNI
 
 	SN::SN_Expression SNI_Or::UnifyArray(SN::SN_Expression * p_ParameterList)
 	{
+		string debugId = SNI_Thread::GetThread()->GetDebugId();
+
+		SNI_Thread::GetThread()->SetDebugId(debugId);
 		SN::SN_Expression* firstParamList = new SN::SN_Expression[2];
-		firstParamList[0] = p_ParameterList[0];
-		firstParamList[1] = p_ParameterList[1];
+		firstParamList[0] = p_ParameterList[PU2_Result];
+		firstParamList[1] = p_ParameterList[PU2_First];
 		SN::SN_Error e1 = skynet::UnaryOr.GetSNI_FunctionDef()->UnifyArray(firstParamList);
-		if (e1.IsError())
+
+		if (e1.IsSignificantError())
 		{
 			SNI_CallRecord *callRecord = new SNI_CallRecord("Or of first parameter.", this);
 			e1.GetSNI_Error()->AddNote(callRecord);
 			return e1;
 		}
 
+		SNI_Thread::GetThread()->SetDebugId(debugId);
 		SN::SN_Expression* secondParamList = new SN::SN_Expression[3];
-		secondParamList[0] = p_ParameterList[0];
+		secondParamList[0] = p_ParameterList[PU2_Result];
 		secondParamList[1] = firstParamList[1];
-		secondParamList[2] = p_ParameterList[2];
+		secondParamList[2] = p_ParameterList[PU2_Second];
 		SN::SN_Error e2 = SNI_Binary::UnifyArray(secondParamList);
-		if (e2.IsError())
+		if (e2.IsSignificantError())
 		{
 			SNI_CallRecord *callRecord = new SNI_CallRecord("Or of second parameter with first result.", this);
 			e2.GetSNI_Error()->AddNote(callRecord);
@@ -181,7 +186,7 @@ namespace SNI
 				if (SN::Is<SNI_Bool *>(right_value) && !SN::SN_Bool(right_value).GetBool())
 				{
 					SN::SN_Error e = p_left.PartialAssertValue(SN::SN_Bool(true));
-					if (e.IsError())
+					if (e.IsSignificantError())
 					{
 						SNI_CallRecord *callRecord = new SNI_CallRecord("Partial Assert left condition true.", this);
 						LOGGING(callRecord->SetLogContext(context));
@@ -192,7 +197,7 @@ namespace SNI
 				if (SN::Is<SNI_Bool *>(left_value) && !SN::SN_Bool(left_value).GetBool())
 				{
 					SN::SN_Error e = p_right.PartialAssertValue(SN::SN_Bool(true));
-					if (e.IsError())
+					if (e.IsSignificantError())
 					{
 						SNI_CallRecord *callRecord = new SNI_CallRecord("Partial Assert right condition true.", this);
 						LOGGING(callRecord->SetLogContext(context));
@@ -206,13 +211,16 @@ namespace SNI
 				SN::SN_Error e1 = p_left.PartialAssertValue(SN::SN_Bool(false));
 				if (e1.IsError())
 				{
-					SNI_CallRecord *callRecord = new SNI_CallRecord("Partial Assert left condition false.", this);
-					LOGGING(callRecord->SetLogContext(context));
-					e1.GetSNI_Error()->AddNote(callRecord);
+					if (e1.IsSignificantError())
+					{
+						SNI_CallRecord *callRecord = new SNI_CallRecord("Partial Assert left condition false.", this);
+						LOGGING(callRecord->SetLogContext(context));
+						e1.GetSNI_Error()->AddNote(callRecord);
+					}
 					return e1;
 				}
 				SN::SN_Error e2 = p_right.PartialAssertValue(SN::SN_Bool(false));
-				if (e2.IsError())
+				if (e2.IsSignificantError())
 				{
 					SNI_CallRecord *callRecord = new SNI_CallRecord("Partial Assert right condition false.", this);
 					LOGGING(callRecord->SetLogContext(context));
@@ -222,7 +230,7 @@ namespace SNI
 			}
 		}
 		SN::SN_Error e(false, false, "Partial assert failure.");
-		if (e.IsError())
+		if (e.IsSignificantError())
 		{
 			SNI_CallRecord *callRecord = new SNI_CallRecord("Could not partial assert a sub expression as either true or false.", this);
 			LOGGING(callRecord->SetLogContext(context));
@@ -264,22 +272,58 @@ namespace SNI
 
 	size_t SNI_Or::CardinalityOfUnify(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const
 	{
-		if (2 <= p_TotalCalc)
+		if (p_TotalCalc <= 2)
 		{
 			SN::SN_Bool result = p_ParamList[PU2_Result].GetVariableValue();
-			if (!result.IsNull() && !result.GetBool())
-			{
-				return 1;
-			}
 			SN::SN_Bool left = p_ParamList[PU2_First].GetVariableValue();
-			if (!left.IsNull() && left.GetBool())
-			{
-				return 1;
-			}
 			SN::SN_Bool right = p_ParamList[PU2_Second].GetVariableValue();
-			if (!right.IsNull() && right.GetBool())
+			switch (p_CalcPos)
 			{
-				return 1;
+			case PU2_Result:
+				if (!left.IsNull() && left.GetBool())
+				{
+					return 1;
+				}
+				if (!right.IsNull() && right.GetBool())
+				{
+					return 1;
+				}
+				return MultiplyCardinality(p_ParamList[PU2_First].Cardinality(), p_ParamList[PU2_Second].Cardinality());
+				break;
+			case PU2_First:
+				if (!result.IsNull() && result.GetBool())
+				{
+					if (!right.IsNull())
+					{
+						if (right.GetBool())
+						{
+							return 0;
+						}
+						else
+						{
+							return 1;
+						}
+					}
+				}
+				return MultiplyCardinality(p_ParamList[PU2_Result].Cardinality(), p_ParamList[PU2_Second].Cardinality());
+				break;
+			case PU2_Second:
+				if (!result.IsNull() && result.GetBool())
+				{
+					if (!left.IsNull())
+					{
+						if (left.GetBool())
+						{
+							return 0;
+						}
+						else
+						{
+							return 1;
+						}
+					}
+				}
+				return MultiplyCardinality(p_ParamList[PU2_Result].Cardinality(), p_ParamList[PU2_First].Cardinality());
+				break;
 			}
 		}
 		return SNI_Binary::CardinalityOfUnify(p_Depth, p_ParamList, p_CalcPos, p_TotalCalc);

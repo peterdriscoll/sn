@@ -54,6 +54,11 @@ namespace SN
 		return m_Error && m_Error->IsError();
 	}
 
+	bool SN_Error::IsSignificantError()
+	{
+		return m_Error && m_Error->IsSignificantError();
+	}
+
 	bool SN_Error::IsNull()
 	{
 		return !m_Error || m_Error->IsNull();

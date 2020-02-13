@@ -114,16 +114,18 @@ namespace SNI
 
 		SN::SN_Error e = SN::SN_Expression(m_Condition).DoAssert();
 
-		condition_param->SetValue(m_Condition);
+		condition_param->SetValue(e);
 
 		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".AssertValue before call", SN::CallId);
 
 		if (e.IsError())
 		{
-			SNI_Thread::GetThread()->DebugCommand(SN::ErrorPoint, GetTypeName() + ".AssertValue failed", SN::ErrorId);
-			SNI_CallRecord *callRecord = new SNI_CallRecord("Asserting let condition.", this);
-			LOGGING(callRecord->SetLogContext(context));
-			e.GetSNI_Error()->AddNote(callRecord);
+			if (e.IsSignificantError())
+			{
+				SNI_CallRecord *callRecord = new SNI_CallRecord("Asserting let condition.", this);
+				LOGGING(callRecord->SetLogContext(context));
+				e.GetSNI_Error()->AddNote(callRecord);
+			}
 		}
 		else
 		{
@@ -139,11 +141,14 @@ namespace SNI
 		LOGGING(SN::LogContext context(DisplaySN0() + "SNI_Let::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
 		SN::SN_Error e = m_Condition->DoAssert();
-		if (!e.GetBool())
+		if (e.IsError())
 		{
-			SNI_CallRecord *callRecord = new SNI_CallRecord("Calling let condition.", this);
-			LOGGING(callRecord->SetLogContext(context));
-			e.GetSNI_Error()->AddNote(callRecord);
+			if (e.IsSignificantError())
+			{
+				SNI_CallRecord *callRecord = new SNI_CallRecord("Calling let condition.", this);
+				LOGGING(callRecord->SetLogContext(context));
+				e.GetSNI_Error()->AddNote(callRecord);
+			}
 			return e;
 		}
 		if (p_ParameterList->size() > 0)
@@ -160,9 +165,12 @@ namespace SNI
 		SN::SN_Error e = m_Condition->DoPartialAssert();
 		if (e.IsError())
 		{
-			SNI_CallRecord *callRecord = new SNI_CallRecord("Partial calling let condition.", this);
-			LOGGING(callRecord->SetLogContext(context));
-			e.GetSNI_Error()->AddNote(callRecord);
+			if (e.IsSignificantError())
+			{
+				SNI_CallRecord *callRecord = new SNI_CallRecord("Partial calling let condition.", this);
+				LOGGING(callRecord->SetLogContext(context));
+				e.GetSNI_Error()->AddNote(callRecord);
+			}
 			return e;
 		}
 		if (p_ParameterList->size() > 0)
@@ -189,9 +197,12 @@ namespace SNI
 
 		if (e.IsError())
 		{
-			SNI_CallRecord *callRecord = new SNI_CallRecord("Unifying let condition.", this);
-			LOGGING(callRecord->SetLogContext(context));
-			e.GetSNI_Error()->AddNote(callRecord);
+			if (e.IsSignificantError())
+			{
+				SNI_CallRecord *callRecord = new SNI_CallRecord("Unifying let condition.", this);
+				LOGGING(callRecord->SetLogContext(context));
+				e.GetSNI_Error()->AddNote(callRecord);
+			}
 			return e;
 		}
 		if (p_ParameterList->size() > 0)
@@ -214,9 +225,12 @@ namespace SNI
 		SN::SN_Error e = SN::SN_Expression(m_Condition).DoPartialAssert();
 		if (e.IsError())
 		{
-			SNI_CallRecord *callRecord = new SNI_CallRecord("Partial unify of let condition.", this);
-			LOGGING(callRecord->SetLogContext(context));
-			e.GetSNI_Error()->AddNote(callRecord);
+			if (e.IsSignificantError())
+			{
+				SNI_CallRecord *callRecord = new SNI_CallRecord("Partial unify of let condition.", this);
+				LOGGING(callRecord->SetLogContext(context));
+				e.GetSNI_Error()->AddNote(callRecord);
+			}
 			return e;
 		}
 		if (p_ParameterList->size() > 0)

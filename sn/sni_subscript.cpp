@@ -128,7 +128,7 @@ namespace SNI
 				}
 				else
 				{
-					LOGGING(context.LogText("fail", "Join worlds failed on " + DisplayWorlds(p_Depth, p_WorldList)));
+					LOGGING(context.LogText("fail", "Join worlds failed on " + DisplayWorlds(p_Depth, p_WorldList, LDO)));
 				}
 				return true;
 			}

@@ -130,7 +130,7 @@ namespace SNI
 		{
 			const string &source_text = GetSourceString();
 			SN::SN_String source = m_Source;
-			SNI_WorldSet *worldSet = new SNI_WorldSet(source);
+			SNI_WorldSet *worldSet = new SNI_WorldSet();
 			return start.ForEach(
 				[&end, &source, &source_text, &p_Cart, worldSet, p_Depth](const SN::SN_Expression &p_Param, SNI::SNI_World *p_World) -> SN::SN_Error
 			{
@@ -180,7 +180,7 @@ namespace SNI
 		{
 			const string &source_text = GetSourceString();
 			SN::SN_String source = m_Source;
-			SNI_WorldSet *worldSet = new SNI_WorldSet(source);
+			SNI_WorldSet *worldSet = new SNI_WorldSet();
 			return start.ForEach(
 				[&end, &source, &source_text, &p_Action, worldSet](const SN::SN_Expression &p_Param, SNI::SNI_World *p_World) -> SN::SN_Error
 			{
@@ -221,9 +221,9 @@ namespace SNI
 
 	string SNI_StringRef::DisplaySN(long /*priority*/, SNI_DisplayOptions & p_DisplayOptions) const
 	{
-		if (IsKnownValue())
+		if (IsKnownValue() && Cardinality() == 1)
 		{
-			return "\"" + GetSourceString() + "\"";
+			return "\"" + GetSourceString().substr(GetLeftMostPos(), Length()) + "\"";
 		}
 		return "\"" + GetSourceString() + "\"[" + GetStart().GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + ".." + GetEnd().GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + "]";
 	}
@@ -277,7 +277,7 @@ namespace SNI
 	{
 		if (!m_WorldSet)
 		{
-			m_WorldSet = new SNI_WorldSet(SN::SN_StringRef(this));
+			m_WorldSet = new SNI_WorldSet();
 			REQUESTPROMOTION(m_WorldSet);
 		}
 		return m_WorldSet;
@@ -378,7 +378,6 @@ namespace SNI
 		}
 		else
 		{
-			string worldString = DisplayWorlds(p_NumWorlds, p_World);
 			return SN::SN_Error("SNI_StringRef::AddValue: Value conflict.");
 		}
 	}
@@ -692,7 +691,7 @@ namespace SNI
 			}
 			SN::SN_ValueSet vs_start;
 			SN::SN_ValueSet vs_end;
-			SNI_WorldSet *worldSet = new SNI_WorldSet(vs_start);
+			SNI_WorldSet *worldSet = new SNI_WorldSet();
 			vs_start.SetWorldSet(worldSet);
 			vs_end.SetWorldSet(worldSet);
 			size_t pos = start_pos;

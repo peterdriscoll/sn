@@ -32,6 +32,10 @@ namespace SNI
 		, m_Delay(p_Delay)
 		, m_Description(p_Description)
 	{
+		if (!p_Success)
+		{
+			long dog = 10;
+		}
 		if (!m_Success && !p_Description.empty() && !SNI_World::ContextWorld())
 		{
 			LOG(WriteLine(SN::ErrorLevel, GetLogDescription()));
@@ -47,13 +51,10 @@ namespace SNI
 		, m_Delay(false)
 		, m_Description(p_Description)
 	{
-		if (!m_Success && !p_Description.empty() && !SNI_World::ContextWorld())
+		if (IsSignificantError())
 		{
 			LOG(WriteLine(SN::ErrorLevel, GetLogDescription()));
-			if (!ErrorIsHandled())
-			{
-				SNI_Thread::GetThread()->RegisterError(this);
-			}
+			SNI_Thread::GetThread()->RegisterError(this);
 		}
 	}
 
@@ -80,7 +81,15 @@ namespace SNI
 
 	string SNI_Error::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
-		return "Error(" + m_Description + ")";
+		if (m_Success)
+		{
+			return "true";
+		}
+		else if (m_Description.empty())
+		{
+			return "false";
+		}
+		return "Error(\"" + m_Description + "\")";
 	}
 
 	long SNI_Error::GetPriority() const
@@ -91,6 +100,8 @@ namespace SNI
 	void SNI_Error::AddNote(SNI_CallRecord * p_CallRecord)
 	{
 		m_CallHistory.push_back(p_CallRecord);
+		LOG(WriteLine(SN::InfoLevel, GetLogDescription()));
+		SNI_Thread::GetThread()->DebugCommand(SN::ErrorPoint, "Error", SN::ErrorId);
 	}
 
 	bool SNI_Error::IsNull() const
@@ -101,6 +112,11 @@ namespace SNI
 	bool SNI_Error::IsError() const
 	{
 		return !m_Success;
+	}
+
+	bool SNI_Error::IsSignificantError() const
+	{
+		return !m_Success && !m_Description.empty() && !SNI_World::ContextWorld() && !ErrorIsHandled();
 	}
 
 	bool SNI_Error::GetBool()

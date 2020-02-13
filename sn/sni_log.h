@@ -10,6 +10,8 @@
 #include <vector>
 #include <ostream>
 
+#include "sni_displayoptions.h"
+
 #define _LOG
 #ifdef _LOG
 #define LOG(content) SNI_Log::GetLog()->content

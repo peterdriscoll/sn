@@ -137,12 +137,18 @@ namespace HTTP
 				else if (path == "/gotostepcount")
 				{
 					long stepCount = atol(umap["stepcount"].c_str());
-					rep.content.append(l_thread->GotoStepCountWeb(stepCount, debugHTML));
+					if (0 < stepCount)
+					{
+						rep.content.append(l_thread->GotoStepCountWeb(stepCount, debugHTML));
+					}
 				}
 				else if (path == "/gotostepcountjs")
 				{
 					long stepCount = atol(umap["stepcount"].c_str());
-					l_thread->GotoStepCount(stepCount);
+					if (0 < stepCount)
+					{
+						l_thread->GotoStepCount(stepCount);
+					}
 				}
 				else if (path == "/maxstackframes")
 				{

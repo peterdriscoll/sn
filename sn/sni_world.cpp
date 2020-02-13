@@ -54,14 +54,18 @@ namespace SNI
 
 	}
 
-	string SNI_World::DisplaySN() const
-	{
-		return m_WorldSet->DisplaySN() + ":W" + to_string(m_WorldNo) + (IsActive() ? "+" : "") + (IsEmpty() ? "<fail>" : "" + DisplaySNChildWorlds());
-	}
-
 	string SNI_World::DisplayShort() const
 	{
-		return m_WorldSet->DisplayShort() + ":W" + to_string(m_WorldNo);
+		if (m_WorldSet)
+		{
+			return m_WorldSet->DisplayShort() + "_W" + to_string(m_WorldNo);
+		}
+		return "Empty_W" + to_string(m_WorldNo);
+	}
+
+	string SNI_World::DisplayShortJS() const
+	{
+		return MakeBreakPointJS(DisplayShort(), SN::ErrorId);
 	}
 
 	string SNI_World::DisplaySN(SNI_DisplayOptions & p_DisplayOptions)
@@ -69,12 +73,12 @@ namespace SNI
 		return DisplayConditionSN(p_DisplayOptions);
 	}
 
-	string SNI_World::DisplayCondition() const
+	string SNI_World::DisplayCondition(SNI_DisplayOptions & p_DisplayOptions) const
 	{
 		string result;
 		if (m_ChildList.empty())
 		{
-			result = m_WorldSet->DisplayVariable() + "=" + m_Value.DisplaySN();
+			result = m_WorldSet->DisplayCondition(p_DisplayOptions, m_Value);
 		}
 		else
 		{
@@ -84,26 +88,26 @@ namespace SNI
 				{
 					result += "&&";
 				}
-				result += w->DisplayCondition();
+				result += w->DisplayCondition(p_DisplayOptions);
 			}
 		}
 		for (SNI_World *w : m_NegatedList)
 		{
 			if (!result.empty())
 			{
-				result += "&&!" + w->DisplayCondition();
+				result += "&&!" + w->DisplayCondition(p_DisplayOptions);
 			}
-			result += w->DisplayCondition();
+			result += w->DisplayCondition(p_DisplayOptions);
 		}
 		return result;
 	}
 
 	string SNI_World::DisplayConditionSN(SNI_DisplayOptions & p_DisplayOptions) const
 	{
-		return 	SetBreakPoint(DisplayCondition(), p_DisplayOptions);
+		return 	SetBreakPoint(DisplayCondition(p_DisplayOptions), p_DisplayOptions);
 	}
 
-	string SNI_World::DisplaySNChildWorlds() const
+	string SNI_World::DisplaySNChildWorlds(SNI_DisplayOptions & p_DisplayOptions) const
 	{
 		if (m_ChildList.size() == 0)
 		{
@@ -113,7 +117,7 @@ namespace SNI
 		string separator;
 		for (SNI_WorldList::const_iterator it = m_ChildList.begin(); it < m_ChildList.end(); it++)
 		{
-			result += separator + (*it)->DisplaySN();
+			result += separator + (*it)->DisplaySN(p_DisplayOptions);
 			separator = ", ";
 		}
 		result += "}";
@@ -134,8 +138,8 @@ namespace SNI
 			return p_Caption;
 		case doDebugPointsJS:
 		{
-			string breakPoint = DisplayShort();
-			return "<button ' ng-click='setbreakpoint(\"" + breakPoint + "\")' ng-class='breakpointdefaultclass(\"" + breakPoint + "\", breakPoint, " + Reason() + ")'>" + p_Caption + "</button>";
+			string breakPoint = DisplayShortJS();
+			return "<button title='" + breakPoint + "' ng-click='setbreakpoint(" + breakPoint + ")' ng-class='breakpointdefaultclass(" + breakPoint + ", breakpoint, \""+ Reason() + "\")'>" + p_Caption + "</button>";
 		}
 		}
 		return "";
@@ -153,11 +157,12 @@ namespace SNI
 		return text;
 	}
 
-	void SNI_World::WriteJS(ostream & p_Stream, const string & tabs) const
+	void SNI_World::WriteJS(ostream & p_Stream, const string & tabs, SNI_DisplayOptions &p_DisplayOptions) const
 	{
 		p_Stream << tabs << "\t\"id\" : \"" << DisplayShort() << "\",\n";
-		p_Stream << tabs << "\t\"expression\" : \"" << ReplaceAll(m_Value.DisplaySN(), "\"", "\\\"") << "\",\n";
-		p_Stream << tabs << "\t\"condition\" : \"" << ReplaceAll(DisplayCondition(), "\"", "\\\"") << "\",\n";
+		p_Stream << tabs << "\t\"breakpoint\" : " << DisplayShortJS() << ",\n";
+		p_Stream << tabs << "\t\"expression\" : \"" << ReplaceAll(m_Value.DisplaySN(p_DisplayOptions), "\"", "\\\"") << "\",\n";
+		p_Stream << tabs << "\t\"condition\" : \"" << ReplaceAll(DisplayCondition(p_DisplayOptions), "\"", "\\\"") << "\",\n";
 		p_Stream << tabs << "\t\"empty\" : " << (IsEmpty() ? "true" : "false") << ",\n";
 		p_Stream << tabs << "\t\"fail\" : " << (IsFailMarked() ? "true" : "false") << ",\n";
 		p_Stream << tabs << "\t\"reason\" : \"" << Reason() << "\"\n";
@@ -468,7 +473,8 @@ namespace SNI
 
 	void SNI_World::MarkEmpty(enum FailReason p_Reason)
 	{
-		LOG(WriteLine(SN::DebugLevel, "Fail " + ReasonString(p_Reason) + " " + DisplayCondition()));
+		SNI_DisplayOptions displayOptions(doTextOnly);
+		LOG(WriteLine(SN::DebugLevel, "Fail " + ReasonString(p_Reason) + " " + DisplayCondition(displayOptions)));
 		m_IsEmpty = true;
 		m_Reason = p_Reason;
 		if (m_WorldSet)
@@ -527,7 +533,8 @@ namespace SNI
 			}
 		}
 
-		LOG(WriteLine(SN::DebugLevel, "Fail " + DisplayCondition()));
+		SNI_DisplayOptions displayOptions(doTextOnly);
+		LOG(WriteLine(SN::DebugLevel, "Fail " + DisplayCondition(displayOptions)));
 		m_IsEmpty = true;
 		return !m_WorldSet->IsEmpty();
 	}

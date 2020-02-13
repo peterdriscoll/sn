@@ -107,24 +107,24 @@ namespace SNI
 		long depth = GetNumParameters()-1;
 		string text;
 		string delimeter = "";
-		long param = SN::ParameterOneId;
+		long param = SN::ParameterOneId + depth;
 		for (SN::SN_Expression &p : *p_ParameterList)
 		{
 			string del = delimeter;
 			if (GetOperator().empty())
 			{
-				delimeter = SetBreakPoint(";", p_DisplayOptions, p_DebugSource, param++) + " ";
+				delimeter = SetBreakPoint(";", p_DisplayOptions, p_DebugSource, --param) + " ";
 			}
 			else
 			{
-				delimeter = SetBreakPoint(GetOperator(), p_DisplayOptions, p_DebugSource, param++);
+				delimeter = SetBreakPoint(GetOperator(), p_DisplayOptions, p_DebugSource, --param);
 			}
 			text = p.GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + del + text;
 		}
 
 		if (GetOperator().empty())
 		{
-			text = SetBreakPoint(GetTypeName(), p_DisplayOptions, p_DebugSource, SN::LeftId) + " " + text + SetBreakPoint(";", p_DisplayOptions, p_DebugSource, SN::ParameterOneId + param);
+			text = SetBreakPoint(GetTypeName(), p_DisplayOptions, p_DebugSource, SN::LeftId) + " " + text + SetBreakPoint(";", p_DisplayOptions, p_DebugSource, SN::ParameterOneId+depth);
 		}
 
 		return Bracket(priority, text, p_DisplayOptions, p_DebugSource);
@@ -306,10 +306,15 @@ namespace SNI
 						inputList[j] = topFrame->CreateTemporary();
 						topFrame->GetVariable(j)->SetValue(inputList[j]);
 						e = p_ParamList[j].AssertValue(inputList[j]);
+						topFrame->GetVariable(j)->SetValue(inputList[j]);
 						LOG(WriteLine(SN::DebugLevel, "Assert " + to_string(j) + ": " + inputList[j].DisplayValueSN()));
 						if (e.IsError())
 						{
 							break;
+						}
+						else if (inputList[j].IsKnownValue())
+						{
+							p_ParamList[j] = inputList[j];
 						}
 					}
 				}
@@ -340,7 +345,10 @@ namespace SNI
 				calcPos = (long)j;
 				topFrame->GetVariable(j)->SetValue(p_ParamList[j]);
 			}
-			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify parameter: " + inputList[j].DisplayValueSN(), SN::ParameterOneId+j);
+			if (j != 0)
+			{
+				SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify parameter: " + inputList[j].DisplayValueSN(), SN::ParameterOneId + j);
+			}
 		}
 		LOG(WriteLine(SN::DebugLevel, GetLogDescription(p_ParamList)));
 		if (e.GetBool())
@@ -355,6 +363,7 @@ namespace SNI
 				}
 				if (maxCard < card)
 				{
+					SNI_Thread::GetThread()->DebugCommand(SN::WarningPoint, GetTypeName() + ".Unify no constraint", SN::DelayId);
 					if (AllowDelay())
 					{
 						LOG(WriteLine(SN::DebugLevel, "Delayed Call " + GetLogDescription(inputList)));
@@ -362,7 +371,10 @@ namespace SNI
 					}
 					else
 					{
-						e = SN::SN_Error(true, true);
+						e = SN::SN_Error(true, true, GetTypeName()+": Max cardinality exceeded, and delayed call not allowed.");
+						SNI_CallRecord *callRecord = new SNI_CallRecord("Check applicable CardinalityOfUnify function.", this);
+						LOGGING(callRecord->SetLogContext(context));
+						e.GetSNI_Error()->AddNote(callRecord);
 					}
 				}
 				else
@@ -383,7 +395,7 @@ namespace SNI
 			}
 			else
 			{
-				SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify no constraint", SN::RightId);
+				SNI_Thread::GetThread()->DebugCommand(SN::WarningPoint, GetTypeName() + ".Unify no constraint", SN::NoConstraintId);
 			}
 		}
 		SNI_Frame::Pop();

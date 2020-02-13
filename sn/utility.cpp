@@ -5,6 +5,7 @@
 #include "sni_world.h"
 #include "sni_worldset.h"
 #include "sni_taggedvalue.h"
+#include "sni_displayoptions.h"
 
 #include "sn_pch.h"
 
@@ -196,18 +197,18 @@ namespace SNI
 		return result;
 	}
 
-	string DisplayPmTaggedValueList(const SNI_TaggedValueList &p_TaggedValueList)
+	string DisplayPmTaggedValueList(const SNI_TaggedValueList &p_TaggedValueList, SNI_DisplayOptions & p_DisplayOptions)
 	{
 		string result;
 		string separator;
 		for (unsigned long j = 0; j < p_TaggedValueList.size(); j++)
 		{
-			result += separator + p_TaggedValueList[j].GetValue().DisplaySN();
+			result += separator + p_TaggedValueList[j].GetValue().DisplaySN(p_DisplayOptions);
 
 			SNI_World *world = p_TaggedValueList[j].GetWorld();
 			if (world)
 			{
-				result += "::" + p_TaggedValueList[j].GetWorld()->DisplaySN();
+				result += "::" + p_TaggedValueList[j].GetWorld()->DisplaySN(p_DisplayOptions);
 			}
 			separator = ", ";
 		}
@@ -226,7 +227,7 @@ namespace SNI
 				result += separator + p_TaggedValueList[j].GetValue().GetSNI_Expression()->DisplaySN(0, p_DisplayOptions);
 				if (world)
 				{
-					result += "::" + p_TaggedValueList[j].GetWorld()->DisplayShort();
+					result += "::" + p_TaggedValueList[j].GetWorld()->DisplaySN(p_DisplayOptions);
 				}
 				separator = ", ";
 			}
@@ -254,6 +255,12 @@ namespace SNI
 
 	string DisplayWorlds(long p_NumWorlds, SNI_World ** p_World)
 	{
+		SNI_DisplayOptions displayOptions(doTextOnly);
+		return DisplayWorldsD(displayOptions, p_NumWorlds, p_World);
+	}
+
+	string DisplayWorldsD(SNI_DisplayOptions &p_DisplayOptions, long p_NumWorlds, SNI_World ** p_World)
+	{
 		if (!p_World)
 		{
 			return "";
@@ -267,13 +274,19 @@ namespace SNI
 			}
 			if (p_World[j])
 			{
-				result += p_World[j]->DisplaySN();
+				result += p_World[j]->DisplaySN(p_DisplayOptions);
 			}
 		}
 		return "worlds " + result;
 	}
 
 	string DisplayValues(long p_NumWorlds, SN::SN_Expression * p_ParamList, SNI_World ** p_World)
+	{
+		SNI_DisplayOptions displayOptions(doTextOnly);
+		return DisplayValuesD(displayOptions, p_NumWorlds, p_ParamList, p_World);
+	}
+	
+	string DisplayValuesD(SNI_DisplayOptions & p_DisplayOptions, long p_NumWorlds, SN::SN_Expression * p_ParamList, SNI_World ** p_World)
 	{
 		string result;
 		for (long j = 0; j < p_NumWorlds; j++)
@@ -287,7 +300,7 @@ namespace SNI
 			{
 				if (p_World[j])
 				{
-					result += "::" + p_World[j]->DisplaySN();
+					result += "::" + p_World[j]->DisplaySN(p_DisplayOptions);
 				}
 			}
 		}

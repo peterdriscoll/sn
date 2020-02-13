@@ -248,7 +248,6 @@ namespace SNI
 		{
 			if (p_WorldList)
 			{
-				string worldString = DisplayWorlds(p_NumWorlds, p_WorldList);
 				LOGGING(SN::LogContext context("SNI_Variable::AddValue (" + SN::SN_Expression(this).DisplayValueSN() + " := " + p_Value.DisplayValueSN() + " worlds " + worldString + " set " + DisplayWorldSet(p_WorldSet) + " )"));
 				bool exists = false;
 				SNI_WorldSet *l_WorldSet = p_WorldSet;
@@ -270,7 +269,7 @@ namespace SNI
 				else
 				{
 					LOGGING(context.LogText("Fail", "JoinWorlds failed on " + worldString));
-					return LOG_RETURN(context, SN::SN_Error("SNI_Variable::AddValue: JoinWorlds failed on " + worldString));
+					return LOG_RETURN(context, SN::SN_Error("SNI_Variable::AddValue: JoinWorlds failed on " + DisplayWorlds(p_NumWorlds, p_WorldList)));
 				}
 
 			}
@@ -330,7 +329,7 @@ namespace SNI
 			delimeter = " ";
 			text = p.GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + del + text;
 		}
-		return BracketStatic(p_Priority, SetStaticBreakPoint(FrameName(), p_DisplayOptions, p_DebugSource, SN::LeftId) + " " + text, p_DisplayOptions, p_DebugSource);
+		return Bracket(p_Priority, SetBreakPoint(FrameName(), p_DisplayOptions, p_DebugSource, SN::LeftId) + " " + text, p_DisplayOptions, p_DebugSource);
 	}
 
 	long SNI_Variable::GetPriority() const
@@ -514,11 +513,15 @@ namespace SNI
 
 	SN::SN_Error SNI_Variable::SelfAssert()
 	{
-		if (m_Value && !m_Value->IsNull() && !m_Value->IsKnownValue() && !m_Value->IsReferableValue())
+		if (m_Value && !m_Value->IsNull() && !m_Value->IsKnownValue() && !m_Value->IsReferableValue() && !m_Value->IsVariable())
 		{
-			SNI_Expression *value = m_Value;
-			m_Value = NULL;
-			return value->AssertValue(this);
+			SNI_Frame *topFrame = SNI_Frame::Top();
+			SNI_Variable *v = topFrame->CreateTemporary();
+			SN::SN_Error e = m_Value->AssertValue(v);
+			if (!e.IsError())
+			{
+				m_Value = v->GetVariableValue(true).GetSNI_Expression();
+			}
 		}
 		return true;
 	}
@@ -650,12 +653,32 @@ namespace SNI
 		{
 			SNI_Expression * l_clone = m_Value->Clone(this, (*p_ParameterList)[0].GetSNI_Expression());
 
-			SN::SN_Expression e = l_clone->Unify(p_ParameterList);
-			SNI_Variable *result = SNI_Frame::Top()->GetResult();
-			result->SetValue((*p_ParameterList)[0].GetVariableValue());
-			SNI_Frame::Pop();
-			if (e.IsNull())
+			SNI_Frame *topFrame = SNI_Frame::Top();
+			for (size_t j = 1; j < p_ParameterList->size(); j++)
 			{
+				topFrame->CreateParameter(j, (*p_ParameterList)[j]);
+			}
+			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before calculation", SN::LeftId);
+
+			SNI_Thread::GetThread()->SetDebugId(GetDebugId());
+			SN::SN_Expression e = l_clone->Unify(p_ParameterList);
+
+			SNI_Variable *result = topFrame->GetResult();
+			result->SetValue((*p_ParameterList)[0].GetVariableValue());
+			for (size_t j = 1; j < p_ParameterList->size(); j++)
+			{
+				SNI_Variable *param = topFrame->GetVariable(j);
+				topFrame->CreateParameter(j, (*p_ParameterList)[j]);
+			}
+			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before calculation", SN::RightId);
+
+			SNI_Frame::Pop();
+			if (e.GetSNI_Error())
+			{
+				return e;
+			} else 
+			if (e.IsNull())
+			{ // dog dog dog
 				return skynet::OK;
 			}
 			return e;
