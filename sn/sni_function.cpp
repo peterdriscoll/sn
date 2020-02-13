@@ -101,13 +101,14 @@ namespace SNI
 	{
 		SN::SN_ExpressionList * l_ParameterList = new SN::SN_ExpressionList();
 		SNI_Expression *nextFunction = LoadParameters(l_ParameterList);
-		const SNI_Expression *function = NULL;
+		SNI_Expression *function = NULL;
 		while (nextFunction)
 		{
 			function = nextFunction;
 			nextFunction = function->LoadParameters(l_ParameterList);
 		}
-		return function->DisplayCall(GetPriority(), p_DisplayOptions, l_ParameterList, this);
+		SN::SN_Expression *param_List = function->LoadParametersCall(l_ParameterList);
+		return function->DisplayCall(GetPriority(), p_DisplayOptions, l_ParameterList->size(), param_List, this);
 	}
 
 	long SNI_Function::GetPriority() const
@@ -206,7 +207,7 @@ namespace SNI
 			{
 				SNI_Thread::GetThread()->SetDebugId(GetDebugId());
 				SN::SN_Expression *param_List = functionDef->LoadParametersUnify(l_ParameterList);
-				function = functionDef->UnifyArray(param_List).GetSNI_Expression();
+				function = functionDef->UnifyArray(param_List, this).GetSNI_Expression();
 			}
 			else
 			{

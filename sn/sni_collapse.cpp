@@ -44,9 +44,9 @@ namespace SNI
 		return GetTypeName();
 	}
 
-	string SNI_Collapse::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList, const SNI_Expression * p_DebugSource) const
+	string SNI_Collapse::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression * p_DebugSource) const
 	{
-		return Bracket(priority, SetBreakPoint(GetTypeName(), p_DisplayOptions, p_DebugSource, SN::ParameterOneId) + " " + (*p_ParameterList)[0].GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions), p_DisplayOptions, p_DebugSource);
+		return Bracket(priority, SetBreakPoint(GetTypeName(), p_DisplayOptions, p_DebugSource, SN::ParameterOneId) + " " + p_ParamList[PC1_First].GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions), p_DisplayOptions, p_DebugSource);
 	}
 
 	long SNI_Collapse::GetPriority() const
@@ -74,12 +74,12 @@ namespace SNI
 		return p_Param.Collapse();
 	}
 
-	SN::SN_Expression SNI_Collapse::UnifyArray(SN::SN_Expression * p_ParamList)
+	SN::SN_Expression SNI_Collapse::UnifyArray(SN::SN_Expression * p_ParamList, const SNI_Expression *p_Source)
 	{
 		SN::SN_Error e = UnifyInternal(p_ParamList[1], p_ParamList[0]);
 		if (e.GetDelay())
 		{
-			SNI_DelayedProcessor::GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), p_ParamList);
+			SNI_Thread::GetThread()->GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), GetNumParameters(), p_ParamList, p_Source);
 		}
 		return e;
 	}

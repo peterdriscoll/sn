@@ -83,11 +83,11 @@ namespace SNI
 		return LOG_RETURN(context, PrimaryFunctionValue(value));
 	}
 
-	SN::SN_Expression SNI_BuildSet::UnifyArray(SN::SN_Expression * p_ParamList)
+	SN::SN_Expression SNI_BuildSet::UnifyArray(SN::SN_Expression * p_ParamList, const SNI_Expression *p_Source)
 	{
 		if (!p_ParamList[PU1_First].IsKnownValue())
 		{
-			SNI_DelayedProcessor::GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), p_ParamList);
+			SNI_Thread::GetThread()->GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), GetNumParameters(), p_ParamList, p_Source);
 			return skynet::OK;
 		}
 		return p_ParamList[PU1_Result].AssertValue(PrimaryFunctionValue(p_ParamList[PU1_First].GetVariableValue()));

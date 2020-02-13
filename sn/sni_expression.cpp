@@ -181,12 +181,36 @@ namespace SNI
 		return this;
 	}
 
-	string SNI_Expression::DisplayCall(long priority, SNI_DisplayOptions &p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList, const SNI_Expression *p_DebugSource) const
+	SN::SN_Expression * SNI_Expression::LoadParametersCall(SN::SN_ExpressionList * p_ParameterList) const
+	{
+		size_t numParams = p_ParameterList->size();
+		SN::SN_Expression *paramList = new SN::SN_Expression[numParams];
+		for (size_t j = 0; j < numParams; j++)
+		{
+			paramList[j] = (*p_ParameterList)[numParams - j - 1];
+		}
+		return paramList;
+	}
+
+	SN::SN_Expression * SNI_Expression::LoadParametersUnify(SN::SN_ExpressionList * p_ParameterList) const
+	{
+		size_t numParams = p_ParameterList->size();
+		SN::SN_Expression *paramList = new SN::SN_Expression[numParams];
+		paramList[PU2_Result] = (*p_ParameterList)[0];
+		for (size_t j = 1; j < numParams; j++)
+		{
+			paramList[j] = (*p_ParameterList)[numParams - j];
+		}
+		return paramList;
+	}
+	
+	string SNI_Expression::DisplayCall(long priority, SNI_DisplayOptions &p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const
 	{
 		string text;
 		string delimeter;
-		for (SN::SN_Expression &p: *p_ParameterList)
+		for (size_t j = 0; j < p_NumParams; j++)
 		{
+			SN::SN_Expression &p = p_ParamList[j];
 			text += delimeter + p.GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions);
 			delimeter = ",";
 		}
@@ -605,7 +629,15 @@ namespace SNI
 
 	void SNI_Expression::HandleAction(SN::SN_Expression p_Result, OnErrorHandler *p_ErrorHandler)
 	{
-		SNI_DelayedProcessor::GetProcessor()->Run();
+		SNI_DelayedProcessor *processor = SNI_Thread::GetThread()->GetProcessor();
+		if (processor)
+		{
+			processor->Run();
+		}
+		else
+		{
+			long dog = 10;
+		}
 		SN::SN_Error e = p_Result;
 		SN::SN_Bool b = p_Result;
 		if (b.IsNull())

@@ -53,6 +53,8 @@ namespace SNI
 		string & GetDebugId();
 		void SetDebugId(const string & p_DebugId);
 
+		SNI_DelayedProcessor *GetProcessor();
+
 		void DebugCommand(SN::InterruptPoint p_InterruptPoint, const string & p_Text, unsigned long p_BreakId);
 		void ScheduleCommand(SN::DebugAction p_DebugAction);
 		bool IsExiting();
@@ -91,6 +93,7 @@ namespace SNI
 		string LogJS(long p_MaxLogEntries);
 		string LogExpJS(long p_MaxLogEntries, enum DisplayOptionType p_OptionType);
 		string ErrorJS(enum DisplayOptionType p_OptionType);
+		string DelayedJS(DisplayOptionType p_OptionType);
 
 		void Lock();
 		void Unlock();
@@ -183,6 +186,7 @@ namespace SNI
 		SNI_WorldSetMap *m_WorldSetProcessMap;
 
 		bool m_CodeBreakScheduled;
+		SNI_DelayedProcessor *m_Processor;
 
 		static long m_GotoThreadNum;
 		static long m_StepCount;

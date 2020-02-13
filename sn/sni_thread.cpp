@@ -107,6 +107,7 @@ namespace SNI
 		, m_WorldSetProcessMap(NULL)
 		, m_CodeBreakScheduled(false)
 		, m_Error(NULL)
+		, m_Processor(NULL)
 	{
 	}
 
@@ -121,11 +122,13 @@ namespace SNI
 	{
 		m_Ended = false;
 		m_FrameList.clear();
+		m_Processor = NULL;
 	}
 
 	void SNI_Thread::Clear()
 	{
 		ThreadListLock();
+		m_Processor = NULL;
 		m_FrameList.clear();
 		m_WorldSetProcessMap = NULL;
 		SNI_Log::GetLog()->ClearLogExpressions();
@@ -359,6 +362,30 @@ namespace SNI
 			return ss.str();
 		}
 		return "{\"description\":\"\",\"callhistory\":[]}";
+	}
+
+	SNI_DelayedProcessor *SNI_Thread::GetProcessor()
+	{
+		if (!m_Processor)
+		{
+			m_Processor = SNI_DelayedProcessor::GetProcessor();
+		}
+		return m_Processor;
+	}
+
+	string SNI_Thread::DelayedJS(DisplayOptionType p_OptionType)
+	{
+		stringstream ss;
+		SNI_DisplayOptions displayOptions(p_OptionType);
+		if (m_Processor)
+		{
+			m_Processor->WriteJS(ss, displayOptions);
+		}
+		else
+		{
+			ss << "{records:[]}\n";
+		}
+		return ss.str();
 	}
 
 	string SNI_Thread::Skynet(enum DisplayOptionType p_OptionType)

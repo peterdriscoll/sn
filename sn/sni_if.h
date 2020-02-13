@@ -21,12 +21,12 @@ namespace SNI
 		virtual long GetPriority() const;
 		virtual string GetOperator() const;
 		virtual long GetNumParameters() const;
-		virtual string DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList, const SNI_Expression *p_DebugSource) const;
+		virtual string DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_Expression * p_ParamList, const SNI_Expression *p_DebugSource) const;
 		/// @endcond
 
 		virtual SN::SN_Expression CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const;
-		virtual SN::SN_Expression UnifyArray(SN::SN_Expression * p_ParameterList);
+		virtual SN::SN_Expression UnifyArray(SN::SN_Expression * p_ParameterList, const SNI_Expression *p_Source);
 		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Expression, bool p_Define = false);
 		virtual SN::SN_Error PartialUnifyInternal(SN::SN_Expression &p_Condition, SN::SN_Expression &p_PositiveCase, SN::SN_Expression &p_NegativeCase, SN::SN_Expression &p_Result);
 

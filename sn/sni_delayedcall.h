@@ -19,7 +19,7 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_DelayedCall)
 	public:
-		SNI_DelayedCall(SN::SN_FunctionDef p_Function, SN::SN_Expression*p_ParameterList, SNI_Frame *p_Frame, SNI_World * p_World = NULL);
+		SNI_DelayedCall(SN::SN_FunctionDef p_Function, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_Source, SNI_Frame *p_Frame, SNI_World * p_World = NULL);
 		virtual ~SNI_DelayedCall();
 
 		virtual size_t CallCardinality() const;
@@ -34,10 +34,13 @@ namespace SNI
 		void Display();
 		bool IsScheduled();
 		void MarkScheduled();
+		void WriteJS(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions);
 
 	private:
 		SN::SN_FunctionDef    m_Function;
-		SN::SN_Expression     *m_ParameterList;
+		size_t                m_NumParams;
+		SN::SN_Expression     *m_ParamList;
+		const SNI_Expression  *m_Source;
 		SNI_World             *m_World;
 		bool                  m_Locked;
 		SN::SN_Error          m_Error;

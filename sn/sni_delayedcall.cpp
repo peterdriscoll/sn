@@ -26,9 +26,10 @@
 
 namespace SNI
 {
-	SNI_DelayedCall::SNI_DelayedCall(SN::SN_FunctionDef p_Function, SN::SN_Expression *p_ParameterList, SNI_Frame *p_Frame, SNI_World * p_World)
+	SNI_DelayedCall::SNI_DelayedCall(SN::SN_FunctionDef p_Function, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_Source, SNI_Frame *p_Frame, SNI_World * p_World)
 		: m_Function(p_Function)
-		, m_ParameterList(p_ParameterList)
+		, m_ParamList(p_ParamList)
+		, m_Source(p_Source)
 		, m_Scheduled(false)
 		, m_Locked(false)
 		, m_Frame(p_Frame)
@@ -43,7 +44,7 @@ namespace SNI
 	// Estimate the number of values that will be created in the unknown variable. This value may be infinite, represented by LONG_MAX.
 	size_t SNI_DelayedCall::CallCardinality() const
 	{
-		return m_Function.GetSNI_FunctionDef()->Cardinality(m_ParameterList);
+		return m_Function.GetSNI_FunctionDef()->Cardinality(m_ParamList);
 	}
 
 	bool SNI_DelayedCall::IsNull() const
@@ -57,7 +58,7 @@ namespace SNI
 		{
 			SNI_Frame::PushFrame(m_Frame);
 		}
-		m_Error = m_Function.GetSNI_FunctionDef()->UnifyArray(m_ParameterList);
+		m_Error = m_Function.GetSNI_FunctionDef()->UnifyArray(m_ParamList, m_Source);
 		if (m_Frame)
 		{
 			SNI_Frame::Pop();
@@ -81,7 +82,7 @@ namespace SNI
 	{
 		for (size_t i = 0; i < m_Function.GetSNI_FunctionDef()->GetNumParameters(); i++)
 		{
-			SN::SN_Expression var = m_ParameterList[i];
+			SN::SN_Expression var = m_ParamList[i];
 			if (var.IsRequested())
 			{
 				return true;
@@ -95,7 +96,7 @@ namespace SNI
 	{
 		for (size_t i = 0; i < m_Function.GetSNI_FunctionDef()->GetNumParameters(); i++)
 		{
-			LinkVariable(m_ParameterList[i]);
+			LinkVariable(m_ParamList[i]);
 		}
 	}
 
@@ -130,7 +131,7 @@ namespace SNI
 
 	void SNI_DelayedCall::Display()
 	{
-		LOG(WriteLine(SN::DebugLevel, "  " + m_Function.GetSNI_FunctionDef()->GetLogDescription(m_ParameterList)));
+		LOG(WriteLine(SN::DebugLevel, "  " + m_Function.GetSNI_FunctionDef()->GetLogDescription(m_ParamList)));
 	}
 
 	bool SNI_DelayedCall::IsScheduled()
@@ -141,5 +142,18 @@ namespace SNI
 	void SNI_DelayedCall::MarkScheduled()
 	{
 		m_Scheduled = true;
+	}
+
+	void SNI_DelayedCall::WriteJS(ostream &p_Stream, SNI::SNI_DisplayOptions &p_DisplayOptions)
+	{
+		p_Stream << "\t\t\"expression\" : \"" << ReplaceAll(m_Function.GetSNI_FunctionDef()->DisplayCall(0, p_DisplayOptions, m_NumParams, m_ParamList + 1, m_Source), "\"", "\\\"") << "\",\n";
+		p_Stream << "\t\t\"result\" : \"" << ReplaceAll(m_ParamList[PU1_Result].DisplaySN(p_DisplayOptions), "\"", "\\\"") << "\",\n";
+		size_t card = CallCardinality();
+		string card_string = "\"infinity\"";
+		if (card < CARDINALITY_MAX)
+		{
+			card_string = to_string(card);
+		}
+		p_Stream << "\t\t\"cardinality\" : " << card_string << "\n";
 	}
 }

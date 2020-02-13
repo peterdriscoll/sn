@@ -310,7 +310,7 @@ namespace SNI
 		// same value must be returned.
 		// The solution to this to include the time, but I don't yet have a time class
 		// or a branching time object to allow me to safely retrieve it. Later.
-		auto &preventReread = SNI_DelayedProcessor::GetProcessor()->GetPreventReread();
+		auto &preventReread = SNI_Thread::GetThread()->GetProcessor()->GetPreventReread();
 		auto it  = preventReread.find(GetString());
 		if (it == preventReread.end())
 		{
@@ -336,7 +336,7 @@ namespace SNI
 		std::ofstream out(GetString());
 		out << p_Contents.GetString();
 		out.close();
-		auto &preventReread = SNI_DelayedProcessor::GetProcessor()->GetPreventReread();
+		auto &preventReread = SNI_Thread::GetThread()->GetProcessor()->GetPreventReread();
 		preventReread[GetString()] = p_Contents;
 	}
 

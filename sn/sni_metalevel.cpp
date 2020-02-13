@@ -34,13 +34,9 @@ namespace SNI
 		return 1;
 	}
 
-	string SNI_MetaLevel::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList, const SNI_Expression * p_DebugSource) const
+	string SNI_MetaLevel::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression * p_DebugSource) const
 	{
-		if (p_ParameterList->size() == 2)
-		{
-			return (*p_ParameterList)[1].GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + ".Meta(" + (*p_ParameterList)[0].GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + ")";
-		}
-		return "";
+		return p_ParamList[PC2_First].GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + ".Meta(" + p_ParamList[PC2_Second].GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + ")";
 	}
 
 	SN::SN_Value SNI_MetaLevel::PrimaryFunctionValue(const SN::SN_Value &p_Left, const SN::SN_Value &p_Right) const
@@ -101,7 +97,7 @@ namespace SNI
 		return p_ParamList[PC1_First].DoEvaluate();
 	}
 
-	SN::SN_Expression SNI_MetaLevel::UnifyArray(SN::SN_Expression * p_ParamList)
+	SN::SN_Expression SNI_MetaLevel::UnifyArray(SN::SN_Expression * p_ParamList, const SNI_Expression *p_Source)
 	{
 		SNI_Thread::GetThread()->SetDebugId("meta");
 		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Meta", SN::CallId);

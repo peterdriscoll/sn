@@ -20,7 +20,7 @@ namespace SNI
 	class SNI_CartUnify : public SNI_Cart
 	{
 	public:
-		SNI_CartUnify(const SNI_FunctionDef *p_FunctionDef, long p_Depth, SN::SN_Expression * p_InputList, SN::SN_Expression * p_ParamList, bool *p_Output, long p_CalcPos, long p_TotalCalc);
+		SNI_CartUnify(const SNI_FunctionDef *p_FunctionDef, long p_Depth, SN::SN_Expression * p_InputList, SN::SN_Expression * p_ParamList, bool *p_Output, long p_CalcPos, long p_TotalCalcc, const SNI_Expression *p_Source);
 		virtual ~SNI_CartUnify();
 
 		SN::SN_Error ForEachUnify();
@@ -44,6 +44,7 @@ namespace SNI
 		long *m_ValueCalcPos;
 		long *m_ValueTotalCalc;
 		SNI_WorldSet *m_WorldSet;
+		const SNI_Expression *m_Source;
 	};
 }
 

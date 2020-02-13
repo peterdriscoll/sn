@@ -130,7 +130,7 @@ namespace SNI
 		SNI_DelayedCall *call = dynamic_cast<SNI_DelayedCall *>(m_Value);
 		if (call)
 		{
-			SNI_DelayedProcessor::GetProcessor()->Request(call);
+			SNI_Thread::GetThread()->GetProcessor()->Request(call);
 		}
 	}
 
@@ -318,16 +318,16 @@ namespace SNI
 		return "Null";
 	}
 
-
-	string SNI_Variable::DisplayCall(long p_Priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList, const SNI_Expression *p_DebugSource) const
+	string SNI_Variable::DisplayCall(long p_Priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const
 	{
 		string text;
 		string delimeter;
-		for (SN::SN_Expression &p : *p_ParameterList)
+		for (size_t j = 0; j < p_NumParams; j++)
 		{
+			SN::SN_Expression &p = p_ParamList[j];
 			string del = delimeter;
 			delimeter = " ";
-			text = p.GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + del + text;
+			text += del + p.GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions);
 		}
 		return Bracket(p_Priority, SetBreakPoint(FrameName(), p_DisplayOptions, p_DebugSource, SN::LeftId) + " " + text, p_DisplayOptions, p_DebugSource);
 	}
@@ -488,7 +488,7 @@ namespace SNI
 		SNI_DelayedCall *call = dynamic_cast<SNI_DelayedCall *>(m_Value);
 		if (call)
 		{
-			SNI_DelayedProcessor::GetProcessor()->Request(call);
+			SNI_Thread::GetThread()->GetProcessor()->Request(call);
 		}
 		return GetValue()->DoEvaluate(p_MetaLevel);
 	}
@@ -553,7 +553,7 @@ namespace SNI
 				REQUESTPROMOTION(m_Value);
 				if (call)
 				{
-					SNI_DelayedProcessor::GetProcessor()->Request(call);
+					SNI_Thread::GetThread()->GetProcessor()->Request(call);
 				}
 				return skynet::OK;
 			}

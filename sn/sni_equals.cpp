@@ -263,7 +263,7 @@ namespace SNI
 		return CARDINALITY_MAX;
 	}
 
-	SN::SN_Error SNI_Equals::UnifyElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, long p_CalcPos, long p_TotalCalc, SNI_WorldSet * worldSet) const
+	SN::SN_Error SNI_Equals::UnifyElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, long p_CalcPos, long p_TotalCalc, SNI_WorldSet * worldSet, const SNI_Expression *p_Source) const
 	{
 		LOGGING(SN::LogContext context("SNI_Equals::UnifyElement(CalcPos " + to_string(p_CalcPos) + " TotalCalc " + to_string(p_TotalCalc) + " " + DisplayValues(p_Depth, p_ParamList, p_WorldList) + ")"));
 		if (worldSet)
@@ -323,7 +323,7 @@ namespace SNI
 					l_ParamList[0] = p_ParamList[PU2_Result];
 					l_ParamList[1] = varLeft;
 					l_ParamList[2] = p_ParamList[PU2_Second];
-					SNI_DelayedProcessor::GetProcessor()->Delay(this, l_ParamList);
+					SNI_Thread::GetThread()->GetProcessor()->Delay(this, 3, l_ParamList, p_Source);
 				}
 				return LOG_RETURN(context, e);
 			}
@@ -344,7 +344,7 @@ namespace SNI
 					l_ParamList[0] = varRight;
 					l_ParamList[1] = p_ParamList[PU2_Result];
 					l_ParamList[2] = p_ParamList[PU2_First];
-					SNI_DelayedProcessor::GetProcessor()->Delay(this, l_ParamList);
+					SNI_Thread::GetThread()->GetProcessor()->Delay(this, 3, l_ParamList, p_Source);
 				}
 				return LOG_RETURN(context, e);
 			}

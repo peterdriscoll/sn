@@ -56,7 +56,7 @@ namespace SNI
 		return skynet::Null;
 	}
 
-	SN::SN_Expression SNI_File::UnifyArray(SN::SN_Expression * p_ParamList)
+	SN::SN_Expression SNI_File::UnifyArray(SN::SN_Expression * p_ParamList, const SNI_Expression *p_Source)
 	{
 		SN::SN_String name = p_ParamList[1].DoEvaluate();
 		if (!name.IsNull())
@@ -76,7 +76,7 @@ namespace SNI
 				return p_ParamList[0].AssertValue(file);
 			}
 		}
-		SNI_DelayedProcessor::GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), p_ParamList);
+		SNI_Thread::GetThread()->GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), GetNumParameters(), p_ParamList, p_Source);
 		return skynet::OK;
 	}
 }

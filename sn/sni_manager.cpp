@@ -484,6 +484,7 @@ namespace SNI
 	void SNI_Manager::StartWebServer(SN::DebugAction p_DebugAction, const string& p_Address, const string& p_Port, const string& p_DocRoot)
 	{
 		m_HasDebugServer = true;
+		PGC::PGC_Transaction *transaction = SNI::SNI_Transaction::TopTransaction();
 		if (m_WebServerThreadUsageCount == 0 && !m_WebServerThread)
 		{
 			SNI_Thread::GetThread()->ScheduleCommand(p_DebugAction);

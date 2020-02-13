@@ -113,7 +113,7 @@ namespace SNI
 		return SNI_Binary::CardinalityOfUnify(p_Depth, p_ParamList, p_CalcPos, p_TotalCalc);
 	}
 
-	SN::SN_Error SNI_Implies::UnifyElement(long p_Depth, SN::SN_Expression *p_ParamList, SNI_World **p_WorldList, long p_CalcPos, long p_TotalCalc, SNI_WorldSet *worldSet) const
+	SN::SN_Error SNI_Implies::UnifyElement(long p_Depth, SN::SN_Expression *p_ParamList, SNI_World **p_WorldList, long p_CalcPos, long p_TotalCalc, SNI_WorldSet *worldSet, const SNI_Expression *p_Source) const
 	{
 		// Note the order is: 0:Left param, 1:Result, 2:right param.
 		switch (p_TotalCalc)

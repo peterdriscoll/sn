@@ -46,27 +46,19 @@ namespace SNI
 		return "Unary Op";
 	}
 
-	string SNI_Unary::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList, const SNI_Expression * p_DebugSource) const
+	string SNI_Unary::DisplayCall(long priority, SNI_DisplayOptions &p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const
 	{
-		long param = SN::ParameterOneId;
 		string text;
-		string delimeter;
 		if (GetOperator().empty())
 		{
-			text = SetBreakPoint(GetTypeName(), p_DisplayOptions, p_DebugSource, SN::LeftId);
-			delimeter = " ";
+			text = SetBreakPoint(GetTypeName(), p_DisplayOptions, p_DebugSource, SN::LeftId) + " ";
 		}
 		else
 		{
 			text = SetBreakPoint(GetOperator(), p_DisplayOptions, p_DebugSource, SN::LeftId);
 		}
-		for (SN::SN_Expression &p : *p_ParameterList)
-		{
-			string del = delimeter;
-			delimeter = SetBreakPoint(";", p_DisplayOptions, p_DebugSource, param++);
-			text = text + del + p.GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions);
-		}
-		return Bracket(priority, text + SetBreakPoint(";", p_DisplayOptions, p_DebugSource, param), p_DisplayOptions, p_DebugSource);
+		return Bracket(priority, 
+			text + " " + p_ParamList[PC1_First].GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + SetBreakPoint(";", p_DisplayOptions, p_DebugSource, SN::ParameterOneId), p_DisplayOptions, p_DebugSource);
 	}
 
 	long SNI_Unary::GetPriority() const
@@ -176,7 +168,7 @@ namespace SNI
 		return CARDINALITY_MAX;
 	}
 
-	SN::SN_Error SNI_Unary::UnifyElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, long p_CalcPos, long p_TotalCalc, SNI_WorldSet * worldSet) const
+	SN::SN_Error SNI_Unary::UnifyElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, long p_CalcPos, long p_TotalCalc, SNI_WorldSet * worldSet, const SNI_Expression *p_Source) const
 	{
 		LOGGING(SN::LogContext context("SNI_Unary::UnifyElement(CalcPos " + to_string(p_CalcPos) + " TotalCalc " + to_string(p_TotalCalc) + " " + DisplayValues(p_Depth, p_ParamList, p_WorldList) + ")"));
 

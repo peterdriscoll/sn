@@ -102,24 +102,25 @@ namespace SNI
 		return CardinalityOfUnify(depth, p_ParamList, calcPos, totalCalc);
 	}
 
-	string SNI_FunctionDef::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList, const SNI_Expression *p_DebugSource) const
+	string SNI_FunctionDef::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression *p_DebugSource) const
 	{
 		long depth = GetNumParameters()-1;
 		string text;
 		string delimeter = "";
-		long param = SN::ParameterOneId + depth;
-		for (SN::SN_Expression &p : *p_ParameterList)
+		long param = SN::ParameterOneId;
+		for (long j=0; j < depth; j++)
 		{
+			SN::SN_Expression &p = p_ParamList[j];
 			string del = delimeter;
 			if (GetOperator().empty())
 			{
-				delimeter = SetBreakPoint(";", p_DisplayOptions, p_DebugSource, --param) + " ";
+				delimeter = SetBreakPoint(";", p_DisplayOptions, p_DebugSource, param++) + " ";
 			}
 			else
 			{
-				delimeter = SetBreakPoint(GetOperator(), p_DisplayOptions, p_DebugSource, --param);
+				delimeter = SetBreakPoint(GetOperator(), p_DisplayOptions, p_DebugSource, param++);
 			}
-			text = p.GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + del + text;
+			text += del + p.GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions);
 		}
 
 		if (GetOperator().empty())
@@ -240,7 +241,7 @@ namespace SNI
 		return PartialUnify(NULL, SN::SN_Bool(true));
 	}
 
-	SN::SN_Expression SNI_FunctionDef::UnifyArray(SN::SN_Expression * p_ParamList)
+	SN::SN_Expression SNI_FunctionDef::UnifyArray(SN::SN_Expression * p_ParamList, const SNI_Expression *p_Source)
 	{
 		SN::SN_Error  e = true;
 		long depth = GetNumParameters();
@@ -363,11 +364,10 @@ namespace SNI
 				}
 				if (maxCard < card)
 				{
-					SNI_Thread::GetThread()->DebugCommand(SN::WarningPoint, GetTypeName() + ".Unify no constraint", SN::DelayId);
 					if (AllowDelay())
 					{
 						LOG(WriteLine(SN::DebugLevel, "Delayed Call " + GetLogDescription(inputList)));
-						SNI_DelayedProcessor::GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), inputList);
+						SNI_Thread::GetThread()->GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), GetNumParameters(), inputList, p_Source);
 					}
 					else
 					{
@@ -379,7 +379,7 @@ namespace SNI
 				}
 				else
 				{
-					e = ForEachUnify(card, depth, inputList, p_ParamList, output, calcPos, totalCalc);
+					e = ForEachUnify(card, depth, inputList, p_ParamList, output, calcPos, totalCalc, p_Source);
 					LOG(WriteLine(SN::DebugLevel, GetLogDescription(inputList)));
 				}
 				for (long j = 0; j < depth; j++)
@@ -408,7 +408,7 @@ namespace SNI
 		return 1;
 	}
 
-	SN::SN_Error SNI_FunctionDef::UnifyElement(long p_Depth, SN::SN_Expression * p_InputList, SNI_World ** p_WorldList, long p_CalcPos, long p_TotalCalc, SNI_WorldSet * worldSet) const
+	SN::SN_Error SNI_FunctionDef::UnifyElement(long p_Depth, SN::SN_Expression * p_InputList, SNI_World ** p_WorldList, long p_CalcPos, long p_TotalCalc, SNI_WorldSet * worldSet, const SNI_Expression *p_Source) const
 	{
 		return false;
 	}
@@ -447,7 +447,7 @@ namespace SNI
 		}
 	}
 
-	SN::SN_Error SNI_FunctionDef::ForEachUnify(size_t p_Card, long p_Depth, SN::SN_Expression * p_InputList, SN::SN_Expression * p_ParamList, bool * p_Output, long p_CalcPos, long p_TotalCalc) const
+	SN::SN_Error SNI_FunctionDef::ForEachUnify(size_t p_Card, long p_Depth, SN::SN_Expression * p_InputList, SN::SN_Expression * p_ParamList, bool * p_Output, long p_CalcPos, long p_TotalCalc, const SNI_Expression *p_Source) const
 	{
 		if (p_Card == 1)
 		{
@@ -461,7 +461,7 @@ namespace SNI
 					}
 				}
 			}
-			SN::SN_Error e = UnifyElement(p_Depth, p_InputList, NULL, p_CalcPos, p_TotalCalc, NULL);
+			SN::SN_Error e = UnifyElement(p_Depth, p_InputList, NULL, p_CalcPos, p_TotalCalc, NULL, p_Source);
 			if (!AllowDelay())
 			{
 				for (size_t j = 0; j < p_Depth; j++)
@@ -481,31 +481,8 @@ namespace SNI
 		}
 		else
 		{
-			SNI_CartUnify cart(this, p_Depth, p_InputList, p_ParamList, p_Output, p_CalcPos, p_TotalCalc);
+			SNI_CartUnify cart(this, p_Depth, p_InputList, p_ParamList, p_Output, p_CalcPos, p_TotalCalc, p_Source);
 			return cart.ForEachUnify();
 		}
-	}
-
-	SN::SN_Expression * SNI_FunctionDef::LoadParametersCall(SN::SN_ExpressionList * p_ParameterList) const
-	{
-		size_t numParams = p_ParameterList->size();
-		SN::SN_Expression *paramList = new SN::SN_Expression[numParams];
-		for (size_t j = 0; j < numParams; j++)
-		{
-			paramList[j] = (*p_ParameterList)[numParams - j - 1];
-		}
-		return paramList;
-	}
-
-	SN::SN_Expression * SNI_FunctionDef::LoadParametersUnify(SN::SN_ExpressionList * p_ParameterList) const
-	{
-		size_t numParams = p_ParameterList->size();
-		SN::SN_Expression *paramList = new SN::SN_Expression[numParams];
-		paramList[PU2_Result] = (*p_ParameterList)[0];
-		for (size_t j = 1; j < numParams; j++)
-		{
-			paramList[j] = (*p_ParameterList)[numParams - j];
-		}
-		return paramList;
 	}
 }

@@ -32,7 +32,7 @@ namespace SNI
 		virtual string DisplayCpp() const;
 		virtual string DisplaySN(long p_Priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual string DisplayValueSN(long priority, SNI_DisplayOptions & p_DisplayOptions) const;
-		virtual string DisplayCall(long p_Priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList, const SNI_Expression *p_DebugSource) const;
+		virtual string DisplayCall(long p_Priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const;
 		virtual long GetPriority() const;
 
 		virtual bool GetBool() const;

@@ -34,10 +34,10 @@ namespace SNI
 		return 1;
 	}
 
-	string SNI_PartialEvaluate::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList, const SNI_Expression * p_DebugSource) const
+	string SNI_PartialEvaluate::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression * p_DebugSource) const
 	{
 
-		return (*p_ParameterList)[0].GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + ".Evaluate()";
+		return p_ParamList[PC1_First].GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + ".Evaluate()";
 	}
 
 
@@ -61,7 +61,7 @@ namespace SNI
 		return p_ParamList[PC1_First].DoPartialEvaluate();
 	}
 
-	SN::SN_Expression SNI_PartialEvaluate::UnifyArray(SN::SN_Expression * p_ParamList)
+	SN::SN_Expression SNI_PartialEvaluate::UnifyArray(SN::SN_Expression * p_ParamList, const SNI_Expression *p_Source)
 	{
 		SNI::SNI_DisplayOptions l_DisplayOptions(doTextOnly);
 

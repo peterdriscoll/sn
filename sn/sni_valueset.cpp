@@ -480,7 +480,7 @@ namespace SNI
 		SN::SN_Expression *paramList = new SN::SN_Expression[2];
 		paramList[0] = p_Value;
 		paramList[1] = this;
-		SN::SN_Error e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList);
+		SN::SN_Error e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList, this);
 		if (e.IsSignificantError())
 		{
 			SNI_CallRecord *callRecord = new SNI_CallRecord("Assert value set to value.", this);
@@ -559,7 +559,7 @@ namespace SNI
 						if (functionDef)
 						{
 							SN::SN_Expression *param_List = functionDef->LoadParametersUnify(&paramListClone);
-							function = functionDef->UnifyArray(param_List).GetSNI_Expression();
+							function = functionDef->UnifyArray(param_List, this).GetSNI_Expression();
 						}
 						else
 						{

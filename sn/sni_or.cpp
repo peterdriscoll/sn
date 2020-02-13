@@ -130,7 +130,7 @@ namespace SNI
 		return LOG_RETURN(context, left_value || right_value);
 	}
 
-	SN::SN_Expression SNI_Or::UnifyArray(SN::SN_Expression * p_ParameterList)
+	SN::SN_Expression SNI_Or::UnifyArray(SN::SN_Expression * p_ParameterList, const SNI_Expression *p_Source)
 	{
 		string debugId = SNI_Thread::GetThread()->GetDebugId();
 
@@ -138,7 +138,7 @@ namespace SNI
 		SN::SN_Expression* firstParamList = new SN::SN_Expression[2];
 		firstParamList[0] = p_ParameterList[PU2_Result];
 		firstParamList[1] = p_ParameterList[PU2_First];
-		SN::SN_Error e1 = skynet::UnaryOr.GetSNI_FunctionDef()->UnifyArray(firstParamList);
+		SN::SN_Error e1 = skynet::UnaryOr.GetSNI_FunctionDef()->UnifyArray(firstParamList, p_Source);
 
 		if (e1.IsSignificantError())
 		{
@@ -152,7 +152,7 @@ namespace SNI
 		secondParamList[0] = p_ParameterList[PU2_Result];
 		secondParamList[1] = firstParamList[1];
 		secondParamList[2] = p_ParameterList[PU2_Second];
-		SN::SN_Error e2 = SNI_Binary::UnifyArray(secondParamList);
+		SN::SN_Error e2 = SNI_Binary::UnifyArray(secondParamList, p_Source);
 		if (e2.IsSignificantError())
 		{
 			SNI_CallRecord *callRecord = new SNI_CallRecord("Or of second parameter with first result.", this);
@@ -329,7 +329,7 @@ namespace SNI
 		return SNI_Binary::CardinalityOfUnify(p_Depth, p_ParamList, p_CalcPos, p_TotalCalc);
 	}
 
-	SN::SN_Error SNI_Or::UnifyElement(long p_Depth, SN::SN_Expression *p_ParamList, SNI_World **p_WorldList, long p_CalcPos, long p_TotalCalc, SNI_WorldSet *worldSet) const
+	SN::SN_Error SNI_Or::UnifyElement(long p_Depth, SN::SN_Expression *p_ParamList, SNI_World **p_WorldList, long p_CalcPos, long p_TotalCalc, SNI_WorldSet *worldSet, const SNI_Expression *p_Source) const
 	{
 		// Note the order is: 0:Left param, 1:Result, 2:right param.
 		switch (p_TotalCalc)

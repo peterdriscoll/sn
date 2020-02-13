@@ -18,6 +18,7 @@
 #include "sni_result.h"
 #include "sni_helpers.h"
 #include "sni_delayedprocessor.h"
+#include "sni_expression.h"
 #include "utility.h"
 
 #include "sn_pch.h"
@@ -26,7 +27,7 @@
 
 namespace SNI
 {
-	SNI_CartUnify::SNI_CartUnify(const SNI_FunctionDef *p_FunctionDef, long p_Depth, SN::SN_Expression * p_InputList, SN::SN_Expression * p_ParamList, bool *p_Output, long p_CalcPos, long p_TotalCalc)
+	SNI_CartUnify::SNI_CartUnify(const SNI_FunctionDef *p_FunctionDef, long p_Depth, SN::SN_Expression * p_InputList, SN::SN_Expression * p_ParamList, bool *p_Output, long p_CalcPos, long p_TotalCalc, const SNI_Expression *p_Source)
 		: m_FunctionDef(p_FunctionDef)
 		, m_Depth(p_Depth)
 		, m_InputList(p_InputList)
@@ -37,6 +38,7 @@ namespace SNI
 		, m_CalcPos(p_CalcPos)
 		, m_ValueCalcPos(new long[p_Depth+1])
 		, m_ValueTotalCalc(new long[p_Depth+1])
+		, m_Source(p_Source)
 	{
 		m_ValueTotalCalc[0] = p_Depth;
 		m_ValueCalcPos[0] = -1;
@@ -98,7 +100,7 @@ namespace SNI
 			}
 			else
 			{
-				e = m_FunctionDef->UnifyElement(p_Depth + 1, m_ValueList, m_WorldList, m_ValueCalcPos[p_Depth + 1], m_ValueTotalCalc[p_Depth + 1], m_WorldSet);
+				e = m_FunctionDef->UnifyElement(p_Depth + 1, m_ValueList, m_WorldList, m_ValueCalcPos[p_Depth + 1], m_ValueTotalCalc[p_Depth + 1], m_WorldSet, m_Source);
 			}
 		}
 		return e;
@@ -210,7 +212,7 @@ namespace SNI
 					l_ParamList[j] = m_ValueList[j];
 				}
 			}
-			SNI_DelayedProcessor::GetProcessor()->Delay(m_FunctionDef, l_ParamList, world);
+			SNI_Thread::GetThread()->GetProcessor()->Delay(m_FunctionDef, m_Depth, l_ParamList, m_Source, world);
 		}
 		return true;
 	}

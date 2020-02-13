@@ -15,11 +15,16 @@ namespace SNI
 {
 	/*static*/ SNI_DelayedProcessor *SNI_DelayedProcessor::GetProcessor()
 	{
-		SNI_DelayedProcessor* task = dynamic_cast<SNI_DelayedProcessor *>(SNI::SNI_Transaction::TopTransaction()->TopTask());
-		if (!task)
+		PGC::PGC_Transaction *transaction = SNI::SNI_Transaction::TopTransaction();
+		SNI_DelayedProcessor* task = NULL;
+		if (transaction)
 		{
-			task = new SNI_DelayedProcessor(SNI_Thread::TopManager());
-			SNI::SNI_Transaction::TopTransaction()->SubmitTask(task);
+			task = dynamic_cast<SNI_DelayedProcessor *>(transaction->TopTask());
+			if (!task)
+			{
+				task = new SNI_DelayedProcessor(SNI_Thread::TopManager());
+				SNI::SNI_Transaction::TopTransaction()->SubmitTask(task);
+			}
 		}
 		return task;
 	}
@@ -36,15 +41,16 @@ namespace SNI
 	}
 
 	// Create a delayed call and link it in as the value of the variables..
-	void SNI_DelayedProcessor::Delay(SN::SN_FunctionDef p_Function, SN::SN_Expression *p_ParameterList, SNI_World *p_World)
+	void SNI_DelayedProcessor::Delay(SN::SN_FunctionDef p_Function, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_Source, SNI_World *p_World)
 	{
-		SNI_DelayedCall *call = new SNI_DelayedCall(p_Function, p_ParameterList, SNI_Frame::Top(), p_World);
+		SNI_DelayedCall *call = new SNI_DelayedCall(p_Function, p_NumParams, p_ParamList, p_Source, SNI_Frame::Top(), p_World);
 		call->LinkToVariables();
 		m_DelayedCallList.push_back(call);
 		if (call->IsCallRequested())
 		{
 			Request(call);
 		}
+		SNI_Thread::GetThread()->DebugCommand(SN::WarningPoint, "Delayed call.", SN::DelayId);
 	}
 
 	void SNI_DelayedProcessor::DelayCall(SNI_DelayedCall * p_Call, SNI_World * p_World)
@@ -164,5 +170,21 @@ namespace SNI
 		} while (found);
 		m_Processing = false;
 		return success;
+	}
+
+	void SNI_DelayedProcessor::WriteJS(ostream &p_Stream, SNI::SNI_DisplayOptions &p_DisplayOptions)
+	{
+		p_Stream << "{\"records\":[\n";
+		string delimeter = "\n";
+		m_SearchLock.lock();
+		for (SNI_DelayedCall *call : m_DelayedCallList)
+		{
+			p_Stream << delimeter << "\t{\n";
+			call->WriteJS(p_Stream, p_DisplayOptions);
+			p_Stream << "\t}";
+			delimeter = ",\n";
+		}
+		m_SearchLock.unlock();
+		p_Stream << "\n]}\n";
 	}
 }

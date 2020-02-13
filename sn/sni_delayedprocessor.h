@@ -27,7 +27,7 @@ namespace SNI
 		SNI_DelayedProcessor(SNI_Manager *p_Manager);
 		~SNI_DelayedProcessor();
 
-		void Delay(SN::SN_FunctionDef p_Function, SN::SN_Expression *p_ParameterList, SNI_World *p_World = NULL);
+		void Delay(SN::SN_FunctionDef p_Function, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_Source, SNI_World *p_World = NULL);
 		void DelayCall(SNI_DelayedCall *p_Call, SNI_World *p_World);
 		bool Process();
 		void Request(SNI_DelayedCall *p_Call);
@@ -36,6 +36,8 @@ namespace SNI
 		virtual void Promote(PGC::PGC_Transaction *p_Transaction);
 		unordered_map<string, SN::SN_String> &GetPreventReread();
 		virtual void Display();
+
+		void WriteJS(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions);
 	private:
 		SNI_DelayedCallList  m_DelayedCallList;
 		SNI_DelayedCallList  m_FailedList;

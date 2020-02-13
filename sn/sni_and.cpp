@@ -175,7 +175,7 @@ namespace SNI
 	/// @param p_ParameterList List of two parameters to be "anded".
 	/// @param p_Result The result of anding the two values.
 	/// @retval True if successful, false for failure.
-	SN::SN_Expression SNI_And::UnifyArray(SN::SN_Expression * p_ParameterList)
+	SN::SN_Expression SNI_And::UnifyArray(SN::SN_Expression * p_ParameterList, const SNI_Expression *p_Source)
 	{
 		string debugId = SNI_Thread::GetThread()->GetDebugId();
 
@@ -183,7 +183,7 @@ namespace SNI
 		SN::SN_Expression * firstParamList = new SN::SN_Expression[2];
 		firstParamList[0] = p_ParameterList[0];
 		firstParamList[1] = p_ParameterList[1];
-		SN::SN_Error e1 = skynet::UnaryAnd.GetSNI_FunctionDef()->UnifyArray(firstParamList);
+		SN::SN_Error e1 = skynet::UnaryAnd.GetSNI_FunctionDef()->UnifyArray(firstParamList, p_Source);
 
 		if (e1.IsError())
 		{
@@ -200,7 +200,7 @@ namespace SNI
 		secondParamList[0] = p_ParameterList[0];
 		secondParamList[1] = firstParamList[1];
 		secondParamList[2] = p_ParameterList[2];
-		SN::SN_Error e2 = SNI_Binary::UnifyArray(secondParamList);
+		SN::SN_Error e2 = SNI_Binary::UnifyArray(secondParamList, p_Source);
 		if (e2.IsSignificantError())
 		{
 			SNI_CallRecord *callRecord = new SNI_CallRecord("And of second parameter with first result.", this);

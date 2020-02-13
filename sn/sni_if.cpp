@@ -63,19 +63,12 @@ namespace SNI
 		return 4;
 	}
 
-	string SNI_If::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList, const SNI_Expression *p_DebugSource) const
+	string SNI_If::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_Expression * p_ParamList, const SNI_Expression *p_DebugSource) const
 	{
-		if ((*p_ParameterList).size() != 3)
-		{
-			return SNI_FunctionDef::DisplayCall(priority, p_DisplayOptions, p_ParameterList, p_DebugSource);
-		}
-
-		string elseClause;
-		if ((*p_ParameterList)[0].IsError() || !(*p_ParameterList)[0].IsNull())
-		{
-			elseClause = " " + SetBreakPoint("else", p_DisplayOptions, p_DebugSource, SN::NegativeId) + " " + (*p_ParameterList)[0].DisplaySN(GetPriority(), p_DisplayOptions);
-		}
-		return SetBreakPoint("if", p_DisplayOptions, p_DebugSource, SN::LeftId) + " " + (*p_ParameterList)[2].DisplaySN(GetPriority(), p_DisplayOptions) + SetBreakPoint("then", p_DisplayOptions, p_DebugSource, SN::PositiveId)+ " " + (*p_ParameterList)[1].DisplaySN(GetPriority(), p_DisplayOptions) + elseClause + SetBreakPoint("end", p_DisplayOptions, p_DebugSource, SN::RightId);
+		return SetBreakPoint("if", p_DisplayOptions, p_DebugSource, SN::LeftId) + " " + p_ParamList[PC3_Condition].DisplaySN(GetPriority(), p_DisplayOptions) + " " +
+			   SetBreakPoint("then", p_DisplayOptions, p_DebugSource, SN::PositiveId)+ " " + p_ParamList[PC3_Positive].DisplaySN(GetPriority(), p_DisplayOptions) + " " +
+			   SetBreakPoint("else", p_DisplayOptions, p_DebugSource, SN::NegativeId) + " " + p_ParamList[PC3_Negative].DisplaySN(GetPriority(), p_DisplayOptions) + " " +
+			   SetBreakPoint("end", p_DisplayOptions, p_DebugSource, SN::RightId);
 	}
 
 	/// @endcond
@@ -188,7 +181,7 @@ namespace SNI
 		return LOG_RETURN(context, condition.If(positiveCase, negativeCase));
 	}
 
-	SN::SN_Expression SNI_If::UnifyArray(SN::SN_Expression * p_ParameterList)
+	SN::SN_Expression SNI_If::UnifyArray(SN::SN_Expression * p_ParameterList, const SNI_Expression *p_Source)
 	{
 		SNI_Frame::Push(this, NULL);
 		SNI_Frame *topFrame = SNI_Frame::Top();
@@ -221,8 +214,9 @@ namespace SNI
 		SN::SN_Expression *parameterList = p_ParameterList;
 		bool success = false;
 		string typeName = GetTypeName();
+		const SNI_Expression *source = p_Source;
 		sCondition.ForEach(
-			[contextWorld, parameterList, &success, &typeName](const SN::SN_Expression &p_Param, SNI::SNI_World *p_World) -> SN::SN_Error
+			[contextWorld, parameterList, &success, &typeName, source](const SN::SN_Expression &p_Param, SNI::SNI_World *p_World) -> SN::SN_Error
 			{
 				if (p_World)
 				{
@@ -237,7 +231,7 @@ namespace SNI
 					paramList[1] = parameterList[2];
 
 					SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, typeName + ".Unify after all values", SN::PositiveId);
-					e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList);
+					e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList, source);
 				}
 				else
 				{
@@ -246,7 +240,7 @@ namespace SNI
 					paramList[1] = parameterList[3];
 
 					SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, typeName + ".Unify after all values", SN::NegativeId);
-					e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList);
+					e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList, source);
 				}
 				if (p_World)
 				{

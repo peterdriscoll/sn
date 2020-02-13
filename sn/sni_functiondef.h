@@ -24,6 +24,13 @@ namespace SNI
 		PC2_Second = 1
 	};
 
+	enum ParameterCall3
+	{
+		PC3_Condition = 0,
+		PC3_Positive = 1,
+		PC3_Negative = 2
+	};
+
 	enum ParameterUnify1
 	{
 		PU1_Result = 0,
@@ -34,6 +41,13 @@ namespace SNI
 		PU2_Result = 0,
 		PU2_First = 1,
 		PU2_Second = 2
+	};
+	enum ParameterUnify3
+	{
+		PU3_Result = 0,
+		PU3_Condition = 1,
+		PU3_Positive = 2,
+		PU3_Negative = 3
 	};
 	class SNI_FunctionDef : public SNI_Value
 	{
@@ -58,7 +72,7 @@ namespace SNI
 
 		virtual size_t Cardinality(SN::SN_Expression * p_ParameterList) const;
 
-		virtual string DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList, const SNI_Expression *p_DebugSource) const;
+		virtual string DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression *p_DebugSource) const;
 
 		string GetLogDescription(SN::SN_Expression * p_ParamList) const;
 
@@ -70,22 +84,19 @@ namespace SNI
 
 		virtual SN::SN_Error DoAssert();
 		virtual SN::SN_Error DoPartialAssert();
-		virtual SN::SN_Expression UnifyArray(SN::SN_Expression* p_ParamList);
+		virtual SN::SN_Expression UnifyArray(SN::SN_Expression* p_ParamList, const SNI_Expression *p_Source);
 		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Expression, bool p_Define = false) = 0;
 
 		virtual size_t CardinalityOfUnify(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const;
-		virtual SN::SN_Error UnifyElement(long p_Depth, SN::SN_Expression * p_InputList, SNI_World ** p_WorldList, long p_CalcPos, long p_TotalCalc, SNI_WorldSet * worldSet) const;
+		virtual SN::SN_Error UnifyElement(long p_Depth, SN::SN_Expression * p_InputList, SNI_World ** p_WorldList, long p_CalcPos, long p_TotalCalc, SNI_WorldSet * worldSet, const SNI_Expression *p_Source) const;
 		virtual size_t CardinalityOfCall(long p_Depth, SN::SN_Expression * p_ParameterList) const;
 		virtual SN::SN_Value CallElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, SN::SN_ValueSet p_Result) const;
 
 		static size_t MultiplyCardinality(size_t p_Left, size_t p_Right);
-
-		virtual SN::SN_Expression * LoadParametersUnify(SN::SN_ExpressionList * p_ParameterList) const;
 	protected:
 		virtual SN::SN_Value ForEachCall(size_t p_Card, long p_Depth, SN::SN_Expression * p_InputList) const;
-		virtual SN::SN_Error ForEachUnify(size_t p_Card, long p_Depth, SN::SN_Expression * p_ParamList, SN::SN_Expression * p_InputList, bool *p_Output, long p_CalcPos, long p_TotalCalc) const;
+		virtual SN::SN_Error ForEachUnify(size_t p_Card, long p_Depth, SN::SN_Expression * p_ParamList, SN::SN_Expression * p_InputList, bool *p_Output, long p_CalcPos, long p_TotalCalc, const SNI_Expression *p_Source) const;
 
-		virtual SN::SN_Expression * LoadParametersCall(SN::SN_ExpressionList * p_ParameterList) const;
 	};
 
 	typedef vector<SNI_FunctionDef *> SNI_FunctionDefList;

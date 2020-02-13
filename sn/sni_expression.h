@@ -54,7 +54,7 @@ namespace SNI
 	class SNI_UnifyContext
 	{
 	public:
-		SN::SN_ExpressionList *m_ParameterList;
+		SN::SN_ExpressionList *m_ParamList;
 		SNI_World             *m_World;
 	};
 
@@ -100,7 +100,9 @@ namespace SNI
 		//---------------------------------------------------------------
 		virtual SNI_Expression * LoadParameters(SN::SN_ExpressionList * p_ParameterList) const;
 		virtual SNI_Expression * LoadFormalParameters(SN::SN_ExpressionList & p_FormalParameterList);
-		virtual string DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList, const SNI_Expression *p_DebugSource) const;
+		virtual SN::SN_Expression * LoadParametersCall(SN::SN_ExpressionList * p_ParameterList) const;
+		virtual SN::SN_Expression * LoadParametersUnify(SN::SN_ExpressionList * p_ParameterList) const;
+		virtual string DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression *p_DebugSource) const;
 		virtual SNI_Expression * Clone(SNI_Frame *p_Frame, bool &p_Changed);
 		virtual SNI_Expression * Clone(const SNI_Expression *p_Function, SNI_Expression *p_Result);
 		virtual bool GetBool() const;

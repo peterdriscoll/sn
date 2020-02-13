@@ -203,6 +203,11 @@ namespace HTTP
 					rep.content.append(l_thread->ErrorJS(debugJS));
 					extension = "json";
 				}
+				else if (path == "/delayedjs")
+				{
+					rep.content.append(l_thread->DelayedJS(debugJS));
+					extension = "json";
+				}
 				else
 				{
 					// Determine the file extension.

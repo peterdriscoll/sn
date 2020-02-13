@@ -41,13 +41,9 @@ namespace SNI
 		return "Subscript";
 	}
 
-	string SNI_Subscript::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_ExpressionList * p_ParameterList, const SNI_Expression *p_DebugSource) const
+	string SNI_Subscript::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const
 	{
-		if ((*p_ParameterList).size() != 2)
-		{
-			return SNI_FunctionDef::DisplayCall(priority, p_DisplayOptions, p_ParameterList, p_DebugSource);
-		}
-		return Bracket(priority, (*p_ParameterList)[1].DisplaySN(GetPriority(), p_DisplayOptions) + SetBreakPoint("[", p_DisplayOptions, p_DebugSource, SN::LeftId) + (*p_ParameterList)[0].DisplaySN(GetPriority(), p_DisplayOptions) + SetBreakPoint("]", p_DisplayOptions, p_DebugSource, SN::RightId), p_DisplayOptions, p_DebugSource);
+		return Bracket(priority, p_ParamList[PC2_First].DisplaySN(GetPriority(), p_DisplayOptions) + SetBreakPoint("[", p_DisplayOptions, p_DebugSource, SN::LeftId) + p_ParamList[PC2_Second].DisplaySN(GetPriority(), p_DisplayOptions) + SetBreakPoint("]", p_DisplayOptions, p_DebugSource, SN::RightId), p_DisplayOptions, p_DebugSource);
 	}
 
 	long SNI_Subscript::GetPriority() const
@@ -99,7 +95,7 @@ namespace SNI
 		return SNI_Binary::CardinalityOfUnify(p_Depth, p_ParamList, p_CalcPos, p_TotalCalc);
 	}
 
-	SN::SN_Error SNI_Subscript::UnifyElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, long p_CalcPos, long p_TotalCalc, SNI_WorldSet * worldSet) const
+	SN::SN_Error SNI_Subscript::UnifyElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, long p_CalcPos, long p_TotalCalc, SNI_WorldSet * worldSet, const SNI_Expression *p_Source) const
 	{
 		LOGGING(SN::LogContext context("SNI_Subscript::UnifyElement(CalcPos " + to_string(p_CalcPos) + " TotalCalc " + to_string(p_TotalCalc) + " " + DisplayValues(p_Depth, p_ParamList, p_WorldList) + ")"));
 		if (worldSet)
