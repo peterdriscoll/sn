@@ -14,7 +14,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.0/angular-sanitize.js"></script>
     <div ng-app="skynetApp" ng-controller='commandCtrl'>
         <h1>
-            Skynet Dashboard - {{taskdescription}} {{statusdescription}} {{callstack.length}} {{breakpoint}}
+            Skynet Dashboard - {{taskdescription}} {{statusdescription}}
         </h1>
         <table class='command'>
             <tr>
@@ -127,6 +127,7 @@
                     <button title='Error' ng-click='setbreakpoint(["Error",16])' ng-class='breakpointdefaultclass(["Error",16], breakpoint, "NONE")'>Error</button>
                     <button title='Delay' ng-click='setbreakpoint(["Warning",20])' ng-class='breakpointdefaultclass(["Warning",20], breakpoint, "NONE")'>Delay</button>
                     <button title='No constraint' ng-click='setbreakpoint(["Warning",19])' ng-class='breakpointdefaultclass(["Warning",19], breakpoint, "NONE")'>No constraint</button>
+                    {{breakpoint}}
                     <table class='frame'>
                         <caption><pre>World Sets</pre></caption>
                         <tr ng-repeat="ws in worldsets">
@@ -273,16 +274,8 @@
             $scope.initFirst = function () {
                 if (!$scope.scheduled) {
                     $scope.scheduled = $scope.scheduled + 1;
-                    $http.get(home + 'stackjs?threadnum=' + $scope.threadnum + '&maxstackframes=' + $scope.maxstackframes)
+                    $http.get(home + 'dashboardjs?threadnum=' + $scope.threadnum)
                         .then(function (response) {
-                            $scope.worldsets = response.data.worldsets;
-                            $scope.frames = response.data.records;
-                            $scope.callstack = [];
-                            for (var i = 0; i < $scope.frames.length; i++) {
-                                if ($scope.frames[i].hascode) {
-                                    $scope.callstack.push($scope.frames[i]);
-                                }
-                            }
                             $scope.threadnum = response.data.threadnum;
                             $scope.breakpoint = response.data.breakpoint;
                             $scope.taskdescription = response.data.taskdescription;
@@ -291,23 +284,36 @@
                             if ($scope.maxstackframes == -1) {
                                 $scope.maxstackframes = response.data.maxstackframes;
                             }
+
                             $scope.pollcount = $scope.pollcount + 1;
                             $scope.scheduled = $scope.scheduled - 1;
                             if ($scope.running) {
                                 $timeout(function () { $scope.initFirst(); }, 2000);
                             };
                         });
+                    $http.get(home + 'stackjs?threadnum=' + $scope.threadnum + '&maxstackframes=' + $scope.maxstackframes)
+                        .then(function (response) {
+                            $scope.frames = response.data.records;
+                            $scope.callstack = [];
+                            for (var i = 0; i < $scope.frames.length; i++) {
+                                if ($scope.frames[i].hascode) {
+                                    $scope.callstack.push($scope.frames[i]);
+                                }
+                            }
+                        });
+                    $http.get(home + 'logjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxstackframes * 4)
+                        .then(function (response) { $scope.logs = response.data.records; });
+                    $http.get(home + 'logexpjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxstackframes * 4)
+                        .then(function (response) { $scope.logexps = response.data.records; });
+                    $http.get(home + "stepcountjs")
+                        .then(function (response) { $scope.stepcounts = response.data.records; });
+                    $http.get(home + 'errorjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxstackframes * 4)
+                        .then(function (response) { $scope.error = response.data; });
+                    $http.get(home + 'delayedjs?threadnum=' + $scope.threadnum)
+                        .then(function (response) { $scope.delayedcalls = response.data.records; });
+                    $http.get(home + 'worldsetsjs?threadnum=' + $scope.threadnum)
+                        .then(function (response) { $scope.worldsets = response.data.records; });
                 };
-                $http.get(home + 'logjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxstackframes * 4)
-                    .then(function (response) { $scope.logs = response.data.records; });
-                $http.get(home + 'logexpjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxstackframes * 4)
-                    .then(function (response) { $scope.logexps = response.data.records; });
-                $http.get(home + "stepcountjs")
-                    .then(function (response) { $scope.stepcounts = response.data.records; });
-                $http.get(home + 'errorjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxstackframes * 4)
-                    .then(function (response) { $scope.error = response.data; });
-                $http.get(home + 'delayedjs?threadnum=' + $scope.threadnum)
-                    .then(function (response) { $scope.delayedcalls = response.data.records; });
             };
             $scope.submit = function (action) {
                 $http.get(home + action + '?threadnum=' + $scope.threadnum + '&stackdepth=' + $scope.stackdepth + '&breakpoints=' + Array.from($scope.breakpointCol).join(','))

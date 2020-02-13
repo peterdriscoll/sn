@@ -310,10 +310,21 @@ namespace SNI
 		return ss.str();
 	}
 
+	string SNI_Thread::DashboardJS(enum DisplayOptionType p_OptionType)
+	{
+		stringstream ss;
+		SNI_Manager *manager = GetTopManager(false);
+		if (manager)
+		{
+			SNI_DisplayOptions l_DisplayOptions(p_OptionType);
+			WriteDashboardJS(ss, l_DisplayOptions);
+		}
+		return ss.str();
+	}
+
 	string SNI_Thread::StackJS(long p_MaxStackFrame, enum DisplayOptionType p_OptionType)
 	{
 		stringstream ss;
-		cout << "StackJS\n";
 		SNI_Manager *manager = GetTopManager(false);
 		if (manager)
 		{
@@ -362,6 +373,14 @@ namespace SNI
 			return ss.str();
 		}
 		return "{\"description\":\"\",\"callhistory\":[]}";
+	}
+
+	string SNI_Thread::WorldSetsJS(DisplayOptionType p_OptionType)
+	{
+		stringstream ss;
+		SNI_DisplayOptions displayOptions(p_OptionType);
+		WriteWorldSetsJS(ss, displayOptions);
+		return ss.str();
 	}
 
 	SNI_DelayedProcessor *SNI_Thread::GetProcessor()
@@ -1002,33 +1021,18 @@ namespace SNI
 		SNI_Log::GetLog()->LogExpTableJS(p_Stream, p_MaxLogEntries, p_displayOptions);
 	}
 
-	void SNI_Thread::WriteStackJS(ostream &p_Stream, size_t p_Depth, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
+	void SNI_Thread::WriteDashboardJS(ostream &p_Stream, SNI::SNI_DisplayOptions &p_DisplayOptions)
 	{
-		Lock();
-		p_Stream << "{\"records\":[\n";
-		size_t base = 0;
-		string delimeter;
-		if (0 < p_Depth && p_Depth < m_FrameList.size())
-		{
-			base = m_FrameList.size() - p_Depth;
-		}
-		for (size_t j = m_FrameList.size(); j > base; j--)
-		{
-			p_Stream << delimeter;
-			m_FrameList[j - 1]->WriteJS(p_Stream, j, p_DebugFieldWidth, p_DisplayOptions);
-			delimeter = ",";
-		}
-		p_Stream << "],\n";
-		Unlock();
+		p_Stream << "{\n";
 
-		WriteWorldSetsJS(p_Stream, "\t", p_DisplayOptions);
-		p_Stream << "\"threadnum\" : \"" << m_ThreadNum << "\",\n";
+		p_Stream << "\t\"threadnum\" : \"" << m_ThreadNum << "\",\n";
+		p_Stream << "\t\"breakpoint\" : " << m_BreakPointJS << ",\n";
 
 		SNI_Manager *manager = GetTopManager(false);
 		if (manager)
 		{
-			p_Stream << "\"taskdescription\" : \"" << manager->Description() << "\",\n";
-			p_Stream << "\"maxstackframes\" : \"" << manager->MaxStackFrames() << "\",\n";
+			p_Stream << "\t\"taskdescription\" : \"" << manager->Description() << "\",\n";
+			p_Stream << "\t\"maxstackframes\" : \"" << manager->MaxStackFrames() << "\",\n";
 		}
 		string statusDescription;
 		int running = 0;
@@ -1045,10 +1049,29 @@ namespace SNI
 		{
 			statusDescription += " - Thread ended";
 		}
-		p_Stream << "\"breakpoint\" : " << m_BreakPointJS << ",\n";
-		p_Stream << "\"statusdescription\" : \"" << statusDescription << "\",\n";
-		p_Stream << "\"running\" : " << running << "\n";
+		p_Stream << "\t\"statusdescription\" : \"" << statusDescription << "\",\n";
+		p_Stream << "\t\"running\" : " << running << "\n";
 		p_Stream << "}\n";
+	}
+
+	void SNI_Thread::WriteStackJS(ostream &p_Stream, size_t p_Depth, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
+	{
+		p_Stream << "{\"records\":[\n";
+		size_t base = 0;
+		string delimeter;
+		Lock();
+		if (0 < p_Depth && p_Depth < m_FrameList.size())
+		{
+			base = m_FrameList.size() - p_Depth;
+		}
+		for (size_t j = m_FrameList.size(); j > base; j--)
+		{
+			p_Stream << delimeter << "\t{\n";
+			m_FrameList[j - 1]->WriteJS(p_Stream, j, p_DebugFieldWidth, p_DisplayOptions);
+			delimeter = ",\n";
+		}
+		Unlock();
+		p_Stream << "\n]}\n";
 	}
 
 	void SNI_Thread::WriteStepCountListJS(ostream &p_Stream)
@@ -1072,24 +1095,24 @@ namespace SNI
 		p_Stream << "{\"threadnum\" : \"" << m_ThreadNum << "\", \"stepcount\" : \"" << m_ThreadStepCount << "\"}\n";
 	}
 
-	void SNI_Thread::WriteWorldSetsJS(ostream &p_Stream, const string &tabs, SNI_DisplayOptions &p_DisplayOptions)
+	void SNI_Thread::WriteWorldSetsJS(ostream &p_Stream, SNI_DisplayOptions &p_DisplayOptions)
 	{
-		Lock();
+		p_Stream << "{\"records\":[\n";
 		if (m_WorldSetProcessMap)
 		{
-			p_Stream << "\"worldsets\":[\n";
 			string delimeter = "";
+			Lock();
 			for (const auto &pair : *m_WorldSetProcessMap)
 			{
 				SNI_WorldSet *ws = pair.second;
-				p_Stream << tabs << delimeter << "\t{\n";
-				ws->WriteJS(p_Stream, tabs + "\t", p_DisplayOptions);
-				p_Stream << tabs << "}\n";
-				delimeter = ",";
+				p_Stream << delimeter << "\t{\n";
+				ws->WriteJS(p_Stream, "\t\t", p_DisplayOptions);
+				p_Stream << "\t}";
+				delimeter = ",\n";
 			}
-			p_Stream << "],\n";
+			Unlock();
 		}
-		Unlock();
+		p_Stream << "\n]}\n";
 	}
 
 

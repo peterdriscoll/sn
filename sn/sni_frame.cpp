@@ -341,7 +341,6 @@ namespace SNI
 		{
 			function = m_Function.DisplaySN();
 		}
-		p_Stream << "\t{\n";
 		p_Stream << "\t\t\"function\" : \"" << ReplaceAll(function, "\"", "\\\"") << "\",\n";
 		p_Stream << "\t\t\"framepos\" : \"" << p_FrameStackPos << "\",\n";
 		p_Stream << "\t\t\"framenum\" : \"" << m_FrameNum << "\",\n";
@@ -357,7 +356,7 @@ namespace SNI
 		}
 		if (HasCode())
 		{
-			WriteVariable(p_Stream, m_Function, m_CloneFunction, "\t", p_DebugFieldWidth, p_DisplayOptions);
+			WriteVariable(p_Stream, m_Function, m_CloneFunction, "\t\t", p_DebugFieldWidth, p_DisplayOptions);
 		}
 		else
 		{
@@ -367,7 +366,7 @@ namespace SNI
 			{
 				val = var->GetSafeValue();
 			}
-			WriteVariable(p_Stream, m_Function, val, "\t", p_DebugFieldWidth, p_DisplayOptions);
+			WriteVariable(p_Stream, m_Function, val, "\t\t", p_DebugFieldWidth, p_DisplayOptions);
 		}
 		p_Stream << ",\n";
 		p_Stream << "\t\t\"variables\" : [\n";
@@ -377,13 +376,13 @@ namespace SNI
 			SN::SN_Expression var(v);
 			SN::SN_Expression val = v->GetSafeValue();
 			p_DisplayOptions.SetVarName(v->FrameName());
-			p_Stream << "\t\t" << delimeter << "\t{\n";
-			WriteVariable(p_Stream, var, val, "\t\t", p_DebugFieldWidth, p_DisplayOptions);
-			p_Stream << "\n\t\t\t}\n";
-			delimeter = ",";
+			p_Stream << delimeter << "\t\t\t{\n";
+			WriteVariable(p_Stream, var, val, "\t\t\t\t", p_DebugFieldWidth, p_DisplayOptions);
+			p_Stream << "\n\t\t\t}";
+			delimeter = ",\n";
 		}
-		p_Stream << "\t\t]\n";
-		p_Stream << "\t}\n";
+		p_Stream << "\n\t\t]\n";
+		p_Stream << "\t}";
 	}
 
 	void SNI_Frame::WriteStackJS(ostream &p_Stream, string &p_Delimeter, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
@@ -402,19 +401,20 @@ namespace SNI
 		SNI_Variable *v = p_Variable.GetSNI_Variable();
 		if (v)
 		{
-			p_Stream << "\t\t\t\t\"name\" : \"" << v->FramePathName() << "\"";
+			p_Stream << p_Prefix << "\"name\" : \"" << v->FramePathName() << "\",\n";
 		}
 		else
 		{
-			p_Stream << "\t\t\t\t\"name\" : \"\"";
+			p_Stream << p_Prefix << "\"name\" : \"\",\n";
 		}
-		p_Stream << ",\n\t\t\t\t\"typetext\" : \"" << p_Variable.GetValueTypeName() << "\"\n";
+		p_Stream << p_Prefix << "\"typetext\" : \"" << p_Variable.GetValueTypeName() << "\"";
 		if (p_Value.GetSNI_Expression())
 		{
-			p_Stream << ",\t\t\t\t\"value\" : [";
+			p_Stream << ",\n" << p_Prefix << "\"value\" : [\n";
 			string delimeter;
+			string prefix = p_Prefix;
 			p_Value.GetVariableValue().ForEach(
-				[&p_Stream, &delimeter, p_DebugFieldWidth, &p_DisplayOptions](const SN::SN_Expression &p_Expression, SNI_World *p_World)->SN::SN_Error
+				[&p_Stream, &delimeter, p_DebugFieldWidth, &p_DisplayOptions, &prefix](const SN::SN_Expression &p_Expression, SNI_World *p_World)->SN::SN_Error
 			{
 				SNI::SNI_DisplayOptions plainText(doTextOnly);
 				string valueText;
@@ -424,11 +424,11 @@ namespace SNI
 					valueText = p_Expression.DisplaySN(plainText) + string(p_World ? "::" + p_World->DisplaySN(plainText) : "");
 					valueTextHTML = p_Expression.DisplaySN(p_DisplayOptions) + string(p_World ? "::" + p_World->DisplaySN(p_DisplayOptions) : "");
 				}
-				p_Stream << delimeter << DetailsFS(valueText, valueTextHTML, p_DebugFieldWidth);
-				delimeter = ",";
+				p_Stream << delimeter  << prefix << "\t" << DetailsFS(valueText, valueTextHTML, p_DebugFieldWidth);
+				delimeter = ",\n";
 				return skynet::OK;
 			});
-			p_Stream << "]";
+			p_Stream << "\n" << p_Prefix << "]\n";
 		}
 	}
 

@@ -175,6 +175,11 @@ namespace HTTP
 				{
 					rep.content.append(l_thread->SkynetJS());
 				}
+				else if (path == "/dashboardjs")
+				{
+					rep.content.append(l_thread->DashboardJS(debugJS));
+					extension = "json";
+				}
 				else if (path == "/stackjs")
 				{
 					long maxStackFrames = atol(umap["maxstackframes"].c_str());
@@ -201,6 +206,11 @@ namespace HTTP
 				else if (path == "/errorjs")
 				{
 					rep.content.append(l_thread->ErrorJS(debugJS));
+					extension = "json";
+				}
+				else if (path == "/worldsetsjs")
+				{
+					rep.content.append(l_thread->WorldSetsJS(debugJS));
 					extension = "json";
 				}
 				else if (path == "/delayedjs")

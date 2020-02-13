@@ -88,11 +88,13 @@ namespace SNI
 		string QuitWeb(enum DisplayOptionType p_OptionType);
 
 		string SkynetJS();
+		string DashboardJS(DisplayOptionType p_OptionType);
 		string StackJS(long p_MaxStackFrame, enum DisplayOptionType p_OptionType);
 		string StepCountJS();
 		string LogJS(long p_MaxLogEntries);
 		string LogExpJS(long p_MaxLogEntries, enum DisplayOptionType p_OptionType);
 		string ErrorJS(enum DisplayOptionType p_OptionType);
+		string WorldSetsJS(DisplayOptionType p_OptionType);
 		string DelayedJS(DisplayOptionType p_OptionType);
 
 		void Lock();
@@ -154,12 +156,13 @@ namespace SNI
 		static void WriteWebStackJS(ostream & p_Stream);
 		static void WriteWebLogJS(ostream & p_Stream);
 
+		void WriteDashboardJS(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions);
 		void WriteStackJS(ostream & p_Stream, size_t  p_Depth, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
 		void WriteLogJS(ostream & p_Stream, long p_MaxLogEntries);
 		void WriteLogExpJS(ostream & p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_DisplayOptions);
 		void WriteStepCountListJS(ostream & p_Stream);
 		void WriteStepCountJS(ostream & p_Stream, const string &p_Delimeter);
-		void WriteWorldSetsJS(ostream & p_Stream, const string & tabs, SNI_DisplayOptions &p_DisplayOptions);
+		void WriteWorldSetsJS(ostream & p_Stream, SNI_DisplayOptions &p_DisplayOptions);
 
 		size_t m_ThreadNum;
 		mutex m_Mutex;
