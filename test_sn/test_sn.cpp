@@ -1621,7 +1621,7 @@ namespace test_sn
 
 				SN_DECLARE(Alpha);
 				SN_DECLARE(a);
-				(Define(Alpha)(a) == (AlphaLower(a) || AlphaUpper(a))).PartialAssert().Do();
+				(Define(Alpha)(a) == (AlphaLower(a) || AlphaUpper(a) || a == string("_"))).PartialAssert().Do();
 
 				SN_DECLARE(AlphaNumeric);
 				SN_DECLARE(k);
@@ -1650,10 +1650,10 @@ namespace test_sn
 
 				SN_DOMAIN(MyDomain);
 				SN_DECLARE(i1);
-				(ParsePart(MyDomain)(String("Peter1"))(i1)).Assert().Do();
+				(ParsePart(MyDomain)(String("Peter_1"))(i1)).Assert().Do();
 
 				SN_DECLARE(j1);
-				(j1 == Meta(1, MyDomain["Peter1"])).Assert().Do();
+				(j1 == Meta(1, MyDomain["Peter_1"])).Assert().Do();
 				(i1 == j1).Evaluate().Do();
 
 				string i1_string = i1.DisplayValueSN();
