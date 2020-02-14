@@ -87,7 +87,6 @@ namespace SNI
 		string SetThreadNumWeb(enum DisplayOptionType p_OptionType);
 		string QuitWeb(enum DisplayOptionType p_OptionType);
 
-		string SkynetJS();
 		string DashboardJS(DisplayOptionType p_OptionType);
 		string StackJS(long p_MaxStackFrame, enum DisplayOptionType p_OptionType);
 		string StepCountJS();
@@ -112,7 +111,6 @@ namespace SNI
 		SN::SN_Error CheckForFails();
 
 		void WriteWebPage(ostream &p_Stream, bool p_Refresh, DisplayOptionType p_OptionType);
-		static void WriteWebPageJS(ostream & p_Stream, bool p_Refresh);
 		void WriteShuttingDown(ostream & p_Stream);
 
 		SNI_Variable * LookupVariable(const string & p_Name);
@@ -120,8 +118,6 @@ namespace SNI
 		void DisplayStepCounts();
 		void WriteStepCounts(ostream & p_Stream);
 		void WriteStepCount(ostream & p_Stream);
-
-		static void WriteWebStepCountListJS(ostream & p_Stream);
 
 		ostream * CreateLogFile(SN::LoggingLevel p_LoggingLevel);
 
@@ -143,7 +139,6 @@ namespace SNI
 
 		static void WriteW3Credentials(ostream & p_Stream);
 		void WriteCommands(ostream & p_Stream);
-		static void WriteWebCommandsJS(ostream & p_Stream);
 		void WriteSubmit(ostream & p_Stream, const string & p_Action, const string & p_Name, const string & p_Description);
 		static void WriteSubmitJS(ostream & p_Stream, const string & p_Action, const string & p_Name, const string & p_Description);
 		void WriteGotoStepCount(ostream &p_Stream);
@@ -152,9 +147,6 @@ namespace SNI
 		static void WriteSetMaxStackFramesJS(ostream & p_Stream);
 
 		void WriteWebStack(ostream & p_Stream, size_t  p_Depth, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
-
-		static void WriteWebStackJS(ostream & p_Stream);
-		static void WriteWebLogJS(ostream & p_Stream);
 
 		void WriteDashboardJS(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions);
 		void WriteStackJS(ostream & p_Stream, size_t  p_Depth, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);

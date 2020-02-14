@@ -262,19 +262,6 @@ namespace SNI
 		p_Stream << "</form></td>\n";
 	}
 
-	/*static*/ void SNI_Thread::WriteWebStepCountListJS(ostream &p_Stream)
-	{
-		p_Stream << "<div><table class='thread'>\n";
-		p_Stream << "<caption>Threads</caption>\n";
-		p_Stream << "<tr>\n";
-		p_Stream << "<td ng-repeat = \"sc in stepcounts\">\n";
-		p_Stream << "<form ng-submit = 'setthread(sc.threadnum)'>\n";
-		p_Stream << "<input type = 'submit' name = 'threadnum' value='{{sc.threadnum}} : {{sc.stepcount}}'/>\n";
-		p_Stream << "</form></td>\n";
-		p_Stream << "</tr>\n";
-		p_Stream << "</table></div>\n";
-	}
-
 	ostream * SNI_Thread::CreateLogFile(SN::LoggingLevel p_LoggingLevel)
 	{
 		string currentDirectory = CurrentWorkingDirectory();
@@ -300,14 +287,6 @@ namespace SNI
 	bool SNI_Thread::IsExiting()
 	{
 		return m_DebugCommand.IsExiting();
-	}
-
-	string SNI_Thread::SkynetJS()
-	{
-		stringstream ss;
-		cout << "SkynetJS\n";
-		WriteWebPageJS(ss, m_Running);
-		return ss.str();
 	}
 
 	string SNI_Thread::DashboardJS(enum DisplayOptionType p_OptionType)
@@ -720,92 +699,6 @@ namespace SNI
 		p_Stream << "</html>\n";
 	}
 
-	/*static*/ void SNI_Thread::WriteWebPageJS(ostream & p_Stream, bool p_Refresh)
-	{
-		p_Stream << "<!doctype html>\n";
-		p_Stream << "<html lang = \"en\">\n";
-		p_Stream << "<head>\n";
-
-		p_Stream << "<meta charset = \"utf-8\">\n";
-		p_Stream << "<title>Skynet Dashboard</title>\n";
-		p_Stream << "<meta name = \"description\" content = \"Skynet\">\n";
-		p_Stream << "<meta name = \"author\" content = \"P.J.Driscoll\">\n";
-		p_Stream << "<link rel = 'icon' href = 'favicon.png' sizes = '32x32' type = 'image/png'>\n";
-		p_Stream << "<link rel = 'stylesheet' type='text/css' href = 'style.css'>\n";
-		p_Stream << "</head>\n";
-		p_Stream << "<body>\n";
-		p_Stream << "<script src = \"https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js\"></script>\n";
-
-		p_Stream << "<div ng-app = \"skynetApp\" ng-controller='commandCtrl'>\n";
-		p_Stream << "<h1>Skynet Dashboard - {{taskdescription}} {{statusdescription}} {{pollcount}}</h1>\n";
-		WriteWebCommandsJS(p_Stream);
-		WriteWebStepCountListJS(p_Stream);
-		p_Stream << "<table class='group'><tr>\n";
-		p_Stream << "<td><div class='group'>\n";
-		WriteWebStackJS(p_Stream);
-		p_Stream << "</div></td>\n";
-		p_Stream << "<td><div class='group'>\n";
-		WriteWebLogJS(p_Stream);
-		p_Stream << "</div></td>\n";
-		p_Stream << "</tr></table>\n";
-		p_Stream << "</div>\n";
-		WriteW3Credentials(p_Stream);
-		p_Stream << "<script>\n";
-		p_Stream << "    var home = 'http://127.0.0.1/';\n";
-		p_Stream << "    var app = angular.module('skynetApp', []);\n";
-		p_Stream << "    app.controller('commandCtrl', function($scope, $http, $timeout) {\n";
-		p_Stream << "        $scope.threadnum = 0;\n";
-		p_Stream << "        $scope.maxstackframes = -1;\n";
-		p_Stream << "        $scope.pollcount = 0;\n";
-		p_Stream << "        $scope.scheduled = 0;\n";
-		p_Stream << "        $scope.initFirst = function() {\n";
-		p_Stream << "            if (!$scope.scheduled) {\n";
-		p_Stream << "                $scope.scheduled = $scope.scheduled + 1;\n";
-		p_Stream << "	             $http.get(home+'stackjs?threadnum='+$scope.threadnum+'&maxstackframes='+$scope.maxstackframes)\n";
-		p_Stream << "		             .then(function(response) {\n";
-		p_Stream << "		                 $scope.frames = response.data.records;";
-		p_Stream << "		                 $scope.threadnum = response.data.threadnum;\n";
-		p_Stream << "		                 $scope.taskdescription = response.data.taskdescription;\n";
-		p_Stream << "		                 $scope.statusdescription = response.data.statusdescription;\n";
-		p_Stream << "		                 $scope.running = response.data.running;\n";
-		p_Stream << "		                 if ($scope.maxstackframes == -1)\n";
-		p_Stream << "		                 {\n";
-		p_Stream << "		                     $scope.maxstackframes = response.data.maxstackframes;\n";
-		p_Stream << "		                 }\n";
-		p_Stream << "		                 $scope.pollcount = $scope.pollcount + 1;\n";
-		p_Stream << "		                 $scope.scheduled = $scope.scheduled - 1;\n";
-		p_Stream << "		                 if ($scope.running) {\n";
-		p_Stream << "		    		         $timeout(function() {   $scope.initFirst(); }, 2000);\n";
-		p_Stream << "		                 };\n";
-		p_Stream << "		             });\n";
-		p_Stream << "            };\n";
-		p_Stream << "            $http.get(home+'logjs?threadnum='+$scope.threadnum+'&maxlogentries='+$scope.maxstackframes*4)\n";
-		p_Stream << "                .then(function(response) { $scope.logs = response.data.records; });\n";
-		p_Stream << "            $http.get(home+\"stepcountjs\")\n";
-		p_Stream << "                .then(function(response) { $scope.stepcounts = response.data.records; });\n";
-		p_Stream << "        };\n";
-		p_Stream << "        $scope.submit = function(action) {\n";
-		p_Stream << "            $http.get(home+action+'?threadnum='+$scope.threadnum+'&stackdepth='+$scope.stackdepth)\n";
-		p_Stream << "                .then(function(response) { $scope.initFirst(); });\n";
-		p_Stream << "        };\n";
-		p_Stream << "        $scope.setthread = function(newthreadnum) {\n";
-		p_Stream << "            if (threadnum != newthreadnum)\n";
-		p_Stream << "           {\n";
-		p_Stream << "	             $scope.threadnum = newthreadnum;\n";
-		p_Stream << "                $scope.initFirst();\n";
-		p_Stream << "            }\n";
-		p_Stream << "        };\n";
-		p_Stream << "        $scope.gotostepcount = function() {\n";
-		p_Stream << "	        $http.get(home+'gotostepcountjs?threadnum='+$scope.threadnum+'&stepcount='+$scope.stepcount)\n";
-		p_Stream << "		        .then(function(response) { $scope.initFirst(); });\n";
-		p_Stream << "       };\n";
-		p_Stream << "        $scope.initFirst();\n";
-		p_Stream << "    });\n";
-		p_Stream << "</script>\n";
-		p_Stream << "</body>\n";
-		p_Stream << "</html>\n";
-	}
-
 	void SNI_Thread::WriteShuttingDown(ostream & p_Stream)
 	{
 		p_Stream << "<!doctype html>\n";
@@ -841,22 +734,9 @@ namespace SNI
 		p_Stream << "</tr></table></div>\n";
 	}
 
-	/*static*/ void SNI_Thread::WriteWebCommandsJS(ostream & p_Stream)
-	{
-		p_Stream << "<table class='command'><tr>\n";
-		WriteSubmitJS(p_Stream, "run", "Run", "Run");
-		WriteSubmitJS(p_Stream, "runtoend", "End", "Run to end");
-		WriteSubmitJS(p_Stream, "debug", "Debug", "Run to breakpoint");
-		WriteSubmitJS(p_Stream, "debugbreak", "Debug break", "Debug break C++");
-		WriteSubmitJS(p_Stream, "stepover", "Step over", "Step over call");
-		WriteSubmitJS(p_Stream, "stepintojs", "Step into", "Step into call");
-		WriteSubmitJS(p_Stream, "stepout", "Step out", "Step out of call");
-		WriteSubmitJS(p_Stream, "stepparam", "Step parameter", "Step into parameters");
-		WriteGotoStepCountJS(p_Stream);
-		WriteSetMaxStackFramesJS(p_Stream);
-		WriteSubmitJS(p_Stream, "quit", "Quit", "Abort thread");
-		p_Stream << "</tr></table>\n";
-	}
+		// dog WriteSubmitJS(p_Stream, "run", "Run", "Run");
+		// dog WriteGotoStepCountJS(p_Stream);
+		// dog WriteSetMaxStackFramesJS(p_Stream);
 
 	void SNI_Thread::WriteSubmit(ostream &p_Stream, const string &p_Action, const string &p_Name, const string &p_Description)
 	{
@@ -964,48 +844,6 @@ namespace SNI
 			p_Stream << "</td></tr>\n";
 		}
 		Unlock();
-		p_Stream << "</table>\n";
-	}
-
-	/*static*/ void SNI_Thread::WriteWebStackJS(ostream &p_Stream)
-	{
-		p_Stream << "<table class='stack'>\n";
-		p_Stream << "<caption>Thread {{threadnum}}</caption>\n";
-		p_Stream << "<tr ng-repeat = \"f in frames\">\n";
-		p_Stream << "<td>\n";
-
-		p_Stream << "<div style = 'overflow-x:auto;white-space:nowrap;width:900px'>\n";
-		p_Stream << "<table class='frame'>\n";
-		p_Stream << "<caption>Frame {{ f.framepos }} : {{ f.framenum }} {{ f.function }}</caption>\n";
-		p_Stream << "<tr>\n";
-		p_Stream << "<th ng-repeat = \"v in f.variables\">{{ v.name }}</th>\n";
-		p_Stream << "</tr>\n";
-		p_Stream << "<tr>\n";
-		p_Stream << "<td ng-repeat = \"v in f.variables\">{{ v.typetext }}</td>\n";
-		p_Stream << "</tr>\n";
-		p_Stream << "<tr>\n";
-		p_Stream << "<td ng-repeat = \"v in f.variables\"><div class='frame'>\n";
-		p_Stream << "<div ng-repeat = \"d in v.value\">\n";
-		p_Stream << "<details ng-if = \"d.abbreviation\">\n";
-		p_Stream << "<summary>{{d.abbreviation}}...</summary><p>{{d.text}}</p>\n";
-		p_Stream << "</details>\n";
-		p_Stream << "<div ng-if = \"!d.abbreviation\">{{d.text}}<br/></div>\n";
-		p_Stream << "</div>\n";
-		p_Stream << "</div></td>\n";
-		p_Stream << "</tr>\n";
-		p_Stream << "</table>\n";
-		p_Stream << "</div>\n";
-
-		p_Stream << "</td>\n";
-		p_Stream << "</tr>\n";
-		p_Stream << "</table>\n";
-	}
-
-	/*static*/ void SNI_Thread::WriteWebLogJS(ostream &p_Stream)
-	{
-		p_Stream << "<table class='log'>\n";
-		p_Stream << "<caption>Logging</caption>";
-		p_Stream << "<tr ng-repeat = \"l in logs\"><td>{{l.text}}</td></tr>";
 		p_Stream << "</table>\n";
 	}
 

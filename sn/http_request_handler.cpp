@@ -171,10 +171,6 @@ namespace HTTP
 				{
 					rep.content.append(l_thread->Skynet(debugHTML));
 				}
-				else if (path == "/skynetjs")
-				{
-					rep.content.append(l_thread->SkynetJS());
-				}
 				else if (path == "/dashboardjs")
 				{
 					rep.content.append(l_thread->DashboardJS(debugJS));
