@@ -292,11 +292,16 @@ namespace SNI
 	string SNI_Thread::DashboardJS(enum DisplayOptionType p_OptionType)
 	{
 		stringstream ss;
+		cout << "DashboardJS\n";
 		SNI_Manager *manager = GetTopManager(false);
 		if (manager)
 		{
 			SNI_DisplayOptions l_DisplayOptions(p_OptionType);
 			WriteDashboardJS(ss, l_DisplayOptions);
+		}
+		else
+		{
+			ss << "{\"records\":[]}\n";
 		}
 		return ss.str();
 	}
@@ -305,10 +310,15 @@ namespace SNI
 	{
 		stringstream ss;
 		SNI_Manager *manager = GetTopManager(false);
+		cout << "StackJS\n";
 		if (manager)
 		{
 			SNI_DisplayOptions l_DisplayOptions(p_OptionType);
 			WriteStackJS(ss, p_MaxStackFrame, manager->DebugFieldWidth(), l_DisplayOptions);
+		}
+		else
+		{
+			ss << "{\"records\":[]}\n";
 		}
 		return ss.str();
 	}
@@ -379,7 +389,7 @@ namespace SNI
 		}
 		else
 		{
-			ss << "{records:[]}\n";
+			ss << "{\"records\":[]}\n";
 		}
 		return ss.str();
 	}

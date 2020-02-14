@@ -156,6 +156,10 @@ namespace SNI
 		{
 			m_LogBuffer->LogTableJS(p_Stream, p_MaxLogEntries);
 		}
+		else
+		{
+			p_Stream << "{\"records\":[]}\n";
+		}
 	}
 
 	void SNI_Log::LogExpTableJS(ostream & p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_DisplayOptions)
@@ -163,6 +167,10 @@ namespace SNI
 		if (m_LogBuffer)
 		{
 			m_LogBuffer->LogExpressionTableJS(p_Stream, p_MaxLogEntries, p_DisplayOptions);
+		}
+		else
+		{
+			p_Stream << "{\"records\":[]}\n";
 		}
 	}
 
