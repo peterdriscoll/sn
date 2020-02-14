@@ -42,14 +42,6 @@ namespace SNI
 	{
 		return m_DebugHTML;
 	}
-	string SNI_DisplayOptions::GetBreakPointLocation()
-	{
-		return m_BreakPointLocation;
-	}
-	void SNI_DisplayOptions::SetBreakPointLocation(const string &p_BreakPointLocation)
-	{
-		m_BreakPointLocation = p_BreakPointLocation;
-	}
 
 	void SNI_DisplayOptions::IncrementLevel()
 	{

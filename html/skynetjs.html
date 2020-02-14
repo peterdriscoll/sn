@@ -124,9 +124,9 @@
                             </td>
                         </tr>
                     </table>
-                    <button title='Error' ng-click='setbreakpoint(["Error",16])' ng-class='breakpointdefaultclass(["Error",16], breakpoint, "NONE")'>Error</button>
-                    <button title='Delay' ng-click='setbreakpoint(["Warning",20])' ng-class='breakpointdefaultclass(["Warning",20], breakpoint, "NONE")'>Delay</button>
-                    <button title='No constraint' ng-click='setbreakpoint(["Warning",19])' ng-class='breakpointdefaultclass(["Warning",19], breakpoint, "NONE")'>No constraint</button>
+                    <button title='Error' ng-click='setbreakpoint(["Error",16])' ng-class='breakpointdefaultclass(["Error",16], "NONE")'>Error</button>
+                    <button title='Delay' ng-click='setbreakpoint(["Warning",20])' ng-class='breakpointdefaultclass(["Warning",20], "NONE")'>Delay</button>
+                    <button title='No constraint' ng-click='setbreakpoint(["Warning",19])' ng-class='breakpointdefaultclass(["Warning",19], "NONE")'>No constraint</button>
                     {{breakpoint}}
                     <table class='frame'>
                         <caption><pre>World Sets</pre></caption>
@@ -135,14 +135,14 @@
                                 {{ws.expression}}
                             </td>
                             <td>
-                                <button ng-repeat="w in ws.worlds" ng-title='w.breakpoint' ng-click='setbreakpoint(w.breakpoint)' ng-class='breakpointdefaultclass(w.breakpoint, breakpoint, w.reason)'>{{w.condition}}</button>
+                                <button ng-repeat="w in ws.worlds" ng-title='w.breakpoint' ng-click='setbreakpoint(w.breakpoint)' ng-class='breakpointdefaultclass(w.breakpoint, w.reason)'>{{w.condition}}</button>
                             </td>
                             <td ng-repeat="cws in ws.childsets">
-                                <button ng-repeat="u in cws.worlds" ng-title='u.breakpoint' ng-click='setbreakpoint(u.breakpoint)' ng-class='breakpointdefaultclass(u.breakpoint, breakpoint, u.reason)'>{{u.condition}}</button>
+                                <button ng-repeat="u in cws.worlds" ng-title='u.breakpoint' ng-click='setbreakpoint(u.breakpoint)' ng-class='breakpointdefaultclass(u.breakpoint, u.reason)'>{{u.condition}}</button>
                             </td>
                         </tr>
                     </table>
-                    <button title='MIR' ng-click='setbreakpoint(["MIR",3])' ng-class='breakpointclass(["MIR",3], breakpoint)'>Check MIR</button>
+                    <button title='MIR' ng-click='setbreakpoint(["MIR",3])' ng-class='breakpointclass(["MIR",3])'>Check MIR</button>
                 </td>
             </tr>
             <tr>
@@ -231,10 +231,10 @@
                             </tr>
                             <tr>
                                 <td>Return</td>
-                                <td><button ng-click='setbreakpoint(["assert",15])' ng-class='breakpointclass(["assert",15], breakpoint)'>Assert</button></td>
-                                <td><button ng-click='setbreakpoint(["partialassert",15])' ng-class='breakpointclass(["partialassert",15], breakpoint)'>Partial Assert</button></td>
-                                <td><button ng-click='setbreakpoint(["evaluate",15])' ng-class='breakpointclass(["evaluate",15], breakpoint)'>Evaluate</button></td>
-                                <td><button ng-click='setbreakpoint(["partialevaluate",15])' ng-class='breakpointclass(["partialevaluate",15], breakpoint)'>Partial Evakuate</button></td>
+                                <td><button ng-click='setbreakpoint(["assert",15])' ng-class='breakpointclass(["assert",15])'>Assert</button></td>
+                                <td><button ng-click='setbreakpoint(["partialassert",15])' ng-class='breakpointclass(["partialassert",15])'>Partial Assert</button></td>
+                                <td><button ng-click='setbreakpoint(["evaluate",15])' ng-class='breakpointclass(["evaluate",15])'>Evaluate</button></td>
+                                <td><button ng-click='setbreakpoint(["partialevaluate",15])' ng-class='breakpointclass(["partialevaluate",15])'>Partial Evakuate</button></td>
                             </tr>
                         </table>
                         <br />
@@ -359,45 +359,77 @@
             $scope.setbreakpoint(["partialassert", 3]);
             $scope.setbreakpoint(["evaluate", 3]);
             $scope.setbreakpoint(["partialevaluate", 3]);
-            $scope.breakpointclass = function (breakpoint, current) {
-                if (breakpoint === undefined || current === undefined) {
+            $scope.breakpointclass = function (breakpoint) {
+                if (breakpoint == undefined || $scope.breakpoint == undefined) {
                     return "error";
                 }
                 var breakpointId = breakpoint[0] + "_" + breakpoint[1];
-                if ((breakpoint[0] == current[0]) && (breakpoint[1] == current[1])) {
+                if ((breakpoint[0] == $scope.breakpoint[0]) && (breakpoint[1] == $scope.breakpoint[1])) {
                     if ($scope.breakpointCol.has(breakpointId)) {
-                        return 'breakpointsetlast';
+                        return 'breakpointsetat';
                     }
-                    return 'breakpointlast';
+                    return 'breakpointat';
                 }
-                if ($scope.breakpointCol.has(breakpointId)) {
-                    return 'breakpointset';
+                var eclass = 'breakpointclear';
+                if ($scope.frames !== undefined) {
+                    $scope.frames.every(function (f) {
+                        if ((breakpoint[0] == f.breakpoint[0]) && (breakpoint[1] == f.breakpoint[1])) {
+                            if ($scope.breakpointCol.has(breakpointId)) {
+                                eclass = 'breakpointsetatstack';
+                            } else {
+                                eclass = 'breakpointatstack';
+                            }
+                        }
+                        return eclass == 'breakpointclear';
+                    });
                 }
-                var breakpointCode = breakpoint[0];
-                if ($scope.getGroupBreakpoint(breakpointCode)) {
-                    return 'breakpointgroupset';
+                if (eclass == 'breakpointclear'){
+                    if ($scope.breakpointCol.has(breakpointId)) {
+                        eclass =  'breakpointset';
+                    } else {
+                        var breakpointCode = breakpoint[0];
+                        if ($scope.getGroupBreakpoint(breakpointCode)) {
+                            eclass = 'breakpointgroupset';
+                        }
+                    }
                 }
-                return 'breakpointclear';
+                return eclass;
             };
-            $scope.breakpointdefaultclass = function (breakpoint, current, c) {
-                if (breakpoint === undefined || current === undefined) {
+            $scope.breakpointdefaultclass = function (breakpoint,c) {
+                if (breakpoint == undefined || $scope.breakpoint == undefined) {
                     return "error";
                 }
                 var breakpointId = breakpoint[0] + "_" + breakpoint[1];
-                if ((breakpoint[0] == current[0]) && (breakpoint[1] == current[1])) {
+                if ((breakpoint[0] == $scope.breakpoint[0]) && (breakpoint[1] == $scope.breakpoint[1])) {
                     if ($scope.breakpointCol.has(breakpointId)) {
-                        return 'breakpointsetlast ' + c;
+                        return 'breakpointsetat ' +c;
                     }
-                    return 'breakpointlast ' + c;
+                    return 'breakpointat ' + c;
                 }
-                if ($scope.breakpointCol.has(breakpointId)) {
-                    return 'breakpointset ' + c;
+                var eclass = 'breakpointclear';
+                if ($scope.frames !== undefined) {
+                    $scope.frames.every(function (f) {
+                        if ((breakpoint[0] == f.breakpoint[0]) && (breakpoint[1] == f.breakpoint[1])) {
+                            if ($scope.breakpointCol.has(breakpointId)) {
+                                eclass = 'breakpointsetatstack';
+                            } else {
+                                eclass = 'breakpointatstack';
+                            }
+                        }
+                        return eclass == 'breakpointclear';
+                    });
                 }
-                var breakpointCode = breakpoint[0];
-                if ($scope.getGroupBreakpoint(breakpointCode)) {
-                    return 'breakpointgroupset ' + c;
+                if (eclass == 'breakpointclear') {
+                    if ($scope.breakpointCol.has(breakpointId)) {
+                        eclass = 'breakpointset';
+                    } else {
+                        var breakpointCode = breakpoint[0];
+                        if ($scope.getGroupBreakpoint(breakpointCode)) {
+                            eclass = 'breakpointgroupset';
+                        }
+                    }
                 }
-                return c;
+                return eclass + ' ' + c;
             };
             $scope.setthread = function (newthreadnum) {
                 if (threadnum != newthreadnum) {

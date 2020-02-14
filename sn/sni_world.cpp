@@ -139,7 +139,7 @@ namespace SNI
 		case doDebugPointsJS:
 		{
 			string breakPoint = DisplayShortJS();
-			return "<button title='" + breakPoint + "' ng-click='setbreakpoint(" + breakPoint + ")' ng-class='breakpointdefaultclass(" + breakPoint + ", breakpoint, \""+ Reason() + "\")'>" + p_Caption + "</button>";
+			return "<button title='" + breakPoint + "' ng-click='setbreakpoint(" + breakPoint + ")' ng-class='breakpointdefaultclass(" + breakPoint + ", \""+ Reason() + "\")'>" + p_Caption + "</button>";
 		}
 		}
 		return "";

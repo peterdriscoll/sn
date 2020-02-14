@@ -329,7 +329,6 @@ namespace SNI
 		if (manager)
 		{
 			SNI_DisplayOptions l_DisplayOptions(p_OptionType);
-			l_DisplayOptions.SetBreakPointLocation("f.");
 			WriteStackJS(ss, p_MaxStackFrame, manager->DebugFieldWidth(), l_DisplayOptions);
 		}
 		return ss.str();
@@ -355,7 +354,6 @@ namespace SNI
 	{
 		stringstream ss;
 		SNI_DisplayOptions displayOptions(p_OptionType);
-		displayOptions.SetBreakPointLocation("");
 		cout << "LogJS\n";
 		WriteLogExpJS(ss, p_MaxLogEntries, displayOptions);
 		return ss.str();

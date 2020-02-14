@@ -157,20 +157,28 @@ table, tr, td {
     background-color: lightblue;
 }
 
-.breakpointlast {
+.breakpointat {
+    background-color: lightcoral;
+}
+
+.breakpointsetat {
+    background-color: orange;
+}
+
+.breakpointatstack {
     background-color: pink;
 }
 
-.error {
-    background-color: red;
-}
-
-.breakpointsetlast {
-    background-color: orange;
+.breakpointsetatstack {
+    background-color: mediumaquamarine;
 }
 
 .breakpointclear {
     background-color: white;
+}
+
+.error {
+    background-color: red;
 }
 
 .CONFLICT {
