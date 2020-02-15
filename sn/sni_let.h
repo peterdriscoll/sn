@@ -33,6 +33,8 @@ namespace SNI
 		virtual SN::SN_Expression Unify(SN::SN_ExpressionList * p_ParameterList);
 		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Expression, bool p_Define = false);
 
+		virtual SN::SN_Error AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World ** p_WorldList, SNI_WorldSet * p_WorldSet);
+
 		SNI_Expression * GetCondition();
 		SNI_Expression * GetExpression();
 

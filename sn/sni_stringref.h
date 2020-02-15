@@ -87,6 +87,8 @@ namespace SNI
 		virtual SN::SN_Error AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result);
 		virtual SN::SN_Value DoIsA(const SNI_Value * p_Parent) const;
 
+		virtual SN::SN_Value DoEscape(enum SN::EscapeType p_EscapeType) const;
+		virtual SN::SN_Value DoUnescape(enum SN::EscapeType p_EscapeType) const;
 		virtual SN::SN_Value DoStringToInt() const;
 
 	protected:

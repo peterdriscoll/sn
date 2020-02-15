@@ -142,15 +142,15 @@ namespace SNI
 	void SNI_Error::WriteJS(ostream &p_Stream, SNI::SNI_DisplayOptions &p_DisplayOptions)
 	{
 		p_Stream << "{\n";
-		p_Stream << "\t\"description\" : \"" << ReplaceAll(m_Description, "\"", "\\\"") << "\",";
+		p_Stream << "\t\"description\" : \"" << EscapeStringToJSON(m_Description) << "\",";
 		p_Stream << "\t\"callhistory\" : [";
 		string delimeter = "\n";
 		for (SNI_CallRecord *callRecord : m_CallHistory)
 		{
 			p_Stream << delimeter << "\t{\n";
-			p_Stream << "\t\t\"purpose\" : \"" << ReplaceAll(callRecord->GetPurpose(), "\"", "\\\"") << "\",";
-			p_Stream << "\t\t\"expression\" : \"" << ReplaceAll(callRecord->GetExpression().DisplaySN(p_DisplayOptions), "\"", "\\\"") << "\",";
-			p_Stream << "\t\t\"logcontext\" : \"" << ReplaceAll(callRecord->GetLogContext(), "\"", "\\\"") << "\"";
+			p_Stream << "\t\t\"purpose\" : \"" << EscapeStringToJSON(callRecord->GetPurpose()) << "\",";
+			p_Stream << "\t\t\"expression\" : \"" << EscapeStringToJSON(callRecord->GetExpression().DisplaySN(p_DisplayOptions)) << "\",";
+			p_Stream << "\t\t\"logcontext\" : \"" << EscapeStringToJSON(callRecord->GetLogContext()) << "\"";
 			p_Stream << "\t}";
 			delimeter = ",\n";
 		}

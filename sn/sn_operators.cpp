@@ -209,6 +209,37 @@ namespace SN
 			return SN::SN_Function(skynet::SquareRoot, p_Expression);
 		}
 
+		// Escape conversions
+		SN::SN_Expression Escape(enum SN::EscapeType p_EscapeType, const SN::SN_Expression &p_Left)
+		{
+			SN_FunctionDef def(skynet::EscapeCPP);
+			switch (p_EscapeType)
+			{
+			case CPP:
+				def = skynet::EscapeCPP;
+				break;
+			case JSON:
+				def = skynet::EscapeJSON;
+				break;
+			}
+			return SN::SN_Function(def, p_Left);
+		}
+
+		SN::SN_Expression Unescape(enum SN::EscapeType p_EscapeType, const SN::SN_Expression &p_Left)
+		{
+			SN_FunctionDef def(skynet::UnescapeCPP);
+			switch (p_EscapeType)
+			{
+			case CPP:
+				def = skynet::UnescapeCPP;
+				break;
+			case JSON:
+				def = skynet::UnescapeJSON;
+				break;
+			}
+			return SN::SN_Function(def, p_Left);
+		}
+
 		// Conversions
 		SN::SN_Expression IntToString(const SN::SN_Expression &p_Left)
 		{

@@ -68,7 +68,6 @@ namespace SNI
 		if (IsNull())
 		{
 			const string & source = GetSourceString();
-			ReplaceAll(source, "\"", "\\\"");
 			SN::SN_Expression end = GetEnd().GetVariableValue();
 			SN::SN_Long l_long = end.DoEvaluate();
 			if (l_long.IsNull())
@@ -79,11 +78,18 @@ namespace SNI
 			{
 				end = SN::SN_Long((long) source.length());
 			}
-			return "\"" + source + "\", " + GetStart().DisplayCpp() + ", " + end.DisplayCpp();
+			return "\"" + EscapeStringToCPP(source) + "\", " + GetStart().DisplayCpp() + ", " + end.DisplayCpp();
 		}
-		string quotedString = GetString();
-		ReplaceAll(quotedString, "\"", "\\\"");
-		return "\"" + quotedString + "\"";
+		return "\"" + EscapeStringToCPP(GetString()) + "\"";
+	}
+
+	string SNI_StringRef::DisplaySN(long /*priority*/, SNI_DisplayOptions & p_DisplayOptions) const
+	{
+		if (IsKnownValue() && Cardinality() == 1)
+		{
+			return "\"" + EscapeStringToCPP(GetSourceString().substr(GetLeftMostPos(), Length())) + "\"";
+		}
+		return "\"" + EscapeStringToCPP(GetSourceString()) + "\"[" + GetStart().GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + ".." + GetEnd().GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + "]";
 	}
 
 	bool SNI_StringRef::IsKnownTypeValue() const
@@ -217,15 +223,6 @@ namespace SNI
 			});
 			worldSet->Complete();
 		}
-	}
-
-	string SNI_StringRef::DisplaySN(long /*priority*/, SNI_DisplayOptions & p_DisplayOptions) const
-	{
-		if (IsKnownValue() && Cardinality() == 1)
-		{
-			return "\"" + GetSourceString().substr(GetLeftMostPos(), Length()) + "\"";
-		}
-		return "\"" + GetSourceString() + "\"[" + GetStart().GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + ".." + GetEnd().GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + "]";
 	}
 
 	long SNI_StringRef::GetPriority() const
@@ -965,8 +962,35 @@ namespace SNI
 		return Class()->DoIsA(p_Parent);
 	}
 
+	SN::SN_Value SNI_StringRef::DoEscape(enum SN::EscapeType p_EscapeType) const
+	{
+		// Simple version, does not cope with value sets.
+		switch (p_EscapeType)
+		{
+		case SN::CPP:
+			return SN::SN_String(EscapeStringToCPP(GetString()));
+		case SN::JSON:
+			return SN::SN_String(EscapeStringToJSON(GetString()));
+		}
+		return SN::SN_Error("Bad escape type for escape conversion");
+	}
+
+	SN::SN_Value SNI_StringRef::DoUnescape(enum SN::EscapeType p_EscapeType) const
+	{
+		// Simple version, does not cope with value sets.
+		switch (p_EscapeType)
+		{
+		case SN::CPP:
+			return SN::SN_String(UnescapeStringToCPPUsingQuoted(GetString()));
+		case SN::JSON:
+			return SN::SN_String(UnescapeStringToJSON(GetString()));
+		}
+		return SN::SN_Error("Bad escape type for escape conversion");
+	}
+
 	SN::SN_Value SNI_StringRef::DoStringToInt() const
 	{
+		// Simple version, does not cope with value sets.
 		string s = GetString();
 		size_t len = s.size();
 		if (len < 10)

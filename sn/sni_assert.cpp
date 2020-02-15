@@ -68,7 +68,7 @@ namespace SNI
 	SN::SN_Expression SNI_Assert::UnifyArray(SN::SN_Expression * p_ParamList, const SNI_Expression *p_Source)
 	{
 		SN::SN_Expression clone = p_ParamList[PU1_First].GetSNI_Expression()->Clone(this, NULL);
-		LOG(WriteLine(SN::DebugLevel, "Assert " + clone.DisplayValueSN()));
+		LOG(WriteClonedExpression(SN::DebugLevel, "Assert: ", clone));
 		SNI_Thread::GetThread()->SetDebugId("assert");
 		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Assert", SN::CallId);
 

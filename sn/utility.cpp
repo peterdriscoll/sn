@@ -9,6 +9,13 @@
 
 #include "sn_pch.h"
 
+#include <boost/property_tree/json_parser/detail/write.hpp>
+//#include <boost/property_tree/json_parser/detail/read.hpp>
+
+#include <iostream>
+#include <iomanip>
+#include <sstream>
+
 #ifdef _WIN32
 #include <ShellApi.h>
 #else
@@ -103,6 +110,97 @@ namespace SNI
 		return result;
 	}
 
+	string EscapeStringToCPP(const std::string &p_Unescaped)
+	{
+		string out;
+		for (std::string::const_iterator i = p_Unescaped.begin(), end = p_Unescaped.end(); i != end; ++i) {
+			unsigned char c = *i;
+			if (' ' <= c && c <= '~' && c != '\\' && c != '"') {
+				out += c;
+			}
+			else {
+				out += '\\';
+				switch (c) {
+				case '"':  out +=  '"'; break;
+				case '\\': out +=  '\\'; break;
+				case '\t': out +=  't'; break;
+				case '\r': out +=  'r'; break;
+				case '\n': out +=  'n'; break;
+				default:
+					char const* const hexdig = "0123456789ABCDEF";
+					out += 'x';
+					out += hexdig[c >> 4];
+					out += hexdig[c & 0xF];
+				}
+			}
+		}
+		return out;
+	}
+
+	string UnescapeStringToCPP(const std::string &p_Escaped)
+	{
+		string out;
+		for (std::string::const_iterator i = p_Escaped.begin(), end = p_Escaped.end(); i != end; ++i) {
+			unsigned char c = *i;
+			if (c == '\\')
+			{
+				c = *(++i);
+				switch (c) {
+				case '"':  out += '"'; break;
+				case '\\': out += '\\'; break;
+				case 't': out += '\t'; break;
+				case 'r': out += '\r'; break;
+				case 'n': out += '\n'; break;
+				default:
+					c = *(++i);
+					if (c == 'x')
+					{
+						char hex_string[3];
+						hex_string[0] = *(++i);;
+						hex_string[1] = *(++i);;
+						unsigned char hex_value = (unsigned char)std::strtoul(hex_string, 0, 16);
+						out += hex_value;
+					}
+					else
+					{
+						out += c;
+					}
+				}
+			}
+			else
+			{
+				out += c;
+			}
+		}
+		return out;
+	}
+	
+	string EscapeStringToCPPUsingQuoted(const std::string &p_Unescaped)
+	{
+		std::stringstream ss;
+		ss << std::quoted(p_Unescaped);
+		return ss.str();
+	}
+
+	string UnescapeStringToCPPUsingQuoted(const std::string &p_Escaped)
+	{
+		std::stringstream ss('\"' + p_Escaped + '\"');
+		std::string out;
+		ss >> std::quoted(out);
+		return out;
+	}
+
+	string EscapeStringToJSON(const string &p_Unescaped)
+	{
+		return boost::property_tree::json_parser::create_escapes<char>(p_Unescaped);
+	}
+
+	string UnescapeStringToJSON(const string &p_Escaped)
+	{
+		// How to do this?
+		return p_Escaped;
+	}
+
 	string DisplayPmExpressionList(SN::SN_ExpressionList * p_ParameterList)
 	{
 		string result;
@@ -160,11 +258,11 @@ namespace SNI
 	string DetailsFS(const string &p_Text, const string &p_TextHTML, size_t p_Width)
 	{
 		string abbreviation;
-		string textHTML = ReplaceAll(p_TextHTML, "\"", "\\\"");
+		string textHTML = EscapeStringToJSON(p_TextHTML);
 		size_t textWidth = p_Text.size();
 		if (p_Width < textWidth)
 		{
-			abbreviation = ReplaceAll(p_Text.substr(0, p_Width - 3), "\"", "\\\"");
+			abbreviation = EscapeStringToJSON(p_Text.substr(0, p_Width - 3));
 		}
 		return "{\"abbreviation\" : \"" + abbreviation + "\",\"text\" : \"" + textHTML + "\"}";
 	}

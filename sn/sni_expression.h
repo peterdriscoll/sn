@@ -222,6 +222,8 @@ namespace SNI
 		virtual	SN::SN_Value DoFile() const;
 
 		// Conversions
+		virtual SN::SN_Value DoEscape(enum SN::EscapeType p_EscapeType) const;
+		virtual SN::SN_Value DoUnescape(enum SN::EscapeType p_EscapeType) const;
 		virtual	SN::SN_Value DoIntToString() const;
 		virtual	SN::SN_Value DoStringToInt() const;
 		virtual	SN::SN_Value DoDoubleToString() const;

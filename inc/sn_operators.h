@@ -75,6 +75,9 @@ namespace SN
 		SN::SN_Expression CountAll(const SN::SN_Expression &p_Mapping);
 		SN::SN_Expression Sum(const SN::SN_Expression &p_Mapping);
 
+		SN::SN_Expression Escape(enum SN::EscapeType p_EscapeType, const SN::SN_Expression &p_Left);
+		SN::SN_Expression Unescape(enum SN::EscapeType p_EscapeType, const SN::SN_Expression &p_Left);
+
 		// Conversions
 		SN::SN_Expression IntToString(const SN::SN_Expression &p_Left);
 		SN::SN_Expression StringToInt(const SN::SN_Expression &p_Left);

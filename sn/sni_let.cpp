@@ -239,4 +239,14 @@ namespace SNI
 		}
 		return m_Expression->PartialAssertValue(p_Result);
 	}
+
+	SN::SN_Error SNI_Let::AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World ** p_WorldList, SNI_WorldSet * p_WorldSet)
+	{
+		ASSERTM(p_WorldList == 0, "Called only with a cardinality of 1, so no worlds.");
+		if (p_Value.IsKnownValue() || p_Value.IsReferableValue())
+		{
+			return AssertValue(p_Value);
+		}
+		return skynet::OK;
+	}
 }

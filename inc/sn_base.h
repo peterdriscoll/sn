@@ -17,6 +17,11 @@ namespace SNI
 
 namespace SN
 {
+	enum EscapeType
+	{
+		CPP, JSON
+	};
+
 	class SN_Expression;
 	class SN_Value;
 

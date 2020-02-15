@@ -107,6 +107,10 @@
 #include "sni_lookaheadright.h"
 #include "sni_file.h"
 
+// Escape conversion
+#include "sni_escape.h"
+#include "sni_unescape.h"
+
 // Conversion
 #include "sni_inttostring.h"
 #include "sni_stringtoint.h"

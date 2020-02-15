@@ -120,7 +120,9 @@ namespace SNI
 			{
 				p_Changed = true;
 				l_NewVariable->AssertIsA(m_ConstraintValue);
-				return dynamic_cast<SNI_Expression *>(new SNI_Lambda(dynamic_cast<SNI_Expression *>(l_NewVariable), l_expression, m_ConstraintValue, m_Id));
+				SNI_Expression *lambda = new SNI_Lambda(dynamic_cast<SNI_Expression *>(l_NewVariable), l_expression, m_ConstraintValue, m_Id);
+				LOG(WriteClonedExpression(SN::DebugLevel, "", lambda));
+				return lambda;
 			}
 		}
 		else
@@ -130,7 +132,8 @@ namespace SNI
 			{
 				p_Changed = true;
 				m_FormalParameter->AssertIsA(m_ConstraintValue);
-				return dynamic_cast<SNI_Expression *>(new SNI_Lambda(m_FormalParameter, l_expression, m_ConstraintValue, m_Id));
+				SNI_Expression *lambda = new SNI_Lambda(m_FormalParameter, l_expression, m_ConstraintValue, m_Id);
+				return lambda;
 			}
 		}
 		return this;

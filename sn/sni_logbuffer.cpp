@@ -78,7 +78,7 @@ namespace SNI
 		long entries = 0;
 		for (auto it = m_Buffer.rbegin(); it != m_Buffer.rend() && (p_MaxLogEntries <= 0 || entries < p_MaxLogEntries); it++, entries++)
 		{
-			string quotedString = ReplaceAll(*it, "\"", "\\\"");
+			string quotedString = EscapeStringToJSON(*it);
 			p_Stream << delimeter << "{\"text\" : \"" << quotedString << "\"}\n";
 			delimeter = ",";
 		}
@@ -94,7 +94,7 @@ namespace SNI
 		long entries = 0;
 		for (auto it = m_ExpressionBuffer.rbegin(); it != m_ExpressionBuffer.rend() && (p_MaxLogEntries <= 0 || entries < p_MaxLogEntries); it++, entries++)
 		{
-			string quotedString = ReplaceAll(it->DisplaySN(p_DisplayOptions), "\"", "\\\"");
+			string quotedString = EscapeStringToJSON(it->DisplaySN(p_DisplayOptions));
 			p_Stream << delimeter << "{\"expression\" : \"" << quotedString << "\"}\n";
 			delimeter = ",";
 		}

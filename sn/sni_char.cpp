@@ -62,8 +62,7 @@ namespace SNI
 		if (m_Char)
 		{
 			string quotedString(1, m_Char);
-			ReplaceAll(quotedString, "\"", "\\\"");
-			return "\"" + quotedString + "\"";
+			return "\"" + EscapeStringToCPP(quotedString)+ "\"";
 		}
 		return "\"\\\0\"";
 	}
@@ -73,8 +72,7 @@ namespace SNI
 		if (m_Char)
 		{
 			string quotedString(1, m_Char);
-			ReplaceAll(quotedString, "\"", "\\\"");
-			return "\"" + quotedString + "\"";
+			return "\"" + EscapeStringToCPP(quotedString) + "\"";
 		}
 		return "\"\\\\0\"";
 	}

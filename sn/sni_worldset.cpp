@@ -116,7 +116,7 @@ namespace SNI
 	void SNI_WorldSet::WriteJS(ostream &p_Stream, const string &tabs, SNI_DisplayOptions & p_DisplayOptions) const
 	{
 		p_Stream << tabs << "\t\"id\" : \"" << DisplayShort() << "\",\n";
-		p_Stream << tabs << "\t\"expression\" : \"" << ReplaceAll(m_Expression.DisplaySN(), "\"", "\\\"") << "\",\n";
+		p_Stream << tabs << "\t\"expression\" : \"" << EscapeStringToJSON(m_Expression.DisplaySN()) << "\",\n";
 		p_Stream << tabs << "\t\"worlds\" : [\n";
 		string delimeter;
 		for (const SNI_World *w : m_WorldList)
@@ -142,7 +142,7 @@ namespace SNI
 	void SNI_WorldSet::WriteUnmarkedJS(ostream &p_Stream, const string &tabs, SNI_DisplayOptions &p_DisplayOptions) const
 	{
 		p_Stream << tabs << "\t\"id\" : \"" << DisplayShort() << "\",\n";
-		p_Stream << tabs << "\t\"expression\" : \"" << ReplaceAll(m_Expression.DisplaySN(), "\"", "\\\"") << "\",\n";
+		p_Stream << tabs << "\t\"expression\" : \"" << EscapeStringToJSON(m_Expression.DisplaySN()) << "\",\n";
 		p_Stream << tabs << "\t\"worlds\" : [\n";
 		string delimeter;
 		for (const SNI_World *w : m_WorldList)

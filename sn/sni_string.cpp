@@ -63,16 +63,13 @@ namespace SNI
 
 	string SNI_String::DisplayCpp() const
 	{
-		string quotedString = m_String;
-		ReplaceAll(quotedString, "\"", "\\\"");
-		return "\"" + quotedString + "\"";
+		return "\"" + EscapeStringToCPP(m_String) + "\"";
 	}
 
 	string SNI_String::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
-		string quotedString = m_String;
-		ReplaceAll(quotedString, "\"", "\\\"");
-		return "\"" + quotedString + "\"";
+		string quotedString = EscapeStringToJSON(m_String);
+		return "\"" + EscapeStringToCPP(m_String) + "\"";
 	}
 
 	long SNI_String::GetPriority() const
@@ -338,6 +335,30 @@ namespace SNI
 		out.close();
 		auto &preventReread = SNI_Thread::GetThread()->GetProcessor()->GetPreventReread();
 		preventReread[GetString()] = p_Contents;
+	}
+
+	SN::SN_Value SNI_String::DoEscape(enum SN::EscapeType p_EscapeType) const
+	{
+		switch (p_EscapeType)
+		{
+		case SN::CPP:
+			return SN::SN_String(EscapeStringToCPP(GetString()));
+		case SN::JSON:
+			return SN::SN_String(EscapeStringToJSON(GetString()));
+		}
+		return SN::SN_Error("Bad escape type for escape conversion");
+	}
+
+	SN::SN_Value SNI_String::DoUnescape(enum SN::EscapeType p_EscapeType) const
+	{
+		switch (p_EscapeType)
+		{
+		case SN::CPP:
+			return SN::SN_String(UnescapeStringToCPP(GetString()));
+		case SN::JSON:
+			return SN::SN_String(UnescapeStringToJSON(GetString()));
+		}
+		return SN::SN_Error("Bad escape type for escape conversion");
 	}
 
 	SN::SN_Value SNI_String::DoStringToInt() const

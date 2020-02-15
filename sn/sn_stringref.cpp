@@ -134,4 +134,24 @@ namespace SN
 		return SN_Operators::File(*this);
 	}
 
+	// Conversion
+	SN_Expression SN_StringRef::Escape(enum EscapeType p_EscapeType) const
+	{
+		return SN_Operators::Escape(p_EscapeType, *this);
+	}
+
+	SN_Expression SN_StringRef::Unescape(enum EscapeType p_EscapeType) const
+	{
+		return SN_Operators::Unescape(p_EscapeType, *this);
+	}
+
+	SN_Expression SN_StringRef::StringToInt() const
+	{
+		return SN_Operators::StringToInt(*this);
+	}
+
+	SN_Expression SN_StringRef::StringToDouble() const
+	{
+		return SN_Operators::StringToDouble(*this);
+	}
 }

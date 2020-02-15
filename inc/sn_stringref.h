@@ -35,7 +35,7 @@ namespace SN
 		SN_StringRef(const SN_Expression &p_other);
 		virtual ~SN_StringRef();
 
-		// Constructionm
+		// Construction
 		SN_Expression operator ==(const SN_Expression &p_Other) const;
 		SN_Expression operator +(const SN_Expression &p_Other) const;
 		SN_Expression operator -(const SN_Expression &p_Other) const;
@@ -50,6 +50,12 @@ namespace SN
 		SN_Expression LookaheadLeft() const;
 		SN_Expression LookaheadRight() const;
 		SN_Expression File() const;
+
+		// Conversions
+		SN_Expression Escape(EscapeType p_EscapeType) const;
+		SN_Expression Unescape(EscapeType p_EscapeType) const;
+		SN_Expression StringToInt() const;
+		SN_Expression StringToDouble() const;
 
 		// Members
 		string GetString() const;

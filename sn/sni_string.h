@@ -70,6 +70,8 @@ namespace SNI
 
 		virtual void DoWriteFile(const SN::SN_Value & p_Contents) const;
 
+		virtual SN::SN_Value DoEscape(enum SN::EscapeType p_EscapeType) const;
+		virtual SN::SN_Value DoUnescape(enum SN::EscapeType p_EscapeType) const;
 		virtual SN::SN_Value DoStringToInt() const;
 
 	private:

@@ -66,11 +66,11 @@ namespace SNI
 			{
 				if (result.GetBool())
 				{
-					if (p_ParamList[PU1_First].IsNullValue())
+					if (p_ParamList[PU1_First].IsKnownValue())
 					{
-						return 1;
+						return p_ParamList[PU1_First].Cardinality();
 					}
-					return p_ParamList[PU1_First].Cardinality();
+					return 1;
 				}
 				return 0;
 			}

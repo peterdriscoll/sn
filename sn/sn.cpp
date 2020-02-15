@@ -53,6 +53,10 @@
 #include "sni_lookaheadleft.h"
 #include "sni_lookaheadright.h"
 
+// Escape conversion
+#include "sni_escape.h"
+#include "sni_unescape.h"
+
 // Conversion
 #include "sni_inttostring.h"
 #include "sni_stringtoint.h"
@@ -125,6 +129,12 @@ namespace skynet
 	SN::SN_FunctionDef LookaheadLeft(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_LookaheadLeft()));
 	SN::SN_FunctionDef LookaheadRight(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_LookaheadRight()));
 	SN::SN_FunctionDef File(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_File()));
+
+	// Escape Conversions
+	SN::SN_FunctionDef EscapeCPP(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Escape(SN::CPP)));
+	SN::SN_FunctionDef UnescapeCPP(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Unescape(SN::CPP)));
+	SN::SN_FunctionDef EscapeJSON(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Escape(SN::JSON)));
+	SN::SN_FunctionDef UnescapeJSON(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Unescape(SN::JSON)));
 
 	// Conversions
 	SN::SN_FunctionDef IntToString(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_IntToString()));

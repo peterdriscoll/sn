@@ -199,6 +199,10 @@ namespace SN
 		SN_Expression LookaheadRight() const;
 		SN_Expression File() const;
 
+		// Escape conversions
+		SN_Expression Escape(enum EscapeType p_EscapeType) const;
+		SN_Expression Unescape(enum EscapeType p_EscapeType) const;
+
 		// Conversions
 		SN_Expression IntToString() const;
 		SN_Expression StringToInt() const;

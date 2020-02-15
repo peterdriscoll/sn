@@ -540,6 +540,12 @@
     <ClInclude Include="sni_callrecord.h">
       <Filter>General Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sni_unescape.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_escape.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -997,6 +1003,12 @@
     </ClCompile>
     <ClCompile Include="sni_callrecord.cpp">
       <Filter>General Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_unescape.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_escape.cpp">
+      <Filter>Function Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

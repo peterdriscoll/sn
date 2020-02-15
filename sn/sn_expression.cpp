@@ -606,6 +606,16 @@ namespace SN
 	}
 
 	// Conversion
+	SN_Expression SN_Expression::Escape(enum EscapeType p_EscapeType) const
+	{
+		return SN_Operators::Escape(p_EscapeType, *this);
+	}
+
+	SN_Expression SN_Expression::Unescape(enum EscapeType p_EscapeType) const
+	{
+		return SN_Operators::Unescape(p_EscapeType, *this);
+	}
+
 	SN_Expression SN_Expression::IntToString() const
 	{
 		return SN_Operators::IntToString(*this);

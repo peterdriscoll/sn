@@ -851,6 +851,16 @@ namespace SNI
 	}
 
 	// Conversion
+	SN::SN_Value SNI_Expression::DoEscape(enum SN::EscapeType p_EscapeType) const
+	{
+		return SN::SN_Error(GetTypeName() + " Escape method not implemented.");
+	}
+
+	SN::SN_Value SNI_Expression::DoUnescape(enum SN::EscapeType p_EscapeType) const
+	{
+		return SN::SN_Error(GetTypeName() + " Unescape method not implemented.");
+	}
+
 	SN::SN_Value SNI_Expression::DoIntToString() const
 	{
 		return SN::SN_Error(GetTypeName() + " IntToString method not implemented.");

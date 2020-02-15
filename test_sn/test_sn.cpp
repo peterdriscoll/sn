@@ -1470,36 +1470,18 @@ namespace test_sn
 				SN_DECLARE(ParseInteger2);
 				(Define(ParseInteger2)(s)(i) == (IsInteger(s) && (s.StringToInt() == i))).PartialAssert().Do();
 
-
 				SN_DECLARE(x2);
 				(ParseInteger("13")(x2)).Assert().Do();
 				(x2 == Long(13)).Evaluate().Do();
-
-				SN_DECLARE(y2);
-				(ParseInteger2("13")(y2)).Assert().Do();
-				(y2 == Long(13)).Evaluate().Do();
 
 				SN_DECLARE(x3);
 				(ParseInteger("21")(x3)).Assert().Do();
 				(x3 == Long(21)).Evaluate().Do();
 
-				SN_DECLARE(ParseTerm);
-				SN_DECLARE(t);
-				SN_DECLARE(t1);
-				SN_DECLARE(t2);
-				SN_DECLARE(s1);
-				SN_DECLARE(s2);
-	
-				(Define(ParseTerm)(s)(t) == Local(t1, Local(t2, Local(s1, Local(s2, Local(t, Let(s == s1 + String("+") + s2, Let(ParseInteger(s1)(t1), Let(ParseInteger(s2)(t2), t == Meta(1, Meta(-1, t1) + Meta(-1, t2))))))))))).PartialAssert().Do();
-
-				SN_DECLARE(x1);
-				SN_DECLARE(y1);
-
-				(ParseTerm("13+21")(x1)).Assert().Do();
-				(x1.DoEvaluate(-1) == y1).Assert().Do();
-				(y1 == Long(34)).Evaluate().Do();
-				long y_value = Long(y1).GetNumber();
-				Assert::IsTrue(y_value == 34);
+				long x2_long = Long(x2).GetNumber();
+				long x3_long = Long(x3).GetNumber();
+				Assert::IsTrue(x2_long == 13);
+				Assert::IsTrue(x3_long == 21);
 			}
 		}
 
@@ -1590,6 +1572,48 @@ namespace test_sn
 				string i3_string = i3.DisplayValueSN();
 				string i4_string = i4.DisplayValueSN();
 				Assert::IsTrue(i3_string == i4_string);
+			}
+		}
+
+		TEST_METHOD(TestParseString)
+		{
+			Initialize();
+			{
+				Manager manager("Test Parse String", AssertErrorHandler);
+				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(IsString);
+				SN_DECLARE(IsStringContent);
+				SN_DECLARE(s);
+				SN_DECLARE(t);
+				(Define(IsString)(s) == Local(t, Let(s == String("\"") + t + String("\""), IsStringContent(t)))).PartialAssert().Do();
+
+				(Define(IsStringContent)(s) == ((s == String("")) || (s.LookaheadLeft() == String("\"")).If(s == String(""), (s.LookaheadLeft() == String("\\")).If(IsStringContent(s.SubtractLeftChar().SubtractLeftChar()), IsStringContent(s.SubtractLeftChar()))))).PartialAssert().Do();
+
+				IsString(String("\"My test string\"")).Assert().Do();
+
+				SN_DECLARE(z1);
+				(IsString(String("\"My test string\"")) == z1).Assert().Do();
+				(z1).Evaluate().Do();
+
+				SN_DECLARE(z2);
+				(IsString(String("\"Line 1\\nLine2\"")) == z2).Assert().Do();
+				(z2).Evaluate().Do();
+
+				SN_DECLARE(ParseString);
+				SN_DECLARE(i);
+				(Define(ParseString)(s)(i) == (IsString(s) && Local(t, Let(s == String("\"") + t + String("\""), t.Unescape(CPP) == i)))).PartialAssert().Do();
+
+				SN_DECLARE(x2);
+				(ParseString("\"Line 1\\nLine2\"")(x2)).Assert().Do();
+				(x2 == String("Line 1\nLine2")).Evaluate().Do();
+
+				SN_DECLARE(y2);
+				(y2 == String("Line 1\nLine2")).Assert().Do();
+
+				string x2_string = x2.DisplayValueSN();
+				string y2_string = y2.DisplayValueSN();
+				Assert::IsTrue(x2_string == y2_string);
 			}
 		}
 

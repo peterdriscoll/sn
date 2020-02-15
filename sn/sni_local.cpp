@@ -65,11 +65,18 @@ namespace SNI
 
 	string SNI_Local::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
-		return "#" + m_LocalVariable->DisplaySN(GetPriority(), p_DisplayOptions) + "." + m_Expression->DisplaySN(GetPriority(), p_DisplayOptions);
 		string sValue;
-		if ((m_LocalVariable->IsKnownValue() || m_LocalVariable->IsKnownTypeValue()) && !m_LocalVariable->IsLambdaValue())
+		if (m_LocalVariable->IsVariable() && !m_LocalVariable->IsNullValue())
 		{
-			sValue = SetStaticBreakPoint(":", p_DisplayOptions, this, SN::ValueId) + m_LocalVariable->DisplayValueSN(GetPriority(), p_DisplayOptions);
+			if (!m_LocalVariable->GetVariableValue(true).GetSNI_ValueSet())
+			{ // Too long to display here.
+				if (p_DisplayOptions.CheckLevel())
+				{
+					p_DisplayOptions.IncrementLevel();
+					sValue = SetStaticBreakPoint(":", p_DisplayOptions, this, SN::ValueId) + m_LocalVariable->GetVariableValue(true).DisplaySN(GetPriority(), p_DisplayOptions);
+					p_DisplayOptions.DecrementLevel();
+				}
+			}
 		}
 		string text = SetStaticBreakPoint("#", p_DisplayOptions, this, SN::LeftId) + m_LocalVariable->DisplaySN(GetPriority(), p_DisplayOptions) + sValue + SetStaticBreakPoint(".", p_DisplayOptions, this, SN::ParameterOneId) + m_Expression->DisplaySN(GetPriority(), p_DisplayOptions);
 		return Bracket(priority, text, p_DisplayOptions, this);
@@ -100,11 +107,12 @@ namespace SNI
 		bool changed = false;
 		SNI_Variable *l_NewVariable = new SNI_Variable(m_LocalVariable->GetName());
 		l_NewVariable->SetFrame(p_Frame);
-		SNI_Expression *l_expression = p_Frame->CloneReplace(p_Changed, m_LocalVariable, l_NewVariable, m_Expression);
+		SNI_Expression *l_expression = p_Frame->CloneReplace(changed, m_LocalVariable, l_NewVariable, m_Expression);
 		if (changed)
 		{
 			p_Changed = true;
-			return dynamic_cast<SNI_Expression *>(new SNI_Local(l_NewVariable, l_expression));
+			SNI_Expression *local = new SNI_Local(l_NewVariable, l_expression);
+			return local;
 		}
 		return this;
 	}
@@ -116,7 +124,12 @@ namespace SNI
 
 	SN::SN_Expression SNI_Local::DoPartialEvaluate(long p_MetaLevel /* = 0 */) const
 	{
-		return m_Expression->DoPartialEvaluate(p_MetaLevel);
+		SN::SN_Expression value = m_Expression->DoPartialEvaluate(p_MetaLevel);
+		if (SN::Is<SNI_Value *>(value))
+		{
+			return value;
+		}
+		return this;
 	}
 
 	SN::SN_Error SNI_Local::DoAssert()
@@ -176,5 +189,10 @@ namespace SNI
 		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Local::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )"));
 
 		return LOG_RETURN(context, m_Expression->PartialUnify(p_ParameterList, p_Result));
+	}
+
+	SN::SN_Error SNI_Local::AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World ** p_WorldList, SNI_WorldSet * p_WorldSet)
+	{
+		return m_Expression->AddValue(p_Value, p_NumWorlds, p_WorldList, p_WorldSet);
 	}
 }

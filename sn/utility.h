@@ -44,6 +44,12 @@ namespace SNI
 		vector<string>& a_result);
 
 	string ReplaceAll(const string &source, const string &target, const string &replace);
+	string EscapeStringToCPP(const std::string &p_Unescaped);
+	string UnescapeStringToCPP(const std::string &p_Escaped);
+	string EscapeStringToCPPUsingQuoted(const std::string &p_Unescaped);
+	string UnescapeStringToCPPUsingQuoted(const string &p_Escaped);
+	string EscapeStringToJSON(const string &p_Unescaped);
+	string UnescapeStringToJSON(const string &p_Escaped);
 
 	string Pad(const string &p_Text, size_t p_Width);
 	string Trim(const string &p_Text, size_t p_Width);

@@ -79,6 +79,10 @@
 
 namespace skynet
 {
+	typedef enum SN::EscapeType EscapeType;
+	const EscapeType CPP = SN::CPP;
+	const EscapeType JSON = SN::JSON;
+
 	// Manager
 	typedef SN::SN_Manager Manager;
 	typedef SN::SN_Transaction Transaction;
@@ -170,6 +174,10 @@ namespace skynet
 	extern SN_EXPORT SN::SN_FunctionDef File;
 
 	// * Conversions
+	extern SN_EXPORT SN::SN_FunctionDef EscapeCPP;
+	extern SN_EXPORT SN::SN_FunctionDef UnescapeCPP;
+	extern SN_EXPORT SN::SN_FunctionDef EscapeJSON;
+	extern SN_EXPORT SN::SN_FunctionDef UnescapeJSON;
 	extern SN_EXPORT SN::SN_FunctionDef IntToString;
 	extern SN_EXPORT SN::SN_FunctionDef StringToInt;
 	extern SN_EXPORT SN::SN_FunctionDef DoubleToString;

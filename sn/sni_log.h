@@ -42,6 +42,7 @@ namespace SNI
 
 		void WriteFrame(SNI_Thread *p_Thread, SN::LoggingLevel p_DebugLevel, SNI_Frame * p_Frame = NULL);
 		void WriteExpression(SN::LoggingLevel p_DebugLevel, SN::SN_Expression p_Result, SN::SN_Expression p_Expression);
+		void WriteClonedExpression(SN::LoggingLevel p_DebugLevel, const string &p_Text, SN::SN_Expression p_Expression);
 		void WriteVariable(SN::LoggingLevel p_DebugLevel, SN::SN_Variable p_Variable);
 		void WriteVariableByName(SN::LoggingLevel p_DebugLevel, const string & p_Name);
 		void WriteContext(SN::LoggingLevel p_DebugLevel, const string &p_Text);

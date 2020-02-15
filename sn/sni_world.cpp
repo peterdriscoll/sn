@@ -161,8 +161,8 @@ namespace SNI
 	{
 		p_Stream << tabs << "\t\"id\" : \"" << DisplayShort() << "\",\n";
 		p_Stream << tabs << "\t\"breakpoint\" : " << DisplayShortJS() << ",\n";
-		p_Stream << tabs << "\t\"expression\" : \"" << ReplaceAll(m_Value.DisplaySN(p_DisplayOptions), "\"", "\\\"") << "\",\n";
-		p_Stream << tabs << "\t\"condition\" : \"" << ReplaceAll(DisplayCondition(p_DisplayOptions), "\"", "\\\"") << "\",\n";
+		p_Stream << tabs << "\t\"expression\" : \"" << EscapeStringToJSON(m_Value.DisplaySN(p_DisplayOptions)) << "\",\n";
+		p_Stream << tabs << "\t\"condition\" : \"" << EscapeStringToJSON(DisplayCondition(p_DisplayOptions)) << "\",\n";
 		p_Stream << tabs << "\t\"empty\" : " << (IsEmpty() ? "true" : "false") << ",\n";
 		p_Stream << tabs << "\t\"fail\" : " << (IsFailMarked() ? "true" : "false") << ",\n";
 		p_Stream << tabs << "\t\"reason\" : \"" << Reason() << "\"\n";

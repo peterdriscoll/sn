@@ -151,6 +151,27 @@ namespace SN
 		return SN_Operators::File(m_Expression);
 	}
 
+	// Conversion
+	SN_Expression SN_String::Escape(enum EscapeType p_EscapeType) const
+	{
+		return SN_Operators::Escape(p_EscapeType, *this);
+	}
+
+	SN_Expression SN_String::Unescape(enum EscapeType p_EscapeType) const
+	{
+		return SN_Operators::Unescape(p_EscapeType, *this);
+	}
+
+	SN_Expression SN_String::StringToInt() const
+	{
+		return SN_Operators::StringToInt(*this);
+	}
+
+	SN_Expression SN_String::StringToDouble() const
+	{
+		return SN_Operators::StringToDouble(*this);
+	}
+
 	SN_Expression SN_String::IsA(const SN_Expression &p_Parent) const
 	{
 		return SN_Operators::IsA(*this, p_Parent);

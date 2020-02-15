@@ -52,6 +52,12 @@ namespace SN
 		SN::SN_Expression LookaheadRight() const;
 		SN::SN_Expression File() const;
 
+		// Conversions
+		SN_Expression Escape(enum EscapeType p_EscapeType) const;
+		SN_Expression Unescape(enum EscapeType p_EscapeType) const;
+		SN_Expression StringToInt() const;
+		SN_Expression StringToDouble() const;
+
 		string GetString() const;
 		size_t Length() const;
 

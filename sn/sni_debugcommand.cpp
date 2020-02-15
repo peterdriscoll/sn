@@ -40,8 +40,9 @@ namespace SNI
 		}
 		bool baseInterrupt = (p_InterruptPoint == SN::BreakPoint || p_InterruptPoint == SN::ErrorPoint || p_InterruptPoint == SN::EndPoint);
 		bool callFound = (p_InterruptPoint == SN::CallPoint) ||
-			             (p_InterruptPoint == SN::FailPoint) ||
-					     (p_InterruptPoint == SN::MirrorPoint) ||
+					 	 (p_InterruptPoint == SN::FailPoint) ||
+						 (p_InterruptPoint == SN::WarningPoint) ||
+						 (p_InterruptPoint == SN::MirrorPoint) ||
 					     (p_InterruptPoint == SN::StaticPoint);
 
 		switch (m_DebugAction)

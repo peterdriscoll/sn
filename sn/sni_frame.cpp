@@ -341,7 +341,7 @@ namespace SNI
 		{
 			function = m_Function.DisplaySN();
 		}
-		p_Stream << "\t\t\"function\" : \"" << ReplaceAll(function, "\"", "\\\"") << "\",\n";
+		p_Stream << "\t\t\"function\" : \"" << EscapeStringToJSON(function) << "\",\n";
 		p_Stream << "\t\t\"framepos\" : \"" << p_FrameStackPos << "\",\n";
 		p_Stream << "\t\t\"framenum\" : \"" << m_FrameNum << "\",\n";
 		p_Stream << "\t\t\"typename\" : \"" << m_Function.GetValueTypeName() << "\",\n";

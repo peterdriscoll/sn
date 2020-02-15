@@ -64,7 +64,7 @@ namespace SNI
 	SN::SN_Expression SNI_Evaluate::UnifyArray(SN::SN_Expression * p_ParamList, const SNI_Expression *p_Source)
 	{
 		SN::SN_Expression clone = p_ParamList[PU1_First].GetSNI_Expression()->Clone(this, NULL);
-		LOG(WriteLine(SN::DebugLevel, "Evaluate " + clone.DisplayValueSN()));
+		LOG(WriteClonedExpression(SN::DebugLevel, "Eval: ", clone));
 		SNI_Thread::GetThread()->SetDebugId("evaluate");
 		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "evaluate", SN::CallId);
 
