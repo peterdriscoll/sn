@@ -4,7 +4,7 @@
 
 namespace SNI
 {
-	SNI_Escape::SNI_Escape(enum SN::EscapeType p_EscapeType)
+	SNI_Escape::SNI_Escape(enum skynet::EscapeType p_EscapeType)
 		: m_EscapeType(p_EscapeType)
 	{
 	}

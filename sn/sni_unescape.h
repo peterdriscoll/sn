@@ -11,7 +11,7 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Unescape)
 	public:
-		SNI_Unescape(enum SN::EscapeType p_EscapeType);
+		SNI_Unescape(enum skynet::EscapeType p_EscapeType);
 		virtual ~SNI_Unescape();
 
 		virtual string GetTypeName() const;
@@ -25,7 +25,7 @@ namespace SNI
 		virtual SN::SN_Expression InverseFunctionExpression(const SN::SN_Expression &p_Param) const;
 
 	private:
-		enum SN::EscapeType m_EscapeType;
+		enum skynet::EscapeType m_EscapeType;
 	};
 }
 

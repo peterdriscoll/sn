@@ -41,6 +41,11 @@ namespace skynet
 	{
 		None, Run, RunToEnd, Debug, CodeBreak, StepOver, StepInto, StepParameter, StepOut, GotoStepCount, Quit, Abort
 	};
+
+	enum EscapeType
+	{
+		CPP, JSON
+	};
 }
 
 #ifdef USE_LOGGING
@@ -105,10 +110,6 @@ namespace skynet
 
 namespace skynet
 {
-	typedef enum SN::EscapeType EscapeType;
-	const EscapeType CPP = SN::CPP;
-	const EscapeType JSON = SN::JSON;
-
 	// Manager
 	typedef SN::SN_Manager Manager;
 	typedef SN::SN_Transaction Transaction;

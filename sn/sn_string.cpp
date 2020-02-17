@@ -152,12 +152,12 @@ namespace SN
 	}
 
 	// Conversion
-	SN_Expression SN_String::Escape(enum EscapeType p_EscapeType) const
+	SN_Expression SN_String::Escape(enum skynet::EscapeType p_EscapeType) const
 	{
 		return SN_Operators::Escape(p_EscapeType, *this);
 	}
 
-	SN_Expression SN_String::Unescape(enum EscapeType p_EscapeType) const
+	SN_Expression SN_String::Unescape(enum skynet::EscapeType p_EscapeType) const
 	{
 		return SN_Operators::Unescape(p_EscapeType, *this);
 	}

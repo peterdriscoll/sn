@@ -52,8 +52,8 @@ namespace SN
 		SN_Expression File() const;
 
 		// Conversions
-		SN_Expression Escape(EscapeType p_EscapeType) const;
-		SN_Expression Unescape(EscapeType p_EscapeType) const;
+		SN_Expression Escape(enum skynet::EscapeType p_EscapeType) const;
+		SN_Expression Unescape(enum skynet::EscapeType p_EscapeType) const;
 		SN_Expression StringToInt() const;
 		SN_Expression StringToDouble() const;
 

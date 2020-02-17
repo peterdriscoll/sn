@@ -337,25 +337,25 @@ namespace SNI
 		preventReread[GetString()] = p_Contents;
 	}
 
-	SN::SN_Value SNI_String::DoEscape(enum SN::EscapeType p_EscapeType) const
+	SN::SN_Value SNI_String::DoEscape(enum skynet::EscapeType p_EscapeType) const
 	{
 		switch (p_EscapeType)
 		{
-		case SN::CPP:
+		case skynet::CPP:
 			return SN::SN_String(EscapeStringToCPP(GetString()));
-		case SN::JSON:
+		case skynet::JSON:
 			return SN::SN_String(EscapeStringToJSON(GetString()));
 		}
 		return SN::SN_Error("Bad escape type for escape conversion");
 	}
 
-	SN::SN_Value SNI_String::DoUnescape(enum SN::EscapeType p_EscapeType) const
+	SN::SN_Value SNI_String::DoUnescape(enum skynet::EscapeType p_EscapeType) const
 	{
 		switch (p_EscapeType)
 		{
-		case SN::CPP:
+		case skynet::CPP:
 			return SN::SN_String(UnescapeStringToCPP(GetString()));
-		case SN::JSON:
+		case skynet::JSON:
 			return SN::SN_String(UnescapeStringToJSON(GetString()));
 		}
 		return SN::SN_Error("Bad escape type for escape conversion");

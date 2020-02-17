@@ -210,30 +210,30 @@ namespace SN
 		}
 
 		// Escape conversions
-		SN::SN_Expression Escape(enum SN::EscapeType p_EscapeType, const SN::SN_Expression &p_Left)
+		SN::SN_Expression Escape(enum skynet::EscapeType p_EscapeType, const SN::SN_Expression &p_Left)
 		{
 			SN_FunctionDef def(skynet::EscapeCPP);
 			switch (p_EscapeType)
 			{
-			case CPP:
+			case skynet::CPP:
 				def = skynet::EscapeCPP;
 				break;
-			case JSON:
+			case skynet::JSON:
 				def = skynet::EscapeJSON;
 				break;
 			}
 			return SN::SN_Function(def, p_Left);
 		}
 
-		SN::SN_Expression Unescape(enum SN::EscapeType p_EscapeType, const SN::SN_Expression &p_Left)
+		SN::SN_Expression Unescape(enum skynet::EscapeType p_EscapeType, const SN::SN_Expression &p_Left)
 		{
 			SN_FunctionDef def(skynet::UnescapeCPP);
 			switch (p_EscapeType)
 			{
-			case CPP:
+			case skynet::CPP:
 				def = skynet::UnescapeCPP;
 				break;
-			case JSON:
+			case skynet::JSON:
 				def = skynet::UnescapeJSON;
 				break;
 			}
