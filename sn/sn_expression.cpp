@@ -298,7 +298,7 @@ namespace SN
 
 	bool SN_Expression::IsStringValue() const
 	{
-		return m_Expression->IsStringValue();
+		return m_Expression && m_Expression->IsStringValue();
 	}
 
 	//----------

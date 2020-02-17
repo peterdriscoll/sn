@@ -176,8 +176,12 @@ namespace SNI
 		return skynet::Null.GetSNI_Expression();
 	}
 
-	SNI_Expression * SNI_Variable::GetSafeValue() const
+	const SNI_Expression * SNI_Variable::GetSafeValue() const
 	{
+		if (m_Value)
+		{
+			return m_Value->GetSafeValue();
+		}
 		return m_Value;
 	}
 
@@ -313,6 +317,10 @@ namespace SNI
 	{
 		if (m_Value)
 		{
+			if (dynamic_cast<SNI_DelayedCall *>(m_Value))
+			{
+				return FrameName();
+			}
 			return m_Value->DisplayValueSN(priority, p_DisplayOptions);
 		}
 		return "Null";

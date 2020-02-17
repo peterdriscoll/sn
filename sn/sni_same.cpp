@@ -14,7 +14,7 @@ namespace SNI
 
 	string SNI_Same::GetTypeName() const
 	{
-		return "Not";
+		return "Same";
 	}
 
 	string SNI_Same::DisplayCpp() const
@@ -35,6 +35,11 @@ namespace SNI
 	string SNI_Same::GetOperator() const
 	{
 		return "==";
+	}
+
+	string SNI_Same::DisplayCall(long priority, SNI_DisplayOptions &p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const
+	{
+		return p_ParamList[PC1_First].GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions);
 	}
 
 	SN::SN_Value SNI_Same::PrimaryFunctionValue(const SN::SN_Value &p_Param) const

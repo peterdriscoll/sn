@@ -134,6 +134,7 @@ namespace SNI
 		}
 		else
 		{
+			ASSERTM(false, "Shouldn't be here. Value should be already simplified. See SimplifyValue.");
 			const string &source_text = GetSourceString();
 			SN::SN_String source = m_Source;
 			SNI_WorldSet *worldSet = new SNI_WorldSet();
@@ -176,6 +177,7 @@ namespace SNI
 
 	SN::SN_Error SNI_StringRef::ForEach(std::function<SN::SN_Error(const SN::SN_Expression &p_Param, SNI_World *p_World)> p_Action)
 	{
+		return p_Action(this, NULL);
 		SN::SN_Expression start = GetStart().DoEvaluate();
 		SN::SN_Expression end = GetEnd().DoEvaluate();
 		if (Cardinality() == 1)
@@ -184,6 +186,7 @@ namespace SNI
 		}
 		else
 		{
+			ASSERTM(false, "Shouldn't be here. Value should be already simplified. See SimplifyValue.");
 			const string &source_text = GetSourceString();
 			SN::SN_String source = m_Source;
 			SNI_WorldSet *worldSet = new SNI_WorldSet();
@@ -225,6 +228,61 @@ namespace SNI
 		}
 	}
 
+	SN::SN_Expression SNI_StringRef::SimplifyValue()
+	{
+		if (  (GetStart().Cardinality() == 1 || GetStart().IsNullValue())
+		   && (GetEnd().Cardinality() == 1 || GetEnd().IsNullValue()))
+		{
+			return this;
+		}
+		else
+		{
+			SN::SN_ValueSet valueSet;
+			SNI_WorldSet *worldSet = valueSet.GetWorldSet();
+			SN::SN_Expression start = GetStart().DoEvaluate();
+			SN::SN_Expression end = GetEnd().DoEvaluate();
+			const string &source_text = GetSourceString();
+			SN::SN_String source = m_Source;
+
+			start.ForEach(
+				[&end, &source, &source_text, &valueSet, worldSet](const SN::SN_Expression &p_Param, SNI::SNI_World *p_World) -> SN::SN_Error
+			{
+				SN::SN_Expression start_exp = p_Param;
+				SNI::SNI_World *startWorld = p_World;
+				end.ForEach(
+					[&start_exp, &source, &source_text, startWorld, &valueSet, worldSet](const SN::SN_Expression &p_Param, SNI::SNI_World *p_World) -> SN::SN_Error
+				{
+					SN::SN_Expression end_exp = p_Param;
+					SN::SN_Long start_long = start_exp;
+					SN::SN_Long end_long = end_exp;
+					SNI::SNI_World *endWorld = p_World;
+					SN::SN_Value value;
+					if (!start_long.IsNullValue() && !end_long.IsNullValue())
+					{
+						size_t start_pos = start_long.GetNumber();
+						size_t end_pos = end_long.GetNumber();
+						string s = source_text.substr(start_pos, end_pos - start_pos);
+						value = SN::SN_String(s);
+					}
+					else
+					{
+						value = SN::SN_StringRef(source, start_exp, end_exp);
+					}
+					bool exists = false;
+					SNI_World *world = worldSet->JoinWorldsArgs(AutoAddWorld, CreateIfActiveParents, exists, startWorld, endWorld);
+					if (exists)
+					{
+						valueSet.AddTaggedValue(value, world);
+					}
+					return true;
+				});
+				return true;
+			});
+			worldSet->Complete();
+			return valueSet;
+		}
+	}
+
 	long SNI_StringRef::GetPriority() const
 	{
 		return 100;
@@ -235,9 +293,17 @@ namespace SNI
 
 	bool SNI_StringRef::IsNull() const
 	{
-		SN::SN_Value start_value = m_Start.DoEvaluate();
-		SN::SN_Value end_value = m_End.DoEvaluate();
-		return start_value.IsNull() || end_value.IsNull();
+		return m_Start.IsNullValue() || m_End.IsNullValue();
+		if (!SN::SN_Transaction::InWebServer())
+		{
+			SN::SN_Value start_value = m_Start.DoEvaluate();
+			SN::SN_Value end_value = m_End.DoEvaluate();
+			return start_value.IsNullValue() || end_value.IsNullValue();
+		}
+		else
+		{
+			return m_Start.IsNullValue() || m_End.IsNullValue();
+		}
 	}
 
 	bool SNI_StringRef::IsNullValue() const
@@ -247,9 +313,16 @@ namespace SNI
 
 	bool SNI_StringRef::IsKnownValue() const
 	{
-		SN::SN_Value start_value = m_Start.DoEvaluate();
-		SN::SN_Value end_value = m_End.DoEvaluate();
-		return start_value.IsKnownValue() && end_value.IsKnownValue();
+		if (!SN::SN_Transaction::InWebServer())
+		{
+			SN::SN_Value start_value = m_Start.DoEvaluate();
+			SN::SN_Value end_value = m_End.DoEvaluate();
+			return start_value.IsKnownValue() && end_value.IsKnownValue();
+		}
+		else
+		{
+			return m_Start.IsKnownValue() && m_End.IsKnownValue();
+		}
 	}
 
 
@@ -866,6 +939,10 @@ namespace SNI
 	{
 		SN::SN_Value start = m_Start.DoEvaluate();
 		SN::SN_Value end = m_End.DoEvaluate();
+
+		ASSERTM(!start.GetSafeValue().GetSNI_ValueSet(), "If start point is valueset, string ref should have been simplified.");
+		ASSERTM(!end.GetSafeValue().GetSNI_ValueSet(), "If end point is valueset, string ref should have been simplified.");
+
 		if (dynamic_cast<SNI_StringRef *>(p_Other))
 		{
 			if (!start.IsNullValue() && !end.IsNullValue())
@@ -880,11 +957,17 @@ namespace SNI
 			{
 				return SN::SN_Bool(GetString() == p_Other->GetString());
 			}
-			if (!start.IsNullValue() && end.IsNullValue())
+			if (!start.IsNullValue() && m_End.IsVariable() && end.IsNullValue())
 			{
+#ifndef INFERENCE_ON_EQUALITY
+				ASSERTM(false, "SNI_Equals::CardinalityOfUnify should stop this from being called.");
+				return skynet::Null;
+#else
 				long start_pos = SN::SN_Long(start).GetNumber();
-				string source = m_Source.GetString().substr(start_pos, p_Other->GetString().length());
-				if (source != p_Other->GetString())
+				string other = p_Other->GetString();
+				string source = GetSourceString();
+				string sourcePart = source.substr(start_pos, other.length());
+				if (sourcePart != other)
 				{
 					return skynet::False;
 				}
@@ -895,22 +978,31 @@ namespace SNI
 				SNI_World *worldFalse = ws_result->CreateWorld();
 				result.AddTaggedValue(skynet::False, worldFalse);
 				SN::SN_ValueSet endVS;
-				SN::SN_Variable endVar;
+				SNI_Frame *topFrame = SNI_Frame::Top();
+				SNI_Variable *endParam = topFrame->CreateParameterByName("_string_end", m_End);
+				SN::SN_Variable endVar = topFrame->CreateTemporary();
+				endVS.SetWorldSet(ws_result);
+				endVS.AddTaggedValue(SN::SN_Long((long) (start_pos + other.length())), worldTrue);
+				endVS.AddTaggedValue(endVar, worldFalse);
+				endVS.GetSNI_ValueSet()->AssignToVariable(m_End.GetSNI_Variable());
+				m_End.GetSNI_Variable()->SetValue(endVS);
+				ws_result->Complete();
 				SN::SN_Expression *l_ParameterList = new SN::SN_Expression[3];
 				l_ParameterList[0] = skynet::False;
 				l_ParameterList[1] = endVar;
-				l_ParameterList[2] = SN::SN_Long((long) (start_pos + p_Other->GetString().length()));
+				l_ParameterList[2] = SN::SN_Long((long)(start_pos + other.length()));
 				SNI_Thread::GetThread()->GetProcessor()->Delay(skynet::Equals, 3, l_ParameterList, this);
-				endVS.AddTaggedValue(SN::SN_Long((long) (start_pos + p_Other->GetString().length())), worldTrue);
-				endVS.AddTaggedValue(endVar, worldFalse);
-				const_cast<SNI_StringRef *>(this)->SetEnd(endVS);
-				ws_result->Complete();
 				return result;
+#endif
 			}
-			if (start.IsNullValue() && !end.IsNullValue())
+			if (m_Start.IsVariable() && start.IsNullValue() && !end.IsNullValue())
 			{
+#ifndef INFERENCE_ON_EQUALITY
+				ASSERTM(false, "SNI_Equals::CardinalityOfUnify should stop this from being called.");
+				return skynet::Null;
+#else
 				long end_pos = SN::SN_Long(end).GetNumber();
-				string source = m_Source.GetString().substr(end_pos - p_Other->GetString().length());
+				string source = GetSourceString().substr(end_pos - p_Other->GetString().length());
 				if (source != p_Other->GetString())
 				{
 					return skynet::False;
@@ -921,18 +1013,23 @@ namespace SNI
 				result.AddTaggedValue(skynet::True, worldTrue);
 				SNI_World *worldFalse = ws_result->CreateWorld();
 				result.AddTaggedValue(skynet::False, worldFalse);
-				SN::SN_Variable startVar;
+				SNI_Frame *topFrame = SNI_Frame::Top();
+				SNI_Variable *startParam = topFrame->CreateParameterByName("_string_start", m_End);
+				SN::SN_Variable startVar = topFrame->CreateTemporary();
+				SN::SN_ValueSet startVS;
+				startVS.SetWorldSet(ws_result);
+				startVS.AddTaggedValue(SN::SN_Long((long) (end_pos - p_Other->GetString().length())), worldTrue);
+				startVS.AddTaggedValue(startVar, worldFalse);
+				startVS.GetSNI_ValueSet()->AssignToVariable(m_Start.GetSNI_Variable());
+				m_Start.GetSNI_Variable()->SetValue(startVS);
+				ws_result->Complete();
 				SN::SN_Expression *l_ParamList = new SN::SN_Expression[3];
 				l_ParamList[0] = skynet::False;
 				l_ParamList[1] = startVar;
-				l_ParamList[2] = SN::SN_Long((long) (end_pos - p_Other->GetString().length()));
+				l_ParamList[2] = SN::SN_Long((long)(end_pos - p_Other->GetString().length()));
 				SNI_Thread::GetThread()->GetProcessor()->Delay(skynet::Equals, 3, l_ParamList, this);
-				SN::SN_ValueSet startVS;
-				startVS.AddTaggedValue(SN::SN_Long((long) (end_pos - p_Other->GetString().length())), worldTrue);
-				startVS.AddTaggedValue(startVar, worldFalse);
-				const_cast<SNI_StringRef *>(this)->SetStart(startVS);
-				ws_result->Complete();
 				return result;
+#endif
 			}
 			return skynet::Null;
 		}

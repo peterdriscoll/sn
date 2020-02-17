@@ -164,6 +164,7 @@ namespace SNI
 		bool m_WebServerThreadUsed;
 		SNI_Manager *m_TopManager;
 		bool m_Ended;
+		bool m_Closing;
 		long m_DefineId;
 
 		SNI_Error *m_Error;

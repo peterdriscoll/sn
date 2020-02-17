@@ -113,7 +113,16 @@ namespace SN
 				SNI::SNI_DisplayOptions l_DisplayOptions(doTextOnly);
 				return GetSNI_Base()->DisplayValueSN(0, l_DisplayOptions);
 			}
-			return "NULL";
+			return "";
+		}
+
+		string DisplayValueSN(SNI::SNI_DisplayOptions &p_DisplayOptions) const
+		{
+			if (GetSNI_Base())
+			{
+				return GetSNI_Base()->DisplayValueSN(0, p_DisplayOptions);
+			}
+			return "";
 		}
 
 		string LogDisplaySN() const
@@ -217,6 +226,15 @@ namespace SN
 				return p_MaxCardinality;
 			}
 			return GetSNI_Base()->RightCardinality(p_MaxCardinality);
+		}
+
+		Exp GetSafeValue() const
+		{
+			if (GetSNI_Base())
+			{
+				return GetSNI_Base()->GetSafeValue();
+			}
+			return skynet::Null;
 		}
 
 		Exp DoEvaluate(long p_MetaLevel = 0) const

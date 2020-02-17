@@ -86,7 +86,7 @@ namespace SNI
 		const_cast<SNI_Expression *>(this)->CreateId();
 		return m_Id;
 	}
-
+	
 	string SNI_Expression::GetDebugId() const
 	{
 		return GetReferredName() + "_" + to_string(GetId());
@@ -434,7 +434,7 @@ namespace SNI
 		return this;
 	}
 
-	SN::SN_Expression SNI_Expression::GetSafeValue()
+	const SNI_Expression *SNI_Expression::GetSafeValue() const
 	{
 		return this;
 	}

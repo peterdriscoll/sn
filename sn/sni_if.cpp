@@ -63,7 +63,7 @@ namespace SNI
 		return 4;
 	}
 
-	string SNI_If::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_Expression * p_ParamList, const SNI_Expression *p_DebugSource) const
+	string SNI_If::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression *p_DebugSource) const
 	{
 		return SetBreakPoint("if", p_DisplayOptions, p_DebugSource, SN::LeftId) + " " + p_ParamList[PC3_Condition].DisplaySN(GetPriority(), p_DisplayOptions) + " " +
 			   SetBreakPoint("then", p_DisplayOptions, p_DebugSource, SN::PositiveId)+ " " + p_ParamList[PC3_Positive].DisplaySN(GetPriority(), p_DisplayOptions) + " " +

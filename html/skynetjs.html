@@ -266,14 +266,17 @@
         var home = 'http://127.0.0.1/';
         var app = angular.module('skynetApp', ['ngSanitize']);
 
-        app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout) {
+        app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $window) {
             $scope.trustAsHtml = $sce.trustAsHtml;
             $scope.threadnum = 0;
             $scope.maxstackframes = -1;
             $scope.pollcount = 0;
             $scope.scheduled = 0;
             $scope.initFirst = function () {
-                if (!$scope.scheduled) {
+                if ($scope.closing) {
+                    $scope.submit('quit');
+                    $window.close();
+                } else if (!$scope.scheduled) {
                     $scope.scheduled = $scope.scheduled + 1;
                     $http.get(home + 'dashboardjs?threadnum=' + $scope.threadnum)
                         .then(function (response) {
@@ -282,13 +285,17 @@
                             $scope.taskdescription = response.data.taskdescription;
                             $scope.statusdescription = response.data.statusdescription;
                             $scope.running = response.data.running;
+                            $scope.closing = response.data.closing;
                             if ($scope.maxstackframes == -1) {
                                 $scope.maxstackframes = response.data.maxstackframes;
                             }
 
                             $scope.pollcount = $scope.pollcount + 1;
                             $scope.scheduled = $scope.scheduled - 1;
-                            if ($scope.running) {
+
+                            if ($scope.closing) {
+                               $timeout(function () { $scope.initFirst(); }, 5000);
+                            } else if ($scope.running) {
                                 $timeout(function () { $scope.initFirst(); }, 2000);
                             };
                         });

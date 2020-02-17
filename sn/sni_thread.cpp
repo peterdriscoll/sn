@@ -101,6 +101,7 @@ namespace SNI
 		, m_TopManager(NULL)
 		, m_ThreadNum(p_ThreadNum)
 		, m_MaxStackFrames(-1)
+		, m_Closing(false)
 		, m_Ended(false)
 		, m_DefineId(0)
 		, m_WorldSetChangedList(NULL)
@@ -158,17 +159,17 @@ namespace SNI
 
 	void SNI_Thread::DebugCommand(SN::InterruptPoint p_InterruptPoint, const string &p_Text, unsigned long p_BreakId)
 	{
-		if (p_InterruptPoint == SN::EndPoint)
-		{
-			m_Ended = true;
-		}
 		if (GetTopManager()->HasDebugServer())
 		{
 			m_ThreadStepCount++;
 			m_DebugCommand.SetText(p_Text);
 			string breakPoint;
 			string breakPointJS;
-			if (p_InterruptPoint == SN::MirrorPoint)
+			if (p_InterruptPoint == SN::EndPoint)
+			{
+				m_Closing = true;
+			}
+			else if (p_InterruptPoint == SN::MirrorPoint)
 			{
 				breakPoint = MakeBreakPoint("MIR", p_BreakId);
 				breakPointJS = MakeBreakPointJS("MIR", p_BreakId);
@@ -882,6 +883,7 @@ namespace SNI
 		}
 		string statusDescription;
 		int running = 0;
+		int closing = 0;
 		if (m_DebugCommand.IsQuitting())
 		{
 			statusDescription += " - Quitting";
@@ -891,12 +893,19 @@ namespace SNI
 			statusDescription += " - Running";
 			running = 1;
 		}
+		else if (m_Closing)
+		{
+			statusDescription += " - Closing";
+			running = 1;
+			closing = 1;
+		}
 		if (m_Ended)
 		{
 			statusDescription += " - Thread ended";
 		}
 		p_Stream << "\t\"statusdescription\" : \"" << statusDescription << "\",\n";
-		p_Stream << "\t\"running\" : " << running << "\n";
+		p_Stream << "\t\"running\" : " << running << ",\n";
+		p_Stream << "\t\"closing\" : " << closing << "\n";
 		p_Stream << "}\n";
 	}
 

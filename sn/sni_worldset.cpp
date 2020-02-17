@@ -324,11 +324,15 @@ namespace SNI
 
 	SNI_World * SNI_WorldSet::CreateWorldForValue(SN::SN_Expression& p_Value)
 	{
-		SNI_World * world = new SNI_World(this);
-		world->Activate();
-		world->AttachValue(p_Value);
-		m_WorldList.push_back(world);
-		return world;
+		if (!SN::SN_Transaction::InWebServer())
+		{
+			SNI_World * world = new SNI_World(this);
+			world->Activate();
+			world->AttachValue(p_Value);
+			m_WorldList.push_back(world);
+			return world;
+		}
+		return NULL;
 	}
 
 	SNI_WorldSet * SNI_WorldSet::Clone()

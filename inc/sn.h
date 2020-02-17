@@ -6,8 +6,26 @@
 #include "exp_ctrl_sn.h"
 
 #include <string>
+#define INFERENCE_ON_EQUALITY
 
-//#define USE_LOGGING
+//	This flag allows
+//		(right unbounded StringRef == string) == unknown boolean.
+//	If enabled, SNI_StringRef::DoEquals will implement this, leading 
+//	to allsorts of complications. It creates valuesets for the start/end 
+//	positions, which turns the stringref into a multi value object, 
+//	effectively, a ValueSet. SimplifyValue then explicitly changes it into
+//	a value set.
+//  This may not be necessary. Changes to Collapse may achieve the same result.
+//	I'll try to get it working with the flag defined or not defined.
+
+//	#define USE_LOGGING
+
+//	The original logging system. Very detailed, and hard to follow.
+//	It writes out an indented structure for the logging.
+//	Not really useful and slows the processessing down. Better without
+//	it. It uses the Log and LogContext classes. It is a replaced with
+//	the newer, higher level SNI_Log, which creates the log in the 
+//	debugger dashboard.
 
 #ifdef USE_LOGGING
 #define LOGGING(l) l

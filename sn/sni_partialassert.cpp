@@ -76,9 +76,9 @@ namespace SNI
 		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Partial assert", SN::CallId);
 
 		SN::SN_Error result = p_ParamList[PU1_First].DoPartialAssert();
-		if (result.IsSignificantError())
+		if (result.IsError())
 		{
-			SNI_CallRecord *callRecord = new SNI_CallRecord("Partial assert.", p_ParamList[PU1_First].GetSNI_Expression());
+			SNI_CallRecord *callRecord = new SNI_CallRecord("Partial assert failure: ", p_ParamList[PU1_First].GetSNI_Expression());
 			LOGGING(callRecord->SetLogContext(context));
 			result.GetSNI_Error()->AddNote(callRecord);
 		}

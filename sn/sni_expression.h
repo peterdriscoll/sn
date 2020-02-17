@@ -129,7 +129,7 @@ namespace SNI
 		virtual bool IsNullValue() const;
 		virtual bool IsReferableValue() const;
 		virtual SN::SN_Expression GetVariableValue(bool p_IfComplete);
-		virtual SN::SN_Expression GetSafeValue();
+		virtual const SNI_Expression *GetSafeValue() const;
 		virtual bool IsError() const;
 		virtual bool IsFixed() const;
 		virtual bool AllValues() const;

@@ -162,7 +162,7 @@ namespace SNI
 			}
 			else
 			{
-				text += "expression";
+				text += p_ParamList[j].DisplayValueSN();;
 			}
 		}
 		if (GetOperator().empty())
@@ -372,9 +372,6 @@ namespace SNI
 					else
 					{
 						e = SN::SN_Error(true, true, GetTypeName()+": Max cardinality exceeded, and delayed call not allowed.");
-						SNI_CallRecord *callRecord = new SNI_CallRecord("Check applicable CardinalityOfUnify function.", this);
-						LOGGING(callRecord->SetLogContext(context));
-						e.GetSNI_Error()->AddNote(callRecord);
 					}
 				}
 				else

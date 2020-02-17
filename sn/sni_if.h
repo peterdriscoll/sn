@@ -21,7 +21,7 @@ namespace SNI
 		virtual long GetPriority() const;
 		virtual string GetOperator() const;
 		virtual long GetNumParameters() const;
-		virtual string DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, SN::SN_Expression * p_ParamList, const SNI_Expression *p_DebugSource) const;
+		virtual string DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression *p_DebugSource) const;
 		/// @endcond
 
 		virtual SN::SN_Expression CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel = 0) const;

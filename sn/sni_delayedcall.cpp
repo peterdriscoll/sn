@@ -41,6 +41,20 @@ namespace SNI
 	{
 	}
 
+	string SNI_DelayedCall::GetTypeName() const
+	{
+		return "Delayed";
+	}
+
+	string SNI_DelayedCall::DisplaySN(long priority, SNI_DisplayOptions & p_DisplayOptions) const
+	{
+		return "[["
+			+ m_Function.GetSNI_FunctionDef()->DisplayCall(0, p_DisplayOptions, m_NumParams, m_ParamList + 1, m_Source)
+			+ "="
+			+ m_ParamList[PU1_Result].DisplaySN(p_DisplayOptions)
+			+ "]]";
+	}
+
 	// Estimate the number of values that will be created in the unknown variable. This value may be infinite, represented by LONG_MAX.
 	size_t SNI_DelayedCall::CallCardinality() const
 	{

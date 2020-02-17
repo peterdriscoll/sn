@@ -62,6 +62,7 @@ namespace SNI
 		virtual string DisplayValueSN(long, SNI_DisplayOptions & p_DisplayOptions) const = 0;
 		virtual long GetPriority() const = 0;
 		virtual string GetOperator() const = 0;
+		virtual const SNI_Expression *GetSafeValue() const = 0;
 
 		//---------------------------------------------------------------
 		// Cardinality

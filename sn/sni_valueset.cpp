@@ -68,21 +68,24 @@ namespace SNI
 
 	void SNI_ValueSet::CheckWorldSetConsistency()
 	{
-		for (const SNI_TaggedValue &tv : m_ValueList)
+		if (!SN::SN_Transaction::InWebServer())
 		{
-			SNI_World *world = tv.GetWorld();
-			if (world)
+			for (const SNI_TaggedValue &tv : m_ValueList)
 			{
-				if (world->GetWorldSet() != m_WorldSet)
+				SNI_World *world = tv.GetWorld();
+				if (world)
 				{
-					//ASSERTM(world->GetWorldSet() == m_WorldSet, "World set inconsistency");
+					if (world->GetWorldSet() != m_WorldSet)
+					{
+						//ASSERTM(world->GetWorldSet() == m_WorldSet, "World set inconsistency");
+					}
 				}
-			}
-			else
-			{
-				if (m_WorldSet)
+				else
 				{
-					ASSERTM(!m_WorldSet, "Null world for null world set inconsistency");
+					if (m_WorldSet)
+					{
+						ASSERTM(!m_WorldSet, "Null world for null world set inconsistency");
+					}
 				}
 			}
 		}
@@ -596,7 +599,6 @@ namespace SNI
 
 	SN::SN_Error SNI_ValueSet::ForEach(std::function<SN::SN_Error(const SN::SN_Expression &p_Param, SNI_World *p_World)> p_Action)
 	{
-		Validate();
 		SNI_World *contextWorld = SNI_World::ContextWorld();
 		SNI_WorldSet *worldSet = GetWorldSet();
 		for (SNI_TaggedValue &tv : m_ValueList)
@@ -604,7 +606,7 @@ namespace SNI
 			SNI_World *world = tv.GetWorld();
 			if (!contextWorld || contextWorld->CompatibleWorld(world))
 			{
-				SN::SN_Value l_Value = tv.GetValue().GetVariableValue();
+				SN::SN_Expression l_Value = tv.GetValue(); // dog dog dog .GetVariableValue()
 				if (!world && worldSet)
 				{
 					world = worldSet->CreateWorldForValue(l_Value);

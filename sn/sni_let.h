@@ -8,6 +8,18 @@ using namespace std;
 
 #include "sni_expression.h"
 
+//  Skynet,
+//		let C in E
+//  C++
+//      Let(C, E)
+//	C is asserted true independently. If it fails then an error exception is returned
+//  through the error handling system (not the result of the expression).
+//	The let condition is asserted as a separate statement at a global level,
+//  but using local variables.
+//	This may not be what you want. A local condition becomes a global failure. 
+//	You can catch the error using Catch to localise the effect.
+//	Alternatively, only assert that which cannot fail.
+
 namespace SNI
 {
 	class SNI_Let : public SNI_Expression

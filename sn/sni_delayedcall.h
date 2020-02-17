@@ -22,6 +22,9 @@ namespace SNI
 		SNI_DelayedCall(SN::SN_FunctionDef p_Function, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_Source, SNI_Frame *p_Frame, SNI_World * p_World = NULL);
 		virtual ~SNI_DelayedCall();
 
+		virtual string GetTypeName() const;
+		virtual string DisplaySN(long, SNI_DisplayOptions &) const;
+
 		virtual size_t CallCardinality() const;
 		virtual bool IsNull() const;
 

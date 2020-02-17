@@ -390,7 +390,8 @@ namespace SNI
 						return p_ParamList[PU2_First].AddValue(RightInverseFunctionValue(result, p_ParamList[PU2_Second]), p_Depth, p_WorldList, worldSet);
 					}
 				}
-				SN::SN_Variable splitPoint;
+				SNI_Frame *topFrame = SNI_Frame::Top();
+				SN::SN_Variable splitPoint = topFrame->CreateTemporary();
 				SN::SN_String s_result = result;
 				p_ParamList[PU2_First].AddValue(SN::SN_StringRef(result, s_result.GetSNI_String()->GetStart(), splitPoint), p_Depth, p_WorldList, worldSet);
 				p_ParamList[PU2_Second].AddValue(SN::SN_StringRef(result, splitPoint, s_result.GetSNI_String()->GetEnd()), p_Depth, p_WorldList, worldSet);

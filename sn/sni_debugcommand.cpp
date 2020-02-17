@@ -38,58 +38,64 @@ namespace SNI
 		{
 			m_ReadyForProcessingCond.wait(mutex_lock);
 		}
-		bool baseInterrupt = (p_InterruptPoint == SN::BreakPoint || p_InterruptPoint == SN::ErrorPoint || p_InterruptPoint == SN::EndPoint);
-		bool callFound = (p_InterruptPoint == SN::CallPoint) ||
-					 	 (p_InterruptPoint == SN::FailPoint) ||
-						 (p_InterruptPoint == SN::WarningPoint) ||
-						 (p_InterruptPoint == SN::MirrorPoint) ||
-					     (p_InterruptPoint == SN::StaticPoint);
-
-		switch (m_DebugAction)
+		if (p_InterruptPoint == SN::EndPoint)
 		{
-		case SN::Run:
-			breakPoint = p_InterruptPoint == SN::ErrorPoint;
-			break;
-		case SN::RunToEnd:
-			breakPoint = p_InterruptPoint == SN::EndPoint || p_InterruptPoint == SN::ErrorPoint;
-			break;
-		case SN::Debug:
-			breakPoint = baseInterrupt || (m_BreakPointSet.find(p_BreakPoint) != m_BreakPointSet.end());
-			break;
-		case SN::StepInto:
-			breakPoint = baseInterrupt || callFound;
-			break;
-		case SN::StepOver:
-			breakPoint = baseInterrupt || (callFound && p_ThreadNum == m_ThreadNum && p_FrameStackDepth <= m_FrameStackDepth);
-			break;
-		case SN::StepOut:
-			breakPoint = baseInterrupt || (callFound && p_ThreadNum == m_ThreadNum  && (m_FrameStackDepth == 0 || p_FrameStackDepth < m_FrameStackDepth));
-			break;
-		case SN::StepParameter:
-			breakPoint = p_InterruptPoint == SN::BreakPoint || callFound || p_InterruptPoint == SN::ParameterPoint;
-			break;
-		case SN::GotoStepCount:
-			breakPoint = baseInterrupt || (m_StepCount == p_StepCount);
-			break;
-		case SN::CodeBreak:
-			SNI_Thread::GetThread()->ScheduleCodeBreak();
-			m_DebugAction = SN::StepInto;
-			breakPoint = false;
-			break;
-		case SN::Quit:
-			breakPoint = false;
-			if (p_InterruptPoint != SN::EndPoint)
+			breakPoint = (m_DebugAction != SN::Quit);
+			m_DebugAction = SN::Run;
+		}
+		else
+		{
+			bool baseInterrupt = (p_InterruptPoint == SN::BreakPoint || p_InterruptPoint == SN::ErrorPoint || p_InterruptPoint == SN::EndPoint);
+			bool callFound = (p_InterruptPoint == SN::CallPoint) ||
+				(p_InterruptPoint == SN::FailPoint) ||
+				(p_InterruptPoint == SN::WarningPoint) ||
+				(p_InterruptPoint == SN::MirrorPoint) ||
+				(p_InterruptPoint == SN::StaticPoint);
+
+			switch (m_DebugAction)
 			{
-				throw -1;
-			}
-			else
-			{
+			case SN::Run:
+				breakPoint = p_InterruptPoint == SN::ErrorPoint;
+				break;
+			case SN::RunToEnd:
+				breakPoint = p_InterruptPoint == SN::EndPoint || p_InterruptPoint == SN::ErrorPoint;
+				break;
+			case SN::Debug:
+				breakPoint = baseInterrupt || (m_BreakPointSet.find(p_BreakPoint) != m_BreakPointSet.end());
+				break;
+			case SN::StepInto:
+				breakPoint = baseInterrupt || callFound;
+				break;
+			case SN::StepOver:
+				breakPoint = baseInterrupt || (callFound && p_ThreadNum == m_ThreadNum && p_FrameStackDepth <= m_FrameStackDepth);
+				break;
+			case SN::StepOut:
+				breakPoint = baseInterrupt || (callFound && p_ThreadNum == m_ThreadNum && (m_FrameStackDepth == 0 || p_FrameStackDepth < m_FrameStackDepth));
+				break;
+			case SN::StepParameter:
+				breakPoint = p_InterruptPoint == SN::BreakPoint || callFound || p_InterruptPoint == SN::ParameterPoint;
+				break;
+			case SN::GotoStepCount:
+				breakPoint = baseInterrupt || (m_StepCount == p_StepCount);
+				break;
+			case SN::CodeBreak:
+				SNI_Thread::GetThread()->ScheduleCodeBreak();
 				m_DebugAction = SN::StepInto;
+				breakPoint = false;
+				break;
+			case SN::Quit:
+				breakPoint = false;
+				if (p_InterruptPoint != SN::EndPoint)
+				{
+					SN::SN_Error e(false, true, "User abort.");
+					SNI_Thread::TopManager()->ErrorHandler()(e);
+					m_DebugAction = SN::StepInto;
+				}
+				break;
+			case SN::Abort:
+				exit(-1);
+				break;
 			}
-			break;
-		case SN::Abort:
-			exit(-1);
-			break;
 		}
 		m_ReadyForCommand = true;
 		m_ReadyForProcessing = !(breakPoint && processCommand);

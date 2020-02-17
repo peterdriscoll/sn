@@ -7,6 +7,20 @@
 
 #include "sni_expression.h"
 
+//	Skynet
+//		local x in E
+//		local x, y in E
+//		local x, y, ..., z in E
+//	C++
+//		Local(x, E)
+//		Local(x, Local(y, E))
+//	Declares the variables x, y ... z local to the expression. This means
+//	That the names refer to a separate variable within the scope than without.
+//	Currently, this is achieved by cloning the expression. An expression is
+//	copied, replacingthe variables with local ones.
+//	Later the same effect may be achieved using frames, but the effect will
+//	be the same.
+
 namespace SNI
 {
 	class SNI_Variable;

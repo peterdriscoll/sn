@@ -225,6 +225,7 @@ namespace SNI
 		{
 			long totalCalc = p_TotalCalc;
 			long calcPos = p_CalcPos;
+
 			SN::SN_Bool result = p_ParamList[PU2_Result].GetVariableValue();
 
 			if (!result.IsNull() && result.GetBool())
@@ -239,6 +240,7 @@ namespace SNI
 					totalCalc--;
 					calcPos = PU2_Second;
 				}
+
 				if (totalCalc > 1)
 				{
 					return CARDINALITY_MAX;
@@ -246,14 +248,25 @@ namespace SNI
 			}
 			else if (!p_ParamList[PU2_Result].IsKnownValue())
 			{
-				if (p_TotalCalc > 1)
+#ifdef INFERENCE_ON_EQUALITY
+				calcPos = PU2_Result;
+				if (p_ParamList[PU2_Second].IsReferableValue() && p_ParamList[PU2_Second].IsNullValue())
+				{
+					totalCalc--;
+				}
+				else if (p_ParamList[PU2_First].IsReferableValue() && p_ParamList[PU2_First].IsNullValue())
+				{
+					totalCalc--;
+				}
+#endif
+				if (totalCalc > 1)
 				{
 					return CARDINALITY_MAX;
 				}
 			}
 			else
 			{
-				if (p_TotalCalc > 0)
+				if (totalCalc > 0)
 				{
 					return CARDINALITY_MAX;
 				}
@@ -357,7 +370,14 @@ namespace SNI
 		}
 		case 2:
 		{
-			if (p_ParamList[PU2_Result].GetBool())
+			if (!p_ParamList[PU2_Result].IsKnownValue())
+			{
+				if (p_ParamList[PU2_First].IsReferableValue() || p_ParamList[PU2_First].IsReferableValue())
+				{
+					return p_ParamList[PU2_Result].AddValue(PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()), p_Depth, p_WorldList, worldSet);
+				}
+			}
+			else if (p_ParamList[PU2_Result].GetBool())
 			{
 				if (p_ParamList[PU2_Second].IsReferableValue() && p_ParamList[PU2_Second].IsNullValue())
 				{

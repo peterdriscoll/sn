@@ -410,24 +410,39 @@ namespace SNI
 		p_Stream << p_Prefix << "\"typetext\" : \"" << p_Variable.GetValueTypeName() << "\"";
 		if (p_Value.GetSNI_Expression())
 		{
+			SN::SN_Expression value = p_Value.GetSafeValue();
 			p_Stream << ",\n" << p_Prefix << "\"value\" : [\n";
-			string delimeter;
 			string prefix = p_Prefix;
-			p_Value.GetVariableValue().ForEach(
-				[&p_Stream, &delimeter, p_DebugFieldWidth, &p_DisplayOptions, &prefix](const SN::SN_Expression &p_Expression, SNI_World *p_World)->SN::SN_Error
+			if (value.IsStringValue())
 			{
+				// Problem calling ForEach from HTTP server.
+				// It creates SNI objects. It is supposed to be watching only, not changing things.
 				SNI::SNI_DisplayOptions plainText(doTextOnly);
 				string valueText;
 				string valueTextHTML;
-				if (p_Expression.GetSNI_Expression())
+				valueText = p_Value.DisplayValueSN(plainText);
+				valueTextHTML = p_Value.DisplayValueSN(p_DisplayOptions);
+				p_Stream << prefix << "\t" << DetailsFS(valueText, valueTextHTML, p_DebugFieldWidth);
+			}
+			else
+			{
+				string delimeter;
+				p_Value.GetSafeValue().ForEach(
+					[&p_Stream, &delimeter, p_DebugFieldWidth, &p_DisplayOptions, &prefix](const SN::SN_Expression &p_Expression, SNI_World *p_World)->SN::SN_Error
 				{
-					valueText = p_Expression.DisplaySN(plainText) + string(p_World ? "::" + p_World->DisplaySN(plainText) : "");
-					valueTextHTML = p_Expression.DisplaySN(p_DisplayOptions) + string(p_World ? "::" + p_World->DisplaySN(p_DisplayOptions) : "");
-				}
-				p_Stream << delimeter  << prefix << "\t" << DetailsFS(valueText, valueTextHTML, p_DebugFieldWidth);
-				delimeter = ",\n";
-				return skynet::OK;
-			});
+					SNI::SNI_DisplayOptions plainText(doTextOnly);
+					string valueText;
+					string valueTextHTML;
+					if (p_Expression.GetSNI_Expression())
+					{
+						valueText = p_Expression.DisplaySN(plainText) + string(p_World ? "::" + p_World->DisplaySN(plainText) : "");
+						valueTextHTML = p_Expression.DisplaySN(p_DisplayOptions) + string(p_World ? "::" + p_World->DisplaySN(p_DisplayOptions) : "");
+					}
+					p_Stream << delimeter << prefix << "\t" << DetailsFS(valueText, valueTextHTML, p_DebugFieldWidth);
+					delimeter = ",\n";
+					return skynet::OK;
+				});
+			}
 			p_Stream << "\n" << p_Prefix << "]\n";
 		}
 	}

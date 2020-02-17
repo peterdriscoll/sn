@@ -17,6 +17,8 @@
 
 #include "sn_pch.h"
 
+// Collapse returns true if the expression could be true. It returns false otherwise.
+
 namespace SNI
 {
 	SNI_Collapse::SNI_Collapse()
