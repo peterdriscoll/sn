@@ -284,8 +284,8 @@ void TestChurchDivide()
 void main(int argc, char *argv[])
 {
 	Manager manager("Test Church Divide");
-	manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root);
-	//manager.StartDebugCommandLineServer(SN::StepInto, _kbhit, _getch);
+	manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root);
+	//manager.StartDebugCommandLineServer(skynet::StepInto, _kbhit, _getch);
 	try
 	{
 		// TestIsInteger();

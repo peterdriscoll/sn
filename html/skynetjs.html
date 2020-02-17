@@ -124,7 +124,9 @@
                             </td>
                         </tr>
                     </table>
+                    <button title='MIR' ng-click='setbreakpoint(["MIR",3])' ng-class='breakpointclass(["MIR",3])'>Check MIR</button>
                     <button title='Cloned' ng-click='setbreakpoint(["cloned",3])' ng-class='breakpointdefaultclass(["cloned",3], "NONE")'>Cloned(see log)</button>
+                    <button title='User' ng-click='setbreakpoint(["user",22])' ng-class='breakpointclass(["user",22])'>User breakpoint</button>
                     <button title='Error' ng-click='setbreakpoint(["Error",16])' ng-class='breakpointdefaultclass(["Error",16], "NONE")'>Error</button>
                     <button title='Delay' ng-click='setbreakpoint(["Warning",20])' ng-class='breakpointdefaultclass(["Warning",20], "NONE")'>Delay</button>
                     <button title='No constraint' ng-click='setbreakpoint(["Warning",19])' ng-class='breakpointdefaultclass(["Warning",19], "NONE")'>No constraint</button>
@@ -143,7 +145,6 @@
                             </td>
                         </tr>
                     </table>
-                    <button title='MIR' ng-click='setbreakpoint(["MIR",3])' ng-class='breakpointclass(["MIR",3])'>Check MIR</button>
                 </td>
             </tr>
             <tr>
@@ -362,6 +363,7 @@
             $scope.setbreakpoint(["Error", 16]);
             $scope.setbreakpoint(["Warning", 20]);
             $scope.setbreakpoint(["Warning", 19]);
+            $scope.setbreakpoint(["user", 22]);
             $scope.setbreakpoint(["MIR", 3])
             $scope.setbreakpoint(["assert", 3]);
             $scope.setbreakpoint(["partialassert", 3]);

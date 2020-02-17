@@ -121,7 +121,7 @@ namespace SN
 		return m_Manager->StartLogging(p_LoggingLevel, p_Stream);
 	}
 
-	void SN_Manager::StartDebugCommandLineServer(DebugAction p_DebugAction, int p_kbhit(), int p_GetCh())
+	void SN_Manager::StartDebugCommandLineServer(skynet::DebugAction p_DebugAction, int p_kbhit(), int p_GetCh())
 	{
 		return m_Manager->StartDebugCommandLineServer(p_DebugAction, p_kbhit, p_GetCh);
 	}
@@ -139,7 +139,7 @@ namespace SN
 		return m_Manager->GetCh();
 	}
 
-	void SN_Manager::StartWebServer(SN::DebugAction p_DebugAction, const string & p_Address, const string & p_Port, const string & p_DocRoot, bool p_DoIt)
+	void SN_Manager::StartWebServer(skynet::DebugAction p_DebugAction, const string & p_Address, const string & p_Port, const string & p_DocRoot, bool p_DoIt)
 	{
 		if (p_DoIt)
 		{
@@ -165,6 +165,16 @@ namespace SN
 	void SN_Manager::SetDebugTitleWidth(size_t p_DebugTitleWidth)
 	{
 		m_Manager->SetDebugTitleWidth(p_DebugTitleWidth);
+	}
+
+	void SN_Manager::Breakpoint()
+	{
+		m_Manager->Breakpoint();
+	}
+
+	void SN_Manager::SetDebugAction(enum skynet::DebugAction p_DebugAction)
+	{
+		m_Manager->SetDebugAction(p_DebugAction);
 	}
 
 	SNI::SNI_Manager * SN_Manager::GetSNI_Manager()

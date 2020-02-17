@@ -57,7 +57,7 @@ namespace test_sn
 			Assert::IsTrue(Transaction::TotalNetMemoryUsed() == 0);
 			{
 				Manager manager("Test String Equivalent", AssertErrorHandler);
-				// manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				// manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				Assert::IsTrue((String("dog") == String("dog")).Equivalent(Function(Function(Equals, String("dog")), String("dog"))));
 				Assert::IsTrue(!(String("dog") == String("dog")).Equivalent(Function(Function(Equals, String("dog")), String("cat"))));
@@ -113,7 +113,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test String Assert", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 				{
 					Transaction transaction;
 
@@ -323,7 +323,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Bool Assert", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(z);
 
@@ -359,7 +359,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Bool Assert If", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(m);
 				SN_DECLARE(n);
@@ -379,7 +379,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Bool Not And Not", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				(!((Bool(true) && Bool(false)))).Assert().Do();
 			}
@@ -391,7 +391,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Double Equivalent", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				((Long(1) + Long(2)) == Long(3)).Evaluate().Do();
 
@@ -457,7 +457,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Double Assert", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(y);
 
@@ -490,7 +490,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Long Assert Simplified", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(c);
 
@@ -506,7 +506,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Long Assert", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 				{
 					Transaction transaction;
 
@@ -579,7 +579,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Function Definition", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				{
 					SN_DECLARE(RemovePrefix);
@@ -615,7 +615,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Function Definition", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(Factorial);
 				SN_DECLARE(n);
@@ -643,7 +643,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Recursive Function Definition", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 				{
 					Transaction transaction;
 
@@ -676,7 +676,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Partial Call", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 				SN_DECLARE(f);
 				SN_DECLARE(g);
 				SN_DECLARE(a);
@@ -701,7 +701,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Y Combinator", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 				SN_DECLARE(Y);
 				SN_DECLARE(f);
 				SN_DECLARE(x);
@@ -735,7 +735,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Church Succ", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(inc);
 				SN_DECLARE(succ);
@@ -778,7 +778,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Church Plus", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(plus);
 				SN_DECLARE(n);
@@ -821,7 +821,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Church Multiply", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(mult);
 				SN_DECLARE(n);
@@ -864,7 +864,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Church Exp", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(exp);
 				SN_DECLARE(n);
@@ -908,7 +908,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Church Pred", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(pred);
 				SN_DECLARE(n);
@@ -954,7 +954,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Church Minus", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(pred);
 				SN_DECLARE(h);
@@ -1008,7 +1008,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Church Divide", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(divide);
 
@@ -1097,7 +1097,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test String Ref Definition", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 				/*
 				SN_DECLARE(x);
 				SN_DECLARE(y);
@@ -1132,7 +1132,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Or 1", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(x);
 				(x == Long(3)).Assert().Do();
@@ -1149,7 +1149,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Or 2", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(x);
 				(x == Long(3) || x == Long(4)).Assert().Do();
@@ -1176,7 +1176,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Or 3", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(x);
 				(x == Long(3) || x == Long(4) || x == Long(5)).Assert().Do();
@@ -1198,7 +1198,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Or 4", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(x);
 				(x == Long(3) || x == Long(4) || x == Long(5) || x == Long(6)).Assert().Do();
@@ -1218,7 +1218,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Or 4 With Calc", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(x);
 				(x == Long(3)+Long(3) || x == Long(4)+Long(4) || x == Long(5)+Long(5) || x == Long(6)+Long(6)).Assert().Do();
@@ -1237,7 +1237,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Or Reversed 4 With Calc", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(x);
 				(Long(3) + Long(3) == x || Long(4) + Long(4) == x || Long(5) + Long(5) == x || Long(6) + Long(6) == x).Assert().Do();
@@ -1256,7 +1256,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Or Reversed 4 With Solve", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(x);
 				(Long(6) == x + Long(3) || Long(8) == x + Long(4) || Long(10) == x + Long(5) || Long(12) == x + Long(6)).Assert().Do();
@@ -1275,7 +1275,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Char In Value Set", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(B_Digit);
 				SN_DECLARE(d);
@@ -1321,7 +1321,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Char In Set", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(B_Digit2);
 				SN_DECLARE(d);
@@ -1364,7 +1364,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Is Integer", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(Digit);
 				SN_DECLARE(d);
@@ -1452,7 +1452,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Parse Integer", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(Digit);
 				SN_DECLARE(d);
@@ -1490,7 +1490,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Parse Name", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(Digit);
 				SN_DECLARE(d);
@@ -1580,7 +1580,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Parse String", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(IsString);
 				SN_DECLARE(IsStringContent);
@@ -1643,7 +1643,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Parse Part", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(Digit);
 				SN_DECLARE(d);
@@ -1723,7 +1723,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Parse Part2", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(Digit);
 				SN_DECLARE(d);
@@ -1828,6 +1828,20 @@ namespace test_sn
 				string i3_string = i3.DisplayValueSN();
 				string j3_string = j3.DisplayValueSN();
 				Assert::IsTrue(i3_string == j3_string);
+
+				manager.Breakpoint();
+				manager.SetDebugAction(skynet::StepInto);
+
+				SN_DECLARE(s1);
+				(ParsePart(MyDomain)(String("\"My test \\\"string\\\"\""))(s1)).Assert().Do();
+
+				SN_DECLARE(s2);
+				(s2 == String("My test \"string\"")).Assert().Do();
+				(s1 == s2).Evaluate().Do();
+
+				string s1_string = s1.DisplayValueSN();
+				string s2_string = s2.DisplayValueSN();
+				Assert::IsTrue(s1_string == s2_string);
 			}
 		}
 
@@ -1836,7 +1850,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Error", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				try
 				{
@@ -2116,7 +2130,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Set Assert", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(x);
 				SN_DECLARE(z);
@@ -2139,7 +2153,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Sub Strings", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				(String("catdog").SubtractRight(String("catdog").SubtractLeft(String("cat"))) == String("cat")).Assert().Do();
 				(String("catdog").SubtractLeft(String("catdog").SubtractRight(String("dog"))) == String("dog")).Assert().Do();
@@ -2167,7 +2181,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Assert Nothing", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer2);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer2);
 			}
 			Cleanup();
 		}
@@ -2178,7 +2192,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Assert Throw", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer2);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer2);
 				{
 					try
 					{
@@ -2213,7 +2227,7 @@ namespace test_sn
 				}
 
 				Manager manager("Test File Access", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer2);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer2);
 				{
 					Transaction transaction;
 
@@ -2271,7 +2285,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Value Set Of Lambda Functions", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(plus);
 				SN_DECLARE(times);
@@ -2310,7 +2324,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Value Set Of Standard Functions", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(f);
 				(f == (skynet::Add || skynet::Multiply)).Assert().Do();
@@ -2334,7 +2348,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Value Set Of String Functions", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer3);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer3);
 
 				SN_DECLARE(f);
 
@@ -2372,7 +2386,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test String Search", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 				{
 					Transaction transaction;
 
@@ -2404,7 +2418,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test String Search Example 1", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(firstname1);
 				SN_DECLARE(surname1);
@@ -2428,7 +2442,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test String Search Example 2", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 				{
 					Transaction transaction;
 
@@ -2468,7 +2482,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test String Ambiguity", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(firstClause);
 				SN_DECLARE(secondClause);
@@ -2495,7 +2509,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Pythagoras", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(X);
 				(Double(245.67).Square() + X.Square() == Double(357.56).Square()).Assert().Do();
@@ -2510,7 +2524,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Simple Transaction", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(X);
 				{
@@ -2528,7 +2542,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Simple Inherit1", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				skynet::True.IsA(Bool::Class()).Assert().Do();
 				String("woof").IsA(String::Class()).Assert().Do();
@@ -2562,7 +2576,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Inherit Short", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				Short::Class().IsA(Long::Class()).Evaluate().Do();
 				SN_DECLARE(x1);
@@ -2608,7 +2622,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Inherit Long", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				Long::Class().IsA(LongLong::Class()).Evaluate().Do();
 				SN_DECLARE(x1);
@@ -2640,7 +2654,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Inherit LongLong", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				LongLong::Class().IsA(LongDouble::Class()).Evaluate().Do();
 				SN_DECLARE(x1);
@@ -2658,7 +2672,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Inherit Float", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				Float::Class().IsA(Double::Class()).Evaluate().Do();
 				SN_DECLARE(x1);
@@ -2683,7 +2697,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Inherit Double", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				Double::Class().IsA(LongDouble::Class()).Evaluate().Do();
 				SN_DECLARE(x1);
@@ -2701,7 +2715,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Inherit Char", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				Char::Class().IsA(String::Class()).Evaluate().Do();
 				SN_DECLARE(x1);
@@ -2719,7 +2733,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Inherit Char", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				StringRef::Class().IsA(String::Class()).Evaluate().Do();
 				SN_DECLARE(x1);
@@ -2738,7 +2752,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Inherit Polymorphic Call", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(A);
 				SN_DECLARE(B);
@@ -2760,7 +2774,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Mapping Forward", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(M);
 				SN_DECLARE(I);
@@ -2784,7 +2798,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Mapping Forward Valueset", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(M);
 				SN_DECLARE(I);
@@ -2804,7 +2818,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Mapping Reverse", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(age);
 				SN_DECLARE(I);
@@ -2839,7 +2853,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Mapping Count", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(age);
 				SN_DECLARE(X);
@@ -2886,7 +2900,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Mapping Fix Errors", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer2);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer2);
 				{
 					try
 					{
@@ -2918,7 +2932,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Vector", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE_VALUE(fib, Vector());
 
@@ -2977,7 +2991,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Derived", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE_VALUE(fib, Derived());
 				SN_DECLARE(N);
@@ -3013,7 +3027,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Virtual", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE_VALUE(fib, Virtual());
 				SN_DECLARE(N);
@@ -3048,7 +3062,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Virtual Polymorphic2", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE_VALUE(typeChecker, Virtual());
 				SN_DECLARE_VALUE(shortType, Short::Class());
@@ -3078,7 +3092,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Virtual Polymorphic 2", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE_VALUE(typeChecker, Virtual());
 				SN_DECLARE_VALUE(shortType, Short::Class());
@@ -3118,7 +3132,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Virtual Polymorphic3", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE_VALUE(typeChecker, Virtual());
 				SN_DECLARE_VALUE(shortType, Short::Class());
@@ -3166,7 +3180,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Virtual Polymorphic Reverse 1", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE_VALUE(typeChecker, Virtual());
 				SN_DECLARE_VALUE(shortType, Short::Class());
@@ -3194,7 +3208,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Virtual Polymorphic Reverse 2", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE_VALUE(typeChecker, Virtual());
 				SN_DECLARE_VALUE(shortType, Short::Class());
@@ -3232,7 +3246,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Virtual Polymorphic Reverse3", AssertErrorHandler);
-				manager.StartWebServer(SN::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE_VALUE(typeChecker, Virtual());
 				SN_DECLARE_VALUE(shortType, Short::Class());

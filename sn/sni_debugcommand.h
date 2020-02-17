@@ -31,7 +31,7 @@ namespace SNI
 		bool IsQuitting();
 		bool IsExiting();
 
-		void ScheduleCommand(SN::DebugAction p_DebugAction);
+		void ScheduleCommand(skynet::DebugAction p_DebugAction);
 
 		// Debug break actions.
 		void Run();
@@ -55,7 +55,7 @@ namespace SNI
 		void SetRunning(bool p_Running);
 	private:
 		bool m_IsExiting;
-		SN::DebugAction m_DebugAction;
+		skynet::DebugAction m_DebugAction;
 		long m_FrameStackDepth;
 		long m_ThreadNum;
 		long m_StepCount;

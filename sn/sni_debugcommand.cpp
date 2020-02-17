@@ -6,7 +6,7 @@ namespace SNI
 {
 	SNI_DebugCommand::SNI_DebugCommand()
 		: m_IsExiting(false)
-		, m_DebugAction(SN::None)
+		, m_DebugAction(skynet::None)
 		, m_FrameStackDepth(0)
 	    , m_ThreadNum(0)
 	    , m_StepCount(0)
@@ -40,8 +40,8 @@ namespace SNI
 		}
 		if (p_InterruptPoint == SN::EndPoint)
 		{
-			breakPoint = (m_DebugAction != SN::Quit);
-			m_DebugAction = SN::Run;
+			breakPoint = (m_DebugAction != skynet::Quit);
+			m_DebugAction = skynet::Run;
 		}
 		else
 		{
@@ -54,45 +54,45 @@ namespace SNI
 
 			switch (m_DebugAction)
 			{
-			case SN::Run:
+			case skynet::Run:
 				breakPoint = p_InterruptPoint == SN::ErrorPoint;
 				break;
-			case SN::RunToEnd:
+			case skynet::RunToEnd:
 				breakPoint = p_InterruptPoint == SN::EndPoint || p_InterruptPoint == SN::ErrorPoint;
 				break;
-			case SN::Debug:
+			case skynet::Debug:
 				breakPoint = baseInterrupt || (m_BreakPointSet.find(p_BreakPoint) != m_BreakPointSet.end());
 				break;
-			case SN::StepInto:
+			case skynet::StepInto:
 				breakPoint = baseInterrupt || callFound;
 				break;
-			case SN::StepOver:
+			case skynet::StepOver:
 				breakPoint = baseInterrupt || (callFound && p_ThreadNum == m_ThreadNum && p_FrameStackDepth <= m_FrameStackDepth);
 				break;
-			case SN::StepOut:
+			case skynet::StepOut:
 				breakPoint = baseInterrupt || (callFound && p_ThreadNum == m_ThreadNum && (m_FrameStackDepth == 0 || p_FrameStackDepth < m_FrameStackDepth));
 				break;
-			case SN::StepParameter:
+			case skynet::StepParameter:
 				breakPoint = p_InterruptPoint == SN::BreakPoint || callFound || p_InterruptPoint == SN::ParameterPoint;
 				break;
-			case SN::GotoStepCount:
+			case skynet::GotoStepCount:
 				breakPoint = baseInterrupt || (m_StepCount == p_StepCount);
 				break;
-			case SN::CodeBreak:
+			case skynet::CodeBreak:
 				SNI_Thread::GetThread()->ScheduleCodeBreak();
-				m_DebugAction = SN::StepInto;
+				m_DebugAction = skynet::StepInto;
 				breakPoint = false;
 				break;
-			case SN::Quit:
+			case skynet::Quit:
 				breakPoint = false;
 				if (p_InterruptPoint != SN::EndPoint)
 				{
 					SN::SN_Error e(false, true, "User abort.");
 					SNI_Thread::TopManager()->ErrorHandler()(e);
-					m_DebugAction = SN::StepInto;
+					m_DebugAction = skynet::StepInto;
 				}
 				break;
-			case SN::Abort:
+			case skynet::Abort:
 				exit(-1);
 				break;
 			}
@@ -121,7 +121,7 @@ namespace SNI
 
 	bool SNI_DebugCommand::IsQuitting()
 	{
-		return m_DebugAction == SN::Quit;
+		return m_DebugAction == skynet::Quit;
 	}
 
 	bool SNI_DebugCommand::IsExiting()
@@ -130,7 +130,7 @@ namespace SNI
 		return m_IsExiting;
 	}
 
-	void SNI_DebugCommand::ScheduleCommand(SN::DebugAction p_DebugAction)
+	void SNI_DebugCommand::ScheduleCommand(skynet::DebugAction p_DebugAction)
 	{
 		unique_lock<mutex> mutex_lock(m_Mutex);
 		while (!m_ReadyForCommand)
@@ -145,44 +145,44 @@ namespace SNI
 
 	void SNI_DebugCommand::Run()
 	{
-		ScheduleCommand(SN::Run);
+		ScheduleCommand(skynet::Run);
 	}
 
 	void SNI_DebugCommand::RunToEnd()
 	{
-		ScheduleCommand(SN::RunToEnd);
+		ScheduleCommand(skynet::RunToEnd);
 	}
 
 	void SNI_DebugCommand::Debug()
 	{
-		ScheduleCommand(SN::Debug);
+		ScheduleCommand(skynet::Debug);
 	}
 
 	void SNI_DebugCommand::CodeBreak()
 	{
-		ScheduleCommand(SN::CodeBreak);
+		ScheduleCommand(skynet::CodeBreak);
 	}
 
 	void SNI_DebugCommand::StepOver(long p_StackDepth)
 	{
 		m_FrameStackDepth = p_StackDepth;
-		ScheduleCommand(SN::StepOver);
+		ScheduleCommand(skynet::StepOver);
 	}
 
 	void SNI_DebugCommand::StepInto()
 	{
-		ScheduleCommand(SN::StepInto);
+		ScheduleCommand(skynet::StepInto);
 	}
 
 	void SNI_DebugCommand::StepOut(long p_StackDepth)
 	{
 		m_FrameStackDepth = p_StackDepth;
-		ScheduleCommand(SN::StepOut);
+		ScheduleCommand(skynet::StepOut);
 	}
 
 	void SNI_DebugCommand::StepParam()
 	{
-		ScheduleCommand(SN::StepParameter);
+		ScheduleCommand(skynet::StepParameter);
 	}
 
 	void SNI_DebugCommand::GotoStepCount(long p_StepCount, long p_ThreadNum)
@@ -192,7 +192,7 @@ namespace SNI
 		{
 			m_ReadyForCommandCond.wait(mutex_lock);
 		}
-		m_DebugAction = SN::GotoStepCount;
+		m_DebugAction = skynet::GotoStepCount;
 		m_StepCount = p_StepCount;
 		m_ThreadNum = p_ThreadNum;
 		m_ReadyForProcessing = true;
@@ -202,12 +202,12 @@ namespace SNI
 
 	void SNI_DebugCommand::Abort()
 	{
-		m_DebugAction = SN::Abort;
+		m_DebugAction = skynet::Abort;
 	}
 
 	void SNI_DebugCommand::Quit()
 	{
-		ScheduleCommand(SN::Quit);
+		ScheduleCommand(skynet::Quit);
 	}
 
 	void SNI_DebugCommand::SelectThread(long p_ThreadNum)

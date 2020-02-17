@@ -296,7 +296,7 @@ namespace SNI
 		SNI_Log::GetLog()->AddStream(p_LoggingLevel, l_Stream);
 	}
 
-	void SNI_Manager::StartDebugCommandLineServer(SN::DebugAction p_DebugAction, int p_KbHit(), int p_GetCh())
+	void SNI_Manager::StartDebugCommandLineServer(skynet::DebugAction p_DebugAction, int p_KbHit(), int p_GetCh())
 	{
 		try
 		{
@@ -481,7 +481,7 @@ namespace SNI
 		}
 	}
 
-	void SNI_Manager::StartWebServer(SN::DebugAction p_DebugAction, const string& p_Address, const string& p_Port, const string& p_DocRoot)
+	void SNI_Manager::StartWebServer(skynet::DebugAction p_DebugAction, const string& p_Address, const string& p_Port, const string& p_DocRoot)
 	{
 		m_HasDebugServer = true;
 		PGC::PGC_Transaction *transaction = SNI::SNI_Transaction::TopTransaction();
@@ -571,5 +571,16 @@ namespace SNI
 	void SNI_Manager::SetMaxStackFrames(size_t p_MaxStackFrame)
 	{
 		m_MaxStackFrames = p_MaxStackFrame;
+	}
+
+	void SNI_Manager::Breakpoint()
+	{
+		SNI_Thread::GetThread()->SetDebugId("user");
+		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "User breakpoint", SN::UserId);
+	}
+
+	void SNI_Manager::SetDebugAction(enum skynet::DebugAction p_DebugLevel)
+	{
+		SNI_Thread::GetThread()->SetDebugAction(p_DebugLevel);
 	}
 }

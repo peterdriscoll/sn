@@ -24,11 +24,6 @@ namespace SN
 		ErrorLevel, WarningLevel, DebugLevel, InfoLevel, DetailLevel
 	};
 
-	enum DebugAction
-	{
-		None, Run, RunToEnd, Debug, CodeBreak, StepOver, StepInto, StepParameter, StepOut, GotoStepCount, Quit, Abort
-	};
-
 	enum InterruptPoint
 	{
 		BreakPoint, CallPoint, ParameterPoint, ClonePoint, ErrorPoint, WarningPoint, EndPoint, MirrorPoint, FailPoint, StaticPoint
@@ -36,7 +31,7 @@ namespace SN
 
 	enum BreakId
 	{
-		LeftId, RightId, PartialCallId, CallId, ParameterOneId, ParameterTwoId, ParameterThreeId, ParameterFourId, ParameterFiveId, ValueId, ConditionId,  PositiveId, NegativeId, InfixId, EvaluateId, ReturnId, ErrorId, ExitId, CloneId, NoConstraintId, DelayId, StringId
+		LeftId, RightId, PartialCallId, CallId, ParameterOneId, ParameterTwoId, ParameterThreeId, ParameterFourId, ParameterFiveId, ValueId, ConditionId,  PositiveId, NegativeId, InfixId, EvaluateId, ReturnId, ErrorId, ExitId, CloneId, NoConstraintId, DelayId, StringId, UserId
 	};
 
 	string GetLoggingLevelCode(LoggingLevel p_LoggingLevel);
@@ -73,8 +68,8 @@ namespace SN
 		void SetMaxStackFrames(size_t p_MaxStackFrame);
 
 		void StartLogging(SN::LoggingLevel p_LoggingLevel, ostream *p_Stream = NULL);
-		void StartDebugCommandLineServer(DebugAction p_DebugAction, int p_kbhit(), int p_GetCh());
-		void StartWebServer(SN::DebugAction p_DebugAction, const string& p_Address, const string& p_Port, const string& p_DocRoot, bool p_DoIt = true);
+		void StartDebugCommandLineServer(skynet::DebugAction p_DebugAction, int p_kbhit(), int p_GetCh());
+		void StartWebServer(skynet::DebugAction p_DebugAction, const string& p_Address, const string& p_Port, const string& p_DocRoot, bool p_DoIt = true);
 
 		bool HasConsole();
 		bool KbHit();
@@ -85,6 +80,10 @@ namespace SN
 
 		size_t DebugTitleWidth();
 		void SetDebugTitleWidth(size_t p_DebugFieldWidth);
+
+		// Debugging
+		void Breakpoint();
+		void SetDebugAction(enum skynet::DebugAction p_DebugAction);
 
 		SNI::SNI_Manager *GetSNI_Manager();
 	private:

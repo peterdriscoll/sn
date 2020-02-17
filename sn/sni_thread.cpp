@@ -280,7 +280,7 @@ namespace SNI
 		return logFile;
 	}
 
-	void SNI_Thread::ScheduleCommand(SN::DebugAction p_DebugAction)
+	void SNI_Thread::ScheduleCommand(skynet::DebugAction p_DebugAction)
 	{
 		return m_DebugCommand.ScheduleCommand(p_DebugAction);
 	}
@@ -458,7 +458,7 @@ namespace SNI
 		m_CodeBreakScheduled = true;
 	}
 
-	string SNI_Thread::StartCommand(enum SN::DebugAction p_DebugAction, const string &p_Description, enum DisplayOptionType p_OptionType)
+	string SNI_Thread::StartCommand(enum skynet::DebugAction p_DebugAction, const string &p_Description, enum DisplayOptionType p_OptionType)
 	{
 		stringstream ss;
 		m_DebugAction = p_DebugAction;
@@ -531,12 +531,12 @@ namespace SNI
 
 	void SNI_Thread::Quit()
 	{
-		m_DebugAction = SN::Quit;
+		m_DebugAction = skynet::Quit;
 	}
 
 	void SNI_Thread::Abort()
 	{
-		m_DebugAction = SN::Abort;
+		m_DebugAction = skynet::Abort;
 	}
 
 	string SNI_Thread::RunWeb(enum DisplayOptionType p_OptionType)
@@ -1113,6 +1113,11 @@ namespace SNI
 			}
 		}
 		return result;
+	}
+
+	void SNI_Thread::SetDebugAction(enum skynet::DebugAction p_DebugAction)
+	{
+		m_DebugCommand.ScheduleCommand(p_DebugAction);
 	}
 
 	void SNI_Thread::PromoteExternals(PGC::PGC_Transaction *p_Transaction)

@@ -56,7 +56,7 @@ namespace SNI
 		SNI_DelayedProcessor *GetProcessor();
 
 		void DebugCommand(SN::InterruptPoint p_InterruptPoint, const string & p_Text, unsigned long p_BreakId);
-		void ScheduleCommand(SN::DebugAction p_DebugAction);
+		void ScheduleCommand(skynet::DebugAction p_DebugAction);
 		bool IsExiting();
 		void LoadBreakPoints(const string &p_BreakPointString);
 		void RegisterError(SNI_Error *p_Error);
@@ -110,6 +110,8 @@ namespace SNI
 
 		SN::SN_Error CheckForFails();
 
+		void SetDebugAction(enum skynet::DebugAction p_DebugLevel);
+
 		void WriteWebPage(ostream &p_Stream, bool p_Refresh, DisplayOptionType p_OptionType);
 		void WriteShuttingDown(ostream & p_Stream);
 
@@ -135,7 +137,7 @@ namespace SNI
 
 		void ScheduleCodeBreak();
 	private:
-		string StartCommand(SN::DebugAction p_DebugAction, const string & p_Description, enum DisplayOptionType p_OptionType);
+		string StartCommand(skynet::DebugAction p_DebugAction, const string & p_Description, enum DisplayOptionType p_OptionType);
 
 		static void WriteW3Credentials(ostream & p_Stream);
 		void WriteCommands(ostream & p_Stream);
@@ -171,7 +173,7 @@ namespace SNI
 
 		static vector<SNI_Thread *> m_ThreadList;
 		static mutex m_ThreadListMutex;
-		enum SN::DebugAction m_DebugAction;
+		enum skynet::DebugAction m_DebugAction;
 		string m_DebugId;
 		string m_BreakPoint;
 		string m_BreakPointJS;

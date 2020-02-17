@@ -60,8 +60,8 @@ namespace SNI
 
 		void StartLogging(SN::LoggingLevel p_LoggingLevel, ostream *p_Stream);
 
-		void StartDebugCommandLineServer(SN::DebugAction p_DebugAction, int p_KbHit(), int p_GetCh());
-		void StartWebServer(SN::DebugAction p_DebugAction, const string& p_Address, const string& p_Port, const string& p_DocRoot);
+		void StartDebugCommandLineServer(skynet::DebugAction p_DebugAction, int p_KbHit(), int p_GetCh());
+		void StartWebServer(skynet::DebugAction p_DebugAction, const string& p_Address, const string& p_Port, const string& p_DocRoot);
 
 		bool HasConsole();
 		bool KbHit();
@@ -84,6 +84,10 @@ namespace SNI
 
 		size_t MaxStackFrames();
 		void SetMaxStackFrames(size_t p_MaxStackFrame);
+
+		// debugging
+		void Breakpoint();
+		void SetDebugAction(enum skynet::DebugAction p_DebugLevel);
 
 	private:
 		static void DebugCommandLineServer(SNI_Thread * p_Thread, int p_KbHit(), int p_GetCh());

@@ -35,6 +35,14 @@
 #define LOG_RETURN(context, result) result
 #endif
 
+namespace skynet
+{
+	enum DebugAction
+	{
+		None, Run, RunToEnd, Debug, CodeBreak, StepOver, StepInto, StepParameter, StepOut, GotoStepCount, Quit, Abort
+	};
+}
+
 #ifdef USE_LOGGING
 #include "log.h"
 #include "logcontext.h"
@@ -104,7 +112,6 @@ namespace skynet
 	// Manager
 	typedef SN::SN_Manager Manager;
 	typedef SN::SN_Transaction Transaction;
-	typedef SN::DebugAction DebugAction;
 
 	// Logging
 #ifdef USE_LOGGING
