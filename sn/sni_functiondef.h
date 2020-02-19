@@ -70,6 +70,8 @@ namespace SNI
 
 		virtual bool IsKnownValue(const SN::SN_Expression & p_Param, long j) const;
 
+		virtual size_t ParamCardinality(const SN::SN_Expression & p_Param, long j) const;
+
 		virtual size_t Cardinality(SN::SN_Expression * p_ParameterList) const;
 
 		virtual string DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression *p_DebugSource) const;

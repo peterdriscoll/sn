@@ -66,6 +66,15 @@ namespace SNI
 	}
 	/// @endcond
 
+	bool SNI_Equals::IsKnownValue(const SN::SN_Expression & p_Param, long p_Index) const
+	{
+		if (p_Index == PU2_Result)
+		{
+			return p_Param.IsKnownValue();
+		}
+		return p_Param.IsKnownValue() || p_Param.IsReferableValue();
+	}
+
 	SN::SN_Value SNI_Equals::PrimaryFunctionValue(const SN::SN_Value &p_Left, const SN::SN_Value &p_Right) const
 	{
 		return p_Left.GetSNI_Value()->DoEquals(p_Right.GetSNI_Value());
@@ -230,17 +239,6 @@ namespace SNI
 
 			if (!result.IsNull() && result.GetBool())
 			{
-				if (p_ParamList[PU2_Second].IsReferableValue() && p_ParamList[PU2_Second].IsNullValue())
-				{
-					totalCalc--;
-					calcPos = PU2_First;
-				}
-				else if (p_ParamList[PU2_First].IsReferableValue() && p_ParamList[PU2_First].IsNullValue())
-				{
-					totalCalc--;
-					calcPos = PU2_Second;
-				}
-
 				if (totalCalc > 1)
 				{
 					return CARDINALITY_MAX;
@@ -248,21 +246,12 @@ namespace SNI
 			}
 			else if (!p_ParamList[PU2_Result].IsKnownValue())
 			{
-#ifdef INFERENCE_ON_EQUALITY
-				calcPos = PU2_Result;
-				if (p_ParamList[PU2_Second].IsReferableValue() && p_ParamList[PU2_Second].IsNullValue())
-				{
-					totalCalc--;
-				}
-				else if (p_ParamList[PU2_First].IsReferableValue() && p_ParamList[PU2_First].IsNullValue())
-				{
-					totalCalc--;
-				}
-#endif
 				if (totalCalc > 1)
 				{
 					return CARDINALITY_MAX;
 				}
+
+				return MultiplyCardinality(p_ParamList[PU2_First].Cardinality(), p_ParamList[PU2_Second].Cardinality());
 			}
 			else
 			{
@@ -379,17 +368,17 @@ namespace SNI
 			}
 			else if (p_ParamList[PU2_Result].GetBool())
 			{
-				if (p_ParamList[PU2_Second].IsReferableValue() && p_ParamList[PU2_Second].IsNullValue())
+				if (p_ParamList[PU2_Second].IsReferableValue() && !p_ParamList[PU2_Second].IsKnownValue())
 				{
 					return p_ParamList[PU2_First].AddValue(RightInverseFunctionValue(p_ParamList[PU2_Result].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()), p_Depth, p_WorldList, worldSet);
 				}
-				else if (p_ParamList[PU2_First].IsReferableValue() && p_ParamList[PU2_First].IsNullValue())
+				else if (p_ParamList[PU2_First].IsReferableValue() && !p_ParamList[PU2_First].IsKnownValue())
 				{
 					return p_ParamList[PU2_Second].AddValue(LeftInverseFunctionValue(p_ParamList[PU2_Result].GetVariableValue(), p_ParamList[PU2_First].GetVariableValue()), p_Depth, p_WorldList, worldSet);
 				}
 			}
 		}
 		}
-		return LOG_RETURN(context, SN::SN_Error("SNI_Equals::UnifyElement: Nothing to unify."));
+		return LOG_RETURN(context, SN::SN_Error(false, false, "SNI_Equals::UnifyElement: " + to_string(p_TotalCalc) + "option not found."));
 	}
 }

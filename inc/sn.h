@@ -6,6 +6,9 @@
 #include "exp_ctrl_sn.h"
 
 #include <string>
+
+// #define STRICT_PARSING
+
 #define INFERENCE_ON_EQUALITY
 
 //	This flag allows

@@ -26,6 +26,8 @@ namespace SNI
 
 		virtual bool IsKnownValue(const SN::SN_Expression & p_Param, long) const;
 
+		size_t ParamCardinality(const SN::SN_Expression & p_Param, long j) const;
+
 		virtual size_t CardinalityOfUnify(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const;
 		virtual size_t CardinalityOfCall(long p_Depth, SN::SN_Expression * p_ParamList) const;
 	};

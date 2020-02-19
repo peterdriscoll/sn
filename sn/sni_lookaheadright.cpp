@@ -59,6 +59,11 @@ namespace SNI
 		return j == PU1_First ? p_Param.IsRightKnownValue() : p_Param.IsKnownValue();
 	}
 
+	size_t SNI_LookaheadRight::ParamCardinality(const SN::SN_Expression &p_Param, long j) const
+	{
+		return j == PU1_First ? p_Param.RightCardinality() : p_Param.Cardinality();
+	}
+
 	size_t SNI_LookaheadRight::CardinalityOfUnify(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const
 	{
 		if (p_Depth == 2)

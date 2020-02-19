@@ -80,7 +80,12 @@ namespace SNI
 
 	bool SNI_FunctionDef::IsKnownValue(const SN::SN_Expression &p_Param, long) const
 	{
-		return p_Param.IsKnownValue();
+		return p_Param.IsKnownValue() && !p_Param.IsReferableValue();
+	}
+
+	size_t SNI_FunctionDef::ParamCardinality(const SN::SN_Expression &p_Param, long j) const
+	{
+		return p_Param.Cardinality();
 	}
 
 	size_t SNI_FunctionDef::Cardinality(SN::SN_Expression * p_ParamList) const
@@ -243,7 +248,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_FunctionDef::UnifyArray(SN::SN_Expression * p_ParamList, const SNI_Expression *p_Source)
 	{
-		SN::SN_Error  e = true;
+		SN::SN_Error e = skynet::OK;
 		long depth = GetNumParameters();
 		SN::SN_Expression *inputList = new SN::SN_Expression[depth];
 		bool *output = new bool[depth];
@@ -255,9 +260,10 @@ namespace SNI
 		for (long j = 0; j < depth; j++)
 		{
 			topFrame->CreateParameter(j, p_ParamList[j]);
+			p_ParamList[j].Simplify();
 			if (IsKnownValue(p_ParamList[j], j))
 			{
-				inputList[j] = p_ParamList[j].GetVariableValue().SimplifyValue();
+				inputList[j] = p_ParamList[j].GetVariableValue();
 				output[j] = false;
 				totalCalc--;
 				if (AllowDelay())
@@ -272,17 +278,20 @@ namespace SNI
 			}
 		}
 
+		long calcPos = -1;
+		size_t card = CardinalityOfUnify(depth-1, inputList, calcPos, totalCalc);
+		topFrame->RegisterCardinality(card);
+		size_t maxCard = SNI_Thread::TopManager()->MaxCardinalityCall();
+
 		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before cardinality check", SN::LeftId);
 
-		long calcPos = -1;
-		size_t card = 0;
-		size_t maxCard = SNI_Thread::TopManager()->MaxCardinalityCall();
 		for (long j = 0; j < depth; j++)
 		{
 			SN::SN_Variable v = inputList[j];
-			if (!IsKnownValue(p_ParamList[j], j) && !p_ParamList[j].IsReferableValue())
+			if (!IsKnownValue(p_ParamList[j], j))
 			{
 				card = CardinalityOfUnify(depth, inputList, (long)j, totalCalc);
+				topFrame->RegisterCardinality(card);
 				if (p_ParamList[j].IsVariable())
 				{
 					if (allFound || maxCard < card)
@@ -339,14 +348,12 @@ namespace SNI
 					output[j] = false;
 					totalCalc--;
 				}
-				topFrame->GetVariable(j)->SetValue(inputList[j]);
 			}
 			else
 			{
 				calcPos = (long)j;
-				topFrame->GetVariable(j)->SetValue(p_ParamList[j]);
 			}
-			if (j != 0)
+			if (j != 0 && j != depth-1)
 			{
 				SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify parameter: " + inputList[j].DisplayValueSN(), SN::ParameterOneId + j);
 			}
@@ -355,6 +362,8 @@ namespace SNI
 		if (e.GetBool())
 		{
 			card = CardinalityOfUnify(depth, inputList, calcPos, totalCalc);
+			topFrame->RegisterCardinality(card);
+			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify parameter: " + inputList[depth-1].DisplayValueSN(), SN::ParameterOneId + depth - 1);
 			if (0 < card)
 			{
 				LOG(WriteLine(SN::DebugLevel, "Cardinality " + to_string(card) + " with total fields " + to_string(totalCalc)));
@@ -381,11 +390,10 @@ namespace SNI
 				}
 				for (long j = 0; j < depth; j++)
 				{
-					p_ParamList[j] = inputList[j];
 					if (output[j])
 					{
-						p_ParamList[j].GetSNI_Expression()->Complete();
-						topFrame->GetVariable(j)->SetValue(inputList[j]);
+						inputList[j].GetSNI_Expression()->Complete();
+						p_ParamList[j] = inputList[j];
 					}
 				}
 				SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after calculation", SN::RightId);
@@ -455,6 +463,8 @@ namespace SNI
 					if (p_Output[j] && !p_ParamList[j].IsVariable())
 					{
 						p_InputList[j] = new SNI_Variable;
+						SNI_Frame *topFrame = SNI_Frame::Top();
+						topFrame->GetVariable(j)->SetValue(p_InputList[j]);
 					}
 				}
 			}
@@ -466,6 +476,8 @@ namespace SNI
 					if (p_Output[j] && !p_ParamList[j].IsVariable())
 					{
 						SN::SN_Value simple = p_InputList[j].SimplifyValue();
+						SNI_Frame *topFrame = SNI_Frame::Top();
+						topFrame->GetVariable(j)->SetValue(simple);
 						SN::SN_Error  e = p_ParamList[j].AssertValue(simple);
 						if (e.IsError())
 						{

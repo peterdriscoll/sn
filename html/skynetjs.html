@@ -154,9 +154,7 @@
                         <tr ng-repeat="d in delayedcalls">
                             <td ng-bind-html="trustAsHtml(d.expression)" init-bind></td>
                             <td ng-bind-html="trustAsHtml(d.result)" init-bind></td>
-                            <td>
-                                {{d.cardinality}}
-                            </td>
+                            <td ng-bind-html="trustAsHtml(d.cardinality)" init-bind></td>
                         </tr>
                     </table>
 
@@ -195,12 +193,12 @@
                                 <td>
                                     <div style='overflow-x:auto;white-space:nowrap;width:900px'>
                                         <table class='frame'>
-                                            <caption>Frame {{ f.typename }} {{ f.name }} : {{ f.function }}</caption>
+                                            <caption>{{ f.function }} : <span ng-bind-html="trustAsHtml(f.functioncardinality)" init-bind></span></caption>
                                             <tr>
                                                 <th ng-repeat="v in f.variables">{{ v.name }}</th>
                                             </tr>
                                             <tr>
-                                                <td ng-repeat="v in f.variables">{{ v.typetext }}</td>
+                                                <td ng-repeat="v in f.variables">{{ v.typetext }} : <span ng-bind-html="trustAsHtml(v.cardinality)" init-bind></span></td>
                                             </tr>
                                             <tr>
                                                 <td ng-repeat="v in f.variables">
@@ -275,8 +273,6 @@
             $scope.scheduled = 0;
             $scope.initFirst = function () {
                 if ($scope.closing) {
-                    $scope.submit('quit');
-                    $window.close();
                 } else if (!$scope.scheduled) {
                     $scope.scheduled = $scope.scheduled + 1;
                     $http.get(home + 'dashboardjs?threadnum=' + $scope.threadnum)
@@ -364,7 +360,6 @@
             $scope.setbreakpoint(["Warning", 20]);
             $scope.setbreakpoint(["Warning", 19]);
             $scope.setbreakpoint(["user", 22]);
-            $scope.setbreakpoint(["MIR", 3])
             $scope.setbreakpoint(["assert", 3]);
             $scope.setbreakpoint(["partialassert", 3]);
             $scope.setbreakpoint(["evaluate", 3]);

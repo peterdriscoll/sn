@@ -71,7 +71,7 @@ namespace SNI
 		m_WorldList[p_Depth] = p_World;
 		m_ValueTotalCalc[p_Depth + 1] = m_ValueTotalCalc[p_Depth];
 		m_ValueCalcPos[p_Depth + 1] = m_ValueCalcPos[p_Depth];
-		if (!m_Output[p_Depth] && m_ValueList[p_Depth].IsKnownValue())
+		if (!m_Output[p_Depth] && m_FunctionDef->IsKnownValue(m_ValueList[p_Depth], p_Depth))
 		{
 			m_ValueTotalCalc[p_Depth + 1]--;
 		}

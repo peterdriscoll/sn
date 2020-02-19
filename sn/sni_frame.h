@@ -47,6 +47,7 @@ namespace SNI
 		void SetCloneFunction(const SNI_Expression *p_Function);
 
 		SNI_Variable *CreateTemporary();
+		SNI_Variable *CreateSplitVariable();
 		SNI_Variable *CreateVariable(const string & p_Name, const string & p_DomainName);
 		SNI_Variable *CreateParameter(size_t p_ParamNum, SN::SN_Expression p_Value);
 		SNI_Variable *CreateParameterByName(const string &p_ParamName, SN::SN_Expression p_Value);
@@ -54,8 +55,9 @@ namespace SNI
 		void WriteWebFrame(ostream &p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
 		void WriteJS(ostream & p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
 		void WriteStackJS(ostream & p_Stream, string &p_Delimeter, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions & p_DisplayOptions);
-		void WriteVariable(ostream &p_Stream, SN::SN_Expression &p_Variable, SN::SN_Expression &p_Value, const string &p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
+		void WriteVariable(ostream &p_Stream, SN::SN_Expression &p_Variable, SN::SN_Expression &p_Value, long j, const string &p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
 
+		void RegisterCardinality(size_t p_Cardinality);
 		void PromoteExternals(PGC::PGC_Transaction * p_Transaction);
 	private:
 		SNI_Variable * AttachParameter(size_t p_ParamNum, SN::SN_Expression p_Param);
@@ -72,6 +74,7 @@ namespace SNI
 		string						   m_DebugId;
 		string						   m_BreakPoint;
 		string						   m_BreakPointJS;
+		size_t						   m_Cardinality;
 	};
 }
 

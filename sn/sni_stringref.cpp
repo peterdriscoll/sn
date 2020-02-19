@@ -971,6 +971,7 @@ namespace SNI
 				{
 					return skynet::False;
 				}
+#ifdef STRICT_PARSING
 				SN::SN_ValueSet result;
 				SNI_WorldSet *ws_result = result.GetWorldSet();
 				SNI_World *worldTrue = ws_result->CreateWorld();
@@ -993,6 +994,10 @@ namespace SNI
 				l_ParameterList[2] = SN::SN_Long((long)(start_pos + other.length()));
 				SNI_Thread::GetThread()->GetProcessor()->Delay(skynet::Equals, 3, l_ParameterList, this);
 				return result;
+#else
+				m_End.GetSNI_Variable()->SetValue(SN::SN_Long((long)(start_pos + other.length())));
+				return skynet::True;
+#endif
 #endif
 			}
 			if (m_Start.IsVariable() && start.IsNullValue() && !end.IsNullValue())
@@ -1007,6 +1012,7 @@ namespace SNI
 				{
 					return skynet::False;
 				}
+#ifdef STRICT_PARSING
 				SN::SN_ValueSet result;
 				SNI_WorldSet *ws_result = result.GetWorldSet();
 				SNI_World *worldTrue = ws_result->CreateWorld();
@@ -1029,6 +1035,10 @@ namespace SNI
 				l_ParamList[2] = SN::SN_Long((long)(end_pos - p_Other->GetString().length()));
 				SNI_Thread::GetThread()->GetProcessor()->Delay(skynet::Equals, 3, l_ParamList, this);
 				return result;
+#else
+				m_Start.GetSNI_Variable()->SetValue(SN::SN_Long((long)(end_pos - p_Other->GetString().length())));
+				return skynet::True;
+#endif
 #endif
 			}
 			return skynet::Null;
