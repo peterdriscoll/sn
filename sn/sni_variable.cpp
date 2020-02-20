@@ -525,17 +525,18 @@ namespace SNI
 
 	SN::SN_Error SNI_Variable::SelfAssert()
 	{
+		SN::SN_Error e(skynet::OK);
 		if (m_Value && !m_Value->IsNull() && !m_Value->IsKnownValue() && !m_Value->IsReferableValue() && !m_Value->IsVariable())
 		{
-			SNI_Frame *topFrame = SNI_Frame::Top();
-			SNI_Variable *v = topFrame->CreateTemporary();
-			SN::SN_Error e = m_Value->AssertValue(v);
-			if (!e.IsError())
+			SNI_Expression *saveValue = m_Value;
+			m_Value = NULL;
+			e = saveValue->AssertValue(this);
+			if (e.IsError() || !m_Value)
 			{
-				m_Value = v->GetVariableValue(true).GetSNI_Expression();
+				m_Value = saveValue;
 			}
 		}
-		return true;
+		return e;
 	}
 
 	SN::SN_Error SNI_Variable::AssertValue(const SN::SN_Expression &p_Value)
