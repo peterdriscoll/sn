@@ -44,7 +44,6 @@ namespace SNI
 		string FrameName() const;
 
 		string FramePathName() const;
-		string GetPathName() const;
 
 		virtual bool IsComplete() const;
 		virtual void Complete();
@@ -56,6 +55,7 @@ namespace SNI
 		virtual bool IsRightKnownValue() const;
 		virtual bool IsKnownTypeValue() const;
 		virtual bool IsLambdaValue() const;
+		virtual bool IsStringValue() const;
 		virtual bool IsVariable() const;
 		virtual bool IsReferableValue() const;
 		virtual void Request();

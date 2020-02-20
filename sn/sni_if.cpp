@@ -210,7 +210,7 @@ namespace SNI
 
 		condition_param->SetValue(sCondition);
 
-		SNI_World *contextWorld = SNI_World::ContextWorld();
+		SNI_World *contextWorld = SNI_Thread::GetThread()->ContextWorld();
 		SN::SN_Expression *parameterList = p_ParameterList;
 		bool success = false;
 		string typeName = GetTypeName();
@@ -220,7 +220,7 @@ namespace SNI
 			{
 				if (p_World)
 				{
-					SNI_World::PushContextWorld(p_World);
+					SNI_Thread::GetThread()->PushContextWorld(p_World);
 				}
 				SNI_Thread::GetThread()->SetDebugId("");
 				SN::SN_Error e;
@@ -244,7 +244,7 @@ namespace SNI
 				}
 				if (p_World)
 				{
-					SNI_World::PopContextWorld();
+					SNI_Thread::GetThread()->PopContextWorld();
 				}
 				if (e.IsError())
 				{

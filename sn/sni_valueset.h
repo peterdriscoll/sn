@@ -37,17 +37,22 @@ namespace SNI
 		string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		long GetPriority() const;
 
+		// Queries
+		bool CompareValue(const SN::SN_Value & p_Value) const;
 
-		// Members
 		virtual bool IsString() const;
 		virtual bool IsKnownValue() const;
+		virtual bool IsLeftKnownValue() const;
+		virtual bool IsRightKnownValue() const;
+		virtual bool IsReferableValue() const;
 		virtual bool IsComplete() const;
 		virtual void Complete();
+
+		SN::SN_Expression GetVariableValue(bool p_IfComplete);
 		virtual bool AllValues() const;
 		virtual size_t Length() const;
 		SNI_TaggedValue &operator[](long p_index);
 		SNI_TaggedValue At(const long &p_Value);
-		bool IsReferableValue(const SN::SN_Value & p_Value) const;
 		virtual bool GetBool() const;
 		void Append(const SN::SN_Value &p_Value);
 		virtual bool DoIsEmpty() const;

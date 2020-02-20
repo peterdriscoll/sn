@@ -112,6 +112,11 @@ namespace SNI
 
 		void SetDebugAction(enum skynet::DebugAction p_DebugLevel);
 
+		SNI_World * ContextWorld();
+		SNI_WorldList & ContextWorldList();
+		void PushContextWorld(SNI_World * p_Context);
+		void PopContextWorld();
+
 		void WriteWebPage(ostream &p_Stream, bool p_Refresh, DisplayOptionType p_OptionType);
 		void WriteShuttingDown(ostream & p_Stream);
 
@@ -185,6 +190,8 @@ namespace SNI
 
 		bool m_CodeBreakScheduled;
 		SNI_DelayedProcessor *m_Processor;
+
+		SNI_WorldList m_ContextStack;
 
 		static long m_GotoThreadNum;
 		static long m_StepCount;

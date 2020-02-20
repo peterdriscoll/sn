@@ -20,6 +20,8 @@ namespace SNI
 	class SNI_Variable;
 	class SNI_Value;
 	class SNI_ValueSet;
+	class SNI_String;
+	class SNI_Bool;
 	class SNI_World;
 	class SNI_WorldSet;
 	class SNI_FunctionDef;
@@ -116,10 +118,7 @@ namespace SN
 		// Destructor
 		virtual ~SN_Expression();
 
-		bool IsReferableValue() const;
-		bool IsError() const;
 		bool DoIsEmpty() const;
-		bool IsStringValue() const;
 		SN_ValueSet DoRemove(const SN_Value &p_Other) const;
 		void Simplify();
 		SN_Expression SimplifyValue();
@@ -232,6 +231,8 @@ namespace SN
 		SNI::SNI_Value * GetSNI_Value() const;
 		SNI::SNI_Error * GetSNI_Error() const;
 		SNI::SNI_ValueSet * GetSNI_ValueSet() const;
+		SNI::SNI_String * GetSNI_String() const;
+		SNI::SNI_Bool * GetSNI_Bool() const;
 		SNI::SNI_Lambda * GetSNI_Lambda() const;
 		SNI::SNI_Variable * GetSNI_Variable() const;
 		SNI::SNI_FunctionDef * GetSNI_FunctionDef() const;

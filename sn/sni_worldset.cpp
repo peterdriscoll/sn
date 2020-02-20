@@ -33,7 +33,7 @@ namespace SNI
 		, m_Complete(false)
 		, m_WorldSetNo(++m_NextWorldSetNo)
 		, m_NextWorldNo(0)
-		, m_ContextWorld(SNI_World::ContextWorld())
+		, m_ContextWorld(SNI_Thread::GetThread()->ContextWorld())
 	{
 	}
 
@@ -42,7 +42,7 @@ namespace SNI
 		, m_Complete(false)
 		, m_WorldSetNo(++m_NextWorldSetNo)
 		, m_NextWorldNo(0)
-		, m_ContextWorld(SNI_World::ContextWorld())
+		, m_ContextWorld(SNI_Thread::GetThread()->ContextWorld())
 	{
 		AttachExpression(p_Expression);
 	}
@@ -115,44 +115,52 @@ namespace SNI
 
 	void SNI_WorldSet::WriteJS(ostream &p_Stream, const string &tabs, SNI_DisplayOptions & p_DisplayOptions) const
 	{
-		p_Stream << tabs << "\t\"id\" : \"" << DisplayShort() << "\",\n";
-		p_Stream << tabs << "\t\"expression\" : \"" << EscapeStringToJSON(m_Expression.DisplaySN()) << "\",\n";
-		p_Stream << tabs << "\t\"worlds\" : [\n";
+		p_Stream << tabs << "\"id\" : \"" << DisplayShort() << "\",\n";
+		p_Stream << tabs << "\"expression\" : \"" << EscapeStringToJSON(m_Expression.DisplaySN()) << "\",\n";
+		p_Stream << tabs << "\"worlds\" : [";
 		string delimeter;
 		for (const SNI_World *w : m_WorldList)
 		{
-			p_Stream << tabs << "\t" << delimeter << "\t{\n";
-			w->WriteJS(p_Stream, tabs+"\t\t", p_DisplayOptions);
-			p_Stream << tabs << "\t}\n";
-			delimeter = ",";
+			SNI_World *contextWorld = SNI_Thread::GetThread()->ContextWorld();
+			if (!contextWorld || contextWorld->CompatibleWorld(const_cast<SNI_World *>(w)))
+			{
+				p_Stream << delimeter << "\n" << tabs << "\t{\n";
+				w->WriteJS(p_Stream, tabs + "\t", p_DisplayOptions);
+				p_Stream << tabs << "\t}";
+				delimeter = ",";
+			}
 		}
-		p_Stream << tabs << "\t\t],\n";
-		p_Stream << tabs << "\t\"childsets\" : [\n";
+		p_Stream << "\n" << tabs << "],\n";
+		p_Stream << tabs << "\"childsets\" : [";
 		delimeter = "";
 		for (const SNI_WorldSet *ws : m_ChildSetList)
 		{
-			p_Stream << tabs << "\t" << delimeter << "\t{\n";
+			p_Stream << delimeter << "\n" << tabs << "\t{\n";
 			ws->WriteUnmarkedJS(p_Stream, tabs + "\t\t", p_DisplayOptions);
-			p_Stream << tabs << "\t}\n";
+			p_Stream << tabs << "\t}";
 			delimeter = ",";
 		}
-		p_Stream << tabs << "\t]\n";
+		p_Stream <<"\n" << tabs << "]\n";
 	}
 	
 	void SNI_WorldSet::WriteUnmarkedJS(ostream &p_Stream, const string &tabs, SNI_DisplayOptions &p_DisplayOptions) const
 	{
-		p_Stream << tabs << "\t\"id\" : \"" << DisplayShort() << "\",\n";
-		p_Stream << tabs << "\t\"expression\" : \"" << EscapeStringToJSON(m_Expression.DisplaySN()) << "\",\n";
-		p_Stream << tabs << "\t\"worlds\" : [\n";
+		p_Stream << tabs << "\"id\" : \"" << DisplayShort() << "\",\n";
+		p_Stream << tabs << "\"expression\" : \"" << EscapeStringToJSON(m_Expression.DisplaySN()) << "\",\n";
+		p_Stream << tabs << "\"worlds\" : [";
 		string delimeter;
 		for (const SNI_World *w : m_WorldList)
 		{
-			p_Stream << tabs << "\t" << delimeter << "\t{\n";
-			w->WriteJS(p_Stream, tabs + "\t\t", p_DisplayOptions);
-			p_Stream << tabs << "\t}\n";
-			delimeter = ",";
+			SNI_World *contextWorld = SNI_Thread::GetThread()->ContextWorld();
+			if (!contextWorld || contextWorld->CompatibleWorld(const_cast<SNI_World *>(w)))
+			{
+				p_Stream << delimeter << "\n" << tabs << "\t{\n";
+				w->WriteJS(p_Stream, tabs + "\t", p_DisplayOptions);
+				p_Stream << tabs << "\t}";
+				delimeter = ",";
+			}
 		}
-		p_Stream << tabs << "\t]\n";
+		p_Stream << "\n" << tabs << "]\n";
 	}
 
 	string SNI_WorldSet::LogHeading(SN::LogContext &context, long p_Width) const
@@ -248,7 +256,11 @@ namespace SNI
 	SNI_World * SNI_WorldSet::JoinWorldsArray(AddWorldType p_AddWorld, CreateWorldType p_CreateWorld, bool &exists, long p_NumWorlds, SNI_World *p_WorldList[], SNI_World * p_ExtraWorld)
 	{
 		bool active = (p_CreateWorld == AlwaysCreateWorld);
-		SNI_World *contextWorld = SNI_World::ContextWorld();
+		SNI_World *contextWorld = NULL;
+		if (p_CreateWorld != CreateIfActiveParentsIgnoreContext)
+		{
+			contextWorld = SNI_Thread::GetThread()->ContextWorld();
+		}
 		if (p_WorldList)
 		{
 			for (long i = 0; i < p_NumWorlds; i++)
@@ -286,7 +298,7 @@ namespace SNI
 				}
 				AddChildWorldSet(p_ExtraWorld->GetWorldSet());
 			}
-			for (SNI_World *contextWorldLoop : SNI_World::ContextWorldList())
+			for (SNI_World *contextWorldLoop : SNI_Thread::GetThread()->ContextWorldList())
 			{
 				if (contextWorldLoop && contextWorldLoop->IsAnyActive())
 				{

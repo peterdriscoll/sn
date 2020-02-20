@@ -36,7 +36,7 @@ namespace SNI
 		{
 			long dog = 10;
 		}
-		if (!m_Success && !p_Description.empty() && !SNI_World::ContextWorld())
+		if (!m_Success && !p_Description.empty() && !SNI_Thread::GetThread()->ContextWorld())
 		{
 			LOG(WriteLine(SN::ErrorLevel, GetLogDescription()));
 			if (!ErrorIsHandled())
@@ -71,7 +71,14 @@ namespace SNI
 
 	string SNI_Error::GetTypeName() const
 	{
-		return "Error";
+		if (m_Success)
+		{
+			return "Result";
+		}
+		else
+		{
+			return "Error";
+		}
 	}
 
 	string SNI_Error::DisplayCpp() const
@@ -116,7 +123,7 @@ namespace SNI
 
 	bool SNI_Error::IsSignificantError() const
 	{
-		return !m_Success && !m_Description.empty() && !SNI_World::ContextWorld() && !ErrorIsHandled();
+		return !m_Success && !m_Description.empty() && !SNI_Thread::GetThread()->ContextWorld() && !ErrorIsHandled();
 	}
 
 	bool SNI_Error::GetBool()

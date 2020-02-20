@@ -58,7 +58,7 @@ namespace SNI
 			text = SetBreakPoint(GetOperator(), p_DisplayOptions, p_DebugSource, SN::LeftId);
 		}
 		return Bracket(priority, 
-			text + " " + p_ParamList[PC1_First].GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + SetBreakPoint(";", p_DisplayOptions, p_DebugSource, SN::ParameterOneId), p_DisplayOptions, p_DebugSource);
+			text + " " + p_ParamList[PC1_First].GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + SetBreakPoint(";", p_DisplayOptions, p_DebugSource, SN::ParameterOneId+1), p_DisplayOptions, p_DebugSource);
 	}
 
 	long SNI_Unary::GetPriority() const

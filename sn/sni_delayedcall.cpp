@@ -28,6 +28,7 @@ namespace SNI
 {
 	SNI_DelayedCall::SNI_DelayedCall(SN::SN_FunctionDef p_Function, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_Source, SNI_Frame *p_Frame, SNI_World * p_World)
 		: m_Function(p_Function)
+		, m_NumParams(p_NumParams)
 		, m_ParamList(p_ParamList)
 		, m_Source(p_Source)
 		, m_Scheduled(false)
@@ -35,6 +36,7 @@ namespace SNI
 		, m_Frame(p_Frame)
 		, m_World(NULL)
 	{
+		ASSERTM(m_NumParams == m_Function.GetSNI_FunctionDef()->GetNumParameters(), "Inconsistent number of parameters.");
 	}
 
 	SNI_DelayedCall::~SNI_DelayedCall()
@@ -94,7 +96,7 @@ namespace SNI
 
 	bool SNI_DelayedCall::IsCallRequested() const
 	{
-		for (size_t i = 0; i < m_Function.GetSNI_FunctionDef()->GetNumParameters(); i++)
+		for (size_t i = 0; i < m_NumParams; i++)
 		{
 			SN::SN_Expression var = m_ParamList[i];
 			if (var.IsRequested())
@@ -117,7 +119,7 @@ namespace SNI
 
 	void SNI_DelayedCall::LinkVariable(SN::SN_Expression &p_Parameter)
 	{
-		if (SN::Is<SNI_Variable*>(p_Parameter))
+		if (p_Parameter.IsVariable())
 		{
 			SNI_Variable *variable = dynamic_cast<SNI_Variable*>(p_Parameter.GetSNI_Expression());
 			variable->AttachDelayedCall(this);
@@ -163,7 +165,7 @@ namespace SNI
 		p_Stream << "\t\t\"expression\" : \"" << EscapeStringToJSON(m_Function.GetSNI_FunctionDef()->DisplayCall(0, p_DisplayOptions, m_NumParams, m_ParamList + 1, m_Source)) << "\",\n";
 		p_Stream << "\t\t\"result\" : \"" << EscapeStringToJSON(m_ParamList[PU1_Result].DisplaySN(p_DisplayOptions)) << "\",\n";
 		size_t card = CallCardinality();
-		string card_string = "\"infinity\"";
+		string card_string = "\"&infin;\"";
 		if (card < CARDINALITY_MAX)
 		{
 			card_string = to_string(card);

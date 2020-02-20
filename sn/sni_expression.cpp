@@ -329,9 +329,8 @@ namespace SNI
 		return this;
 	}
 
-	bool SNI_Expression::IsStringValue() const
+	void SNI_Expression::AttachDelayedCall(SNI_DelayedCall *p_Call)
 	{
-		return dynamic_cast<const SNI_String *>(this) || dynamic_cast<const SNI_StringRef *>(this) || dynamic_cast<const SNI_Char *>(this);
 	}
 
 	bool SNI_Expression::IsRequested() const
@@ -390,6 +389,16 @@ namespace SNI
 	bool SNI_Expression::IsVariable() const
 	{
 		return false;
+	}
+
+	bool SNI_Expression::IsString() const
+	{
+		return false;
+	}
+
+	bool SNI_Expression::IsStringValue() const
+	{
+		return IsString();
 	}
 
 	bool SNI_Expression::IsError() const

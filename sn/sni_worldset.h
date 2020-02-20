@@ -34,7 +34,8 @@ namespace SNI
 	enum EnumCreateWorld
 	{
 		AlwaysCreateWorld,
-		CreateIfActiveParents
+		CreateIfActiveParents,
+		CreateIfActiveParentsIgnoreContext
 	};
 	typedef enum EnumCreateWorld CreateWorldType;
 

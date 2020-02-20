@@ -160,6 +160,11 @@ namespace SN
 			return GetSNI_Base() && GetSNI_Base()->IsKnownTypeValue();
 		}
 
+		bool IsReferableValue() const
+		{
+			return m_Expression && m_Expression->IsReferableValue();
+		}
+
 		bool IsLambdaValue() const
 		{
 			return GetSNI_Base() && GetSNI_Base()->IsLambdaValue();
@@ -170,9 +175,19 @@ namespace SN
 			return GetSNI_Base() && GetSNI_Base()->IsVariable();
 		}
 
+		bool IsString() const
+		{
+			return GetSNI_Base() && GetSNI_Base()->IsString();
+		}
+
+		bool IsStringValue() const
+		{
+			return GetSNI_Base() && GetSNI_Base()->IsStringValue();
+		}
+
 		bool IsError() const
 		{
-			return !GetSNI_Base() && GetSNI_Base()->IsError();
+			return GetSNI_Base() && GetSNI_Base()->IsError();
 		}
 
 		bool IsFixed() const

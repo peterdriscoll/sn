@@ -269,7 +269,7 @@ namespace SNI
 						value = SN::SN_StringRef(source, start_exp, end_exp);
 					}
 					bool exists = false;
-					SNI_World *world = worldSet->JoinWorldsArgs(AutoAddWorld, CreateIfActiveParents, exists, startWorld, endWorld);
+					SNI_World *world = worldSet->JoinWorldsArgs(AutoAddWorld, CreateIfActiveParentsIgnoreContext, exists, startWorld, endWorld);
 					if (exists)
 					{
 						valueSet.AddTaggedValue(value, world);

@@ -1120,6 +1120,30 @@ namespace SNI
 		m_DebugCommand.ScheduleCommand(p_DebugAction);
 	}
 
+	SNI_World * SNI_Thread::ContextWorld()
+	{
+		if (m_ContextStack.size())
+		{
+			return m_ContextStack.back();
+		}
+		return NULL;
+	}
+
+	SNI_WorldList & SNI_Thread::ContextWorldList()
+	{
+		return m_ContextStack;
+	}
+
+	void SNI_Thread::PushContextWorld(SNI_World * p_Context)
+	{
+		m_ContextStack.push_back(p_Context);
+	}
+
+	void SNI_Thread::PopContextWorld()
+	{
+		m_ContextStack.pop_back();
+	}
+
 	void SNI_Thread::PromoteExternals(PGC::PGC_Transaction *p_Transaction)
 	{
 		for (SNI_Frame *f : m_FrameList)

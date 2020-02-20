@@ -114,6 +114,11 @@ namespace SNI
 		return m_Value && m_Value->IsLambdaValue();
 	}
 
+	bool SNI_Variable::IsStringValue() const
+	{
+		return m_Value && m_Value->IsLambdaValue();
+	}
+
 	bool SNI_Variable::IsVariable() const
 	{
 		return true;
@@ -145,21 +150,12 @@ namespace SNI
 
 	string SNI_Variable::FramePathName() const
 	{
-		if (m_Frame)
-		{	// Main thread
-			return GetPathName() + m_Frame->NameSuffix();
-		}
-		return GetPathName();
-	}
-
-	string SNI_Variable::GetPathName() const
-	{
 		if (m_Value && m_Value->IsVariable())
 		{
 			SN::SN_Variable value = m_Value;
-			return GetName() + "/" + value.GetSNI_Variable()->GetPathName();
-		} 
-		return GetName();
+			return FrameName() + "/" + value.GetSNI_Variable()->FramePathName();
+		}
+		return FrameName();
 	}
 
 	SNI_Expression * SNI_Variable::GetValue(bool p_Request) const
@@ -187,9 +183,16 @@ namespace SNI
 
 	void SNI_Variable::Simplify()
 	{
-		if (IsKnownValue() && !SNI_World::ContextWorld())
+		if (m_Value && !SNI_Thread::GetThread()->ContextWorld())
 		{
-			m_Value = m_Value->SimplifyValue().GetSNI_Expression();
+			if (m_Value->IsVariable())
+			{
+				m_Value->Simplify();
+			}
+			else
+			{
+				m_Value = m_Value->SimplifyValue().GetSNI_Expression();
+			}
 		}
 	}
 
@@ -209,8 +212,9 @@ namespace SNI
 				return value.GetVariableValue(p_IfComplete);
 			}
 			Simplify();
+			return m_Value;
 		}
-		return m_Value;
+		return this;
 	}
 
 	void SNI_Variable::Fix(SN::SN_Expression p_Value)
@@ -237,9 +241,9 @@ namespace SNI
 		}
 		if (p_Value.IsVariable())
 		{
-			FORCE_ASSERTM("Variable not expected.");
+			return p_Value.AddValue(p_Value, p_NumWorlds, p_WorldList, p_WorldSet);
 		}
-		if (SNI_World::ContextWorld())
+		if (SNI_Thread::GetThread()->ContextWorld())
 		{
 			if (!m_Value || m_Value->IsNull())
 			{
@@ -536,7 +540,7 @@ namespace SNI
 
 	SN::SN_Error SNI_Variable::AssertValue(const SN::SN_Expression &p_Value)
 	{
-		if (SNI_World::ContextWorld())
+		if (SNI_Thread::GetThread()->ContextWorld())
 		{
 			if (!m_Value || m_Value->IsNull())
 			{
@@ -653,7 +657,7 @@ namespace SNI
 			}
 			return LOG_RETURN(context, m_Value->PartialCall(p_ParameterList, p_MetaLevel));
 		}
-		return LOG_RETURN(context, SN::SN_Error(GetTypeName() + " partial function to call is unknown."));
+		return LOG_RETURN(context, SN::SN_Error(GetTypeName() + " partial function to call to null value."));
 	}
 
 	SN::SN_Expression SNI_Variable::Unify(SN::SN_ExpressionList * p_ParameterList)
@@ -726,6 +730,10 @@ namespace SNI
 		{
 			m_Value = p_Call;
 			REQUESTPROMOTION(m_Value);
+		}
+		else if (m_Value->IsVariable())
+		{
+			m_Value->AttachDelayedCall(p_Call);
 		}
 	}
 

@@ -257,6 +257,8 @@ namespace SNI
 		SNI_Frame::Push(this, NULL);
 		SNI_Frame *topFrame = SNI_Frame::Top();
 
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before cardinality check", SN::LeftId);
+
 		for (long j = 0; j < depth; j++)
 		{
 			topFrame->CreateParameter(j, p_ParamList[j]);
@@ -282,8 +284,6 @@ namespace SNI
 		size_t card = CardinalityOfUnify(depth-1, inputList, calcPos, totalCalc);
 		topFrame->RegisterCardinality(card);
 		size_t maxCard = SNI_Thread::TopManager()->MaxCardinalityCall();
-
-		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before cardinality check", SN::LeftId);
 
 		for (long j = 0; j < depth; j++)
 		{
@@ -313,11 +313,14 @@ namespace SNI
 					LOG(WriteLine(SN::DebugLevel, "Parameter " + to_string(j) + ": " + inputList[j].DisplayValueSN()));
 					if (allFound || maxCard < card)
 					{
-						inputList[j] = topFrame->CreateTemporary();
-						topFrame->GetVariable(j)->SetValue(inputList[j]);
-						e = p_ParamList[j].AssertValue(inputList[j]);
-						topFrame->GetVariable(j)->SetValue(inputList[j]);
-						LOG(WriteLine(SN::DebugLevel, "Assert " + to_string(j) + ": " + inputList[j].DisplayValueSN()));
+						SNI_Variable *v = topFrame->GetVariable(j);
+						v->SetValue(SN::SN_Expression());
+						e = inputList[j].AssertValue(v);
+						if (!e.IsError() && v->GetSafeValue()!=NULL)
+						{
+							inputList[j] = v;
+							p_ParamList[j] = v;
+						}
 						if (e.IsError())
 						{
 							break;

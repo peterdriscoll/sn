@@ -1580,7 +1580,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Parse String", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false);
 
 				SN_DECLARE(IsString);
 				SN_DECLARE(IsStringContent);
@@ -2509,7 +2509,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Pythagoras", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false);
 
 				SN_DECLARE(X);
 				(Double(245.67).Square() + X.Square() == Double(357.56).Square()).Assert().Do();

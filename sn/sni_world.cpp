@@ -10,32 +10,6 @@
 
 namespace SNI
 {
-	thread_local SNI_WorldList g_ContextStack;
-
-	/*static*/ SNI_World * SNI_World::ContextWorld()
-	{
-		if (g_ContextStack.size())
-		{
-			return g_ContextStack.back();
-		}
-		return NULL;
-	}
-
-	/*static*/ SNI_WorldList & SNI_World::ContextWorldList()
-	{
-		return g_ContextStack;
-	}
-
-	/*static*/ void SNI_World::PushContextWorld(SNI_World * p_Context)
-	{
-		g_ContextStack.push_back(p_Context);
-	}
-
-	/*static*/ void SNI_World::PopContextWorld()
-	{
-		g_ContextStack.pop_back();
-	}
-
 	SNI_World::SNI_World(SNI_WorldSet * p_WorldSet, SNI_World *p_CloneParent)
 		: m_Mark(false)
 		, m_IsEmpty(false)
@@ -78,7 +52,7 @@ namespace SNI
 		string result;
 		if (m_ChildList.empty())
 		{
-			result = m_WorldSet->DisplayCondition(p_DisplayOptions, m_Value);
+			result = "(" + m_WorldSet->DisplayCondition(p_DisplayOptions, m_Value) + ")";
 		}
 		else
 		{
@@ -88,18 +62,23 @@ namespace SNI
 				{
 					result += "&&";
 				}
-				result += w->DisplayCondition(p_DisplayOptions);
+				result += w->DisplayShort();
 			}
 		}
+		string negated;
 		for (SNI_World *w : m_NegatedList)
 		{
-			if (!result.empty())
+			if (!negated.empty())
 			{
-				result += "&&!" + w->DisplayCondition(p_DisplayOptions);
+				negated += "&&";
 			}
-			result += w->DisplayCondition(p_DisplayOptions);
+			negated += w->DisplayShort();
 		}
-		return result;
+		if (!negated.empty())
+		{
+			negated = "&& !(" + negated + ")";
+		}
+		return DisplayShort() + "=" + result + negated;
 	}
 
 	string SNI_World::DisplayConditionSN(SNI_DisplayOptions & p_DisplayOptions) const
@@ -225,6 +204,12 @@ namespace SNI
 		{
 			return true;
 		}
+
+		if (IsNegated(p_World))
+		{
+			return false;
+		}
+
 		p_World->Mark(false);
 		Mark(true);
 		if (!p_World->HasMutualExclusion())
@@ -485,7 +470,7 @@ namespace SNI
 
 	SN::SN_Error SNI_World::Fail(enum FailReason p_Reason)
 	{
-		return FailInContext(SNI_World::ContextWorld(), p_Reason);
+		return FailInContext(SNI_Thread::GetThread()->ContextWorld(), p_Reason);
 	}
 
 	SN::SN_Error SNI_World::FailInContext(SNI_World *p_ContextWorld, enum FailReason p_Reason)
@@ -517,9 +502,22 @@ namespace SNI
 		m_NegatedList.push_back(p_World);
 	}
 
+	bool SNI_World::IsNegated(SNI_World * p_World)
+	{
+		ASSERTM(p_World, "Attempt to add null child world.");
+		for (SNI_World *w : m_NegatedList)
+		{
+			if (w == p_World)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	bool SNI_World::FailNoRemove()
 	{
-		return FailNoRemoveInContext(SNI_World::ContextWorld());
+		return FailNoRemoveInContext(SNI_Thread::GetThread()->ContextWorld());
 	}
 
 	bool SNI_World::FailNoRemoveInContext(SNI_World *p_ContextWorld)

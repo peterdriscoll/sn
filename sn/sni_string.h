@@ -35,6 +35,9 @@ namespace SNI
 		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual long GetPriority() const;
 
+		// Status
+		virtual bool IsString() const;
+
 		// Members
 		virtual string GetString() const;
 		virtual size_t Length() const;

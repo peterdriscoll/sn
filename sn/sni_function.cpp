@@ -169,9 +169,9 @@ namespace SNI
 		SN::SN_ExpressionList * l_ParameterList = new SN::SN_ExpressionList();
 		l_ParameterList->push_back(m_Parameter);
 		SNI_World *world(new SNI_World(NULL)); // Only create a world so that errors are not fatal.
-		SNI_World::PushContextWorld(world);
+		SNI_Thread::GetThread()->PushContextWorld(world);
 		SN::SN_Expression result = m_Function->PartialCall(l_ParameterList, p_MetaLevel);
-		SNI_World::PopContextWorld();
+		SNI_Thread::GetThread()->PopContextWorld();
 		if (result.IsNull())
 		{
 			return this;

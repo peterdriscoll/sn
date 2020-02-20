@@ -24,6 +24,8 @@ namespace SNI
 		virtual string DisplayCpp() const;
 		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual long GetPriority() const;
+
+		virtual bool IsString() const;
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 
 		virtual size_t Hash() const;

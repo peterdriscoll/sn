@@ -237,6 +237,16 @@ namespace SN
 		return dynamic_cast<SNI::SNI_ValueSet *>(m_Expression);
 	}
 
+	SNI::SNI_String * SN_Expression::GetSNI_String() const
+	{
+		return dynamic_cast<SNI::SNI_String *>(m_Expression);
+	}
+
+	SNI::SNI_Bool * SN_Expression::GetSNI_Bool() const
+	{
+		return dynamic_cast<SNI::SNI_Bool *>(m_Expression);
+	}
+
 	SNI::SNI_Lambda * SN_Expression::GetSNI_Lambda() const
 	{
 		return dynamic_cast<SNI::SNI_Lambda *>(m_Expression);
@@ -276,16 +286,6 @@ namespace SN
 		return GetSNI_Expression()->CartProd(p_Index, p_FunctionDef);
 	}
 
-	bool SN_Expression::IsReferableValue() const
-	{
-		return m_Expression && m_Expression->IsReferableValue();
-	}
-
-	bool SN_Expression::IsError() const
-	{
-		return m_Expression && m_Expression->IsError();
-	}
-
 	SN_ValueSet SN_Expression::DoRemove(const SN_Value &p_Other) const
 	{
 		return m_Expression->DoRemove(p_Other);
@@ -294,11 +294,6 @@ namespace SN
 	bool SN_Expression::DoIsEmpty() const
 	{
 		return m_Expression->DoIsEmpty();
-	}
-
-	bool SN_Expression::IsStringValue() const
-	{
-		return m_Expression && m_Expression->IsStringValue();
 	}
 
 	//----------

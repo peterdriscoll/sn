@@ -289,6 +289,7 @@ namespace SNI
 
 	size_t SNI_Binary::CardinalityOfUnify(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const
 	{
+		ASSERTM(p_TotalCalc >= 0, "Negative number of pararmeters to calculate is impossible.");
 		if (p_TotalCalc == 0)
 		{
 			return MultiplyCardinality(p_ParamList[PU2_First].Cardinality(), MultiplyCardinality(p_ParamList[PU2_Second].Cardinality(), p_ParamList[PU2_Result].Cardinality()));
@@ -308,7 +309,7 @@ namespace SNI
 		else if (p_Depth == 3)
 		{  // This is for SNI_Add. Move. ????
 			SN::SN_Value result = p_ParamList[PU2_Result].GetVariableValue();
-			if (SN::Is<SNI_String *>(result) || SN::Is<SNI_StringRef *>(result))
+			if (result.IsStringValue())
 			{
 				if (result.IsReferableValue() && result.IsNull())
 				{   // A string ref can still be used in a split, even if it is null.
@@ -377,24 +378,30 @@ namespace SNI
 		case 3:
 		{
 			SN::SN_Value result = p_ParamList[PU2_Result].GetVariableValue();
-			if (SN::Is<SNI_String *>(result) || SN::Is<SNI_StringRef *>(result))
+			if (result.IsStringValue())
 			{
-				if (SN::Is<SNI_StringRef *>(result))
+				if (result.IsReferableValue())
 				{
-					if (SN::Is<SNI_String *>(p_ParamList[PU2_First]) || SN::Is<SNI_StringRef *>(p_ParamList[PU2_First]))
+					if (p_ParamList[PU2_First].IsStringValue())
 					{
 						return p_ParamList[PU2_Second].AddValue(LeftInverseFunctionValue(result, p_ParamList[PU2_First]), p_Depth, p_WorldList, worldSet);
 					}
-					else if (SN::Is<SNI_String *>(p_ParamList[PU2_Second]) || SN::Is<SNI_StringRef *>(p_ParamList[PU2_Second]))
+					else if (p_ParamList[PU2_Second].IsStringValue())
 					{
 						return p_ParamList[PU2_First].AddValue(RightInverseFunctionValue(result, p_ParamList[PU2_Second]), p_Depth, p_WorldList, worldSet);
 					}
 				}
 				SNI_Frame *topFrame = SNI_Frame::Top();
-				SN::SN_Variable splitPoint = topFrame->CreateTemporary();
+				SN::SN_Variable splitPoint = topFrame->CreateSplitVariable();
 				SN::SN_String s_result = result;
-				p_ParamList[PU2_First].AddValue(SN::SN_StringRef(result, s_result.GetSNI_String()->GetStart(), splitPoint), p_Depth, p_WorldList, worldSet);
-				p_ParamList[PU2_Second].AddValue(SN::SN_StringRef(result, splitPoint, s_result.GetSNI_String()->GetEnd()), p_Depth, p_WorldList, worldSet);
+				result.ForEach(
+						[&splitPoint, &p_ParamList, p_Depth, p_WorldList, worldSet](const SN::SN_Expression &p_Param, SNI::SNI_World *p_World) -> SN::SN_Error
+				{
+					p_ParamList[PU2_First].AddValue(SN::SN_StringRef(p_Param, p_Param.GetSNI_String()->GetStart(), splitPoint), p_Depth, p_WorldList, worldSet);
+					p_ParamList[PU2_Second].AddValue(SN::SN_StringRef(p_Param, splitPoint, p_Param.GetSNI_String()->GetEnd()), p_Depth, p_WorldList, worldSet);
+					return true;
+				}
+				);
 				return true;
 			}
 		}

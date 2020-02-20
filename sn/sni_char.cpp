@@ -82,6 +82,11 @@ namespace SNI
 		return 100;
 	}
 
+	bool SNI_Char::IsString() const
+	{
+		return true;
+	}
+
 	bool SNI_Char::Equivalent(SNI_Object * p_Other) const
 	{
 		if (dynamic_cast<SNI_Char *>(p_Other))

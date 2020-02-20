@@ -41,6 +41,7 @@ namespace SNI
 	class SNI_Splitter;
 	class SNI_Frame;
 	class SNI_Class;
+	class SNI_DelayedCall;
 
 	class SNI_Replacement;
 	typedef vector<SNI_Replacement> SNI_ReplacementList;
@@ -112,7 +113,7 @@ namespace SNI
 		virtual void Simplify();
 		virtual void Validate();
 		virtual SN::SN_Expression SimplifyValue();
-		virtual bool IsStringValue() const;
+		virtual void AttachDelayedCall(SNI_DelayedCall * p_Call);
 		virtual bool IsRequested() const;
 		virtual void Request();
 		virtual SNI_WorldSet *GetWorldSet();
@@ -126,6 +127,8 @@ namespace SNI
 		virtual bool IsComplete() const;
 		virtual void Complete();
 		virtual bool IsVariable() const;
+		virtual bool IsString() const;
+		virtual bool IsStringValue() const;
 		virtual bool IsNullValue() const;
 		virtual bool IsReferableValue() const;
 		virtual SN::SN_Expression GetVariableValue(bool p_IfComplete);

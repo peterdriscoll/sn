@@ -22,7 +22,8 @@ namespace SNI
 		IncompatibleValue,
 		EmptyChild,
 		MissingInResult,
-		NegatedInAllValues
+		NegatedInAllValues,
+		FailedInCollapse
 	};
 
 	class SNI_WorldSet;
@@ -38,10 +39,6 @@ namespace SNI
 	private:
 		PGC_CLASS(SNI_World);
 	public:
-		static SNI_World *ContextWorld();
-		static SNI_WorldList & ContextWorldList();
-		static void PushContextWorld(SNI_World *p_Context);
-		static void PopContextWorld();
 		static string ReasonString(enum FailReason p_Reason);
 
 		SNI_World(SNI_WorldSet * p_WorldSet, SNI_World *p_CloneParent = NULL);
@@ -94,6 +91,7 @@ namespace SNI
 		bool IsProperSubWorld(SNI_World * p_World) const;
 		bool IsSubWorld(SNI_World * p_World) const;
 		void Negate(SNI_World * p_World);
+		bool IsNegated(SNI_World * p_World);
 		bool FailNoRemove();
 		bool FailNoRemoveInContext(SNI_World *p_ContextWorld);
 		void MarkEmpty(enum FailReason p_Reason);

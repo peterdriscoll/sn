@@ -127,7 +127,7 @@ namespace SNI
 
 	void SNI_Log::WriteContext(SN::LoggingLevel p_DebugLevel, const string & p_Text)
 	{
-		SNI_World *world = SNI_World::ContextWorld();
+		SNI_World *world = SNI_Thread::GetThread()->ContextWorld();
 		if (world)
 		{
 			SNI_DisplayOptions displayOptions(doTextOnly);
