@@ -495,15 +495,15 @@ namespace SNI
 				if (loopValue.GetSNI_Expression()->MarkComplete())
 				{
 					SNI_World *loopWorld = m_ValueList[j].GetWorld();
-					SNI_ValueSet *vs = SN::Is<SNI_ValueSet *>(loopValue.GetVariableValue());
+					SNI_ValueSet *vs = SN::Is<SNI_ValueSet *>(loopValue.GetSafeValue());
 					if (vs)
 					{
 						m_ValueList[j].MarkForDeletion();
 						SNI_WorldSet *vsWorldSet = new SNI_WorldSet();
-						for (SNI_TaggedValueList::iterator itVS = vs->m_ValueList.begin(); itVS != vs->m_ValueList.end(); itVS++)
+						for (SNI_TaggedValue &tvLoop : vs->m_ValueList)
 						{
-							SN::SN_Expression vsValue = itVS->GetValue();
-							SNI_World *vsWorld = itVS->GetWorld();
+							SN::SN_Expression vsValue = tvLoop.GetValue();
+							SNI_World *vsWorld = tvLoop.GetWorld();
 							bool exists = false;
 							SNI_World *splitWorld = vsWorldSet->JoinWorldsArgs(AutoAddWorld, CreateIfActiveParents, exists, loopWorld, vsWorld);
 							if (exists)

@@ -1098,13 +1098,7 @@ namespace test_sn
 			{
 				Manager manager("Test String Ref Definition", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false);
-				/*
-				SN_DECLARE(x);
-				SN_DECLARE(y);
-				(String("dogcat") == x + y).Assert().Do();
-				(x == "dog").Assert().Do();
-				y.DoEvaluate().Equivalent(String("cat")));
-				*/
+
 				SN_DECLARE(a);
 				SN_DECLARE(b);
 				SN_DECLARE(c);

@@ -393,13 +393,16 @@ namespace SNI
 		long index = 0;
 		for (const SNI_Variable *v : m_VariableList)
 		{
-			SN::SN_Expression var(v);
-			SN::SN_Expression val = v->GetSafeValue();
-			p_DisplayOptions.SetVarName(v->FrameName());
-			p_Stream << delimeter << "\t\t\t{\n";
-			WriteVariable(p_Stream, var, val, index++, "\t\t\t\t", p_DebugFieldWidth, p_DisplayOptions);
-			p_Stream << "\n\t\t\t}";
-			delimeter = ",\n";
+			if (v)
+			{
+				SN::SN_Expression var(v);
+				SN::SN_Expression val = v->GetSafeValue();
+				p_DisplayOptions.SetVarName(v->FrameName());
+				p_Stream << delimeter << "\t\t\t{\n";
+				WriteVariable(p_Stream, var, val, index++, "\t\t\t\t", p_DebugFieldWidth, p_DisplayOptions);
+				p_Stream << "\n\t\t\t}";
+				delimeter = ",\n";
+			}
 		}
 		p_Stream << "\n\t\t]\n";
 		p_Stream << "\t}";
@@ -552,33 +555,11 @@ namespace SNI
 		return result;
 	}
 
-	SNI_Variable * SNI_Frame::AttachParameter(size_t p_ParamNum, SN::SN_Expression p_Param)
+	void SNI_Frame::AttachParameter(SN::SN_Expression p_Param)
 	{
-		string paramName = "result";
-		if (p_ParamNum > 0)
-		{
-			paramName = "param" + to_string(p_ParamNum);
-		}
-		return AttachParameterByName(paramName, p_Param);
-	}
-
-	SNI_Variable * SNI_Frame::AttachParameterByName(const string & p_ParamName, SN::SN_Expression p_Param)
-	{
-		SNI_Variable * result;
-		if (p_Param.IsVariable())
-		{
-			result = p_Param.GetSNI_Variable();
-		}
-		else
-		{
-			result = new SNI_Variable();
-			result->SetName(p_ParamName + NameSuffix());
-			result->SetValue(p_Param);
-		}
 		SNI_Thread::GetThread()->Lock();
-		m_VariableList.push_back(result);
+		m_VariableList.push_back(p_Param.GetSNI_Variable());
 		SNI_Thread::GetThread()->Unlock();
-		return result;
 	}
 
 	void SNI_Frame::PromoteMembers()

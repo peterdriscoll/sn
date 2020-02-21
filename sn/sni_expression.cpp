@@ -788,6 +788,19 @@ namespace SNI
 		return SN::SN_Bool(Equivalent(dynamic_cast<SNI_Object *>(p_Other)));
 	}
 
+	SN::SN_Error SNI_Expression::DoAssertEqualsValue(SNI_Value *p_Other, SNI_Value *p_Result) const
+	{
+		if (SN::Is<SNI_StringRef *>(p_Other))
+		{
+			return p_Other->DoEquals(dynamic_cast<SNI_Value *>(const_cast<SNI_Expression *>(this)));
+		}
+		if (SN::Is<SNI_ValueSet *>(p_Other))
+		{
+			return p_Other->DoEquals(dynamic_cast<SNI_Value *>(const_cast<SNI_Expression *>(this)));
+		}
+		return p_Result->Equivalent(SN::SN_Bool(Equivalent(dynamic_cast<SNI_Object *>(p_Other))).GetSNI_Bool());
+	}
+
 	SN::SN_Value SNI_Expression::DoLessThan(SNI_Value * /*p_Other*/) const
 	{
 		return SN::SN_Error(GetTypeName() + " < operator not implemented.");

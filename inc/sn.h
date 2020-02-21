@@ -7,7 +7,7 @@
 
 #include <string>
 
-// #define STRICT_PARSING
+#define STRICT_PARSING
 
 #define INFERENCE_ON_EQUALITY
 

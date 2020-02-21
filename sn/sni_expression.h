@@ -207,6 +207,7 @@ namespace SNI
 
 		// Comparison
 		virtual SN::SN_Value DoEquals(SNI_Value *p_Other) const;
+		virtual SN::SN_Error DoAssertEqualsValue(SNI_Value * p_Other, SNI_Value * p_Result) const;
 		virtual SN::SN_Value DoLessThan(SNI_Value * p_Other) const;
 		virtual SN::SN_Value DoGreaterThan(SNI_Value * p_Other) const;
 		virtual SN::SN_Value DoLessEquals(SNI_Value * p_Other) const;

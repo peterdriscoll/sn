@@ -80,6 +80,8 @@ namespace SNI
 		virtual	SN::SN_Value DoFile() const;
 		virtual	SN::SN_Value DoEquals(SNI_Value * p_Other) const;
 
+		virtual SN::SN_Error DoAssertEqualsValue(SNI_Value * p_Other, SNI_Value * p_Result) const;
+
 		void SetStart(SN::SN_Expression p_Expression);
 		void SetEnd(SN::SN_Expression p_Expression);
 

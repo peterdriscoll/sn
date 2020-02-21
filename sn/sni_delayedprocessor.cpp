@@ -70,7 +70,7 @@ namespace SNI
 			if (p_Call->IsCallRequested())
 			{
 				p_Call->MarkScheduled();
-				m_DelayedCallList.push_front(p_Call);
+				//m_DelayedCallList.push_front(p_Call);
 				Display();
 			}
 		}

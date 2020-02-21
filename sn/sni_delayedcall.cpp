@@ -162,14 +162,19 @@ namespace SNI
 
 	void SNI_DelayedCall::WriteJS(ostream &p_Stream, SNI::SNI_DisplayOptions &p_DisplayOptions)
 	{
-		p_Stream << "\t\t\"expression\" : \"" << EscapeStringToJSON(m_Function.GetSNI_FunctionDef()->DisplayCall(0, p_DisplayOptions, m_NumParams, m_ParamList + 1, m_Source)) << "\",\n";
-		p_Stream << "\t\t\"result\" : \"" << EscapeStringToJSON(m_ParamList[PU1_Result].DisplaySN(p_DisplayOptions)) << "\",\n";
-		size_t card = CallCardinality();
-		string card_string = "\"&infin;\"";
-		if (card < CARDINALITY_MAX)
+		if (!m_World || !m_World->IsEmpty())
 		{
-			card_string = to_string(card);
+			p_Stream << "\t\t\"expression\" : \"" << EscapeStringToJSON(m_Function.GetSNI_FunctionDef()->DisplayCall(0, p_DisplayOptions, m_NumParams, m_ParamList + 1, m_Source)) << "\",\n";
+			p_Stream << "\t\t\"result\" : \"" << EscapeStringToJSON(m_ParamList[PU1_Result].DisplaySN(p_DisplayOptions)) << "\",\n";
+			size_t card = CallCardinality();
+			string card_string = "\"&infin;\"";
+			if (card < CARDINALITY_MAX)
+			{
+				card_string = to_string(card);
+			}
+			p_Stream << "\t\t\"cardinality\" : " << card_string << ",\n";
+			SNI_DisplayOptions displayOptions(doTextOnly);
+			p_Stream << "\t\t\"world\" : \"" << (m_World?m_World->DisplaySN(displayOptions):"") << "\"\n";
 		}
-		p_Stream << "\t\t\"cardinality\" : " << card_string << "\n";
 	}
 }

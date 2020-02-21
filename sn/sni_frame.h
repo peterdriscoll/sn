@@ -59,10 +59,10 @@ namespace SNI
 
 		void RegisterCardinality(size_t p_Cardinality);
 		void PromoteExternals(PGC::PGC_Transaction * p_Transaction);
-	private:
-		SNI_Variable * AttachParameter(size_t p_ParamNum, SN::SN_Expression p_Param);
-		SNI_Variable *AttachParameterByName(const string &p_ParamName, SN::SN_Expression p_Param);
 
+		void AttachParameter(SN::SN_Expression p_Param);
+
+	private:
 		virtual void PromoteMembers();
 
 		SN::SN_Expression              m_Function;

@@ -79,6 +79,11 @@ namespace SNI
 	{
 		return p_Left.GetSNI_Value()->DoEquals(p_Right.GetSNI_Value());
 	}
+	
+	SN::SN_Error SNI_Equals::AssertValue(const SN::SN_Value &p_Left, const SN::SN_Value &p_Right, const SN::SN_Value &p_Result) const
+	{
+		return p_Left.GetSNI_Value()->DoAssertEqualsValue(p_Right.GetSNI_Value(), p_Result.GetSNI_Value());
+	}
 
 	SN::SN_Expression SNI_Equals::PrimaryFunctionExpression(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right) const
 	{
@@ -300,7 +305,7 @@ namespace SNI
 			}
 			else
 			{
-				return LOG_RETURN(context, PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()).Equivalent(p_ParamList[PU2_Result].GetVariableValue()));
+				return LOG_RETURN(context, AssertValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue(), p_ParamList[PU2_Result].GetVariableValue()));
 			}
 		}
 		break;
