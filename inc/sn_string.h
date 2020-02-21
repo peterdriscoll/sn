@@ -35,7 +35,14 @@ namespace SN
 		SN_String(const char p_Char);
 		virtual ~SN_String();
 
-		SN::SN_Expression operator ==(const SN::SN_Expression &p_Other) const;
+		// Comparison
+		SN_Expression operator ==(const SN_Expression &p_Other) const;
+		SN_Expression operator !=(const SN_Expression &p_Other) const;
+		SN_Expression operator <(const SN_Expression &p_Other) const;
+		SN_Expression operator >(const SN_Expression &p_Other) const;
+		SN_Expression operator <=(const SN_Expression &p_Other) const;
+		SN_Expression operator >=(const SN_Expression &p_Other) const;
+
 		SN::SN_Expression operator +(const SN::SN_Expression &p_Other) const;
 		SN::SN_Expression operator -(const SN::SN_Expression &p_Other) const;
 

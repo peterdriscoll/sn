@@ -148,10 +148,35 @@ namespace SN
 			return SN_Operators::operator /(*this, p_Other);
 		}
 
-		// Comparisons
+		// Comparison
 		SN_Expression operator ==(const SN_Expression &p_Other) const
 		{
 			return SN_Operators::operator ==(*this, p_Other);
+		}
+
+		SN_Expression operator !=(const SN_Expression &p_Other) const
+		{
+			return SN_Operators::operator !=(*this, p_Other);
+		}
+
+		SN_Expression operator <(const SN_Expression &p_Other) const
+		{
+			return SN_Operators::operator <(*this, p_Other);
+		}
+
+		SN_Expression operator >(const SN_Expression &p_Other) const
+		{
+			return SN_Operators::operator >(*this, p_Other);
+		}
+
+		SN_Expression operator <=(const SN_Expression &p_Other) const
+		{
+			return SN_Operators::operator <=(*this, p_Other);
+		}
+
+		SN_Expression operator >=(const SN_Expression &p_Other) const
+		{
+			return SN_Operators::operator >=(*this, p_Other);
 		}
 
 		// Math

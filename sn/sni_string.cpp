@@ -82,6 +82,127 @@ namespace SNI
 		return true;
 	}
 
+	// Comparisons
+	SN::SN_Value SNI_String::DoEquals(SNI_Value *p_Other) const
+	{
+		if (dynamic_cast<SNI_String *>(p_Other))
+		{
+			SNI_String * l_string = dynamic_cast<SNI_String *>(p_Other);
+			return SN::SN_Bool(m_String == l_string->m_String);
+		}
+		if (dynamic_cast<SNI_StringRef *>(p_Other))
+		{
+			SNI_StringRef * l_string = dynamic_cast<SNI_StringRef *>(p_Other);
+			return SN::SN_Bool(m_String == l_string->GetString());
+		}
+		if (dynamic_cast<SNI_Char *>(p_Other))
+		{
+			SNI_Char * l_char = dynamic_cast<SNI_Char *>(p_Other);
+			return SN::SN_Bool(m_String == l_char->GetString());
+		}
+		return SN::SN_Error(GetTypeName() + " Equals not implemented.");
+	}
+
+	SN::SN_Value SNI_String::DoNotEquals(SNI_Value *p_Other) const
+	{
+		if (dynamic_cast<SNI_String *>(p_Other))
+		{
+			SNI_String * l_string = dynamic_cast<SNI_String *>(p_Other);
+			return SN::SN_Bool(m_String != l_string->m_String);
+		}
+		if (dynamic_cast<SNI_StringRef *>(p_Other))
+		{
+			SNI_StringRef * l_string = dynamic_cast<SNI_StringRef *>(p_Other);
+			return SN::SN_Bool(m_String != l_string->GetString());
+		}
+		if (dynamic_cast<SNI_Char *>(p_Other))
+		{
+			SNI_Char * l_char = dynamic_cast<SNI_Char *>(p_Other);
+			return SN::SN_Bool(m_String != l_char->GetString());
+		}
+		return SN::SN_Error(GetTypeName() + " Equals not implemented.");
+	}
+
+	SN::SN_Value SNI_String::DoLessThan(SNI_Value * p_Other) const
+	{
+		if (dynamic_cast<SNI_String *>(p_Other))
+		{
+			SNI_String * l_string = dynamic_cast<SNI_String *>(p_Other);
+			return SN::SN_Bool(m_String < l_string->m_String);
+		}
+		if (dynamic_cast<SNI_StringRef *>(p_Other))
+		{
+			SNI_StringRef * l_string = dynamic_cast<SNI_StringRef *>(p_Other);
+			return SN::SN_Bool(m_String < l_string->GetString());
+		}
+		if (dynamic_cast<SNI_Char *>(p_Other))
+		{
+			SNI_Char * l_char = dynamic_cast<SNI_Char *>(p_Other);
+			return SN::SN_Bool(m_String < l_char->GetString());
+		}
+		return SN::SN_Error(GetTypeName() + " Equals not implemented.");
+	}
+
+	SN::SN_Value SNI_String::DoGreaterThan(SNI_Value * p_Other) const
+	{
+		if (dynamic_cast<SNI_String *>(p_Other))
+		{
+			SNI_String * l_string = dynamic_cast<SNI_String *>(p_Other);
+			return SN::SN_Bool(m_String > l_string->m_String);
+		}
+		if (dynamic_cast<SNI_StringRef *>(p_Other))
+		{
+			SNI_StringRef * l_string = dynamic_cast<SNI_StringRef *>(p_Other);
+			return SN::SN_Bool(m_String > l_string->GetString());
+		}
+		if (dynamic_cast<SNI_Char *>(p_Other))
+		{
+			SNI_Char * l_char = dynamic_cast<SNI_Char *>(p_Other);
+			return SN::SN_Bool(m_String > l_char->GetString());
+		}
+		return SN::SN_Error(GetTypeName() + " Greater than not implemented.");
+	}
+
+	SN::SN_Value SNI_String::DoLessEquals(SNI_Value * p_Other) const
+	{
+		if (dynamic_cast<SNI_String *>(p_Other))
+		{
+			SNI_String * l_string = dynamic_cast<SNI_String *>(p_Other);
+			return SN::SN_Bool(m_String <= l_string->m_String);
+		}
+		if (dynamic_cast<SNI_StringRef *>(p_Other))
+		{
+			SNI_StringRef * l_string = dynamic_cast<SNI_StringRef *>(p_Other);
+			return SN::SN_Bool(m_String <= l_string->GetString());
+		}
+		if (dynamic_cast<SNI_Char *>(p_Other))
+		{
+			SNI_Char * l_char = dynamic_cast<SNI_Char *>(p_Other);
+			return SN::SN_Bool(m_String <= l_char->GetString());
+		}
+		return SN::SN_Error(GetTypeName() + " Less than or equal not implemented.");
+	}
+
+	SN::SN_Value SNI_String::DoGreaterEquals(SNI_Value * p_Other) const
+	{
+		if (dynamic_cast<SNI_String *>(p_Other))
+		{
+			SNI_String * l_string = dynamic_cast<SNI_String *>(p_Other);
+			return SN::SN_Bool(m_String >= l_string->m_String);
+		}
+		if (dynamic_cast<SNI_StringRef *>(p_Other))
+		{
+			SNI_StringRef * l_string = dynamic_cast<SNI_StringRef *>(p_Other);
+			return SN::SN_Bool(m_String >= l_string->GetString());
+		}
+		if (dynamic_cast<SNI_Char *>(p_Other))
+		{
+			SNI_Char * l_char = dynamic_cast<SNI_Char *>(p_Other);
+			return SN::SN_Bool(m_String >= l_char->GetString());
+		}
+		return SN::SN_Error(GetTypeName() + " Greater than or equal not implemented.");
+	}
+
 	//-----------------------------------------------------------------------
 	// Members
 	//-----------------------------------------------------------------------

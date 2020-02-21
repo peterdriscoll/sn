@@ -34,6 +34,7 @@ namespace SN
 
 		// Comparison
 		SN_EXPORT SN::SN_Expression operator ==(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right);
+		SN_EXPORT SN::SN_Expression operator !=(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right);
 		SN_EXPORT SN::SN_Expression operator <(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right);
 		SN_EXPORT SN::SN_Expression operator >(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right);
 		SN_EXPORT SN::SN_Expression operator >=(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right);

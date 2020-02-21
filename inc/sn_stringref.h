@@ -36,7 +36,15 @@ namespace SN
 		virtual ~SN_StringRef();
 
 		// Construction
+
+		// Comparison
 		SN_Expression operator ==(const SN_Expression &p_Other) const;
+		SN_Expression operator !=(const SN_Expression &p_Other) const;
+		SN_Expression operator <(const SN_Expression &p_Other) const;
+		SN_Expression operator >(const SN_Expression &p_Other) const;
+		SN_Expression operator <=(const SN_Expression &p_Other) const;
+		SN_Expression operator >=(const SN_Expression &p_Other) const;
+
 		SN_Expression operator +(const SN_Expression &p_Other) const;
 		SN_Expression operator -(const SN_Expression &p_Other) const;
 

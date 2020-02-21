@@ -51,7 +51,13 @@ namespace SN
 
 		virtual ~SN_Number();
 
-		SN_Expression operator ==(const SN_Expression &p_Other) const;
+		SN_Expression operator ==(const SN_Expression & p_Other) const;
+		SN_Expression operator !=(const SN_Expression & p_Other) const;
+		SN_Expression operator <(const SN_Expression & p_Other) const;
+		SN_Expression operator >(const SN_Expression & p_Other) const;
+		SN_Expression operator <=(const SN_Expression & p_Other) const;
+		SN_Expression operator >=(const SN_Expression & p_Other) const;
+
 		SN_Expression operator +(const SN_Expression &p_Other) const;
 		SN_Expression operator&&(const SN_Expression &right) const;
 		SN_Expression operator||(const SN_Expression &right) const;

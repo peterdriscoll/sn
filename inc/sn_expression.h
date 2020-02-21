@@ -164,9 +164,9 @@ namespace SN
 		SN_Expression IsA(const SN_Expression &p_Parent) const;
 		SN_Expression HasA(const SN_Expression &p_Component, const SN_Expression &p_Name) const;
 
-
 		// Comparison
 		SN_Expression operator ==(const SN_Expression &p_Other) const;
+		SN_Expression operator !=(const SN_Expression &p_Other) const;
 		SN_Expression operator <(const SN_Expression &p_Other) const;
 		SN_Expression operator >(const SN_Expression &p_Other) const;
 		SN_Expression operator <=(const SN_Expression &p_Other) const;

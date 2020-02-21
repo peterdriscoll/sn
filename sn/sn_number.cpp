@@ -92,6 +92,31 @@ namespace SN
 		return SN_Operators::operator ==(*this, p_Other);
 	}
 
+	SN_Expression SN_Number::operator !=(const SN_Expression &p_Other) const
+	{
+		return SN_Operators::operator !=(*this, p_Other);
+	}
+
+	SN_Expression SN_Number::operator <(const SN_Expression &p_Other) const
+	{
+		return SN_Operators::operator <(*this, p_Other);
+	}
+
+	SN_Expression SN_Number::operator >(const SN_Expression &p_Other) const
+	{
+		return SN_Operators::operator >(*this, p_Other);
+	}
+
+	SN_Expression SN_Number::operator <=(const SN_Expression &p_Other) const
+	{
+		return SN_Operators::operator <=(*this, p_Other);
+	}
+
+	SN_Expression SN_Number::operator >=(const SN_Expression &p_Other) const
+	{
+		return SN_Operators::operator >=(*this, p_Other);
+	}
+
 	SN_Expression SN_Number::operator +(const SN_Expression &p_Other) const
 	{
 		return SN_Operators::operator +(*this, p_Other);

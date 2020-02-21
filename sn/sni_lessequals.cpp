@@ -41,7 +41,7 @@ namespace SNI
 
 	SN::SN_Value SNI_LessEquals::PrimaryFunctionValue(const SN::SN_Value &p_Left, const SN::SN_Value &p_Right) const
 	{
-		return p_Left.GetSNI_Value()->DoLessThan(p_Right.GetSNI_Value());
+		return p_Left.GetSNI_Value()->DoLessEquals(p_Right.GetSNI_Value());
 	}
 
 

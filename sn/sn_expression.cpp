@@ -487,6 +487,11 @@ namespace SN
 		return SN_Operators::operator==(*this, p_Other);
 	}
 
+	SN_Expression SN_Expression::operator!=(const SN_Expression &p_Other) const
+	{
+		return SN_Operators::operator!=(*this, p_Other);
+	}
+
 	SN_Expression SN_Expression::operator <(const SN_Expression &p_Other) const
 	{
 		return SN_Operators::operator <(*this, p_Other);
@@ -506,7 +511,6 @@ namespace SN
 	{
 		return SN_Operators::operator >=(*this, p_Other);
 	}
-
 
 	// Functions
 	SN_Expression SN_Expression::operator()(const SN_Expression &p_Parameter) const

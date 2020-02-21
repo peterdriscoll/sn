@@ -28,9 +28,15 @@ namespace SN
 	{
 	}
 
+	// Comparison
 	SN_Expression SN_FunctionDef::operator==(const SN_Expression &p_Other) const
 	{
 		return SN_Operators::operator==(*this, p_Other);
+	}
+
+	SN_Expression SN_FunctionDef::operator!=(const SN_Expression &p_Other) const
+	{
+		return SN_Operators::operator!=(*this, p_Other);
 	}
 
 	SN_Expression SN_FunctionDef::operator()(const SN_Expression &p_Parameter) const

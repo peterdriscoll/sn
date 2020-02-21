@@ -38,6 +38,7 @@
 
 // Comparisons
 #include "sni_equals.h"
+#include "sni_notequals.h"
 #include "sni_lessthan.h"
 #include "sni_greaterthan.h"
 #include "sni_lessequals.h"
@@ -113,6 +114,7 @@ namespace skynet
 
 	// Comparison
 	SN::SN_FunctionDef Equals(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Equals()));
+	SN::SN_FunctionDef NotEquals(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_NotEquals()));
 	SN::SN_FunctionDef LessThan(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_LessThan()));
 	SN::SN_FunctionDef GreaterThan(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_GreaterThan()));
 	SN::SN_FunctionDef LessEqual(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_LessEquals()));

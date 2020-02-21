@@ -185,6 +185,7 @@ namespace skynet
 
 	// * Comparisons
 	extern SN_EXPORT SN::SN_FunctionDef Equals;
+	extern SN_EXPORT SN::SN_FunctionDef NotEquals;
 	extern SN_EXPORT SN::SN_FunctionDef LessThan;
 	extern SN_EXPORT SN::SN_FunctionDef GreaterThan;
 	extern SN_EXPORT SN::SN_FunctionDef LessEqual;

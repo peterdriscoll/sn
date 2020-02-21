@@ -38,6 +38,15 @@ namespace SNI
 		// Status
 		virtual bool IsString() const;
 
+
+		// Comparisons
+		SN::SN_Value DoEquals(SNI_Value * p_Other) const;
+		SN::SN_Value DoNotEquals(SNI_Value * p_Other) const;
+		SN::SN_Value DoLessThan(SNI_Value * p_Other) const;
+		SN::SN_Value DoGreaterThan(SNI_Value * p_Other) const;
+		SN::SN_Value DoLessEquals(SNI_Value * p_Other) const;
+		SN::SN_Value DoGreaterEquals(SNI_Value * p_Other) const;
+
 		// Members
 		virtual string GetString() const;
 		virtual size_t Length() const;

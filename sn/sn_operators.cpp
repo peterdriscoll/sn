@@ -98,6 +98,11 @@ namespace SN
 			return SN::SN_Function(SN::SN_Function(skynet::Equals, p_Left), p_Right);
 		}
 
+		SN::SN_Expression operator !=(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right)
+		{
+			return SN::SN_Function(SN::SN_Function(skynet::NotEquals, p_Left), p_Right);
+		}
+
 		SN::SN_Expression operator <(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right)
 		{
 			return SN::SN_Function(SN::SN_Function(skynet::LessThan, p_Left), p_Right);

@@ -37,9 +37,14 @@ namespace SN
 	{
 	}
 
-	SN_Expression SN_Set::operator==(const SN_Expression &p_Other) const
+	SN_Expression SN_Set::operator ==(const SN_Expression &p_Other) const
 	{
-		return SN_Operators::operator==(*this, p_Other);
+		return SN_Operators::operator ==(*this, p_Other);
+	}
+
+	SN_Expression SN_Set::operator !=(const SN_Expression &p_Other) const
+	{
+		return SN_Operators::operator !=(*this, p_Other);
 	}
 
 	SN_Expression SN_Set::operator +(const SN_Expression &p_Other) const

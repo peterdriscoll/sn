@@ -546,6 +546,9 @@
     <ClInclude Include="sni_escape.h">
       <Filter>Function Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sni_notequals.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -1008,6 +1011,9 @@
       <Filter>Function Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sni_escape.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_notequals.cpp">
       <Filter>Function Source Files</Filter>
     </ClCompile>
   </ItemGroup>

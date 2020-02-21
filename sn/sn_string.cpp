@@ -91,6 +91,31 @@ namespace SN
 		return SN_Operators::operator ==(*this, p_Other);
 	}
 
+	SN_Expression SN_String::operator !=(const SN_Expression &p_Other) const
+	{
+		return SN_Operators::operator !=(*this, p_Other);
+	}
+
+	SN_Expression SN_String::operator <(const SN_Expression &p_Other) const
+	{
+		return SN_Operators::operator <(*this, p_Other);
+	}
+
+	SN_Expression SN_String::operator >(const SN_Expression &p_Other) const
+	{
+		return SN_Operators::operator >(*this, p_Other);
+	}
+
+	SN_Expression SN_String::operator <=(const SN_Expression &p_Other) const
+	{
+		return SN_Operators::operator <=(*this, p_Other);
+	}
+
+	SN_Expression SN_String::operator >=(const SN_Expression &p_Other) const
+	{
+		return SN_Operators::operator >=(*this, p_Other);
+	}
+
 	SN_Expression SN_String::operator +(const SN_Expression  &p_Other) const
 	{
 		return SN_Function(SN_Function(skynet::Add, *this), p_Other);

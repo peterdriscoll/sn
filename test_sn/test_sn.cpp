@@ -3280,5 +3280,30 @@ namespace test_sn
 			}
 			Cleanup();
 		}
+		TEST_METHOD(TestComparisons)
+		{
+			Initialize();
+			{
+				Manager manager("Test Virtual Polymorphic Reverse3", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				(Long(5) != Long(6)).Assert().Do();
+				(Long(5) == Long(5)).Assert().Do();
+				(Long(5) < Long(6)).Assert().Do();
+				(Long(6) > Long(5)).Assert().Do();
+				(Long(5) <= Long(5)).Assert().Do();
+				(Long(6) >= Long(6)).Assert().Do();
+				(Long(7) >= Long(6)).Assert().Do();
+
+				(String("555") != String("666")).Assert().Do();
+				(String("555") == String("555")).Assert().Do();
+				(String("555") < String("666")).Assert().Do();
+				(String("666") > String("555")).Assert().Do();
+				(String("555") <= String("555")).Assert().Do();
+				(String("666") >= String("666")).Assert().Do();
+				(String("777") >= String("666")).Assert().Do();
+			}
+			Cleanup();
+		}
 	};
 }

@@ -91,6 +91,7 @@
 
 // Comparisons
 #include "sni_equals.h"
+#include "sni_notequals.h"
 #include "sni_lessthan.h"
 #include "sni_greaterthan.h"
 #include "sni_lessequals.h"

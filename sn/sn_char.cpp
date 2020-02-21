@@ -43,9 +43,15 @@ namespace SN
 		return m_Char;
 	}
 
-	SN_Expression SN_Char::operator ==(const SN_Expression &p_Other) const
+	// Comparison
+	SN_Expression SN_Char::operator==(const SN_Expression &p_Other) const
 	{
-		return SN_Operators::operator ==(*this, p_Other);
+		return SN_Operators::operator==(*this, p_Other);
+	}
+
+	SN_Expression SN_Char::operator!=(const SN_Expression &p_Other) const
+	{
+		return SN_Operators::operator!=(*this, p_Other);
 	}
 
 	SN_Expression SN_Char::operator <(const SN_Expression &p_Other) const
