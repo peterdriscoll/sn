@@ -45,8 +45,12 @@ namespace SNL
 			SN_LOCAL(IsNameContinuation);
 			SN_LOCAL(i);
 
-			(Define(IsName)(i) == (m_CharacterSet.AlphaUnder(i.SelectLeftChar()) && (!m_CharacterSet.AlphaUnderNumeric(i.SubtractLeftChar().LookaheadLeft())).If(i == i.SelectLeftChar(), m_CharacterSet.AlphaUnder(i.SelectLeftChar()) && IsNameContinuation(i.SubtractLeftChar())))).PartialAssert().Do();
-			(Define(IsNameContinuation)(i) == (m_CharacterSet.AlphaUnderNumeric(i.SelectLeftChar()) && (!m_CharacterSet.AlphaUnderNumeric(i.SubtractLeftChar().LookaheadLeft())).If(i == i.SelectLeftChar(), m_CharacterSet.AlphaUnderNumeric(i.SelectLeftChar()) && IsNameContinuation(i.SubtractLeftChar())))).PartialAssert().Do();
+			(Define(IsName)(i) == (i.LookaheadLeft() != "" && m_CharacterSet.AlphaUnder(i.SelectLeftChar()) && IsNameContinuation(i.SubtractLeftChar()))).PartialAssert().Do();
+			(Define(IsNameContinuation)(i) == (
+				(i.LookaheadLeft() != "" && m_CharacterSet.AlphaUnderNumeric(i.LookaheadLeft()))
+				.If(IsNameContinuation(i.SubtractLeftChar()), i == "")
+			)).PartialAssert().Do();
+
 		}
 
 		{

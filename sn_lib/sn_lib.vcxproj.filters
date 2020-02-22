@@ -4,9 +4,6 @@
     <ClCompile Include="snl_pch.cpp">
       <Filter>Interface Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="snl_parser.cpp">
-      <Filter>Interface Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="snl.cpp">
       <Filter>Interface Source Files</Filter>
     </ClCompile>
@@ -14,6 +11,9 @@
       <Filter>Interface Source Files</Filter>
     </ClCompile>
     <ClCompile Include="snl_validate.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="snl_parse.cpp">
       <Filter>Interface Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -45,9 +45,6 @@
     <ClInclude Include="snl_pch.h">
       <Filter>Interface Include Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\inc\snl_parser.h">
-      <Filter>Interface Include Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\inc\snl.h">
       <Filter>Interface Include Files</Filter>
     </ClInclude>
@@ -55,6 +52,9 @@
       <Filter>Interface Include Files</Filter>
     </ClInclude>
     <ClInclude Include="..\inc\snl_validate.h">
+      <Filter>Interface Include Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\snl_parse.h">
       <Filter>Interface Include Files</Filter>
     </ClInclude>
   </ItemGroup>

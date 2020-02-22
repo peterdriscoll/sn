@@ -164,14 +164,14 @@
   <ItemGroup>
     <ClInclude Include="..\inc\snl.h" />
     <ClInclude Include="..\inc\snl_characterset.h" />
-    <ClInclude Include="..\inc\snl_parser.h" />
+    <ClInclude Include="..\inc\snl_parse.h" />
     <ClInclude Include="..\inc\snl_validate.h" />
     <ClInclude Include="snl_pch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="snl.cpp" />
     <ClCompile Include="snl_characterset.cpp" />
-    <ClCompile Include="snl_parser.cpp" />
+    <ClCompile Include="snl_parse.cpp" />
     <ClCompile Include="snl_pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

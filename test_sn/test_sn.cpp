@@ -3461,5 +3461,23 @@ namespace test_sn
 			}
 			Cleanup();
 		}
+
+		TEST_METHOD(TestValidate_IsName)
+		{
+			Initialize();
+			{
+				Manager manager("Test Validate IsInteger", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false);
+
+				CharacterSet characterSet;
+				Validate validate(characterSet);
+
+				(!validate.IsName(String(""))).Assert().Do();
+				validate.IsName(String("_MyVariable65")).Assert().Do();
+				validate.IsName(String("My_Variable_65")).Assert().Do();
+				(!validate.IsName(String("677_M"))).Assert().Do();
+			}
+			Cleanup();
+		}
 	};
 }
