@@ -52,7 +52,7 @@ namespace SNI
 
 	string SNI_NotEquals::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
-		return "=";
+		return "!=";
 	}
 
 	long SNI_NotEquals::GetPriority() const

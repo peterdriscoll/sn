@@ -257,8 +257,6 @@ namespace SNI
 		SNI_Frame::Push(this, NULL);
 		SNI_Frame *topFrame = SNI_Frame::Top();
 
-		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before cardinality check", SN::LeftId);
-
 		for (long j = 0; j < depth; j++)
 		{
 			topFrame->CreateParameter(j, p_ParamList[j]);
@@ -284,6 +282,8 @@ namespace SNI
 		size_t card = CardinalityOfUnify(depth-1, inputList, calcPos, totalCalc);
 		topFrame->RegisterCardinality(card);
 		size_t maxCard = SNI_Thread::TopManager()->MaxCardinalityCall();
+
+		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before cardinality check", SN::LeftId);
 
 		for (long j = 0; j < depth; j++)
 		{

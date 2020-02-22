@@ -88,6 +88,16 @@ namespace SN
 		GetSNI_Variable()->SetName(p_Name);
 	}
 
+	string SN_Variable::GetDomainName()
+	{
+		return GetSNI_Variable()->GetDomainName();
+	}
+
+	void SN_Variable::SetDomainName(const string & p_Name)
+	{
+		GetSNI_Variable()->SetDomainName(p_Name);
+	}
+
 	string SN_Variable::FrameName()
 	{
 		return GetSNI_Variable()->FrameName();

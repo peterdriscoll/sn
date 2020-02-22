@@ -7,7 +7,7 @@
 
 #include <string>
 
-#define STRICT_PARSING
+// #define STRICT_PARSING
 
 #define INFERENCE_ON_EQUALITY
 
@@ -100,6 +100,14 @@ namespace skynet
 //   SNI_Function
 #define SN_DECLARE(n) \
     SN::SN_Variable n(string(#n))
+
+#define SN_LOCAL(n) \
+    SN::SN_Variable n; \
+	n.SetName(#n);
+
+#define SN_LINK(n) \
+	(*this)[#n] = n; \
+	n.SetName(#n);
 
 #define SN_DECLARE_VALUE(n, r) \
     SN::SN_Variable n(string(#n), r)

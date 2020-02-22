@@ -43,8 +43,9 @@ namespace SN
 
 		string GetName();
 		void SetName(const string &p_Name);
+		string GetDomainName();
+		void SetDomainName(const string &p_Name);
 		string FrameName();
-		void AddToFrame();
 
 		SN_Expression GetValue() const;
 

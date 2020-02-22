@@ -905,14 +905,14 @@ namespace SNI
 		SN::SN_Expression start = m_Start.DoPartialEvaluate();
 		if (!SN::Is<SNI_Long *>(start))
 		{
-			return SN::SN_Char(0);
+			return SN::SN_String("");
 		}
 		size_t start_pos = SN::SN_Long(start).GetNumber();
 		if (start_pos < GetSourceString().length())
 		{
 			return SN::SN_Char(GetSourceString()[start_pos]);
 		}
-		return SN::SN_Char(0);
+		return SN::SN_String("");
 	}
 
 	SN::SN_Value SNI_StringRef::DoLookaheadRight() const
@@ -920,14 +920,14 @@ namespace SNI
 		SN::SN_Expression end = m_End.DoPartialEvaluate();
 		if (!SN::Is<SNI_Long *>(end))
 		{
-			return SN::SN_Char(0);
+			return SN::SN_String("");
 		}
 		size_t end_pos = SN::SN_Long(end).GetNumber();
 		if (end_pos < GetSourceString().length())
 		{
 			return SN::SN_Char(GetSourceString()[end_pos]);
 		}
-		return SN::SN_Char(0);
+		return SN::SN_String("");
 	}
 
 	SN::SN_Value SNI_StringRef::DoFile() const

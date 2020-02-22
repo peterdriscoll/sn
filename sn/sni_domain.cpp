@@ -91,7 +91,9 @@ namespace SNI
 		auto it = m_Map.find(p_Index);
 		if (it == m_Map.end())
 		{
-			SN::SN_Variable v(p_Index, m_Name);
+			SN::SN_Variable v;
+			v.SetName(p_Index);
+			v.SetDomainName(m_Name);
 			const_cast<SNI_Domain *>(this)->m_Map.emplace(p_Index, v);
 			return v;
 		}

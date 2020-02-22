@@ -413,7 +413,7 @@ namespace SNI
 		{
 			return SN::SN_Char(m_String[0]);
 		}
-		return SN::SN_Char(0);
+		return SN::SN_String("");
 	}
 
 	SN::SN_Value SNI_String::DoLookaheadRight() const
@@ -423,7 +423,7 @@ namespace SNI
 		{
 			return SN::SN_Char(m_String[length-1]);
 		}
-		return SN::SN_Char(0);
+		return SN::SN_String("");
 	}
 
 	SN::SN_Value SNI_String::DoFile() const

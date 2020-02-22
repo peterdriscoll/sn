@@ -1,4 +1,4 @@
-#include "sn.h"
+#include "snl.h"
 
 #include <cstdio>
 #include <fstream>
@@ -1593,7 +1593,7 @@ namespace test_sn
 				//	otherwise.
 
 				(Define(IsString)(s) == (((s.SelectLeftChar() == String("\"")) && Local(t, Local(u, Let(s.SubtractLeftChar() == t + u, IsStringContent(t) && (u == String("\""))))))).Collapse()).PartialAssert().Do();
-				
+
 				(Define(IsStringContent)(s) == ((s.LookaheadLeft() == String("\"")).If(s == String(""), (s.LookaheadLeft() == String("\\")).If(IsStringContent(s.SubtractLeftChar().SubtractLeftChar()), IsStringContent(s.SubtractLeftChar()))))).PartialAssert().Do();
 
 				IsString(String("\"My test string\"")).Assert().Do();
@@ -3302,6 +3302,162 @@ namespace test_sn
 				(String("555") <= String("555")).Assert().Do();
 				(String("666") >= String("666")).Assert().Do();
 				(String("777") >= String("666")).Assert().Do();
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestCharactersets)
+		{
+			Initialize();
+			{
+				Manager manager("Test CharacterSets", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				CharacterSet characterSet;
+
+				characterSet.Digit(String("0")).Assert().Do();
+				characterSet.Digit(String("5")).Assert().Do();
+				characterSet.Digit(String("9")).Assert().Do();
+				(!characterSet.Digit(String("&"))).Assert().Do();
+
+				characterSet.AlphaLower(String("a")).Assert().Do();
+				characterSet.AlphaLower(String("z")).Assert().Do();
+				(!characterSet.AlphaLower(String("Z"))).Assert().Do();
+
+				characterSet.AlphaUpper(String("A")).Assert().Do();
+				characterSet.AlphaUpper(String("Z")).Assert().Do();
+				(!characterSet.AlphaUpper(String("q"))).Assert().Do();
+
+				characterSet.Alpha(String("A")).Assert().Do();
+				characterSet.Alpha(String("Z")).Assert().Do();
+				characterSet.Alpha(String("a")).Assert().Do();
+				characterSet.Alpha(String("z")).Assert().Do();
+				(!characterSet.Alpha(String("_"))).Assert().Do();
+
+				characterSet.AlphaUnder(String("A")).Assert().Do();
+				characterSet.AlphaUnder(String("Z")).Assert().Do();
+				characterSet.AlphaUnder(String("a")).Assert().Do();
+				characterSet.AlphaUnder(String("z")).Assert().Do();
+				characterSet.AlphaUnder(String("_")).Assert().Do();
+				(!characterSet.AlphaUnder(String("9"))).Assert().Do();
+
+				characterSet.AlphaNumeric(String("A")).Assert().Do();
+				characterSet.AlphaNumeric(String("Z")).Assert().Do();
+				characterSet.AlphaNumeric(String("a")).Assert().Do();
+				characterSet.AlphaNumeric(String("z")).Assert().Do();
+				characterSet.AlphaNumeric(String("0")).Assert().Do();
+				characterSet.AlphaNumeric(String("5")).Assert().Do();
+				characterSet.AlphaNumeric(String("9")).Assert().Do();
+				(!characterSet.AlphaNumeric(String("_"))).Assert().Do();
+
+				characterSet.AlphaUnderNumeric(String("A")).Assert().Do();
+				characterSet.AlphaUnderNumeric(String("Z")).Assert().Do();
+				characterSet.AlphaUnderNumeric(String("a")).Assert().Do();
+				characterSet.AlphaUnderNumeric(String("z")).Assert().Do();
+				characterSet.AlphaUnderNumeric(String("0")).Assert().Do();
+				characterSet.AlphaUnderNumeric(String("5")).Assert().Do();
+				characterSet.AlphaUnderNumeric(String("9")).Assert().Do();
+				characterSet.AlphaUnderNumeric(String("_")).Assert().Do();
+				(!characterSet.AlphaUnderNumeric(String(" "))).Assert().Do();
+
+				characterSet.White(String(" ")).Assert().Do();
+				characterSet.White(String("\t")).Assert().Do();
+				characterSet.White(String("\n")).Assert().Do();
+				characterSet.White(String("\r")).Assert().Do();
+				(!characterSet.White(String("X"))).Assert().Do();
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestValidate_IsInteger)
+		{
+			Initialize();
+			{
+				Manager manager("Test Validate IsInteger", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false);
+
+				CharacterSet characterSet;
+				Validate validate(characterSet);
+
+				(!validate.IsInteger(String(""))).Assert().Do();
+				validate.IsInteger(String("1")).Assert().Do();
+				validate.IsInteger(String("45")).Assert().Do();
+				validate.IsInteger(String("543")).Assert().Do();
+				(!validate.IsInteger(String("543X"))).Assert().Do();
+				(!validate.IsInteger(String("A543X"))).Assert().Do();
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s+t == String("")).Assert().Do();
+					(!validate.IsInteger(s)).Assert().Do();
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("1 dog")).Assert().Do();
+					validate.IsInteger(s).Assert().Do();
+					(t == String(" dog")).Evaluate().Do();
+					string t_string = t.GetString();
+					Assert::IsTrue(t_string == " dog");
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("45 dog")).Assert().Do();
+					validate.IsInteger(s).Assert().Do();
+					(t == String(" dog")).Evaluate().Do();
+					string s_string = s.GetString();
+					string t_string = t.GetString();
+					Assert::IsTrue(s_string == "45");
+					Assert::IsTrue(t_string == " dog");
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("568 dog")).Assert().Do();
+					validate.IsInteger(s).Assert().Do();
+					(t == String(" dog")).Evaluate().Do();
+					string s_string = s.GetString();
+					string t_string = t.GetString();
+					Assert::IsTrue(s_string == "568");
+					Assert::IsTrue(t_string == " dog");
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("9678 dog")).Assert().Do();
+					validate.IsInteger(s).Assert().Do();
+					(t == String(" dog")).Evaluate().Do();
+					string s_string = s.GetString();
+					string t_string = t.GetString();
+					Assert::IsTrue(s_string == "9678");
+					Assert::IsTrue(t_string == " dog");
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("A543X dog")).Assert().Do();
+					(!validate.IsInteger(s)).Assert().Do();
+					string s_string = s.DisplayValueSN();
+					string s_part = s_string.substr(0, 37 - 5);
+					string s_comp = "StringRef(\"A543X dog\"[0.._split_";
+					Assert::IsTrue(s_part == s_comp);
+					string t_string = t.DisplayValueSN();
+					string t_part = t_string.substr(0, 37 - 8);
+					string t_comp = "StringRef(\"A543X dog\"[_split_";
+					Assert::IsTrue(t_part == t_comp);
+				}
+				
+//				Validate.IsString;
+//				Validate.IsName;
+//				Validate.IsWhiteSpace;
+
 			}
 			Cleanup();
 		}

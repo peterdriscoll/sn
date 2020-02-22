@@ -1,23 +1,61 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Main Source Files">
-      <UniqueIdentifier>{fc86a5d8-70cb-44e1-b916-95668a55e9fa}</UniqueIdentifier>
-      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
-    </Filter>
-    <Filter Include="Main Header Files">
-      <UniqueIdentifier>{9f00ac46-1445-4ab2-8626-040f1c405bf5}</UniqueIdentifier>
-      <Extensions>h</Extensions>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="parser.cpp">
-      <Filter>Main Source Files</Filter>
+    <ClCompile Include="snl_pch.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="snl_parser.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="snl.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="snl_characterset.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="snl_validate.cpp">
+      <Filter>Interface Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\inc\parser.h">
-      <Filter>Main Header Files</Filter>
+    <None Include="..\html\skynetjs.html">
+      <Filter>HTML Files</Filter>
+    </None>
+    <None Include="..\html\style.css">
+      <Filter>HTML Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="HTML Files">
+      <UniqueIdentifier>{ac128466-ff2a-43fc-b26e-7d1100093d6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface Source Files">
+      <UniqueIdentifier>{79f974d2-ed16-4a8f-850a-8552318a17eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface Include Files">
+      <UniqueIdentifier>{88564585-7173-4696-8dbd-1f4fbd77029d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\html\favicon.ico">
+      <Filter>HTML Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="snl_pch.h">
+      <Filter>Interface Include Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\snl_parser.h">
+      <Filter>Interface Include Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\snl.h">
+      <Filter>Interface Include Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\snl_characterset.h">
+      <Filter>Interface Include Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\snl_validate.h">
+      <Filter>Interface Include Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
