@@ -3476,6 +3476,54 @@ namespace test_sn
 				validate.IsName(String("_MyVariable65")).Assert().Do();
 				validate.IsName(String("My_Variable_65")).Assert().Do();
 				(!validate.IsName(String("677_M"))).Assert().Do();
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String(" dog")).Assert().Do();
+					(!validate.IsName(s)).Assert().Do();
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("_MyVariable65 dog")).Assert().Do();
+					validate.IsName(s).Assert().Do();
+					(s == String("_MyVariable65")).Evaluate().Do();
+					(t == String(" dog")).Evaluate().Do();
+					string s_string = s.GetString();
+					string t_string = t.GetString();
+					Assert::IsTrue(s_string == "_MyVariable65");
+					Assert::IsTrue(t_string == " dog");
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("My_Variable_65 dog")).Assert().Do();
+					validate.IsName(s).Assert().Do();
+					(s == String("My_Variable_65")).Evaluate().Do();
+					(t == String(" dog")).Evaluate().Do();
+					string s_string = s.GetString();
+					string t_string = t.GetString();
+					Assert::IsTrue(s_string == "My_Variable_65");
+					Assert::IsTrue(t_string == " dog");
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("677_M dog")).Assert().Do();
+					(!validate.IsName(s)).Assert().Do();
+					string s_string = s.DisplayValueSN();
+					string s_part = s_string.substr(0, 37 - 5);
+					string s_comp = "StringRef(\"677_M dog\"[0.._split_";
+					Assert::IsTrue(s_part == s_comp);
+					string t_string = t.DisplayValueSN();
+					string t_part = t_string.substr(0, 37 - 8);
+					string t_comp = "StringRef(\"677_M dog\"[_split_";
+					Assert::IsTrue(t_part == t_comp);
+				}
 			}
 			Cleanup();
 		}
