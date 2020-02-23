@@ -91,6 +91,7 @@ namespace SNI
 		string StackJS(long p_MaxStackFrame, enum DisplayOptionType p_OptionType);
 		string StepCountJS();
 		string LogJS(long p_MaxLogEntries);
+		string DerivationJS(long p_MaxLogEntries);
 		string LogExpJS(long p_MaxLogEntries, enum DisplayOptionType p_OptionType);
 		string ErrorJS(enum DisplayOptionType p_OptionType);
 		string WorldSetsJS(DisplayOptionType p_OptionType);
@@ -158,6 +159,7 @@ namespace SNI
 		void WriteDashboardJS(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions);
 		void WriteStackJS(ostream & p_Stream, size_t  p_Depth, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
 		void WriteLogJS(ostream & p_Stream, long p_MaxLogEntries);
+		void WriteDerivationJS(ostream & p_Stream, long p_MaxLogEntries);
 		void WriteLogExpJS(ostream & p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_DisplayOptions);
 		void WriteStepCountListJS(ostream & p_Stream);
 		void WriteStepCountJS(ostream & p_Stream, const string &p_Delimeter);

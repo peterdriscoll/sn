@@ -1,0 +1,195 @@
+<HTML>
+<HEAD>
+    <meta charset="utf-8">
+    <title>Skynet Help Index</title>
+    <meta name="description" content="SKYNET">
+    <meta name="author" content="P.J.Driscoll">
+    <link rel='icon' href='favicon.png' sizes='32x32' type='image/png'>
+    <link rel='stylesheet' type='text/css' href='style.css'>
+</HEAD>
+<BODY>
+    <div>
+        <div class="left-float">
+            <h1>SKYNET Help Index</h1>
+        </div>
+        <div class="right-float">
+            <table>
+                <tr>
+                    <td class="help-link"><a href="runjs.html">Running Dashboard</a></td>
+                    <td class="help-link"><a href="skynetjs.html">Developer Dashboard</a></td>
+                    <td class="help-link"><a href="derivationjs.html">Derivation</a></td>
+                    <td class="help-link"><a href="explorerjs.html">Object Explorer</a></td>
+                    <td class="help-link"><a href="help_start.html">Get Started</a></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <p class="help-normal clear">
+        SKYNET is a logic, object oriented, and funtional langage, and web-based visual development environment.
+    </p>
+    <h2 class="help-heading2">Visual Design</h2>
+    <ul id="help-index">
+        <li>
+            <span class="caret">Expand topics</span>
+            <ul class="nested">
+                <li>
+                    <span class="caret">Object Explorer</span>
+                    <ul class="nested">
+                        <li>Water</li>
+                        <li>Coffee</li>
+                        <li>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <span class="caret">Form Design</span>
+                    <ul class="nested">
+                        <li>Water</li>
+                        <li>Coffee</li>
+                        <li>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <span class="caret">Debugger</span>
+                    <ul class="nested">
+                        <li>Water</li>
+                        <li>Coffee</li>
+                        <li>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <h2 class="help-heading2">Language</h2>
+            <h3 class="help-heading3">Concepts</h3>
+            <ul id="help-index">
+                <li>
+                    <span class="caret">Expand</span>
+                    <ul class="nested">
+                        <li>Relational Model</li>
+                        <li>
+                            <span class="caret">Cardinality</span>
+                            <ul class="nested">
+                                <li>World</li>
+                                <li>World Sets</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="caret">Resolution</span>
+                            <ul class="nested">
+                                <li>Value conflict</li>
+                                <li>Missing In Result (MIR)</li>
+                                <li>Failure in context world</li>
+                                <li>Failure in all contexts</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="caret">Object Oriented</span>
+                            <ul class="nested">
+                                <li>Is a - Belongs to.</li>
+                                <li>
+                                    <span class="caret">Has a - Owns and controls</span>
+                                    <ul class="nested">
+                                        <li>Renaming inheritance</li>
+                                        <li>Shared Inheritance</li>
+                                    </ul>
+                                </li>
+                                <li>Virtual Inheritance</li>
+                                <li>Derived Inheritance</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="caret">Functional</span>
+                            <ul class="nested">
+                                <li>Lambda expressions</li>
+                                <li>Lazy evaluation</li>
+                                <li>Let Expressions</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <h3 class="help-heading3">Data Types</h3>
+    <ul id="help-index">
+        <li>
+            <span class="caret">Expand topics</span>
+            <ul class="nested">
+                <span class="caret">Simple types</span>
+                <ul class="nested">
+                    <li>Bool</li>
+                    <li>
+                        <span class="caret">String</span>
+                        <ul class="nested">
+                            <li>Char</li>
+                            <li>String</li>
+                            <li>StringRef</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <span class="caret">Number</span>
+                        <ul class="nested">
+                            <li>Short</li>
+                            <li>Long</li>
+                            <li>LongLong</li>
+                            <li>Float</li>
+                            <li>Double</li>
+                            <li>LongDouble</li>
+                        </ul>
+                    </li>
+                    <li>Instance</li>
+                </ul>
+        </li>
+        <li>
+            <span class="caret">Objects</span>
+            <ul class="nested">
+                <li>Class</li>
+                <li>Instance</li>
+            </ul>
+        </li>
+        <li>
+            <span class="caret">Containers</span>
+            <ul class="nested">
+                <li>Vector</li>
+                <li>Mapping</li>
+                <li>ValueSet</li>
+                <li>Set</li>
+            </ul>
+        </li>
+        <li>
+            <span class="caret">Inheritance Styles</span>
+            <ul class="nested">
+                <li>Virtual</li>
+                <li>Derived</li>
+            </ul>
+        </li>
+    </ul>
+    <h3 class="help-heading3">Language Elements</h3>
+    <ul id="help-index">
+        <li>
+            <span class="caret">Expand Topics</span>
+            <ul class="nested">
+                <li>Lambda</li>
+                <li>Let</li>
+                <li>Local</li>
+                <li>Function</li>
+                <li>Meta</li>
+                <li>Variable</li>
+                <li>Domain</li>
+            </ul>
+        </li>
+    </ul>
+    <script>
+        var toggler = document.getElementsByClassName("caret");
+        var i;
+
+        for (i = 0; i < toggler.length; i++) {
+            toggler[i].addEventListener("click", function () {
+                this.parentElement.querySelector(".nested").classList.toggle("active");
+                this.classList.toggle("caret-down");
+            });
+        }
+    </script>
+</BODY>
+</HTML>

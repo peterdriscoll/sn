@@ -1050,7 +1050,7 @@ namespace SNI
 	{
 		SN::SN_Value start = m_Start.DoEvaluate();
 		SN::SN_Value end = m_End.DoEvaluate();
-		SN::SN_Bool result = p_Result;
+		SN::SN_Value result = p_Result;
 
 		ASSERTM(!start.GetSafeValue().GetSNI_ValueSet(), "If start point is valueset, string ref should have been simplified.");
 		ASSERTM(!end.GetSafeValue().GetSNI_ValueSet(), "If end point is valueset, string ref should have been simplified.");

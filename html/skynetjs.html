@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <title>Skynet Dashboard</title>
-    <meta name="description" content="Skynet">
+    <meta name="description" content="SKYNET">
     <meta name="author" content="P.J.Driscoll">
     <link rel='icon' href='favicon.png' sizes='32x32' type='image/png'>
     <link rel='stylesheet' type='text/css' href='style.css'>
@@ -13,90 +13,107 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.0/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.0/angular-sanitize.js"></script>
     <div ng-app="skynetApp" ng-controller='commandCtrl'>
-        <h1>
-            Skynet Dashboard - {{taskdescription}} {{statusdescription}}
-        </h1>
-        <table class='command'>
-            <tr>
-                <td>
-                    <form ng-submit='submit("runjs")'>
-                        Run<br>
-                        <input type='submit' value='Run'>
-                    </form>
-                </td>
-                <td>
-                    <form ng-submit='submit("runtoendjs")'>
-                        Run to end<br>
-                        <input type='submit' value='End'>
-                    </form>
-                </td>
-                <td>
-                    <form ng-submit='submit("debugjs")'>
-                        Run to breakpoint<br>
-                        <input type='submit' value='Debug'>
-                    </form>
-                </td>
-                <td>
-                    <form ng-submit='submit("codebreakjs")'>
-                        Code debug break C++<br>
-                        <input type='submit' value='Code break'>
-                    </form>
-                </td>
-                <td>
-                    <form ng-submit='submit("stepoverjs")'>
-                        Step over call<br>
-                        <input type='submit' value='Step over'>
-                    </form>
-                </td>
-                <td>
-                    <form ng-submit='submit("stepintojs")'>
-                        Step into call<br>
-                        <input type='submit' value='Step into'>
-                    </form>
-                </td>
-                <td>
-                    <form ng-submit='submit("stepoutjs")'>
-                        Step out of call<br>
-                        <input type='submit' value='Step out'>
-                    </form>
-                </td>
-                <td>
-                    <form ng-submit='submit("stepparamjs")'>
-                        Step into parameters<br>
-                        <input type='submit' value='Step parameter'>
-                    </form>
-                </td>
-                <td>
-                    <form ng-submit='gotostepcount()'>
-                        <details>
-                            <summary>
-                                Goto step count<br>
-                                <input type='submit' value='Goto'><br>
-                            </summary>Step count : <br>
-                            <input type='text' ng-model='stepcount' name='stepcount'>
-                            <br>
-                        </details>
-                    </form>
-                </td>
-                <td>
-                    <form ng-submit='initFirst()'>
-                        <details>
-                            <summary>
-                                Max stack frames<br>
-                                <input type='submit' value='Stack depth'><br>
-                            </summary>Number of stack frames to display :<br>
-                            <input type='text' ng-model='maxstackframes' name='maxstackframes'>
-                        </details>
-                    </form>
-                </td>
-                <td>
-                    <form ng-submit='submit("quit")'>
-                        Abort thread<br>
-                        <input type='submit' value='Quit'>
-                    </form>
-                </td>
-            </tr>
-        </table>
+        <div>
+            <div class="left-float">
+                <h1>SKYNET Dashboard - {{taskdescription}} {{statusdescription}}</h1>
+            </div>
+            <div class="right-float">
+                <table>
+                    <tr>
+                        <td class="help-link"><a href="runjs.html">Running Dashboard</a></td>
+                        <td class="help-link"><a href="skynetjs.html">Developer Dashboard</a></td>
+                        <td class="help-link"><a href="derivationjs.html">Derivation</a></td>
+                        <td class="help-link"><a href="explorerjs.html">Object Explorer</a></td>
+                        <td class="help-link"><a href="help_index.html">Help</a></td>
+                        <td class="help-link"><a href="help_start.html">Get Started</a></td>
+                    </tr>
+                </table>               
+            </div>
+        </div>
+        
+        <p class='clear'>
+            <table class='command clear'>
+                <tr>
+                    <td>
+                        <form ng-submit='submit("runjs")'>
+                            Run<br>
+                            <input type='submit' value='Run'>
+                        </form>
+                    </td>
+                    <td>
+                        <form ng-submit='submit("runtoendjs")'>
+                            Run to end<br>
+                            <input type='submit' value='End'>
+                        </form>
+                    </td>
+                    <td>
+                        <form ng-submit='submit("debugjs")'>
+                            Run to breakpoint<br>
+                            <input type='submit' value='Debug'>
+                        </form>
+                    </td>
+                    <td>
+                        <form ng-submit='submit("codebreakjs")'>
+                            Code debug break C++<br>
+                            <input type='submit' value='Code break'>
+                        </form>
+                    </td>
+                    <td>
+                        <form ng-submit='submit("stepoverjs")'>
+                            Step over call<br>
+                            <input type='submit' value='Step over'>
+                        </form>
+                    </td>
+                    <td>
+                        <form ng-submit='submit("stepintojs")'>
+                            Step into call<br>
+                            <input type='submit' value='Step into'>
+                        </form>
+                    </td>
+                    <td>
+                        <form ng-submit='submit("stepoutjs")'>
+                            Step out of call<br>
+                            <input type='submit' value='Step out'>
+                        </form>
+                    </td>
+                    <td>
+                        <form ng-submit='submit("stepparamjs")'>
+                            Step into parameters<br>
+                            <input type='submit' value='Step parameter'>
+                        </form>
+                    </td>
+                    <td>
+                        <form ng-submit='gotostepcount()'>
+                            <details id='gotoid'>
+                                <summary>
+                                    Goto step count<br>
+                                    <input type='submit' value='Goto'><br>
+                                </summary>Step count : <br>
+                                <input type='text' ng-model='stepcount' name='stepcount'>
+                                <br>
+                            </details>
+                        </form>
+                    </td>
+                    <td>
+                        <form ng-submit='setMaxStackFrames()'>
+                            <details id="maxStackFramesId">
+                                <summary>
+                                    Max stack frames<br>
+                                    <input type='submit' value='Stack depth'><br>
+                                </summary>Number of stack frames to display :<br>
+                                <input type='text' ng-model='maxstackframes' name='maxstackframes'>
+                            </details>
+                        </form>
+                    </td>
+                    <td>
+                        <form ng-submit='submit("quit")'>
+                            Abort thread<br>
+                            <input type='submit' value='Quit'>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </p>   
         <div>
             <table class='thread'>
                 <caption>Threads</caption>
@@ -131,34 +148,37 @@
                     <button title='Delay' ng-click='setbreakpoint(["Warning",20])' ng-class='breakpointdefaultclass(["Warning",20], "NONE")'>Delay</button>
                     <button title='No constraint' ng-click='setbreakpoint(["Warning",19])' ng-class='breakpointdefaultclass(["Warning",19], "NONE")'>No constraint</button>
                     {{breakpoint}}
-                    <table class='frame'>
-                        <caption><pre>World Sets</pre></caption>
-                        <tr ng-repeat="ws in worldsets">
-                            <td>
-                                {{ws.expression}}
-                            </td>
-                            <td>
-                                <button ng-repeat="w in ws.worlds" ng-title='w.breakpoint' ng-click='setbreakpoint(w.breakpoint)' ng-class='breakpointdefaultclass(w.breakpoint, w.reason)'>{{w.condition}}</button>
-                            </td>
-                            <td ng-repeat="cws in ws.childsets">
-                                <button ng-repeat="u in cws.worlds" ng-title='u.breakpoint' ng-click='setbreakpoint(u.breakpoint)' ng-class='breakpointdefaultclass(u.breakpoint, u.reason)'>{{u.condition}}</button>
-                            </td>
-                        </tr>
-                    </table>
+                    <details open>
+                        <summary>World Sets</summary>
+                        <table class='frame'>
+                            <tr ng-repeat="ws in worldsets">
+                                <td>
+                                    {{ws.expression}}
+                                </td>
+                                <td>
+                                    <button ng-repeat="w in ws.worlds" ng-title='w.breakpoint' ng-click='setbreakpoint(w.breakpoint)' ng-class='breakpointdefaultclass(w.breakpoint, w.reason)'>{{w.condition}}</button>
+                                </td>
+                                <td ng-repeat="cws in ws.childsets">
+                                    <button ng-repeat="u in cws.worlds" ng-title='u.breakpoint' ng-click='setbreakpoint(u.breakpoint)' ng-class='breakpointdefaultclass(u.breakpoint, u.reason)'>{{u.condition}}</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </details>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <table class='frame'>
-                        <caption><pre>Delayed Calls</pre></caption>
-                        <tr ng-repeat="d in delayedcalls">
-                            <td ng-bind-html="trustAsHtml(d.expression)" init-bind></td>
-                            <td ng-bind-html="trustAsHtml(d.result)" init-bind></td>
-                            <td ng-bind-html="trustAsHtml(d.cardinality)" init-bind></td>
-                            <td>{{d.world}}</td>
-                        </tr>
-                    </table>
-
+                    <details open>
+                        <summary>Delayed Calls</summary>
+                        <table class='frame'>
+                            <tr ng-repeat="d in delayedcalls">
+                                <td ng-bind-html="trustAsHtml(d.expression)" init-bind></td>
+                                <td ng-bind-html="trustAsHtml(d.result)" init-bind></td>
+                                <td ng-bind-html="trustAsHtml(d.cardinality)" init-bind></td>
+                                <td>{{d.world}}</td>
+                            </tr>
+                        </table>
+                    </details>
                 </td>
             </tr>
             <tr>
@@ -245,6 +265,10 @@
                         </table>
                         <br />
                         <table class='log'>
+                            <caption>Derivation</caption>
+                            <tr><td class='log' ng-bind-html="trustAsHtml(derivationhtml)" init-bind></td></tr>
+                        </table>
+                        <table class='log'>
                             <caption>Logging</caption>
                             <tr ng-repeat="l in logs"><td>{{l.text}}</td></tr>
                         </table>
@@ -266,7 +290,7 @@
         var home = 'http://127.0.0.1/';
         var app = angular.module('skynetApp', ['ngSanitize']);
 
-        app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $window) {
+        app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $window, $document) {
             $scope.trustAsHtml = $sce.trustAsHtml;
             $scope.threadnum = 0;
             $scope.maxstackframes = -1;
@@ -307,6 +331,8 @@
                                 }
                             }
                         });
+                    $http.get(home + 'derivationjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxstackframes * 4)
+                        .then(function (response) { $scope.derivationhtml = response.data.derivationhtml; });
                     $http.get(home + 'logjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxstackframes * 4)
                         .then(function (response) { $scope.logs = response.data.records; });
                     $http.get(home + 'logexpjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxstackframes * 4)
@@ -444,8 +470,13 @@
                 }
             };
             $scope.gotostepcount = function () {
+                $document[0].getElementById('gotoid').open = 0;
                 $http.get(home + 'gotostepcountjs?threadnum=' + $scope.threadnum + '&stepcount=' + $scope.stepcount)
                     .then(function (response) { $scope.initFirst(); });
+            };
+            $scope.setMaxStackFrames = function () {
+                $document[0].getElementById('maxStackFramesId').open = 0;
+                $scope.initFirst();
             };
             $scope.initFirst();
         })

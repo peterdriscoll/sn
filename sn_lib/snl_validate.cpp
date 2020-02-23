@@ -69,7 +69,7 @@ namespace SNL
 			SN_LOCAL(u);
 			SN_LOCAL(v);
 
-			(Define(IsString)(s) == (((s.SelectLeftChar() == String("\"")) && Local(t, Local(u, Let(s.SubtractLeftChar() == t + u, IsStringContent(t) && (u == String("\""))))))).Collapse()).PartialAssert().Do();
+			(Define(IsString)(s) == ((s.LookaheadLeft() == String("\"") && Local(t, Local(u, Let(s.SubtractLeftChar() == t + u, IsStringContent(t) && (u == String("\""))))))).Collapse()).PartialAssert().Do();
 			(Define(IsStringContent)(s) == ((s.LookaheadLeft() == String("\"")).If(s == String(""), (s.LookaheadLeft() == String("\\")).If(IsStringContent(s.SubtractLeftChar().SubtractLeftChar()), IsStringContent(s.SubtractLeftChar()))))).PartialAssert().Do();
 		}
 	}

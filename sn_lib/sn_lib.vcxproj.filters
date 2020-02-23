@@ -18,28 +18,12 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\html\skynetjs.html">
-      <Filter>HTML Files</Filter>
-    </None>
-    <None Include="..\html\style.css">
-      <Filter>HTML Files</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="HTML Files">
-      <UniqueIdentifier>{ac128466-ff2a-43fc-b26e-7d1100093d6e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Interface Source Files">
       <UniqueIdentifier>{79f974d2-ed16-4a8f-850a-8552318a17eb}</UniqueIdentifier>
     </Filter>
     <Filter Include="Interface Include Files">
       <UniqueIdentifier>{88564585-7173-4696-8dbd-1f4fbd77029d}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\html\favicon.ico">
-      <Filter>HTML Files</Filter>
-    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="snl_pch.h">

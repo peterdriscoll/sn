@@ -188,6 +188,12 @@ namespace HTTP
 					rep.content.append(l_thread->LogJS(maxLogEntries));
 					extension = "json";
 				}
+				else if (path == "/derivationjs")
+				{
+					long maxLogEntries = atol(umap["maxlogentries"].c_str());
+					rep.content.append(l_thread->DerivationJS(maxLogEntries));
+					extension = "json";
+				}
 				else if (path == "/logexpjs")
 				{
 					long maxLogEntries = atol(umap["maxlogentries"].c_str());

@@ -493,6 +493,8 @@
     <ClCompile Include="utility.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\html\help_index.html" />
+    <None Include="..\html\help_start.html" />
     <None Include="..\html\skynetjs.html" />
     <None Include="..\html\style.css" />
   </ItemGroup>

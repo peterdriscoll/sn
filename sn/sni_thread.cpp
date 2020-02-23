@@ -340,6 +340,13 @@ namespace SNI
 		return ss.str();
 	}
 
+	string SNI_Thread::DerivationJS(long p_MaxLogEntries)
+	{
+		stringstream ss;
+		WriteDerivationJS(ss, p_MaxLogEntries);
+		return ss.str();
+	}
+
 	string SNI_Thread::LogExpJS(long p_MaxLogEntries, enum DisplayOptionType p_OptionType)
 	{
 		stringstream ss;
@@ -861,6 +868,11 @@ namespace SNI
 	void SNI_Thread::WriteLogJS(ostream &p_Stream, long p_MaxLogEntries)
 	{
 		SNI_Log::GetLog()->LogTableJS(p_Stream, p_MaxLogEntries);
+	}
+
+	void SNI_Thread::WriteDerivationJS(ostream &p_Stream, long p_MaxLogEntries)
+	{
+		SNI_Log::GetLog()->DerivationJS(p_Stream, p_MaxLogEntries);
 	}
 
 	void SNI_Thread::WriteLogExpJS(ostream &p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_displayOptions)

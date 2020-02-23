@@ -3455,9 +3455,89 @@ namespace test_sn
 				}
 				
 //				Validate.IsString;
-//				Validate.IsName;
 //				Validate.IsWhiteSpace;
 
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestValidate_IsString)
+		{
+			Initialize();
+			{
+				Manager manager("Test Validate IsString", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				CharacterSet characterSet;
+				Validate validate(characterSet);
+
+				(!validate.IsString(String(""))).Assert().Do();
+				validate.IsString(String("\"\"")).Assert().Do();
+				validate.IsString(String("\"Simple string\"")).Assert().Do();
+				validate.IsString(String("\"Containing \\\"escaped\\\" quotes\"")).Assert().Do();
+				validate.IsString(String("\"Escaped backslash \\ quotes\"")).Assert().Do();
+				(!validate.IsString(String("\"Cat \" dog"))).Assert().Do();
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String(" dog")).Assert().Do();
+					(!validate.IsString(s)).Assert().Do();
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("\"\" dog")).Assert().Do();
+					validate.IsString(s).Assert().Do();
+					(s == String("\"\"")).Evaluate().Do();
+					(t == String(" dog")).Evaluate().Do();
+					string s_string = s.GetString();
+					string t_string = t.GetString();
+					Assert::IsTrue(s_string == "\"\"");
+					Assert::IsTrue(t_string == " dog");
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("\"Contaning \\\"escaped\\\" quotes\" dog")).Assert().Do();
+					validate.IsString(s).Assert().Do();
+					(s == String("\"Contaning \\\"escaped\\\" quotes\"")).Evaluate().Do();
+					(t == String(" dog")).Evaluate().Do();
+					string s_string = s.GetString();
+					string t_string = t.GetString();
+					Assert::IsTrue(s_string == "\"Contaning \\\"escaped\\\" quotes\"");
+					Assert::IsTrue(t_string == " dog");
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("\"Escaped backslash \\ quotes\" dog")).Assert().Do();
+					validate.IsString(s).Assert().Do();
+					(s == String("\"Escaped backslash \\ quotes\"")).Evaluate().Do();
+					(t == String(" dog")).Evaluate().Do();
+					string s_string = s.GetString();
+					string t_string = t.GetString();
+					Assert::IsTrue(s_string == "\"Escaped backslash \\ quotes\"");
+					Assert::IsTrue(t_string == " dog");
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("Not a dog")).Assert().Do();
+					(!validate.IsString(s)).Assert().Do();
+					string s_string = s.DisplayValueSN();
+					string s_part = s_string.substr(0, 37 - 5);
+					string s_comp = "StringRef(\"Not a dog\"[0.._split_";
+					Assert::IsTrue(s_part == s_comp);
+					string t_string = t.DisplayValueSN();
+					string t_part = t_string.substr(0, 37 - 8);
+					string t_comp = "StringRef(\"Not a dog\"[_split_";
+					Assert::IsTrue(t_part == t_comp);
+				}
 			}
 			Cleanup();
 		}
@@ -3466,7 +3546,7 @@ namespace test_sn
 		{
 			Initialize();
 			{
-				Manager manager("Test Validate IsInteger", AssertErrorHandler);
+				Manager manager("Test Validate IsName", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false);
 
 				CharacterSet characterSet;

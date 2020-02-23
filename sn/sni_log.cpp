@@ -170,6 +170,18 @@ namespace SNI
 		}
 	}
 
+	void SNI_Log::DerivationJS(ostream & p_Stream, long p_MaxLogEntries)
+	{
+		if (m_LogBuffer)
+		{
+			m_LogBuffer->DerivationJS(p_Stream, p_MaxLogEntries);
+		}
+		else
+		{
+			p_Stream << "{\"derivationhtml\":\"\"}\n";
+		}
+	}
+
 	void SNI_Log::LogExpTableJS(ostream & p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_DisplayOptions)
 	{
 		if (m_LogBuffer)

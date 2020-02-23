@@ -7,5 +7,89 @@
 </head>
 <body>
     <button ng-click='setbreakpoint("typeChecker1_0")' ng-class='breakpointclass("typeChecker1_0")'>typeChecker</button> numbers1
+
+    <details>
+        <p>Stuff before summary line 1</p>
+        <p>Stuff before summary line 2</p>
+        <p>Stuff before summary line 3</p>
+        <p>Stuff before summary line 4</p>
+        <p>Stuff before summary line 5</p>
+        <summary>Log summary</summary>
+    </details>
+
+    <td class="log ng-binding" ng-bind-html="trustAsHtml(derivationhtml)" init-bind="">
+        <details>
+            <details open="">
+                <details open="">
+                    <details open="">
+                        <details open="">
+                            <details open="">
+                                <details open="">
+                                    <p>7: Null == LookaheadLeft  s_4</p>
+                                    <p>7: Parameter 1: LookaheadLeft  s_4</p>
+                                    <p>7: Self Assert 0: param1_7</p>
+                                    <summary>Self Assert 0: param1_7</summary>
+                                </details>
+                                <p>6: Null == LookaheadLeft  s_4="\""</p>
+                                <p>6: Parameter 1: LookaheadLeft  s_4="\""</p>
+                                <p>6: Parameter 0: Bool(false)</p>
+                                <p>6: Bool(false) == UnaryAnd(LookaheadLeft  s_4="\"")</p>
+                                <p>6: Parameter 1: LookaheadLeft  s_4="\""</p>
+                                <p>6: Parameter 0: Bool(false)</p>
+                                <summary>Parameter 0: Bool(false)</summary>
+                            </details>
+                            <p>5: Bool(false) == LookaheadLeft  s_4="\""&amp;#t_4.#u_4.(let SubtractLeftChar  s_4=t_4+u_4 in IsStringContent t_4&amp;u_4="\"")</p>
+                            <summary>Bool(false) == LookaheadLeft  s_4="\""&amp;#t_4.#u_4.(let SubtractLeftChar  s_4=t_4+u_4 in IsStringContent t_4&amp;u_4="\"")</summary>
+                        </details>
+                        <p>4: Bool(false) == Collapse LookaheadLeft  s_4="\""&amp;#t_4.#u_4.(let SubtractLeftChar  s_4=t_4+u_4 in IsStringContent t_4&amp;u_4="\"")</p>
+                        <p>4: false    | ""     |          |          | @s.if LookaheadLe... | ""       |</p>
+                        <p>4: Bool     | String | Variable | Variable | Lambda               | String   |</p>
+                        <p>4: result_4 | s_4    | t_4      | u_4      | IsStringContent      | param1_4 |</p>
+                        <p>4: Frame 4 thread 0 IsString                                </p>
+                        <p>4: s == ""</p>
+                        <p>4: Unify var: Cloned @s_4.Collapse LookaheadLeft  s_4="\""&amp;#t_4.#u_4.(let SubtractLeftChar  s_4=t_4+u_4 in IsStringContent t_4&amp;u_4="\"")</p>
+                        <p>4: Cloned @s_4.Collapse LookaheadLeft  s_4="\""&amp;#t_4.#u_4.(let SubtractLeftChar  s_4=t_4+u_4 in IsStringContent t_4&amp;u_4="\"")</p>
+                        <summary>Cloned @s_4.Collapse LookaheadLeft  s_4="\""&amp;#t_4.#u_4.(let SubtractLeftChar  s_4=t_4+u_4 in IsStringContent t_4&amp;u_4="\"")</summary>
+                    </details>
+                    <p>3: Bool(false) == IsString ""</p>
+                    <p>3: IsString ""</p>
+                    <p>3: Cardinality 1 with total fields 1</p>
+                    <p>3: Bool(true) == IsString ""</p>
+                    <p>3: Parameter 1: IsString ""</p>
+                    <p>3: Parameter 0: Bool(true)</p>
+                    <summary>Parameter 0: Bool(true)</summary>
+                </details>
+                <p>2: Bool(true) == ! IsString ""</p>
+                <p>2: Assert: Cloned ! IsString ""</p>
+                <summary>Assert: Cloned ! IsString ""</summary>
+            </details>
+            <p>1: Null == ! IsString "".Assert()</p>
+            <p>1: Partial assert $IsStringContent(s)=if LookaheadLeft  s="\"" then s="" else if LookaheadLeft  s="\\" then IsStringContent SubtractLeftChar  SubtractLeftChar  s else IsStringContent SubtractLeftChar  s  </p>
+            <p>1: Null == $IsStringContent(s)=if LookaheadLeft  s="\"" then s="" else if LookaheadLeft  s="\\" then IsStringContent SubtractLeftChar  SubtractLeftChar  s else IsStringContent SubtractLeftChar  s  .PartialAssert()</p>
+            <p>1: Partial assert $IsString(s)=Collapse LookaheadLeft  s="\""&amp;#t.#u.(let SubtractLeftChar  s=t+u in IsStringContent t&amp;u="\"")</p>
+            <p>1: Null == $IsString(s)=Collapse LookaheadLeft  s="\""&amp;#t.#u.(let SubtractLeftChar  s=t+u in IsStringContent t&amp;u="\"").PartialAssert()</p>
+            <p>1: Partial assert $IsNameContinuation(i)=if LookaheadLeft  i!=""&amp;AlphaUnderNumeric LookaheadLeft  i then IsNameContinuation SubtractLeftChar  i else i="" </p>
+            <p>1: Null == $IsNameContinuation(i)=if LookaheadLeft  i!=""&amp;AlphaUnderNumeric LookaheadLeft  i then IsNameContinuation SubtractLeftChar  i else i="" .PartialAssert()</p>
+            <p>1: Partial assert $IsName(i)=LookaheadLeft  i!=""&amp;AlphaUnder SelectLeftChar  i&amp;IsNameContinuation SubtractLeftChar  i</p>
+            <p>1: Null == $IsName(i)=LookaheadLeft  i!=""&amp;AlphaUnder SelectLeftChar  i&amp;IsNameContinuation SubtractLeftChar  i.PartialAssert()</p>
+            <p>1: Partial assert $IsIntegerContinuation(i)=if LookaheadLeft  i!=""&amp;Digit LookaheadLeft  i then IsIntegerContinuation SubtractLeftChar  i else i="" </p>
+            <p>1: Null == $IsIntegerContinuation(i)=if LookaheadLeft  i!=""&amp;Digit LookaheadLeft  i then IsIntegerContinuation SubtractLeftChar  i else i="" .PartialAssert()</p>
+            <p>1: Partial assert $IsInteger(i)=LookaheadLeft  i!=""&amp;Digit SelectLeftChar  i&amp;IsIntegerContinuation SubtractLeftChar  i</p>
+            <p>1: Null == $IsInteger(i)=LookaheadLeft  i!=""&amp;Digit SelectLeftChar  i&amp;IsIntegerContinuation SubtractLeftChar  i.PartialAssert()</p>
+            <p>1: Partial assert $White(w)=w=" "|"/t"|"/n"|"/r"</p>
+            <p>1: Null == $White(w)=w=" "|"/t"|"/n"|"/r".PartialAssert()</p>
+            <p>1: Error: Partial assert failure.</p>
+            <p>1: Partial assert $AlphaUnderNumeric(k)=AlphaUnder k|Digit k</p>
+            <p>1: Null == $AlphaUnderNumeric(k)=AlphaUnder k|Digit k.PartialAssert()</p>
+            <p>1: Error: Partial assert failure.</p>
+            <p>1: Partial assert $AlphaNumeric(k)=Alpha k|Digit k</p>
+            <p>1: Null == $AlphaNumeric(k)=Alpha k|Digit k.PartialAssert()</p>
+            <p>1: Error: Partial assert failure.</p>
+            <p>1: Partial assert $AlphaUnder(a)=AlphaLower a|AlphaUpper a|a="_"</p>
+            <p>1: Null == $AlphaUnder(a)=AlphaLower a|AlphaUpper a|a="_".PartialAssert()</p>
+            <summary>Null == $AlphaUnder(a)=AlphaLower a|AlphaUpper a|a="_".PartialAssert()</summary>
+        </details>
+    </td>
+
 </body>
 </html>

@@ -528,9 +528,6 @@
     <ClInclude Include="sni_partialevaluate.h">
       <Filter>Function Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sni_domain.h">
-      <Filter>Type Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\inc\sn_domain.h">
       <Filter>Interface Header Files</Filter>
     </ClInclude>
@@ -548,6 +545,9 @@
     </ClInclude>
     <ClInclude Include="sni_notequals.h">
       <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_domain.h">
+      <Filter>Expression Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -995,9 +995,6 @@
     <ClCompile Include="sni_partialevaluate.cpp">
       <Filter>Function Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sni_domain.cpp">
-      <Filter>Type Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sn_domain.cpp">
       <Filter>Interface Source Files</Filter>
     </ClCompile>
@@ -1016,12 +1013,21 @@
     <ClCompile Include="sni_notequals.cpp">
       <Filter>Function Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="sni_domain.cpp">
+      <Filter>Expression Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\html\skynetjs.html">
       <Filter>HTML Files</Filter>
     </None>
     <None Include="..\html\style.css">
+      <Filter>HTML Files</Filter>
+    </None>
+    <None Include="..\html\help_index.html">
+      <Filter>HTML Files</Filter>
+    </None>
+    <None Include="..\html\help_start.html">
       <Filter>HTML Files</Filter>
     </None>
   </ItemGroup>
