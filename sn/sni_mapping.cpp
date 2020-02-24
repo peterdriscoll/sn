@@ -96,7 +96,7 @@ namespace SNI
 
 	size_t SNI_Mapping::Hash() const
 	{
-		return _Hash_representation(m_Map);
+		return 0; // _Hash_representation(m_Map);
 	}
 
 	bool SNI_Mapping::IsFixed() const

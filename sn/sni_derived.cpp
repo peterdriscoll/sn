@@ -90,7 +90,7 @@ namespace SNI
 
 	size_t SNI_Derived::Hash() const
 	{
-		return _Hash_representation(m_Vector);
+		return 0; // _Hash_representation(m_Vector);
 	}
 
 	bool SNI_Derived::IsFixed() const

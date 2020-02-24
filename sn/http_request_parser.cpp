@@ -4,10 +4,10 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
+#include "sn_pch.h"
+
 #include "http_request_parser.h"
 #include "http_request.h"
-
-#include "sn_pch.h"
 
 namespace HTTP
 {

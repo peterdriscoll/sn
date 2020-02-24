@@ -9,6 +9,8 @@
 
 #include "sn_pch.h"
 
+#include <windows.h>
+
 #include <boost/property_tree/json_parser/detail/write.hpp>
 //#include <boost/property_tree/json_parser/detail/read.hpp>
 

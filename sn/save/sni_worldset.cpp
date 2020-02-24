@@ -24,6 +24,7 @@ namespace SNI
 	}
 
 	typedef unordered_map<SNI_WorldSet *, SN::SN_Value, WorldSetKeyHasher, WorldSetKeyEqual> ConflictMap;
+
 	/*static*/ long SNI_WorldSet::m_NextWorldSetNo = 0;
 	/*static*/ SNI_WorldSetList SNI_WorldSet::m_ChangedList;
 
@@ -716,14 +717,15 @@ namespace SNI
 		}
 		for (const auto &pair : negatedMap)
 		{
+/*
 			if (pair.second == count)
 			{
 				SNI_World *w = pair.first;
 				w->FailInContext(m_ContextWorld, NegatedInAllValues);
 			}
+*/
 		}
 	}
-
 	void SNI_WorldSet::BreakPointsForDeletedWorlds()
 	{
 		for (SNI_World *w : m_WorldList)

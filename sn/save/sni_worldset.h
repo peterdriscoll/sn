@@ -4,6 +4,7 @@
 #pragma once
 
 #include "sni_object.h"
+
 #include <unordered_map>
 using namespace std;
 
@@ -19,6 +20,7 @@ namespace SNI
 
 	class SNI_WorldSet;
 	typedef vector<SNI_WorldSet*> SNI_WorldSetList;
+
 	struct WorldSetKeyHasher
 	{
 		std::size_t operator()(SNI_WorldSet * k) const;
@@ -28,14 +30,16 @@ namespace SNI
 	{
 		bool operator()(SNI_WorldSet* p_Left, SNI_WorldSet* p_Right) const;
 	};
-	
-	typedef unordered_map<long, SNI_WorldSet*> SNI_WorldSetMap;
+
+	//typedef unordered_map<SNI_WorldSet *, SNI_WorldSet *, WorldSetKeyHasher, WorldSetKeyEqual> SNI_WorldSetMap;
+	typedef vector<SNI_WorldSet *> SNI_WorldSetMap;
 
 	enum EnumAddWorld
 	{
 		AutoAddWorld,
 		ManualAddWorld
 	};
+
 	typedef enum EnumAddWorld AddWorldType;
 	
 	

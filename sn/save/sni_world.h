@@ -39,10 +39,13 @@ namespace SNI
 
 	struct WorldKeyEqual
 	{
+//		typedef SNI_World value_type;
 		bool operator()(SNI_World* p_Left, SNI_World* p_Right) const;
 	};
 
-	typedef unordered_map<SNI_World*, long, WorldKeyHasher, WorldKeyEqual> SNI_WorldCount;
+	typedef unordered_map<SNI_World*, long, WorldKeyHasher, WorldKeyHasher, WorldKeyEqual> SNI_WorldCount;
+//	typedef vector<SNI_World*> SNI_WorldCount;
+	//	typedef unordered_map<long, SNI_World*> SNI_WorldMap;
 
 	class SNI_World :public SNI_Object
 	{

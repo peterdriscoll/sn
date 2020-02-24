@@ -872,9 +872,6 @@
     <ClCompile Include="sni_if.cpp">
       <Filter>Function Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sni_add.cpp">
-      <Filter>Interface Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sni_sum.cpp">
       <Filter>Function Source Files</Filter>
     </ClCompile>
@@ -1015,6 +1012,9 @@
     </ClCompile>
     <ClCompile Include="sni_domain.cpp">
       <Filter>Expression Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_add.cpp">
+      <Filter>Function Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

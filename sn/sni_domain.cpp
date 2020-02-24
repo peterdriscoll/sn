@@ -67,7 +67,7 @@ namespace SNI
 
 	size_t SNI_Domain::Hash() const
 	{
-		return _Hash_representation(m_Map);
+		return 0; // _Hash_representation(m_Map);
 	}
 
 	// Inheritance

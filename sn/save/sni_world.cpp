@@ -586,7 +586,7 @@ namespace SNI
 			{ 
 				if (negatedMap.find(w) == negatedMap.end())
 				{
-					negatedMap[w] = 0;
+					//negatedMap[w] = 0;
 				}
 				negatedMap[w]++;
 			}

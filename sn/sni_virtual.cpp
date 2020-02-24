@@ -201,7 +201,7 @@ namespace SNI
 
 	size_t SNI_Virtual::Hash() const
 	{
-		return _Hash_representation(m_CallList);
+		return 0; // _Hash_representation(m_CallList);
 	}
 
 	bool SNI_Virtual::IsFixed() const

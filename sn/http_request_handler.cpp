@@ -3,10 +3,6 @@
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include "http_request_handler.h"
-#include "http_mime_types.h"
-#include "http_reply.h"
-#include "http_request.h"
 #include "sni_frame.h"
 
 #include <fstream>
@@ -14,6 +10,12 @@
 #include <string>
 
 #include "sn_pch.h"
+
+#include "http_request_handler.h"
+#include "http_mime_types.h"
+#include "http_reply.h"
+#include "http_request.h"
+
 using namespace std;
 
 #pragma warning (disable: 4244)
