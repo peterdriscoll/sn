@@ -72,5 +72,16 @@ namespace SNL
 			(Define(IsString)(s) == ((s.LookaheadLeft() == String("\"") && Local(t, Local(u, Let(s.SubtractLeftChar() == t + u, IsStringContent(t) && (u == String("\""))))))).Collapse()).PartialAssert().Do();
 			(Define(IsStringContent)(s) == ((s.LookaheadLeft() == String("\"")).If(s == String(""), (s.LookaheadLeft() == String("\\")).If(IsStringContent(s.SubtractLeftChar().SubtractLeftChar()), IsStringContent(s.SubtractLeftChar()))))).PartialAssert().Do();
 		}
+
+		{
+			SN_LOCAL(IsWhiteSpaceContinuation);
+			SN_LOCAL(i);
+			(Define(IsWhiteSpace)(i) == (i.LookaheadLeft() != "" && m_CharacterSet.White(i.SelectLeftChar()) && IsWhiteSpaceContinuation(i.SubtractLeftChar()))).PartialAssert().Do();
+			(Define(IsWhiteSpaceContinuation)(i) == (
+				(i.LookaheadLeft() != "" && m_CharacterSet.White(i.LookaheadLeft()))
+				.If(IsWhiteSpaceContinuation(i.SubtractLeftChar()), i == "")
+				)).PartialAssert().Do();
+		}
+
 	}
 }

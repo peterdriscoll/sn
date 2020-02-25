@@ -80,7 +80,7 @@ namespace SNL
 
 		{
 			SN_LOCAL(w);
-			(Define(White)(w) == (w == (String(" ") || String("/t") || String("/n") || String("/r")))).PartialAssert().Do();
+			(Define(White)(w) == (w == (String(" ") || String("\t") || String("\n") || String("\r")))).PartialAssert().Do();
 		}
 	}
 }

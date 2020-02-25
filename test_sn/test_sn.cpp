@@ -3453,10 +3453,6 @@ namespace test_sn
 					string t_comp = "StringRef(\"A543X dog\"[_split_";
 					Assert::IsTrue(t_part == t_comp);
 				}
-				
-//				Validate.IsString;
-//				Validate.IsWhiteSpace;
-
 			}
 			Cleanup();
 		}
@@ -3466,7 +3462,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Validate IsString", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, true /*runWebServer*/);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				CharacterSet characterSet;
 				Validate validate(characterSet);
@@ -3547,7 +3543,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Validate IsName", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				CharacterSet characterSet;
 				Validate validate(characterSet);
@@ -3602,6 +3598,94 @@ namespace test_sn
 					string t_string = t.DisplayValueSN();
 					string t_part = t_string.substr(0, 37 - 8);
 					string t_comp = "StringRef(\"677_M dog\"[_split_";
+					Assert::IsTrue(t_part == t_comp);
+				}
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestValidate_IsWhitespace)
+		{
+			Initialize();
+			{
+				Manager manager("Test Validate IsWhitespace", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				CharacterSet characterSet;
+				Validate validate(characterSet);
+
+				(!validate.IsWhiteSpace(String(""))).Assert().Do();
+				validate.IsWhiteSpace(String(" ")).Assert().Do();
+				validate.IsWhiteSpace(String("\t\n")).Assert().Do();
+				validate.IsWhiteSpace(String(" \t\n")).Assert().Do();
+				(!validate.IsWhiteSpace(String(" \t \r\nXX"))).Assert().Do();
+				(!validate.IsWhiteSpace(String("X   \tX"))).Assert().Do();
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("")).Assert().Do();
+					(!validate.IsWhiteSpace(s)).Assert().Do();
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String(" dog")).Assert().Do();
+					validate.IsWhiteSpace(s).Assert().Do();
+					(t == String("dog")).Evaluate().Do();
+					string t_string = t.GetString();
+					Assert::IsTrue(t_string == "dog");
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String(" \tdog")).Assert().Do();
+					validate.IsWhiteSpace(s).Assert().Do();
+					(t == String("dog")).Evaluate().Do();
+					string s_string = s.GetString();
+					string t_string = t.GetString();
+					Assert::IsTrue(s_string == " \t");
+					Assert::IsTrue(t_string == "dog");
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("\t\n dog")).Assert().Do();
+					validate.IsWhiteSpace(s).Assert().Do();
+					(t == String("dog")).Evaluate().Do();
+					string s_string = s.GetString();
+					string t_string = t.GetString();
+					Assert::IsTrue(s_string == "\t\n ");
+					Assert::IsTrue(t_string == "dog");
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("\t \r\ndog")).Assert().Do();
+					validate.IsWhiteSpace(s).Assert().Do();
+					(t == String("dog")).Evaluate().Do();
+					string s_string = s.GetString();
+					string t_string = t.GetString();
+					Assert::IsTrue(s_string == "\t \r\n");
+					Assert::IsTrue(t_string == "dog");
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("A  \tX dog")).Assert().Do();
+					(!validate.IsWhiteSpace(s)).Assert().Do();
+					string s_string = s.DisplayValueSN();
+					string s_part = s_string.substr(0, 37 - 4);
+					string s_comp = "StringRef(\"A  \\tX dog\"[0.._split_";
+					Assert::IsTrue(s_part == s_comp);
+					string t_string = t.DisplayValueSN();
+					string t_part = t_string.substr(0, 37 - 7);
+					string t_comp = "StringRef(\"A  \\tX dog\"[_split_";
 					Assert::IsTrue(t_part == t_comp);
 				}
 			}
