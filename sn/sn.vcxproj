@@ -258,6 +258,8 @@
     <ClInclude Include="sni_isa.h" />
     <ClInclude Include="sni_log.h" />
     <ClInclude Include="sni_logbuffer.h" />
+    <ClInclude Include="sni_lookstringleft.h" />
+    <ClInclude Include="sni_lookstringright.h" />
     <ClInclude Include="sni_mapping.h" />
     <ClInclude Include="sni_metalevel.h" />
     <ClInclude Include="sni_notequals.h" />
@@ -377,6 +379,8 @@
     <ClCompile Include="sni_isa.cpp" />
     <ClCompile Include="sni_log.cpp" />
     <ClCompile Include="sni_logbuffer.cpp" />
+    <ClCompile Include="sni_lookstringleft.cpp" />
+    <ClCompile Include="sni_lookstringright.cpp" />
     <ClCompile Include="sni_mapping.cpp" />
     <ClCompile Include="sni_metalevel.cpp" />
     <ClCompile Include="sni_notequals.cpp" />

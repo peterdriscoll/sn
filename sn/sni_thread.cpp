@@ -30,7 +30,7 @@ namespace SNI
 	{
 		return SN::SN_Thread::GetThread().GetSNI_Thread();
 	}
-	/*static*/ SNI_Thread *SNI_Thread::GetThreadByNumber(long p_ThreadNum)
+	/*static*/ SNI_Thread *SNI_Thread::GetThreadByNumber(size_t p_ThreadNum)
 	{
 		if (p_ThreadNum < m_ThreadList.size())
 		{

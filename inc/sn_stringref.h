@@ -57,6 +57,8 @@ namespace SN
 		SN_Expression SelectRightChar() const;
 		SN_Expression LookaheadLeft() const;
 		SN_Expression LookaheadRight() const;
+		SN_Expression LookStringLeft(const SN::SN_Expression & p_Other) const;
+		SN_Expression LookStringRight(const SN::SN_Expression & p_Other) const;
 		SN_Expression File() const;
 
 		// Conversions

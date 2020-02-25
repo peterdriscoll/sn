@@ -107,6 +107,8 @@
 #include "sni_selectrightchar.h"
 #include "sni_lookaheadleft.h"
 #include "sni_lookaheadright.h"
+#include "sni_lookstringleft.h"
+#include "sni_lookstringright.h"
 #include "sni_file.h"
 
 // Escape conversion

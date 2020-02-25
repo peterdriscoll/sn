@@ -210,6 +210,8 @@ namespace skynet
 	extern SN_EXPORT SN::SN_FunctionDef SelectRightChar;
 	extern SN_EXPORT SN::SN_FunctionDef LookaheadLeft;
 	extern SN_EXPORT SN::SN_FunctionDef LookaheadRight;
+	extern SN_EXPORT SN::SN_FunctionDef LookStringLeft;
+	extern SN_EXPORT SN::SN_FunctionDef LookStringRight;
 	extern SN_EXPORT SN::SN_FunctionDef File;
 
 	// * Conversions

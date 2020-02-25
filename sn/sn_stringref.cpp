@@ -154,6 +154,16 @@ namespace SN
 		return SN_Operators::LookaheadRight(*this);
 	}
 
+	SN_Expression SN_StringRef::LookStringLeft(const SN_Expression &p_Other) const
+	{
+		return SN_Operators::LookStringLeft(m_Expression, p_Other);
+	}
+
+	SN_Expression SN_StringRef::LookStringRight(const SN_Expression &p_Other) const
+	{
+		return SN_Operators::LookStringRight(m_Expression, p_Other);
+	}
+
 	SN_Expression SN_StringRef::File() const
 	{
 		return SN_Operators::File(*this);

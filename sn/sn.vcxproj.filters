@@ -528,6 +528,12 @@
     <ClInclude Include="..\inc\ihttp_server.h">
       <Filter>Interface Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sni_lookstringleft.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_lookstringright.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -979,6 +985,12 @@
     </ClCompile>
     <ClCompile Include="sn_factory.cpp">
       <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_lookstringleft.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_lookstringright.cpp">
+      <Filter>Function Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

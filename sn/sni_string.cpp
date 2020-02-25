@@ -421,9 +421,33 @@ namespace SNI
 		size_t length = m_String.length();
 		if (length)
 		{
-			return SN::SN_Char(m_String[length-1]);
+			return SN::SN_Char(m_String[length - 1]);
 		}
 		return SN::SN_String("");
+	}
+
+	SN::SN_Value SNI_String::DoLookStringLeft(SNI_Value * p_Other) const
+	{
+		string other = p_Other->GetString();
+		size_t length = m_String.length();
+		size_t otherLength = other.length();
+		if (m_String.length())
+		{
+			return SN::SN_Bool(m_String.substr(0, otherLength) == other);
+		}
+		return skynet::False;
+	}
+
+	SN::SN_Value SNI_String::DoLookStringRight(SNI_Value * p_Other) const
+	{
+		string other = p_Other->GetString();
+		size_t length = m_String.length();
+		size_t otherLength = other.length();
+		if (otherLength < length)
+		{
+			return SN::SN_Bool(m_String.substr(length-otherLength, otherLength) == other);
+		}
+		return skynet::False;
 	}
 
 	SN::SN_Value SNI_String::DoFile() const

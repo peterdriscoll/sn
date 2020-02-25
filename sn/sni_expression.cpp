@@ -867,6 +867,16 @@ namespace SNI
 		return SN::SN_Error(GetTypeName() + " LookaheadRight method not implemented.");
 	}
 
+	SN::SN_Value SNI_Expression::DoLookStringLeft(SNI_Value * p_Other) const
+	{
+		return SN::SN_Error(GetTypeName() + " LookStringLeft method not implemented.");
+	}
+
+	SN::SN_Value SNI_Expression::DoLookStringRight(SNI_Value * p_Other) const
+	{
+		return SN::SN_Error(GetTypeName() + " LookStringRight method not implemented.");
+	}
+
 	SN::SN_Value SNI_Expression::DoFile() const
 	{
 		return SN::SN_Error(GetTypeName() + " File method not implemented.");

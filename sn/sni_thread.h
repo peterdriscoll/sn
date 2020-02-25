@@ -28,7 +28,7 @@ namespace SNI
 	{
 	public:
 		static SNI_Thread *GetThread();
-		static SNI_Thread *GetThreadByNumber(long p_ThreadNum);
+		static SNI_Thread *GetThreadByNumber(size_t p_ThreadNum);
 		static size_t GetNumThreads();
 		static SNI_Thread *BuildThread();
 		static SNI_Manager *TopManager();

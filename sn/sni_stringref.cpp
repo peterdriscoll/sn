@@ -930,6 +930,40 @@ namespace SNI
 		return SN::SN_String("");
 	}
 
+	SN::SN_Value SNI_StringRef::DoLookStringLeft(SNI_Value * p_Other) const
+	{
+		string other = p_Other->GetString();
+		size_t other_length = other.length();
+		SN::SN_Expression start = m_Start.DoPartialEvaluate();
+		if (!SN::Is<SNI_Long *>(start))
+		{
+			return SN::SN_String("");
+		}
+		size_t start_pos = SN::SN_Long(start).GetNumber();
+		if (start_pos + other_length <= GetSourceString().length())
+		{
+			return SN::SN_Bool(GetSourceString().substr(start_pos, other_length) == other);
+		}
+		return skynet::False;
+	}
+
+	SN::SN_Value SNI_StringRef::DoLookStringRight(SNI_Value * p_Other) const
+	{
+		string other = p_Other->GetString();
+		size_t other_length = other.length();
+		SN::SN_Expression end = m_End.DoPartialEvaluate();
+		if (!SN::Is<SNI_Long *>(end))
+		{
+			return SN::SN_String("");
+		}
+		size_t end_pos = SN::SN_Long(end).GetNumber();
+		if (end_pos + other_length <= GetSourceString().length())
+		{
+			return SN::SN_Bool(GetSourceString().substr(end_pos - other_length, other_length) == other);
+		}
+		return skynet::False;
+	}
+
 	SN::SN_Value SNI_StringRef::DoFile() const
 	{
 		return SN::SN_String("");

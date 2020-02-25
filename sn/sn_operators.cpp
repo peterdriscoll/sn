@@ -169,6 +169,16 @@ namespace SN
 			return SN::SN_Function(skynet::LookaheadRight, p_Left);
 		}
 
+		SN::SN_Expression LookStringLeft(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right)
+		{
+			return SN::SN_Function(SN::SN_Function(skynet::LookStringLeft, p_Left), p_Right);
+		}
+
+		SN::SN_Expression LookStringRight(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right)
+		{
+			return SN::SN_Function(SN::SN_Function(skynet::LookStringRight, p_Left), p_Right);
+		}
+
 		SN::SN_Expression File(const SN::SN_Expression &p_Left)
 		{
 			return SN::SN_Function(skynet::File, p_Left);

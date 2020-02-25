@@ -55,6 +55,8 @@ namespace SN
 		SN_EXPORT SN::SN_Expression SelectRightChar(const SN::SN_Expression &p_Left);
 		SN_EXPORT SN::SN_Expression LookaheadLeft(const SN::SN_Expression &p_Left);
 		SN_EXPORT SN::SN_Expression LookaheadRight(const SN::SN_Expression &p_Left);
+		SN_EXPORT SN::SN_Expression LookStringLeft(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right);
+		SN_EXPORT SN::SN_Expression LookStringRight(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right);
 		SN_EXPORT SN::SN_Expression File(const SN::SN_Expression &p_Left);
 
 		// Numbers

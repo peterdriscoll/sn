@@ -53,6 +53,8 @@
 #include "sni_selectrightchar.h"
 #include "sni_lookaheadleft.h"
 #include "sni_lookaheadright.h"
+#include "sni_lookstringleft.h"
+#include "sni_lookstringright.h"
 
 // Escape conversion
 #include "sni_escape.h"
@@ -130,6 +132,8 @@ namespace skynet
 	SN::SN_FunctionDef SelectRightChar(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_SelectRightChar()));
 	SN::SN_FunctionDef LookaheadLeft(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_LookaheadLeft()));
 	SN::SN_FunctionDef LookaheadRight(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_LookaheadRight()));
+	SN::SN_FunctionDef LookStringLeft(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_LookStringLeft()));
+	SN::SN_FunctionDef LookStringRight(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_LookStringRight()));
 	SN::SN_FunctionDef File(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_File()));
 
 	// Escape Conversions

@@ -78,6 +78,8 @@ namespace SNI
 		virtual	SN::SN_Value DoSelectRightChar() const;
 		virtual	SN::SN_Value DoLookaheadLeft() const;
 		virtual	SN::SN_Value DoLookaheadRight() const;
+		virtual	SN::SN_Value DoLookStringLeft(SNI_Value * p_Other) const;
+		virtual	SN::SN_Value DoLookStringRight(SNI_Value * p_Other) const;
 		virtual	SN::SN_Value DoFile() const;
 
 		virtual void DoWriteFile(const SN::SN_Value & p_Contents) const;
