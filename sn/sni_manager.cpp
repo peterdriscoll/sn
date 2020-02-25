@@ -12,7 +12,20 @@
 
 #include "sn_pch.h"
 
-#include "http_server.h"
+#include "../inc/ihttp_server.h"
+
+#define VK_F1             0x70
+#define VK_F2             0x71
+#define VK_F3             0x72
+#define VK_F4             0x73
+#define VK_F5             0x74
+#define VK_F6             0x75
+#define VK_F7             0x76
+#define VK_F8             0x77
+#define VK_F9             0x78
+#define VK_F10            0x79
+#define VK_F11            0x7A
+#define VK_F12            0x7B
 
 #define VK_FUNCTION 0
 #define VK_FUNCTION2 224
@@ -49,7 +62,7 @@ namespace SNI
 	/*static*/ long SNI_Manager::m_CommandServerThreadUsageCount = 0;
 
 	/*static*/ thread *SNI_Manager::m_WebServerThread = NULL;
-	/*static*/ HTTP::server::server *SNI_Manager::m_WebServer = NULL;
+	/*static*/ IHTTP_Server *SNI_Manager::m_WebServer = NULL;
 	/*static*/ long SNI_Manager::m_WebServerThreadUsageCount = 0;
 	/*static*/ bool SNI_Manager::m_LogicSetupDone = false;
 
@@ -332,8 +345,7 @@ namespace SNI
 
 	void SNI_Manager::WebServerShutdown()
 	{
-
-		Sleep(1000);
+		//Sleep(1000);
 
 		m_WebServer->stop();
 		m_WebServerThread->join();
@@ -472,7 +484,8 @@ namespace SNI
 		{
 			// Initialise the server.
 			// "0.0.0.0", "80", "C:/sn/html"
-			SNI_Manager::m_WebServer = new HTTP::server::server(p_Address, p_Port, p_DocRoot);
+			m_WebServer = SN::SN_Factory<IHTTP_Server>::CreateObject();
+			m_WebServer->setup(p_Address.data(), p_Port.data(), p_DocRoot.data());
 			// Run the server until stopped.
 			m_WebServer->run();
 		}

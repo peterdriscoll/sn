@@ -3466,7 +3466,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Validate IsString", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, true /*runWebServer*/);
 
 				CharacterSet characterSet;
 				Validate validate(characterSet);

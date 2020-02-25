@@ -56,6 +56,7 @@ namespace skynet
 #include "logcontext.h"
 #endif
 
+#include "sn_factory.h"
 #include "sn_error.h"
 #include "sn_manager.h"
 #include "sn_transaction.h"

@@ -164,6 +164,8 @@
   <ItemGroup>
     <ClInclude Include="..\inc\exp_ctrl_sn.h" />
     <ClInclude Include="..\inc\exp_ctrl_sn_lib.h" />
+    <ClInclude Include="..\inc\ihttp_handler.h" />
+    <ClInclude Include="..\inc\ihttp_server.h" />
     <ClInclude Include="..\inc\log.h" />
     <ClInclude Include="..\inc\logcontext.h" />
     <ClInclude Include="..\inc\parser.h" />
@@ -180,6 +182,7 @@
     <ClInclude Include="..\inc\sn_domain.h" />
     <ClInclude Include="..\inc\sn_error.h" />
     <ClInclude Include="..\inc\sn_expression.h" />
+    <ClInclude Include="..\inc\sn_factory.h" />
     <ClInclude Include="..\inc\sn_function.h" />
     <ClInclude Include="..\inc\sn_functiondef.h" />
     <ClInclude Include="..\inc\sn_instance.h" />
@@ -206,15 +209,6 @@
     <ClInclude Include="..\inc\sn_variable.h" />
     <ClInclude Include="..\inc\sn_vector.h" />
     <ClInclude Include="..\inc\sn_virtual.h" />
-    <ClInclude Include="http_connection.h" />
-    <ClInclude Include="http_connection_manager.h" />
-    <ClInclude Include="http_header.h" />
-    <ClInclude Include="http_mime_types.h" />
-    <ClInclude Include="http_reply.h" />
-    <ClInclude Include="http_request.h" />
-    <ClInclude Include="http_request_handler.h" />
-    <ClInclude Include="http_request_parser.h" />
-    <ClInclude Include="http_server.h" />
     <ClInclude Include="sni_add.h" />
     <ClInclude Include="sni_and.h" />
     <ClInclude Include="sni_assert.h" />
@@ -257,6 +251,7 @@
     <ClInclude Include="sni_greaterthan.h" />
     <ClInclude Include="sni_hasa.h" />
     <ClInclude Include="sni_helpers.h" />
+    <ClInclude Include="sni_http_handler.h" />
     <ClInclude Include="sni_if.h" />
     <ClInclude Include="sni_implies.h" />
     <ClInclude Include="sni_instance.h" />
@@ -331,13 +326,6 @@
     <ClInclude Include="utility.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="http_connection.cpp" />
-    <ClCompile Include="http_connection_manager.cpp" />
-    <ClCompile Include="http_mime_types.cpp" />
-    <ClCompile Include="http_reply.cpp" />
-    <ClCompile Include="http_request_handler.cpp" />
-    <ClCompile Include="http_request_parser.cpp" />
-    <ClCompile Include="http_server.cpp" />
     <ClCompile Include="log.cpp" />
     <ClCompile Include="logcontext.cpp" />
     <ClCompile Include="sn.cpp" />
@@ -382,6 +370,7 @@
     <ClCompile Include="sni_greaterthan.cpp" />
     <ClCompile Include="sni_hasa.cpp" />
     <ClCompile Include="sni_helpers.cpp" />
+    <ClCompile Include="sni_http_handler.cpp" />
     <ClCompile Include="sni_if.cpp" />
     <ClCompile Include="sni_implies.cpp" />
     <ClCompile Include="sni_instance.cpp" />
@@ -460,6 +449,7 @@
     <ClCompile Include="sn_domain.cpp" />
     <ClCompile Include="sn_error.cpp" />
     <ClCompile Include="sn_expression.cpp" />
+    <ClCompile Include="sn_factory.cpp" />
     <ClCompile Include="sn_function.cpp" />
     <ClCompile Include="sn_functiondef.cpp" />
     <ClCompile Include="sn_instance.cpp" />

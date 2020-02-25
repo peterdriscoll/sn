@@ -18,6 +18,7 @@
 // Other
 #include "sni_replacement.h"
 #include "sni_frame.h"
+#include "sni_http_handler.h"
 
 // Language elements
 #include "sni_meta.h"

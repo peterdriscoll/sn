@@ -135,10 +135,27 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\inc\sn_factory.h" />
+    <ClInclude Include="connection.hpp" />
+    <ClInclude Include="connection_manager.hpp" />
+    <ClInclude Include="header.hpp" />
+    <ClInclude Include="mime_types.hpp" />
+    <ClInclude Include="reply.hpp" />
+    <ClInclude Include="request.hpp" />
+    <ClInclude Include="request_handler.hpp" />
+    <ClInclude Include="request_parser.hpp" />
+    <ClInclude Include="server.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="connection.cpp" />
+    <ClCompile Include="connection_manager.cpp" />
+    <ClCompile Include="load_library.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="sn_factory.cpp" />
+    <ClCompile Include="mime_types.cpp" />
+    <ClCompile Include="reply.cpp" />
+    <ClCompile Include="request_handler.cpp" />
+    <ClCompile Include="request_parser.cpp" />
+    <ClCompile Include="server.cpp" />
+    <ClCompile Include="sn_entrypoint.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

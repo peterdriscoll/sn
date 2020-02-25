@@ -32,7 +32,11 @@ namespace SNI
 	}
 	/*static*/ SNI_Thread *SNI_Thread::GetThreadByNumber(long p_ThreadNum)
 	{
-		return m_ThreadList[p_ThreadNum];
+		if (p_ThreadNum < m_ThreadList.size())
+		{
+			return m_ThreadList[p_ThreadNum];
+		}
+		return NULL;
 	}
 
 	/*static*/ size_t SNI_Thread::GetNumThreads()

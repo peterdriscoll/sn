@@ -9,9 +9,12 @@
 //
 
 #include <iostream>
+#include <string>
+#include <boost/asio.hpp>
+#include "server.hpp"
+#include "../inc/ihttp_handler.h"
 
-#include "../inc/ihttp_server.h"
-#include "../inc/sn_factory.h"
+IHTTP_Handler *LoadLibrary();
 
 int main(int argc, char* argv[])
 {
@@ -27,17 +30,18 @@ int main(int argc, char* argv[])
       std::cerr << "    receiver 0::0 80 .\n";
       return 1;
     }
+	IHTTP_Handler *handler = LoadLibrary();
+	http::server::request_handler::SetIHTTP_Handler(handler);
 
     // Initialise the server.
+	//http::server::server s(argv[1], argv[2], argv[3]);
 	char *doc_root = "C:/Users/peter_driscoll/Documents/Source/Repos/skynet2/html";
 
-	IHTTP_Server *server = SN::SN_Factory<IHTTP_Server>::CreateObject();
-	
-	//server->setup(argv[1], argv[2], argv[3]);
-	server->setup("0.0.0.0", "80", doc_root);
+	http::server::server s("0.0.0.0", "80", doc_root);
 
-	// Run the server until stopped.
-	server->run();
+	http::server::request_handler::SetIHTTP_Handler(LoadLibrary());
+    // Run the server until stopped.
+    s.run();
   }
   catch (std::exception& e)
   {

@@ -1,0 +1,237 @@
+#include "sni_http_handler.h"
+
+#include "sn_pch.h"
+
+namespace SNI
+{
+	SNI_HTTP_Handler::SNI_HTTP_Handler()
+	{
+	}
+
+	SNI_HTTP_Handler::~SNI_HTTP_Handler()
+	{
+	}
+
+	bool SNI_HTTP_Handler::handle_response(const char *p_Path, const char *p_ParamString, const char *p_Extension)
+	{
+
+		SN::SN_Transaction::RegisterInWebServer();
+
+		string path = p_Path;
+		string paramString = p_ParamString;
+		m_extension = p_Extension;
+
+		string_umap umap;
+		extract_parameters(paramString, umap);
+
+		m_response_data = "";
+
+		long threadNum = atol(umap["threadnum"].c_str());
+		DisplayOptionType debugHTML = doDebugPointsHTML;
+		DisplayOptionType debugJS = doDebugPointsJS;
+		bool result = true;
+
+		SNI::SNI_Thread *l_thread = SNI::SNI_Thread::GetThreadByNumber(threadNum);
+		if (l_thread)
+		{
+			if (path == "/skynet")
+			{
+				m_response_data = l_thread->Skynet(debugHTML);
+			}
+			else if (path == "/run")
+			{
+				m_response_data = l_thread->RunWeb(debugHTML);
+			}
+			else if (path == "/runjs")
+			{
+				l_thread->Run();
+			}
+			else if (path == "/runtoend")
+			{
+				m_response_data = l_thread->RunToEndWeb(debugHTML);
+			}
+			else if (path == "/runtoendjs")
+			{
+				l_thread->RunToEnd();
+			}
+			else if (path == "/debug")
+			{
+				m_response_data = l_thread->DebugWeb(debugHTML);
+			}
+			else if (path == "/debugjs")
+			{
+				string breakpoints = umap["breakpoints"].c_str();
+				l_thread->LoadBreakPoints(breakpoints);
+				l_thread->Debug();
+			}
+			else if (path == "/codebreak")
+			{
+				m_response_data = l_thread->CodeBreakWeb(debugHTML);
+			}
+			else if (path == "/codebreakjs")
+			{
+				l_thread->CodeBreak();
+			}
+			else if (path == "/stepover")
+			{
+				m_response_data = l_thread->StepOverWeb(debugHTML);
+			}
+			else if (path == "/stepoverjs")
+			{
+				l_thread->StepOverWeb(debugHTML);
+			}
+			else if (path == "/stepinto")
+			{
+				m_response_data = l_thread->StepIntoWeb(debugHTML);
+			}
+			else if (path == "/stepintojs")
+			{
+				l_thread->StepInto();
+			}
+			else if (path == "/stepout")
+			{
+				m_response_data = l_thread->StepOutWeb(debugHTML);
+			}
+			else if (path == "/stepoutjs")
+			{
+				l_thread->StepOutWeb(debugHTML);
+			}
+			else if (path == "/stepparam")
+			{
+				m_response_data = l_thread->StepParamWeb(debugHTML);
+			}
+			else if (path == "/stepparamjs")
+			{
+				l_thread->StepParamWeb(debugHTML);
+			}
+			else if (path == "/gotostepcount")
+			{
+				long stepCount = atol(umap["stepcount"].c_str());
+				if (0 < stepCount)
+				{
+					m_response_data = l_thread->GotoStepCountWeb(stepCount, debugHTML);
+				}
+			}
+			else if (path == "/gotostepcountjs")
+			{
+				long stepCount = atol(umap["stepcount"].c_str());
+				if (0 < stepCount)
+				{
+					l_thread->GotoStepCount(stepCount);
+				}
+			}
+			else if (path == "/maxstackframes")
+			{
+				long maxStackFrames = atol(umap["maxstackframes"].c_str());
+				m_response_data = l_thread->SetMaxStackFramesWeb(maxStackFrames, debugHTML);
+			}
+			else if (path == "/thread")
+			{
+				m_response_data = l_thread->Skynet(debugHTML);
+			}
+			else if (path == "/quit")
+			{
+				m_response_data = l_thread->QuitWeb(debugHTML);
+			}
+			else if (path == "/quitjs")
+			{
+				l_thread->Quit();
+			}
+			else if (path == "/skynet")
+			{
+				m_response_data = l_thread->Skynet(debugHTML);
+			}
+			else if (path == "/dashboardjs")
+			{
+				m_response_data = l_thread->DashboardJS(debugJS);
+				m_extension = "json";
+			}
+			else if (path == "/stackjs")
+			{
+				long maxStackFrames = atol(umap["maxstackframes"].c_str());
+				m_response_data = l_thread->StackJS(maxStackFrames, debugJS);
+				m_extension = "json";
+			}
+			else if (path == "/logjs")
+			{
+				long maxLogEntries = atol(umap["maxlogentries"].c_str());
+				m_response_data = l_thread->LogJS(maxLogEntries);
+				m_extension = "json";
+			}
+			else if (path == "/derivationjs")
+			{
+				long maxLogEntries = atol(umap["maxlogentries"].c_str());
+				m_response_data = l_thread->DerivationJS(maxLogEntries);
+				m_extension = "json";
+			}
+			else if (path == "/logexpjs")
+			{
+				long maxLogEntries = atol(umap["maxlogentries"].c_str());
+				m_response_data = l_thread->LogExpJS(maxLogEntries, debugJS);
+				m_extension = "json";
+			}
+			else if (path == "/stepcountjs")
+			{
+				m_response_data = l_thread->StepCountJS();
+				m_extension = "json";
+			}
+			else if (path == "/errorjs")
+			{
+				m_response_data = l_thread->ErrorJS(debugJS);
+				m_extension = "json";
+			}
+			else if (path == "/worldsetsjs")
+			{
+				m_response_data = l_thread->WorldSetsJS(debugJS);
+				m_extension = "json";
+			}
+			else if (path == "/delayedjs")
+			{
+				m_response_data = l_thread->DelayedJS(debugJS);
+				m_extension = "json";
+			}
+			else
+			{
+				result = false;
+			}
+		}
+		else
+		{
+			result = false;
+		}
+		return result;
+	}
+
+	const char * SNI_HTTP_Handler::extension()
+	{
+		return m_extension.data();
+	}
+
+	const char * SNI_HTTP_Handler::response_data()
+	{
+		return m_response_data.data();
+	}
+
+	void SNI_HTTP_Handler::extract_parameters(const string &p_ParamString, string_umap &p_Map)
+	{
+		string result;
+		vector<string> assignmentList;
+		if (!p_ParamString.empty())
+		{
+			Split(p_ParamString, "&", assignmentList);
+			for (const string &element : assignmentList)
+			{
+				vector<string> tokenList;
+				Split(element, "=", tokenList);
+				if (tokenList.size() == 2)
+				{
+					string t0 = tokenList[0];
+					string t1 = tokenList[1];
+					p_Map[tokenList[0]] = tokenList[1];
+					string r1 = p_Map[tokenList[0]];
+				}
+			}
+		}
+	}
+}
+

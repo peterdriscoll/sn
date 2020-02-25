@@ -8,6 +8,7 @@
 using namespace std;
 
 #include "sni_debugcommand.h"
+#include "ihttp_server.h"
 
 namespace SN
 {
@@ -130,7 +131,7 @@ namespace SNI
 		static long m_CommandServerThreadUsageCount;
 
 		static thread *m_WebServerThread;
-		static HTTP::server::server *m_WebServer;
+		static IHTTP_Server *m_WebServer;
 		static long m_WebServerThreadUsageCount;
 		static bool m_LogicSetupDone;
 	};

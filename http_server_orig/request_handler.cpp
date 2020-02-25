@@ -80,6 +80,16 @@ void request_handler::handle_request(const request& req, reply& rep)
   rep.headers[1].value = mime_types::extension_to_type(extension);
 }
 
+/*static*/ IHTTP_Handler *request_handler::m_IHTTP_Handler;
+IHTTP_Handler * request_handler::GetIHTTP_Handler()
+{
+	return m_IHTTP_Handler;
+}
+/*static*/ void request_handler::SetIHTTP_Handler(IHTTP_Handler *p_IHTTP_Handler)
+{
+	m_IHTTP_Handler = p_IHTTP_Handler;
+}
+
 bool request_handler::url_decode(const std::string& in, std::string& out)
 {
   out.clear();
