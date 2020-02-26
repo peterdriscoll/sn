@@ -77,7 +77,7 @@ namespace SNI
 				{
 					if (world->GetWorldSet() != m_WorldSet)
 					{
-						//ASSERTM(world->GetWorldSet() == m_WorldSet, "World set inconsistency");
+						ASSERTM(world->GetWorldSet() == m_WorldSet, "World set inconsistency");
 					}
 				}
 				else

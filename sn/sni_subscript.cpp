@@ -155,6 +155,6 @@ namespace SNI
 			}
 		}
 		}
-		return false;
+		return SN::SN_Error(GetTypeName() + ": Expression not unified. TotalCalc=" + to_string(p_TotalCalc) + " Calcpos=" + to_string(p_CalcPos));
 	}
 }

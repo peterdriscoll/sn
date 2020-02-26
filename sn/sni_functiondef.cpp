@@ -418,7 +418,7 @@ namespace SNI
 
 	SN::SN_Error SNI_FunctionDef::UnifyElement(long p_Depth, SN::SN_Expression * p_InputList, SNI_World ** p_WorldList, long p_CalcPos, long p_TotalCalc, SNI_WorldSet * worldSet, const SNI_Expression *p_Source) const
 	{
-		return false;
+		return SN::SN_Error(GetTypeName() + ": Unify element not implemented.");
 	}
 
 	size_t SNI_FunctionDef::CardinalityOfCall(long p_NumParams, SN::SN_Expression * p_ParameterList) const
