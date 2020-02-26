@@ -96,7 +96,7 @@ namespace SNL
 			SN_LOCAL(v);
 
 			(Define(IsSimpleComment)(s) == (s.LookStringLeft(String("/*")) && Local(t, Local(u, Let(s.SubtractLeft(String("/*")) == t + u, IsSimpleCommentContent(t) && (u == String("*/")))))).Collapse()).PartialAssert().Do();
-			(Define(IsSimpleCommentContent)(s) == (s.LookStringLeft(String("*/")).If(s == String(""), (s.LookaheadLeft() == String("\\")).If(IsSimpleCommentContent(s.SubtractLeftChar().SubtractLeftChar()), IsSimpleCommentContent(s.SubtractLeftChar()))))).PartialAssert().Do();
+			(Define(IsSimpleCommentContent)(s) == (s.LookStringLeft(String("*/")).If(s == String(""), IsSimpleCommentContent(s.SubtractLeftChar())))).PartialAssert().Do();
 		}
 
 		{
