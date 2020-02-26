@@ -1823,9 +1823,6 @@ namespace test_sn
 				string j3_string = j3.DisplayValueSN();
 				Assert::IsTrue(i3_string == j3_string);
 
-				manager.Breakpoint();
-				manager.SetDebugAction(skynet::StepInto);
-
 				SN_DECLARE(s1);
 				(ParsePart(MyDomain)(String("\"My test \\\"string\\\"\""))(s1)).Assert().Do();
 
@@ -3720,7 +3717,6 @@ namespace test_sn
 					SN_LOCAL(s);
 					SN_LOCAL(t);
 					(s + t == String("/**/ dog")).Assert().Do();
-					manager.Breakpoint();
 					validate.IsSimpleComment(s).Assert().Do();
 					(s == String("/**/")).Evaluate().Do();
 					(t == String(" dog")).Evaluate().Do();
@@ -3734,7 +3730,6 @@ namespace test_sn
 					SN_LOCAL(s);
 					SN_LOCAL(t);
 					(s + t == String("/*Containing included /* in text*/ dog")).Assert().Do();
-					manager.Breakpoint();
 					validate.IsSimpleComment(s).Assert().Do();
 					(s == String("/*Containing included /* in text*/")).Evaluate().Do();
 					(t == String(" dog")).Evaluate().Do();
@@ -3762,7 +3757,7 @@ namespace test_sn
 			Cleanup();
 		}
 
-		TEST_METHOD(TestValidate_IsLineComment)
+		TEST_METHOD(omp)
 		{
 			Initialize();
 			{
@@ -3773,9 +3768,8 @@ namespace test_sn
 				Validate validate(characterSet);
 
 				// No closing line feed.
-				manager.Breakpoint();
-				validate.IsLineComment(String("//D")).Assert().Do();
-				validate.IsLineComment(String("//Escaped // quotes*/")).Assert().Do();
+				(!validate.IsLineComment(String("//D"))).Assert().Do();
+				(!validate.IsLineComment(String("//Escaped // quotes*/"))).Assert().Do();
 
 				(!validate.IsLineComment(String(""))).Assert().Do();
 				validate.IsLineComment(String("//\n")).Assert().Do();
