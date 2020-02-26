@@ -17,8 +17,11 @@ namespace SNL
 		skynet::Variable IsInteger;
 		skynet::Variable IsString;
 		skynet::Variable IsName;
+		skynet::Variable IsWhiteSpaceOnly;
+		skynet::Variable IsSimpleComment;
+		skynet::Variable IsLineComment;
+		skynet::Variable IsComment;
 		skynet::Variable IsWhiteSpace;
-		skynet::Variable IsMatchingComment;
 
 		private:
 			void Setup();

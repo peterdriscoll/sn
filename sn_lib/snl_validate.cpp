@@ -38,7 +38,7 @@ namespace SNL
 			(Define(IsIntegerContinuation)(i) == (
 				(i.LookaheadLeft() != "" && m_CharacterSet.Digit(i.LookaheadLeft()))
 				.If(IsIntegerContinuation(i.SubtractLeftChar()), i == "")
-			)).PartialAssert().Do();
+				)).PartialAssert().Do();
 		}
 
 		{
@@ -49,7 +49,7 @@ namespace SNL
 			(Define(IsNameContinuation)(i) == (
 				(i.LookaheadLeft() != "" && m_CharacterSet.AlphaUnderNumeric(i.LookaheadLeft()))
 				.If(IsNameContinuation(i.SubtractLeftChar()), i == "")
-			)).PartialAssert().Do();
+				)).PartialAssert().Do();
 
 		}
 
@@ -74,14 +74,56 @@ namespace SNL
 		}
 
 		{
-			SN_LOCAL(IsWhiteSpaceContinuation);
+			SN_LOCAL(IsWhiteSpaceOnlyContinuation);
 			SN_LOCAL(i);
-			(Define(IsWhiteSpace)(i) == (i.LookaheadLeft() != "" && m_CharacterSet.White(i.SelectLeftChar()) && IsWhiteSpaceContinuation(i.SubtractLeftChar()))).PartialAssert().Do();
-			(Define(IsWhiteSpaceContinuation)(i) == (
+			(Define(IsWhiteSpaceOnly)(i) == (i.LookaheadLeft() != "" && m_CharacterSet.White(i.SelectLeftChar()) && IsWhiteSpaceOnlyContinuation(i.SubtractLeftChar()))).PartialAssert().Do();
+			(Define(IsWhiteSpaceOnlyContinuation)(i) == (
 				(i.LookaheadLeft() != "" && m_CharacterSet.White(i.LookaheadLeft()))
-				.If(IsWhiteSpaceContinuation(i.SubtractLeftChar()), i == "")
+				.If(IsWhiteSpaceOnlyContinuation(i.SubtractLeftChar()), i == "")
 				)).PartialAssert().Do();
 		}
 
+		{
+			SN_LOCAL(IsSimpleCommentContent);
+			SN_LOCAL(s);
+			SN_LOCAL(t);
+			SN_LOCAL(u);
+			SN_LOCAL(v);
+
+			(Define(IsSimpleComment)(s) == (s.LookStringLeft(String("/*")) && Local(t, Local(u, Let(s.SubtractLeft(String("/*")) == t + u, IsSimpleCommentContent(t) && (u == String("*/")))))).Collapse()).PartialAssert().Do();
+			(Define(IsSimpleCommentContent)(s) == (s.LookStringLeft(String("*/")).If(s == String(""), (s.LookaheadLeft() == String("\\")).If(IsSimpleCommentContent(s.SubtractLeftChar().SubtractLeftChar()), IsSimpleCommentContent(s.SubtractLeftChar()))))).PartialAssert().Do();
+		}
+
+		{
+			SN_LOCAL(IsLineCommentContent);
+			SN_LOCAL(s);
+			SN_LOCAL(t);
+			SN_LOCAL(u);
+			SN_LOCAL(v);
+
+			(Define(IsLineComment)(s) == (s.LookStringLeft(String("//")) && Local(t, Local(u, Let(s.SubtractLeft(String("//")) == t + u, IsLineCommentContent(t) && (u == String("\n")))))).Collapse()).PartialAssert().Do();
+			(Define(IsLineCommentContent)(s) == (s.LookStringLeft(String("\n")).If(s == String(""), (s.LookaheadLeft() == String("\\")).If(IsLineCommentContent(s.SubtractLeftChar().SubtractLeftChar()), IsLineCommentContent(s.SubtractLeftChar()))))).PartialAssert().Do();
+		}
+
+		{
+			SN_LOCAL(s);
+
+			(Define(IsComment)(s) == (IsSimpleComment(s) || IsLineComment(s))).PartialAssert().Do();
+		}
+
+		{
+			SN_LOCAL(IsWhiteSpaceContinuation);
+
+			SN_LOCAL(IgnoreText);
+			SN_LOCAL(s);
+			(Define(IgnoreText)(s) == (m_CharacterSet.White(s) || IsComment(s))).PartialAssert().Do();
+
+			SN_LOCAL(i);
+			(Define(IsWhiteSpace)(i) == (i.LookaheadLeft() != "" && m_CharacterSet.White(i.SelectLeftChar()) && IsWhiteSpaceContinuation(i.SubtractLeftChar()))).PartialAssert().Do();
+			(Define(IsWhiteSpaceContinuation)(i) == (
+				(i.LookaheadLeft() != "" && IgnoreText(i.LookaheadLeft()))
+				.If(IsWhiteSpaceContinuation(i.SubtractLeftChar()), i == "")
+				)).PartialAssert().Do();
+		}
 	}
 }

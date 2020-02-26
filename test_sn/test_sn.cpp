@@ -3604,35 +3604,35 @@ namespace test_sn
 			Cleanup();
 		}
 
-		TEST_METHOD(TestValidate_IsWhitespace)
+		TEST_METHOD(TestValidate_IsWhiteSpaceOnly)
 		{
 			Initialize();
 			{
-				Manager manager("Test Validate IsWhitespace", AssertErrorHandler);
+				Manager manager("Test Validate IsWhiteSpaceOnly", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				CharacterSet characterSet;
 				Validate validate(characterSet);
 
-				(!validate.IsWhiteSpace(String(""))).Assert().Do();
-				validate.IsWhiteSpace(String(" ")).Assert().Do();
-				validate.IsWhiteSpace(String("\t\n")).Assert().Do();
-				validate.IsWhiteSpace(String(" \t\n")).Assert().Do();
-				(!validate.IsWhiteSpace(String(" \t \r\nXX"))).Assert().Do();
-				(!validate.IsWhiteSpace(String("X   \tX"))).Assert().Do();
+				(!validate.IsWhiteSpaceOnly(String(""))).Assert().Do();
+				validate.IsWhiteSpaceOnly(String(" ")).Assert().Do();
+				validate.IsWhiteSpaceOnly(String("\t\n")).Assert().Do();
+				validate.IsWhiteSpaceOnly(String(" \t\n")).Assert().Do();
+				(!validate.IsWhiteSpaceOnly(String(" \t \r\nXX"))).Assert().Do();
+				(!validate.IsWhiteSpaceOnly(String("X   \tX"))).Assert().Do();
 
 				{
 					SN_LOCAL(s);
 					SN_LOCAL(t);
 					(s + t == String("")).Assert().Do();
-					(!validate.IsWhiteSpace(s)).Assert().Do();
+					(!validate.IsWhiteSpaceOnly(s)).Assert().Do();
 				}
 
 				{
 					SN_LOCAL(s);
 					SN_LOCAL(t);
 					(s + t == String(" dog")).Assert().Do();
-					validate.IsWhiteSpace(s).Assert().Do();
+					validate.IsWhiteSpaceOnly(s).Assert().Do();
 					(t == String("dog")).Evaluate().Do();
 					string t_string = t.GetString();
 					Assert::IsTrue(t_string == "dog");
@@ -3642,7 +3642,7 @@ namespace test_sn
 					SN_LOCAL(s);
 					SN_LOCAL(t);
 					(s + t == String(" \tdog")).Assert().Do();
-					validate.IsWhiteSpace(s).Assert().Do();
+					validate.IsWhiteSpaceOnly(s).Assert().Do();
 					(t == String("dog")).Evaluate().Do();
 					string s_string = s.GetString();
 					string t_string = t.GetString();
@@ -3654,7 +3654,7 @@ namespace test_sn
 					SN_LOCAL(s);
 					SN_LOCAL(t);
 					(s + t == String("\t\n dog")).Assert().Do();
-					validate.IsWhiteSpace(s).Assert().Do();
+					validate.IsWhiteSpaceOnly(s).Assert().Do();
 					(t == String("dog")).Evaluate().Do();
 					string s_string = s.GetString();
 					string t_string = t.GetString();
@@ -3666,7 +3666,7 @@ namespace test_sn
 					SN_LOCAL(s);
 					SN_LOCAL(t);
 					(s + t == String("\t \r\ndog")).Assert().Do();
-					validate.IsWhiteSpace(s).Assert().Do();
+					validate.IsWhiteSpaceOnly(s).Assert().Do();
 					(t == String("dog")).Evaluate().Do();
 					string s_string = s.GetString();
 					string t_string = t.GetString();
@@ -3678,7 +3678,7 @@ namespace test_sn
 					SN_LOCAL(s);
 					SN_LOCAL(t);
 					(s + t == String("A  \tX dog")).Assert().Do();
-					(!validate.IsWhiteSpace(s)).Assert().Do();
+					(!validate.IsWhiteSpaceOnly(s)).Assert().Do();
 					string s_string = s.DisplayValueSN();
 					string s_part = s_string.substr(0, 37 - 4);
 					string s_comp = "StringRef(\"A  \\tX dog\"[0.._split_";
