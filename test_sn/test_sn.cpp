@@ -3761,5 +3761,78 @@ namespace test_sn
 			}
 			Cleanup();
 		}
+
+		TEST_METHOD(TestValidate_IsLineComment)
+		{
+			Initialize();
+			{
+				Manager manager("Test Validate TestValidate_IsLineComment", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				CharacterSet characterSet;
+				Validate validate(characterSet);
+
+				// No closing line feed.
+				manager.Breakpoint();
+				validate.IsLineComment(String("//D")).Assert().Do();
+				validate.IsLineComment(String("//Escaped // quotes*/")).Assert().Do();
+
+				(!validate.IsLineComment(String(""))).Assert().Do();
+				validate.IsLineComment(String("//\n")).Assert().Do();
+				validate.IsLineComment(String("//Simple string*/\n")).Assert().Do();
+				validate.IsLineComment(String("//Containing /* */ \n")).Assert().Do();
+				validate.IsLineComment(String("//Escaped // quotes\n")).Assert().Do();
+				(!validate.IsLineComment(String("//Cat \n dog"))).Assert().Do();
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String(" dog")).Assert().Do();
+					(!validate.IsLineComment(s)).Assert().Do();
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("//\n dog")).Assert().Do();
+					validate.IsLineComment(s).Assert().Do();
+					(s == String("//\n")).Evaluate().Do();
+					(t == String(" dog")).Evaluate().Do();
+					string s_string = s.GetString();
+					string t_string = t.GetString();
+					Assert::IsTrue(s_string == "//\n");
+					Assert::IsTrue(t_string == " dog");
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("//Containing included /* in text\n dog")).Assert().Do();
+					validate.IsLineComment(s).Assert().Do();
+					(s == String("//Containing included /* in text\n")).Evaluate().Do();
+					(t == String(" dog")).Evaluate().Do();
+					string s_string = s.GetString();
+					string t_string = t.GetString();
+					Assert::IsTrue(s_string == "//Containing included /* in text\n");
+					Assert::IsTrue(t_string == " dog");
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("Not a dog")).Assert().Do();
+					(!validate.IsLineComment(s)).Assert().Do();
+					string s_string = s.DisplayValueSN();
+					string s_part = s_string.substr(0, 37 - 5);
+					string s_comp = "StringRef(\"Not a dog\"[0.._split_";
+					Assert::IsTrue(s_part == s_comp);
+					string t_string = t.DisplayValueSN();
+					string t_part = t_string.substr(0, 37 - 8);
+					string t_comp = "StringRef(\"Not a dog\"[_split_";
+					Assert::IsTrue(t_part == t_comp);
+				}
+			}
+			Cleanup();
+		}
 	};
 }

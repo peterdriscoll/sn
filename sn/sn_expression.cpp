@@ -242,6 +242,11 @@ namespace SN
 		return dynamic_cast<SNI::SNI_String *>(m_Expression);
 	}
 
+	SNI::SNI_StringRef * SN_Expression::GetSNI_StringRef() const
+	{
+		return dynamic_cast<SNI::SNI_StringRef *>(m_Expression);
+	}
+
 	SNI::SNI_Bool * SN_Expression::GetSNI_Bool() const
 	{
 		return dynamic_cast<SNI::SNI_Bool *>(m_Expression);

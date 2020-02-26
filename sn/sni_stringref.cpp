@@ -42,6 +42,7 @@ namespace SNI
 	SNI_StringRef::SNI_StringRef(const SN::SN_Value & p_Source, const SN::SN_Expression & p_Start, const SN::SN_Expression & p_End)
 		: m_WorldSet(NULL)
 	{
+		ASSERTM(p_Source.GetSNI_StringRef() != this, "String ref cannot point to itself.");
 		m_Source = p_Source;
 		m_Start = p_Start;
 		m_End = p_End;

@@ -106,8 +106,12 @@ namespace SNL
 			SN_LOCAL(u);
 			SN_LOCAL(v);
 
-			(Define(IsLineComment)(s) == (s.LookStringLeft(String("//")) && Local(t, Local(u, Let(s.SubtractLeft(String("//")) == t + u, IsLineCommentContent(t) && (u == String("\n")))))).Collapse()).PartialAssert().Do();
-			(Define(IsLineCommentContent)(s) == (s.LookStringLeft(String("\n")).If(s == String(""), (s.LookaheadLeft() == String("\\")).If(IsLineCommentContent(s.SubtractLeftChar().SubtractLeftChar()), IsLineCommentContent(s.SubtractLeftChar()))))).PartialAssert().Do();
+			(Define(IsLineComment)(s) == (s.LookStringLeft(String("//")) && Local(t, Local(u, Let(s.SubtractLeft(String("//")) == t + u, IsLineCommentContent(t) && ((u.LookaheadLeft() == "" && u == String("") || u == String("\n"))))))).Collapse()).PartialAssert().Do();
+			(Define(IsLineCommentContent)(s) ==
+				(	s.LookaheadLeft() == String("")
+				||	s.LookaheadLeft() == String("\n"))
+				.If(s == String(""), 
+					IsLineCommentContent(s.SubtractLeftChar()))).PartialAssert().Do();
 		}
 
 		{

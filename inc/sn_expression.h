@@ -21,6 +21,7 @@ namespace SNI
 	class SNI_Value;
 	class SNI_ValueSet;
 	class SNI_String;
+	class SNI_StringRef;
 	class SNI_Bool;
 	class SNI_World;
 	class SNI_WorldSet;
@@ -234,6 +235,7 @@ namespace SN
 		SNI::SNI_Error * GetSNI_Error() const;
 		SNI::SNI_ValueSet * GetSNI_ValueSet() const;
 		SNI::SNI_String * GetSNI_String() const;
+		SNI::SNI_StringRef * GetSNI_StringRef() const;
 		SNI::SNI_Bool * GetSNI_Bool() const;
 		SNI::SNI_Lambda * GetSNI_Lambda() const;
 		SNI::SNI_Variable * GetSNI_Variable() const;
