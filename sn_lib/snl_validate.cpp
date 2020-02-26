@@ -95,8 +95,22 @@ namespace SNL
 			SN_LOCAL(u);
 			SN_LOCAL(v);
 
-			(Define(IsSimpleComment)(s) == (s.LookStringLeft(String("/*")) && Local(t, Local(u, Let(s.SubtractLeft(String("/*")) == t + u, IsSimpleCommentContent(t) && (u == String("*/")))))).Collapse()).PartialAssert().Do();
-			(Define(IsSimpleCommentContent)(s) == (s.LookStringLeft(String("*/")).If(s == String(""), IsSimpleCommentContent(s.SubtractLeftChar())))).PartialAssert().Do();
+			(Define(IsSimpleComment)(s) == (
+				s.LookStringLeft(String("/*"))
+			&&	Local(t, Local(u, Let(
+					s.SubtractLeft(String("/*")) == t + u
+				,	IsSimpleCommentContent(t)
+				&&	u.LookaheadLeft() != ""
+				&&	(u == String("*/"))
+				)))
+			).Collapse()).PartialAssert().Do();
+			
+			(Define(IsSimpleCommentContent)(s) == (
+				s.LookaheadLeft() != String("")
+			&&	s.LookStringLeft(String("*/"))
+				.If (s == String("")
+				,	IsSimpleCommentContent(s.SubtractLeftChar()))
+			)).PartialAssert().Do();
 		}
 
 		{
@@ -121,9 +135,8 @@ namespace SNL
 					s.LookaheadLeft() != String("")
 				&&	(s.LookaheadLeft() == String("\n"))
 					.If (s == String("")
-					,	IsLineCommentContent(s.SubtractLeftChar())
-				))
-			).PartialAssert().Do();
+					,	IsLineCommentContent(s.SubtractLeftChar()))
+			)).PartialAssert().Do();
 		}
 
 		{
