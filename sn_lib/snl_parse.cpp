@@ -26,6 +26,7 @@ namespace SNL
 		SN_LINK(Integer);
 		SN_LINK(Name);
 		SN_LINK(String);
+		SN_LINK(Value);
 	}
 
 	void SNL_Parse::Init()

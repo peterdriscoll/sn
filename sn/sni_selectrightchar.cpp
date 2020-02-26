@@ -66,13 +66,13 @@ namespace SNI
 
 	size_t SNI_SelectRightChar::CardinalityOfUnify(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const
 	{
-		if (p_Depth == 2)
+		if (p_TotalCalc <= 1)
 		{
 			if (p_ParamList[PU1_First].IsLeftKnownValue())
 			{
-				if (p_ParamList[PU1_Result].IsKnownValue())
+				if (p_TotalCalc == 0)
 				{
-					return MultiplyCardinality(p_ParamList[PU1_Result].Cardinality(), p_ParamList[PU1_First].Cardinality());
+					return MultiplyCardinality(p_ParamList[PU1_First].LeftCardinality(), p_ParamList[PU1_Result].Cardinality());
 				}
 				return p_ParamList[PU1_First].LeftCardinality();
 			}

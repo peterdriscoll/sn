@@ -279,7 +279,7 @@ namespace SNI
 		}
 
 		long calcPos = -1;
-		size_t card = CardinalityOfUnify(depth-1, inputList, calcPos, totalCalc);
+		size_t card = CardinalityOfUnify(depth, inputList, calcPos, totalCalc);
 		topFrame->RegisterCardinality(card);
 		size_t maxCard = SNI_Thread::TopManager()->MaxCardinalityCall();
 

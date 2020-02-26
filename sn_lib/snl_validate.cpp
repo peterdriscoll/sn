@@ -27,6 +27,11 @@ namespace SNL
 		SN_LINK(IsInteger);
 		SN_LINK(IsString);
 		SN_LINK(IsName);
+		SN_LINK(IsWhiteSpaceOnly);
+		SN_LINK(IsSimpleComment);
+		SN_LINK(IsLineComment);
+		SN_LINK(IsComment);
+		SN_LINK(IsWhiteSpace);
 	}
 
 	void SNL_Validate::Init()

@@ -3691,5 +3691,75 @@ namespace test_sn
 			}
 			Cleanup();
 		}
+
+		TEST_METHOD(TestValidate_IsSimpleComment)
+		{
+			Initialize();
+			{
+				Manager manager("Test Validate IsSimpleComment", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				CharacterSet characterSet;
+				Validate validate(characterSet);
+
+				(!validate.IsSimpleComment(String(""))).Assert().Do();
+				validate.IsSimpleComment(String("/**/")).Assert().Do();
+				validate.IsSimpleComment(String("/*Simple string*/")).Assert().Do();
+				validate.IsSimpleComment(String("/*Containing /* */")).Assert().Do();
+				validate.IsSimpleComment(String("/*Escaped backslash \\ quotes*/")).Assert().Do();
+				(!validate.IsSimpleComment(String("/*Cat */ dog"))).Assert().Do();
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String(" dog")).Assert().Do();
+					(!validate.IsSimpleComment(s)).Assert().Do();
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("/**/ dog")).Assert().Do();
+					manager.Breakpoint();
+					validate.IsSimpleComment(s).Assert().Do();
+					(s == String("/**/")).Evaluate().Do();
+					(t == String(" dog")).Evaluate().Do();
+					string s_string = s.GetString();
+					string t_string = t.GetString();
+					Assert::IsTrue(s_string == "/**/");
+					Assert::IsTrue(t_string == " dog");
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("/*Containing included /* in text*/ dog")).Assert().Do();
+					manager.Breakpoint();
+					validate.IsSimpleComment(s).Assert().Do();
+					(s == String("/*Containing included /* in text*/")).Evaluate().Do();
+					(t == String(" dog")).Evaluate().Do();
+					string s_string = s.GetString();
+					string t_string = t.GetString();
+					Assert::IsTrue(s_string == "/*Containing included /* in text*/");
+					Assert::IsTrue(t_string == " dog");
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("Not a dog")).Assert().Do();
+					(!validate.IsSimpleComment(s)).Assert().Do();
+					string s_string = s.DisplayValueSN();
+					string s_part = s_string.substr(0, 37 - 5);
+					string s_comp = "StringRef(\"Not a dog\"[0.._split_";
+					Assert::IsTrue(s_part == s_comp);
+					string t_string = t.DisplayValueSN();
+					string t_part = t_string.substr(0, 37 - 8);
+					string t_comp = "StringRef(\"Not a dog\"[_split_";
+					Assert::IsTrue(t_part == t_comp);
+				}
+			}
+			Cleanup();
+		}
 	};
 }

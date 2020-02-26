@@ -76,11 +76,15 @@ namespace SNI
 
 	size_t SNI_LookStringLeft::CardinalityOfUnify(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const
 	{
-		if (p_Depth == 3)
+		if (p_TotalCalc <= 1)
 		{
 			if (p_ParamList[PU2_First].IsLeftKnownValue() && p_ParamList[PU2_Second].IsKnownValue())
 			{
-				return MultiplyCardinality(p_ParamList[PU2_First].LeftCardinality(), p_ParamList[PU2_Result].Cardinality());
+				if (p_TotalCalc == 0)
+				{
+					return MultiplyCardinality(p_ParamList[PU2_First].LeftCardinality(), MultiplyCardinality(p_ParamList[PU2_Second].Cardinality(), p_ParamList[PU2_Result].Cardinality()));
+				}
+				return MultiplyCardinality(p_ParamList[PU2_First].LeftCardinality(), p_ParamList[PU2_Second].Cardinality());
 			}
 		}
 		return CARDINALITY_MAX;
