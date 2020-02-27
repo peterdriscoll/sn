@@ -3464,6 +3464,9 @@ namespace test_sn
 				CharacterSet characterSet;
 				Validate validate(characterSet);
 
+				(!validate.IsString(String("\"D"))).Assert().Do();
+				(!validate.IsString(String("\"X\\"))).Assert().Do();
+
 				(!validate.IsString(String(""))).Assert().Do();
 				validate.IsString(String("\"\"")).Assert().Do();
 				validate.IsString(String("\"Simple string\"")).Assert().Do();
@@ -3700,8 +3703,8 @@ namespace test_sn
 				Validate validate(characterSet);
 
 				// No closing line feed.
-				(!validate.IsLineComment(String("/*D"))).Assert().Do();
-				(!validate.IsLineComment(String("/*Escaped dog*"))).Assert().Do();
+				(!validate.IsSimpleComment(String("/*D"))).Assert().Do();
+				(!validate.IsSimpleComment(String("/*Escaped dog*"))).Assert().Do();
 
 				(!validate.IsSimpleComment(String(""))).Assert().Do();
 				validate.IsSimpleComment(String("/**/")).Assert().Do();

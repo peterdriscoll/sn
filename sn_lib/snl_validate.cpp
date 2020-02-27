@@ -74,14 +74,33 @@ namespace SNL
 			SN_LOCAL(u);
 			SN_LOCAL(v);
 
-			(Define(IsString)(s) == ((s.LookaheadLeft() == String("\"") && Local(t, Local(u, Let(s.SubtractLeftChar() == t + u, IsStringContent(t) && (u == String("\""))))))).Collapse()).PartialAssert().Do();
-			(Define(IsStringContent)(s) == ((s.LookaheadLeft() == String("\"")).If(s == String(""), (s.LookaheadLeft() == String("\\")).If(IsStringContent(s.SubtractLeftChar().SubtractLeftChar()), IsStringContent(s.SubtractLeftChar()))))).PartialAssert().Do();
+			(Define(IsString)(s) == (
+				s.LookaheadLeft() == String("\"")
+			&&	Local(t, Local(u, Let(
+					s.SubtractLeftChar() == t + u
+				,	IsStringContent(t)
+				&&	u.LookaheadLeft() != ""
+				&&	(u == String("\""))
+				)))
+			).Collapse()).PartialAssert().Do();
+
+			(Define(IsStringContent)(s) == (
+				(s.LookaheadLeft() != String(""))
+			&&	(s.LookaheadLeft() == String("\""))
+				.If (s == String("")
+				,	(s.LookaheadLeft() == String("\\"))
+					.If (s.SubtractLeftChar().LookaheadLeft() != String("")
+					&&	IsStringContent(s.SubtractLeftChar().SubtractLeftChar())
+					,	IsStringContent(s.SubtractLeftChar())
+				))
+			)).PartialAssert().Do();
 		}
 
 		{
 			SN_LOCAL(IsWhiteSpaceOnlyContinuation);
 			SN_LOCAL(i);
-			(Define(IsWhiteSpaceOnly)(i) == (i.LookaheadLeft() != "" && m_CharacterSet.White(i.SelectLeftChar()) && IsWhiteSpaceOnlyContinuation(i.SubtractLeftChar()))).PartialAssert().Do();
+			(Define(IsWhiteSpaceOnly)(i) == (
+				i.LookaheadLeft() != "" && m_CharacterSet.White(i.SelectLeftChar()) && IsWhiteSpaceOnlyContinuation(i.SubtractLeftChar()))).PartialAssert().Do();
 			(Define(IsWhiteSpaceOnlyContinuation)(i) == (
 				(i.LookaheadLeft() != "" && m_CharacterSet.White(i.LookaheadLeft()))
 				.If(IsWhiteSpaceOnlyContinuation(i.SubtractLeftChar()), i == "")
