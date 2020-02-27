@@ -25,6 +25,11 @@ namespace SNL
 	void SNL_Validate::Link()
 	{
 		SN_LINK(IsInteger);
+		SN_LINK(IsFloatingPoint);
+		SN_LINK(IsFloatingPointExtension);
+		SN_LINK(IsExponential);
+		SN_LINK(IsExponentialExtension);
+
 		SN_LINK(IsString);
 		SN_LINK(IsName);
 		SN_LINK(IsWhiteSpaceOnly);
@@ -43,6 +48,43 @@ namespace SNL
 			(Define(IsIntegerContinuation)(i) == (
 				(i.LookaheadLeft() != "" && m_CharacterSet.Digit(i.LookaheadLeft()))
 				.If(IsIntegerContinuation(i.SubtractLeftChar()), i == "")
+				)).PartialAssert().Do();
+		}
+
+		{
+			SN_LOCAL(f);
+			SN_LOCAL(t);
+			SN_LOCAL(u);
+
+			(Define(IsFloatingPoint)(f) ==
+				Local(t, Local(u, Let(
+					f == t + u
+				,	IsInteger(t)
+				&&	IsFloatingPointExtension(u)
+				)))
+			).PartialAssert().Do();
+
+			(Define(IsFloatingPointExtension)(f) == (
+				(f.LookaheadLeft() == String("."))
+				.If(IsInteger(f.SubtractLeftChar())
+					, f == String(""))
+			)).PartialAssert().Do();
+		}
+
+		{
+			SN_LOCAL(f);
+			SN_LOCAL(t);
+			SN_LOCAL(u);
+
+			(Define(IsExponential)(f) == (Let(
+				f == t + u
+				, IsFloatingPoint(t)
+				&& IsExponentialExtension(u)
+			))).PartialAssert().Do();
+
+			(Define(IsExponentialExtension)(f) == (
+				f.LookaheadLeft() == (String("e") || String("E"))
+				&& IsInteger(f.SubtractLeftChar())
 				)).PartialAssert().Do();
 		}
 

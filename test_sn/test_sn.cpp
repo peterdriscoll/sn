@@ -3454,6 +3454,104 @@ namespace test_sn
 			Cleanup();
 		}
 
+		TEST_METHOD(TestValidate_IsFloatingPoint)
+		{
+			Initialize();
+			{
+				Manager manager("Test Validate IsFloatingPoint", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				CharacterSet characterSet;
+				Validate validate(characterSet);
+
+				(!validate.IsFloatingPoint(String(""))).Assert().Do();
+				validate.IsFloatingPoint(String("135")).Assert().Do();
+				validate.IsFloatingPoint(String("45.9")).Assert().Do();
+				validate.IsFloatingPoint(String("543.995")).Assert().Do();
+
+				(!validate.IsFloatingPoint(String("8."))).Assert().Do();
+				(!validate.IsFloatingPoint(String("543."))).Assert().Do();
+				(!validate.IsFloatingPoint(String("543.89X"))).Assert().Do();
+				(!validate.IsFloatingPoint(String("A543X"))).Assert().Do();
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("")).Assert().Do();
+					(!validate.IsFloatingPoint(s)).Assert().Do();
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("536. dog")).Assert().Do();
+					(!validate.IsFloatingPoint(s)).Assert().Do();
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("3.1415 dog")).Assert().Do();
+					validate.IsFloatingPoint(s).Assert().Do();
+					(t == String(" dog")).Evaluate().Do();
+					string t_string = t.GetString();
+					Assert::IsTrue(t_string == " dog");
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("45 dog")).Assert().Do();
+					validate.IsFloatingPoint(s).Assert().Do();
+					(t == String(" dog")).Evaluate().Do();
+					string s_string = s.GetString();
+					string t_string = t.GetString();
+					Assert::IsTrue(s_string == "45");
+					Assert::IsTrue(t_string == " dog");
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("3.141596 dog")).Assert().Do();
+					validate.IsFloatingPoint(s).Assert().Do();
+					(t == String(" dog")).Evaluate().Do();
+					string s_string = s.GetString();
+					string t_string = t.GetString();
+					Assert::IsTrue(s_string == "3.141596");
+					Assert::IsTrue(t_string == " dog");
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("9678.345 dog")).Assert().Do();
+					validate.IsFloatingPoint(s).Assert().Do();
+					(t == String(" dog")).Evaluate().Do();
+					string s_string = s.GetString();
+					string t_string = t.GetString();
+					Assert::IsTrue(s_string == "9678.345");
+					Assert::IsTrue(t_string == " dog");
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("A2.1X dog")).Assert().Do();
+					(!validate.IsFloatingPoint(s)).Assert().Do();
+					string s_string = s.DisplayValueSN();
+					string s_part = s_string.substr(0, 37 - 5);
+					string s_comp = "StringRef(\"A2.1X dog\"[0.._split_";
+					Assert::IsTrue(s_part == s_comp);
+					string t_string = t.DisplayValueSN();
+					string t_part = t_string.substr(0, 37 - 8);
+					string t_comp = "StringRef(\"A2.1X dog\"[_split_";
+					Assert::IsTrue(t_part == t_comp);
+				}
+			}
+			Cleanup();
+		}
+
 		TEST_METHOD(TestValidate_IsString)
 		{
 			Initialize();

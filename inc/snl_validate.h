@@ -15,6 +15,11 @@ namespace SNL
 		SNL_Validate(const SNL::SNL_CharacterSet &p_CharacterSet);
 
 		skynet::Variable IsInteger;
+		skynet::Variable IsFloatingPoint;
+		skynet::Variable IsFloatingPointExtension;
+		skynet::Variable IsExponential;
+		skynet::Variable IsExponentialExtension;
+
 		skynet::Variable IsString;
 		skynet::Variable IsName;
 		skynet::Variable IsWhiteSpaceOnly;
