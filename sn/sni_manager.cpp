@@ -122,6 +122,9 @@ namespace SNI
 		, m_LogExpressionBufferCapacity(50)
 		, m_MaxStackFrames(10)
 		, m_Transaction(false)
+		, m_DirectPassType(skynet::DirectPass)
+		, m_EvaluationType(skynet::Lazy)
+		, m_LogicType(skynet::Parsing)
 	{
 		LogicSetup();
 		if (!m_ErrorHandler)
@@ -155,6 +158,9 @@ namespace SNI
 		, m_LogExpressionBufferCapacity(50)
 		, m_MaxStackFrames(10)
 		, m_Transaction(false)
+		, m_DirectPassType(skynet::DirectPass)
+		, m_EvaluationType(skynet::Lazy)
+		, m_LogicType(skynet::Parsing)
 	{
 		LogicSetup();
 		if (!m_ErrorHandler)
@@ -188,6 +194,9 @@ namespace SNI
 		, m_LogExpressionBufferCapacity(50)
 		, m_MaxStackFrames(10)
 		, m_Transaction(false)
+		, m_DirectPassType(skynet::DirectPass)
+		, m_EvaluationType(skynet::Lazy)
+		, m_LogicType(skynet::Parsing)
 	{
 		LogicSetup();
 		if (!m_ErrorHandler)
@@ -585,6 +594,36 @@ namespace SNI
 	void SNI_Manager::SetMaxStackFrames(size_t p_MaxStackFrame)
 	{
 		m_MaxStackFrames = p_MaxStackFrame;
+	}
+
+	skynet::DirectPassType SNI_Manager::GetDirectPassType()
+	{
+		return m_DirectPassType;
+	}
+
+	void SNI_Manager::SetDirectPassType(skynet::DirectPassType p_DirectPassType)
+	{
+		m_DirectPassType = p_DirectPassType;
+	}
+
+	skynet::EvaluationType SNI_Manager::GetEvaluationType()
+	{
+		return m_EvaluationType;
+	}
+
+	void SNI_Manager::SetEvaluationType(skynet::EvaluationType p_EvaluationType)
+	{
+		m_EvaluationType = p_EvaluationType;
+	}
+
+	skynet::LogicType SNI_Manager::GetLogicType()
+	{
+		return m_LogicType;
+	}
+
+	void SNI_Manager::SetLogicType(skynet::LogicType p_LogicType)
+	{
+		m_LogicType = p_LogicType;
 	}
 
 	void SNI_Manager::Breakpoint()

@@ -7,20 +7,6 @@
 
 #include <string>
 
-// #define STRICT_PARSING
-
-#define INFERENCE_ON_EQUALITY
-
-//	This flag allows
-//		(right unbounded StringRef == string) == unknown boolean.
-//	If enabled, SNI_StringRef::DoEquals will implement this, leading 
-//	to allsorts of complications. It creates valuesets for the start/end 
-//	positions, which turns the stringref into a multi value object, 
-//	effectively, a ValueSet. SimplifyValue then explicitly changes it into
-//	a value set.
-//  This may not be necessary. Changes to Collapse may achieve the same result.
-//	I'll try to get it working with the flag defined or not defined.
-
 //	#define USE_LOGGING
 
 //	The original logging system. Very detailed, and hard to follow.
@@ -48,6 +34,21 @@ namespace skynet
 	enum EscapeType
 	{
 		CPP, JSON
+	};
+
+	enum DirectPassType
+	{
+		ReturnValueToVariable, DirectPass
+	};
+
+	enum EvaluationType
+	{
+		Lazy, Strict
+	};
+
+	enum LogicType
+	{
+		Pure, Parsing, FailAsNeg
 	};
 }
 

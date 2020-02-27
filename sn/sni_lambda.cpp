@@ -245,13 +245,13 @@ namespace SNI
 		SN::SN_Expression param = p_ParameterList->back();
 		p_ParameterList->pop_back();
 		SN::SN_Error e;
-		if (!m_FormalParameter || m_FormalParameter->IsNullValue())
+		if ((SNI_Thread::TopManager()->GetEvaluationType() == skynet::Lazy) && (!m_FormalParameter || m_FormalParameter->IsNullValue()))
 		{	// Lazy evaluation. Delay until the value is needed.
 			e = SN::SN_Expression(m_FormalParameter).PartialAssertValue(param, true);
 		}
 		else
 		{	// The value is needed now.
-			e = m_FormalParameter->AssertValue(param.DoEvaluate());
+			e = param.AssertValue(m_FormalParameter);
 		}
 		if (e.IsError())
 		{

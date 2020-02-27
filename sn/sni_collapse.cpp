@@ -99,38 +99,41 @@ namespace SNI
 
 		SNI_Thread::GetThread()->SetDebugId(GetDebugId()+"Collapse");
 
-#ifdef INFERENCE_ON_EQUALITY
-		SN::SN_Error err = p_value.AssertValue(p_Result);
-
-		valueParam->SetValue(p_Result);
-		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before collapse", SN::ParameterOneId);
-
-		resultParam->SetValue(p_Result.GetVariableValue().GetSNI_Expression()->DoCollapse());
-#else
-		SNI_WorldSet *worldSet = new SNI_WorldSet();
-		SNI_World *successWorld = worldSet->CreateWorld();
-		SNI_World *failWorld = worldSet->CreateWorld();
-		worldSet->Complete();
-
-		SNI_Thread::GetThread()->PushContextWorld(successWorld);
-		SN::SN_Error e = p_value.DoAssert();
-		SNI_Thread::GetThread()->PopContextWorld();
 		SN::SN_Error err;
-		if (e.IsError())
+		if (SNI_Thread::TopManager()->GetLogicType() != skynet::FailAsNeg)
 		{
-			successWorld->Fail(FailedInCollapse);
-			worldSet->CheckDependentWorlds();
-			err = p_Result.AssertValue(skynet::False);
+			err = p_value.AssertValue(p_Result);
+
+			valueParam->SetValue(p_Result);
+			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before collapse", SN::ParameterOneId);
+
+			resultParam->SetValue(p_Result.GetVariableValue().GetSNI_Expression()->DoCollapse());
 		}
 		else
 		{
-			failWorld->Fail(FailedInCollapse);
-			worldSet->CheckDependentWorlds();
-			err = p_Result.AssertValue(skynet::True);
-		}
+			SNI_WorldSet *worldSet = new SNI_WorldSet();
+			SNI_World *successWorld = worldSet->CreateWorld();
+			SNI_World *failWorld = worldSet->CreateWorld();
+			worldSet->Complete();
 
-		valueParam->SetValue(p_Result);
-#endif
+			SNI_Thread::GetThread()->PushContextWorld(successWorld);
+			SN::SN_Error e = p_value.DoAssert();
+			SNI_Thread::GetThread()->PopContextWorld();
+			if (e.IsError())
+			{
+				successWorld->Fail(FailedInCollapse);
+				worldSet->CheckDependentWorlds();
+				err = p_Result.AssertValue(skynet::False);
+			}
+			else
+			{
+				failWorld->Fail(FailedInCollapse);
+				worldSet->CheckDependentWorlds();
+				err = p_Result.AssertValue(skynet::True);
+			}
+
+			valueParam->SetValue(p_Result);
+		}
 
 		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after collapse", SN::RightId);
 		SNI_Frame::Pop();

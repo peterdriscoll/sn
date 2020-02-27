@@ -167,6 +167,36 @@ namespace SN
 		m_Manager->SetDebugTitleWidth(p_DebugTitleWidth);
 	}
 
+	skynet::DirectPassType SN_Manager::GetDirectPassType()
+	{
+		return m_Manager->GetDirectPassType();
+	}
+
+	void SN_Manager::SetDirectPassType(skynet::DirectPassType p_DirectPassType)
+	{
+		m_Manager->SetDirectPassType(p_DirectPassType);
+	}
+
+	skynet::EvaluationType SN_Manager::GetEvaluationType()
+	{
+		return m_Manager->GetEvaluationType();
+	}
+
+	void SN_Manager::SetEvaluationType(skynet::EvaluationType p_EvaluationType)
+	{
+		m_Manager->SetEvaluationType(p_EvaluationType);
+	}
+
+	skynet::LogicType SN_Manager::GetLogicType()
+	{
+		return m_Manager->GetLogicType();
+	}
+
+	void SN_Manager::SetLogicType(skynet::LogicType p_LogicType)
+	{
+		m_Manager->SetLogicType(p_LogicType);
+	}
+
 	void SN_Manager::Breakpoint()
 	{
 		m_Manager->Breakpoint();

@@ -459,7 +459,7 @@ namespace SNI
 	{
 		if (p_Card == 1)
 		{
-			if (!AllowDelay())
+			if (SNI_Thread::TopManager()->GetDirectPassType() == skynet::ReturnValueToVariable || !AllowDelay())
 			{
 				for (long j = 0; j < p_Depth; j++)
 				{
@@ -472,7 +472,7 @@ namespace SNI
 				}
 			}
 			SN::SN_Error e = UnifyElement(p_Depth, p_InputList, NULL, p_CalcPos, p_TotalCalc, NULL, p_Source);
-			if (!AllowDelay())
+			if (SNI_Thread::TopManager()->GetDirectPassType() == skynet::ReturnValueToVariable || !AllowDelay())
 			{
 				for (size_t j = 0; j < p_Depth; j++)
 				{

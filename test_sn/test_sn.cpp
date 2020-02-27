@@ -3764,7 +3764,7 @@ namespace test_sn
 			Cleanup();
 		}
 
-		TEST_METHOD(omp)
+		TEST_METHOD(TestValidate_IsLineComment)
 		{
 			Initialize();
 			{

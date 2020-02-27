@@ -994,87 +994,100 @@ namespace SNI
 			}
 			if (!start.IsNullValue() && m_End.IsVariable() && end.IsNullValue())
 			{
-#ifndef INFERENCE_ON_EQUALITY
-				ASSERTM(false, "SNI_Equals::CardinalityOfUnify should stop this from being called.");
-				return skynet::Null;
-#else
-				long start_pos = SN::SN_Long(start).GetNumber();
-				string other = p_Other->GetString();
-				string source = GetSourceString();
-				string sourcePart = source.substr(start_pos, other.length());
-				if (sourcePart != other)
+				if (SNI_Thread::TopManager()->GetLogicType() == skynet::FailAsNeg)
 				{
-					return skynet::False;
+					ASSERTM(false, "SNI_Equals::CardinalityOfUnify should stop this from being called when using the failure as negation implementation of Collapse.");
+					return skynet::Null;
 				}
-#ifdef STRICT_PARSING
-				SN::SN_ValueSet result;
-				SNI_WorldSet *ws_result = result.GetWorldSet();
-				SNI_World *worldTrue = ws_result->CreateWorld();
-				result.AddTaggedValue(skynet::True, worldTrue);
-				SNI_World *worldFalse = ws_result->CreateWorld();
-				result.AddTaggedValue(skynet::False, worldFalse);
-				SN::SN_ValueSet endVS;
-				SNI_Frame *topFrame = SNI_Frame::Top();
-				SNI_Variable *endParam = topFrame->CreateParameterByName("_string_end", m_End);
-				SN::SN_Variable endVar = topFrame->CreateTemporary();
-				endVS.SetWorldSet(ws_result);
-				endVS.AddTaggedValue(SN::SN_Long((long) (start_pos + other.length())), worldTrue);
-				endVS.AddTaggedValue(endVar, worldFalse);
-				endVS.GetSNI_ValueSet()->AssignToVariable(m_End.GetSNI_Variable());
-				m_End.GetSNI_Variable()->SetValue(endVS);
-				ws_result->Complete();
-				SN::SN_Expression *l_ParameterList = new SN::SN_Expression[3];
-				l_ParameterList[0] = skynet::False;
-				l_ParameterList[1] = endVar;
-				l_ParameterList[2] = SN::SN_Long((long)(start_pos + other.length()));
-				SNI_Thread::GetThread()->GetProcessor()->Delay(skynet::Equals, 3, l_ParameterList, this);
-				return result;
-#else
-				m_End.GetSNI_Variable()->SetValue(SN::SN_Long((long)(start_pos + other.length())));
-				return skynet::True;
-#endif
-#endif
+				else
+				{
+					long start_pos = SN::SN_Long(start).GetNumber();
+					string other = p_Other->GetString();
+					string source = GetSourceString();
+					string sourcePart = source.substr(start_pos, other.length());
+					if (sourcePart != other)
+					{
+						return skynet::False;
+					}
+					if (SNI_Thread::TopManager()->GetLogicType() == skynet::Pure)
+					{
+						SN::SN_ValueSet result;
+						SNI_WorldSet *ws_result = result.GetWorldSet();
+						SNI_World *worldTrue = ws_result->CreateWorld();
+						result.AddTaggedValue(skynet::True, worldTrue);
+						SNI_World *worldFalse = ws_result->CreateWorld();
+						result.AddTaggedValue(skynet::False, worldFalse);
+						SN::SN_ValueSet endVS;
+						SNI_Frame *topFrame = SNI_Frame::Top();
+						SNI_Variable *endParam = topFrame->CreateParameterByName("_string_end", m_End);
+						SN::SN_Variable endVar = topFrame->CreateTemporary();
+						endVS.SetWorldSet(ws_result);
+						endVS.AddTaggedValue(SN::SN_Long((long) (start_pos + other.length())), worldTrue);
+						endVS.AddTaggedValue(endVar, worldFalse);
+						endVS.GetSNI_ValueSet()->AssignToVariable(m_End.GetSNI_Variable());
+						m_End.GetSNI_Variable()->SetValue(endVS);
+						ws_result->Complete();
+						SN::SN_Expression *l_ParameterList = new SN::SN_Expression[3];
+						l_ParameterList[0] = skynet::False;
+						l_ParameterList[1] = endVar;
+						l_ParameterList[2] = SN::SN_Long((long)(start_pos + other.length()));
+						SNI_Thread::GetThread()->GetProcessor()->Delay(skynet::Equals, 3, l_ParameterList, this);
+						return result;
+					}
+					else
+					{
+						m_End.GetSNI_Variable()->SetValue(SN::SN_Long((long)(start_pos + other.length())));
+						return skynet::True;
+					}
+				}
 			}
 			if (m_Start.IsVariable() && start.IsNullValue() && !end.IsNullValue())
 			{
-#ifndef INFERENCE_ON_EQUALITY
-				ASSERTM(false, "SNI_Equals::CardinalityOfUnify should stop this from being called.");
-				return skynet::Null;
-#else
-				long end_pos = SN::SN_Long(end).GetNumber();
-				string source = GetSourceString().substr(end_pos - p_Other->GetString().length());
-				if (source != p_Other->GetString())
+				if (SNI_Thread::TopManager()->GetLogicType() == skynet::FailAsNeg)
 				{
-					return skynet::False;
+					ASSERTM(false, "SNI_Equals::CardinalityOfUnify should stop this from being called when using the failure as negation implementation of Collapse.");
+					return skynet::Null;
 				}
-#ifdef STRICT_PARSING
-				SN::SN_ValueSet result;
-				SNI_WorldSet *ws_result = result.GetWorldSet();
-				SNI_World *worldTrue = ws_result->CreateWorld();
-				result.AddTaggedValue(skynet::True, worldTrue);
-				SNI_World *worldFalse = ws_result->CreateWorld();
-				result.AddTaggedValue(skynet::False, worldFalse);
-				SNI_Frame *topFrame = SNI_Frame::Top();
-				SNI_Variable *startParam = topFrame->CreateParameterByName("_string_start", m_End);
-				SN::SN_Variable startVar = topFrame->CreateTemporary();
-				SN::SN_ValueSet startVS;
-				startVS.SetWorldSet(ws_result);
-				startVS.AddTaggedValue(SN::SN_Long((long) (end_pos - p_Other->GetString().length())), worldTrue);
-				startVS.AddTaggedValue(startVar, worldFalse);
-				startVS.GetSNI_ValueSet()->AssignToVariable(m_Start.GetSNI_Variable());
-				m_Start.GetSNI_Variable()->SetValue(startVS);
-				ws_result->Complete();
-				SN::SN_Expression *l_ParamList = new SN::SN_Expression[3];
-				l_ParamList[0] = skynet::False;
-				l_ParamList[1] = startVar;
-				l_ParamList[2] = SN::SN_Long((long)(end_pos - p_Other->GetString().length()));
-				SNI_Thread::GetThread()->GetProcessor()->Delay(skynet::Equals, 3, l_ParamList, this);
-				return result;
-#else
-				m_Start.GetSNI_Variable()->SetValue(SN::SN_Long((long)(end_pos - p_Other->GetString().length())));
-				return skynet::True;
-#endif
-#endif
+				else
+				{
+					long end_pos = SN::SN_Long(end).GetNumber();
+					string source = GetSourceString().substr(end_pos - p_Other->GetString().length());
+					if (source != p_Other->GetString())
+					{
+						return skynet::False;
+					}
+
+					if (SNI_Thread::TopManager()->GetLogicType() == skynet::Pure)
+					{
+						SN::SN_ValueSet result;
+						SNI_WorldSet *ws_result = result.GetWorldSet();
+						SNI_World *worldTrue = ws_result->CreateWorld();
+						result.AddTaggedValue(skynet::True, worldTrue);
+						SNI_World *worldFalse = ws_result->CreateWorld();
+						result.AddTaggedValue(skynet::False, worldFalse);
+						SNI_Frame *topFrame = SNI_Frame::Top();
+						SNI_Variable *startParam = topFrame->CreateParameterByName("_string_start", m_End);
+						SN::SN_Variable startVar = topFrame->CreateTemporary();
+						SN::SN_ValueSet startVS;
+						startVS.SetWorldSet(ws_result);
+						startVS.AddTaggedValue(SN::SN_Long((long) (end_pos - p_Other->GetString().length())), worldTrue);
+						startVS.AddTaggedValue(startVar, worldFalse);
+						startVS.GetSNI_ValueSet()->AssignToVariable(m_Start.GetSNI_Variable());
+						m_Start.GetSNI_Variable()->SetValue(startVS);
+						ws_result->Complete();
+						SN::SN_Expression *l_ParamList = new SN::SN_Expression[3];
+						l_ParamList[0] = skynet::False;
+						l_ParamList[1] = startVar;
+						l_ParamList[2] = SN::SN_Long((long)(end_pos - p_Other->GetString().length()));
+						SNI_Thread::GetThread()->GetProcessor()->Delay(skynet::Equals, 3, l_ParamList, this);
+						return result;
+					}
+					else
+					{
+						m_Start.GetSNI_Variable()->SetValue(SN::SN_Long((long)(end_pos - p_Other->GetString().length())));
+						return skynet::True;
+					}
+				}
 			}
 			return skynet::Null;
 		}

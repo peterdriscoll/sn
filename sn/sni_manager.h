@@ -86,6 +86,16 @@ namespace SNI
 		size_t MaxStackFrames();
 		void SetMaxStackFrames(size_t p_MaxStackFrame);
 
+		// Processing options
+		skynet::DirectPassType GetDirectPassType();
+		void SetDirectPassType(skynet::DirectPassType p_DirectPassType);
+
+		skynet::EvaluationType GetEvaluationType();
+		void SetEvaluationType(skynet::EvaluationType p_EvaluationType);
+
+		skynet::LogicType GetLogicType();
+		void SetLogicType(skynet::LogicType p_LogicType);
+
 		// debugging
 		void Breakpoint();
 		void SetDebugAction(enum skynet::DebugAction p_DebugLevel);
@@ -110,6 +120,11 @@ namespace SNI
 
 		long m_DebugFieldWidth;
 		long m_DebugTitleWidth;
+
+		// Processing options.
+		skynet::DirectPassType m_DirectPassType;
+		skynet::EvaluationType m_EvaluationType;
+		skynet::LogicType m_LogicType;
 
 		bool m_HasConsole;
 

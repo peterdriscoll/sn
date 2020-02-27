@@ -81,6 +81,25 @@ namespace SN
 		size_t DebugTitleWidth();
 		void SetDebugTitleWidth(size_t p_DebugFieldWidth);
 
+		// Processing options
+		skynet::DirectPassType GetDirectPassType();
+		void SetDirectPassType(skynet::DirectPassType p_DirectPassType);
+
+		skynet::EvaluationType GetEvaluationType();
+		void SetEvaluationType(skynet::EvaluationType p_EvaluationType);
+
+		skynet::LogicType GetLogicType();
+		void SetLogicType(skynet::LogicType p_LogicType);
+		//	This flag allows
+		//		(right unbounded StringRef == string) == unknown boolean.
+		//	If enabled, SNI_StringRef::DoEquals will implement this, leading 
+		//	to allsorts of complications. It creates valuesets for the start/end 
+		//	positions, which turns the stringref into a multi value object, 
+		//	effectively, a ValueSet. SimplifyValue then explicitly changes it into
+		//	a value set.
+		//  This may not be necessary. Changes to Collapse may achieve the same result.
+		//	I'll try to get it working with the flag defined or not defined.
+
 		// Debugging
 		void Breakpoint();
 		void SetDebugAction(enum skynet::DebugAction p_DebugAction);
