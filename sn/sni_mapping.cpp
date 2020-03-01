@@ -42,6 +42,11 @@ namespace SNI
 
 	}
 
+	SNI_Expression * SNI_Mapping::Copy() const
+	{
+		return new SNI_Mapping(*this);
+	}
+
 	void SNI_Mapping::PromoteMembers()
 	{
 		for (auto &pair : m_Map)

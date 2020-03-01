@@ -231,6 +231,11 @@ namespace SNI
 		return function;
 	}
 
+	SNI_Expression * SNI_Expression::Copy() const
+	{
+		return NULL;
+	}
+
 	/* static */ SN::SN_Expression SNI_Expression::AddLambdasPartial(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)
 	{
 		if (p_ParameterList->size())

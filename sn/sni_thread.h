@@ -142,6 +142,11 @@ namespace SNI
 		void ClearDependencyChecks();
 
 		void ScheduleCodeBreak();
+
+		void RegisterChange(SNI_Variable *p_NewValue);
+		string ChangeJS(DisplayOptionType p_OptionType);
+		void WriteChangeJS(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions);
+
 	private:
 		string StartCommand(skynet::DebugAction p_DebugAction, const string & p_Description, enum DisplayOptionType p_OptionType);
 
@@ -169,7 +174,7 @@ namespace SNI
 		mutex m_Mutex;
 		SNI_DebugCommand m_DebugCommand;
 		SNI_FrameList m_FrameList;
-		long m_ThreadStepCount;
+		size_t m_ThreadStepCount;
 		bool m_WebServerThreadUsed;
 		SNI_Manager *m_TopManager;
 		bool m_Ended;
@@ -195,12 +200,14 @@ namespace SNI
 
 		SNI_WorldList m_ContextStack;
 
+		SNI_ChangeMap m_ChangeMap;
+
 		static long m_GotoThreadNum;
 		static long m_StepCount;
 		static bool m_Running;
 
 		static thread *m_WebServerThread;
-		static long m_WebServerThreadUsageCount;;
+		static long m_WebServerThreadUsageCount;
 	};
 }
 

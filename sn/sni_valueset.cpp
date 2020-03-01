@@ -58,6 +58,11 @@ namespace SNI
 	{
 	}
 
+	SNI_Expression *SNI_ValueSet::Copy() const
+	{
+		return new SNI_ValueSet(*this);
+	}
+
 	void SNI_ValueSet::PromoteMembers()
 	{
 		for (SNI_TaggedValue &tv : m_ValueList)

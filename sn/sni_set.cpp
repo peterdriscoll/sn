@@ -60,6 +60,11 @@ namespace SNI
 
 	}
 
+	SNI_Expression *SNI_Set::Copy() const
+	{
+		return new SNI_Set(*this);
+	}
+
 	void SNI_Set::PromoteMembers()
 	{
 		for (SN::SN_Value &v : m_SetList)

@@ -31,6 +31,8 @@ namespace SNI
 		SNI_String(const string &p_Other);
 		virtual ~SNI_String();
 
+		virtual SNI_Expression * Copy() const;
+
 		// Logging
 		virtual string GetTypeName() const;
 		virtual string DisplayCpp() const;

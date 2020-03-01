@@ -35,6 +35,11 @@ namespace SNI
 	{
 	}
 
+	SNI_Expression *SNI_Vector::Copy() const
+	{
+		return new SNI_Vector(*this);
+	}
+
 	void SNI_Vector::PromoteMembers()
 	{
 		for (auto &entry : m_Vector)

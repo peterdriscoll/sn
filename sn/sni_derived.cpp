@@ -40,6 +40,11 @@ namespace SNI
 	{
 	}
 
+	SNI_Expression * SNI_Derived::Copy() const
+	{
+		return new SNI_Derived(*this);
+	}
+
 	void SNI_Derived::PromoteMembers()
 	{
 		for (auto &entry : m_Vector)

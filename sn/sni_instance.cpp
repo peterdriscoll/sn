@@ -31,6 +31,11 @@ namespace SNI
 	{
 	}
 
+	SNI_Expression * SNI_Instance::Copy() const
+	{
+		return new SNI_Instance(*this);
+	}
+
 	string SNI_Instance::GetTypeName() const
 	{
 		return "Instance";

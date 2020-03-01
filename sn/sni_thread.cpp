@@ -469,6 +469,81 @@ namespace SNI
 		m_CodeBreakScheduled = true;
 	}
 
+	void SNI_Thread::RegisterChange(SNI_Variable * p_Variable)
+	{
+		ChangeKey changeKey(m_ThreadStepCount, p_Variable);
+		auto it = m_ChangeMap.find(changeKey);
+		if (it == m_ChangeMap.end())
+		{
+			ChangeValue changeValue(p_Variable);
+			m_ChangeMap[changeKey] = changeValue;
+		}
+	}
+
+	string SNI_Thread::ChangeJS(enum DisplayOptionType p_OptionType)
+	{
+		stringstream ss;
+		SNI_Manager *manager = GetTopManager(false);
+		cout << "ChangeJS\n";
+		if (manager)
+		{
+			SNI_DisplayOptions l_DisplayOptions(p_OptionType);
+			WriteChangeJS(ss, l_DisplayOptions);
+		}
+		else
+		{
+			ss << "{\"records\":[]}\n";
+		}
+		return ss.str();
+	}
+
+	void SNI_Thread::WriteChangeJS(ostream &p_Stream, SNI::SNI_DisplayOptions &p_DisplayOptions)
+	{
+		p_Stream << "{\"records\":[\n";
+		set<string> rowChanges;
+		vector<string> rowVector;
+
+		Unlock();
+		for (size_t stepCount = 0; stepCount <= m_ThreadStepCount; stepCount++)
+		{
+			for (auto it = m_ChangeMap.find(ChangeKey(stepCount));
+				it->first.GetStepCount() == stepCount; it++)
+			{
+				if (rowChanges.find(it->first.GetName()) == rowChanges.end())
+				{
+					rowVector.push_back(it->first.GetName());
+				}
+			}
+			p_Stream << "\t\"stepcount\":" << to_string(stepCount)<< "\n";
+			p_Stream << "\t\"variables\":{\n";
+			for (const string &name : rowVector)
+			{
+				auto itLoop = m_ChangeMap.find(ChangeKey(stepCount, name));
+				p_Stream << "\t\t[\n";
+				if (itLoop == m_ChangeMap.end())
+				{
+					p_Stream << "\t\t\t\"name\" : \"\",\n";
+					p_Stream << "\t\t\t\"framename\" : \"\",\n";
+					p_Stream << "\t\t\t\"value\" : \"\"\n";
+				}
+				else
+				{
+					string description = itLoop->second.DisplaySN(p_DisplayOptions);
+					string abbreviation = description.substr(0, 20);
+
+					p_Stream << "\t\t\t\"name\" : \"" << name << "\",\n";
+					p_Stream << "\t\t\t\"framename\" : \"" << itLoop->second.GetFrameName() << "\",\n";
+					p_Stream << "\t\t\t\"abbreviation\" : \"" << EscapeStringToJSON(abbreviation) << "\",\n";
+					p_Stream << "\t\t\t\"value\" : \"" << EscapeStringToJSON(description) << "\",\n";
+				}
+				p_Stream << "\t\t]\n";
+			}
+			p_Stream << "\t\n";
+		}
+		Unlock();
+		p_Stream << "\n]}\n";
+	}
+
 	string SNI_Thread::StartCommand(enum skynet::DebugAction p_DebugAction, const string &p_Description, enum DisplayOptionType p_OptionType)
 	{
 		stringstream ss;

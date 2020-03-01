@@ -28,6 +28,8 @@ namespace SNI
 		SNI_Derived();
 		virtual ~SNI_Derived();
 
+		virtual SNI_Expression * Copy() const;
+
 		virtual string GetTypeName() const;
 		virtual string DisplayCpp() const;
 		virtual long GetPriority() const;

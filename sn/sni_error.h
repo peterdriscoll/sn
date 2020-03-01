@@ -32,6 +32,8 @@ namespace SNI
 		SNI_Error(const SNI_Error &p_Other);
 		virtual ~SNI_Error();
 
+		virtual SNI_Expression * Copy() const;
+
 		virtual string GetTypeName() const;
 		virtual string DisplayCpp() const;
 		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;

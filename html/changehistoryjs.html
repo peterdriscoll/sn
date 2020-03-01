@@ -1,0 +1,96 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Skynet Change Hstory</title>
+    <meta name="description" content="SKYNET">
+    <meta name="author" content="P.J.Driscoll">
+    <link rel='icon' href='favicon.png' sizes='32x32' type='image/png'>
+    <link rel='stylesheet' type='text/css' href='style.css'>
+</head>
+<body>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.0/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.0/angular-sanitize.js"></script>
+    <div ng-app="skynetApp" ng-controller='commandCtrl'>
+        <div>
+            <div class="left-float">
+                <h1>SKYNET Change History - {{taskdescription}} {{statusdescription}}</h1>
+            </div>
+            <div class="right-float">
+                <table>
+                    <tr>
+                        <td class="help-link"><a href="runjs.html">Running Dashboard</a></td>
+                        <td class="help-link"><a href="skynetjs.html">Developer Dashboard</a></td>
+                        <td class="help-link"><a href="derivationjs.html">Derivation</a></td>
+                        <td class="help-link"><a href="explorerjs.html">Object Explorer</a></td>
+                        <td class="help-link"><a href="help_index.html">Help</a></td>
+                        <td class="help-link"><a href="help_start.html">Get Started</a></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <p class='clear'></p>
+        <table class='thread'>
+            <caption>Change History</caption>
+            <tr ng-repeat="line in changes">
+                <td ng-repeat="v in line.variables">
+                    {{v.framename}}
+                </td>
+            </tr>
+            <tr>
+                <td ng-repeat="v in line.variables">
+                    <details>
+                        <summary>{{v.abbreviation}}...</summary>
+                        <p ng-bind-html="trustAsHtml(v.value)" init-bind></p>
+                    </details>
+                </td>
+            </tr>
+        </table>
+        <p>
+            <a href='http://jigsaw.w3.org/css-validator/check/referer'>
+                <img style='border:0;width:88px;height:31px'
+                     src='http://jigsaw.w3.org/css-validator/images/vcss-blue'
+                     alt='Valid CSS!' />
+            </a>
+        </p>
+    </div>
+    <script>
+        var home = 'http://127.0.0.1/';
+        var app = angular.module('skynetApp', ['ngSanitize']);
+
+        app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $window, $document) {
+            $scope.trustAsHtml = $sce.trustAsHtml;
+            $scope.threadnum = 0;
+            $scope.initFirst = function () {
+                $http.get(home + 'dashboardjs?threadnum=' + $scope.threadnum)
+                    .then(function (response) {
+                        $scope.threadnum = response.data.threadnum;
+                        $scope.breakpoint = response.data.breakpoint;
+                        $scope.taskdescription = response.data.taskdescription;
+                        $scope.statusdescription = response.data.statusdescription;
+                        $scope.running = response.data.running;
+                        $scope.closing = response.data.closing;
+                    });
+                $http.get(home + 'changejs?threadnum=' + $scope.threadnum)
+                    .then(function (response) {
+                        $scope.changes = response.data.records;
+                    });
+            };
+            $scope.initFirst();
+        })
+        .directive('initBind', function ($compile) {
+            return {
+                restrict: 'A',
+                link: function (scope, element, attr) {
+                    attr.$observe('ngBindHtml', function () {
+                        if (attr.ngBindHtml) {
+                            $compile(element[0].children)(scope);
+                        }
+                    })
+                }
+            };
+        });
+    </script>
+</body>
+</html>

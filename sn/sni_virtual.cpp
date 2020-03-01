@@ -131,6 +131,11 @@ namespace SNI
 	{
 	}
 
+	SNI_Expression *SNI_Virtual::Copy() const
+	{
+		return new SNI_Virtual(*this);
+	}
+
 	void SNI_Virtual::PromoteMembers()
 	{
 		for (auto &entry : m_CallList)

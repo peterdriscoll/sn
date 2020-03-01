@@ -50,6 +50,11 @@ namespace SNI
 	{
 	}
 
+	SNI_Expression * SNI_Class::Copy() const
+	{
+		return new SNI_Class(*this);
+	}
+
 	string SNI_Class::GetTypeName() const
 	{
 		return "Class";

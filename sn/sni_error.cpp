@@ -42,6 +42,14 @@ namespace SNI
 	{
 	}
 
+	SNI_Error::SNI_Error(const SNI_Error &p_Other)
+		: m_Success(p_Other.m_Success)
+		, m_Delay(p_Other.m_Delay)
+		, m_Description(p_Other.m_Description)
+		, m_CallHistory(p_Other.m_CallHistory)
+	{
+	}
+
 	SNI_Error::SNI_Error(bool p_Success, bool p_Delay, const string & p_Description)
 		: m_Success(p_Success)
 		, m_Delay(p_Delay)
@@ -63,6 +71,11 @@ namespace SNI
 
 	SNI_Error::~SNI_Error()
 	{
+	}
+
+	SNI_Expression * SNI_Error::Copy() const
+	{
+		return new SNI_Error(*this);
 	}
 
 	string SNI_Error::GetTypeName() const

@@ -26,6 +26,8 @@ namespace SNI
 		SNI_Vector();
 		virtual ~SNI_Vector();
 
+		virtual SNI_Expression *Copy() const;
+
 		virtual string GetTypeName() const;
 		virtual string DisplayCpp() const;
 		virtual long GetPriority() const;

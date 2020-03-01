@@ -48,6 +48,11 @@ namespace SNI
 
 	}
 
+	SNI_Expression * SNI_Bool::Copy() const
+	{
+		return new SNI_Bool(*this);
+	}
+
 	string SNI_Bool::GetTypeName() const
 	{
 		return "Bool";

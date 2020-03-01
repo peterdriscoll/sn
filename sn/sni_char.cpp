@@ -47,6 +47,11 @@ namespace SNI
 
 	}
 
+	SNI_Expression * SNI_Char::Copy() const
+	{
+		return new SNI_Char(*this);
+	}
+
 	string::value_type SNI_Char::GetChar() const
 	{
 		return m_Char;

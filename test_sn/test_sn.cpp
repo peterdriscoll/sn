@@ -3533,7 +3533,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Validate IsExponential", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, true /*runWebServer*/);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				CharacterSet characterSet;
 				Validate validate(characterSet);

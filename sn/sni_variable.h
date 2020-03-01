@@ -9,6 +9,9 @@
 #include "ref.h"
 
 #include <string>
+#include <map>
+#include <set>
+
 using namespace std;
 
 namespace SNI
@@ -105,6 +108,82 @@ namespace SNI
 
 	typedef vector<SNI_Variable> SNI_VariableList;
 	typedef vector<const SNI_Variable *> SNI_VariableConstPointerList;
+
+	struct HashChangeKey;
+
+	class ChangeKey
+	{
+		size_t m_StepCount;
+		string m_Name;
+
+	public:
+		ChangeKey(size_t p_StepCount)
+			: m_StepCount(p_StepCount)
+		{
+		}
+
+		ChangeKey(size_t p_StepCount, const string &p_Name)
+			: m_StepCount(p_StepCount)
+			, m_Name(p_Name)
+		{
+		}
+
+		ChangeKey(size_t p_StepCount, SNI_Variable * p_Variable)
+			: m_StepCount(p_StepCount)
+			, m_Name(p_Variable->GetName())
+		{
+		}
+
+		size_t GetStepCount() const
+		{
+			return m_StepCount;
+		}
+
+		string GetName() const
+		{
+			return m_Name;
+		}
+
+		bool operator<(const ChangeKey &other) const
+		{
+			return (m_StepCount < other.m_StepCount)
+				|| (m_StepCount == other.m_StepCount && m_Name < other.m_Name);
+		}
+	};
+
+	class ChangeValue
+	{
+		string m_FrameName;
+		SNI_Expression *m_Value;
+
+	public:
+		ChangeValue()
+			: m_Value(NULL)
+		{
+		}
+		ChangeValue(SNI_Variable *p_Variable)
+			: m_FrameName(p_Variable->FrameName())
+			, m_Value(p_Variable->GetSafeValue()->Copy())
+		{
+		}
+		ChangeValue(const ChangeValue &p_Other)
+			: m_FrameName(p_Other.m_FrameName)
+			, m_Value(p_Other.m_Value)
+		{
+		}
+
+		string GetFrameName() const
+		{
+			return m_FrameName;
+		}
+
+		string DisplaySN(SNI_DisplayOptions &p_DisplayOptions) const
+		{
+			return m_Value->DisplaySN(0, p_DisplayOptions);
+		}
+	};
+
+	typedef map<ChangeKey, ChangeValue> SNI_ChangeMap;
 }
 
 #endif // !defined(SNI_VARIABLE_H_INCLUDED)

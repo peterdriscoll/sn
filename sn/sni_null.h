@@ -22,6 +22,8 @@ namespace SNI
 		SNI_Null(const SNI_Null &p_Other);
 		virtual ~SNI_Null();
 
+		SNI_Expression * Copy() const;
+
 		virtual string GetTypeName() const;
 		virtual string DisplayCpp() const;
 		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;

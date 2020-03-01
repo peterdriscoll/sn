@@ -28,6 +28,8 @@ namespace SNI
 		SNI_StringRef(const SN::SN_Value &p_Source, const SN::SN_Expression &p_Start, const SN::SN_Expression &p_End);
 		virtual ~SNI_StringRef();
 
+		virtual SNI_Expression *Copy() const;
+
 		virtual string GetTypeName() const;
 		virtual string DisplayCpp() const;
 		virtual string DisplaySN(long, SNI_DisplayOptions &) const;

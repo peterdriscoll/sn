@@ -31,6 +31,11 @@ namespace SNI
 	{
 	}
 
+	SNI_Expression * SNI_Null::Copy() const
+	{
+		return const_cast<SNI_Null *>(this);
+	}
+
 	string SNI_Null::GetTypeName() const
 	{
 		return "Null";

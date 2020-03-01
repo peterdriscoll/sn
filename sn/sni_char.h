@@ -19,6 +19,7 @@ namespace SNI
 		SNI_Char(const SNI_Char &p_Other);
 		SNI_Char(string::value_type p_Other);
 
+		SNI_Expression * Copy() const;
 
 		virtual ~SNI_Char();
 

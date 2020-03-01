@@ -152,6 +152,11 @@ namespace SNI
 				m_response_data = l_thread->StackJS(maxStackFrames, debugJS);
 				m_extension = "json";
 			}
+			else if (path == "/changejs")
+			{
+				m_response_data = l_thread->ChangeJS(debugJS);
+				m_extension = "json";
+			}
 			else if (path == "/logjs")
 			{
 				long maxLogEntries = atol(umap["maxlogentries"].c_str());
