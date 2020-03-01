@@ -174,8 +174,7 @@ namespace SN
 		SN_Expression operator >=(const SN_Expression &p_Other) const;
 
 		// Function
-		SN_Expression operator()(const SN_Expression &p_Parameter) const;
-		SN_Expression operator()(const SN_Expression &p_Parameter, const SN_Expression &p_Condition) const;
+		SN_Function operator()(const SN_Expression &p_Parameter) const;
 		SN_Expression operator[](const SN_Expression &p_Index) const;
 		SN_Expression CreateMetaVariable(const SN_Expression &p_Index);
 		SN_Expression ReverseSubscript(const SN_Expression & p_Index) const;

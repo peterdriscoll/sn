@@ -136,15 +136,15 @@ namespace SNI
 	{
 		if (!m_Map.size())
 		{
-			return SN::SN_Error(GetTypeName() + " No values in map.");
+			return SN::SN_Error(false, false, GetTypeName() + " No values in map.");
 		}
 		if (!m_Fixed)
 		{
-			return SN::SN_Error(GetTypeName() + " Default value not fixed.");
+			return SN::SN_Error(false, false, GetTypeName() + " Default value not fixed.");
 		}
 		if (p_Result.Equivalent(m_DefaultValue))
 		{
-			return SN::SN_Error(GetTypeName() + " Undefined operation, because result matches default " + m_DefaultValue->DisplaySN0());
+			return SN::SN_Error(false, false, GetTypeName() + " Undefined operation, because result matches default " + m_DefaultValue->DisplaySN0());
 		}
 		SN::SN_ValueSet vs;
 		SNI_WorldSet *worldSet = vs.GetWorldSet();
@@ -163,14 +163,14 @@ namespace SNI
 		{
 			return vs;
 		}
-		return SN::SN_Error(GetTypeName() + " No matching values in map.");
+		return SN::SN_Error(false, false, GetTypeName() + " No matching values in map.");
 	}
 
 	SN::SN_Value SNI_Mapping::DoCountIf(SN::SN_Expression p_Value) const
 	{
 		if (!m_Fixed)
 		{
-			return SN::SN_Error(GetTypeName() + " CountIf - Number of values in map may change. Fix the map before counting.");
+			return SN::SN_Error(false, false, GetTypeName() + " CountIf - Number of values in map may change. Fix the map before counting.");
 		}
 		SN_DECLARE_VALUE(countCondition, p_Value);
 		long count = 0;
@@ -188,7 +188,7 @@ namespace SNI
 	{
 		if (!m_Fixed)
 		{
-			return SN::SN_Error(GetTypeName() + " CountAll - Number of values in map may change. Fix the map before counting.");
+			return SN::SN_Error(false, false, GetTypeName() + " CountAll - Number of values in map may change. Fix the map before counting.");
 		}
 		return SN::SN_Long(m_Map.size());
 	}
@@ -197,14 +197,14 @@ namespace SNI
 	{
 		if (!m_Fixed)
 		{
-			return SN::SN_Error(GetTypeName() + " Sum - Number of values in map may change. Fix the map before summing.");
+			return SN::SN_Error(false, false, GetTypeName() + " Sum - Number of values in map may change. Fix the map before summing.");
 		}
 		SN::SN_Expression sum;
 		for (auto &pair : m_Map)
 		{
 			if (pair.second.IsNullValue())
 			{
-				return SN::SN_Error(GetTypeName() + " Sum - Null value found.");
+				return SN::SN_Error(false, false, GetTypeName() + " Sum - Null value found.");
 			}
 			if (sum.IsNull())
 			{

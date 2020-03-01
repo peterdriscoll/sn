@@ -44,7 +44,7 @@ namespace SN
 	}
 
 	SN_Value::SN_Value(const SN_Expression &p_Expression)
-		: SN_Expression(dynamic_cast<SNI::SNI_Value *>(p_Expression.GetSNI_Expression()))
+		: SN_Expression(p_Expression.GetSNI_Value())
 	{
 	}
 

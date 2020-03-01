@@ -238,7 +238,7 @@ namespace SNI
 
 	SN::SN_Error SNI_FunctionDef::DoAssert()
 	{
-		return Unify(NULL);
+		return Unify(NULL).GetError();
 	}
 
 	SN::SN_Error SNI_FunctionDef::DoPartialAssert()
@@ -287,7 +287,6 @@ namespace SNI
 
 		for (long j = 0; j < depth; j++)
 		{
-			SN::SN_Variable v = inputList[j];
 			if (!IsKnownValue(p_ParamList[j], j))
 			{
 				card = CardinalityOfUnify(depth, inputList, (long)j, totalCalc);
@@ -296,7 +295,8 @@ namespace SNI
 				{
 					if (allFound || maxCard < card)
 					{
-						LOG(WriteLine(SN::DebugLevel, "Self Assert " + to_string(j) + ": " + v.GetName()));
+						LOG(WriteLine(SN::DebugLevel, "Self Assert " + to_string(j) + ": " + inputList[j].DisplaySN()));
+
 						e = inputList[j].GetSNI_Expression()->SelfAssert();
 						if (e.IsError())
 						{
@@ -305,10 +305,10 @@ namespace SNI
 					}
 					else
 					{
-						LOG(WriteLine(SN::DebugLevel, "Parameter " + to_string(j) + ": " + v.GetName()));
+						LOG(WriteLine(SN::DebugLevel, "Parameter " + to_string(j) + ": " + inputList[j].DisplaySN()));
 					}
 				}
-				else
+				else if (!inputList[j].GetSNI_ValueSet())
 				{
 					LOG(WriteLine(SN::DebugLevel, "Parameter " + to_string(j) + ": " + inputList[j].DisplayValueSN()));
 					if (allFound || maxCard < card)
@@ -336,7 +336,7 @@ namespace SNI
 			{
 				if (inputList[j].IsVariable())
 				{
-					LOG(WriteLine(SN::DebugLevel, "Parameter " + to_string(j) + ": " + v.GetName()));
+					LOG(WriteLine(SN::DebugLevel, "Parameter " + to_string(j) + ": " + inputList[j].DisplaySN()));
 				}
 				else
 				{
@@ -418,7 +418,7 @@ namespace SNI
 
 	SN::SN_Error SNI_FunctionDef::UnifyElement(long p_Depth, SN::SN_Expression * p_InputList, SNI_World ** p_WorldList, long p_CalcPos, long p_TotalCalc, SNI_WorldSet * worldSet, const SNI_Expression *p_Source) const
 	{
-		return SN::SN_Error(GetTypeName() + ": Unify element not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + ": Unify element not implemented.");
 	}
 
 	size_t SNI_FunctionDef::CardinalityOfCall(long p_NumParams, SN::SN_Expression * p_ParameterList) const

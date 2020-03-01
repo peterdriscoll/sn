@@ -89,7 +89,7 @@ namespace SNI
 		{
 			return p_Result.PartialAssertValue(PrimaryFunctionValue(left, right));
 		}
-		return false;
+		return skynet::Fail;
 	}
 
 	SN::SN_Expression SNI_MetaLevel::CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel /* = 0 */) const
@@ -124,7 +124,7 @@ namespace SNI
 				}
 			}
 		}
-		SN::SN_Error result = p_ParamList[PU2_First].DoEvaluate().DoMeta(metaLevel);
+		SN::SN_Error result = p_ParamList[PU2_First].DoEvaluate().DoMeta(metaLevel).GetError();
 
 		SNI_Thread::GetThread()->SetDebugId("meta");
 		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Meta", SN::ReturnId);

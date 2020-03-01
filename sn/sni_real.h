@@ -24,20 +24,20 @@ using namespace std;
 
 #define SN_OPERATOR_TYPE_CASES(OP)                                     \
 	SN_APPLY_TYPES(OP, DUMMY, SN_OPERATOR_TYPE)                        \
-    return SN::SN_Error(GetTypeName() + " " #OP " " + p_Other->GetTypeName() + " operator not implemented on ");
+    return SN::SN_Error(false, false, GetTypeName() + " " #OP " " + p_Other->GetTypeName() + " operator not implemented on ");
 
 #define SN_DIVIDE_TYPE(C, B, K, N)                                     \
     if (dynamic_cast<SNI_Real<K> *>(p_Other))                          \
     {                                                                  \
         SNI_Real<K> * l_Real = dynamic_cast<SNI_Real<K> *>(p_Other);   \
         if (l_Real->m_Number == 0)                                     \
-            return SN::SN_Error(GetTypeName() + " divide by zero.");   \
+            return SN::SN_Error(false, false, GetTypeName() + " divide by zero.");   \
         return MakeType(m_Number / l_Real->m_Number);                  \
     }
 
 #define SN_DIVIDE_TYPE_CASES()                                         \
 	SN_APPLY_TYPES(DUMMY, DUMMY, SN_DIVIDE_TYPE)                       \
-    return SN::SN_Error(GetTypeName() + " / " + p_Other->GetTypeName() + " operator not implemented on ");
+    return SN::SN_Error(false, false, GetTypeName() + " / " + p_Other->GetTypeName() + " operator not implemented on ");
 
 #define SN_EQUIVALENT_TYPE(C, B, K, N)                                 \
     if (dynamic_cast<SNI_Real<K> *>(p_Other))                          \
@@ -239,7 +239,7 @@ namespace SNI
 		{
 			if (m_Number < 0)
 			{
-				return SN::SN_Error(GetTypeName() + " Imaginary numbers not supported. Square root of " + to_string(m_Number));
+				return SN::SN_Error(false, false, GetTypeName() + " Imaginary numbers not supported. Square root of " + to_string(m_Number));
 			}
 			else if (0 == m_Number)
 			{
@@ -249,7 +249,7 @@ namespace SNI
 			{
 				if (m_Number < 0)
 				{
-					return SN::SN_Error(GetTypeName() + " Imaginary numbers not supported. Square root of " + to_string(m_Number));
+					return SN::SN_Error(false, false, GetTypeName() + " Imaginary numbers not supported. Square root of " + to_string(m_Number));
 				}
 				T n, p, low, high;
 				if (m_Number == 0)

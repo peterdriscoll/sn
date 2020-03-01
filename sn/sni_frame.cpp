@@ -190,7 +190,6 @@ namespace SNI
 		{
 			size_t fixedWidth = minFixedWidth;
 			string name = v->FrameName();
-			SN::SN_Expression e = v->GetSafeValue();
 			string typeText = v->GetValueTypeName();
 			if (fixedWidth < name.size())
 			{
@@ -200,8 +199,11 @@ namespace SNI
 			{
 				fixedWidth = typeText.size();
 			}
-			e.ForEach(
-				[&fixedWidth](const SN::SN_Expression &p_Expression, SNI_World *p_World) -> SN::SN_Error
+			if (v->GetSafeValue())
+			{
+				SN::SN_Expression e = v->GetSafeValue();
+				e.ForEach(
+					[&fixedWidth](const SN::SN_Expression &p_Expression, SNI_World *p_World) -> SN::SN_Error
 				{
 					string valueText;
 					if (!p_Expression.IsNull())
@@ -214,17 +216,16 @@ namespace SNI
 						fixedWidth = valueText.size();
 					}
 					return skynet::OK;
+				});
+				if (debugFieldWidth < fixedWidth)
+				{
+					fixedWidth = debugFieldWidth;
 				}
-			);
-			if (debugFieldWidth < fixedWidth)
-			{
-				fixedWidth = debugFieldWidth;
-			}
-			heading += delimeter + Pad(name, fixedWidth);
-			typeLine += delimeter + Pad(typeText, fixedWidth);
-			size_t row = 0;
-			e.ForEach(
-				[&data, &row, &delimeter, &filler, fixedWidth](const SN::SN_Expression &p_Expression, SNI_World *p_World)->SN::SN_Error
+				heading += delimeter + Pad(name, fixedWidth);
+				typeLine += delimeter + Pad(typeText, fixedWidth);
+				size_t row = 0;
+				e.ForEach(
+					[&data, &row, &delimeter, &filler, fixedWidth](const SN::SN_Expression &p_Expression, SNI_World *p_World)->SN::SN_Error
 				{
 					string valueText;
 					if (!p_Expression.IsNull())
@@ -240,14 +241,15 @@ namespace SNI
 					data[row - 1] += delimeter + Pad(valueText, fixedWidth);
 					return skynet::OK;
 				}
-			);
-			string fillerField = delimeter + string(fixedWidth,' ');
-			for (size_t j = row; j < data.size(); j++)
-			{
-				data[j] += fillerField;
+				);
+				string fillerField = delimeter + string(fixedWidth, ' ');
+				for (size_t j = row; j < data.size(); j++)
+				{
+					data[j] += fillerField;
+				}
+				filler += fillerField;
+				delimeter = " | ";
 			}
-			filler += fillerField;
-			delimeter = " | ";
 		}
 		string result = heading + " |";
 		if (!data.empty())

@@ -115,7 +115,7 @@ namespace SNI
 		SN::SN_Real<long> indexNumber(indexValue);
 		if (indexNumber.IsNull())
 		{
-			return SN::SN_Error(GetTypeName() + " Subscript index is not a Long.");
+			return SN::SN_Error(false, false, GetTypeName() + " Subscript index is not a Long.");
 		}
 		size_t index = indexNumber.GetNumber();
 
@@ -123,7 +123,7 @@ namespace SNI
 		{
 			if (m_Fixed)
 			{
-				return SN::SN_Error(GetTypeName() + " Subscript index is out of bounds.");
+				return SN::SN_Error(false, false, GetTypeName() + " Subscript index is out of bounds.");
 			}
 			else
 			{
@@ -145,14 +145,14 @@ namespace SNI
 		SN::SN_Real<long> indexNumber(indexValue);
 		if (indexNumber.IsNull())
 		{
-			return SN::SN_Error(GetTypeName() + " Subscript index is not a Long.");
+			return SN::SN_Error(false, false, GetTypeName() + " Subscript index is not a Long.");
 		}
 		size_t index = (size_t)indexNumber.GetNumber();
 		if (index >= m_Vector.size())
 		{
 			if (m_Fixed)
 			{
-				return SN::SN_Error(GetTypeName() + " Subscript index is out of bounds.");
+				return SN::SN_Error(false, false, GetTypeName() + " Subscript index is out of bounds.");
 			}
 			else
 			{
@@ -166,11 +166,11 @@ namespace SNI
 	{
 		if (!m_Vector.size())
 		{
-			return SN::SN_Error(GetTypeName() + " No values in map.");
+			return SN::SN_Error(false, false, GetTypeName() + " No values in map.");
 		}
 		if (!m_Fixed)
 		{
-			return SN::SN_Error(GetTypeName() + " Vector length not fixed.");
+			return SN::SN_Error(false, false, GetTypeName() + " Vector length not fixed.");
 		}
 		SN::SN_ValueSet vs;
 		SNI_WorldSet *worldSet = vs.GetWorldSet();
@@ -189,14 +189,14 @@ namespace SNI
 		{
 			return vs;
 		}
-		return SN::SN_Error(GetTypeName() + " No matching values in map.");
+		return SN::SN_Error(false, false, GetTypeName() + " No matching values in map.");
 	}
 
 	SN::SN_Value SNI_Vector::DoCountIf(SN::SN_Expression p_Value) const
 	{
 		if (!m_Fixed)
 		{
-			return SN::SN_Error(GetTypeName() + " CountIf - Number of values in map may change. Fix the map before counting.");
+			return SN::SN_Error(false, false, GetTypeName() + " CountIf - Number of values in map may change. Fix the map before counting.");
 		}
 		SN_DECLARE_VALUE(countCondition, p_Value);
 		long count = 0;
@@ -214,7 +214,7 @@ namespace SNI
 	{
 		if (!m_Fixed)
 		{
-			return SN::SN_Error(GetTypeName() + " CountAll - Number of values in vector may change. Fix the vector before counting.");
+			return SN::SN_Error(false, false, GetTypeName() + " CountAll - Number of values in vector may change. Fix the vector before counting.");
 		}
 		size_t size = m_Vector.size();
 		return SN::SN_Long(size);
@@ -224,14 +224,14 @@ namespace SNI
 	{
 		if (!m_Fixed)
 		{
-			return SN::SN_Error(GetTypeName() + " Sum - Number of values in map may change. Fix the map before summing.");
+			return SN::SN_Error(false, false, GetTypeName() + " Sum - Number of values in map may change. Fix the map before summing.");
 		}
 		SN::SN_Expression sum;
 		for (auto &item : m_Vector)
 		{
 			if (item.IsNullValue())
 			{
-				return SN::SN_Error(GetTypeName() + " Sum - Null value found.");
+				return SN::SN_Error(false, false, GetTypeName() + " Sum - Null value found.");
 			}
 			if (sum.IsNull())
 			{

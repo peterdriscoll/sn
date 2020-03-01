@@ -33,12 +33,17 @@ namespace SN
 
 	public:
 		SN_Base()
+			: m_Expression(NULL)
 		{
 		}
 
 		SN_Base(T * p_Expression)
 			: m_Expression(p_Expression)
 		{
+			if (m_Expression == NULL)
+			{
+				long dog = 10;
+			}
 		}
 
 		~SN_Base()
@@ -190,6 +195,11 @@ namespace SN
 			return GetSNI_Base() && GetSNI_Base()->IsError();
 		}
 
+		bool IsSignificantError()
+		{
+			return GetSNI_Base() && GetSNI_Base()->IsSignificantError();
+		}
+
 		bool IsFixed() const
 		{
 			return !GetSNI_Base() || GetSNI_Base()->IsFixed();
@@ -272,7 +282,7 @@ namespace SN
 			return GetSNI_Base()->DoPartialAssert();
 		}
 
-		Err DoMeta(long p_MetaLevel = 0)
+		Exp DoMeta(long p_MetaLevel = 0)
 		{
 			return GetSNI_Base()->DoMeta(p_MetaLevel);
 		}
@@ -285,6 +295,21 @@ namespace SN
 		void Throw()
 		{
 			return GetSNI_Base()->Throw();
+		}
+
+		Err GetError() const
+		{
+			SNI_Error *err = dynamic_cast<SNI_Error *>(GetSNI_Base());
+			if (err)
+			{
+				return Err(err);
+			}
+			SNI_Bool *result = dynamic_cast<SNI_Bool *>(GetSNI_Base());
+			if (result)
+			{
+				return Err(result->GetBool(), false);
+			}
+			return Err(false, false, "Error object expected.");
 		}
 
 		void Do()

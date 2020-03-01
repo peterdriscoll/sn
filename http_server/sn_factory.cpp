@@ -1,21 +1,6 @@
-#define LIBRARY http_server_library
+#define LIBRARY http_server
 
-// Create dummies for the classes that are not being implemented here.
-namespace SNI
-{
-	class SNI_HTTP_Handler
-	{
-	public:
-		SNI_HTTP_Handler() {};
-	};
-}
-
-namespace HTTP
-{
-	namespace server
-	{
-		class server {};
-	}
-}
+#define SN_APPLY_CURRENT_LIBRARY(L, A) \
+	L(A, http_server, "http_server.exe")
 
 #include "../inc/sn_factory.cpp"

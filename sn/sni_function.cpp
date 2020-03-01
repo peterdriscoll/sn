@@ -21,8 +21,8 @@ namespace SNI
 
 	SNI_Function::SNI_Function(SNI_Expression *p_Function)
 		: m_Function(p_Function)
-		, m_Parameter(NULL)
-		, m_Condition(NULL)
+		, m_Parameter(skynet::Null.GetSNI_Expression())
+		, m_Condition(skynet::Null.GetSNI_Expression())
 	{
 		REQUESTPROMOTION(m_Function);
 		REQUESTPROMOTION(m_Parameter);
@@ -32,7 +32,7 @@ namespace SNI
 	SNI_Function::SNI_Function(SNI_Expression *p_Function, SNI_Expression *p_Parameter)
 		: m_Function(p_Function)
 		, m_Parameter(p_Parameter)
-		, m_Condition(NULL)
+		, m_Condition(skynet::Null.GetSNI_Expression())
 	{
 		REQUESTPROMOTION(m_Function);
 		REQUESTPROMOTION(m_Parameter);
@@ -63,6 +63,13 @@ namespace SNI
 	SNI_Function::~SNI_Function()
 	{
 
+	}
+
+
+	SN::SN_Function SNI_Function::Condition(SNI_Expression *p_Condition)
+	{
+		m_Condition = p_Condition;
+		return this;
 	}
 
 	void SNI_Function::PromoteMembers()
@@ -189,7 +196,7 @@ namespace SNI
 		LOG(WriteExpression(SN::DebugLevel, p_Value, this));
 		if (p_Value.IsError())
 		{
-			return p_Value;
+			return p_Value.GetError();
 		}
 
 		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Function::AssertValue ( " + p_Value.DisplaySN() + " )"));
@@ -216,8 +223,7 @@ namespace SNI
 			}
 			e = dynamic_cast<SNI_Error *>(function);
 		}
-		SN::SN_Expression exp(e);
-		SN::SN_Error err(exp);
+		SN::SN_Error err(e);
 		ASSERTM(e == err.GetSNI_Error(), "Must be equal.");
 		if (err.IsSignificantError())
 		{
@@ -225,7 +231,7 @@ namespace SNI
 			LOGGING(callRecord->SetLogContext(context));
 			err.GetSNI_Error()->AddNote(callRecord);
 		}
-		return LOG_RETURN(context, exp);
+		return LOG_RETURN(context, err);
 	}
 
 	SN::SN_Error SNI_Function::AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World ** p_WorldList, SNI_WorldSet * p_WorldSet)

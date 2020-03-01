@@ -4,19 +4,27 @@
 #pragma once
 
 // List DLLs you want to load here.
-#define SN_APPLY_LIBRARIES(L)                          \
-    L(sn, "sn.dll")                                    \
-	L(http_server_lib, "http_server_lib.dll")          \
-	L(http_server, "")
+#define SN_APPLY_LIBRARIES(L, A)                          \
+    L(A, sn, "sn.dll")                                    \
+	L(A, http_server_lib, "http_server_lib.dll")          \
+	L(A, http_server, "")
 
 // List dlls above.
 //  L(name, path) \
 
 // List classes you want to create from those libraries here.
 // Each class has a pure  virtual interface from which they inherit.
-#define SN_APPLY_ENTRYPOINTS(M)                        \
-    M(IHTTP_Handler, SNI::SNI_HTTP_Handler, sn, def)\
+#define SN_APPLY_ENTRYPOINTS_sn(M)                                     \
+    M(IHTTP_Handler, SNI::SNI_HTTP_Handler, sn, def)
+
+#define SN_APPLY_ENTRYPOINTS_http_server_lib(M)                        \
 	M(IHTTP_Server, HTTP::server::server, http_server_lib, def)
+
+#define SN_APPLY_ENTRYPOINTS_http_server(M)
+
+#define APPLY_ENTRY(A, N, L) \
+	SN_APPLY_ENTRYPOINTS_##N(A)
+
 
 // List interface implementations above.
 //  M(interface, implementation. library path) \
@@ -29,26 +37,26 @@
 //	}
 #define DEFINE_INTERFACE(I) \
 	public: \
-		static const long Id = SN::I##_def; \
+		static const long Id = SN::I##_def_entry; \
 	private:
 
 namespace SN
 {
-	#define DEFINE_LIBRARY_ENUM(N, L) \
+	#define DEFINE_LIBRARY_ENUM(A, N, L) \
 		N##_library,
 
 	enum LibraryValues
 	{
-		SN_APPLY_LIBRARIES(DEFINE_LIBRARY_ENUM)
+		SN_APPLY_LIBRARIES(DEFINE_LIBRARY_ENUM, "")
 		LastLibrary
 	};
 
 	#define DEFINE_ENTRY_ENUM(I, C, L, D) \
-		I##_##D,
+		I##_##D##_entry,
 	
 	enum EntryValues
 	{
-		SN_APPLY_ENTRYPOINTS(DEFINE_ENTRY_ENUM)
+		SN_APPLY_LIBRARIES(APPLY_ENTRY, DEFINE_ENTRY_ENUM)
 		LastEntry
 	};
 

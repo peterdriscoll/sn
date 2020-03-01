@@ -193,7 +193,7 @@ namespace SNI
 					SN::SN_String s_result = result;
 					p_left = SN::SN_StringRef(result, s_result.GetSNI_String()->GetStart(), splitPoint);
 					p_right = SN::SN_StringRef(result, splitPoint, s_result.GetSNI_String()->GetEnd());
-					return true;
+					return skynet::OK;
 				}
 			}
 			else if (SN::Is<SNI_Variable *>(left_value))
@@ -254,7 +254,7 @@ namespace SNI
 		{
 			ok |= result.PartialAssertValue(PrimaryFunctionExpression(left_value, right_value)).GetBool();
 		}
-		return ok;
+		return SN::SN_Error(ok, false);
 	}
 
 	size_t SNI_Binary::CardinalityOfCall(long p_Depth, SN::SN_Expression * p_ParamList) const
@@ -344,12 +344,12 @@ namespace SNI
 						world->AddToSetList();
 					}
 				}
-				return true;
+				return skynet::OK;
 			}
 			else
 			{
 				SN::SN_Value value = PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue());
-				return value.Equivalent(p_ParamList[PU2_Result].GetVariableValue());
+				return SN::SN_Error(value.Equivalent(p_ParamList[PU2_Result].GetVariableValue()), false);
 			}
 		}
 		break;
@@ -399,13 +399,13 @@ namespace SNI
 					{
 						p_ParamList[PU2_First].AddValue(SN::SN_StringRef(p_Param, p_Param.GetSNI_String()->GetStart(), splitPoint), p_Depth, p_WorldList, worldSet);
 						p_ParamList[PU2_Second].AddValue(SN::SN_StringRef(p_Param, splitPoint, p_Param.GetSNI_String()->GetEnd()), p_Depth, p_WorldList, worldSet);
-						return true;
+						return skynet::OK;
 					}
 				);
-				return true;
+				return skynet::OK;
 			}
 		}
 		}
-		return SN::SN_Error(GetTypeName() + ": Expression not unified. TotalCalc=" + to_string(p_TotalCalc) + " Calcpos="+ to_string(p_CalcPos));
+		return SN::SN_Error(false, false, GetTypeName() + ": Expression not unified. TotalCalc=" + to_string(p_TotalCalc) + " Calcpos="+ to_string(p_CalcPos));
 	}
 }

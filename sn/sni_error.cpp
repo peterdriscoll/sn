@@ -46,25 +46,6 @@ namespace SNI
 		}
 	}
 
-	SNI_Error::SNI_Error(const string &p_Description)
-		: m_Success(false)
-		, m_Delay(false)
-		, m_Description(p_Description)
-	{
-		if (IsSignificantError())
-		{
-			LOG(WriteLine(SN::ErrorLevel, GetLogDescription()));
-			SNI_Thread::GetThread()->RegisterError(this);
-		}
-	}
-
-	SNI_Error::SNI_Error(const SNI_Error &p_Other)
-		: m_Success(p_Other.m_Success)
-		, m_Delay(p_Other.m_Delay)
-		, m_Description(p_Other.m_Description)
-	{
-	}
-
 	SNI_Error::~SNI_Error()
 	{
 	}

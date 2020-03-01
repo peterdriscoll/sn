@@ -100,7 +100,7 @@ namespace SNI
 			SNI_Char * l_char = dynamic_cast<SNI_Char *>(p_Other);
 			return SN::SN_Bool(m_String == l_char->GetString());
 		}
-		return SN::SN_Error(GetTypeName() + " Equals not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " Equals not implemented.");
 	}
 
 	SN::SN_Value SNI_String::DoNotEquals(SNI_Value *p_Other) const
@@ -120,7 +120,7 @@ namespace SNI
 			SNI_Char * l_char = dynamic_cast<SNI_Char *>(p_Other);
 			return SN::SN_Bool(m_String != l_char->GetString());
 		}
-		return SN::SN_Error(GetTypeName() + " Equals not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " Equals not implemented.");
 	}
 
 	SN::SN_Value SNI_String::DoLessThan(SNI_Value * p_Other) const
@@ -140,7 +140,7 @@ namespace SNI
 			SNI_Char * l_char = dynamic_cast<SNI_Char *>(p_Other);
 			return SN::SN_Bool(m_String < l_char->GetString());
 		}
-		return SN::SN_Error(GetTypeName() + " Equals not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " Equals not implemented.");
 	}
 
 	SN::SN_Value SNI_String::DoGreaterThan(SNI_Value * p_Other) const
@@ -160,7 +160,7 @@ namespace SNI
 			SNI_Char * l_char = dynamic_cast<SNI_Char *>(p_Other);
 			return SN::SN_Bool(m_String > l_char->GetString());
 		}
-		return SN::SN_Error(GetTypeName() + " Greater than not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " Greater than not implemented.");
 	}
 
 	SN::SN_Value SNI_String::DoLessEquals(SNI_Value * p_Other) const
@@ -180,7 +180,7 @@ namespace SNI
 			SNI_Char * l_char = dynamic_cast<SNI_Char *>(p_Other);
 			return SN::SN_Bool(m_String <= l_char->GetString());
 		}
-		return SN::SN_Error(GetTypeName() + " Less than or equal not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " Less than or equal not implemented.");
 	}
 
 	SN::SN_Value SNI_String::DoGreaterEquals(SNI_Value * p_Other) const
@@ -200,7 +200,7 @@ namespace SNI
 			SNI_Char * l_char = dynamic_cast<SNI_Char *>(p_Other);
 			return SN::SN_Bool(m_String >= l_char->GetString());
 		}
-		return SN::SN_Error(GetTypeName() + " Greater than or equal not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " Greater than or equal not implemented.");
 	}
 
 	//-----------------------------------------------------------------------
@@ -284,14 +284,14 @@ namespace SNI
 	{
 		if (p_Value.IsError())
 		{
-			return p_Value;
+			return p_Value.GetError();
 		}
 		if (SN::Is<SNI_StringRef*>(p_Value) || SN::Is<SNI_ValueSet*>(p_Value) || SN::Is<SNI_Variable*>(p_Value) || !p_Value.IsKnownValue())
 		{
 			SN::SN_Expression value(p_Value);
 			return value.AssertValue(this);
 		}
-		return Equivalent(p_Value.GetSNI_Expression());
+		return SN::SN_Error(Equivalent(p_Value.GetSNI_Expression()), false);
 	}
 
 	// Inheritance
@@ -336,7 +336,7 @@ namespace SNI
 			SNI_Char * l_char = dynamic_cast<SNI_Char *>(p_Other);
 			return SN::SN_String(m_String + l_char->GetChar());
 		}
-		return SN::SN_Error(GetTypeName() + " Concat not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " Concat not implemented.");
 	}
 
 	SN::SN_Value SNI_String::DoSubtractLeft(SNI_Value * p_Other) const
@@ -349,9 +349,9 @@ namespace SNI
 			{
 				return SN::SN_String(m_String.substr(part_length));
 			}
-			return SN::SN_Error(GetTypeName() + " Subtract left did not match.");
+			return SN::SN_Error(false, false, GetTypeName() + " Subtract left did not match.");
 		}
-		return SN::SN_Error(GetTypeName() + " - operator not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " - operator not implemented.");
 	}
 
 	SN::SN_Value SNI_String::DoSubtractRight(SNI_Value * p_Other) const
@@ -365,9 +365,9 @@ namespace SNI
 				string result = m_String.substr(0, m_String.length() - part_length);
 				return SN::SN_String(result);
 			}
-			return SN::SN_Error(GetTypeName() + " Subtract right did not match.");
+			return SN::SN_Error(false, false, GetTypeName() + " Subtract right did not match.");
 		}
-		return SN::SN_Error(GetTypeName() + " - operator not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " - operator not implemented.");
 	}
 
 	SN::SN_Value SNI_String::DoSubtractLeftChar() const
@@ -376,7 +376,7 @@ namespace SNI
 		{
 			return SN::SN_String(m_String.substr(1));
 		}
-		return SN::SN_Error(GetTypeName() + " SubtractLeftChar method failed. String too short.");
+		return SN::SN_Error(false, false, GetTypeName() + " SubtractLeftChar method failed. String too short.");
 	}
 
 	SN::SN_Value SNI_String::DoSubtractRightChar() const
@@ -385,7 +385,7 @@ namespace SNI
 		{
 			return SN::SN_String(m_String.substr(0, m_String.length() - 1));
 		}
-		return SN::SN_Error(GetTypeName() + " SubtractRightChar method failed. String too short.");
+		return SN::SN_Error(false, false, GetTypeName() + " SubtractRightChar method failed. String too short.");
 	}
 
 	SN::SN_Value SNI_String::DoSelectLeftChar() const
@@ -394,7 +394,7 @@ namespace SNI
 		{
 			return SN::SN_Char(m_String[0]);
 		}
-		return SN::SN_Error(GetTypeName() + " SelectLeftChar operator not implemented on a null string.");
+		return SN::SN_Error(false, false, GetTypeName() + " SelectLeftChar operator not implemented on a null string.");
 	}
 
 	SN::SN_Value SNI_String::DoSelectRightChar() const
@@ -404,7 +404,7 @@ namespace SNI
 		{
 			return SN::SN_Char(m_String[length - 1]);
 		}
-		return SN::SN_Error(GetTypeName() + " SelectRightChar operator not implemented on a null string.");
+		return SN::SN_Error(false, false, GetTypeName() + " SelectRightChar operator not implemented on a null string.");
 	}
 
 	SN::SN_Value SNI_String::DoLookaheadLeft() const
@@ -496,7 +496,7 @@ namespace SNI
 		case skynet::JSON:
 			return SN::SN_String(EscapeStringToJSON(GetString()));
 		}
-		return SN::SN_Error("Bad escape type for escape conversion");
+		return SN::SN_Error(false, false, "Bad escape type for escape conversion");
 	}
 
 	SN::SN_Value SNI_String::DoUnescape(enum skynet::EscapeType p_EscapeType) const
@@ -508,7 +508,7 @@ namespace SNI
 		case skynet::JSON:
 			return SN::SN_String(UnescapeStringToJSON(GetString()));
 		}
-		return SN::SN_Error("Bad escape type for escape conversion");
+		return SN::SN_Error(false, false, "Bad escape type for escape conversion");
 	}
 
 	SN::SN_Value SNI_String::DoStringToInt() const

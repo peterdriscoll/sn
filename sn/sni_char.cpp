@@ -145,6 +145,6 @@ namespace SNI
 			SNI_StringRef * l_string = dynamic_cast<SNI_StringRef *>(p_Other);
 			return SN::SN_String(string(1, m_Char) + l_string->GetString());
 		}
-		return SN::SN_Error(GetTypeName() + " Concat not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " Concat not implemented.");
 	}
 }

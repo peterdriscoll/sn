@@ -88,7 +88,7 @@ namespace SNI
 
 	SN::SN_Error SNI_Bool::DoAssert()
 	{
-		return m_Expression;
+		return SN::SN_Error(m_Expression, false);
 	}
 
 
@@ -105,7 +105,7 @@ namespace SNI
 
 	SN::SN_Value SNI_Bool::DoHasA(SNI_Value * p_Member, SNI_Value * p_Name) const
 	{
-		return SN::SN_Error(GetTypeName() + " HasA function not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " HasA function not implemented.");
 	}
 
 	bool SNI_Bool::GetBool() const
@@ -128,7 +128,7 @@ namespace SNI
 		{
 			return p_Other->DoAnd(const_cast<SNI_Bool *>(this));
 		}
-		return SN::SN_Error(p_Other->GetTypeName() + " && operator not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " && operator not implemented.");
 	}
 
 	SN::SN_Value SNI_Bool::DoOr(SNI_Expression * p_Other) const
@@ -146,7 +146,7 @@ namespace SNI
 		{
 			return SNI_ValueSet::GeneralDoOr(this, p_Other);
 		}
-		return SN::SN_Error(p_Other->GetTypeName() + " && operator not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " && operator not implemented.");
 	}
 
 	SN::SN_Value SNI_Bool::DoIf(SNI_Expression * p_PositiveCase, SNI_Expression * p_NegativeCase) const

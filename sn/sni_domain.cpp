@@ -115,6 +115,6 @@ namespace SNI
 
 	SN::SN_Value SNI_Domain::DoReverseSubscript(const SN::SN_Value & p_Result) const
 	{
-		return SN::SN_Error(GetTypeName() + "Name not given.");
+		return SN::SN_Error(false, false, GetTypeName() + "Name not given.");
 	}
 }

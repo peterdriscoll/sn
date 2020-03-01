@@ -141,7 +141,7 @@ namespace SNI
 		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Derived::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 		if (!m_Fixed)
 		{
-			return LOG_RETURN(context, SN::SN_Error(GetTypeName() + " Fix the derived calls. There maybe be more defines, so the call is undefined."));
+			return LOG_RETURN(context, SN::SN_Error(false, false, GetTypeName() + " Fix the derived calls. There maybe be more defines, so the call is undefined."));
 		}
 		unsigned long id = 0;
 		SNI_Thread::GetThread()->SetDebugId(GetDebugId());
@@ -165,7 +165,7 @@ namespace SNI
 					{
 						if (!finalResult.Equivalent(result.GetSNI_Expression()))
 						{
-							return LOG_RETURN(context, SN::SN_Error(GetTypeName() + " Polymorphic calls gave different results. Did you mean to use Virtual instead of Derived?"));
+							return LOG_RETURN(context, SN::SN_Error(false, false, GetTypeName() + " Polymorphic calls gave different results. Did you mean to use Virtual instead of Derived?"));
 						}
 					}
 					else
@@ -177,7 +177,7 @@ namespace SNI
 			}
 			else
 			{
-				return LOG_RETURN(context, SN::SN_Error(GetTypeName() + " function to call is unknown."));
+				return LOG_RETURN(context, SN::SN_Error(false, false, GetTypeName() + " function to call is unknown."));
 			}
 		}
 		return LOG_RETURN(context, finalResult);
@@ -189,7 +189,7 @@ namespace SNI
 
 		if (!m_Fixed)
 		{
-			return LOG_RETURN(context, SN::SN_Error(GetTypeName() + " Fix the derived calls. There maybe be more defines, so the define is undefined."));
+			return LOG_RETURN(context, SN::SN_Error(false, false, GetTypeName() + " Fix the derived calls. There maybe be more defines, so the define is undefined."));
 		}
 		SN::SN_Expression finalResult;
 		unsigned long id = 0;
@@ -214,7 +214,7 @@ namespace SNI
 						{
 							if (!finalResult.Equivalent(result.GetSNI_Expression()))
 							{
-								return LOG_RETURN(context, SN::SN_Error(GetTypeName() + " Polymorphic calls gave different results. Did you mean to use Virtual instead of Derived?"));
+								return LOG_RETURN(context, SN::SN_Error(false, false, GetTypeName() + " Polymorphic calls gave different results. Did you mean to use Virtual instead of Derived?"));
 							}
 						}
 						else
@@ -227,7 +227,7 @@ namespace SNI
 			}
 			else
 			{
-				return LOG_RETURN(context, SN::SN_Error(GetTypeName() + " partial function to call is unknown."));
+				return LOG_RETURN(context, SN::SN_Error(false, false, GetTypeName() + " partial function to call is unknown."));
 			}
 		}
 
@@ -257,7 +257,7 @@ namespace SNI
 				}
 				else
 				{
-					return SN::SN_Error(GetTypeName() + " function to unify is unknown.");
+					return SN::SN_Error(false, false, GetTypeName() + " function to unify is unknown.");
 				}
 			}
 			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after unify", id);
@@ -290,12 +290,12 @@ namespace SNI
 					SNI_Frame::Pop();
 					if (e.IsError())
 					{
-						return e;
+						return e.GetError();
 					}
 				}
 				else
 				{
-					return SN::SN_Error(GetTypeName() + " function to unify is unknown.");
+					return SN::SN_Error(false, false, GetTypeName() + " function to unify is unknown.");
 				}
 			}
 			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after unify", id);

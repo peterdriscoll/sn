@@ -38,7 +38,7 @@
 namespace SN
 {
 	SN_Expression::SN_Expression()
-		: SN_Base(NULL)
+		: SN_Base()
 	{
 	}
 
@@ -224,7 +224,12 @@ namespace SN
 
 	SNI::SNI_Value * SN_Expression::GetSNI_Value() const
 	{
-		return dynamic_cast<SNI::SNI_Value *>(m_Expression);
+		SNI::SNI_Value *value = dynamic_cast<SNI::SNI_Value *>(m_Expression);
+		if (value)
+		{
+			return value;
+		}
+		return skynet::Null.GetSNI_Value();
 	}
 
 	SNI::SNI_Error * SN_Expression::GetSNI_Error() const
@@ -518,14 +523,9 @@ namespace SN
 	}
 
 	// Functions
-	SN_Expression SN_Expression::operator()(const SN_Expression &p_Parameter) const
+	SN_Function SN_Expression::operator()(const SN_Expression &p_Parameter) const
 	{
 		return SN_Operators::FunctionCall(*this, p_Parameter);
-	}
-
-	SN_Expression SN_Expression::operator()(const SN_Expression &p_Parameter, const SN_Expression &p_Condition) const
-	{
-		return SN_Operators::FunctionCall(*this, p_Parameter, p_Condition);
 	}
 
 	SN_Expression SN_Expression::operator[](const SN_Expression &p_Index) const

@@ -175,7 +175,7 @@ namespace SNI
 		ASSERTM(p_ParameterList->size() >0, "Cannot call a lambda without a parameter");
 		SN::SN_Expression param = p_ParameterList->back().GetSNI_Expression();
 		p_ParameterList->pop_back();
-		SN::SN_Error e;
+		SN::SN_Error e = skynet::OK;
 		if (!m_FormalParameter || m_FormalParameter->IsNullValue())
 		{	// Lazy evaluation. Delay until the value is needed.
 			e = m_FormalParameter->PartialAssertValue(param, true);
@@ -244,16 +244,16 @@ namespace SNI
 		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, GetTypeName() + ".Unify begin", SN::LeftId);
 		SN::SN_Expression param = p_ParameterList->back();
 		p_ParameterList->pop_back();
-		SN::SN_Error e;
+		SN::SN_Expression result = skynet::OK;
 		if ((SNI_Thread::TopManager()->GetEvaluationType() == skynet::Lazy) && (!m_FormalParameter || m_FormalParameter->IsNullValue()))
 		{	// Lazy evaluation. Delay until the value is needed.
-			e = SN::SN_Expression(m_FormalParameter).PartialAssertValue(param, true);
+			result = SN::SN_Expression(m_FormalParameter).PartialAssertValue(param, true);
 		}
 		else
 		{	// The value is needed now.
-			e = param.AssertValue(m_FormalParameter);
+			result = param.AssertValue(m_FormalParameter);
 		}
-		if (e.IsError())
+		if (result.IsError())
 		{
 			return LOG_RETURN(context, skynet::Null); // The parameter didn't match, but there may be other polymorphic calls.
 		}
@@ -262,18 +262,18 @@ namespace SNI
 		{
 			SNI_Thread::GetThread()->SetDebugId(GetDebugId());
 			SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, GetTypeName() + ".Unify before unify", SN::ParameterOneId);
-			e = m_Expression->Unify(p_ParameterList);
+			result = m_Expression->Unify(p_ParameterList);
 		}
 		else
 		{
 			SNI_Thread::GetThread()->SetDebugId(GetDebugId());
 			SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, GetTypeName() + ".Unify before assert", SN::ParameterOneId);
-			e = m_Expression->AssertValue(p_ParameterList->back());
+			result = m_Expression->AssertValue(p_ParameterList->back());
 		}
 
 		SNI_Thread::GetThread()->SetDebugId(GetDebugId());
 		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, GetTypeName() + ".Unify return", SN::ReturnId);
-		return LOG_RETURN(context, e);
+		return LOG_RETURN(context, result);
 	}
 
 	SN::SN_Error SNI_Lambda::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
@@ -286,7 +286,7 @@ namespace SNI
 		SN::SN_Error e = SN::SN_Expression(m_FormalParameter).PartialAssertValue(param, true);
 		if (e.IsError())
 		{
-			return LOG_RETURN(context, skynet::Null); // The parameter didn't match, but there may be other polymorphic calls.
+			return LOG_RETURN(context, skynet::Fail); // The parameter didn't match, but there may be other polymorphic calls.
 		}
 		if (e.IsError())
 		{

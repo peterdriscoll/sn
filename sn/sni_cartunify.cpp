@@ -66,7 +66,7 @@ namespace SNI
 
 	SN::SN_Error SNI_CartUnify::ProcessValue(long p_Depth, const SN::SN_Expression &p_Param, SNI_World*p_World)
 	{
-		SN::SN_Error e(true);
+		SN::SN_Error e = skynet::OK;
 		m_ValueList[p_Depth] = p_Param;
 		m_WorldList[p_Depth] = p_World;
 		m_ValueTotalCalc[p_Depth + 1] = m_ValueTotalCalc[p_Depth];
@@ -108,7 +108,7 @@ namespace SNI
 
 	SN::SN_Error SNI_CartUnify::ForEachUnify()
 	{
-		SN::SN_Error e;
+		SN::SN_Error e = skynet::OK;
 		CreateVariablesForOutput();
 		if (m_Output[0])
 		{
@@ -129,7 +129,7 @@ namespace SNI
 				}
 				if (m_WorldSet->IsEmpty())
 				{
-					return SN::SN_Error("SNI_Cart: World set is empty after matching values in cartesian product.");
+					return SN::SN_Error(false, false, "SNI_Cart: World set is empty after matching values in cartesian product.");
 				}
 			}
 			e = CaptureOutput();
@@ -167,7 +167,7 @@ namespace SNI
 				m_InputList[j].Simplify();
 			}
 		}
-		return true;
+		return skynet::OK;
 	}
 
 	SN::SN_Error SNI_CartUnify::DelayUnify()
@@ -214,6 +214,6 @@ namespace SNI
 			}
 			SNI_Thread::GetThread()->GetProcessor()->Delay(m_FunctionDef, m_Depth, l_ParamList, m_Source, world);
 		}
-		return true;
+		return skynet::OK;
 	}
 }

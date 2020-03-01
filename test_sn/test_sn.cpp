@@ -665,7 +665,7 @@ namespace test_sn
 					SN_DECLARE(k);
 					SN_DECLARE(n);
 					// Fact 0 == 1 && Fact k : > 0 == k * Fact k-1 : < 0
-					((Fact(Long(0)) == Long(1)) && (Fact(k, Lambda(n, n > Long(0))) == k * Fact(k - Long(1), Lambda(n, n < Long(0))))).PartialAssert().Do();
+					((Fact(Long(0)) == Long(1)) && (Fact(k).Condition(Lambda(n, n > Long(0))) == k * Fact(k - Long(1)).Condition(Lambda(n, n < Long(0))))).PartialAssert().Do();
 				}
 			}
 			Cleanup();
@@ -3541,6 +3541,126 @@ namespace test_sn
 					(!validate.IsFloatingPoint(s)).Assert().Do();
 					string s_string = s.DisplayValueSN();
 					string s_part = s_string.substr(0, 37 - 5);
+					string s_comp = "StringRef(\"A2.1X dog\"[0.._split_";
+					Assert::IsTrue(s_part == s_comp);
+					string t_string = t.DisplayValueSN();
+					string t_part = t_string.substr(0, 37 - 8);
+					string t_comp = "StringRef(\"A2.1X dog\"[_split_";
+					Assert::IsTrue(t_part == t_comp);
+				}
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestValidate_IsExponential)
+		{
+			return;
+			Initialize();
+			{
+				Manager manager("Test Validate IsExponential", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, true /*runWebServer*/);
+
+				CharacterSet characterSet;
+				Validate validate(characterSet);
+/*
+				(!validate.IsExponential(String(""))).Assert().Do();
+				validate.IsExponential(String("135")).Assert().Do();
+				validate.IsExponential(String("45.9")).Assert().Do();
+				validate.IsExponential(String("543.995e19")).Assert().Do();
+
+				(!validate.IsExponential(String("8."))).Assert().Do();
+				(!validate.IsExponential(String("543."))).Assert().Do();
+				(!validate.IsExponential(String("543.843E"))).Assert().Do();
+				(!validate.IsExponential(String("543.89e13X"))).Assert().Do();
+				(!validate.IsExponential(String("A53.12e12X"))).Assert().Do();
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("")).Assert().Do();
+					(!validate.IsExponential(s)).Assert().Do();
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("536. dog")).Assert().Do();
+					(!validate.IsExponential(s)).Assert().Do();
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("536.89e dog")).Assert().Do();
+					(!validate.IsExponential(s)).Assert().Do();
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("536.e45 dog")).Assert().Do();
+					(!validate.IsExponential(s)).Assert().Do();
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("3.1415 dog")).Assert().Do();
+					validate.IsExponential(s).Assert().Do();
+					(s == String("3.1415")).Evaluate().Do();
+					(t == String(" dog")).Evaluate().Do();
+					string s_string = s.GetString();
+					string t_string = t.GetString();
+					Assert::IsTrue(s_string == "3.1415");
+					Assert::IsTrue(t_string == " dog");
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("45 dog")).Assert().Do();
+					validate.IsExponential(s).Assert().Do();
+					(t == String(" dog")).Evaluate().Do();
+					string s_string = s.GetString();
+					string t_string = t.GetString();
+					Assert::IsTrue(s_string == "45");
+					Assert::IsTrue(t_string == " dog");
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("3.141596 dog")).Assert().Do();
+					validate.IsExponential(s).Assert().Do();
+					(t == String(" dog")).Evaluate().Do();
+					string s_string = s.GetString();
+					string t_string = t.GetString();
+					Assert::IsTrue(s_string == "3.141596");
+					Assert::IsTrue(t_string == " dog");
+				}
+*/
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("9678.345e45 dog")).Assert().Do();
+					string s_dislay = s.DisplayValueSN();
+					string t_display = t.DisplayValueSN();
+					validate.IsExponential(s).Assert().Do();
+					string s_dislay1 = s.DisplayValueSN();
+					string t_display1 = t.DisplayValueSN();
+					string s_string = s.GetString();
+					string t_string = t.GetString();
+					Assert::IsTrue(s_string == "9678.345e45");
+					Assert::IsTrue(t_string == " dog");
+				}
+
+				{
+					SN_LOCAL(s);
+					SN_LOCAL(t);
+					(s + t == String("A2.1X dog")).Assert().Do();
+					(!validate.IsExponential(s)).Assert().Do();
+					string s_string = s.DisplayValueSN();
+					string s_part = s_string.substr(0, 37 - 6);
 					string s_comp = "StringRef(\"A2.1X dog\"[0.._split_";
 					Assert::IsTrue(s_part == s_comp);
 					string t_string = t.DisplayValueSN();

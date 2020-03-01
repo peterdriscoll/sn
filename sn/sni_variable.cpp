@@ -237,7 +237,7 @@ namespace SNI
 	{
 		if (p_Value.IsError())
 		{
-			return p_Value;
+			return p_Value.GetError();
 		}
 		if (p_Value.IsVariable())
 		{
@@ -277,7 +277,7 @@ namespace SNI
 				else
 				{
 					LOGGING(context.LogText("Fail", "JoinWorlds failed on " + worldString));
-					return LOG_RETURN(context, SN::SN_Error("SNI_Variable::AddValue: JoinWorlds failed on " + DisplayWorlds(p_NumWorlds, p_WorldList)));
+					return LOG_RETURN(context, SN::SN_Error(false, false, "SNI_Variable::AddValue: JoinWorlds failed on " + DisplayWorlds(p_NumWorlds, p_WorldList)));
 				}
 
 			}
@@ -327,7 +327,7 @@ namespace SNI
 			}
 			return m_Value->DisplayValueSN(priority, p_DisplayOptions);
 		}
-		return "Null";
+		return FrameName();
 	}
 
 	string SNI_Variable::DisplayCall(long p_Priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const
@@ -595,7 +595,7 @@ namespace SNI
 						REQUESTPROMOTION(m_Value);
 					}
 					LOG(WriteVariable(SN::DebugLevel, this));
-					return true;
+					return skynet::OK;
 				}
 			}
 
@@ -611,9 +611,9 @@ namespace SNI
 				m_Value = p_Expression.GetSNI_Expression();
 				REQUESTPROMOTION(m_Value);
 				LOG(WriteVariable(SN::DebugLevel, this));
-				return true;
+				return skynet::OK;
 			}
-			return false;
+			return skynet::Fail;
 		}
 		if (dynamic_cast<SNI_Value *>(m_Value))
 		{
@@ -643,7 +643,7 @@ namespace SNI
 			}
 			return LOG_RETURN(context, e);
 		}
-		return LOG_RETURN(context, dynamic_cast<SNI_Expression *>(SN::SN_Error(GetTypeName() + " function to call is unknown.").GetSNI_Error()));
+		return LOG_RETURN(context, dynamic_cast<SNI_Expression *>(SN::SN_Error(false, false, GetTypeName() + " function to call is unknown.").GetSNI_Error()));
 	}
 
 	SN::SN_Expression SNI_Variable::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
@@ -658,7 +658,7 @@ namespace SNI
 			}
 			return LOG_RETURN(context, m_Value->PartialCall(p_ParameterList, p_MetaLevel));
 		}
-		return LOG_RETURN(context, SN::SN_Error(GetTypeName() + " partial function to call to null value."));
+		return LOG_RETURN(context, SN::SN_Error(false, false, GetTypeName() + " partial function to call to null value."));
 	}
 
 	SN::SN_Expression SNI_Variable::Unify(SN::SN_ExpressionList * p_ParameterList)

@@ -189,33 +189,33 @@ namespace SNI
 		SNI_Variable* condition_param = topFrame->CreateParameterByName("Condition", m_Condition);
 		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before condition check", SN::LeftId);
 
-		SN::SN_Error e = SN::SN_Expression(m_Condition).DoAssert();
+		SN::SN_Expression result = SN::SN_Expression(m_Condition).DoAssert();
 
 		condition_param->SetValue(m_Condition);
 
 		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before call", SN::CallId);
 
-		if (e.IsError())
+		if (result.IsError())
 		{
-			if (e.IsSignificantError())
+			if (result.IsSignificantError())
 			{
 				SNI_CallRecord *callRecord = new SNI_CallRecord("Unifying let condition.", this);
 				LOGGING(callRecord->SetLogContext(context));
-				e.GetSNI_Error()->AddNote(callRecord);
+				result.GetSNI_Error()->AddNote(callRecord);
 			}
-			return e;
+			return result;
 		}
 		if (p_ParameterList->size() > 0)
 		{
-			e = m_Expression->Unify(p_ParameterList);
+			result = m_Expression->Unify(p_ParameterList);
 		}
 		else
 		{
-			e = m_Expression->AssertValue((*p_ParameterList)[0]);
+			result = m_Expression->AssertValue((*p_ParameterList)[0]);
 		}
 		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after call", SN::RightId);
 		SNI_Frame::Pop();
-		return e;
+		return result;
 	}
 
 	SN::SN_Error SNI_Let::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)

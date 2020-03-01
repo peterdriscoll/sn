@@ -35,7 +35,7 @@ namespace SNI
 
 	SN::SN_Error SNI_CartCall::ProcessValue(long p_Depth, const SN::SN_Expression &p_Param, SNI_World*p_World)
 	{
-		SN::SN_Error e(true);
+		SN::SN_Error e = skynet::OK;
 		m_ValueList[p_Depth] = p_Param;
 		m_WorldList[p_Depth] = p_World;
 		if (p_Depth < m_Depth-1)
@@ -52,7 +52,7 @@ namespace SNI
 			}
 			else
 			{
-				e = m_FunctionDef->CallElement(p_Depth + 1, m_ValueList, m_WorldList, m_Result);
+				e = m_FunctionDef->CallElement(p_Depth + 1, m_ValueList, m_WorldList, m_Result).GetError();
 			}
 		}
 		return e;

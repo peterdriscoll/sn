@@ -27,7 +27,7 @@ namespace SN
 	}
 
 	SN_Bool::SN_Bool(const SN_Value &p_Value)
-		: SN_Base(dynamic_cast<SNI::SNI_Bool *>(p_Value.GetSNI_Value()))
+		: SN_Base(p_Value.GetSNI_Bool())
 	{
 	}
 

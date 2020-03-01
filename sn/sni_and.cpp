@@ -125,7 +125,7 @@ namespace SNI
 		{
 			if (!SN::Is<SNI_Bool *>(left_value))
 			{
-				return LOG_RETURN(context, new SNI_Error("Invalid type for: " + DisplayPmExpression(left_value)));
+				return LOG_RETURN(context, SN::SN_Error(false, false, "Invalid type for: " + DisplayPmExpression(left_value)));
 			}
 			if (!left_value.GetBool())
 			{
@@ -138,7 +138,7 @@ namespace SNI
 		{
 			if (!SN::Is<SNI_Bool *>(right_value))
 			{
-				return LOG_RETURN(context, new SNI_Error("Invalid type for: " + DisplayPmExpression(right_value)));
+				return LOG_RETURN(context, SN::SN_Error(false, false, "Invalid type for: " + DisplayPmExpression(right_value)));
 			}
 			if (!right_value.GetBool())
 			{
@@ -183,7 +183,7 @@ namespace SNI
 		SN::SN_Expression * firstParamList = new SN::SN_Expression[2];
 		firstParamList[0] = p_ParameterList[0];
 		firstParamList[1] = p_ParameterList[1];
-		SN::SN_Error e1 = skynet::UnaryAnd.GetSNI_FunctionDef()->UnifyArray(firstParamList, p_Source);
+		SN::SN_Error e1 = skynet::UnaryAnd.GetSNI_FunctionDef()->UnifyArray(firstParamList, p_Source).GetError();
 
 		if (e1.IsError())
 		{
@@ -200,7 +200,7 @@ namespace SNI
 		secondParamList[0] = p_ParameterList[0];
 		secondParamList[1] = firstParamList[1];
 		secondParamList[2] = p_ParameterList[2];
-		SN::SN_Error e2 = SNI_Binary::UnifyArray(secondParamList, p_Source);
+		SN::SN_Error e2 = SNI_Binary::UnifyArray(secondParamList, p_Source).GetError();
 		if (e2.IsSignificantError())
 		{
 			SNI_CallRecord *callRecord = new SNI_CallRecord("And of second parameter with first result.", this);
@@ -314,7 +314,7 @@ namespace SNI
 				}
 			}
 		}
-		return SN::SN_Error(false, false);
+		return skynet::Fail;
 	}
 
 	size_t SNI_And::CardinalityOfCall(long p_Depth, SN::SN_Expression * p_ParamList) const

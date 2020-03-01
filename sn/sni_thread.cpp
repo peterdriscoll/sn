@@ -279,7 +279,7 @@ namespace SNI
 		if (!logFile->is_open())
 		{
 			delete logFile;
-			throw SN::SN_Error("Log file " + fileName + " not opened. Check folders exist in path from " + currentDirectory);
+			throw new SNI_Error(false, false, "Log file " + fileName + " not opened. Check folders exist in path from " + currentDirectory);
 		}
 		return logFile;
 	}

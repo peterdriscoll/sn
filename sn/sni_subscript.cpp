@@ -126,7 +126,7 @@ namespace SNI
 				{
 					LOGGING(context.LogText("fail", "Join worlds failed on " + DisplayWorlds(p_Depth, p_WorldList, LDO)));
 				}
-				return true;
+				return skynet::OK;
 			}
 			else
 			{
@@ -155,6 +155,6 @@ namespace SNI
 			}
 		}
 		}
-		return SN::SN_Error(GetTypeName() + ": Expression not unified. TotalCalc=" + to_string(p_TotalCalc) + " Calcpos=" + to_string(p_CalcPos));
+		return SN::SN_Error(false, false, GetTypeName() + ": Expression not unified. TotalCalc=" + to_string(p_TotalCalc) + " Calcpos=" + to_string(p_CalcPos));
 	}
 }

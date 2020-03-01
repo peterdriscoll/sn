@@ -57,7 +57,7 @@ namespace SNI
 		{
 			return p_Result.PartialAssertValue(PrimaryFunctionValue(value));
 		}
-		return false;
+		return skynet::Fail;
 	}
 
 	SN::SN_Expression SNI_Assert::CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel /* = 0 */) const

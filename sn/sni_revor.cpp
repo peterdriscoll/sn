@@ -132,7 +132,6 @@ namespace SNI
 		{
 		case 0:
 		{
-			return true;
 			if (p_WorldList)
 			{
 				bool exists = false;
@@ -147,7 +146,7 @@ namespace SNI
 			}
 			else
 			{
-				return PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()).Equivalent(p_ParamList[PU2_Result].GetVariableValue());
+				return SN::SN_Error(PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()).Equivalent(p_ParamList[PU2_Result].GetVariableValue()), false);
 			}
 		}
 		break;
@@ -176,17 +175,17 @@ namespace SNI
 			{
 				p_ParamList[PU2_Result].AddValue(skynet::False, p_Depth, p_WorldList, worldSet);
 				p_ParamList[PU2_Second].AddValue(skynet::Null, p_Depth, p_WorldList, worldSet);
-				return true;
+				return skynet::OK;
 			}
 			SN::SN_Bool second = p_ParamList[PU2_Second].GetVariableValue();
 			if (!second.IsNull() && !second.GetBool())
 			{
 				p_ParamList[PU2_First].AddValue(skynet::False, p_Depth, p_WorldList, worldSet);
 				p_ParamList[PU2_Result].AddValue(skynet::False, p_Depth, p_WorldList, worldSet);
-				return true;
+				return skynet::OK;
 			}
 		}
 		}
-		return SN::SN_Error(GetTypeName() + ": Expression not unified. TotalCalc=" + to_string(p_TotalCalc) + " Calcpos=" + to_string(p_CalcPos));
+		return SN::SN_Error(false, false, GetTypeName() + ": Expression not unified. TotalCalc=" + to_string(p_TotalCalc) + " Calcpos=" + to_string(p_CalcPos));
 	}
 }

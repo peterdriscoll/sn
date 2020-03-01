@@ -99,7 +99,7 @@ namespace SNI
 
 		SNI_Thread::GetThread()->SetDebugId(GetDebugId()+"Collapse");
 
-		SN::SN_Error err;
+		SN::SN_Error err = skynet::OK;
 		if (SNI_Thread::TopManager()->GetLogicType() != skynet::FailAsNeg)
 		{
 			err = p_value.AssertValue(p_Result);

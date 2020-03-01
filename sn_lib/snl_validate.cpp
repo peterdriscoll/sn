@@ -76,16 +76,19 @@ namespace SNL
 			SN_LOCAL(t);
 			SN_LOCAL(u);
 
-			(Define(IsExponential)(f) == (Let(
-				f == t + u
-				, IsFloatingPoint(t)
-				&& IsExponentialExtension(u)
-			))).PartialAssert().Do();
+			(Define(IsExponential)(f) == (
+				Local(t, Local(u, Let(
+					f == t + u
+					,	IsFloatingPoint(t)
+					&&	IsExponentialExtension(u)
+				)))
+			)).PartialAssert().Do();
 
 			(Define(IsExponentialExtension)(f) == (
-				f.LookaheadLeft() == (String("e") || String("E"))
-				&& IsInteger(f.SubtractLeftChar())
-				)).PartialAssert().Do();
+				(f.LookaheadLeft() == (String("e") || String("E"))).If(
+					IsInteger(f.SubtractLeftChar())
+				,	f == String(""))	
+			)).PartialAssert().Do();
 		}
 
 		{

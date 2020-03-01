@@ -10,16 +10,6 @@
 
 namespace SN
 {
-	SN_Error::SN_Error()
-		: m_Error(NULL)
-	{
-	}
-
-	SN_Error::SN_Error(string p_String)
-		: m_Error(new SNI::SNI_Error(p_String))
-	{
-	}
-
 	SN_Error::SN_Error(bool p_Success, bool p_Delay, const string & p_Description)
 		: m_Error(new SNI::SNI_Error(p_Success, p_Delay, p_Description))
 	{
@@ -28,11 +18,13 @@ namespace SN
 	SN_Error::SN_Error(const SN_Error &p_Error)
 		: m_Error(p_Error.m_Error)
 	{
+		ASSERTM(m_Error, "NULL error is not valid.");
 	}
 
-	SN_Error::SN_Error(const SN_Expression &p_Expression)
-		: m_Error(p_Expression.GetSNI_Error())
+	SN_Error::SN_Error(SNI::SNI_Error *p_Error)
+		: m_Error(p_Error)
 	{
+		ASSERTM(m_Error, "NULL error is not valid.");
 	}
 
 	SN_Error::~SN_Error()

@@ -136,7 +136,7 @@ namespace SNI
 				{
 					LOGGING(context.LogText("fail", "Join worlds failed on " + DisplayWorlds(p_Depth, p_WorldList)));
 				}
-				return true;
+				return skynet::OK;
 			}
 			else
 			{
@@ -147,7 +147,7 @@ namespace SNI
 		{
 			return AssertValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue(), p_ParamList[PU2_Result]);
 		}
-		return SN::SN_Error(GetTypeName() + ": Expression not unified. TotalCalc=" + to_string(p_TotalCalc) + " Calcpos=" + to_string(p_CalcPos));
+		return SN::SN_Error(false, false, GetTypeName() + ": Expression not unified. TotalCalc=" + to_string(p_TotalCalc) + " Calcpos=" + to_string(p_CalcPos));
 	}
 
 	size_t SNI_IsA::CardinalityOfCall(long p_Depth, SN::SN_Expression * p_ParamList) const

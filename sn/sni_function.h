@@ -21,6 +21,8 @@ namespace SNI
 		SNI_Function(const SNI_Function &p_Function);
 		virtual ~SNI_Function();
 
+		SN::SN_Function Condition(SNI_Expression * p_Condition);
+
 		virtual string GetTypeName() const;
 		virtual string GetReferredName() const;
 		virtual string DisplayCpp() const;

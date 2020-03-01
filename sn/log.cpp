@@ -108,7 +108,7 @@ namespace SN
 		m_LogFile.open(fileName.data(), ios::out | ios::trunc);
 		if (!m_LogFile.is_open())
 		{
-			throw SN::SN_Error("Log file " + fileName + " not opened. Check folders exist in path from " + currentDirectory);
+			throw new SNI_Error(false, false, "Log file " + fileName + " not opened. Check folders exist in path from " + currentDirectory);
 		}
 	}
 

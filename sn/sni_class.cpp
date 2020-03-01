@@ -131,7 +131,7 @@ namespace SNI
 
 	SN::SN_Value SNI_Class::DoHasA(SNI_Value * p_Member, SNI_Value * p_Name) const
 	{
-		return SN::SN_Error(GetTypeName() + " HasA function not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " HasA function not implemented.");
 	}
 
 	void SNI_Class::Fix()

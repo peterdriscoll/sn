@@ -223,7 +223,7 @@ namespace SNI
 					SNI_Thread::GetThread()->PushContextWorld(p_World);
 				}
 				SNI_Thread::GetThread()->SetDebugId("");
-				SN::SN_Error e;
+				SN::SN_Error e = skynet::OK;
 				if (p_Param.GetBool())
 				{
 					SN::SN_Expression *paramList = new SN::SN_Expression[2];
@@ -231,7 +231,7 @@ namespace SNI
 					paramList[1] = parameterList[2];
 
 					SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, typeName + ".Unify after all values", SN::PositiveId);
-					e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList, source);
+					e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList, source).GetError();
 				}
 				else
 				{
@@ -240,7 +240,7 @@ namespace SNI
 					paramList[1] = parameterList[3];
 
 					SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, typeName + ".Unify after all values", SN::NegativeId);
-					e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList, source);
+					e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList, source).GetError();
 				}
 				if (p_World)
 				{
@@ -261,7 +261,7 @@ namespace SNI
 				{
 					success = true;
 				}
-				return true;
+				return skynet::OK;
 			}
 		);
 
@@ -392,7 +392,7 @@ namespace SNI
 				}
 			}
 		}
-		return false;
+		return skynet::Fail;
 	}
 
 	size_t SNI_If::CardinalityOfCall(long p_Depth, SN::SN_Expression * p_ParamList) const

@@ -1,13 +1,6 @@
 #include "http_server_lib_pch.h"
 
-// Create dummies for the classes that are not being implemented here.
-namespace SNI
-{
-	class SNI_HTTP_Handler
-	{
-	};
-}
-
-#define LIBRARY http_server_lib_library
+#define SN_APPLY_CURRENT_LIBRARY(L, A) \
+	L(A, http_server_lib, "http_server_lib.dll")
 
 #include "../inc/sn_factory.cpp"

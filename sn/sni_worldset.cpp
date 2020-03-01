@@ -532,11 +532,11 @@ namespace SNI
 			{
 				if (missingInResult)
 				{
-					return SN::SN_Error("SNI_WorldSet: World set is empty after a mising in result failure.");
+					return SN::SN_Error(false, false, "SNI_WorldSet: World set is empty after a mising in result failure.");
 				}
 				else
 				{
-					return SN::SN_Error("SNI_WorldSet: World set is empty.");
+					return SN::SN_Error(false, false, "SNI_WorldSet: World set is empty.");
 				}
 			}
 		}
@@ -775,7 +775,7 @@ namespace SNI
 		}
 		if (m_WorldList.empty())
 		{
-			return SN::SN_Error("SNI_WorldSet: World set is empty.");
+			return SN::SN_Error(false, false, "SNI_WorldSet: World set is empty.");
 		}
 		return skynet::OK;
 	}

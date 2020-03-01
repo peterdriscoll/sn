@@ -79,7 +79,7 @@ namespace SNI
 	SN::SN_Expression ConstructionTree::BuildExpression(size_t p_Depth)
 	{
 		SNI_Error::PushHandler();
-		SN::SN_Error err(string("Virtual - No polymorphic implementation found for parameters."));
+		SN::SN_Error err(false, false, "Virtual - No polymorphic implementation found for parameters.");
 		SNI_Error::PopHandler();
 		SN::SN_Expression callExpression = m_ImplementationCall;
 		if (callExpression.IsNull())
@@ -238,7 +238,7 @@ namespace SNI
 	{
 		if (m_CallList.size() == 0)
 		{
-			return SN::SN_Error(GetTypeName() + " - No function definitions.");
+			return SN::SN_Error(false, false, GetTypeName() + " - No function definitions.");
 		}
 		ConstructionTree *tree = BuildTree();
 		return tree->CreateExpression();
@@ -282,7 +282,7 @@ namespace SNI
 		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Virtual::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 		if (!m_Fixed)
 		{
-			return LOG_RETURN(context, SN::SN_Error(GetTypeName() + " Fix the virtual calls. There maybe be more defines, so the call is undefined."));
+			return LOG_RETURN(context, SN::SN_Error(false, false, GetTypeName() + " Fix the virtual calls. There maybe be more defines, so the call is undefined."));
 		}
 		return LOG_RETURN(context, m_CallExpression.GetSNI_Expression()->Call(p_ParameterList, p_MetaLevel));
 	}
@@ -293,7 +293,7 @@ namespace SNI
 
 		if (!m_Fixed)
 		{
-			return LOG_RETURN(context, SN::SN_Error(GetTypeName() + " Fix the virtual calls. There maybe be more defines, so the define is undefined."));
+			return LOG_RETURN(context, SN::SN_Error(false, false, GetTypeName() + " Fix the virtual calls. There maybe be more defines, so the define is undefined."));
 		}
 		return LOG_RETURN(context, m_CallExpression.GetSNI_Expression()->PartialCall(p_ParameterList, p_MetaLevel));
 	}

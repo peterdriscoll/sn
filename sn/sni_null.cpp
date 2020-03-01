@@ -70,7 +70,7 @@ namespace SNI
 	{
 		if (!p_WorldSet)
 		{
-			return true;
+			return skynet::OK;
 		}
 
 		// The assumption is that no one cares about the value. That is why it is given as Null.
@@ -81,7 +81,7 @@ namespace SNI
 			[l_WorldSet, &exists, p_NumWorlds, p_WorldList, p_Value](const SN::SN_Expression &p_Param, SNI::SNI_World *p_World) -> SN::SN_Error
 			{
 				SNI_World *world = l_WorldSet->JoinWorldsArray(AutoAddWorld, AlwaysCreateWorld, exists, p_NumWorlds, p_WorldList, p_World);
-				return true;
+				return skynet::OK;
 			}
 		);
 	}

@@ -5,6 +5,7 @@
 
 #include "exp_ctrl_sn.h"
 #include "sn_base.h"
+#include "sn_function.h"
 
 namespace SN
 {
@@ -88,8 +89,7 @@ namespace SN
 		SN::SN_Expression StringToDouble(const SN::SN_Expression &p_Left);
 
 		// Function calls
-		SN::SN_Expression FunctionCall(const SN::SN_Expression &p_Function, const SN::SN_Expression &p_Parameter);
-		SN::SN_Expression FunctionCall(const SN::SN_Expression &p_Function, const SN::SN_Expression &p_Parameter, const SN::SN_Expression &p_Condition);
+		SN::SN_Function FunctionCall(const SN::SN_Expression &p_Function, const SN::SN_Expression &p_Parameter);
 	}
 }
 

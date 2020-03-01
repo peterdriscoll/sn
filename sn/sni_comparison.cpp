@@ -28,13 +28,13 @@ namespace SNI
 
 	SN::SN_Value SNI_Comparison::LeftInverseFunctionValue(const SN::SN_Value &p_Left, const SN::SN_Value &p_Right) const
 	{
-		return SN::SN_Error("Internal error - Left inverse expression not defined.");
+		return SN::SN_Error(false, false, "Internal error - Left inverse expression not defined.");
 	}
 
 	SN::SN_Expression SNI_Comparison::LeftInverseFunctionExpression(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right) const
 
 	{
-		return SN::SN_Error("Internal error - Left inverse expression not defined.");
+		return SN::SN_Error(false, false, "Internal error - Left inverse expression not defined.");
 	}
 
 	/// \brief Return an expression or a value for the operation applied to two values.
@@ -82,7 +82,7 @@ namespace SNI
 		{
 			return p_Result.AssertValue(PrimaryFunctionValue(left_evaluate, right_evaluate));
 		}
-		return false;
+		return skynet::Fail;
 	}
 
 	size_t SNI_Comparison::CardinalityOfUnify(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const
@@ -138,11 +138,11 @@ namespace SNI
 					LOGGING(context.LogText("fail", "Join worlds failed on " + DisplayWorlds(p_Depth, p_WorldList)));
 				}
 #endif
-				return LOG_RETURN(context, true);
+				return LOG_RETURN(context, skynet::OK);
 			}
 			else
 			{
-				return LOG_RETURN(context, PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()).Equivalent(p_ParamList[PU2_Result].GetVariableValue()));
+				return LOG_RETURN(context, SN::SN_Error(PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()).Equivalent(p_ParamList[PU2_Result].GetVariableValue()), false));
 			}
 		}
 		case 1:
@@ -153,6 +153,6 @@ namespace SNI
 			}
 		}
 		}
-		return LOG_RETURN(context, SN::SN_Error(GetTypeName() + ": Expression not unified. TotalCalc=" + to_string(p_TotalCalc) + " Calcpos=" + to_string(p_CalcPos)));
+		return LOG_RETURN(context, SN::SN_Error(false, false, GetTypeName() + ": Expression not unified. TotalCalc=" + to_string(p_TotalCalc) + " Calcpos=" + to_string(p_CalcPos)));
 	}
 }

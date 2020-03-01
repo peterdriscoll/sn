@@ -324,15 +324,9 @@ namespace SN
 		}
 
 		// Function calls
-		SN::SN_Expression FunctionCall(const SN::SN_Expression &p_Function, const SN::SN_Expression &p_Parameter)
+		SN::SN_Function FunctionCall(const SN::SN_Expression &p_Function, const SN::SN_Expression &p_Parameter)
 		{
 			return SN::SN_Function(p_Function, p_Parameter);
 		}
-
-		SN::SN_Expression FunctionCall(const SN::SN_Expression &p_Function, const SN::SN_Expression &p_Parameter, const SN::SN_Expression &p_Condition)
-		{
-			return SN::SN_Function(p_Function, p_Parameter, p_Condition);
-		}
 	}
-
 }

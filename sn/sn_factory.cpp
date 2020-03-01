@@ -1,17 +1,6 @@
 #include "sn_pch.h"
 
-namespace HTTP
-{
-	namespace server
-	{
-		class server
-		{
-		public:
-			server() {};
-		};
-	}
-}
-
-#define LIBRARY sn_library
+#define SN_APPLY_CURRENT_LIBRARY(L, A) \
+	L(A, sn, "sn.dll")
 
 #include "../inc/sn_factory.cpp"

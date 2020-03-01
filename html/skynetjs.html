@@ -183,24 +183,27 @@
             </tr>
             <tr>
                 <td>
-                    <table class='frame'>
-                        <caption>Call stack</caption>
-                        <tr ng-repeat="f in callstack">
-                            <td>
-                                {{f.name}}
-                            </td>
-                            <td>
-                                <div>
-                                    <div ng-repeat="d in f.value">
-                                        <div ng-bind-html="trustAsHtml(d.text)" init-bind><br /></div>
+                    {{breakpoint}}
+                    <details open>
+                        <summary>Call stack</summary>
+                        <table class='frame'>
+                            <tr ng-repeat="f in callstack">
+                                <td>
+                                    {{f.name}}
+                                </td>
+                                <td>
+                                    <div>
+                                        <div ng-repeat="d in f.value">
+                                            <div ng-bind-html="trustAsHtml(d.text)" init-bind><br /></div>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                            <td>
-                                {{f.breakpoint}}
-                            </td>
-                        </tr>
-                    </table>
+                                </td>
+                                <td>
+                                    {{f.breakpoint}}
+                                </td>
+                            </tr>
+                        </table>
+                    </details>
                 </td>
             </tr>
         </table>

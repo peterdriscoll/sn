@@ -230,7 +230,7 @@ namespace SNI
 			}
 			return e;
 		}
-		return false;
+		return skynet::Fail;
 	}
 
 	size_t SNI_Equals::CardinalityOfUnify(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const
@@ -301,7 +301,7 @@ namespace SNI
 				{
 					LOGGING(context.LogText("fail", "Join worlds failed on " + DisplayWorlds(p_Depth, p_WorldList)));
 				}
-				return LOG_RETURN(context, true);
+				return LOG_RETURN(context, skynet::OK);
 			}
 			else
 			{
@@ -315,7 +315,7 @@ namespace SNI
 			{
 			case PU2_First:
 			{
-				SN::SN_Error e;
+				SN::SN_Error e = skynet::OK;
 				if (p_ParamList[PU2_Result].GetBool())
 				{
 					SN::SN_Value value = RightInverseFunctionValue(p_ParamList[PU2_Result].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue());
@@ -336,7 +336,7 @@ namespace SNI
 			}
 			case PU2_Second:
 			{
-				SN::SN_Error e;
+				SN::SN_Error e = skynet::OK;
 				if (p_ParamList[PU2_Result].GetBool())
 				{
 					SN::SN_Value value = LeftInverseFunctionValue(p_ParamList[PU2_Result].GetVariableValue(), p_ParamList[PU2_First].GetVariableValue());

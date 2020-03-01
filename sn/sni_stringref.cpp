@@ -90,7 +90,22 @@ namespace SNI
 		{
 			return "\"" + EscapeStringToCPP(GetSourceString().substr(GetLeftMostPos(), Length())) + "\"";
 		}
-		return "\"" + EscapeStringToCPP(GetSourceString()) + "\"[" + GetStart().GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + ".." + GetEnd().GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + "]";
+		SN::SN_Long longStart = GetStart().GetVariableValue();
+		if (!longStart.IsNull())
+		{
+			long startPos = longStart.GetNumber();
+			return "\"" + EscapeStringToCPP(GetSourceString().substr(startPos)) + "\"[0.." + GetEnd().GetSNI_Expression()->DisplayValueSN(GetPriority(), p_DisplayOptions) + "-" + to_string(startPos) + "]";
+		}
+		SN::SN_Long longEnd = GetEnd().GetVariableValue();
+		if (!longEnd.IsNull())
+		{
+			long endPos = longEnd.GetNumber();
+			if (endPos != -1)
+			{
+				return "\"" + EscapeStringToCPP(GetSourceString().substr(0, endPos)) + "\"[" + GetStart().GetSNI_Expression()->DisplayValueSN(GetPriority(), p_DisplayOptions) + "..]";
+			}
+		}
+		return "\"" + EscapeStringToCPP(GetSourceString()) + "\"[" + GetStart().GetSNI_Expression()->DisplayValueSN(GetPriority(), p_DisplayOptions) + ".." + GetEnd().GetSNI_Expression()->DisplayValueSN(GetPriority(), p_DisplayOptions) + "]";
 	}
 
 	bool SNI_StringRef::IsKnownTypeValue() const
@@ -169,7 +184,7 @@ namespace SNI
 					{
 						return p_Cart->ProcessValue(p_Depth, value, world);
 					}
-					return true;
+					return skynet::OK;
 				});
 			});
 			worldSet->Complete();
@@ -221,9 +236,9 @@ namespace SNI
 					{
 						return p_Action(value, world);
 					}
-					return true;
+					return skynet::OK;
 				});
-				return true;
+				return skynet::OK;
 			});
 			worldSet->Complete();
 		}
@@ -275,9 +290,9 @@ namespace SNI
 					{
 						valueSet.AddTaggedValue(value, world);
 					}
-					return true;
+					return skynet::OK;
 				});
-				return true;
+				return skynet::OK;
 			});
 			worldSet->Complete();
 			return valueSet;
@@ -449,7 +464,7 @@ namespace SNI
 		}
 		else
 		{
-			return SN::SN_Error("SNI_StringRef::AddValue: Value conflict.");
+			return SN::SN_Error(false, false, "SNI_StringRef::AddValue: Value conflict.");
 		}
 	}
 
@@ -457,7 +472,7 @@ namespace SNI
 	{
 		if (p_Value.IsError())
 		{
-			return p_Value;
+			return p_Value.GetError();
 		}
 		string part;
 		bool found = false;
@@ -495,7 +510,7 @@ namespace SNI
 			long start_pos = SN::SN_Long(start).GetNumber();
 			if (start_pos + part_len > GetRightMostPos())
 			{
-				return SN::SN_Error("SNI_StringRef.AssertValue: String too long.");
+				return SN::SN_Error(false, false, "SNI_StringRef.AssertValue: String too long.");
 			}
 			if (GetSourceString().substr(start_pos, part_len) == part)
 			{
@@ -632,20 +647,20 @@ namespace SNI
 		}
 		if (!SN::Is<SNI_String *>(part))
 		{
-			return SN::SN_Error("StringRef.SubtractLeft: Expected a string to subtract: " + DisplayPmExpression(part));
+			return SN::SN_Error(false, false, "StringRef.SubtractLeft: Expected a string to subtract: " + DisplayPmExpression(part));
 		}
 		string part_text = part.GetString();
 		long part_len = (long) part_text.length();
 		if (part_len == 0)
 		{
-			return SN::SN_Error("StringRef.SubtractLeft: Expected a string to subtract: " + DisplayPmExpression(part));
+			return SN::SN_Error(false, false, "StringRef.SubtractLeft: Expected a string to subtract: " + DisplayPmExpression(part));
 		}
 		SN::SN_Value start = m_Start.DoEvaluate();
 		if (!start.IsNull())
 		{
 			if (!SN::Is<SNI_Long *>(start))
 			{
-				return SN::SN_Error("StringRef.SubtractLeft: Start of string ref must be long in: " + DisplaySN0());
+				return SN::SN_Error(false, false, "StringRef.SubtractLeft: Start of string ref must be long in: " + DisplaySN0());
 			}
 			long start_pos = SN::SN_Long(start).GetNumber();
 
@@ -654,24 +669,24 @@ namespace SNI
 			{
 				if (!SN::Is<SNI_Long *>(end))
 				{
-					return SN::SN_Error("StringRef.SubtractLeft: End of string ref must be long: " + DisplaySN0());
+					return SN::SN_Error(false, false, "StringRef.SubtractLeft: End of string ref must be long: " + DisplaySN0());
 				}
 				SN::SN_Long end = m_End.DoEvaluate();
 				if (end.IsNullValue())
 				{
-					return SN::SN_Error("StringRef.SubtractLeft: End is not known: " + DisplaySN0() + " < " + DisplayPmExpression(part));
+					return SN::SN_Error(false, false, "StringRef.SubtractLeft: End is not known: " + DisplaySN0() + " < " + DisplayPmExpression(part));
 				}
 				long end_pos = end.GetNumber();
 				if (start_pos + part_len > end_pos)
 				{
-					return SN::SN_Error("StringRef.SubtractLeft: Not enough characters to subtract: " + DisplaySN0() + " < " + DisplayPmExpression(part));
+					return SN::SN_Error(false, false, "StringRef.SubtractLeft: Not enough characters to subtract: " + DisplaySN0() + " < " + DisplayPmExpression(part));
 				}
 			}
 
 			string match = GetSourceString().substr(start_pos, part_len);
 			if (match != part_text)
 			{
-				return SN::SN_Error("StringRef.SubtractLeft: Subtract string does not match: " + match + " != " + part_text);
+				return SN::SN_Error(false, false, "StringRef.SubtractLeft: Subtract string does not match: " + match + " != " + part_text);
 			}
 			return SN::SN_StringRef(this, SN::SN_Long(start_pos + part_len), end);
 		}
@@ -681,7 +696,7 @@ namespace SNI
 			long end_pos = GetRightMostPos();
 			if (start_pos + part_len > end_pos)
 			{
-				return SN::SN_Error("StringRef.SubtractLeft: Not enough characters to subtract: " + DisplaySN0() + " < " + DisplayPmExpression(part));
+				return SN::SN_Error(false, false, "StringRef.SubtractLeft: Not enough characters to subtract: " + DisplaySN0() + " < " + DisplayPmExpression(part));
 			}
 			SN::SN_ValueSet vs_start;
 			SN::SN_ValueSet vs_end;
@@ -703,7 +718,7 @@ namespace SNI
 				return SN::SN_StringRef(this, vs_end.SimplifyValue(), m_End);
 			}
 		}
-		return SN::SN_Error("StringRef.SubtractLeft: Left string not matched in search: " + DisplaySN0() + " < " + DisplayPmExpression(part));
+		return SN::SN_Error(false, false, "StringRef.SubtractLeft: Left string not matched in search: " + DisplaySN0() + " < " + DisplayPmExpression(part));
 	}
 
 	SN::SN_Value SNI_StringRef::DoSubtractRight(SNI_Value * p_Part) const
@@ -715,7 +730,7 @@ namespace SNI
 		}
 		if (!SN::Is<SNI_String *>(part))
 		{
-			return SN::SN_Error("SubtractLeft: Expected a string to subtract: " + DisplayPmExpression(part));
+			return SN::SN_Error(false, false, "SubtractLeft: Expected a string to subtract: " + DisplayPmExpression(part));
 		}
 		SN::SN_Value start = m_Start.DoPartialEvaluate();
 		if (SN::Is<SNI_Value *>(start))
@@ -726,21 +741,21 @@ namespace SNI
 			}
 			if (!SN::Is<SNI_Long *>(start))
 			{
-				return SN::SN_Error("SubtractLeft: Start of string ref must be long in: " + DisplaySN0());
+				return SN::SN_Error(false, false, "SubtractLeft: Start of string ref must be long in: " + DisplaySN0());
 			}
 		}
 		string part_text = part.GetString();
 		long part_len = (long) part_text.length();
 		if (part_len == 0)
 		{
-			return SN::SN_Error("StringRef.SubtractLeft: Expected a string to subtract: " + DisplayPmExpression(part));
+			return SN::SN_Error(false, false, "StringRef.SubtractLeft: Expected a string to subtract: " + DisplayPmExpression(part));
 		}
 		SN::SN_Value end = m_End.DoEvaluate();
 		if (!end.IsNull())
 		{
 			if (!SN::Is<SNI_Long *>(end))
 			{
-				return SN::SN_Error("SubtractLeft: End of string ref must be long in: " + DisplaySN0());
+				return SN::SN_Error(false, false, "SubtractLeft: End of string ref must be long in: " + DisplaySN0());
 			}
 
 			long end_pos = GetRightMostPos();
@@ -748,7 +763,7 @@ namespace SNI
 			string match = GetSourceString().substr(end_pos - part_len, part_len);
 			if (match != part_text)
 			{
-				return SN::SN_Error("SubtractLeft: Subtract string does not match: " + match + " != " + part_text);
+				return SN::SN_Error(false, false, "SubtractLeft: Subtract string does not match: " + match + " != " + part_text);
 			}
 			return SN::SN_StringRef(this, start, SN::SN_Long(end_pos - part_len));
 		}
@@ -758,7 +773,7 @@ namespace SNI
 			size_t end_pos = GetRightMostPos();
 			if (start_pos + part_len > end_pos)
 			{
-				return SN::SN_Error("StringRef.SubtractLeft: Not enough characters to subtract: " + DisplaySN0() + " < " + DisplayPmExpression(part));
+				return SN::SN_Error(false, false, "StringRef.SubtractLeft: Not enough characters to subtract: " + DisplaySN0() + " < " + DisplayPmExpression(part));
 			}
 			SN::SN_ValueSet vs_start;
 			SN::SN_ValueSet vs_end;
@@ -784,7 +799,7 @@ namespace SNI
 				return SN::SN_StringRef(this, m_Start, vs_start.SimplifyValue());
 			}
 		}
-		return SN::SN_Error("StringRef.SubtractRight: Right string not matched in search: " + DisplaySN0() + " < " + DisplayPmExpression(part));
+		return SN::SN_Error(false, false, "StringRef.SubtractRight: Right string not matched in search: " + DisplaySN0() + " < " + DisplayPmExpression(part));
 	}
 
 	SN::SN_Value SNI_StringRef::DoSubtractLeftChar() const
@@ -796,7 +811,7 @@ namespace SNI
 		}
 		if (!SN::Is<SNI_Long *>(start))
 		{
-			return SN::SN_Error("SubtractLeftChar: Start of string ref must be long in: " + DisplaySN0());
+			return SN::SN_Error(false, false, "SubtractLeftChar: Start of string ref must be long in: " + DisplaySN0());
 		}
 		long start_pos = SN::SN_Long(start).GetNumber();
 		SN::SN_Expression end = m_End.DoPartialEvaluate();
@@ -804,12 +819,12 @@ namespace SNI
 		{
 			if (!SN::Is<SNI_Long *>(end))
 			{
-				return SN::SN_Error("DoSubtractLeftChar: End of string ref must be long: " + DisplaySN0());
+				return SN::SN_Error(false, false, "DoSubtractLeftChar: End of string ref must be long: " + DisplaySN0());
 			}
 			long end_pos = SN::SN_Long(end).GetNumber();
 			if (start_pos + 1 > end_pos)
 			{
-				return SN::SN_Error("DoSubtractLeftChar: Not enough characters to subtract one: " + DisplaySN0());
+				return SN::SN_Error(false, false, "DoSubtractLeftChar: Not enough characters to subtract one: " + DisplaySN0());
 			}
 		}
 		return SN::SN_StringRef(this, SN::SN_Long(start_pos + 1), end);
@@ -820,7 +835,7 @@ namespace SNI
 		SN::SN_Expression end = m_End.DoPartialEvaluate();
 		if (!SN::Is<SNI_Long *>(end))
 		{
-			return SN::SN_Error("SubtractRightChar: End of string ref must be long: " + DisplaySN0());
+			return SN::SN_Error(false, false, "SubtractRightChar: End of string ref must be long: " + DisplaySN0());
 		}
 		long end_pos = SN::SN_Long(end).GetNumber();
 		SN::SN_Value start = m_Start.DoEvaluate();
@@ -832,12 +847,12 @@ namespace SNI
 			}
 			if (!SN::Is<SNI_Long *>(start))
 			{
-				return SN::SN_Error("SubtractRightChar: Start of string ref must be long in: " + DisplaySN0());
+				return SN::SN_Error(false, false, "SubtractRightChar: Start of string ref must be long in: " + DisplaySN0());
 			}
 			long start_pos = SN::SN_Long(start).GetNumber();
 			if (start_pos > end_pos - 1)
 			{
-				return SN::SN_Error("SubtractRightChar: Not enough characters to subtract one: " + DisplaySN0());
+				return SN::SN_Error(false, false, "SubtractRightChar: Not enough characters to subtract one: " + DisplaySN0());
 			}
 		}
 		return SN::SN_StringRef(this, start, SN::SN_Long(end_pos - 1));
@@ -852,7 +867,7 @@ namespace SNI
 		}
 		if (!SN::Is<SNI_Long *>(start))
 		{
-			return SN::SN_Error("SelectLeftChar: Start of string ref must be long in: " + DisplaySN0());
+			return SN::SN_Error(false, false, "SelectLeftChar: Start of string ref must be long in: " + DisplaySN0());
 		}
 
 		long start_pos = SN::SN_Long(start).GetNumber();
@@ -862,12 +877,12 @@ namespace SNI
 		{
 			if (!SN::Is<SNI_Long *>(end))
 			{
-				return SN::SN_Error("SelectLeftChar: End of string ref must be long: " + DisplaySN0());
+				return SN::SN_Error(false, false, "SelectLeftChar: End of string ref must be long: " + DisplaySN0());
 			}
 			long end_pos = SN::SN_Long(end).GetNumber();
 			if (start_pos + 1 > end_pos)
 			{
-				return SN::SN_Error("SelectLeftChar: Not enough characters to select char: " + DisplaySN0());
+				return SN::SN_Error(false, false, "SelectLeftChar: Not enough characters to select char: " + DisplaySN0());
 			}
 		}
 		return SN::SN_Char(GetSourceString()[start_pos]);
@@ -878,7 +893,7 @@ namespace SNI
 		SN::SN_Expression end = m_End.DoPartialEvaluate();
 		if (!SN::Is<SNI_Long *>(end))
 		{
-			return SN::SN_Error("SelectRightChar: End of string ref must be long: " + DisplaySN0());
+			return SN::SN_Error(false, false, "SelectRightChar: End of string ref must be long: " + DisplaySN0());
 		}
 		long end_pos = SN::SN_Long(end).GetNumber();
 		SN::SN_Value start = m_Start.DoEvaluate();
@@ -890,12 +905,12 @@ namespace SNI
 			}
 			if (!SN::Is<SNI_Long *>(start))
 			{
-				return SN::SN_Error("SelectRightChar: Start of string ref must be long in: " + DisplaySN0());
+				return SN::SN_Error(false, false, "SelectRightChar: Start of string ref must be long in: " + DisplaySN0());
 			}
 			long start_pos = SN::SN_Long(start).GetNumber();
 			if (start_pos + 1 > end_pos)
 			{
-				return SN::SN_Error("SelectRightChar: Not enough characters to select char: " + DisplaySN0());
+				return SN::SN_Error(false, false, "SelectRightChar: Not enough characters to select char: " + DisplaySN0());
 			}
 		}
 		return SN::SN_Char(GetSourceString()[end_pos - 1]);
@@ -1110,13 +1125,13 @@ namespace SNI
 				return p_Other->DoAssertEqualsValue(SN::SN_String(GetString()).GetSNI_String(), p_Result);
 			}
 			//	Maybe this could be implemented in the future. It is unclear.
-			return SN::SN_Error("Not implemented. Trying to compare two string refs with unknown start or end.");
+			return SN::SN_Error(false, false, "Not implemented. Trying to compare two string refs with unknown start or end.");
 		}
 		if (dynamic_cast<SNI_String *>(p_Other))
 		{
 			if (!start.IsNullValue() && !end.IsNullValue())
 			{
-				return (GetString() == p_Other->GetString()) == result.GetBool();
+				return SN::SN_Error((GetString() == p_Other->GetString()) == result.GetBool(), false);
 			}
 			if (!start.IsNullValue() && m_End.IsVariable() && end.IsNullValue())
 			{
@@ -1126,7 +1141,7 @@ namespace SNI
 				string sourcePart = source.substr(start_pos, other.length());
 				if (sourcePart != other)
 				{
-					return !result.GetBool();
+					return SN::SN_Error(!result.GetBool(), false);
 				}
 				else
 				{
@@ -1152,7 +1167,7 @@ namespace SNI
 				string source = GetSourceString().substr(end_pos - p_Other->GetString().length());
 				if (source != p_Other->GetString())
 				{
-					return !result.GetBool();
+					return SN::SN_Error(!result.GetBool(), false);
 				}
 				else
 				{
@@ -1210,7 +1225,7 @@ namespace SNI
 		case skynet::JSON:
 			return SN::SN_String(EscapeStringToJSON(GetString()));
 		}
-		return SN::SN_Error("Bad escape type for escape conversion");
+		return SN::SN_Error(false, false, "Bad escape type for escape conversion");
 	}
 
 	SN::SN_Value SNI_StringRef::DoUnescape(enum skynet::EscapeType p_EscapeType) const
@@ -1223,7 +1238,7 @@ namespace SNI
 		case skynet::JSON:
 			return SN::SN_String(UnescapeStringToJSON(GetString()));
 		}
-		return SN::SN_Error("Bad escape type for escape conversion");
+		return SN::SN_Error(false, false, "Bad escape type for escape conversion");
 	}
 
 	SN::SN_Value SNI_StringRef::DoStringToInt() const

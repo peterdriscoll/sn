@@ -134,6 +134,7 @@ namespace SNI
 		virtual SN::SN_Expression GetVariableValue(bool p_IfComplete);
 		virtual const SNI_Expression *GetSafeValue() const;
 		virtual bool IsError() const;
+		virtual bool IsSignificantError() const;
 		virtual bool IsFixed() const;
 		virtual bool AllValues() const;
 		virtual SN::SN_Error AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World **p_World, SNI_WorldSet *p_WorldSet);

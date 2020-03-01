@@ -46,7 +46,7 @@ namespace SNI
 			{
 				local_this->m_SetList.push_back(p_Param);
 			}
-			return true;
+			return skynet::OK;
 		});
 	}
 

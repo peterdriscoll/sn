@@ -22,8 +22,9 @@ namespace SN
 		SN_Function(const SN_Function &p_Function);
 		SN_Function(const SN_Expression  &p_Function);
 		SN_Function(const SN_Expression &p_Function, const SN_Expression &p_Parameter);
-		SN_Function(const SN_Expression &p_Function, const SN_Expression &p_Parameter, const SN_Expression &p_Condition);
 		virtual ~SN_Function();
+
+		SN_Function &Condition(const SN_Expression &p_Condition);
 
 		SN_Expression GetFunction() const;
 		SN_Expression GetParameter() const;

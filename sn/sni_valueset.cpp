@@ -173,6 +173,10 @@ namespace SNI
 
 	bool SNI_ValueSet::IsKnownValue() const
 	{
+		if (!IsComplete())
+		{
+			return false;
+		}
 		SNI_World *contextWorld = SNI_Thread::GetThread()->ContextWorld();
 		if (contextWorld)
 		{
@@ -190,7 +194,7 @@ namespace SNI
 		}
 		else
 		{
-			return IsComplete() && !m_ValueList.empty();
+			return !m_ValueList.empty();
 		}
 		return false;
 	}
@@ -630,7 +634,7 @@ namespace SNI
 		{
 			if (loopError.IsNull())
 			{
-				return SN::SN_Error(GetTypeName() + " has no values.");
+				return SN::SN_Error(false, false, GetTypeName() + " has no values.");
 			}
 			return loopError;
 		}
@@ -649,7 +653,7 @@ namespace SNI
 		SN::SN_Expression *paramList = new SN::SN_Expression[2];
 		paramList[0] = p_Value;
 		paramList[1] = this;
-		SN::SN_Error e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList, this);
+		SN::SN_Error e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList, this).GetError();
 		if (e.IsSignificantError())
 		{
 			SNI_CallRecord *callRecord = new SNI_CallRecord("Assert value set to value.", this);
@@ -698,7 +702,7 @@ namespace SNI
 		LOGGING(SN::LogContext context("SNI_ValueSet::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 		
 		Validate();
-		SN::SN_Error err(true);
+		SN::SN_Error err = skynet::OK;
 		bool success = false;
 		SNI_World *contextWorld = SNI_Thread::GetThread()->ContextWorld();
 		SNI_WorldSet *worldSet = GetWorldSet();
@@ -752,7 +756,7 @@ namespace SNI
 		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after all values", SN::LeftId);
 		if (success)
 		{
-			return SN::SN_Error(success);
+			return SN::SN_Error(success, false);
 		}
 		if (err.IsSignificantError())
 		{
@@ -802,7 +806,7 @@ namespace SNI
 				SNI_Error::PopHandler();
 			}
 		}
-		return true;
+		return skynet::OK;
 	}
 
 	void SNI_ValueSet::ForEachSplit(SNI_Splitter * p_Splitter)
@@ -935,7 +939,7 @@ namespace SNI
 	{
 		if (p_Value.IsError())
 		{
-			return p_Value;
+			return p_Value.GetError();
 		}
 		bool exists = false;
 		SNI_WorldSet *l_WorldSet = p_WorldSet;
@@ -956,7 +960,7 @@ namespace SNI
 				else
 				{
 				}
-				return true;
+				return skynet::OK;
 			}
 		);
 	}

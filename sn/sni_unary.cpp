@@ -139,7 +139,7 @@ namespace SNI
 				return p_value.PartialAssertValue(newValue);
 			}
 		}
-		return false;
+		return skynet::Fail;
 	}
 
 	size_t SNI_Unary::CardinalityOfUnify(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const
@@ -191,11 +191,11 @@ namespace SNI
 						LOGGING(context.LogText("fail", "Value conflict on " + DisplayValues(p_Depth, p_ParamList, p_WorldList)));
 					}
 				}
-				return true;
+				return skynet::OK;
 			}
 			else
 			{
-				return PrimaryFunctionValue(p_ParamList[PU1_First].GetVariableValue()).Equivalent(p_ParamList[PU1_Result].GetVariableValue());
+				return SN::SN_Error(PrimaryFunctionValue(p_ParamList[PU1_First].GetVariableValue()).Equivalent(p_ParamList[PU1_Result].GetVariableValue()), false);
 			}
 		}
 		break;
@@ -216,7 +216,7 @@ namespace SNI
 			}
 		}
 		}
-		return SN::SN_Error(GetTypeName() + ": Expression not unified. TotalCalc=" + to_string(p_TotalCalc) + " Calcpos=" + to_string(p_CalcPos));
+		return SN::SN_Error(false, false, GetTypeName() + ": Expression not unified. TotalCalc=" + to_string(p_TotalCalc) + " Calcpos=" + to_string(p_CalcPos));
 	}
 
 	bool SNI_Unary::EvaluateNow(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const

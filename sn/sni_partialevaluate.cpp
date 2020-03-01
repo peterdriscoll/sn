@@ -69,7 +69,7 @@ namespace SNI
 		SNI_Thread::GetThread()->SetDebugId("partialevaluate");
 		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "evaluate", SN::CallId);
 
-		SN::SN_Error result = p_ParamList[PC1_First].DoPartialEvaluate();
+		SN::SN_Error result = p_ParamList[PC1_First].DoPartialEvaluate().GetError();
 
 		SNI_Thread::GetThread()->SetDebugId("partialevaluate");
 		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Evaluate", SN::ReturnId);

@@ -406,6 +406,11 @@ namespace SNI
 		return false;
 	}
 
+	bool SNI_Expression::IsSignificantError() const
+	{
+		return false;
+	}
+
 	bool SNI_Expression::IsFixed() const
 	{
 		return false;
@@ -420,7 +425,7 @@ namespace SNI
 	{
 		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Expression::AddValue ( )"));
 
-		return LOG_RETURN(context, SN::SN_Error(GetTypeName() + " AddValue not implemented ."));
+		return LOG_RETURN(context, SN::SN_Error(false, false, GetTypeName() + " AddValue not implemented ."));
 	}
 
 	bool SNI_Expression::MarkComplete()
@@ -472,7 +477,7 @@ namespace SNI
 	{
 		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Expression::ForEachCart ( cartesian )"));
 
-		return LOG_RETURN(context, SN::SN_Error(GetTypeName() + " ForEachCart not implemented ."));
+		return LOG_RETURN(context, SN::SN_Error(false, false, GetTypeName() + " ForEachCart not implemented ."));
 	}
 
 	void SNI_Expression::ForEachSplit(SNI_Splitter * p_Splitter)
@@ -510,7 +515,7 @@ namespace SNI
 
 	SN::SN_Error SNI_Expression::DoAssert()
 	{
-		return false;
+		return skynet::Fail;
 	}
 
 	SN::SN_Error SNI_Expression::AssertValue(const SN::SN_Expression &p_Value)
@@ -556,29 +561,24 @@ namespace SNI
 				}
 			}
 			valueSet.Simplify();
-			return result;
+			return SN::SN_Error(result, false);
 		}
-//		if (p_Value.IsVariable())
-//		{
-//			SN::SN_Expression value = p_Value;
-//			return value.AssertValue(this);
-//		}
-		return p_Value.Equivalent(thisValue);
+		return SN::SN_Error(p_Value.Equivalent(thisValue), false);
 	}
 
 	SN::SN_Error SNI_Expression::AssertIsA(const SN::SN_Expression &p_Value)
 	{
-		return SN::SN_Error();
+		return skynet::Fail;
 	}
 
 	SN::SN_Error SNI_Expression::SelfAssert()
 	{
-		return true;
+		return skynet::OK;
 	}
 
 	SN::SN_Error SNI_Expression::DoPartialAssert()
 	{
-		return false;
+		return skynet::Fail;
 	}
 
 	SN::SN_Expression SNI_Expression::DoMeta(long p_MetaLevel)
@@ -589,31 +589,31 @@ namespace SNI
 
 	SN::SN_Error SNI_Expression::PartialAssertValue(const SN::SN_Expression &p_Expression, bool /* p_Define */)
 	{
-		return Equivalent(p_Expression.GetSNI_Expression());
+		return SN::SN_Error(Equivalent(p_Expression.GetSNI_Expression()), false);
 	}
 
 	SN::SN_Expression SNI_Expression::Call(SN::SN_ExpressionList * p_ParameterList, long  /* p_MetaLevel = 0 */) const
 	{
 		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Expression::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
-		return LOG_RETURN(context, SN::SN_Error(GetTypeName() + " Call not implemented."));
+		return LOG_RETURN(context, SN::SN_Error(false, false, GetTypeName() + " Call not implemented."));
 	}
 
 	SN::SN_Expression SNI_Expression::PartialCall(SN::SN_ExpressionList * p_ParameterList, long  /* p_MetaLevel = 0 */) const
 	{
 		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Concat::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
-		return LOG_RETURN(context, SN::SN_Error(GetTypeName() + " Partial Call not implemented."));
+		return LOG_RETURN(context, SN::SN_Error(false, false, GetTypeName() + " Partial Call not implemented."));
 	}
 
 	SN::SN_Expression SNI_Expression::Unify(SN::SN_ExpressionList * /*p_ParameterList*/)
 	{
-		return SN::SN_Error(GetTypeName() + " Unify not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " Unify not implemented.");
 	}
 
 	SN::SN_Error SNI_Expression::PartialUnify(SN::SN_ParameterList * /*p_ParameterList*/, SN::SN_Expression /*p_Expression*/, bool /*p_Define*/)
 	{
-		return false;
+		return skynet::Fail;
 	}
 
 	void SNI_Expression::Throw()
@@ -643,24 +643,19 @@ namespace SNI
 		{
 			processor->Run();
 		}
-		else
+		SN::SN_Error e = p_Result.GetError();
+		if (!e.GetSNI_Error())
 		{
-			long dog = 10;
-		}
-		SN::SN_Error e = p_Result;
-		SN::SN_Bool b = p_Result;
-		if (b.IsNull())
-		{
-			if (!e.GetSNI_Error())
+			if (p_Result.GetSNI_Bool())
 			{
-				e = SN::SN_Error("Expected bool or error, returned " + p_Result.DisplayValueSN() + " from " + SN::SN_Expression(this).DisplayValueSN());
+				if (!p_Result.GetBool())
+				{
+					e = SN::SN_Error(false, false, "Expected true, returned " + p_Result.DisplayValueSN() + " from " + SN::SN_Expression(this).DisplayValueSN());
+				}
 			}
-		}
-		else
-		{
-			if (!b.GetBool())
+			else
 			{
-				e = SN::SN_Error("Expected true, returned " + p_Result.DisplayValueSN() + " from " + SN::SN_Expression(this).DisplayValueSN());
+				e = SN::SN_Error(false, false, "Expected bool or error, returned " + p_Result.DisplayValueSN() + " from " + SN::SN_Expression(this).DisplayValueSN());
 			}
 		}
 		if (e.IsError())
@@ -690,88 +685,88 @@ namespace SNI
 	// Numbers
 	SN::SN_Value SNI_Expression::DoAdd(SNI_Value * /*p_Other*/) const
 	{
-		return SN::SN_Error(GetTypeName() + " + operator not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " + operator not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoSubtract(SNI_Value * /*p_Other*/) const
 	{
-		return SN::SN_Error(GetTypeName() + " - operator not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " - operator not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoDivide(SNI_Value * /*p_Other*/) const
 	{
-		return SN::SN_Error(GetTypeName() + " / operator not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " / operator not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoMultiply(SNI_Value * /*p_Other*/) const
 	{
-		return SN::SN_Error(GetTypeName() + " * operator not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " * operator not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoNegative() const
 	{
-		return SN::SN_Error(GetTypeName() + " Unary - operator not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " Unary - operator not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoSquare() const
 	{
-		return SN::SN_Error(GetTypeName() + "  Square function not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + "  Square function not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoSquareRoot() const
 	{
-		return SN::SN_Error(GetTypeName() + "  SquareRoot function not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + "  SquareRoot function not implemented.");
 	}
 
 	//Logic
 	SN::SN_Value SNI_Expression::DoNot() const
 	{
-		return SN::SN_Error(GetTypeName() + " not function not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " not function not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoRevAnd(SNI_Expression * p_PositiveCase) const
 	{
-		return SN::SN_Error(GetTypeName() + " 'reverse and' function not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " 'reverse and' function not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoRevOr(SNI_Expression * p_PositiveCase) const
 	{
-		return SN::SN_Error(GetTypeName() + " 'reverse or' function not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " 'reverse or' function not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoCollapse()
 	{
-		return SN::SN_Error(GetTypeName() + " collapse function not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " collapse function not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoUnaryAnd() const
 	{
-		return SN::SN_Error(GetTypeName() + " 'reverse implies' function not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " 'reverse implies' function not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoUnaryOr() const
 	{
-		return SN::SN_Error(GetTypeName() + " 'reverse implies' function not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " 'reverse implies' function not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoAnd(SNI_Expression * /*p_Other*/) const
 	{
-		return SN::SN_Error(GetTypeName() + " && operator not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " && operator not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoOr(SNI_Expression * /*p_Other*/) const
 	{
-		return SN::SN_Error(GetTypeName() + " || operator not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " || operator not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoIf(SNI_Expression * /*p_PositiveCase*/, SNI_Expression * /*p_NegativeCase*/) const
 	{
-		return SN::SN_Error(GetTypeName() + " If operator not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " If operator not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoImplies(SNI_Expression * /*p_PositiveCase*/) const
 	{
-		return SN::SN_Error(GetTypeName() + " Implies operator not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " Implies operator not implemented.");
 	}
 
 	//Comparison
@@ -792,188 +787,188 @@ namespace SNI
 	{
 		if (SN::Is<SNI_StringRef *>(p_Other))
 		{
-			return p_Other->DoEquals(dynamic_cast<SNI_Value *>(const_cast<SNI_Expression *>(this)));
+			return p_Other->DoEquals(dynamic_cast<SNI_Value *>(const_cast<SNI_Expression *>(this))).GetError();
 		}
 		if (SN::Is<SNI_ValueSet *>(p_Other))
 		{
-			return p_Other->DoEquals(dynamic_cast<SNI_Value *>(const_cast<SNI_Expression *>(this)));
+			return p_Other->DoEquals(dynamic_cast<SNI_Value *>(const_cast<SNI_Expression *>(this))).GetError();
 		}
-		return p_Result->Equivalent(SN::SN_Bool(Equivalent(dynamic_cast<SNI_Object *>(p_Other))).GetSNI_Bool());
+		return SN::SN_Error(p_Result->GetBool() == Equivalent(dynamic_cast<SNI_Object *>(p_Other)), false);
 	}
 
 	SN::SN_Value SNI_Expression::DoLessThan(SNI_Value * /*p_Other*/) const
 	{
-		return SN::SN_Error(GetTypeName() + " < operator not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " < operator not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoGreaterThan(SNI_Value * /*p_Other*/) const
 	{
-		return SN::SN_Error(GetTypeName() + " > operator not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " > operator not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoLessEquals(SNI_Value * /*p_Other*/) const
 	{
-		return SN::SN_Error(GetTypeName() + " <= operator not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " <= operator not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoGreaterEquals(SNI_Value * /*p_Other*/) const
 	{
-		return SN::SN_Error(GetTypeName() + " >= operator not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " >= operator not implemented.");
 	}
 
 	//Strings
 	SN::SN_Value SNI_Expression::DoConcat(SNI_Value * /*p_Other*/) const
 	{
-		return SN::SN_Error(GetTypeName() + " + operator not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " + operator not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoSubtractLeft(SNI_Value * /*p_Other*/) const
 	{
-		return SN::SN_Error(GetTypeName() + " SubtractLeft method not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " SubtractLeft method not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoSubtractRight(SNI_Value * /*p_Other*/) const
 	{
-		return SN::SN_Error(GetTypeName() + " SubtractRight method not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " SubtractRight method not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoSubtractLeftChar() const
 	{
-		return SN::SN_Error(GetTypeName() + " SubtractLeftChar method not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " SubtractLeftChar method not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoSubtractRightChar() const
 	{
-		return SN::SN_Error(GetTypeName() + " SubtractRightChar method not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " SubtractRightChar method not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoSelectRightChar() const
 	{
-		return SN::SN_Error(GetTypeName() + " SelectRightChar method not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " SelectRightChar method not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoSelectLeftChar() const
 	{
-		return SN::SN_Error(GetTypeName() + " SelectLeftChar method not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " SelectLeftChar method not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoLookaheadLeft() const
 	{
-		return SN::SN_Error(GetTypeName() + " LookaheadLeft method not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " LookaheadLeft method not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoLookaheadRight() const
 	{
-		return SN::SN_Error(GetTypeName() + " LookaheadRight method not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " LookaheadRight method not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoLookStringLeft(SNI_Value * p_Other) const
 	{
-		return SN::SN_Error(GetTypeName() + " LookStringLeft method not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " LookStringLeft method not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoLookStringRight(SNI_Value * p_Other) const
 	{
-		return SN::SN_Error(GetTypeName() + " LookStringRight method not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " LookStringRight method not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoFile() const
 	{
-		return SN::SN_Error(GetTypeName() + " File method not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " File method not implemented.");
 	}
 
 	// Conversion
 	SN::SN_Value SNI_Expression::DoEscape(enum skynet::EscapeType p_EscapeType) const
 	{
-		return SN::SN_Error(GetTypeName() + " Escape method not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " Escape method not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoUnescape(enum skynet::EscapeType p_EscapeType) const
 	{
-		return SN::SN_Error(GetTypeName() + " Unescape method not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " Unescape method not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoIntToString() const
 	{
-		return SN::SN_Error(GetTypeName() + " IntToString method not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " IntToString method not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoStringToInt() const
 	{
-		return SN::SN_Error(GetTypeName() + " StringToInt method not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " StringToInt method not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoDoubleToString() const
 	{
-		return SN::SN_Error(GetTypeName() + " DoubleToString method not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " DoubleToString method not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoStringToDouble() const
 	{
-		return SN::SN_Error(GetTypeName() + " StringToDouble method not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " StringToDouble method not implemented.");
 	}
 
 	SN::SN_Error  SNI_Expression::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)
 	{
-		return SN::SN_Error(GetTypeName() + " IsA function not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " IsA function not implemented.");
 	}
 
 	// Inheritance
 	SN::SN_Value SNI_Expression::DoIsA(const SNI_Value * p_Parent) const
 	{
-		return SN::SN_Error(GetTypeName() + " IsA function not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " IsA function not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoHasA(SNI_Value * p_Member, SNI_Value * p_Name) const
 	{
-		return SN::SN_Error(GetTypeName() + " HasA function not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " HasA function not implemented.");
 	}
 
 	// Sets
 	SN::SN_Value SNI_Expression::DoBuildSet() const
 	{
-		return SN::SN_Error(GetTypeName() + " BuildSet function not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " BuildSet function not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoHasMember(SNI_Value * /*p_Member*/) const
 	{
-		return SN::SN_Error(GetTypeName() + "  HasMember function not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + "  HasMember function not implemented.");
 	}
 
 	// ValueSets
 	SN::SN_ValueSet SNI_Expression::DoRemove(const SN::SN_Value & /*p_Other*/)
 	{
-		return SN::SN_Error(GetTypeName() + " Remove not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " Remove not implemented.");
 	}
 
 	SN::SN_Error SNI_Expression::AssertSubscriptValue(const SNI_Value * p_Index, SN::SN_Expression p_Result)
 	{
-		return SN::SN_Error(GetTypeName() + " Subscript operator [] function not implemented on assert.");
+		return SN::SN_Error(false, false, GetTypeName() + " Subscript operator [] function not implemented on assert.");
 	}
 
 	SN::SN_Value SNI_Expression::DoSubscriptCall(const SN::SN_Value & p_Index) const
 	{
-		return SN::SN_Error(GetTypeName() + " Subscript operator [] not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " Subscript operator [] not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoReverseSubscript(const SN::SN_Value & p_Result) const
 	{
-		return SN::SN_Error(GetTypeName() + " Reverse subscript operator [] not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " Reverse subscript operator [] not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoCountIf(SN::SN_Expression p_Value) const
 	{
-		return SN::SN_Error(GetTypeName() + " CountIf function not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " CountIf function not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoCountAll() const
 	{
-		return SN::SN_Error(GetTypeName() + " CountAll function not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " CountAll function not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoSum() const
 	{
-		return SN::SN_Error(GetTypeName() + " Sum function not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " Sum function not implemented.");
 	}
 
 	bool SNI_Expression::DoIsEmpty() const

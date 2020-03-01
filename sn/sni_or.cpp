@@ -138,7 +138,7 @@ namespace SNI
 		SN::SN_Expression* firstParamList = new SN::SN_Expression[2];
 		firstParamList[0] = p_ParameterList[PU2_Result];
 		firstParamList[1] = p_ParameterList[PU2_First];
-		SN::SN_Error e1 = skynet::UnaryOr.GetSNI_FunctionDef()->UnifyArray(firstParamList, p_Source);
+		SN::SN_Error e1 = skynet::UnaryOr.GetSNI_FunctionDef()->UnifyArray(firstParamList, p_Source).GetError();
 
 		if (e1.IsSignificantError())
 		{
@@ -152,7 +152,7 @@ namespace SNI
 		secondParamList[0] = p_ParameterList[PU2_Result];
 		secondParamList[1] = firstParamList[1];
 		secondParamList[2] = p_ParameterList[PU2_Second];
-		SN::SN_Error e2 = SNI_Binary::UnifyArray(secondParamList, p_Source);
+		SN::SN_Error e2 = SNI_Binary::UnifyArray(secondParamList, p_Source).GetError();
 		if (e2.IsSignificantError())
 		{
 			SNI_CallRecord *callRecord = new SNI_CallRecord("Or of second parameter with first result.", this);
@@ -347,11 +347,11 @@ namespace SNI
 						world->AddToSetList();
 					}
 				}
-				return true;
+				return skynet::OK;
 			}
 			else
 			{
-				return PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()).Equivalent(p_ParamList[PU2_Result].GetVariableValue());
+				return SN::SN_Error(PrimaryFunctionValue(p_ParamList[PU2_First].GetVariableValue(), p_ParamList[PU2_Second].GetVariableValue()).Equivalent(p_ParamList[PU2_Result].GetVariableValue()), false);
 			}
 		}
 		break;
@@ -380,17 +380,17 @@ namespace SNI
 			{
 				p_ParamList[PU2_Result].AddValue(skynet::True, p_Depth, p_WorldList, worldSet);
 				p_ParamList[PU2_Second].AddValue(skynet::Null, p_Depth, p_WorldList, worldSet);
-				return true;
+				return skynet::OK;
 			}
 			SN::SN_Bool result = p_ParamList[PU2_Result].GetVariableValue();
 			if (!result.IsNull() && !result.GetBool())
 			{
 				p_ParamList[PU2_First].AddValue(skynet::False, p_Depth, p_WorldList, worldSet);
 				p_ParamList[PU2_Second].AddValue(skynet::False, p_Depth, p_WorldList, worldSet);
-				return true;
+				return skynet::OK;
 			}
 		}
 		}
-		return SN::SN_Error(GetTypeName() + ": Expression not unified. TotalCalc=" + to_string(p_TotalCalc) + " Calcpos=" + to_string(p_CalcPos));
+		return SN::SN_Error(false, false, GetTypeName() + ": Expression not unified. TotalCalc=" + to_string(p_TotalCalc) + " Calcpos=" + to_string(p_CalcPos));
 	}
 }

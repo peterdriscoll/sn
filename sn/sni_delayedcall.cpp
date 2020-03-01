@@ -35,6 +35,7 @@ namespace SNI
 		, m_Locked(false)
 		, m_Frame(p_Frame)
 		, m_World(NULL)
+		, m_Error(skynet::OK)
 	{
 		ASSERTM(m_NumParams == m_Function.GetSNI_FunctionDef()->GetNumParameters(), "Inconsistent number of parameters.");
 	}
@@ -74,7 +75,7 @@ namespace SNI
 		{
 			SNI_Frame::PushFrame(m_Frame);
 		}
-		m_Error = m_Function.GetSNI_FunctionDef()->UnifyArray(m_ParamList, m_Source);
+		m_Error = m_Function.GetSNI_FunctionDef()->UnifyArray(m_ParamList, m_Source).GetError();
 		if (m_Frame)
 		{
 			SNI_Frame::Pop();

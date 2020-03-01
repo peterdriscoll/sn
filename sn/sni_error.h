@@ -24,9 +24,8 @@ namespace SNI
 		static void PopHandler();
 
 		SNI_Error();
-		SNI_Error(bool p_Success, bool p_Delay = false, const string &p_Description = "");
+		SNI_Error(bool p_Success, bool p_Delay, const string &p_Description = "");
 		SNI_Error(const SNI_Error &p_Other);
-		SNI_Error(const string &p_Description);
 		virtual ~SNI_Error();
 
 		virtual string GetTypeName() const;
