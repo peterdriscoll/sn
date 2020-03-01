@@ -74,6 +74,10 @@ namespace SNI
 		{
 			return skynet::True;
 		}
+		if (Equivalent(const_cast<SNI_Value *>(p_Parent)))
+		{
+			return skynet::True;
+		}
 		if (m_Class)
 		{
 			if (m_Class->DoIsA(p_Parent).GetBool())
