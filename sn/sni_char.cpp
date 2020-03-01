@@ -20,6 +20,11 @@ namespace SNI
 		return m_Class;
 	}
 
+	SNI_Class *SNI_Char::VClass()
+	{
+		return Class();
+	}
+
 	SNI_Char::SNI_Char()
 	{
 
@@ -110,17 +115,6 @@ namespace SNI
 	size_t SNI_Char::Hash() const
 	{
 		return _Hash_representation(m_Char);
-	}
-
-	// Inheritance
-	SN::SN_Error  SNI_Char::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)
-	{
-		return p_Result.AssertValue(Class()->DoIsA(p_Parent));
-	}
-
-	SN::SN_Value SNI_Char::DoIsA(const SNI_Value * p_Parent) const
-	{
-		return Class()->DoIsA(p_Parent);
 	}
 
 	SN::SN_Value SNI_Char::DoAdd(SNI_Value * p_Other) const

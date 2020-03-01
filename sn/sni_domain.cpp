@@ -17,9 +17,14 @@ namespace SNI
 	{
 		if (!m_Class)
 		{
-			m_Class = new SNI_Class("Mapping");
+			m_Class = new SNI_Class("Domain");
 		}
 		return m_Class;
+	}
+
+	SNI_Class *SNI_Domain::VClass()
+	{
+		return Class();
 	}
 
 	SNI_Domain::SNI_Domain(const string &p_Name)
@@ -68,17 +73,6 @@ namespace SNI
 	size_t SNI_Domain::Hash() const
 	{
 		return 0; // _Hash_representation(m_Map);
-	}
-
-	// Inheritance
-	SN::SN_Error SNI_Domain::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)
-	{
-		return p_Result.AssertValue(Class()->DoIsA(p_Parent));
-	}
-
-	SN::SN_Value SNI_Domain::DoIsA(const SNI_Value * p_Parent) const
-	{
-		return Class()->DoIsA(p_Parent);
 	}
 
 	SN::SN_Error SNI_Domain::AssertSubscriptValue(const SNI_Value * p_Index, SN::SN_Expression p_Result)

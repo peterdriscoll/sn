@@ -12,7 +12,11 @@ namespace SNI
 	class SNI_Instance : public SNI_Null
 	{
 		PGC_CLASS(SNI_Instance);
+
 	public:
+		virtual SNI_Class * Class();
+		virtual SNI_Class *VClass();
+
 		SNI_Instance();
 		SNI_Instance(const SNI_Instance &p_Other);
 		virtual ~SNI_Instance();

@@ -25,6 +25,11 @@ namespace SNI
 		return m_Class;
 	}
 
+	SNI_Class *SNI_Meta::VClass()
+	{
+		return Class();
+	}
+
 	SNI_Meta::SNI_Meta()
 	{
 	}
@@ -107,17 +112,6 @@ namespace SNI
 	{
 		string data = DisplaySN0();
 		return _Hash_array_representation(data.c_str(), data.size());
-	}
-
-	// Inheritance
-	SN::SN_Error  SNI_Meta::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)
-	{
-		return p_Result.AssertValue(Class()->DoIsA(p_Parent));
-	}
-
-	SN::SN_Value SNI_Meta::DoIsA(const SNI_Value * p_Parent) const
-	{
-		return Class()->DoIsA(p_Parent);
 	}
 
 	SN::SN_Expression SNI_Meta::DoEvaluate(long p_MetaLevel /* = 0 */) const

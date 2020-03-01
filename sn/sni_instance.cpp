@@ -4,6 +4,20 @@
 
 namespace SNI
 {
+	/*static*/ SNI_Class *SNI_Instance::Class()
+	{
+		if (!m_Class)
+		{
+			m_Class = new SNI_Class("Instance");
+		}
+		return m_Class;
+	}
+
+	SNI_Class *SNI_Instance::VClass()
+	{
+		return Class();
+	}
+
 	SNI_Instance::SNI_Instance()
 	: m_Fixed(false)
 	{
@@ -11,7 +25,6 @@ namespace SNI
 
 	SNI_Instance::~SNI_Instance()
 	{
-
 	}
 
 	SNI_Instance::SNI_Instance(const SNI_Instance &p_Other)

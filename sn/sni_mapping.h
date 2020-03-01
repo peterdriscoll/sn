@@ -37,7 +37,9 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Mapping);
 	public:
-		static SNI_Class * Class();
+		static SNI_Class *m_Class;
+		static SNI_Class *Class();
+		virtual SNI_Class *VClass();
 
 		SNI_Mapping();
 		virtual ~SNI_Mapping();
@@ -50,9 +52,6 @@ namespace SNI
 		virtual size_t Hash() const;
 
 		virtual bool IsFixed() const;
-
-		virtual SN::SN_Error AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result);
-		virtual SN::SN_Value DoIsA(const SNI_Value * p_Parent) const;
 
 		virtual SN::SN_Error AssertSubscriptValue(const SNI_Value *p_Index, SN::SN_Expression p_Result);
 		virtual SN::SN_Value DoSubscriptCall(const SN::SN_Value &p_Index) const;
@@ -69,8 +68,6 @@ namespace SNI
 		virtual void PromoteMembers();
 
 	private:
-		static SNI_Class *m_Class;
-
 		unordered_map<SN::SN_Expression, SN::SN_Expression, KeyHasher, KeyEqual> m_Map;
 		bool m_Fixed;
 		SNI_Expression *m_DefaultValue;

@@ -21,6 +21,11 @@ namespace SNI
 		return m_Class;
 	}
 
+	SNI_Class *SNI_Bool::VClass()
+	{
+		return Class();
+	}
+
 	SNI_Bool::SNI_Bool()
 	{
 
@@ -91,17 +96,6 @@ namespace SNI
 		return SN::SN_Error(m_Expression, false);
 	}
 
-
-	// Inheritance
-	SN::SN_Error  SNI_Bool::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)
-	{
-		return p_Result.AssertValue(Class()->DoIsA(p_Parent));
-	}
-
-	SN::SN_Value SNI_Bool::DoIsA(const SNI_Value * p_Parent) const
-	{
-		return Class()->DoIsA(p_Parent);
-	}
 
 	SN::SN_Value SNI_Bool::DoHasA(SNI_Value * p_Member, SNI_Value * p_Name) const
 	{

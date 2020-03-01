@@ -23,6 +23,10 @@ namespace SNI
 		static void PushHandler();
 		static void PopHandler();
 
+		static SNI_Class * m_Class;
+		static SNI_Class * Class();
+		virtual SNI_Class *VClass();
+
 		SNI_Error();
 		SNI_Error(bool p_Success, bool p_Delay, const string &p_Description = "");
 		SNI_Error(const SNI_Error &p_Other);

@@ -21,7 +21,9 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_String);
 	public:
+		static SNI_Class *m_Class;
 		static SNI_Class *Class();
+		virtual SNI_Class *VClass();
 
 		SNI_String();
 		SNI_String(const SNI_String &p_Other);
@@ -62,10 +64,6 @@ namespace SNI
 		virtual size_t Hash() const;
 		virtual SN::SN_Error AssertValue(const SN::SN_Expression &p_Value);
 
-		// Inheritance
-		virtual SN::SN_Error AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result);
-		virtual SN::SN_Value DoIsA(const SNI_Value * p_Parent) const;
-
 		// Implementation
 		virtual SN::SN_Value DoAdd(SNI_Value * p_Other) const;
 		virtual SN::SN_Value DoSubtract(SNI_Value * p_Other) const;
@@ -89,8 +87,6 @@ namespace SNI
 		virtual SN::SN_Value DoStringToInt() const;
 
 	private:
-		static SNI_Class *m_Class;
-
 		string m_String;
 	};
 

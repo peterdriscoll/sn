@@ -15,7 +15,9 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Bool);
 	public:
-		static SNI_Class *Class();
+		static SNI_Class * m_Class;
+		static SNI_Class * Class();
+		SNI_Class *VClass();
 
 		SNI_Bool();
 		SNI_Bool(const SNI_Bool &p_Other);
@@ -33,8 +35,6 @@ namespace SNI
 		virtual bool GetBool() const;
 
 		// Inheritance
-		virtual SN::SN_Error AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result);
-		virtual SN::SN_Value DoIsA(const SNI_Value * p_Parent) const;
 		virtual SN::SN_Value DoHasA(SNI_Value * p_Member, SNI_Value * p_Name) const;
 
 		virtual SN::SN_Value DoAnd(SNI_Expression * p_Other) const;
@@ -51,8 +51,6 @@ namespace SNI
 		virtual SN::SN_Value DoUnaryOr() const;
 
 	private:
-		static SNI_Class *m_Class;
-
 		bool m_Expression;
 	};
 

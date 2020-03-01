@@ -25,6 +25,11 @@ namespace SNI
 		return m_Class;
 	}
 
+	SNI_Class *SNI_Mapping::VClass()
+	{
+		return Class();
+	}
+
 	SNI_Mapping::SNI_Mapping()
 	: m_Fixed(false)
 	, m_DefaultValue(NULL)
@@ -102,17 +107,6 @@ namespace SNI
 	bool SNI_Mapping::IsFixed() const
 	{
 		return m_Fixed;
-	}
-
-	// Inheritance
-	SN::SN_Error SNI_Mapping::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)
-	{
-		return p_Result.AssertValue(Class()->DoIsA(p_Parent));
-	}
-
-	SN::SN_Value SNI_Mapping::DoIsA(const SNI_Value * p_Parent) const
-	{
-		return Class()->DoIsA(p_Parent);
 	}
 
 	SN::SN_Error SNI_Mapping::AssertSubscriptValue(const SNI_Value * p_Index, SN::SN_Expression p_Result)

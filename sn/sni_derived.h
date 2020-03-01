@@ -21,7 +21,9 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Derived);
 	public:
+		static SNI_Class * m_Class;
 		static SNI_Class * Class();
+		SNI_Class *VClass();
 
 		SNI_Derived();
 		virtual ~SNI_Derived();
@@ -34,9 +36,6 @@ namespace SNI
 		virtual size_t Hash() const;
 
 		virtual bool IsFixed() const;
-
-		virtual SN::SN_Value DoIsA(const SNI_Value * p_Parent) const;
-
 		virtual void Fix();
 
 		virtual SNI_Expression * Clone(SNI_Frame * p_Frame, bool & p_Changed);
@@ -51,8 +50,6 @@ namespace SNI
 		virtual void PromoteMembers();
 
 	private:
-		static SNI_Class *m_Class;
-
 		vector<SNI_Expression *> m_Vector;
 		long m_DefineId;
 		bool m_Fixed;

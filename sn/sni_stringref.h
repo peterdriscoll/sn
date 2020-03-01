@@ -20,7 +20,9 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_StringRef);
 	public:
+		static SNI_Class *m_Class;
 		static SNI_Class *Class();
+		virtual SNI_Class *VClass();
 
 		SNI_StringRef();
 		SNI_StringRef(const SN::SN_Value &p_Source, const SN::SN_Expression &p_Start, const SN::SN_Expression &p_End);
@@ -90,10 +92,6 @@ namespace SNI
 		virtual SN::SN_Error AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World ** p_World, SNI_WorldSet * p_WorldSet);
 		virtual SN::SN_Error AssertValue(const SN::SN_Expression &p_Value);
 
-		// Inheritance
-		virtual SN::SN_Error AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result);
-		virtual SN::SN_Value DoIsA(const SNI_Value * p_Parent) const;
-
 		virtual SN::SN_Value DoEscape(enum skynet::EscapeType p_EscapeType) const;
 		virtual SN::SN_Value DoUnescape(enum skynet::EscapeType p_EscapeType) const;
 		virtual SN::SN_Value DoStringToInt() const;
@@ -102,8 +100,6 @@ namespace SNI
 		virtual void PromoteMembers();
 
 	private:
-		static SNI_Class *m_Class;
-
 		SNI_WorldSet *m_WorldSet;
 		SN::SN_String m_Source;
 		SN::SN_Expression m_Start;

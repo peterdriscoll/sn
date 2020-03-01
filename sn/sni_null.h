@@ -14,6 +14,10 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Null);
 	public:
+		static SNI_Class *m_Class;
+		static SNI_Class *Class();
+		virtual SNI_Class *VClass();
+
 		SNI_Null();
 		SNI_Null(const SNI_Null &p_Other);
 		virtual ~SNI_Null();

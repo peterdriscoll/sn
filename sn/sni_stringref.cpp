@@ -34,6 +34,11 @@ namespace SNI
 		return m_Class;
 	}
 
+	SNI_Class *SNI_StringRef::VClass()
+	{
+		return Class();
+	}
+
 	SNI_StringRef::SNI_StringRef()
 		: m_WorldSet(NULL)
 	{
@@ -1202,17 +1207,6 @@ namespace SNI
 	{
 		m_End = p_Expression;
 		REQUESTPROMOTION(m_End.GetSNI_ExpressionRef());
-	}
-
-	// Inheritance
-	SN::SN_Error  SNI_StringRef::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)
-	{
-		return p_Result.AssertValue(Class()->DoIsA(p_Parent));
-	}
-
-	SN::SN_Value SNI_StringRef::DoIsA(const SNI_Value * p_Parent) const
-	{
-		return Class()->DoIsA(p_Parent);
 	}
 
 	SN::SN_Value SNI_StringRef::DoEscape(enum skynet::EscapeType p_EscapeType) const

@@ -53,7 +53,9 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Virtual);
 	public:
-		static SNI_Class * Class();
+		static SNI_Class *m_Class;
+		static SNI_Class *Class();
+		virtual SNI_Class *VClass();
 
 		SNI_Virtual();
 		virtual ~SNI_Virtual();
@@ -66,8 +68,6 @@ namespace SNI
 		virtual size_t Hash() const;
 
 		virtual bool IsFixed() const;
-
-		virtual SN::SN_Value DoIsA(const SNI_Value * p_Parent) const;
 
 		virtual void Fix();
 
@@ -86,8 +86,6 @@ namespace SNI
 		ConstructionTree *BuildTree();
 		SN::SN_Expression CreateImplementation();
 		void BuildImplementation();
-
-		static SNI_Class *m_Class;
 
 		vector<SN::SN_Expression> m_CallList;
 		long m_DefineId;

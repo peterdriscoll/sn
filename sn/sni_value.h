@@ -43,6 +43,9 @@ namespace SNI
 		virtual SN::SN_Value DoOr(SNI_Expression * p_Other) const;
 		virtual SN::SN_Value DoUnaryOr() const;
 		virtual SN::SN_Value DoBuildSet() const;
+		
+		virtual SN::SN_Error AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result);
+		virtual SN::SN_Value DoIsA(const SNI_Value * p_Parent) const;
 	};
 
 	typedef vector<SNI_Value> SNI_ValueList;

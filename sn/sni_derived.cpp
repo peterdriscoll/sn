@@ -25,6 +25,11 @@ namespace SNI
 		return m_Class;
 	}
 
+	SNI_Class *SNI_Derived::VClass()
+	{
+		return Class();
+	}
+
 	SNI_Derived::SNI_Derived()
 	: m_Fixed(false)
 	, m_DefineId(0)
@@ -96,12 +101,6 @@ namespace SNI
 	bool SNI_Derived::IsFixed() const
 	{
 		return m_Fixed;
-	}
-
-	// Inheritance
-	SN::SN_Value SNI_Derived::DoIsA(const SNI_Value * p_Parent) const
-	{
-		return Class()->DoIsA(p_Parent);
 	}
 
 	void SNI_Derived::Fix()

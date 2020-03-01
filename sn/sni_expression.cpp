@@ -914,6 +914,11 @@ namespace SNI
 	}
 
 	// Inheritance
+	SNI_Class *SNI_Expression::VClass()
+	{
+		return NULL;
+	}
+
 	SN::SN_Value SNI_Expression::DoIsA(const SNI_Value * p_Parent) const
 	{
 		return SN::SN_Error(false, false, GetTypeName() + " IsA function not implemented.");

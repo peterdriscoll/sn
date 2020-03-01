@@ -24,6 +24,7 @@ namespace SNI
 		PGC_CLASS(SNI_Domain);
 	public:
 		static SNI_Class * Class();
+		virtual SNI_Class * VClass();
 
 		SNI_Domain(const string &p_Name);
 		virtual ~SNI_Domain();
@@ -35,8 +36,6 @@ namespace SNI
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 		virtual size_t Hash() const;
 
-		virtual SN::SN_Error AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result);
-		virtual SN::SN_Value DoIsA(const SNI_Value * p_Parent) const;
 
 		virtual SN::SN_Error AssertSubscriptValue(const SNI_Value *p_Index, SN::SN_Expression p_Result);
 		virtual SN::SN_Expression operator[](const string & p_Index);

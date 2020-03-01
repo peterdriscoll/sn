@@ -29,6 +29,11 @@ namespace SNI
 		return m_Class;
 	}
 
+	SNI_Class *SNI_String::VClass()
+	{
+		return Class();
+	}
+
 	SNI_String::SNI_String()
 	{
 	}
@@ -292,17 +297,6 @@ namespace SNI
 			return value.AssertValue(this);
 		}
 		return SN::SN_Error(Equivalent(p_Value.GetSNI_Expression()), false);
-	}
-
-	// Inheritance
-	SN::SN_Error  SNI_String::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)
-	{
-		return p_Result.AssertValue(Class()->DoIsA(p_Parent));
-	}
-
-	SN::SN_Value SNI_String::DoIsA(const SNI_Value * p_Parent) const
-	{
-		return Class()->DoIsA(p_Parent);
 	}
 
 	//-----------------------------------------------------------------------

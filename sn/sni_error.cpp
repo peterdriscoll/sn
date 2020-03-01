@@ -23,6 +23,21 @@ namespace SNI
 		g_ErrorHandledDepth--;
 	}
 
+	/*static*/ SNI_Class *SNI_Error::m_Class = NULL;
+	/*static*/ SNI_Class *SNI_Error::Class()
+	{
+		if (!m_Class)
+		{
+			m_Class = new SNI_Class("Error");
+		}
+		return m_Class;
+	}
+
+	SNI_Class *SNI_Error::VClass()
+	{
+		return Class();
+	}
+
 	SNI_Error::SNI_Error()
 	{
 	}

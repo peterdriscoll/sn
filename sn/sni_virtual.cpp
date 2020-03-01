@@ -116,6 +116,11 @@ namespace SNI
 		return m_Class;
 	}
 
+	SNI_Class *SNI_Virtual::VClass()
+	{
+		return Class();
+	}
+
 	SNI_Virtual::SNI_Virtual()
 	: m_Fixed(false)
 	, m_DefineId(0)
@@ -213,11 +218,6 @@ namespace SNI
 		return m_Fixed;
 	}
 
-	// Inheritance
-	SN::SN_Value SNI_Virtual::DoIsA(const SNI_Value * p_Parent) const
-	{
-		return Class()->DoIsA(p_Parent);
-	}
 
 	void SNI_Virtual::Fix()
 	{
