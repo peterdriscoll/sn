@@ -623,7 +623,7 @@ namespace SNI
 		{
 			return SN::SN_Expression(m_Value).PartialAssertValue(p_Expression);//Equivalent(dynamic_cast<SNI_Object>(p_Expression.GetSNI_Expression()));
 		}
-		return false; // to be implemented, or too hard
+		return skynet::Fail; // to be implemented, or too hard
 	}
 
 	SN::SN_Expression SNI_Variable::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const

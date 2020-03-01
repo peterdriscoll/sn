@@ -1004,7 +1004,6 @@ namespace test_sn
 
 		TEST_METHOD(TestChurchDivide)
 		{
-			return;
 			Initialize();
 			{
 				Manager manager("Test Church Divide", AssertErrorHandler);
