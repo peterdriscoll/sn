@@ -2736,29 +2736,6 @@ namespace test_sn
 			Cleanup();
 		}
 
-		TEST_METHOD(TestInheritPolymorphicCall)
-		{
-			return; // bark
-			Initialize();
-			{
-				Manager manager("Test Inherit Polymorphic Call", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
-
-				SN_DECLARE(A);
-				SN_DECLARE(B);
-				SN_DECLARE(M);
-				SN_DECLARE(F);
-				{
-					Transaction transaction;
-					A.IsA(B).PartialAssert().Do();
-					(F(B) == Long(10)).Assert().Do();
-					M(B).Assert().Do();
-					(F(A) == Long(10)).Evaluate().Do();
-				}
-			}
-			Cleanup();
-		}
-
 		TEST_METHOD(TestMappingForward)
 		{
 			Initialize();
@@ -2784,7 +2761,7 @@ namespace test_sn
 
 		TEST_METHOD(TestMappingForwardValueset)
 		{
-			return;
+			return; // Valid test. Needs investigation.
 			Initialize();
 			{
 				Manager manager("Test Mapping Forward Valueset", AssertErrorHandler);
@@ -3013,7 +2990,6 @@ namespace test_sn
 
 		TEST_METHOD(TestVirtual)
 		{
-			return;
 			Initialize();
 			{
 				Manager manager("Test Virtual", AssertErrorHandler);

@@ -99,6 +99,10 @@ namespace SNI
 
 	SN::SN_Expression ConstructionTree::BuildCondition(size_t p_Depth, SN::SN_Expression p_ElseCondition, SN::SN_Variable p_ParameterVariable)
 	{
+		if (m_Parameter.IsVariable() && !m_Parameter.IsKnownValue())
+		{
+			return BuildExpression(p_Depth - 1);
+		}
 		return p_ParameterVariable.IsA(m_Parameter).If(BuildExpression(p_Depth - 1), p_ElseCondition);
 	}
 
