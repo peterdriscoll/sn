@@ -163,8 +163,13 @@ namespace SNI
 		}
 		ChangeValue(SNI_Variable *p_Variable)
 			: m_FrameName(p_Variable->FrameName())
-			, m_Value(p_Variable->GetSafeValue()->Copy())
+			, m_Value(NULL)
 		{
+			const SNI_Expression *value = p_Variable->GetSafeValue();
+			if (value)
+			{
+				m_Value = value->Copy();
+			}
 		}
 		ChangeValue(const ChangeValue &p_Other)
 			: m_FrameName(p_Other.m_FrameName)
@@ -179,7 +184,11 @@ namespace SNI
 
 		string DisplaySN(SNI_DisplayOptions &p_DisplayOptions) const
 		{
-			return m_Value->DisplaySN(0, p_DisplayOptions);
+			if (m_Value)
+			{
+				return m_Value->DisplaySN(0, p_DisplayOptions);
+			}
+			return "Created";
 		}
 	};
 

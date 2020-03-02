@@ -471,24 +471,29 @@ namespace SNI
 
 	void SNI_Thread::RegisterChange(SNI_Variable * p_Variable)
 	{
-		ChangeKey changeKey(m_ThreadStepCount, p_Variable);
-		auto it = m_ChangeMap.find(changeKey);
-		if (it == m_ChangeMap.end())
+		if (p_Variable && p_Variable->GetName().substr(0, 1) != "_")
 		{
-			ChangeValue changeValue(p_Variable);
-			m_ChangeMap[changeKey] = changeValue;
+			ChangeKey changeKey(m_ThreadStepCount, p_Variable);
+			m_ChangeMutex.lock();
+			auto it = m_ChangeMap.find(changeKey);
+			if (it == m_ChangeMap.end())
+			{
+				ChangeValue changeValue(p_Variable);
+				m_ChangeMap[changeKey] = changeValue;
+			}
+			m_ChangeMutex.unlock();
 		}
 	}
 
-	string SNI_Thread::ChangeJS(enum DisplayOptionType p_OptionType)
+	string SNI_Thread::ChangeHistoryJS(enum DisplayOptionType p_OptionType, size_t p_ColumnWidth, size_t p_FromStep, size_t p_ToStep)
 	{
 		stringstream ss;
 		SNI_Manager *manager = GetTopManager(false);
-		cout << "ChangeJS\n";
+		cout << "ChangeHistoryJS\n";
 		if (manager)
 		{
 			SNI_DisplayOptions l_DisplayOptions(p_OptionType);
-			WriteChangeJS(ss, l_DisplayOptions);
+			WriteChangeHistoryJS(ss, l_DisplayOptions, p_ColumnWidth, p_FromStep, p_ToStep);
 		}
 		else
 		{
@@ -497,50 +502,80 @@ namespace SNI
 		return ss.str();
 	}
 
-	void SNI_Thread::WriteChangeJS(ostream &p_Stream, SNI::SNI_DisplayOptions &p_DisplayOptions)
+	void SNI_Thread::WriteChangeHistoryJS(ostream &p_Stream, SNI::SNI_DisplayOptions &p_DisplayOptions, size_t p_ColumnWidth, size_t p_FromStep, size_t p_ToStep)
 	{
-		p_Stream << "{\"records\":[\n";
+		p_Stream << "{\"records\":[";
 		set<string> rowChanges;
 		vector<string> rowVector;
+		string delimeter1 = "\n";
+		m_ChangeMutex.lock();
+		SNI_DisplayOptions textDisplayOptions(doTextOnly);
 
-		Unlock();
-		for (size_t stepCount = 0; stepCount <= m_ThreadStepCount; stepCount++)
+		for (size_t stepCount = p_FromStep; stepCount <= m_ThreadStepCount && stepCount <= p_ToStep ; stepCount++)
 		{
-			for (auto it = m_ChangeMap.find(ChangeKey(stepCount));
-				it->first.GetStepCount() == stepCount; it++)
+			bool changes = false;
+			for (auto it = m_ChangeMap.lower_bound(ChangeKey(stepCount));
+				it != m_ChangeMap.end() && it->first.GetStepCount() == stepCount;
+				it++)
 			{
-				if (rowChanges.find(it->first.GetName()) == rowChanges.end())
+				string name = it->first.GetName();
+				changes = true;
+				if (rowChanges.find(name) == rowChanges.end())
 				{
-					rowVector.push_back(it->first.GetName());
+					rowChanges.insert(name);
+					rowVector.push_back(name);
 				}
 			}
-			p_Stream << "\t\"stepcount\":" << to_string(stepCount)<< "\n";
-			p_Stream << "\t\"variables\":{\n";
-			for (const string &name : rowVector)
+			if (changes)
 			{
-				auto itLoop = m_ChangeMap.find(ChangeKey(stepCount, name));
-				p_Stream << "\t\t[\n";
-				if (itLoop == m_ChangeMap.end())
+				p_Stream << delimeter1 << "\t{\n";
+				delimeter1 = ",\n";
+				p_Stream << "\t\t\"stepcount\":" << to_string(stepCount) << ",\n";
+				p_Stream << "\t\t\"variables\":[";
+				string delimeter2 = "\n";
+				for (const string &name : rowVector)
 				{
-					p_Stream << "\t\t\t\"name\" : \"\",\n";
-					p_Stream << "\t\t\t\"framename\" : \"\",\n";
-					p_Stream << "\t\t\t\"value\" : \"\"\n";
-				}
-				else
-				{
-					string description = itLoop->second.DisplaySN(p_DisplayOptions);
-					string abbreviation = description.substr(0, 20);
+					auto itLoop = m_ChangeMap.find(ChangeKey(stepCount, name));
+					p_Stream << delimeter2 << "\t\t\t{\n";
+					delimeter2 = ",\n";
+					if (itLoop == m_ChangeMap.end())
+					{
+						p_Stream << "\t\t\t\t\"name\" : \"\",\n";
+						p_Stream << "\t\t\t\t\"nabbreviation\" : \"\",\n";
+						p_Stream << "\t\t\t\t\"framename\" : \"\",\n";
+						p_Stream << "\t\t\t\t\"vabbreviation\" : \"\",\n";
+						p_Stream << "\t\t\t\t\"value\" : \"\"\n";
+					}
+					else
+					{
+						string frameName = itLoop->second.GetFrameName();
+						string nabbreviation = frameName.substr(0, p_ColumnWidth-3);
+						if (nabbreviation.length() == frameName.length())
+						{
+							nabbreviation = "";
+						}
 
-					p_Stream << "\t\t\t\"name\" : \"" << name << "\",\n";
-					p_Stream << "\t\t\t\"framename\" : \"" << itLoop->second.GetFrameName() << "\",\n";
-					p_Stream << "\t\t\t\"abbreviation\" : \"" << EscapeStringToJSON(abbreviation) << "\",\n";
-					p_Stream << "\t\t\t\"value\" : \"" << EscapeStringToJSON(description) << "\",\n";
+						string htmlDescription = itLoop->second.DisplaySN(p_DisplayOptions);
+						string textDescription = itLoop->second.DisplaySN(textDisplayOptions);
+						string vabbreviation = textDescription.substr(0, p_ColumnWidth-3);
+						if (vabbreviation.length() == textDescription.length())
+						{
+							vabbreviation = "";
+						}
+			
+						p_Stream << "\t\t\t\t\"name\" : \"" << name << "\",\n";
+						p_Stream << "\t\t\t\t\"nabbreviation\" : \"" << nabbreviation << "\",\n";
+						p_Stream << "\t\t\t\t\"framename\" : \"" << frameName << "\",\n";
+						p_Stream << "\t\t\t\t\"vabbreviation\" : \"" << EscapeStringToJSON(vabbreviation) << "\",\n";
+						p_Stream << "\t\t\t\t\"value\" : \"" << EscapeStringToJSON(htmlDescription) << "\"\n";
+					}
+					p_Stream << "\t\t\t}";
 				}
-				p_Stream << "\t\t]\n";
+				p_Stream << "\n\t\t]\n";
+				p_Stream << "\n\t}";
 			}
-			p_Stream << "\t\n";
 		}
-		Unlock();
+		m_ChangeMutex.unlock();
 		p_Stream << "\n]}\n";
 	}
 

@@ -152,9 +152,12 @@ namespace SNI
 				m_response_data = l_thread->StackJS(maxStackFrames, debugJS);
 				m_extension = "json";
 			}
-			else if (path == "/changejs")
+			else if (path == "/changehistoryjs")
 			{
-				m_response_data = l_thread->ChangeJS(debugJS);
+				size_t fromstep = atol(umap["fromstep"].c_str());
+				size_t tostep = atol(umap["tostep"].c_str());
+				size_t columnwidth = atol(umap["columnwidth"].c_str());
+				m_response_data = l_thread->ChangeHistoryJS(debugJS, columnwidth, fromstep, tostep);
 				m_extension = "json";
 			}
 			else if (path == "/logjs")

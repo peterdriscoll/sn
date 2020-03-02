@@ -233,7 +233,7 @@ namespace SNI
 
 	SNI_Expression * SNI_Expression::Copy() const
 	{
-		return NULL;
+		return const_cast<SNI_Expression *>(this);
 	}
 
 	/* static */ SN::SN_Expression SNI_Expression::AddLambdasPartial(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result)

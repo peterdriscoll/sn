@@ -8,6 +8,11 @@ namespace SNI
 	{
 	}
 
+	SNI_Namable::SNI_Namable(const string &p_Name)
+	{
+		m_Name = p_Name;
+	}
+
 	SNI_Namable::~SNI_Namable()
 	{
 	}
@@ -20,6 +25,7 @@ namespace SNI
 	void SNI_Namable::SetName(const string &p_Name)
 	{
 		m_Name = p_Name;
+		SNI_Thread::GetThread()->RegisterChange(dynamic_cast<SNI_Variable *>(this));
 	}
 
 	string SNI_Namable::GetDomainName() const

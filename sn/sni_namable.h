@@ -14,6 +14,7 @@ namespace SNI
 	{
 	public:
 		SNI_Namable();
+		SNI_Namable(const string & p_Name);
 		virtual ~SNI_Namable();
 
 		string GetName() const;

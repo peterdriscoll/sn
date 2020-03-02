@@ -28,11 +28,11 @@ namespace SNI
 {
 	long m_MaxTempNum = 0;
 	SNI_Variable::SNI_Variable()
-		: m_Value(NULL)
+		: SNI_Namable("_t" + to_string(++m_MaxTempNum))
+		, m_Value(NULL)
 		, m_Frame(NULL)
 		, m_Requested(false)
 	{
-		SetName("_t" + to_string(++m_MaxTempNum));
 	}
 
 	SNI_Variable::SNI_Variable(const string &p_Name)
@@ -76,6 +76,7 @@ namespace SNI
 		if (m_Value)
 		{
 			m_Value->Complete();
+			SNI_Thread::GetThread()->RegisterChange(dynamic_cast<SNI_Variable *>(this));
 		}
 	}
 
@@ -191,7 +192,12 @@ namespace SNI
 			}
 			else
 			{
-				m_Value = m_Value->SimplifyValue().GetSNI_Expression();
+				SNI_Expression *value = m_Value->SimplifyValue().GetSNI_Expression();
+				if (value != m_Value)
+				{
+					m_Value = value;
+					SNI_Thread::GetThread()->RegisterChange(dynamic_cast<SNI_Variable *>(this));
+				}
 			}
 		}
 	}
@@ -251,6 +257,7 @@ namespace SNI
 				REQUESTPROMOTION(m_Value);
 			}
 			return m_Value->AddValue(p_Value, p_NumWorlds, p_WorldList, p_WorldSet);
+			SNI_Thread::GetThread()->RegisterChange(dynamic_cast<SNI_Variable *>(this));
 		}
 		else
 		{
@@ -549,6 +556,7 @@ namespace SNI
 				REQUESTPROMOTION(m_Value);
 			}
 			return m_Value->AddValue(p_Value, 0, NULL, NULL);
+			SNI_Thread::GetThread()->RegisterChange(dynamic_cast<SNI_Variable *>(this));
 		}
 		else
 		{
@@ -563,6 +571,7 @@ namespace SNI
 
 				SNI_DelayedCall *call = dynamic_cast<SNI_DelayedCall *>(m_Value);
 				m_Value = p_Value.GetSNI_Expression();
+				SNI_Thread::GetThread()->RegisterChange(dynamic_cast<SNI_Variable *>(this));
 				REQUESTPROMOTION(m_Value);
 				if (call)
 				{
@@ -594,6 +603,7 @@ namespace SNI
 						m_Value = var->m_Value;
 						REQUESTPROMOTION(m_Value);
 					}
+					SNI_Thread::GetThread()->RegisterChange(dynamic_cast<SNI_Variable *>(this));
 					LOG(WriteVariable(SN::DebugLevel, this));
 					return skynet::OK;
 				}
@@ -609,6 +619,7 @@ namespace SNI
 				}
 
 				m_Value = p_Expression.GetSNI_Expression();
+				SNI_Thread::GetThread()->RegisterChange(dynamic_cast<SNI_Variable *>(this));
 				REQUESTPROMOTION(m_Value);
 				LOG(WriteVariable(SN::DebugLevel, this));
 				return skynet::OK;
@@ -701,6 +712,7 @@ namespace SNI
 		else
 		{
 			m_Value = AddLambdas(p_ParameterList).GetSNI_Expression();
+			SNI_Thread::GetThread()->RegisterChange(dynamic_cast<SNI_Variable *>(this));
 			REQUESTPROMOTION(m_Value);
 			return skynet::OK;
 		}
@@ -720,6 +732,7 @@ namespace SNI
 		else
 		{
 			m_Value = AddLambdasPartial(p_ParameterList, p_Result).GetSNI_Expression();
+			SNI_Thread::GetThread()->RegisterChange(dynamic_cast<SNI_Variable *>(this));
 			REQUESTPROMOTION(m_Value);
 			return skynet::OK;
 		}
@@ -730,6 +743,7 @@ namespace SNI
 		if (!m_Value)
 		{
 			m_Value = p_Call;
+			SNI_Thread::GetThread()->RegisterChange(dynamic_cast<SNI_Variable *>(this));
 			REQUESTPROMOTION(m_Value);
 		}
 		else if (m_Value->IsVariable())
@@ -744,6 +758,7 @@ namespace SNI
 		if (value != this)
 		{
 			m_Value = value;
+			SNI_Thread::GetThread()->RegisterChange(dynamic_cast<SNI_Variable *>(this));
 			REQUESTPROMOTION(m_Value);
 		}
 	}

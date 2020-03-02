@@ -1006,6 +1006,9 @@
     <None Include="..\html\help_start.html">
       <Filter>HTML Files</Filter>
     </None>
+    <None Include="..\html\changehistoryjs.html">
+      <Filter>HTML Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\html\favicon.ico">

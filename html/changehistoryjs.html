@@ -32,13 +32,60 @@
 
         <p class='clear'></p>
         <table class='thread'>
+            <caption>Threads</caption>
+            <tr>
+                <td ng-repeat="sc in stepcounts">
+                    <form ng-submit='setthread(sc.threadnum)'>
+                        <input type='submit' name='threadnum' value='{{sc.threadnum}} : {{sc.stepcount}}' />
+                    </form>
+                </td>
+            </tr>
+        </table>
+        <form ng-submit='load("dummy")'>
+            <label for="fromstep">From steps:</label>
+            <input type="number" id="fromstep" name="fromstep" min="0" ng-model='fromstep'>
+            <label for="tostep">to:</label>
+            <input type="number" id="tostep" name="tostep" min="0" ng-model='tostep'>
+            <label for="columnwidth">to:</label>
+            <input type="number" id="columnwidth" name="columnwidth" min="0" max="40" ng-model='columnwidth'>
+            <input type="submit" value="Load">
+        </form>
+        <table class='noborders'>
             <caption>Change History</caption>
             <tr ng-repeat="line in changes">
-                <td ng-repeat="v in line.variables">
-                    {{v.framename}}
+                <td>
+                    <table class='frame'>
+                        <tr>
+                            <td style="min-width:10ch">
+                                Step Count
+                            </td>
+                            <td style="min-width:{{columnwidth}}ch" ng-repeat="v in line.variables">
+                                <details ng-if="v.nabbreviation">
+                                    <summary>{{v.nabbreviation}}...</summary>
+                                    {{v.framename}}
+                                </details>
+                                <div ng-if="!v.nabbreviation"> {{v.framename}} </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="min-width:10ch">
+                                {{line.stepcount}}
+                            </td>
+                            <td style="min-width:{{columnwidth}}ch" ng-repeat="v in line.variables">
+                                <details ng-if="v.vabbreviation">
+                                    <summary>{{v.vabbreviation}}...</summary>
+                                    <p ng-bind-html="trustAsHtml(v.value)" init-bind></p>
+                                </details>
+                                <div ng-if="!v.vabbreviation" ng-bind-html="trustAsHtml(v.value)" init-bind><br /></div>
+                            </td>
+                        </tr>
+                    </table>
                 </td>
             </tr>
             <tr>
+                <td>
+                    {{line.stepcount}}
+                </td>
                 <td ng-repeat="v in line.variables">
                     <details>
                         <summary>{{v.abbreviation}}...</summary>
@@ -62,6 +109,10 @@
         app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $window, $document) {
             $scope.trustAsHtml = $sce.trustAsHtml;
             $scope.threadnum = 0;
+            $scope.fromstep = 0;
+            $scope.tostep = 0;
+            $scope.columnwidth = 10;
+            $scope.stepcounts = [];
             $scope.initFirst = function () {
                 $http.get(home + 'dashboardjs?threadnum=' + $scope.threadnum)
                     .then(function (response) {
@@ -72,13 +123,20 @@
                         $scope.running = response.data.running;
                         $scope.closing = response.data.closing;
                     });
-                $http.get(home + 'changejs?threadnum=' + $scope.threadnum)
+                $http.get(home + "stepcountjs")
+                    .then(function (response) {
+                        $scope.stepcounts = response.data.records;
+                        $scope.tostep = stepcounts[0].stepcount;
+                    });
+            };
+            $scope.initFirst();
+            $scope.load = function (action) {
+                $http.get(home + 'changehistoryjs?threadnum=' + $scope.threadnum + '&columnwidth=' + $scope.columnwidth + '&fromstep=' + $scope.fromstep + '&tostep=' + $scope.tostep)
                     .then(function (response) {
                         $scope.changes = response.data.records;
                     });
             };
-            $scope.initFirst();
-        })
+         })
         .directive('initBind', function ($compile) {
             return {
                 restrict: 'A',

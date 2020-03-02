@@ -144,8 +144,8 @@ namespace SNI
 		void ScheduleCodeBreak();
 
 		void RegisterChange(SNI_Variable *p_NewValue);
-		string ChangeJS(DisplayOptionType p_OptionType);
-		void WriteChangeJS(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions);
+		string ChangeHistoryJS(DisplayOptionType p_OptionType, size_t p_ColumnWidth, size_t p_FromStep, size_t p_ToStep);
+		void WriteChangeHistoryJS(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions, size_t p_ColumnWidth, size_t p_FromStep, size_t p_ToStep);
 
 	private:
 		string StartCommand(skynet::DebugAction p_DebugAction, const string & p_Description, enum DisplayOptionType p_OptionType);
@@ -172,6 +172,7 @@ namespace SNI
 
 		size_t m_ThreadNum;
 		mutex m_Mutex;
+		mutex m_ChangeMutex;
 		SNI_DebugCommand m_DebugCommand;
 		SNI_FrameList m_FrameList;
 		size_t m_ThreadStepCount;

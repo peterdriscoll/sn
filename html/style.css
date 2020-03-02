@@ -138,6 +138,10 @@ table, tr, td {
         border: none;
     }
 
+.noborder {
+    border-style: none;
+    border-spacing: 0px;
+}
 
 .log {
     border-spacing: 2px;
