@@ -164,9 +164,8 @@ namespace SNI
 			}
 			else
 			{
-				m_InputList[j].Simplify();
-				m_InputList[j].GetSNI_Expression()->Complete();
-				m_ParamList[j] = m_InputList[j];
+				m_ParamList[j] = m_InputList[j].SimplifyValue();
+				m_ParamList[j].GetSNI_Expression()->Complete();
 			}
 		}
 		return skynet::OK;
