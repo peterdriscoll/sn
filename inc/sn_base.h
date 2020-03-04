@@ -180,6 +180,11 @@ namespace SN
 			return GetSNI_Base() && GetSNI_Base()->IsVariable();
 		}
 
+		bool IsValueHolder() const
+		{
+			return GetSNI_Base() && GetSNI_Base()->IsValueHolder();
+		}
+
 		bool IsString() const
 		{
 			return GetSNI_Base() && GetSNI_Base()->IsString();

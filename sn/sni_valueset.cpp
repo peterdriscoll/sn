@@ -128,6 +128,11 @@ namespace SNI
 		return 100;
 	}
 
+	bool SNI_ValueSet::IsValueHolder() const
+	{
+		return true;
+	}
+
 	bool SNI_ValueSet::IsComplete() const
 	{
 		if (m_WorldSet)

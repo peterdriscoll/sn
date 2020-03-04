@@ -414,6 +414,11 @@ namespace SNI
 		return false;
 	}
 
+	bool SNI_Expression::IsValueHolder() const
+	{
+		return false;
+	}
+
 	bool SNI_Expression::IsString() const
 	{
 		return false;

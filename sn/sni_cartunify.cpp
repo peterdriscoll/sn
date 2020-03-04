@@ -157,6 +157,7 @@ namespace SNI
 			{
 				SN::SN_Value simple = m_InputList[j].SimplifyValue();
 				SN::SN_Error  e = m_ParamList[j].AssertValue(simple);
+				m_ParamList[j].GetSNI_Expression()->Complete();
 				if (e.IsError())
 				{
 					return e;

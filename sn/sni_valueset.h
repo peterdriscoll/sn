@@ -42,6 +42,7 @@ namespace SNI
 		// Queries
 		bool CompareValue(const SN::SN_Value & p_Value) const;
 
+		virtual bool IsValueHolder() const;
 		virtual bool IsString() const;
 		virtual bool IsKnownValue() const;
 		virtual bool IsLeftKnownValue() const;

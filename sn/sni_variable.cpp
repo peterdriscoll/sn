@@ -125,6 +125,11 @@ namespace SNI
 		return true;
 	}
 
+	bool SNI_Variable::IsValueHolder() const
+	{
+		return true;
+	}
+
 	bool SNI_Variable::IsReferableValue() const
 	{
 		return m_Value && m_Value->IsReferableValue();

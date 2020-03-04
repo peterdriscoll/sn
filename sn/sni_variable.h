@@ -60,6 +60,7 @@ namespace SNI
 		virtual bool IsLambdaValue() const;
 		virtual bool IsStringValue() const;
 		virtual bool IsVariable() const;
+		virtual bool IsValueHolder() const;
 		virtual bool IsReferableValue() const;
 		virtual void Request();
 		virtual SNI_Expression * GetValue(bool p_Request = true) const;

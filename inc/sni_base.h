@@ -85,6 +85,7 @@ namespace SNI
 		virtual bool IsReferableValue() const = 0;
 		virtual bool IsLambdaValue() const = 0;
 		virtual bool IsVariable() const = 0;
+		virtual bool IsValueHolder() const = 0;
 		virtual bool IsString() const = 0;
 		virtual bool IsStringValue() const = 0;
 		virtual bool IsComplete() const = 0;

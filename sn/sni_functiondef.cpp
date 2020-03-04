@@ -314,7 +314,6 @@ namespace SNI
 				}
 				else if (inputList[j].IsComplete())
 				{
-					LOG(WriteLine(SN::DebugLevel, "Parameter " + to_string(j) + ": " + inputList[j].DisplaySN()));
 					if (allFound || maxCard < card)
 					{
 						LOG(WriteLine(SN::DebugLevel, "Assert start " + to_string(j) + ": " + inputList[j].DisplayValueSN()));
@@ -455,7 +454,7 @@ namespace SNI
 			{
 				for (long j = 0; j < p_Depth; j++)
 				{
-					if (p_Output[j] && !p_ParamList[j].IsVariable())
+					if (p_Output[j] && !p_ParamList[j].IsValueHolder())
 					{
 						p_InputList[j] = new SNI_Variable;
 						SNI_Frame *topFrame = SNI_Frame::Top();
@@ -468,7 +467,7 @@ namespace SNI
 			{
 				for (size_t j = 0; j < p_Depth; j++)
 				{
-					if (p_Output[j] && !p_ParamList[j].IsVariable())
+					if (p_Output[j] && !p_ParamList[j].IsValueHolder())
 					{
 						SN::SN_Value simple = p_InputList[j].SimplifyValue();
 						SNI_Frame *topFrame = SNI_Frame::Top();

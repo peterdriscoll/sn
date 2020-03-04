@@ -3529,7 +3529,6 @@ namespace test_sn
 
 		TEST_METHOD(TestValidate_IsExponential)
 		{
-			return;
 			Initialize();
 			{
 				Manager manager("Test Validate IsExponential", AssertErrorHandler);
