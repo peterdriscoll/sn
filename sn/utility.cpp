@@ -203,6 +203,11 @@ namespace SNI
 		return p_Escaped;
 	}
 
+	string EscapeStringToHTML(const string &p_Unescaped)
+	{ // Crude draft.
+		return ReplaceAll(p_Unescaped, "&", "&amp;");
+	}
+
 	string DisplayPmExpressionList(SN::SN_ExpressionList * p_ParameterList)
 	{
 		string result;

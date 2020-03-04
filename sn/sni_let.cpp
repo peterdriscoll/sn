@@ -109,6 +109,10 @@ namespace SNI
 
 		SNI_Thread::GetThread()->SetDebugId(GetDebugId());
 		SNI_Frame *topFrame = SNI_Frame::Push(this, NULL);
+
+		SNI_DisplayOptions displayOptions(doTextOnly);
+		LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": Start " + DisplaySN(0, displayOptions)));
+
 		SNI_Variable* condition_param = topFrame->CreateParameterByName("Condition", m_Condition);
 		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".AssertValue before condition check", SN::LeftId);
 
@@ -131,6 +135,7 @@ namespace SNI
 		{
 			e = m_Expression->AssertValue(p_Value);
 		}
+		LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": End " + DisplaySN(0, displayOptions)));
 		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".AssertValue after call", SN::RightId);
 		SNI_Frame::Pop();
 		return e;
@@ -186,6 +191,8 @@ namespace SNI
 
 		SNI_Thread::GetThread()->SetDebugId(GetDebugId());
 		SNI_Frame *topFrame = SNI_Frame::Push(this, NULL);
+
+		LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": Start " + DisplayUnifyExp(p_ParameterList)));
 		SNI_Variable* condition_param = topFrame->CreateParameterByName("Condition", m_Condition);
 		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before condition check", SN::LeftId);
 
@@ -214,6 +221,7 @@ namespace SNI
 			result = m_Expression->AssertValue((*p_ParameterList)[0]);
 		}
 		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after call", SN::RightId);
+		LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": End " + DisplayUnifyExp(p_ParameterList)));
 		SNI_Frame::Pop();
 		return result;
 	}

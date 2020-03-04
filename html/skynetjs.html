@@ -218,7 +218,7 @@
                                 <td>
                                     <div style='overflow-x:auto;white-space:nowrap;width:900px'>
                                         <table class='frame'>
-                                            <caption>{{ f.function }} : <span ng-bind-html="trustAsHtml(f.functioncardinality)" init-bind></span></caption>
+                                            <caption>{{f.framepos}} : {{ f.function }} : <span ng-bind-html="trustAsHtml(f.functioncardinality)" init-bind></span></caption>
                                             <tr>
                                                 <th ng-repeat="v in f.variables">{{ v.name }}</th>
                                             </tr>
@@ -263,10 +263,12 @@
                             </tr>
                         </table>
                         <br />
-                        <table class='log'>
-                            <caption>Code</caption>
-                            <tr ng-repeat="l in logexps"><td ng-bind-html="trustAsHtml(l.expression)" init-bind></td></tr>
-                        </table>
+                        <details open>
+                            <summary>Code</summary>
+                            <table class='log'>
+                                <tr ng-repeat="l in logexps"><td ng-bind-html="trustAsHtml(l.expression)" init-bind></td></tr>
+                            </table>
+                        </details>
                         <br />
                         <table class='log'>
                             <caption>Derivation</caption>
@@ -474,13 +476,30 @@
                 }
             };
             $scope.gotostepcount = function () {
-                $document[0].getElementById('gotoid').open = 0;
-                $http.get(home + 'gotostepcountjs?threadnum=' + $scope.threadnum + '&stepcount=' + $scope.stepcount)
-                    .then(function (response) { $scope.initFirst(); });
+                var field = $document[0].getElementById('gotoid');
+                if (field.open) {
+                    field.open = 0;
+                    $http.get(home + 'gotostepcountjs?threadnum=' + $scope.threadnum + '&stepcount=' + $scope.stepcount)
+                        .then(function (response) { $scope.initFirst(); });
+                }
+                else
+                {
+                    field.open = 1;
+                    field.focus();
+                }
             };
             $scope.setMaxStackFrames = function () {
-                $document[0].getElementById('maxStackFramesId').open = 0;
-                $scope.initFirst();
+                var field = $document[0].getElementById('maxStackFramesId');
+                if (field.open)
+                {
+                    field.open = 0;
+                    $scope.initFirst();
+                }
+                else
+                {
+                    field.open = 1;
+                    field.focus();
+                }
             };
             $scope.initFirst();
         })

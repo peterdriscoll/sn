@@ -44,6 +44,14 @@ namespace SNI
 	{
 	}
 
+	SNI_StringRef::SNI_StringRef(const SNI_StringRef &p_Other)
+		: m_WorldSet(p_Other.m_WorldSet)
+		, m_Source(p_Other.m_Source)
+		, m_Start(p_Other.m_Start.GetSNI_Expression()->Copy())
+		, m_End(p_Other.m_End.GetSNI_Expression()->Copy())
+	{
+	}
+
 	SNI_StringRef::SNI_StringRef(const SN::SN_Value & p_Source, const SN::SN_Expression & p_Start, const SN::SN_Expression & p_End)
 		: m_WorldSet(NULL)
 	{

@@ -50,6 +50,7 @@ namespace SNI
 	string UnescapeStringToCPPUsingQuoted(const string &p_Escaped);
 	string EscapeStringToJSON(const string &p_Unescaped);
 	string UnescapeStringToJSON(const string &p_Escaped);
+	string EscapeStringToHTML(const string &p_Unescaped);
 
 	string Pad(const string &p_Text, size_t p_Width);
 	string Trim(const string &p_Text, size_t p_Width);

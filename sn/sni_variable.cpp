@@ -677,6 +677,8 @@ namespace SNI
 		if (m_Value)
 		{
 			SNI_Expression * l_clone = m_Value->Clone(this, (*p_ParameterList)[0].GetSNI_Expression());
+
+			LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": Start " + DisplayUnifyExp(p_ParameterList)));
 			LOG(WriteClonedExpression(SN::DebugLevel, "Unify var: ", l_clone));
 
 			SNI_Frame *topFrame = SNI_Frame::Top();
@@ -692,10 +694,11 @@ namespace SNI
 			SNI_Variable *result = topFrame->GetResult();
 			result->SetValue((*p_ParameterList)[0].GetVariableValue());
 			for (size_t j = 1; j < p_ParameterList->size(); j++)
-			{
+			{ // dog dog dog
 				SNI_Variable *param = topFrame->GetVariable(j);
 				topFrame->CreateParameter(j, (*p_ParameterList)[j]);
 			}
+			LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": End " + DisplayUnifyExp(p_ParameterList)));
 			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before calculation", SN::RightId);
 
 			SNI_Frame::Pop();

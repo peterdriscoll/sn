@@ -190,6 +190,11 @@ namespace SN
 			return GetSNI_Base() && GetSNI_Base()->IsStringValue();
 		}
 
+		bool IsComplete() const
+		{
+			return GetSNI_Base() && GetSNI_Base()->IsComplete();
+		}
+
 		bool IsError() const
 		{
 			return GetSNI_Base() && GetSNI_Base()->IsError();

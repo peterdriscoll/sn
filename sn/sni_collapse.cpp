@@ -91,6 +91,7 @@ namespace SNI
 		LOGGING(SN::LogContext context("SNI_Unary::UnifyInternal ( " + p_value.DisplaySN() + " )"));
 
 		SNI_Frame::Push(this, NULL);
+		LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": Start " + p_Result.DisplayValueSN() + "=" + GetTypeName() + " " + p_value.DisplayValueSN()));
 		SNI_Frame *topFrame = SNI_Frame::Top();
 		SNI_Variable *resultParam = topFrame->CreateParameterByName("result", p_Result); // Result.
 		SNI_Variable *valueParam = topFrame->CreateParameterByName("param", p_value); // Param 1.
@@ -135,6 +136,7 @@ namespace SNI
 			valueParam->SetValue(p_Result);
 		}
 
+		LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": End " + p_Result.DisplayValueSN() + "=" + GetTypeName() + " " + p_value.DisplayValueSN()));
 		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after collapse", SN::RightId);
 		SNI_Frame::Pop();
 		return LOG_RETURN(context, err);

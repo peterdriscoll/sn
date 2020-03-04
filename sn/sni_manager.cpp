@@ -210,10 +210,12 @@ namespace SNI
 			m_Transaction.Init();
 		}
 		SNI_Thread::GetThread()->SetTopManager(this);
+		LOG(WriteHeading(SN::DebugLevel, "Start - " + m_Description));
 	}
 	
 	SNI_Manager::~SNI_Manager()
 	{
+		LOG(WriteHeading(SN::DebugLevel, "End - " + m_Description));
 		SNI_Thread::GetThread()->DebugCommand(SN::EndPoint, "Exit", SN::ExitId);
 		SNI_Thread::GetThread()->SetTopManager(m_LastManager);
 		SNI_Thread::GetThread()->ClearDependencyChecks();
@@ -512,6 +514,7 @@ namespace SNI
 		{
 			SNI_Thread::GetThread()->ScheduleCommand(p_DebugAction);
 			SNI_Log::GetLog()->SetLogBuffer(SN::DebugLevel, m_LogBufferCapacity, m_LogExpressionBufferCapacity);
+			LOG(WriteHeading(SN::DebugLevel, "Start - " + m_Description));
 			m_WebServerThread = new thread(RunServer, p_Address, p_Port, p_DocRoot);
 			m_WebServerThreadUsed = true;
 			OpenURLInBrowser("http://127.0.0.1/skynetjs.html");

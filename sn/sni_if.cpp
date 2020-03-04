@@ -184,6 +184,9 @@ namespace SNI
 	SN::SN_Expression SNI_If::UnifyArray(SN::SN_Expression * p_ParameterList, const SNI_Expression *p_Source)
 	{
 		SNI_Frame::Push(this, NULL);
+
+		SNI_DisplayOptions displayOptions(doTextOnly);
+		LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": Start " + DisplayUnify(GetNumParameters(), p_ParameterList, p_Source)));
 		SNI_Frame *topFrame = SNI_Frame::Top();
 		SNI_Variable* result_param = topFrame->CreateParameterByName("result", p_ParameterList[0]);
 		SNI_Variable* condition_param = topFrame->CreateParameterByName("condition", p_ParameterList[1]);
@@ -265,6 +268,7 @@ namespace SNI
 			}
 		);
 
+		LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": End " + DisplayUnify(GetNumParameters(), p_ParameterList, p_Source)));
 		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, typeName + ".Unify after all values", SN::RightId);
 		SNI_Frame::Pop();
 		if (!success)

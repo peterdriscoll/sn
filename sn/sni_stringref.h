@@ -25,6 +25,7 @@ namespace SNI
 		virtual SNI_Class *VClass();
 
 		SNI_StringRef();
+		SNI_StringRef(const SNI_StringRef & p_Other);
 		SNI_StringRef(const SN::SN_Value &p_Source, const SN::SN_Expression &p_Start, const SN::SN_Expression &p_End);
 		virtual ~SNI_StringRef();
 

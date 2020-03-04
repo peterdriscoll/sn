@@ -47,7 +47,7 @@ namespace SNI
 		m_LogBufferLoggingLevel = p_LoggingLevel;
 	}
 
-	void SNI_Log::WriteLine(SN::LoggingLevel p_DebugLevel, const string &p_line)
+	void SNI_Log::WriteLine(SN::LoggingLevel p_DebugLevel, const string &p_line, bool p_Heading)
 	{
 		vector<string> arrLines;
 		SNI::Split(p_line, "\n", arrLines);
@@ -64,10 +64,10 @@ namespace SNI
 				for (string & line : arrLines)
 				{
 					*stream << prefix << " | " << line << "\n";
-					stream->flush();
 					delimeter = "\n";
 					prefix = blank;
 				}
+				stream->flush();
 			}
 		}
 		if (m_LogBuffer)
@@ -76,10 +76,15 @@ namespace SNI
 			{
 				for (string & line : arrLines)
 				{
-					m_LogBuffer->WriteLine(line);
+					m_LogBuffer->WriteLine(line, p_Heading);
 				}
 			}
 		}
+	}
+
+	void SNI_Log::WriteHeading(SN::LoggingLevel p_DebugLevel, const string & p_line)
+	{
+		WriteLine(p_DebugLevel, p_line, true);
 	}
 
 	void SNI_Log::WriteFrame(SNI_Thread *p_Thread, SN::LoggingLevel p_DebugLevel, SNI_Frame * p_Frame)

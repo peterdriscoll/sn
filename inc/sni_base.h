@@ -87,6 +87,7 @@ namespace SNI
 		virtual bool IsVariable() const = 0;
 		virtual bool IsString() const = 0;
 		virtual bool IsStringValue() const = 0;
+		virtual bool IsComplete() const = 0;
 		virtual bool IsError() const = 0;
 		virtual bool IsSignificantError() const = 0;
 		virtual bool IsFixed() const = 0;

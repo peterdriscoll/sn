@@ -217,6 +217,24 @@ namespace SNI
 		return Bracket(priority, DisplaySN(GetPriority(), p_DisplayOptions), p_DisplayOptions, p_DebugSource) + "(" + text + ")";
 	}
 
+	string SNI_Expression::DisplayUnify(size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const
+	{
+		SNI_DisplayOptions displayOptions(doTextOnly);
+		return p_ParamList[0].DisplaySN() + " = " + DisplayCall(0, displayOptions, p_NumParams - 1, p_ParamList + 1, NULL);
+	}
+
+	string SNI_Expression::DisplayUnifyExp(SN::SN_ExpressionList * p_ParameterList) const
+	{
+		size_t numParams = p_ParameterList->size();
+		SNI_DisplayOptions displayOptions(doTextOnly);
+		string result = (*p_ParameterList)[0].DisplaySN() + " = " + DisplayValueSN(0, displayOptions);
+		for (size_t j = 1; j < numParams; j++)
+		{
+			result += " " + (*p_ParameterList)[numParams - j].DisplaySN();
+		}
+		return result;
+	}
+
 	SNI_Expression * SNI_Expression::Clone(SNI_Frame *p_Frame, bool &/*p_Changed*/)
 	{
 		return this;

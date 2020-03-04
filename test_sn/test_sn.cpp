@@ -3635,7 +3635,7 @@ namespace test_sn
 					(s + t == String("A2.1X dog")).Assert().Do();
 					(!validate.IsExponential(s)).Assert().Do();
 					string s_string = s.DisplayValueSN();
-					string s_part = s_string.substr(0, 37 - 6);
+					string s_part = s_string.substr(0, 37 - 5);
 					string s_comp = "StringRef(\"A2.1X dog\"[0.._split_";
 					Assert::IsTrue(s_part == s_comp);
 					string t_string = t.DisplayValueSN();

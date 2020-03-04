@@ -53,6 +53,8 @@ namespace SNI
 		string & GetDebugId();
 		void SetDebugId(const string & p_DebugId);
 
+		size_t GetStepCount();
+
 		SNI_DelayedProcessor *GetProcessor();
 
 		void DebugCommand(SN::InterruptPoint p_InterruptPoint, const string & p_Text, unsigned long p_BreakId);

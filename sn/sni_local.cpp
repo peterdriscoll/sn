@@ -69,16 +69,13 @@ namespace SNI
 		if (m_LocalVariable->IsVariable() && !m_LocalVariable->IsNullValue())
 		{
 			const SNI_Expression *value = m_LocalVariable->GetSafeValue();
-			if (value)
-			{
-				if (!dynamic_cast<const SNI_ValueSet *>(value))
-				{ // Too long to display here.
-					if (p_DisplayOptions.CheckLevel())
-					{
-						p_DisplayOptions.IncrementLevel();
-						sValue = SetStaticBreakPoint(":", p_DisplayOptions, this, SN::ValueId) + m_LocalVariable->GetSafeValue()->DisplaySN(GetPriority(), p_DisplayOptions);
-						p_DisplayOptions.DecrementLevel();
-					}
+			if (!dynamic_cast<const SNI_Value *>(value) || value->Cardinality() == 1)
+			{ // Too long to display here.
+				if (p_DisplayOptions.CheckLevel())
+				{
+					p_DisplayOptions.IncrementLevel();
+					sValue = SetStaticBreakPoint(":", p_DisplayOptions, this, SN::ValueId) + m_LocalVariable->GetSafeValue()->DisplaySN(GetPriority(), p_DisplayOptions);
+					p_DisplayOptions.DecrementLevel();
 				}
 			}
 		}

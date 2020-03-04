@@ -74,16 +74,13 @@ namespace SNI
 		if (m_FormalParameter->IsVariable() && !m_FormalParameter->IsNullValue())
 		{
 			const SNI_Expression *value = m_FormalParameter->GetSafeValue();
-			if (!dynamic_cast<const SNI_ValueSet *>(value))
+			if (!dynamic_cast<const SNI_Value *>(value) || value->Cardinality() == 1)
 			{ // Too long to display here.
-				if (value)
+				if (p_DisplayOptions.CheckLevel())
 				{
-					if (p_DisplayOptions.CheckLevel())
-					{
-						p_DisplayOptions.IncrementLevel();
-						sValue = SetStaticBreakPoint(":", p_DisplayOptions, this, SN::ValueId) + value->DisplaySN(GetPriority(), p_DisplayOptions);
-						p_DisplayOptions.DecrementLevel();
-					}
+					p_DisplayOptions.IncrementLevel();
+					sValue = SetStaticBreakPoint(":", p_DisplayOptions, this, SN::ValueId) + value->DisplaySN(GetPriority(), p_DisplayOptions);
+					p_DisplayOptions.DecrementLevel();
 				}
 			}
 		}

@@ -161,11 +161,16 @@ namespace SNI
 		m_DebugId = p_DebugId;
 	}
 
+	size_t SNI_Thread::GetStepCount()
+	{
+		return m_ThreadStepCount;
+	}
+
 	void SNI_Thread::DebugCommand(SN::InterruptPoint p_InterruptPoint, const string &p_Text, unsigned long p_BreakId)
 	{
+		m_ThreadStepCount++;
 		if (GetTopManager()->HasDebugServer())
 		{
-			m_ThreadStepCount++;
 			m_DebugCommand.SetText(p_Text);
 			string breakPoint;
 			string breakPointJS;
@@ -471,6 +476,7 @@ namespace SNI
 
 	void SNI_Thread::RegisterChange(SNI_Variable * p_Variable)
 	{
+/* Not working properly. Expensive on memory.
 		if (p_Variable && p_Variable->GetName().substr(0, 1) != "_")
 		{
 			ChangeKey changeKey(m_ThreadStepCount, p_Variable);
@@ -483,6 +489,7 @@ namespace SNI
 			}
 			m_ChangeMutex.unlock();
 		}
+*/
 	}
 
 	string SNI_Thread::ChangeHistoryJS(enum DisplayOptionType p_OptionType, size_t p_ColumnWidth, size_t p_FromStep, size_t p_ToStep)
@@ -1134,6 +1141,7 @@ namespace SNI
 
 	void SNI_Thread::PushFrame(SNI_Frame *p_Frame)
 	{
+		LOG(WriteLine(SN::DebugLevel, "Pushing stack frame " + to_string(m_FrameList.size()+1)));
 		p_Frame->SetDebugId(m_DebugId);
 		Lock();
 		m_FrameList.push_back(p_Frame);
@@ -1145,6 +1153,7 @@ namespace SNI
 		Lock();
 		m_FrameList.pop_back();
 		Unlock();
+		LOG(WriteLine(SN::DebugLevel, "Popped stack frame " + to_string(m_FrameList.size() + 1)));
 	}
 
 	size_t SNI_Thread::GetFrameStackDepth()

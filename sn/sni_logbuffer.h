@@ -18,20 +18,30 @@ namespace SNI
 	class SNI_LogLine {
 	public:
 		size_t m_Depth;
+		size_t m_StepCount;
 		string m_String;
+		bool m_Heading;
 
-		SNI_LogLine(size_t p_Depth, const string &p_String)
+		SNI_LogLine(size_t p_Depth, size_t p_StepCount, const string &p_String, bool p_Heading)
 			: m_Depth(p_Depth)
+			, m_StepCount(p_StepCount)
 			, m_String(p_String)
+			, m_Heading(p_Heading)
 		{}
+
 		SNI_LogLine(const SNI_LogLine &p_Source)
 			: m_Depth(p_Source.m_Depth)
+			, m_StepCount(p_Source.m_StepCount)
 			, m_String(p_Source.m_String)
+			, m_Heading(p_Source.m_Heading)
 		{}
+
 		SNI_LogLine &operator =(const SNI_LogLine &p_Source)
 		{
 			m_Depth = p_Source.m_Depth;
+			m_StepCount = p_Source.m_StepCount;
 			m_String = p_Source.m_String;
+			m_Heading = p_Source.m_Heading;
 			return *this;
 		}
 	};
@@ -42,7 +52,7 @@ namespace SNI
 		SNI_LogBuffer(size_t p_Capacity, size_t p_ExpressionCapacity);
 		virtual ~SNI_LogBuffer();
 
-		void WriteLine(const string &p_Line);
+		void WriteLine(const string &p_Line, bool p_Heading);
 		void WriteExpression(const SN::SN_Expression & p_Expression);
 		void ClearLogExpressions();
 		void LogTableToStream(ostream & p_Stream, long p_MaxLogEntries);
