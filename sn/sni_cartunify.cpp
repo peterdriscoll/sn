@@ -152,7 +152,6 @@ namespace SNI
 	{
 		for (size_t j = 0; j < m_Depth; j++)
 		{
-			m_InputList[j].GetSNI_Expression()->Complete();
 			if (m_Output[j])
 			{
 				SN::SN_Value simple = m_InputList[j].SimplifyValue();
@@ -162,8 +161,6 @@ namespace SNI
 				{
 					return e;
 				}
-				m_InputList[j].GetSNI_Expression()->Complete();
-				m_ParamList[j] = m_InputList[j];
 			}
 			else
 			{
