@@ -257,6 +257,9 @@ namespace SNI
 		SNI_Frame::Push(this, NULL);
 		SNI_Frame *topFrame = SNI_Frame::Top();
 
+		SNI_DisplayOptions displayOptions(doTextOnly);
+		LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": Start " + DisplayUnify(depth, p_ParamList, p_Source)));
+
 		for (long j = 0; j < depth; j++)
 		{
 			topFrame->CreateParameter(j, p_ParamList[j]);
@@ -406,6 +409,7 @@ namespace SNI
 				SNI_Thread::GetThread()->DebugCommand(SN::WarningPoint, GetTypeName() + ".Unify no constraint", SN::NoConstraintId);
 			}
 		}
+		LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": End " + DisplayUnify(depth, p_ParamList, p_Source)));
 		SNI_Frame::Pop();
 		delete[] output;
 		return e;
