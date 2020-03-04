@@ -378,14 +378,15 @@ namespace SNI
 				{
 					e = ForEachUnify(card, depth, inputList, p_ParamList, output, calcPos, totalCalc, p_Source);
 					LOG(WriteLine(SN::DebugLevel, GetLogDescription(inputList)));
-				}
-				for (long j = 0; j < depth; j++)
-				{
-					if (output[j])
+
+					for (long j = 0; j < depth; j++)
 					{
-						inputList[j].GetSNI_Expression()->Complete();
-						p_ParamList[j] = inputList[j];
-						LOG(WriteLine(SN::DebugLevel, "Parameter " + to_string(j) + " calculated: " + p_ParamList[j].DisplaySN()));
+						if (output[j])
+						{
+							inputList[j].GetSNI_Expression()->Complete();
+							p_ParamList[j] = inputList[j];
+							LOG(WriteLine(SN::DebugLevel, "Parameter " + to_string(j) + " calculated: " + p_ParamList[j].DisplaySN()));
+						}
 					}
 				}
 				SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after calculation", SN::RightId);

@@ -131,6 +131,7 @@ namespace SNI
 		virtual void Complete();
 		virtual bool IsVariable() const;
 		virtual bool IsValueHolder() const;
+		virtual bool IsValueSet() const;
 		virtual bool IsString() const;
 		virtual bool IsStringValue() const;
 		virtual bool IsNullValue() const;

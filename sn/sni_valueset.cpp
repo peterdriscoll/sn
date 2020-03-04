@@ -133,6 +133,11 @@ namespace SNI
 		return true;
 	}
 
+	bool SNI_ValueSet::IsValueSet() const
+	{
+		return true;
+	}
+
 	bool SNI_ValueSet::IsComplete() const
 	{
 		if (m_WorldSet)

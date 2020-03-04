@@ -547,7 +547,7 @@ namespace SNI
 			SN::SN_ValueSet valueSet(p_Value);
 			return valueSet.AssertValue(this);
 		}
-		return false;
+		return skynet::Fail;
 	}
 
 	SN::SN_Expression SNI_StringRef::DoEvaluate(long p_MetaLevel /* = 0 */) const
