@@ -235,6 +235,7 @@ namespace SNI
 
 					SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, typeName + ".Unify after all values", SN::PositiveId);
 					e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList, source).GetError();
+					delete[] paramList;
 				}
 				else
 				{
@@ -244,6 +245,7 @@ namespace SNI
 
 					SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, typeName + ".Unify after all values", SN::NegativeId);
 					e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList, source).GetError();
+					delete[] paramList;
 				}
 				if (p_World)
 				{

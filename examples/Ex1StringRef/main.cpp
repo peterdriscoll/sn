@@ -2,7 +2,7 @@
 #include <string>
 #include <conio.h>
 
-#include "sn.h"
+#include "snl.h"
 using namespace PGCX;
 using namespace skynet; // Interface namespace for SN.
 
@@ -35,7 +35,7 @@ void main(int argc, char *argv[])
 {
 	Manager manager; // Sets up any configuration parameters for SN
 
-	_getch();
+	int c = _getch();
 	Transaction transaction;
 	try
 	{

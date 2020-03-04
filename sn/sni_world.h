@@ -23,7 +23,8 @@ namespace SNI
 		EmptyChild,
 		MissingInResult,
 		NegatedInAllValues,
-		FailedInCollapse
+		FailedInCollapse,
+		NoReason
 	};
 
 	class SNI_WorldSet;

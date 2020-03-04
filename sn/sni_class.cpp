@@ -47,6 +47,7 @@ namespace SNI
 	}
 
 	SNI_Class::SNI_Class(const SNI_Class &p_Other)
+		: m_Fixed(false)
 	{
 	}
 

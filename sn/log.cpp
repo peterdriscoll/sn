@@ -14,11 +14,12 @@ using namespace std;
 
 namespace SN
 {
+	#define BUFFER_SIZE 100
 	string current_working_directory()
 	{
-		char* cwd = _getcwd(0, 0); // **** microsoft specific ****
+		char buffer[BUFFER_SIZE];
+		char* cwd = _getcwd(buffer, BUFFER_SIZE); // **** microsoft specific ****
 		string working_directory(cwd);
-		free(cwd);
 		return working_directory;
 	}
 

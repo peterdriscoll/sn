@@ -106,6 +106,7 @@ namespace SNI
 		, m_ThreadNum(p_ThreadNum)
 		, m_MaxStackFrames(-1)
 		, m_Closing(false)
+		, m_DebugAction(skynet::StepInto)
 		, m_Ended(false)
 		, m_DefineId(0)
 		, m_WorldSetChangedList(NULL)

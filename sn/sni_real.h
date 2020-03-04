@@ -179,11 +179,13 @@ namespace SNI
         // Arithmatic
         virtual SN::SN_Value DoAdd(SNI_Value *p_Other) const
         {
-            SN_OPERATOR_TYPE_CASES(+);
+			ASSERTM(p_Other, "Null pointer.");
+			SN_OPERATOR_TYPE_CASES(+);
         }
 
         virtual SN::SN_Value DoSubtract(SNI_Value *p_Other) const
         {
+			ASSERTM(p_Other, "Null pointer.");
             SN_OPERATOR_TYPE_CASES(-);
         }
 

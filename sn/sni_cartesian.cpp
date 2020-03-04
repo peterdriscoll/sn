@@ -50,8 +50,12 @@ namespace SNI
 	SN::SN_Error SNI_Cartesian::ForEach(std::function<SN::SN_Error(long p_Depth, SN::SN_Expression *p_ParamList, SNI_World **p_WorldList, long p_CalcPos, long p_TotalCalc)> p_Action)
 	{
 		long depth = Depth();
-
-		return Loop(0, new SN::SN_Expression[depth], new SNI_World*[depth], -1, 0, p_Action);
+		SN::SN_Expression *paramList = new SN::SN_Expression[depth];
+		SNI_World **WorldList = new SNI_World*[depth];
+		SN::SN_Error err = Loop(0, paramList, WorldList, -1, 0, p_Action);
+		delete[] paramList;
+		delete[] WorldList;
+		return err;
 	};
 
 	SN::SN_Error SNI_Cartesian::Loop(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, long p_CalcPos, long p_TotalCalc, std::function<SN::SN_Error(long p_Depth, SN::SN_Expression *p_ParamList, SNI_World **p_WorldList, long p_CalcPos, long p_TotalCalc)> p_Action)

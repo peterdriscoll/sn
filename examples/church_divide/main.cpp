@@ -2,11 +2,93 @@
 #include <string>
 #include <conio.h>
 
-#include "sn.h"
+#include "snl.h"
 using namespace PGCX;
 using namespace skynet; // Interface namespace for SN.
 
 string doc_root = "C:/Users/peter_driscoll/Documents/Source/Repos/skynet2/html";
+
+void TestValidate_IsString()
+{
+	Manager manager("Test Validate IsString");
+	manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false);
+
+	CharacterSet characterSet;
+	Validate validate(characterSet);
+
+	(!validate.IsString(String("\"D"))).Assert().Do();
+	(!validate.IsString(String("\"X\\"))).Assert().Do();
+
+	(!validate.IsString(String(""))).Assert().Do();
+	validate.IsString(String("\"\"")).Assert().Do();
+	validate.IsString(String("\"Simple string\"")).Assert().Do();
+	validate.IsString(String("\"C \\\"e\\\" q\"")).Assert().Do();
+	validate.IsString(String("\"Containing \\\"escaped\\\" quotes\"")).Assert().Do();
+	validate.IsString(String("\"Escaped backslash \\ quotes\"")).Assert().Do();
+	(!validate.IsString(String("\"Cat \" dog"))).Assert().Do();
+
+	{
+		SN_LOCAL(s);
+		SN_LOCAL(t);
+		(s + t == String(" dog")).Assert().Do();
+		(!validate.IsString(s)).Assert().Do();
+	}
+
+	{
+		SN_LOCAL(s);
+		SN_LOCAL(t);
+		(s + t == String("\"\" dog")).Assert().Do();
+		validate.IsString(s).Assert().Do();
+		(s == String("\"\"")).Evaluate().Do();
+		(t == String(" dog")).Evaluate().Do();
+		string s_string = s.GetString();
+		string t_string = t.GetString();
+		ASSERTM(s_string == "\"\"", "");
+		ASSERTM(t_string == " dog", "");
+	}
+
+	{
+		SN_LOCAL(s);
+		SN_LOCAL(t);
+		(s + t == String("\"Contaning \\\"escaped\\\" quotes\" dog")).Assert().Do();
+		validate.IsString(s).Assert().Do();
+		(s == String("\"Contaning \\\"escaped\\\" quotes\"")).Evaluate().Do();
+		(t == String(" dog")).Evaluate().Do();
+		string s_string = s.GetString();
+		string t_string = t.GetString();
+		ASSERTM(s_string == "\"Contaning \\\"escaped\\\" quotes\"", "");
+		ASSERTM(t_string == " dog", "");
+	}
+
+	{
+		SN_LOCAL(s);
+		SN_LOCAL(t);
+		(s + t == String("\"Escaped backslash \\ quotes\" dog")).Assert().Do();
+		validate.IsString(s).Assert().Do();
+		(s == String("\"Escaped backslash \\ quotes\"")).Evaluate().Do();
+		(t == String(" dog")).Evaluate().Do();
+		string s_string = s.GetString();
+		string t_string = t.GetString();
+		ASSERTM(s_string == "\"Escaped backslash \\ quotes\"", "");
+		ASSERTM(t_string == " dog", "");
+	}
+
+	{
+		SN_LOCAL(s);
+		SN_LOCAL(t);
+		(s + t == String("Not a dog")).Assert().Do();
+		(!validate.IsString(s)).Assert().Do();
+		string s_string = s.DisplayValueSN();
+		string s_part = s_string.substr(0, 37 - 5);
+		string s_comp = "StringRef(\"Not a dog\"[0.._split_";
+		ASSERTM(s_part == s_comp, "");
+		string t_string = t.DisplayValueSN();
+		string t_part = t_string.substr(0, 37 - 8);
+		string t_comp = "StringRef(\"Not a dog\"[_split_";
+		ASSERTM(t_part == t_comp, "");
+	}
+}
+
 
 void TestIsInteger()
 {
@@ -280,8 +362,12 @@ void TestChurchDivide()
 
 }
 
-
 void main(int argc, char *argv[])
+{
+	TestValidate_IsString();
+}
+
+void main2(int argc, char *argv[])
 {
 	Manager manager("Test Church Divide");
 	manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root);

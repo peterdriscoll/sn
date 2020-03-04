@@ -190,7 +190,9 @@ namespace SNI
 	SN::SN_Expression SNI_FunctionDef::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
 		SN::SN_Expression *paramList = LoadParametersCall(p_ParameterList);
-		return CallArray(paramList, p_MetaLevel);
+		SN::SN_Expression result = CallArray(paramList, p_MetaLevel);
+		delete[] paramList;
+		return result;
 	}
 
 	SN::SN_Expression SNI_FunctionDef::CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel /* = 0 */) const
@@ -286,6 +288,8 @@ namespace SNI
 		topFrame->RegisterCardinality(card);
 		size_t maxCard = SNI_Thread::TopManager()->MaxCardinalityCall();
 
+		LOG(WriteLine(SN::DebugLevel, "Card: " + to_string(card) + " Max card: " + to_string(maxCard) + " Total calc " + to_string(totalCalc)));
+
 		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before cardinality check", SN::LeftId);
 
 		for (long j = 0; j < depth; j++)
@@ -293,57 +297,40 @@ namespace SNI
 			if (!IsKnownValue(p_ParamList[j], j))
 			{
 				card = CardinalityOfUnify(depth, inputList, (long)j, totalCalc);
+				LOG(WriteLine(SN::DebugLevel, "Parameter " + to_string(j) + " " + "Card: " + to_string(card) + ": " + inputList[j].DisplaySN() + " / " + inputList[j].GetSafeValue().DisplaySN()));
 				topFrame->RegisterCardinality(card);
 				if (p_ParamList[j].IsVariable())
 				{
 					if (allFound || maxCard < card)
 					{
-						LOG(WriteLine(SN::DebugLevel, "Self Assert " + to_string(j) + ": " + inputList[j].DisplaySN()));
-
+						LOG(WriteLine(SN::DebugLevel, "Self Assert variable start " + to_string(j) ));
 						e = inputList[j].GetSNI_Expression()->SelfAssert();
 						if (e.IsError())
 						{
 							break;
 						}
 					}
-					else
-					{
-						LOG(WriteLine(SN::DebugLevel, "Parameter " + to_string(j) + ": " + inputList[j].DisplaySN()));
-					}
 				}
 				else if (!inputList[j].GetSNI_ValueSet())
 				{
-					LOG(WriteLine(SN::DebugLevel, "Parameter " + to_string(j) + ": " + inputList[j].DisplayValueSN()));
+					LOG(WriteLine(SN::DebugLevel, "Parameter " + to_string(j) + ": " + inputList[j].DisplaySN()));
 					if (allFound || maxCard < card)
 					{
+						LOG(WriteLine(SN::DebugLevel, "Assert start " + to_string(j) + ": " + inputList[j].DisplayValueSN()));
 						SNI_Variable *v = topFrame->GetVariable(j);
 						v->SetValue(SN::SN_Expression());
 						e = inputList[j].AssertValue(v);
-						if (!e.IsError() && v->GetSafeValue()!=NULL)
-						{
-							inputList[j] = v;
-							p_ParamList[j] = v;
-						}
 						if (e.IsError())
 						{
 							break;
 						}
-						else if (inputList[j].IsKnownValue())
+						else if (v->GetSafeValue()!=NULL)
 						{
-							p_ParamList[j] = inputList[j];
+							inputList[j] = v;
+							p_ParamList[j] = v;
 						}
+						LOG(WriteLine(SN::DebugLevel, "Assert value " + to_string(j) + ": " + inputList[j].DisplaySN() + "/" + inputList[j].DisplayValueSN() + (IsKnownValue(inputList[j], j)?" known":" unknown")));
 					}
-				}
-			}
-			else
-			{
-				if (inputList[j].IsVariable())
-				{
-					LOG(WriteLine(SN::DebugLevel, "Parameter " + to_string(j) + ": " + inputList[j].DisplaySN()));
-				}
-				else
-				{
-					LOG(WriteLine(SN::DebugLevel, "Parameter " + to_string(j) + ": " + inputList[j].DisplayValueSN()));
 				}
 			}
 			if (IsKnownValue(inputList[j], j))
@@ -353,11 +340,13 @@ namespace SNI
 				{
 					output[j] = false;
 					totalCalc--;
+					LOG(WriteLine(SN::DebugLevel, "Value " + to_string(j) + " found. Total calc " + to_string(totalCalc)));
 				}
 			}
 			else
 			{
 				calcPos = (long)j;
+				LOG(WriteLine(SN::DebugLevel, "Value " + to_string(j) + " is to be calculated."));
 			}
 			if (j != 0 && j != depth-1)
 			{
@@ -400,6 +389,7 @@ namespace SNI
 					{
 						inputList[j].GetSNI_Expression()->Complete();
 						p_ParamList[j] = inputList[j];
+						LOG(WriteLine(SN::DebugLevel, "Parameter " + to_string(j) + " calculated: " + p_ParamList[j].DisplaySN()));
 					}
 				}
 				SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after calculation", SN::RightId);
@@ -411,7 +401,8 @@ namespace SNI
 		}
 		LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": End " + DisplayUnify(depth, p_ParamList, p_Source)));
 		SNI_Frame::Pop();
-		delete[] output;
+		delete [] output;
+		delete[] inputList;
 		return e;
 	}
 

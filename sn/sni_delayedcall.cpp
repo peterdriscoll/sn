@@ -29,7 +29,7 @@ namespace SNI
 	SNI_DelayedCall::SNI_DelayedCall(SN::SN_FunctionDef p_Function, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_Source, SNI_Frame *p_Frame, SNI_World * p_World)
 		: m_Function(p_Function)
 		, m_NumParams(p_NumParams)
-		, m_ParamList(p_ParamList)
+		, m_ParamList(NULL)
 		, m_Source(p_Source)
 		, m_Scheduled(false)
 		, m_Locked(false)
@@ -38,10 +38,16 @@ namespace SNI
 		, m_Error(skynet::OK)
 	{
 		ASSERTM(m_NumParams == m_Function.GetSNI_FunctionDef()->GetNumParameters(), "Inconsistent number of parameters.");
+		m_ParamList = new SN::SN_Expression[m_NumParams];
+		for (long j = 0; j < m_NumParams; j++)
+		{
+			m_ParamList[j] = p_ParamList[j];
+		}
 	}
 
 	SNI_DelayedCall::~SNI_DelayedCall()
 	{
+		delete[] m_ParamList;
 	}
 
 	string SNI_DelayedCall::GetTypeName() const

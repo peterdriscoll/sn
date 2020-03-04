@@ -98,6 +98,7 @@ namespace SNI
 
 	SNI_ValueSet::SNI_ValueSet(const SNI_ValueSet &)
 		: m_WorldSet(NULL)
+		, m_Variable(NULL)
 	{
 	}
 
@@ -665,6 +666,7 @@ namespace SNI
 			LOGGING(callRecord->SetLogContext(context));
 			e.GetSNI_Error()->AddNote(callRecord);
 		}
+		delete[] paramList;
 		return e;
 	}
 
@@ -738,6 +740,7 @@ namespace SNI
 						{
 							SN::SN_Expression *param_List = functionDef->LoadParametersUnify(&paramListClone);
 							function = functionDef->UnifyArray(param_List, this).GetSNI_Expression();
+							delete[] param_List;
 						}
 						else
 						{

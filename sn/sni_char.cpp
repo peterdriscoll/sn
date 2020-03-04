@@ -26,6 +26,7 @@ namespace SNI
 	}
 
 	SNI_Char::SNI_Char()
+		: m_Char(' ')
 	{
 
 	}

@@ -73,6 +73,7 @@ namespace SN
 		SN_Expression IsA(const SN_Expression &p_Parent) const;
 
 		SNI::SNI_String * GetSNI_String() const;
+		SNI::SNI_StringRef * GetSNI_StringRef() const;
 	};
 }
 

@@ -41,11 +41,13 @@ namespace PGC
 		}
 		SRef(const RefBase &p_Other)
 			: RefBase(p_Other.Ptr())
+			, m_LiveTransaction(false)
 		{
 			SetLiveTransaction();
 		}
 		SRef(T *p_Object)
 			: RefBase(p_Object)
+			, m_LiveTransaction(false)
 		{
 			SetLiveTransaction();
 		}
@@ -155,6 +157,7 @@ namespace PGC
 		}
 		Ref(T *p_Pointer)
 			: m_Pointer(p_Pointer)
+			, m_Transaction(NULL)
 		{
 			//PGC_Base::CaptureMember((PGC_Base **)&m_Pointer);
 			RequestPromotion();

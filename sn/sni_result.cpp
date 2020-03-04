@@ -13,6 +13,10 @@
 namespace SNI
 {
 	SNI_Result::SNI_Result()
+		: m_Result(true)
+		, m_Delay(false)
+		, m_Call(NULL)
+		, m_Error(NULL)
 	{
 	}
 

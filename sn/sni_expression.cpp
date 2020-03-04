@@ -220,7 +220,7 @@ namespace SNI
 	string SNI_Expression::DisplayUnify(size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const
 	{
 		SNI_DisplayOptions displayOptions(doTextOnly);
-		return p_ParamList[0].DisplaySN() + " = " + DisplayCall(0, displayOptions, p_NumParams - 1, p_ParamList + 1, NULL);
+		return "dummy"; // p_ParamList[0].DisplaySN() + " = " + DisplayCall(0, displayOptions, p_NumParams - 1, p_ParamList + 1, NULL);
 	}
 
 	string SNI_Expression::DisplayUnifyExp(SN::SN_ExpressionList * p_ParameterList) const

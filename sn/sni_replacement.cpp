@@ -7,6 +7,8 @@
 namespace SNI
 {
 	SNI_Replacement::SNI_Replacement()
+		: m_From(NULL)
+		, m_To(NULL)
 	{
 	}
 

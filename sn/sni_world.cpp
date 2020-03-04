@@ -26,6 +26,7 @@ namespace SNI
 		, m_Active(false)
 		, m_WorldSet(p_WorldSet)
 		, m_CloneParent(p_CloneParent)
+		, m_Reason(NoReason)
 	{
 		if (m_WorldSet)
 		{

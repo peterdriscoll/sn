@@ -8,6 +8,8 @@ namespace PGC
 {
 	PGC_Block::PGC_Block(PGC_Block *p_LastBlock)
 		: m_NextBlock(NULL)
+		, m_end(NULL)
+		, m_current(NULL)
 	{
 		if (p_LastBlock)
 		{

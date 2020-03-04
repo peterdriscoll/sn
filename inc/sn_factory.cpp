@@ -35,7 +35,7 @@ namespace SN
 
 	typedef long(*f_entrypoint)(long id);
 
-	f_entrypoint libraryFunctionArray[LastLibrary - 1];
+	f_entrypoint libraryFunctionArray[LastLibrary];
 	void InitlibraryFunctionArray()
 	{
 		for (long j = 0; j < LastLibrary; j++)

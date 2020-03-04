@@ -401,7 +401,14 @@ namespace SNI
 
 	const string &SNI_StringRef::GetSourceString() const
 	{
-		return m_Source.GetSNI_String()->GetSourceString();
+		SNI_StringRef *source = m_Source.GetSNI_StringRef();
+		SNI_String *s = m_Source.GetSNI_String();
+		while (source)
+		{
+			s = source->m_Source.GetSNI_String();
+			source = source->m_Source.GetSNI_StringRef();
+		}
+		return s->GetSourceString();
 	}
 
 	long SNI_StringRef::GetLeftMostPos() const

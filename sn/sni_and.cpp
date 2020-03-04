@@ -192,6 +192,7 @@ namespace SNI
 				SNI_CallRecord *callRecord = new SNI_CallRecord("And of first parameter.", this);
 				e1.GetSNI_Error()->AddNote(callRecord);
 			}
+			delete[] firstParamList;
 			return e1;
 		}
 
@@ -201,6 +202,10 @@ namespace SNI
 		secondParamList[1] = firstParamList[1];
 		secondParamList[2] = p_ParameterList[2];
 		SN::SN_Error e2 = SNI_Binary::UnifyArray(secondParamList, p_Source).GetError();
+
+		delete[] firstParamList;
+		delete[] secondParamList;
+
 		if (e2.IsSignificantError())
 		{
 			SNI_CallRecord *callRecord = new SNI_CallRecord("And of second parameter with first result.", this);

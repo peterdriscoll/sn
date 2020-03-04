@@ -3663,8 +3663,8 @@ namespace test_sn
 				(!validate.IsString(String(""))).Assert().Do();
 				validate.IsString(String("\"\"")).Assert().Do();
 				validate.IsString(String("\"Simple string\"")).Assert().Do();
-				validate.IsString(String("\"Containing \\\"escaped\\\" quotes\"")).Assert().Do();
-				validate.IsString(String("\"Escaped backslash \\ quotes\"")).Assert().Do();
+				validate.IsString(String("\"C \\\"e\\\" q\"")).Assert().Do();
+				validate.IsString(String("\"E \\ q\"")).Assert().Do();
 				(!validate.IsString(String("\"Cat \" dog"))).Assert().Do();
 
 				{
@@ -3690,26 +3690,26 @@ namespace test_sn
 				{
 					SN_LOCAL(s);
 					SN_LOCAL(t);
-					(s + t == String("\"Contaning \\\"escaped\\\" quotes\" dog")).Assert().Do();
+					(s + t == String("\"C \\\"e\\\" quotes\" dog")).Assert().Do();
 					validate.IsString(s).Assert().Do();
-					(s == String("\"Contaning \\\"escaped\\\" quotes\"")).Evaluate().Do();
+					(s == String("\"C \\\"e\\\" quotes\"")).Evaluate().Do();
 					(t == String(" dog")).Evaluate().Do();
 					string s_string = s.GetString();
 					string t_string = t.GetString();
-					Assert::IsTrue(s_string == "\"Contaning \\\"escaped\\\" quotes\"");
+					Assert::IsTrue(s_string == "\"C \\\"e\\\" quotes\"");
 					Assert::IsTrue(t_string == " dog");
 				}
 
 				{
 					SN_LOCAL(s);
 					SN_LOCAL(t);
-					(s + t == String("\"Escaped backslash \\ quotes\" dog")).Assert().Do();
+					(s + t == String("\"E \\ quotes\" dog")).Assert().Do();
 					validate.IsString(s).Assert().Do();
-					(s == String("\"Escaped backslash \\ quotes\"")).Evaluate().Do();
+					(s == String("\"E \\ quotes\"")).Evaluate().Do();
 					(t == String(" dog")).Evaluate().Do();
 					string s_string = s.GetString();
 					string t_string = t.GetString();
-					Assert::IsTrue(s_string == "\"Escaped backslash \\ quotes\"");
+					Assert::IsTrue(s_string == "\"E \\ quotes\"");
 					Assert::IsTrue(t_string == " dog");
 				}
 

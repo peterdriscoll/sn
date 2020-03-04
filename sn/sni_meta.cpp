@@ -31,6 +31,8 @@ namespace SNI
 	}
 
 	SNI_Meta::SNI_Meta()
+		: m_DeltaMetaLevel(0)
+		, m_Expression(NULL)
 	{
 	}
 

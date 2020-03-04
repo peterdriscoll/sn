@@ -27,6 +27,7 @@ namespace SNI
 	}
 
 	SNI_Bool::SNI_Bool()
+		: m_Expression(false)
 	{
 
 	}

@@ -70,6 +70,11 @@ namespace SN
 		return m_Expression;
 	}
 
+	SNI::SNI_StringRef * SN_String::GetSNI_StringRef() const
+	{
+		return dynamic_cast<SNI::SNI_StringRef *>(const_cast<SNI::SNI_String *>(m_Expression));
+	}
+
 	string SN_String::GetString() const
 	{
 		return m_Expression->GetString();
