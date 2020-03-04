@@ -162,16 +162,12 @@ namespace SNI
 				{
 					return e;
 				}
+				m_InputList[j].GetSNI_Expression()->Complete();
+				m_ParamList[j] = m_InputList[j];
 			}
 			else
 			{
 				m_InputList[j].Simplify();
-			}
-		}
-		for (long j = 0; j < m_Depth; j++)
-		{
-			if (m_Output[j])
-			{
 				m_InputList[j].GetSNI_Expression()->Complete();
 				m_ParamList[j] = m_InputList[j];
 			}
