@@ -478,9 +478,14 @@ namespace SNI
 							{
 								return e;
 							}
+							p_InputList[j].GetSNI_Expression()->Complete();
+							p_ParamList[j] = p_InputList[j];
 						}
-						p_InputList[j].GetSNI_Expression()->Complete();
-						p_ParamList[j] = p_InputList[j];
+						else
+						{
+							p_InputList[j].GetSNI_Expression()->Complete();
+							p_ParamList[j] = p_InputList[j];
+						}
 					}
 				}
 			}
