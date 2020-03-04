@@ -309,9 +309,10 @@ namespace SNI
 						{
 							break;
 						}
+						LOG(WriteLine(SN::DebugLevel, "Self Assert variable end " + to_string(j) + ": " + inputList[j].DisplaySN() + " / " + inputList[j].GetSafeValue().DisplaySN()));
 					}
 				}
-				else if (!inputList[j].GetSNI_ValueSet())
+				else if (inputList[j].IsComplete())
 				{
 					LOG(WriteLine(SN::DebugLevel, "Parameter " + to_string(j) + ": " + inputList[j].DisplaySN()));
 					if (allFound || maxCard < card)
@@ -362,10 +363,6 @@ namespace SNI
 			if (0 < card)
 			{
 				LOG(WriteLine(SN::DebugLevel, "Cardinality " + to_string(card) + " with total fields " + to_string(totalCalc)));
-				if (totalCalc)
-				{
-					LOG(WriteLine(SN::DebugLevel, inputList[calcPos].DisplayValueSN()));
-				}
 				if (maxCard < card)
 				{
 					if (AllowDelay())
