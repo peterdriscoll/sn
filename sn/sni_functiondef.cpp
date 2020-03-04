@@ -383,8 +383,6 @@ namespace SNI
 					{
 						if (output[j])
 						{
-							inputList[j].GetSNI_Expression()->Complete();
-							p_ParamList[j] = inputList[j];
 							LOG(WriteLine(SN::DebugLevel, "Parameter " + to_string(j) + " calculated: " + p_ParamList[j].DisplaySN()));
 						}
 					}
@@ -468,16 +466,32 @@ namespace SNI
 			{
 				for (size_t j = 0; j < p_Depth; j++)
 				{
-					if (p_Output[j] && !p_ParamList[j].IsValueHolder())
+					if (p_Output[j])
 					{
-						SN::SN_Value simple = p_InputList[j].SimplifyValue();
-						SNI_Frame *topFrame = SNI_Frame::Top();
-						topFrame->GetVariable(j)->SetValue(simple);
-						SN::SN_Error  e = p_ParamList[j].AssertValue(simple);
-						if (e.IsError())
+						if (!p_ParamList[j].IsValueHolder())
 						{
-							return e;
+							SN::SN_Value simple = p_InputList[j].SimplifyValue();
+							SNI_Frame *topFrame = SNI_Frame::Top();
+							topFrame->GetVariable(j)->SetValue(simple);
+							SN::SN_Error  e = p_ParamList[j].AssertValue(simple);
+							if (e.IsError())
+							{
+								return e;
+							}
 						}
+						p_InputList[j].GetSNI_Expression()->Complete();
+						p_ParamList[j] = p_InputList[j];
+					}
+				}
+			}
+			else
+			{
+				for (long j = 0; j < p_Depth; j++)
+				{
+					if (p_Output[j])
+					{
+						p_InputList[j].GetSNI_Expression()->Complete();
+						p_ParamList[j] = p_InputList[j];
 					}
 				}
 			}
