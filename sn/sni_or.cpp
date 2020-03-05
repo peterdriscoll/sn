@@ -249,8 +249,7 @@ namespace SNI
 		}
 		else
 		{
-			SN::SN_Bool left = p_ParamList[PC2_First].GetVariableValue();
-			if (!left.IsNull() && left.GetBool())
+			if (p_ParamList[PC2_First].AllValuesEqual(skynet::True))
 			{
 				return 1;
 			}
@@ -263,8 +262,7 @@ namespace SNI
 			}
 			else
 			{
-				SN::SN_Bool right = p_ParamList[PC2_Second].GetVariableValue();
-				if (!right.IsNull() && right.GetBool())
+				if (p_ParamList[PC2_Second].AllValuesEqual(skynet::True))
 				{
 					return 1;
 				}
@@ -277,28 +275,25 @@ namespace SNI
 	{
 		if (p_TotalCalc <= 2)
 		{
-			SN::SN_Bool result = p_ParamList[PU2_Result].GetVariableValue();
-			SN::SN_Bool left = p_ParamList[PU2_First].GetVariableValue();
-			SN::SN_Bool right = p_ParamList[PU2_Second].GetVariableValue();
 			switch (p_CalcPos)
 			{
 			case PU2_Result:
-				if (!left.IsNull() && left.GetBool())
+				if (p_ParamList[PU2_First].AllValuesEqual(skynet::True))
 				{
 					return 1;
 				}
-				if (!right.IsNull() && right.GetBool())
+				if (p_ParamList[PU2_Second].AllValuesEqual(skynet::True))
 				{
 					return 1;
 				}
 				return MultiplyCardinality(p_ParamList[PU2_First].Cardinality(), p_ParamList[PU2_Second].Cardinality());
 				break;
 			case PU2_First:
-				if (!result.IsNull() && result.GetBool())
+				if (p_ParamList[PU2_Result].AllValuesEqual(skynet::True))
 				{
-					if (!right.IsNull())
+					if (p_ParamList[PU2_Second].IsKnownValue())
 					{
-						if (right.GetBool())
+						if (p_ParamList[PU2_Second].AllValuesEqual(skynet::True))
 						{
 							return 0;
 						}
@@ -311,11 +306,11 @@ namespace SNI
 				return MultiplyCardinality(p_ParamList[PU2_Result].Cardinality(), p_ParamList[PU2_Second].Cardinality());
 				break;
 			case PU2_Second:
-				if (!result.IsNull() && result.GetBool())
+				if (p_ParamList[PU2_Result].AllValuesEqual(skynet::True))
 				{
-					if (!left.IsNull())
+					if (p_ParamList[PU2_First].IsKnownValue())
 					{
-						if (left.GetBool())
+						if (p_ParamList[PU2_First].AllValuesEqual(skynet::True))
 						{
 							return 0;
 						}

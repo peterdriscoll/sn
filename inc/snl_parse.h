@@ -15,6 +15,9 @@ namespace SNL
 		SNL_Parse(const SNL_Validate &p_Validate);
 
 		skynet::Variable Integer;
+		skynet::Variable Scientific;
+		skynet::Variable Number;
+
 		skynet::Variable Name;
 		skynet::Variable String;
 		skynet::Variable Value;

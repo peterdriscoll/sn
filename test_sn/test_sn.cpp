@@ -3536,7 +3536,7 @@ namespace test_sn
 
 				CharacterSet characterSet;
 				Validate validate(characterSet);
-/*
+
 				(!validate.IsExponential(String(""))).Assert().Do();
 				validate.IsExponential(String("135")).Assert().Do();
 				validate.IsExponential(String("45.9")).Assert().Do();
@@ -3566,6 +3566,7 @@ namespace test_sn
 					SN_LOCAL(s);
 					SN_LOCAL(t);
 					(s + t == String("536.89e dog")).Assert().Do();
+					manager.Breakpoint();
 					(!validate.IsExponential(s)).Assert().Do();
 				}
 
@@ -3612,7 +3613,7 @@ namespace test_sn
 					Assert::IsTrue(s_string == "3.141596");
 					Assert::IsTrue(t_string == " dog");
 				}
-*/
+
 				{
 					SN_LOCAL(s);
 					SN_LOCAL(t);

@@ -124,6 +124,7 @@ namespace SN
 		void Simplify();
 		SN_Expression SimplifyValue();
 		bool IsRequested() const;
+		bool AllValuesEqual(const SN::SN_Expression & p_Value) const;
 		SN_Error AddValue(SN_Expression p_Value, long p_NumWorlds, SNI::SNI_World **p_WorldList, SNI::SNI_WorldSet *p_WorldSet);
 		SNI::SNI_WorldSet *GetWorldSet();
 

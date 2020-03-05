@@ -91,6 +91,11 @@ namespace SNI
 		p_Splitter->ProcessValueSplit(SN::SN_Expression(this), NULL);
 	}
 
+	bool SNI_Value::AllValuesEqual(const SN::SN_Expression & p_Value) const
+	{
+		return Equivalent(p_Value.GetSNI_Expression());
+	}
+
 	SN::SN_Error SNI_Value::AssertValue(const SN::SN_Expression &p_Value)
 	{
 		if (SN::Is<SNI_ValueSet *>(p_Value))

@@ -24,6 +24,9 @@ namespace SNL
 	void SNL_Parse::Link()
 	{
 		SN_LINK(Integer);
+		SN_LINK(Scientific);
+		SN_LINK(Number);
+
 		SN_LINK(Name);
 		SN_LINK(String);
 		SN_LINK(Value);
@@ -36,6 +39,45 @@ namespace SNL
 			SN_LOCAL(i);
 
 			(Define(Integer)(s)(i) == (m_Validate.IsInteger(s) && (s.StringToInt() == i))).PartialAssert().Do();
+		}
+
+		{
+			SN_LOCAL(s);
+			SN_LOCAL(i);
+
+			(Define(Scientific)(s)(i) == (m_Validate.IsExponential(s) && (s.StringToInt() == i))).PartialAssert().Do();
+		}
+
+		{
+			SN_LOCAL(s);
+			SN_LOCAL(i);
+		
+			SN_LOCAL(p);
+			SN_LOCAL(q);
+			SN_LOCAL(m);
+			SN_LOCAL(n);
+			
+			SN_LOCAL(Float_Extension);
+			SN_LOCAL(Exp_Extension);
+
+			(Define(Number)(s)(i) == (
+				Let(s = p + q
+					,	m_Validate.IsInteger(p)
+					&&	(	Float_Extension(s)(i)(q)
+						||	(q == String("") && (s.StringToDouble() == i)))
+				)));
+
+			(Define(Float_Extension)(s)(i)(q) ==
+				Let(q == m + n
+					,	m_Validate.IsFloatingPointExtension(m)
+					&&  (	Exp_Extension(s)(i)(n)
+						||	(n == String("") && (s.StringToDouble() == i))
+				)));
+
+			(Define(Exp_Extension)(s)(i)(n) ==
+					(m_Validate.IsExponentialExtension(n)
+				&&	(s.StringToDouble() == i)
+					));
 		}
 
 		{
@@ -60,7 +102,7 @@ namespace SNL
 			SN_LOCAL(i);
 
 
-			(Define(Value)(d)(s)(i) == (Name(d)(s)(i) || Integer(s)(i) || String(s)(i))).PartialAssert().Do();
+			(Define(Value)(d)(s)(i) == (Name(d)(s)(i) || Number(s)(i) || String(s)(i))).PartialAssert().Do();
 		}
 	}
 }

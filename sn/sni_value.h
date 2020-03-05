@@ -35,6 +35,8 @@ namespace SNI
 		virtual SN::SN_Error ForEachCart(long p_Depth, SNI_Cart * p_Cart);
 		virtual void ForEachSplit(SNI_Splitter * p_Splitter);
 
+		virtual bool AllValuesEqual(const SN::SN_Expression & p_Value) const;
+
 		virtual SN::SN_Error AssertValue(const SN::SN_Expression & p_Value);
 
 		virtual SN::SN_Expression DoEvaluate(long p_MetaLevel = 0) const;

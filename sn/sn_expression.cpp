@@ -343,6 +343,11 @@ namespace SN
 		return m_Expression->IsRequested();
 	}
 
+	bool SN_Expression::AllValuesEqual(const SN::SN_Expression & p_Value) const
+	{
+		return m_Expression && m_Expression->AllValuesEqual(p_Value);
+	}
+
 	SN_Error SN_Expression::AddValue(SN_Expression p_Value, long p_NumWorlds, SNI::SNI_World ** p_WorldList, SNI::SNI_WorldSet *p_WorldSet)
 	{
 		return GetSNI_Expression()->AddValue(p_Value, p_NumWorlds, p_WorldList, p_WorldSet);

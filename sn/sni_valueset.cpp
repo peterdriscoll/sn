@@ -331,6 +331,36 @@ namespace SNI
 		return false;
 	}
 
+	bool SNI_ValueSet::AllValues() const
+	{
+		bool trueFound = false;
+		bool falseFound = false;
+		SNI_World *contextWorld = SNI_Thread::GetThread()->ContextWorld();
+		for (const SNI_TaggedValue &tv : m_ValueList)
+		{
+			SNI_World *world = tv.GetWorld();
+			if (!world || !world->IsEmpty())
+			{
+				if (!contextWorld || contextWorld->CompatibleWorld(world))
+				{
+					SN::SN_Bool b = tv.GetValue();
+					if (b.IsKnownValue())
+					{
+						if (b.GetBool())
+						{
+							trueFound = true;
+						}
+						else
+						{
+							falseFound = true;
+						}
+					}
+				}
+			}
+		}
+		return trueFound && falseFound;
+	}
+
 	SN::SN_Expression SNI_ValueSet::GetVariableValue(bool p_IfComplete)
 	{
 		if (p_IfComplete && !IsComplete())
@@ -361,10 +391,9 @@ namespace SNI
 		return value;
 	}
 
-	bool SNI_ValueSet::AllValues() const
+	bool SNI_ValueSet::AllValuesEqual(const SN::SN_Expression & p_Value) const
 	{
-		bool trueFound = false;
-		bool falseFound = false;
+		bool found = false;
 		SNI_World *contextWorld = SNI_Thread::GetThread()->ContextWorld();
 		for (const SNI_TaggedValue &tv : m_ValueList)
 		{
@@ -373,22 +402,18 @@ namespace SNI
 			{
 				if (!contextWorld || contextWorld->CompatibleWorld(world))
 				{
-					SN::SN_Bool b = tv.GetValue();
-					if (b.IsKnownValue())
+					if (!tv.GetValue().Equivalent(p_Value))
 					{
-						if (b.GetBool())
-						{
-							trueFound = true;
-						}
-						else
-						{
-							falseFound = true;
-						}
+						return false;
+					}
+					else
+					{
+						found = true;
 					}
 				}
 			}
 		}
-		return trueFound && falseFound;
+		return found;
 	}
 
 	SNI_Expression * SNI_ValueSet::Clone(SNI_Frame *p_Frame, bool &p_Changed)
