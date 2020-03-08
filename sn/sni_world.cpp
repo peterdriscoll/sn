@@ -188,21 +188,6 @@ namespace SNI
 		m_WorldSet->AddToSetList(this);
 	}
 
-	bool SNI_World::AddFailedContext(SNI_World * p_World)
-	{
-		ASSERTM(p_World, "Attempt to add null child world.");
-		bool found = false;
-		for (size_t j = 0; j<m_FailedContextList.size(); j++)
-		{
-			if (m_FailedContextList[j] == p_World)
-			{
-				return false;
-			}
-		}
-		m_FailedContextList.push_back(p_World);
-		return true;
-	}
-
 	bool SNI_World::AddChildWorld(SNI_World *p_World)
 	{
 		ASSERTM(p_World, "Attempt to add null child world.");
@@ -240,97 +225,14 @@ namespace SNI
 		return false;
 	}
 
-	void SNI_World::BuildFailedWorldSets(SNI_WorldSetList & p_FailedWorldSetList)
-	{
-		for (SNI_World *world : m_FailedContextList)
-		{
-			SNI_WorldSet *worldSet = world->GetWorldSet();
-			bool found = false;
-			for (SNI_WorldSet *worldSetLoop : p_FailedWorldSetList)
-			{
-				if (worldSet == worldSetLoop)
-				{
-					found = true;
-					break;
-				}
-			}
-			if (!found)
-			{
-				p_FailedWorldSetList.push_back(worldSet);
-			}
-		}
-	}
-
-	bool SNI_World::CheckForWorldSetFails()
-	{
-		SNI_WorldSetList worldSetList;
-		BuildFailedWorldSets(worldSetList);
-		ClearContextFailMarks(worldSetList);
-		MarkContextFailMarks();
-		return CheckFailedWorldSets(worldSetList);
-	}
-
-	void SNI_World::ClearContextFailMarks(SNI_WorldSetList &p_FailedWorldSetList)
-	{
-		for (SNI_WorldSet *worldSet : p_FailedWorldSetList)
-		{
-			worldSet->ClearFailMarks();
-		}
-	}
-
-	void SNI_World::MarkContextFailMarks()
-	{
-		for (SNI_World *world : m_FailedContextList)
-		{
-			world->MarkFail();
-		}
-	}
-
-	bool SNI_World::CheckFailedWorldSets(SNI_WorldSetList &p_FailedWorldSetList)
-	{
-		for (SNI_WorldSet *worldSet : p_FailedWorldSetList)
-		{
-			if (worldSet->AllContextFailed())
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-
 	void SNI_World::ClearFailMark()
 	{
 		m_FailMark = false;
 	}
 
-	void SNI_World::MarkFail()
-	{
-		m_FailMark = true;
-	}
-
 	bool SNI_World::IsFailMarked() const
 	{
 		return m_FailMark;
-	}
-
-	bool SNI_World::Contains(SNI_World *p_World) const
-	{
-		if (p_World == NULL)
-		{
-			return true;
-		}
-		if (p_World == this)
-		{
-			return true;
-		}
-		for (size_t j = 0; j<m_ChildList.size(); j++)
-		{
-			if (m_ChildList[j]->Contains(p_World))
-			{
-				return true;
-			}
-		}
-		return false;
 	}
 
 	void SNI_World::Mark(bool p_Mark)
@@ -355,15 +257,6 @@ namespace SNI
 	void SNI_World::MarkWorld(bool p_Mark)
 	{
 		m_Mark = p_Mark;
-	}
-
-	void SNI_World::MarkChildWorlds(bool p_Mark)
-	{
-		MarkWorld(p_Mark);
-		for (SNI_WorldList::iterator it = m_ChildList.begin(); it < m_ChildList.end(); it++)
-		{
-			(*it)->MarkChildWorlds(p_Mark);
-		}
 	}
 
 	void SNI_World::MarkChildWorlds2()
@@ -446,37 +339,6 @@ namespace SNI
 		return false;
 	}
 
-	SNI_World *SNI_World::GetContextWorld() const
-	{
-		if (!m_WorldSet)
-		{
-			return NULL;
-		}
-		return m_WorldSet->ContextWorld();
-	}
-
-	bool SNI_World::IsProperSubWorld(SNI_World *p_World) const
-	{
-		if (this == p_World)
-		{
-			return false;
-		}
-		return IsSubWorld(p_World);
-	}
-
-	bool SNI_World::IsSubWorld(SNI_World *p_World) const
-	{
-		if (this == p_World)
-		{
-			return true;
-		}
-		if (!p_World)
-		{
-			return true;
-		}
-		return IsSubWorld(p_World->GetContextWorld());
-	}
-
 	void SNI_World::MarkEmpty(enum FailReason p_Reason)
 	{
 		SNI_DisplayOptions displayOptions(doTextOnly);
@@ -534,28 +396,6 @@ namespace SNI
 			}
 		}
 		return false;
-	}
-
-	bool SNI_World::FailNoRemove()
-	{
-		return FailNoRemoveInContext(SNI_Thread::GetThread()->ContextWorld());
-	}
-
-	bool SNI_World::FailNoRemoveInContext(SNI_World *p_ContextWorld)
-	{
-		if (p_ContextWorld && p_ContextWorld->IsProperSubWorld(m_WorldSet->ContextWorld()))
-		{
-			AddFailedContext(p_ContextWorld);
-			if (!CheckForWorldSetFails())
-			{
-				return false;
-			}
-		}
-
-		SNI_DisplayOptions displayOptions(doTextOnly);
-		LOG(WriteLine(SN::DebugLevel, "Fail " + DisplayCondition(displayOptions)));
-		m_IsEmpty = true;
-		return !m_WorldSet->IsEmpty();
 	}
 
 	string SNI_World::Reason() const

@@ -86,7 +86,6 @@ namespace SNI
 		bool HasMutualExclusion();
 		void RemoveWorld(SNI_World *world);
 		SN::SN_Error CheckDependentWorlds();
-		SN::SN_Error CheckDependentWorldsOld();
 		SNI_WorldSet * OneParent();
 		bool IsComplete();
 		void Complete();
@@ -97,16 +96,17 @@ namespace SNI
 
 		void ScheduleCheckForFails();
 
-		void ClearFailMarks();
-		void EmptyUnmarkedWorlds(SNI_World *p_ContextWorld);
-
 		void AddRelated(SNI_WorldSetMap * p_ProcessMap);
-		void AddCloselyRelated(SNI_WorldSetMap * p_ProcessMap);
 		void CheckEmptyChildren();
 		void CheckMissingInResult();
 		void CheckAllNegated();
 		void BreakPointsForDeletedWorlds();
 		SN::SN_Error RemoveFailures();
+		void ClearFailMarks();
+	private:
+		void EmptyUnmarkedWorlds(SNI_World *p_ContextWorld);
+
+		void AddCloselyRelated(SNI_WorldSetMap * p_ProcessMap);
 
 	protected:
 		void ClearMarkInWorlds();
@@ -117,16 +117,6 @@ namespace SNI
 	private:
 		static long m_NextWorldSetNo;
 		static SNI_WorldSetList m_ChangedList;
-
-		SN::SN_Error CheckRelatedWorlds(SNI_WorldSetList &p_ChangedList);
-		SN::SN_Error CheckDependencies(SNI_WorldSetList & p_ChangedList);
-		void MarkAllWorldInChildSets(bool p_Mark);
-		SN::SN_Error FailUnmarkedWorldsInChildSets(bool p_Mark, SNI_WorldSetList &p_ChangedList, SNI_World *p_ContextWorld);
-		void MarkWorlds(bool p_Mark);
-		SN::SN_Error FailUnmarkedWorlds(bool p_Mark, SNI_WorldSetList &p_ChangedList, SNI_World *p_ContextWorld);
-		void FailWorldsWithEmptyChildren(SNI_WorldSetList & p_ChangedList);
-		void MarkChildWorlds(bool p_Mark);
-
 
 		SNI_WorldList m_WorldList;
 		SNI_WorldSetList m_ChildSetList;

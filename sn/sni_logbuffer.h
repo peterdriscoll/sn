@@ -17,7 +17,7 @@ namespace SNI
 {
 	class SNI_LogLine {
 	public:
-		size_t m_Depth;
+		long m_Depth;
 		size_t m_StepCount;
 		string m_String;
 		bool m_Heading;

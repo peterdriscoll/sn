@@ -67,59 +67,43 @@ namespace SNI
 		string LogText(SN::LogContext & context, long p_Width) const;
 		void WriteJS(ostream &p_Stream, const string &tabs, SNI_DisplayOptions & p_DisplayOptions) const;
 
-		SNI_WorldSet *GetWorldSet();
-		bool AddChildWorld(SNI_World *p_World);
-		void AddToSetList();
-		bool AddFailedContext(SNI_World *p_World);
-		bool CompatibleWorld(SNI_World * p_World);
-
-		bool CheckForWorldSetFails();
-		void BuildFailedWorldSets(SNI_WorldSetList &p_FailedWorldSetList);
-		void ClearContextFailMarks(SNI_WorldSetList &p_FailedWorldSetList);
-		void MarkContextFailMarks();
-		bool CheckFailedWorldSets(SNI_WorldSetList &p_FailedWorldSetList);
-
-		void ClearFailMark();
-		void MarkFail();
-		bool IsFailMarked() const;
-
-		bool Contains(SNI_World * p_World) const;
-
-		void Mark(bool p_Mark);
-		bool HasMark(bool p_Mark);
-		void MarkWorld(bool p_Mark);
-		void MarkChildWorlds(bool p_Mark);
-		void MarkChildWorlds2();
-		bool HasMutualExclusion();
-
-		void Activate();
-		bool IsActive() const;
-		bool IsAnyActive() const;
-
-		string Reason() const;
-
 		bool IsEmpty() const;
 		bool HasEmptyChild() const;
-		SNI_World * GetContextWorld() const;
-		bool IsProperSubWorld(SNI_World * p_World) const;
-		bool IsSubWorld(SNI_World * p_World) const;
-		void Negate(SNI_World * p_World);
-		bool IsNegated(SNI_World * p_World);
-		bool FailNoRemove();
-		bool FailNoRemoveInContext(SNI_World *p_ContextWorld);
 		void MarkEmpty(enum FailReason p_Reason);
+
+		bool IsActive() const;
+		bool IsAnyActive() const;
+		void Activate();
+		void AttachValue(const SN::SN_Expression &p_Value);
+		SNI_World * OneParent(SNI_WorldSet * parentWorldSet);
+
+
+		bool IsFailMarked() const;
+		bool HasMark(bool p_Mark);
+		void ClearFailMark();
+
 		SN::SN_Error Fail(enum FailReason p_Reason);
 		SN::SN_Error FailInContext(SNI_World *p_ContextWorld, enum FailReason p_Reason);
 
+		bool CompatibleWorld(SNI_World * p_World);
+		void AddToSetList();
+		bool AddChildWorld(SNI_World *p_World);
+		void MarkChildWorlds2();
+		void MarkWorld(bool p_Mark);
+
 		void CountNegatedMap(SNI_WorldCount &negatedMap) const;
-		void DeleteEmptyFromNegatedMap();
-		
-		SNI_World * OneParent(SNI_WorldSet * parentWorldSet);
-		void AttachValue(const SN::SN_Expression &p_Value);
-
 		void BreakPointIfDeleted();
+		void DeleteEmptyFromNegatedMap();
 
-	protected:
+		SNI_WorldSet *GetWorldSet();
+
+	private:
+		string Reason() const;
+		void Mark(bool p_Mark);
+		bool HasMutualExclusion();
+		void Negate(SNI_World * p_World);
+		bool IsNegated(SNI_World * p_World);
+
 		virtual void PromoteMembers();
 
 	private:

@@ -120,7 +120,7 @@ namespace SNI
 					p_Stream << "<details>\\n";
 				}
 			}
-			ASSERTM(it->m_Depth - minDepth + 1 <= stackLastLines.size(), "Internal error 2");
+			ASSERTM(it->m_Depth - minDepth + 1 <= (long) stackLastLines.size(), "Internal error 2");
 			for (long j = currentDepth; it->m_Depth < j; j--)
 			{
 				ASSERTM(j - minDepth + 1 == stackLastLines.size(), "Internal error 3");
