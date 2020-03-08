@@ -31,7 +31,7 @@ namespace SN
 
 	enum BreakId
 	{
-		LeftId, RightId, PartialCallId, CallId, ParameterOneId, ParameterTwoId, ParameterThreeId, ParameterFourId, ParameterFiveId, ValueId, ConditionId,  PositiveId, NegativeId, InfixId, EvaluateId, ReturnId, ErrorId, ExitId, CloneId, NoConstraintId, DelayId, StringId, UserId
+		LeftId, RightId, PartialCallId, CallId, ParameterOneId, ParameterTwoId, ParameterThreeId, ParameterFourId, ParameterFiveId, ValueId, ConditionId,  PositiveId, NegativeId, InfixId, EvaluateId, ReturnId, ErrorId, ExitId, CloneId, NoConstraintId, DelayId, StringId, UserId, MultipleOutputsId
 	};
 
 	string GetLoggingLevelCode(LoggingLevel p_LoggingLevel);

@@ -779,12 +779,12 @@ namespace SNI
 
 	SN::SN_Value SNI_Expression::DoUnaryAnd() const
 	{
-		return SN::SN_Error(false, false, GetTypeName() + " 'reverse implies' function not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " 'Unary and' function not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoUnaryOr() const
 	{
-		return SN::SN_Error(false, false, GetTypeName() + " 'reverse implies' function not implemented.");
+		return SN::SN_Error(false, false, GetTypeName() + " 'Unary or' function not implemented.");
 	}
 
 	SN::SN_Value SNI_Expression::DoAnd(SNI_Expression * /*p_Other*/) const

@@ -13,6 +13,7 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Frame)
 	public:
+		static size_t StackMemory();
 		static SNI_Frame *Push(const SNI_Expression *p_Function, SNI_Expression *p_Result);
 		static void PushFrame(SNI_Frame * p_Frame);
 		static void Pop();
@@ -75,6 +76,8 @@ namespace SNI
 		string						   m_BreakPoint;
 		string						   m_BreakPointJS;
 		size_t						   m_Cardinality;
+		size_t						   m_StackUsage;
+		SNI_World *                    m_ContextWorld;
 	};
 }
 

@@ -148,6 +148,7 @@
                     <button title='Error' ng-click='setbreakpoint(["Error",16])' ng-class='breakpointdefaultclass(["Error",16], "NONE")'>Error</button>
                     <button title='Delay' ng-click='setbreakpoint(["Warning",20])' ng-class='breakpointdefaultclass(["Warning",20], "NONE")'>Delay</button>
                     <button title='No constraint' ng-click='setbreakpoint(["Warning",19])' ng-class='breakpointdefaultclass(["Warning",19], "NONE")'>No constraint</button>
+                    <button title='Multiple out' ng-click='setbreakpoint(["Warning",23])' ng-class='breakpointdefaultclass(["Warning",23], "NONE")'>Multiple out</button>
                     {{breakpoint}}
                     <details open>
                         <summary>World Sets</summary>
@@ -218,7 +219,7 @@
                                 <td>
                                     <div style='overflow-x:auto;white-space:nowrap;width:900px'>
                                         <table class='frame'>
-                                            <caption>{{f.framepos}} : {{ f.function }} : <span ng-bind-html="trustAsHtml(f.functioncardinality)" init-bind></span></caption>
+                                            <caption>{{f.framepos}} : {{ f.function }} : <span ng-bind-html="trustAsHtml(f.contextworld)" init-bind></span>  : Mem {{f.stackusage}} : <span ng-bind-html="trustAsHtml(f.functioncardinality)" init-bind></span></caption>
                                             <tr>
                                                 <th ng-repeat="v in f.variables">{{ v.name }}</th>
                                             </tr>
@@ -392,6 +393,7 @@
             $scope.setbreakpoint(["Error", 16]);
             $scope.setbreakpoint(["Warning", 20]);
             $scope.setbreakpoint(["Warning", 19]);
+            $scope.setbreakpoint(["Warning", 23]);
             $scope.setbreakpoint(["user", 22]);
             $scope.setbreakpoint(["assert", 3]);
             $scope.setbreakpoint(["partialassert", 3]);

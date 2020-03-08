@@ -25,6 +25,7 @@ namespace SNL
 	void SNL_Validate::Link()
 	{
 		SN_LINK(IsInteger);
+		SN_LINK(IsUnsignedInteger);
 		SN_LINK(IsFloatingPoint);
 		SN_LINK(IsFloatingPointExtension);
 		SN_LINK(IsExponential);
@@ -42,9 +43,14 @@ namespace SNL
 	void SNL_Validate::Init()
 	{
 		{
+			SN_LOCAL(i);
+			(Define(IsInteger)(i) == (i.LookaheadLeft() != "" && (((m_CharacterSet.Sign(i.LookaheadLeft()) && IsUnsignedInteger(i.SubtractLeftChar())) || IsUnsignedInteger(i))))).PartialAssert().Do();
+		}
+
+		{
 			SN_LOCAL(IsIntegerContinuation);
 			SN_LOCAL(i);
-			(Define(IsInteger)(i) == (i.LookaheadLeft() != "" && m_CharacterSet.Digit(i.SelectLeftChar()) && IsIntegerContinuation(i.SubtractLeftChar()))).PartialAssert().Do();
+			(Define(IsUnsignedInteger)(i) == (i.LookaheadLeft() != "" && m_CharacterSet.Digit(i.SelectLeftChar()) && IsIntegerContinuation(i.SubtractLeftChar()))).PartialAssert().Do();
 			(Define(IsIntegerContinuation)(i) == (
 				(i.LookaheadLeft() != "" && m_CharacterSet.Digit(i.LookaheadLeft()))
 				.If(IsIntegerContinuation(i.SubtractLeftChar()), i == "")
@@ -66,7 +72,7 @@ namespace SNL
 
 			(Define(IsFloatingPointExtension)(f) == (
 				(f.LookaheadLeft() == String("."))
-				.If(IsInteger(f.SubtractLeftChar())
+				.If(IsUnsignedInteger(f.SubtractLeftChar())
 					, f == String(""))
 			)).PartialAssert().Do();
 		}
@@ -85,7 +91,7 @@ namespace SNL
 			)).PartialAssert().Do();
 
 			(Define(IsExponentialExtension)(f) == (
-				(f.LookaheadLeft() == (String("e") || String("E"))).If(
+				(f.LookaheadLeft() == (String("e") || String("E"))).Collapse().If(
 					IsInteger(f.SubtractLeftChar())
 				,	f == String(""))	
 			)).PartialAssert().Do();

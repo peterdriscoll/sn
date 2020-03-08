@@ -44,6 +44,11 @@ namespace SNI
 	}
 	/// @endcond
 
+	bool SNI_Add::SupportsMultipleOutputs() const
+	{
+		return true;
+	}
+
 	SN::SN_Value SNI_Add::PrimaryFunctionValue(const SN::SN_Value &p_Left, const SN::SN_Value &p_Right) const
 	{
 		if (p_Left.IsStringValue())

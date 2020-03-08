@@ -26,8 +26,9 @@ namespace SN
 		SNI::SNI_Error * m_Error;
 
 	public:
-		SN_Error(bool p_Success, bool p_Delay, const string &p_Description="");
+		SN_Error();
 		SN_Error(const SN_Error &p_Other);
+		SN_Error(bool p_Success, bool p_Delay, const string &p_Description="");
 		SN_Error(SNI::SNI_Error *p_Error);
 		virtual ~SN_Error();
 
@@ -39,6 +40,8 @@ namespace SN
 		bool GetBool();
 		bool GetDelay();
 		string GetDescription();
+
+		void AddError(SN::SN_Error & p_Error);
 		void Log();
 	};
 }

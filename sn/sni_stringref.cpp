@@ -221,6 +221,8 @@ namespace SNI
 		else
 		{
 			ASSERTM(false, "Shouldn't be here. Value should be already simplified. See SimplifyValue.");
+
+			// If you resurrect this, fix error handling. See SNI_ValueSet::ForEach.
 			const string &source_text = GetSourceString();
 			SN::SN_String source = m_Source;
 			SNI_WorldSet *worldSet = new SNI_WorldSet();

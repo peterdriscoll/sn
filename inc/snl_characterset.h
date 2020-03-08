@@ -13,6 +13,7 @@ namespace SNL
 	public:
 		SNL_CharacterSet();
 
+		skynet::Variable Sign;
 		skynet::Variable Digit;
 		skynet::Variable AlphaLower;
 		skynet::Variable AlphaUpper;

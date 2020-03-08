@@ -538,7 +538,7 @@ namespace SNI
 	SN::SN_Error SNI_Variable::SelfAssert()
 	{
 		SN::SN_Error e(skynet::OK);
-		if (m_Value && !m_Value->IsNull() && !m_Value->IsKnownValue() && !m_Value->IsReferableValue() && !m_Value->IsVariable())
+		if (m_Value && !m_Value->IsNull() && !m_Value->IsKnownValue() && !m_Value->IsReferableValue() && !m_Value->IsVariable() && !m_Value->IsValueSet())
 		{
 			SNI_Expression *saveValue = m_Value;
 			m_Value = NULL;

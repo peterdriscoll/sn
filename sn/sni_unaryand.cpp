@@ -32,6 +32,11 @@ namespace SNI
 		return 4;
 	}
 
+	bool SNI_UnaryAnd::IgnoreNoConstraint() const
+	{
+		return true;
+	}
+
 	bool SNI_UnaryAnd::AllowDelay() const
 	{
 		return false;
@@ -61,31 +66,33 @@ namespace SNI
 	{
 		if (p_TotalCalc <= 1)
 		{
-			SN::SN_Bool result = p_ParamList[PU1_Result].GetVariableValue();
-			if (!result.IsNull())
+			if (p_ParamList[PU1_Result].IsKnownValue())
 			{
-				if (result.GetBool())
+				if (p_ParamList[PU1_Result].AllValuesEqual(skynet::True))
 				{
-					if (p_ParamList[PU1_First].IsKnownValue())
+					if (!p_ParamList[PU1_First].IsKnownValue())
+					{
+						return p_ParamList[PU1_Result].Cardinality();
+					}
+				}
+				if (p_ParamList[PU1_Result].AllValuesEqual(skynet::False))
+				{
+					return 0;
+				}
+			}
+			if (p_ParamList[PU1_First].IsKnownValue())
+			{
+				if (p_ParamList[PU1_First].AllValuesEqual(skynet::False))
+				{
+					if (!p_ParamList[PU1_Result].IsKnownValue())
 					{
 						return p_ParamList[PU1_First].Cardinality();
 					}
-					return 1;
 				}
-				return 0;
-			}
-			SN::SN_Bool first = p_ParamList[PU1_First].GetVariableValue();
-			if (!first.IsNull())
-			{
-				if (!first.GetBool())
+				if (p_ParamList[PU1_First].AllValuesEqual(skynet::True))
 				{
-					if (p_ParamList[PU1_Result].IsNullValue())
-					{
-						return 1;
-					}
-					return p_ParamList[PU1_Result].Cardinality();
+					return 0;
 				}
-				return 0;
 			}
 			return MultiplyCardinality(p_ParamList[PU1_First].Cardinality(), p_ParamList[PU1_Result].Cardinality());
 		}

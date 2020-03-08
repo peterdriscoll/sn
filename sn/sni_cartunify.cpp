@@ -155,6 +155,7 @@ namespace SNI
 			if (m_Output[j])
 			{
 				SN::SN_Value simple = m_InputList[j].SimplifyValue();
+				m_InputList[j].GetSNI_Expression()->Complete();
 				SN::SN_Error  e = m_ParamList[j].AssertValue(simple);
 				m_ParamList[j].GetSNI_Expression()->Complete();
 				if (e.IsError())

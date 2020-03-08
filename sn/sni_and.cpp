@@ -359,50 +359,34 @@ namespace SNI
 			switch (p_CalcPos)
 			{
 			case PU2_Result:
-				if (p_ParamList[PU2_First].AllValuesEqual(skynet::False))
+				if (p_ParamList[PU2_First].IsKnownValue() && p_ParamList[PU2_First].AllValuesEqual(skynet::False))
 				{
-					return 1;
+					return p_ParamList[PU2_First].Cardinality();
 				}
-				if (p_ParamList[PU2_Second].AllValuesEqual(skynet::False))
+				if (p_ParamList[PU2_Second].IsKnownValue() && p_ParamList[PU2_Second].AllValuesEqual(skynet::False))
 				{
-					return 1;
+					return p_ParamList[PU2_Second].Cardinality();
 				}
 				return MultiplyCardinality(p_ParamList[PU2_First].Cardinality(), p_ParamList[PU2_Second].Cardinality());
 				break;
 			case PU2_First:
-				if (p_ParamList[PU2_Result].AllValuesEqual(skynet::False))
+				if (p_ParamList[PU2_Result].IsKnownValue() && p_ParamList[PU2_Result].AllValuesEqual(skynet::False))
 				{
-					if (p_ParamList[PU2_Second].IsKnownValue())
+					if (p_ParamList[PU2_Second].IsKnownValue() && p_ParamList[PU2_Second].AllValuesEqual(skynet::False))
 					{
-						if (p_ParamList[PU2_Second].AllValuesEqual(skynet::False))
-						{
-							return 0;
-						}
-						else
-						{
-							return 1;
-						}
+						return 0;
 					}
 				}
 				return MultiplyCardinality(p_ParamList[PU2_Result].Cardinality(), p_ParamList[PU2_Second].Cardinality());
-				break;
 			case PU2_Second:
-				if (p_ParamList[PU2_Result].AllValuesEqual(skynet::False))
+				if (p_ParamList[PU2_Result].IsKnownValue() && p_ParamList[PU2_Result].AllValuesEqual(skynet::False))
 				{
-					if (p_ParamList[PU2_Second].IsKnownValue())
+					if (p_ParamList[PU2_First].IsKnownValue() && p_ParamList[PU2_First].AllValuesEqual(skynet::False))
 					{
-						if (p_ParamList[PU2_First].AllValuesEqual(skynet::False))
-						{
-							return 0;
-						}
-						else
-						{
-							return 1;
-						}
+						return 0;
 					}
 				}
 				return MultiplyCardinality(p_ParamList[PU2_Result].Cardinality(), p_ParamList[PU2_First].Cardinality());
-				break;
 			}
 		}
 		return SNI_Binary::CardinalityOfUnify(p_Depth, p_ParamList, p_CalcPos, p_TotalCalc);

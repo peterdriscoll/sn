@@ -814,8 +814,10 @@ namespace SNI
 	{
 		SNI_World *contextWorld = SNI_Thread::GetThread()->ContextWorld();
 		SNI_WorldSet *worldSet = GetWorldSet();
+		SN::SN_Error e;
 		for (SNI_TaggedValue &tv : m_ValueList)
 		{
+
 			SNI_World *world = tv.GetWorld();
 			if (!contextWorld || contextWorld->CompatibleWorld(world))
 			{
@@ -825,7 +827,7 @@ namespace SNI
 					world = worldSet->CreateWorldForValue(l_Value);
 					tv.SetWorld(world);
 				}
-				p_Action(l_Value, world);
+				e.AddError(p_Action(l_Value, world));
 			}
 		}
 		if (worldSet)
@@ -833,7 +835,7 @@ namespace SNI
 			worldSet->Complete();
 			Validate();
 		}
-		return skynet::OK;
+		return e;
 	}
 
 	SN::SN_Error SNI_ValueSet::ForEachCart(long p_Depth, SNI_Cart *p_Cart)

@@ -63,6 +63,16 @@ namespace SNI
 		return true;
 	}
 
+	bool SNI_FunctionDef::SupportsMultipleOutputs() const
+	{
+		return false;
+	}
+
+	bool SNI_FunctionDef::IgnoreNoConstraint() const
+	{
+		return false;
+	}
+
 	bool SNI_FunctionDef::Equivalent(SNI_Object * p_Other) const
 	{
 		if (dynamic_cast<SNI_FunctionDef *>(p_Other))
@@ -261,7 +271,6 @@ namespace SNI
 
 		SNI_DisplayOptions displayOptions(doTextOnly);
 		LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": Start " + DisplayUnify(depth, p_ParamList, p_Source)));
-
 		for (long j = 0; j < depth; j++)
 		{
 			topFrame->CreateParameter(j, p_ParamList[j]);
@@ -284,12 +293,8 @@ namespace SNI
 		}
 
 		long calcPos = -1;
-		size_t card = CardinalityOfUnify(depth, inputList, calcPos, totalCalc);
-		topFrame->RegisterCardinality(card);
 		size_t maxCard = SNI_Thread::TopManager()->MaxCardinalityCall();
-
-		LOG(WriteLine(SN::DebugLevel, "Card: " + to_string(card) + " Max card: " + to_string(maxCard) + " Total calc " + to_string(totalCalc)));
-
+		size_t card = -1;
 		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before cardinality check", SN::LeftId);
 
 		for (long j = 0; j < depth; j++)
@@ -389,7 +394,7 @@ namespace SNI
 				}
 				SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after calculation", SN::RightId);
 			}
-			else
+			else if (!IgnoreNoConstraint())
 			{
 				SNI_Thread::GetThread()->DebugCommand(SN::WarningPoint, GetTypeName() + ".Unify no constraint", SN::NoConstraintId);
 			}
@@ -447,7 +452,25 @@ namespace SNI
 
 	SN::SN_Error SNI_FunctionDef::ForEachUnify(size_t p_Card, long p_Depth, SN::SN_Expression * p_InputList, SN::SN_Expression * p_ParamList, bool * p_Output, long p_CalcPos, long p_TotalCalc, const SNI_Expression *p_Source) const
 	{
-		if (p_Card == 1)
+		bool single = p_Card == 1;
+		for (long j = 0; j < p_Depth; j++)
+		{
+			if (p_Output[j])
+			{
+				if (j != p_CalcPos)
+				{
+					if (!SupportsMultipleOutputs())
+					{
+						SNI_Thread::GetThread()->DebugCommand(SN::WarningPoint, "Multiple outputs.", SN::MultipleOutputsId);
+					}
+				}
+			}
+			else if (p_InputList[j].IsValueSet())
+			{
+				single = false;
+			}
+		}
+		if (single)
 		{
 			if (SNI_Thread::TopManager()->GetDirectPassType() == skynet::ReturnValueToVariable || !AllowDelay())
 			{

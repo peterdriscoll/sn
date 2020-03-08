@@ -15,6 +15,10 @@ namespace SN
 
 namespace SNI
 {
+	class SNI_Error;
+
+	typedef vector<SNI_Error *> SNI_ErrorList;
+
 	class SNI_Error : public SNI_Value
 	{
 		PGC_CLASS(SNI_Error);
@@ -42,6 +46,8 @@ namespace SNI
 		virtual void AddNote(SNI_CallRecord *p_CallRecord);
 
 		virtual bool IsNull() const;
+		void AddError(SN::SN_Error & p_Error);
+		void CheckChildError();
 		virtual bool IsError() const;
 		bool IsSignificantError() const;
 
@@ -58,9 +64,8 @@ namespace SNI
 		bool m_Delay;
 		string m_Description;
 		SNI_CallRecordList m_CallHistory;
+		SNI_ErrorList m_ChildErrorList;
 	};
-
-	typedef vector<SNI_Error> SNI_ErrorList;
 }
 
 #endif // !defined(SNI_ERROR_H_INCLUDED)

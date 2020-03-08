@@ -9,6 +9,12 @@ namespace SNI
 	long m_MaxThreadNum = 0;
 	thread_local long t_MaxFrameNum = 0;
 
+	/*static*/ size_t SNI_Frame::StackMemory()
+	{
+		size_t stackTop = (size_t) &stackTop;
+		static size_t stackBottom = stackTop;
+		return stackBottom - stackTop;
+	}
 
 	/*static*/ SNI_Frame *SNI_Frame::Push(const SNI_Expression *p_Function, SNI_Expression *p_Result)
 	{
@@ -99,6 +105,8 @@ namespace SNI
 		, m_FrameNum(++t_MaxFrameNum)
 		, m_BreakPointJS(MakeBreakPointJS("", 0))
 		, m_Cardinality(0)
+		, m_StackUsage(StackMemory())
+		, m_ContextWorld(SNI_Thread::GetThread()->ContextWorld())
 	{
 	}
 
@@ -108,6 +116,8 @@ namespace SNI
 		, m_Function(p_Function)
 		, m_BreakPointJS(MakeBreakPointJS("", 0))
 		, m_Cardinality(0)
+		, m_StackUsage(StackMemory())
+		, m_ContextWorld(SNI_Thread::GetThread()->ContextWorld())
 	{
 	}
 
@@ -367,6 +377,13 @@ namespace SNI
 		p_Stream << "\t\t\"framenum\" : \"" << m_FrameNum << "\",\n";
 		p_Stream << "\t\t\"typename\" : \"" << m_Function.GetValueTypeName() << "\",\n";
 		p_Stream << "\t\t\"breakpoint\" : " << m_BreakPointJS << ",\n";
+		p_Stream << "\t\t\"stackusage\" : " << to_string(m_StackUsage) << ",\n";
+		string context;
+		if (m_ContextWorld)
+		{
+			context = m_ContextWorld->DisplaySN(p_DisplayOptions);
+		}
+		p_Stream << "\t\t\"contextworld\" : \"" << EscapeStringToJSON(context) << "\",\n";
 		if (HasCode())
 		{
 			p_Stream << "\t\t\"hascode\" : true,\n";

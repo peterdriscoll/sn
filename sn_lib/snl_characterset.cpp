@@ -21,6 +21,7 @@ namespace SNL
 	}
 	void SNL_CharacterSet::Link()
 	{
+		SN_LINK(Sign);
 		SN_LINK(Digit);
 		SN_LINK(AlphaLower);
 		SN_LINK(AlphaUpper);
@@ -34,6 +35,12 @@ namespace SNL
 	void SNL_CharacterSet::Init()
 	{
 		// Character sets.
+
+		{
+			SN_LOCAL(c);
+
+			(Define(Sign)(c) == (c == (String("+") || String("-")))).PartialAssert().Do();
+		}
 
 		{
 			SN_LOCAL(d);

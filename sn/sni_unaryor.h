@@ -19,6 +19,7 @@ namespace SNI
 		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual long GetPriority() const;
 
+		virtual bool IgnoreNoConstraint() const;
 		virtual bool AllowDelay() const;
 
 		virtual SN::SN_Value PrimaryFunctionValue(const SN::SN_Value &p_Param) const;

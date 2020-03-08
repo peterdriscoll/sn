@@ -39,6 +39,8 @@ namespace SNI
 	}
 
 	SNI_Error::SNI_Error()
+		: m_Success(true)
+		, m_Delay(false)
 	{
 	}
 
@@ -125,8 +127,40 @@ namespace SNI
 		return true;
 	}
 
+	void SNI_Error::AddError(SN::SN_Error &p_Error)
+	{
+		SNI_Error *e = p_Error.GetSNI_Error();
+		if (e == this)
+		{
+			long dog = 10;
+		}
+		ASSERTM(e != this, "Recursive error inclusion.");
+		m_ChildErrorList.push_back(e);
+	}
+
+	void SNI_Error::CheckChildError()
+	{
+		if (m_Success && !m_ChildErrorList.empty())
+		{
+			bool success = false;
+			for (SNI_Error *e : m_ChildErrorList)
+			{
+				if (!e->IsError())
+				{
+					success = true;
+				}
+			}
+			if (!success)
+			{
+				m_Success = success;
+				m_Description = "All options failed.";
+			}
+		}
+	}
+
 	bool SNI_Error::IsError() const
 	{
+		const_cast<SNI_Error *>(this)->CheckChildError();
 		return !m_Success;
 	}
 

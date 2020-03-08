@@ -3355,6 +3355,7 @@ namespace test_sn
 				validate.IsInteger(String("1")).Assert().Do();
 				validate.IsInteger(String("45")).Assert().Do();
 				validate.IsInteger(String("543")).Assert().Do();
+				validate.IsInteger(String("-821")).Assert().Do();
 				(!validate.IsInteger(String("543X"))).Assert().Do();
 				(!validate.IsInteger(String("A543X"))).Assert().Do();
 
@@ -3532,7 +3533,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Validate IsExponential", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false /*runWebServer*/);
 
 				CharacterSet characterSet;
 				Validate validate(characterSet);
@@ -3541,6 +3542,7 @@ namespace test_sn
 				validate.IsExponential(String("135")).Assert().Do();
 				validate.IsExponential(String("45.9")).Assert().Do();
 				validate.IsExponential(String("543.995e19")).Assert().Do();
+				validate.IsExponential(String("6.626e-34")).Assert().Do();
 
 				(!validate.IsExponential(String("8."))).Assert().Do();
 				(!validate.IsExponential(String("543."))).Assert().Do();
@@ -4027,6 +4029,100 @@ namespace test_sn
 				}
 			}
 			Cleanup();
+		}
+
+		TEST_METHOD(TestParse_Value)
+		{
+			return;
+			Initialize();
+			{
+				Manager manager("Test Parse Value", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				CharacterSet characterSet;
+				Validate validate(characterSet);
+				Parse parse(validate);
+
+				// Name test.
+				SN_DOMAIN(MyDomain);
+				SN_DECLARE(i1);
+				(parse.Value(MyDomain)(String("Peter_1"))(i1)).Assert().Do();
+
+				SN_DECLARE(j1);
+				(j1 == Meta(1, MyDomain["Peter_1"])).Assert().Do();
+				(i1 == j1).Evaluate().Do();
+
+				string i1_string = i1.DisplayValueSN();
+				string j1_string = j1.DisplayValueSN();
+				Assert::IsTrue(i1_string == j1_string);
+
+				// Integer test.
+				SN_DECLARE(i2);
+				(parse.Value(MyDomain)(String("543"))(i2)).Assert().Do();
+
+				SN_DECLARE(j2);
+				(j2 == Long(543)).Assert().Do();
+				(i2 == j2).Evaluate().Do();
+
+				string i2_string = i2.DisplayValueSN();
+				string j2_string = j2.DisplayValueSN();
+				Assert::IsTrue(i2_string == j2_string);
+
+				// Floating point test.
+				SN_DECLARE(i4);
+				(parse.Value(MyDomain)(String("3.1415"))(i4)).Assert().Do();
+
+				SN_DECLARE(j4);
+				(j4 == Double(3.1415)).Assert().Do();
+				(i4 == j4).Evaluate().Do();
+
+				string i4_string = i4.DisplayValueSN();
+				string j4_string = j4.DisplayValueSN();
+				Assert::IsTrue(i4_string == j4_string);
+
+				// Exponential test.
+				SN_DECLARE(k5);
+				(parse.Number(MyDomain)(String("6.626176e-34"))(k5)).Assert().Do();
+
+				SN_DECLARE(i5);
+				(parse.Value(MyDomain)(String("6.626176e-34"))(i5)).Assert().Do();
+
+				SN_DECLARE(j5);
+				(j5 == Double(6.626176e-34)).Assert().Do();
+				(i5 == j5).Evaluate().Do();
+				(k5 == j5).Evaluate().Do();
+
+				string i5_string = i5.DisplayValueSN();
+				string k5_string = k5.DisplayValueSN();
+				string j5_string = j5.DisplayValueSN();
+				Assert::IsTrue(i5_string == j5_string);
+				Assert::IsTrue(k5_string == j5_string);
+
+				// String
+				SN_DECLARE(i3);
+				(parse.Value(MyDomain)(String("\"My test string\""))(i3)).Assert().Do();
+
+				SN_DECLARE(j3);
+				(j3 == String("My test string")).Assert().Do();
+				(i3 == j3).Evaluate().Do();
+
+				string i3_string = i3.DisplayValueSN();
+				string j3_string = j3.DisplayValueSN();
+				Assert::IsTrue(i3_string == j3_string);
+
+
+				// String sub string
+				SN_DECLARE(s1);
+				(parse.Value(MyDomain)(String("\"My test \\\"string\\\"\""))(s1)).Assert().Do();
+
+				SN_DECLARE(s2);
+				(s2 == String("My test \"string\"")).Assert().Do();
+				(s1 == s2).Evaluate().Do();
+
+				string s1_string = s1.DisplayValueSN();
+				string s2_string = s2.DisplayValueSN();
+				Assert::IsTrue(s1_string == s2_string);
+			}
 		}
 	};
 }

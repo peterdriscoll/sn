@@ -203,88 +203,129 @@ namespace SNI
 		condition_param->SetValue(condition);
 		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after all values", SN::LeftId);
 
-		SN::SN_Error e1 = p_ParameterList[1].AssertValue(condition);
-		if (e1.IsError())
+		SN::SN_Error e = p_ParameterList[1].AssertValue(condition);
+		if (!e.IsError())
 		{
-			return e1;
-		}
+			SN::SN_Expression sCondition = condition.SimplifyValue();
 
-		SN::SN_Expression sCondition = condition.SimplifyValue();
+			condition_param->SetValue(sCondition);
 
-		condition_param->SetValue(sCondition);
+			string typeName = GetTypeName();
+			bool success = false;
+			bool useAllValuesEqual = true;
 
-		SNI_World *contextWorld = SNI_Thread::GetThread()->ContextWorld();
-		SN::SN_Expression *parameterList = p_ParameterList;
-		bool success = false;
-		string typeName = GetTypeName();
-		const SNI_Expression *source = p_Source;
-		sCondition.ForEach(
-			[contextWorld, parameterList, &success, &typeName, source](const SN::SN_Expression &p_Param, SNI::SNI_World *p_World) -> SN::SN_Error
+			if (useAllValuesEqual && sCondition.AllValuesEqual(skynet::True))
 			{
-				if (p_World)
-				{
-					SNI_Thread::GetThread()->PushContextWorld(p_World);
-				}
-				SNI_Thread::GetThread()->SetDebugId("");
-				SN::SN_Error e = skynet::OK;
-				if (p_Param.GetBool())
-				{
-					SN::SN_Expression *paramList = new SN::SN_Expression[2];
-					paramList[0] = parameterList[0];
-					paramList[1] = parameterList[2];
+				SN::SN_Expression *paramList = new SN::SN_Expression[2];
+				paramList[0] = p_ParameterList[0];
+				paramList[1] = p_ParameterList[2];
 
-					SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, typeName + ".Unify after all values", SN::PositiveId);
-					e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList, source).GetError();
-					delete[] paramList;
-				}
-				else
-				{
-					SN::SN_Expression *paramList = new SN::SN_Expression[2];
-					paramList[0] = parameterList[0];
-					paramList[1] = parameterList[3];
-
-					SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, typeName + ".Unify after all values", SN::NegativeId);
-					e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList, source).GetError();
-					delete[] paramList;
-				}
-				if (p_World)
-				{
-					SNI_Thread::GetThread()->PopContextWorld();
-				}
-				if (e.IsError())
-				{
-					if (p_World)
-					{
-						SN::SN_Error err = p_World->Fail(IncompatibleValue);
-						if (err.IsError())
-						{
-							return err;
-						}
-					}
-				}
-				else
+				SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, typeName + ".Unify after all values", SN::PositiveId);
+				e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList, p_Source).GetError();
+				delete[] paramList;
+				if (!e.IsError())
 				{
 					success = true;
 				}
-				return skynet::OK;
 			}
-		);
+			else if (useAllValuesEqual && sCondition.AllValuesEqual(skynet::False))
+			{
+				SN::SN_Expression *paramList = new SN::SN_Expression[2];
+				paramList[0] = p_ParameterList[0];
+				paramList[1] = p_ParameterList[3];
 
-		LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": End " + DisplayUnify(GetNumParameters(), p_ParameterList, p_Source)));
-		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, typeName + ".Unify after all values", SN::RightId);
-		SNI_Frame::Pop();
-		if (!success)
-		{
-			return SN::SN_Error(false, false, "Both the positive and negative cases failed in if statement.");
-		}
+				SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, typeName + ".Unify after all values", SN::PositiveId);
+				e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList, p_Source).GetError();
+				delete[] paramList;
+				if (!e.IsError())
+				{
+					success = true;
+				}
+			}
+			else
+			{
+				SNI_World *contextWorld = SNI_Thread::GetThread()->ContextWorld();
+				SN::SN_Expression *parameterList = p_ParameterList;
+				const SNI_Expression *source = p_Source;
+				e = sCondition.ForEach(
+					[contextWorld, parameterList, &success, &typeName, source](const SN::SN_Expression &p_Param, SNI::SNI_World *p_World) -> SN::SN_Error
+				{
+					if (p_World)
+					{
+						SNI_Thread::GetThread()->PushContextWorld(p_World);
+					}
+					SNI_Thread::GetThread()->SetDebugId("");
+					SN::SN_Error e = skynet::OK;
+					if (p_Param.GetBool())
+					{
+						SN::SN_Expression *paramList = new SN::SN_Expression[2];
+						paramList[0] = parameterList[0];
+						paramList[1] = parameterList[2];
 
-		SN::SN_Error e = condition_worldSet->CheckDependentWorlds();
-		if (e.IsError())
-		{
+						SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, typeName + ".Unify after all values", SN::PositiveId);
+						e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList, source).GetError();
+						delete[] paramList;
+					}
+					else
+					{
+						SN::SN_Expression *paramList = new SN::SN_Expression[2];
+						paramList[0] = parameterList[0];
+						paramList[1] = parameterList[3];
+
+						SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, typeName + ".Unify after all values", SN::NegativeId);
+						e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList, source).GetError();
+						delete[] paramList;
+					}
+					if (p_World)
+					{
+						SNI_Thread::GetThread()->PopContextWorld();
+					}
+					if (e.IsError())
+					{
+						if (p_World)
+						{
+							SN::SN_Error e2 = p_World->Fail(IncompatibleValue);
+							if (e2.IsError())
+							{
+								e.AddError(e2);
+							}
+						}
+					}
+					else
+					{
+						success = true;
+					}
+					return e;
+				});
+
+				if (!success)
+				{
+					ASSERTM(e.IsError(), "Error should have been detected in all options in error handling.");
+					SNI_CallRecord *callRecord = new SNI_CallRecord("Both positive and negative cases failed in if.", this);
+					e.GetSNI_Error()->AddNote(callRecord);
+				}
+
+				SN::SN_Error e2 = condition_worldSet->CheckDependentWorlds();
+				if (e2.IsError())
+				{
+					if (!e.IsError())
+					{
+						e = e2;
+					}
+					else
+					{
+						e.AddError(e2);
+					}
+				}
+			}
+
+			LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": End " + DisplayUnify(GetNumParameters(), p_ParameterList, p_Source)));
+			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, typeName + ".Unify after all values", SN::RightId);
+			SNI_Frame::Pop();
 			return e;
 		}
 
-		return skynet::OK;
+		return e;
 	}
 
 	/// @brief Extract the condition, positive case, and negative case from the parameter list and call PartialUnifyInternal.

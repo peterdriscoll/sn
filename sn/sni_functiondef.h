@@ -63,6 +63,8 @@ namespace SNI
 		virtual string GetOperator() const;
 
 		virtual bool AllowDelay() const;
+		virtual bool SupportsMultipleOutputs() const;
+		virtual bool IgnoreNoConstraint() const;
 		virtual long GetNumParameters() const;
 
 		virtual bool Equivalent(SNI_Object * p_Other) const;
