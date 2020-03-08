@@ -109,7 +109,6 @@ namespace SNI
 	SN::SN_Error SNI_CartUnify::ForEachUnify()
 	{
 		SN::SN_Error e = skynet::OK;
-		CreateVariablesForOutput();
 		if (m_Output[0])
 		{
 			e = ProcessValue(0, m_InputList[0], NULL);
@@ -132,44 +131,8 @@ namespace SNI
 					return SN::SN_Error(false, false, "SNI_Cart: World set is empty after matching values in cartesian product.");
 				}
 			}
-			e = CaptureOutput();
 		}
 		return e;
-	}
-
-	void SNI_CartUnify::CreateVariablesForOutput()
-	{
-		for (long j = 0; j < m_Depth; j++)
-		{
-			if (m_Output[j])
-			{
-				m_InputList[j] = new SNI_ValueSet;
-			}
-		}
-	}
-
-	SN::SN_Error SNI_CartUnify::CaptureOutput()
-	{
-		for (size_t j = 0; j < m_Depth; j++)
-		{
-			if (m_Output[j])
-			{
-				SN::SN_Value simple = m_InputList[j].SimplifyValue();
-				m_InputList[j].GetSNI_Expression()->Complete();
-				SN::SN_Error  e = m_ParamList[j].AssertValue(simple);
-				m_ParamList[j].GetSNI_Expression()->Complete();
-				if (e.IsError())
-				{
-					return e;
-				}
-			}
-			else
-			{
-				m_ParamList[j] = m_InputList[j].SimplifyValue();
-				m_ParamList[j].GetSNI_Expression()->Complete();
-			}
-		}
-		return skynet::OK;
 	}
 
 	SN::SN_Error SNI_CartUnify::DelayUnify()

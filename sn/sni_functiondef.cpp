@@ -527,8 +527,40 @@ namespace SNI
 		}
 		else
 		{
-			SNI_CartUnify cart(this, p_Depth, p_InputList, p_ParamList, p_Output, p_CalcPos, p_TotalCalc, p_Source);
-			return cart.ForEachUnify();
+			for (long j = 0; j < p_Depth; j++)
+			{
+				if (p_Output[j])
+				{
+					p_InputList[j] = new SNI_ValueSet;
+				}
+			}
+			
+			SN::SN_Error e =skynet::OK;
+			{
+				SNI_CartUnify cart(this, p_Depth, p_InputList, p_ParamList, p_Output, p_CalcPos, p_TotalCalc, p_Source);
+				e = cart.ForEachUnify();
+			}
+
+			for (size_t j = 0; j < p_Depth; j++)
+			{
+				if (p_Output[j])
+				{
+					SN::SN_Value simple = p_InputList[j].SimplifyValue();
+					p_InputList[j].GetSNI_Expression()->Complete();
+					SN::SN_Error  e = p_ParamList[j].AssertValue(simple);
+					p_ParamList[j].GetSNI_Expression()->Complete();
+					if (e.IsError())
+					{
+						return e;
+					}
+				}
+				else
+				{
+					p_ParamList[j] = p_InputList[j].SimplifyValue();
+					p_ParamList[j].GetSNI_Expression()->Complete();
+				}
+			}
+			return e;
 		}
 	}
 }

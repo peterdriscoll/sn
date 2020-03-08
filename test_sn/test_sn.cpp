@@ -3534,6 +3534,7 @@ namespace test_sn
 			{
 				Manager manager("Test Validate IsExponential", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false /*runWebServer*/);
+				//manager.SetDirectPassType(skynet::ReturnValueToVariable);
 
 				CharacterSet characterSet;
 				Validate validate(characterSet);

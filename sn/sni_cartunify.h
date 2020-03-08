@@ -28,8 +28,6 @@ namespace SNI
 		virtual SN::SN_Error ProcessValue(long p_Depth, const SN::SN_Expression & p_Param, SNI_World * p_World);
 
 	protected:
-		void CreateVariablesForOutput();
-		SN::SN_Error CaptureOutput();
 		SN::SN_Error DelayUnify();
 
 	private:
