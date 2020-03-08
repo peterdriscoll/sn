@@ -565,6 +565,43 @@ namespace SNI
 		}
 	}
 
+	SN::SN_Expression SNI_ValueSet::CommonValue()
+	{
+		if (m_ValueList.size() == 0)
+		{
+			return skynet::Null;
+		}
+		SNI_World *contextWorld = SNI_Thread::GetThread()->ContextWorld();
+		if (contextWorld)
+		{
+			return skynet::Null;
+		}
+		SN::SN_Expression result = skynet::Null;
+		for (const SNI_TaggedValue &tv : m_ValueList)
+		{
+			SNI_World *world = tv.GetWorld();
+			if (!world || !world->IsEmpty())
+			{
+				if (tv.GetValue().IsNullValue())
+				{
+					return skynet::Null;
+				}
+				if (result.IsNull())
+				{
+					result = tv.GetValue();
+				}
+				else
+				{
+					if (!result.Equivalent(tv.GetValue()))
+					{
+						return skynet::Null;
+					}
+				}
+			}
+		}
+		return result;
+	}
+
 	bool SNI_ValueSet::ExtractBooleanValue(bool &p_Value)
 	{
 		if (m_ValueList.size() == 0)
@@ -622,6 +659,11 @@ namespace SNI
 
 	SN::SN_Expression SNI_ValueSet::SimplifyValue()
 	{
+		SN::SN_Expression result = CommonValue();
+		if (!result.IsNull())
+		{
+			return result;
+		}
 		bool extractValue = false;
 		Validate();
 		if (ExtractBooleanValue(extractValue))
