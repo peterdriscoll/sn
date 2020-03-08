@@ -393,18 +393,6 @@ namespace SNI
 		return m_Mark;
 	}
 
-	void SNI_WorldSet::RemoveWorld(SNI_World *world)
-	{
-		for (size_t j = 0; j < m_WorldList.size(); j++)
-		{
-			if (m_WorldList[j] == world)
-			{
-				m_WorldList.erase(m_WorldList.begin() + j);
-				return;
-			}
-		}
-	}
-
 	SN::SN_Error SNI_WorldSet::CheckDependentWorlds()
 	{
 		ScheduleCheckForFails();

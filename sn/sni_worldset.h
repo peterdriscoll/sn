@@ -84,7 +84,6 @@ namespace SNI
 
 		void Mark(bool p_Mark);
 		bool HasMutualExclusion();
-		void RemoveWorld(SNI_World *world);
 		SN::SN_Error CheckDependentWorlds();
 		SNI_WorldSet * OneParent();
 		bool IsComplete();

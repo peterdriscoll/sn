@@ -1229,6 +1229,7 @@ namespace SNI
 				}
 				DebugCommand(SN::MirrorPoint, "Check dependencies", SN::CallId);
 
+				Lock();
 				for (auto pair : *processMap)
 				{
 					SNI_WorldSet *ws = pair.second;
@@ -1238,7 +1239,6 @@ namespace SNI
 						result = err;
 					}
 				}
-				Lock();
 				processMap->clear();
 				changesToProcess = !changedList->empty();
 				Unlock();
