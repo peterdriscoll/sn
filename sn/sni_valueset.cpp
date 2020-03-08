@@ -497,6 +497,7 @@ namespace SNI
 		SNI_WorldSet *worldSet = NULL;
 		SNI_WorldSet *parentWorldSet = NULL;
 		bool oneParent = true;
+		SNI_Thread::GetThread()->Lock();
 		for (SNI_TaggedValueList::iterator it = m_ValueList.begin(); it != m_ValueList.end();)
 		{
 			SNI_World * world = it->GetWorld();
@@ -518,6 +519,7 @@ namespace SNI
 				++it;
 			}
 		}
+		SNI_Thread::GetThread()->Unlock();
 		if (oneParent && parentWorldSet)
 		{ 
 			for (SNI_TaggedValue &tv : m_ValueList)
@@ -632,6 +634,7 @@ namespace SNI
 		bool found = false;
 
 		SN::SN_Expression loopError;
+		SNI_Thread::GetThread()->Lock();
 		for (SNI_TaggedValueList::iterator it = m_ValueList.begin(); it != m_ValueList.end();)
 		{
 			SNI_World *world = it->GetWorld();
@@ -670,6 +673,7 @@ namespace SNI
 				it++;
 			}
 		}
+		SNI_Thread::GetThread()->Unlock();
 		Validate();
 		if (!found)
 		{

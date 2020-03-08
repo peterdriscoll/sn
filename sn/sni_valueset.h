@@ -66,12 +66,9 @@ namespace SNI
 		virtual SN::SN_ValueSet DoRemove(const SN::SN_Value &p_Other);
 		virtual SNI_Expression * Clone(SNI_Frame *p_Frame, bool &p_Changed);
 		void AssignToVariable(SNI_Variable * p_Variable);
-		string GenerateTempVariableName();
-		virtual void RemoveFailedWorlds();
-		virtual void FlattenValueSets();
-		virtual bool ExtractBooleanValue(bool & p_Value);
 		virtual void Simplify();
 		virtual void Validate();
+		string GenerateTempVariableName();
 		virtual SN::SN_Expression SimplifyValue();
 		virtual SN::SN_Error AssertValue(const SN::SN_Expression &p_Value);
 		virtual SNI_WorldSet *GetWorldSet();
@@ -109,6 +106,9 @@ namespace SNI
 		virtual void PromoteMembers();
 
 	private:
+		virtual void RemoveFailedWorlds();
+		virtual void FlattenValueSets();
+		virtual bool ExtractBooleanValue(bool & p_Value);
 		void CheckWorldSetConsistency();
 
 		SNI_WorldSet        *m_WorldSet;
