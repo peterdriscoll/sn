@@ -103,6 +103,7 @@ namespace SNI
 	SNI_Frame::SNI_Frame()
 		: m_ThreadNum(SNI_Thread::GetThread()->GetThreadNum())
 		, m_FrameNum(++t_MaxFrameNum)
+		, m_StepCount(SNI_Thread::GetThread()->GetStepCount())
 		, m_BreakPointJS(MakeBreakPointJS("", 0))
 		, m_Cardinality(0)
 		, m_StackUsage(StackMemory())
@@ -113,6 +114,7 @@ namespace SNI
 	SNI_Frame::SNI_Frame(SN::SN_Expression p_Function)
 	    : m_ThreadNum(SNI_Thread::GetThread()->GetThreadNum())
 		, m_FrameNum(++t_MaxFrameNum)
+		, m_StepCount(SNI_Thread::GetThread()->GetStepCount())
 		, m_Function(p_Function)
 		, m_BreakPointJS(MakeBreakPointJS("", 0))
 		, m_Cardinality(0)
@@ -375,6 +377,7 @@ namespace SNI
 		p_Stream << "\t\t\"functioncardinality\" : \"" << card_string << "\",\n";
 		p_Stream << "\t\t\"framepos\" : \"" << p_FrameStackPos << "\",\n";
 		p_Stream << "\t\t\"framenum\" : \"" << m_FrameNum << "\",\n";
+		p_Stream << "\t\t\"stepcount\" : \"" << m_StepCount << "\",\n";
 		p_Stream << "\t\t\"typename\" : \"" << m_Function.GetValueTypeName() << "\",\n";
 		p_Stream << "\t\t\"breakpoint\" : " << m_BreakPointJS << ",\n";
 		p_Stream << "\t\t\"stackusage\" : " << to_string(m_StackUsage) << ",\n";

@@ -69,6 +69,7 @@ namespace SNI
 		SN::SN_Expression              m_Function;
 		long                           m_ThreadNum;
 		long                           m_FrameNum;
+		long                           m_StepCount;
 		SNI_ReplacementList            m_ReplacementList;
 		SNI_VariablePointerList        m_VariableList;
 		SN::SN_Expression              m_CloneFunction;

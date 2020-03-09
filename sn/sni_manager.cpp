@@ -122,7 +122,7 @@ namespace SNI
 		, m_LogExpressionBufferCapacity(50)
 		, m_MaxStackFrames(10)
 		, m_Transaction(false)
-		, m_DirectPassType(skynet::DirectPass)
+		, m_DirectPassType(skynet::ReturnValueToVariable)
 		, m_EvaluationType(skynet::Lazy)
 		, m_LogicType(skynet::Parsing)
 	{

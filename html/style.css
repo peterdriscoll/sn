@@ -138,6 +138,21 @@ table, tr, td {
         border: none;
     }
 
+.frameheading {
+    border-style: none;
+    border-spacing: 0px;
+    background-color: seashell;
+}
+
+    .frameheading th {
+        text-align: center;
+    }
+
+    .frameheading td {
+        text-align: center;
+    }
+
+
 .noborder {
     border-style: none;
     border-spacing: 0px;

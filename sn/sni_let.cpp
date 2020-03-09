@@ -116,7 +116,7 @@ namespace SNI
 		SNI_Variable* condition_param = topFrame->CreateParameterByName("Condition", m_Condition);
 		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".AssertValue before condition check", SN::LeftId);
 
-		SN::SN_Error e = SN::SN_Expression(m_Condition).DoAssert();
+		SN::SN_Error e = m_Condition->DoAssert();
 
 		condition_param->SetValue(e);
 

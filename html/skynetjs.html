@@ -218,8 +218,19 @@
                             <tr ng-repeat="f in frames">
                                 <td>
                                     <div style='overflow-x:auto;white-space:nowrap;width:900px'>
+                                        <table class="frameheading">
+                                            <tr>
+                                                <td>{{f.framepos}}</td>
+                                                <td>{{f.function}}</td>
+                                                <td>STEP:{{f.stepcount}}</td>
+                                                <td>STACK:{{f.stackusage}}</td>
+                                                <td ng-bind-html="trustAsHtml(f.contextworld)" init-bind></tdng-bind-html="trustAsHtml(f.contextworld)">
+                                                <td ng-bind-html="trustAsHtml(f.functioncardinality)" init-bind></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </table>
                                         <table class='frame'>
-                                            <caption>{{f.framepos}} : {{ f.function }} : <span ng-bind-html="trustAsHtml(f.contextworld)" init-bind></span>  : Mem {{f.stackusage}} : <span ng-bind-html="trustAsHtml(f.functioncardinality)" init-bind></span></caption>
                                             <tr>
                                                 <th ng-repeat="v in f.variables">{{ v.name }}</th>
                                             </tr>

@@ -392,16 +392,23 @@ namespace SNI
 					}
 				}
 				SNI_Frame *topFrame = SNI_Frame::Top();
-				SN::SN_Variable splitPoint = topFrame->CreateSplitVariable();
 				SN::SN_String s_result = result;
 				result.ForEach(
-					[&splitPoint, &p_ParamList, p_Depth, p_WorldList, worldSet](const SN::SN_Expression &p_Param, SNI::SNI_World *p_World) -> SN::SN_Error
+				[topFrame, &p_ParamList, p_Depth, p_WorldList, worldSet](const SN::SN_Expression &p_Param, SNI::SNI_World *p_World) -> SN::SN_Error
+				{
+					if (p_Param.IsKnownValue() && p_Param.GetString() == "")
 					{
+						p_ParamList[PU2_First].AddValue(p_Param, p_Depth, p_WorldList, worldSet);
+						p_ParamList[PU2_Second].AddValue(p_Param, p_Depth, p_WorldList, worldSet);
+					}
+					else
+					{
+						SN::SN_Variable splitPoint = topFrame->CreateSplitVariable();
 						p_ParamList[PU2_First].AddValue(SN::SN_StringRef(p_Param, p_Param.GetSNI_String()->GetStart(), splitPoint), p_Depth, p_WorldList, worldSet);
 						p_ParamList[PU2_Second].AddValue(SN::SN_StringRef(p_Param, splitPoint, p_Param.GetSNI_String()->GetEnd()), p_Depth, p_WorldList, worldSet);
 						return skynet::OK;
 					}
-				);
+				});
 				return skynet::OK;
 			}
 		}

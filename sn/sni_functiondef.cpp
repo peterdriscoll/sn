@@ -476,7 +476,7 @@ namespace SNI
 			{
 				for (long j = 0; j < p_Depth; j++)
 				{
-					if (p_Output[j] && !p_ParamList[j].IsValueHolder())
+					if (p_Output[j] && !p_ParamList[j].IsValueHolder() && !p_ParamList[j].IsReferableValue())
 					{
 						p_InputList[j] = new SNI_Variable;
 						SNI_Frame *topFrame = SNI_Frame::Top();
@@ -491,12 +491,12 @@ namespace SNI
 				{
 					if (p_Output[j])
 					{
-						if (!p_ParamList[j].IsValueHolder())
+						if (!p_ParamList[j].IsValueHolder() && !p_ParamList[j].IsValueHolder() && !p_ParamList[j].IsReferableValue())
 						{
 							SN::SN_Value simple = p_InputList[j].SimplifyValue();
 							SNI_Frame *topFrame = SNI_Frame::Top();
 							topFrame->GetVariable(j)->SetValue(simple);
-							SN::SN_Error  e = p_ParamList[j].AssertValue(simple);
+							SN::SN_Error  e = p_ParamList[j].GetSNI_Expression()->AssertValue(simple);
 							if (e.IsError())
 							{
 								return e;
