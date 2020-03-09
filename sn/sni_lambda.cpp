@@ -176,7 +176,7 @@ namespace SNI
 		SN::SN_Expression param = p_ParameterList->back().GetSNI_Expression();
 		p_ParameterList->pop_back();
 		SN::SN_Error e = skynet::OK;
-		if (!m_FormalParameter || m_FormalParameter->IsNullValue())
+		if ((SNI_Thread::TopManager()->GetEvaluationType() == skynet::Lazy) && (!m_FormalParameter || m_FormalParameter->IsNullValue()))
 		{	// Lazy evaluation. Delay until the value is needed.
 			e = m_FormalParameter->PartialAssertValue(param, true);
 		}

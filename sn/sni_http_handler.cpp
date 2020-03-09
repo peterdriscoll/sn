@@ -174,8 +174,8 @@ namespace SNI
 			}
 			else if (path == "/logexpjs")
 			{
-				long maxLogEntries = atol(umap["maxlogentries"].c_str());
-				m_response_data = l_thread->LogExpJS(maxLogEntries, debugJS);
+				long maxCode = atol(umap["maxcode"].c_str());
+				m_response_data = l_thread->LogExpJS(maxCode, debugJS);
 				m_extension = "json";
 			}
 			else if (path == "/stepcountjs")

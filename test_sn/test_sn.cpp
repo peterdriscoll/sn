@@ -702,6 +702,12 @@ namespace test_sn
 			{
 				Manager manager("Test Y Combinator", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				if (manager.GetEvaluationType() == skynet::Strict)
+				{
+					return;
+				}
+
 				SN_DECLARE(Y);
 				SN_DECLARE(f);
 				SN_DECLARE(x);
@@ -1008,6 +1014,11 @@ namespace test_sn
 			{
 				Manager manager("Test Church Divide", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				if (manager.GetEvaluationType() == skynet::Strict)
+				{
+					return;
+				}
 
 				SN_DECLARE(divide);
 
@@ -1471,8 +1482,8 @@ namespace test_sn
 				(ParseInteger("21")(x3)).Assert().Do();
 				(x3 == Long(21)).Evaluate().Do();
 
-				long x2_long = Long(x2).GetNumber();
-				long x3_long = Long(x3).GetNumber();
+				long x2_long = Long(x2.GetSafeValue()).GetNumber();
+				long x3_long = Long(x3.GetSafeValue()).GetNumber();
 				Assert::IsTrue(x2_long == 13);
 				Assert::IsTrue(x3_long == 21);
 			}
@@ -3533,8 +3544,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Validate IsExponential", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false /*runWebServer*/);
-				//manager.SetDirectPassType(skynet::ReturnValueToVariable);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				CharacterSet characterSet;
 				Validate validate(characterSet);

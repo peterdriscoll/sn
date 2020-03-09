@@ -180,7 +180,7 @@ namespace SNI
 		m_Mutex.lock();
 		string delimeter = " ";
 		long entries = 0;
-		for (auto it = m_ExpressionBuffer.rbegin(); it != m_ExpressionBuffer.rend() && (p_MaxLogEntries <= 0 || entries < p_MaxLogEntries); it++, entries++)
+		for (auto it = m_ExpressionBuffer.rbegin(); it != m_ExpressionBuffer.rend() && (p_MaxLogEntries < 0 || entries < p_MaxLogEntries); it++, entries++)
 		{
 			string quotedString = EscapeStringToJSON(it->DisplaySN(p_DisplayOptions));
 			p_Stream << delimeter << "{\"expression\" : \"" << quotedString << "\"}\n";

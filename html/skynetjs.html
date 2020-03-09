@@ -96,15 +96,20 @@
                         </form>
                     </td>
                     <td>
-                        <form ng-submit='setMaxStackFrames()'>
-                            <details id="maxStackFramesId">
-                                <summary>
-                                    Max stack frames<br>
-                                    <input type='submit' value='Stack depth'><br>
-                                </summary>Number of stack frames to display :<br>
-                                <input type='text' ng-model='maxstackframes' name='maxstackframes'>
-                            </details>
-                        </form>
+                        <details id='settingsid'>
+                            <summary>
+                                Dashboard Settings <br>
+                                <button title='Setup' ng-click='settings()' class=''>Settings</button>
+                            </summary>
+                            Max frames : <br>
+                            <input type='text' ng-model='maxstackframes' name='maxstackframes'> <br>
+                            Max code : <br>
+                            <input type='text' ng-model='maxcode' name='maxcode'> <br>
+                            Max derivation : <br>
+                            <input type='text' ng-model='maxderivation' name='maxderivation'> <br>
+                            Max log : <br>
+                            <input type='text' ng-model='maxlog' name='maxlog'>
+                        </details>
                     </td>
                     <td>
                         <form ng-submit='submit("quit")'>
@@ -312,6 +317,13 @@
             $scope.trustAsHtml = $sce.trustAsHtml;
             $scope.threadnum = 0;
             $scope.maxstackframes = -1;
+
+            $scope.stepcount = '';
+            $scope.maxstackframes = 20;
+            $scope.maxcode = 0;
+            $scope.maxderivation = 40;
+            $scope.maxlog = 10;
+
             $scope.pollcount = 0;
             $scope.scheduled = 0;
             $scope.initFirst = function () {
@@ -349,15 +361,15 @@
                                 }
                             }
                         });
-                    $http.get(home + 'derivationjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxstackframes * 4)
+                    $http.get(home + 'derivationjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxderivation)
                         .then(function (response) { $scope.derivationhtml = response.data.derivationhtml; });
-                    $http.get(home + 'logjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxstackframes * 4)
+                    $http.get(home + 'logjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxlog)
                         .then(function (response) { $scope.logs = response.data.records; });
-                    $http.get(home + 'logexpjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxstackframes * 4)
+                    $http.get(home + 'logexpjs?threadnum=' + $scope.threadnum + '&maxcode=' + $scope.maxcode)
                         .then(function (response) { $scope.logexps = response.data.records; });
                     $http.get(home + "stepcountjs")
                         .then(function (response) { $scope.stepcounts = response.data.records; });
-                    $http.get(home + 'errorjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxstackframes * 4)
+                    $http.get(home + 'errorjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxcode)
                         .then(function (response) { $scope.error = response.data; });
                     $http.get(home + 'delayedjs?threadnum=' + $scope.threadnum)
                         .then(function (response) { $scope.delayedcalls = response.data.records; });
@@ -501,8 +513,8 @@
                     field.focus();
                 }
             };
-            $scope.setMaxStackFrames = function () {
-                var field = $document[0].getElementById('maxStackFramesId');
+            $scope.settings = function () {
+                var field = $document[0].getElementById('settingsid');
                 if (field.open)
                 {
                     field.open = 0;
