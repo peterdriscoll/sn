@@ -100,17 +100,8 @@
                                 Dashboard Settings <br>
                                 <button title='Setup' ng-click='settings()' class=''>Settings</button>
                             </summary>
-                            <label for="debuglevel">Debug level</label><br/>
-                            <select id="debuglevel" ng-model="debugstop">
-                                <option value="0">none</option>
-                                <option value="1">end</option>
-                                <option value="2">task</option>
-                                <option value="3">error</option>
-                                <option value="4">warning</option>
-                                <option value="5">info</option>
-                                <option value="6">debug</option>
-                                <option value="7">detail</option>
-                            </select>
+                            <label for="debugstop">Debug level</label><br/>
+                            <select id="debugstop" ng-model="debugstop" ng-options="option.name for option in debugstopoptions"> </select>
                             Max frames : <br/>
                             <input type='text' ng-model='maxstackframes' name='maxstackframes'> <br>
                             Max code : <br/>
@@ -327,13 +318,25 @@
             $scope.trustAsHtml = $sce.trustAsHtml;
             $scope.threadnum = 0;
 
+            $scope.debugstopoptions = [
+                { name: 'none', value: '0' },
+                { name: 'end', value: '1' },
+                { name: 'task', value: '2' },
+                { name: 'error', value: '3' },
+                { name: 'warning', value: '4' },
+                { name: 'info', value: '5' },
+                { name: 'debug', value: '6' },
+                { name: 'detail', value: '7' }
+            ];
+
+            $scope.debugstop = $scope.debugstopoptions[6];
+
             // Default settings
             $scope.stepcount = '';
             $scope.maxstackframes = -1;
             $scope.maxcode = 0;
             $scope.maxderivation = 40;
             $scope.maxlog = 10;
-            $scope.debugstop = 6;
 
             // Protect against requesting data again before data is retrieved.
             $scope.scheduled = 0;
@@ -392,7 +395,7 @@
 
             // Request an action from the server.
             $scope.submit = function (action) {
-                $http.get(home + action + '?threadnum=' + $scope.threadnum + '&stackdepth=' + $scope.stackdepth + '&debugstop=' + $scope.debugstop + '&breakpoints=' + Array.from($scope.breakpointCol).join(','))
+                $http.get(home + action + '?threadnum=' + $scope.threadnum + '&stackdepth=' + $scope.stackdepth + '&debugstop=' + $scope.debugstop.value + '&breakpoints=' + Array.from($scope.breakpointCol).join(','))
                     .then(function (response) { $scope.initFirst(); });
             };
 
