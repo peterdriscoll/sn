@@ -179,6 +179,9 @@ namespace SNI
 			case SN::ClonePoint:
 				debugId = "clone";
 				break;
+			case SN::DelayedPoint:
+				debugId = "delayed";
+				break;
 			case SN::CodePoint:
 				debugId = p_DebugId;
 				break;
@@ -972,6 +975,7 @@ namespace SNI
 
 		p_Stream << "\t\"threadnum\" : \"" << m_ThreadNum << "\",\n";
 		p_Stream << "\t\"breakpoint\" : " << m_BreakPointJS << ",\n";
+		p_Stream << "\t\"breakpointdescription\" : \"" << m_DebugCommand.Description() << "\",\n";
 
 		SNI_Manager *manager = GetTopManager(false);
 		if (manager)
