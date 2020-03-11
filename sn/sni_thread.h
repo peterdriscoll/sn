@@ -50,14 +50,11 @@ namespace SNI
 		size_t GetThreadNum();
 		SNI_FrameList & GetFrameList();
 
-		string & GetDebugId();
-		void SetDebugId(const string & p_DebugId);
-
 		size_t GetStepCount();
 
 		SNI_DelayedProcessor *GetProcessor();
 
-		void DebugCommand(SN::InterruptPoint p_InterruptPoint, const string & p_Text, unsigned long p_BreakId);
+		void Breakpoint(SN::DebuggingStop p_DebuggingStop, SN::BreakId p_BreakId, const string &p_TypeName, const string &p_Description, const SNI_Expression *p_Source = NULL, SN::InterruptPoint p_InterruptPoint = SN::CallPoint, const string &p_DebugId = "");
 		void ScheduleCommand(skynet::DebugAction p_DebugAction);
 		bool IsExiting();
 		void LoadBreakPoints(const string &p_BreakPointString);
@@ -67,7 +64,7 @@ namespace SNI
 		void Debug();
 		void CodeBreak();
 		void StepOver();
-		void StepInto();
+		void StepInto(SN::DebuggingStop p_DebugStop);
 		void StepOut();
 		void StepParam();
 		void GotoStepCount(long p_StepCount);
@@ -189,7 +186,6 @@ namespace SNI
 		static vector<SNI_Thread *> m_ThreadList;
 		static mutex m_ThreadListMutex;
 		enum skynet::DebugAction m_DebugAction;
-		string m_DebugId;
 		string m_BreakPoint;
 		string m_BreakPointJS;
 

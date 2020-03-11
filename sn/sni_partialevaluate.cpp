@@ -66,13 +66,11 @@ namespace SNI
 		SNI::SNI_DisplayOptions l_DisplayOptions(doTextOnly);
 
 		LOG(WriteLine(SN::DebugLevel, "Partial evaluate " + DisplayValueSN(0, l_DisplayOptions)));
-		SNI_Thread::GetThread()->SetDebugId("partialevaluate");
-		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "evaluate", SN::CallId);
+		Breakpoint(SN::DebugStop, SN::CallId, GetTypeName(), "Call", this, SN::CallPoint);
 
 		SN::SN_Error result = p_ParamList[PC1_First].DoPartialEvaluate().GetError();
 
-		SNI_Thread::GetThread()->SetDebugId("partialevaluate");
-		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Evaluate", SN::ReturnId);
+		Breakpoint(SN::DebugStop, SN::ReturnId, GetTypeName(), "Return", this, SN::CallPoint);
 
 		return p_ParamList[PU1_Result].AssertValue(result);
 	}

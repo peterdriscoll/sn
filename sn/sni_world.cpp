@@ -473,8 +473,7 @@ namespace SNI
 	{
 		if (IsEmpty())
 		{
-			SNI_Thread::GetThread()->SetDebugId(DisplayShort());
-			SNI_Thread::GetThread()->DebugCommand(SN::FailPoint, "Deleted world", SN::CallId);
+			SNI_Thread::GetThread()->Breakpoint(SN::DebugStop, SN::CallId, "", "User breakpoint", NULL, SN::CodePoint, DisplayShort());
 		}
 	}
 }

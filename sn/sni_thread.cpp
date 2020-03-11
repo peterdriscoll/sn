@@ -153,82 +153,46 @@ namespace SNI
 		return m_FrameList;
 	}
 	
-	string & SNI_Thread::GetDebugId()
-	{
-		return m_DebugId;
-	}
-	void SNI_Thread::SetDebugId(const string &p_DebugId)
-	{
-		m_DebugId = p_DebugId;
-	}
-
 	size_t SNI_Thread::GetStepCount()
 	{
 		return m_ThreadStepCount;
 	}
 
-	void SNI_Thread::DebugCommand(SN::InterruptPoint p_InterruptPoint, const string &p_Text, unsigned long p_BreakId)
+	void SNI_Thread::Breakpoint(SN::DebuggingStop p_DebuggingStop, SN::BreakId p_BreakId, const string &p_TypeName, const string &p_Description, const SNI_Expression *p_DebugSource, SN::InterruptPoint p_InterruptPoint, const string &p_DebugId)
 	{
 		m_ThreadStepCount++;
 		if (GetTopManager()->HasDebugServer())
 		{
-			m_DebugCommand.SetText(p_Text);
-			string breakPoint;
-			string breakPointJS;
-			if (p_InterruptPoint == SN::EndPoint)
+			m_DebugCommand.SetDescription(p_Description);
+			string debugId;
+			switch (p_InterruptPoint)
 			{
-				m_Closing = true;
-			}
-			else if (p_InterruptPoint == SN::MirrorPoint)
-			{
-				breakPoint = MakeBreakPoint("MIR", p_BreakId);
-				breakPointJS = MakeBreakPointJS("MIR", p_BreakId);
-				SetThreadBreakPoint(breakPoint, breakPointJS);
-			}
-			else if (p_InterruptPoint == SN::FailPoint)
-			{
-				if (m_DebugId.empty())
+			case SN::MirrorPoint:
+				debugId = "MIR";
+				break;
+			case SN::ErrorPoint:
+				debugId = "Error";
+				break;
+			case SN::UserPoint:
+				debugId = "user";
+				break;
+			case SN::ClonePoint:
+				debugId = "clone";
+				break;
+			case SN::CodePoint:
+				debugId = p_DebugId;
+				break;
+			default:
+				if (p_DebugSource)
 				{
-					return;
+					debugId = p_DebugSource->GetDebugId();
 				}
-				breakPoint = MakeBreakPoint(m_DebugId, p_BreakId);
-				breakPointJS = MakeBreakPointJS(m_DebugId, p_BreakId);
-				SetThreadBreakPoint(breakPoint, breakPointJS);
+				break;
 			}
-			else if (p_InterruptPoint == SN::StaticPoint)
-			{
-				breakPoint = MakeBreakPoint(m_DebugId, p_BreakId);
-				breakPointJS = MakeBreakPointJS(m_DebugId, p_BreakId);
-				SetThreadBreakPoint(breakPoint, breakPointJS);
-			}
-			else if (p_InterruptPoint == SN::ErrorPoint)
-			{
-				string errorId = "Error";
-				breakPoint = MakeBreakPoint(errorId, p_BreakId);
-				breakPointJS = MakeBreakPointJS(errorId, p_BreakId);
-				SetThreadBreakPoint(breakPoint, breakPointJS);
-			}
-			else if (p_InterruptPoint == SN::WarningPoint)
-			{
-				string errorId = "Warning";
-				breakPoint = MakeBreakPoint(errorId, p_BreakId);
-				breakPointJS = MakeBreakPointJS(errorId, p_BreakId);
-				SetThreadBreakPoint(breakPoint, breakPointJS);
-			}
-			else
-			{				
-				if (Top()->GetDebugId().empty())
-				{
-					return;
-				}
-				//SetThreadBreakPoint("", MakeBreakPointJS("", 0));
-				breakPoint = Top()->GetBreakPoint(p_BreakId);
-				breakPointJS = Top()->GetBreakPointJS(p_BreakId);
-				SetDeepBreakPoint(breakPoint, breakPointJS);
-				SetThreadBreakPoint(breakPoint, breakPointJS);
-			}
-
-			while (m_DebugCommand.IsBreakPoint(p_InterruptPoint, m_ThreadNum, SNI_Frame::GetFrameStackDepth(), m_ThreadStepCount, breakPoint))
+			string breakPoint = MakeBreakPoint(debugId, p_BreakId);
+			string breakPointJS = MakeBreakPointJS(debugId, p_BreakId);
+			SetThreadBreakPoint(breakPoint, breakPointJS);
+			while (m_DebugCommand.IsBreakPoint(p_InterruptPoint, m_ThreadNum, SNI_Frame::GetFrameStackDepth(), m_ThreadStepCount, breakPoint, p_DebuggingStop))
 			{
 			}
 		}
@@ -615,7 +579,7 @@ namespace SNI
 	void SNI_Thread::RegisterError(SNI_Error *p_Error)
 	{
 		m_Error = p_Error;
-		DebugCommand(SN::ErrorPoint, "Error", SN::ErrorId);
+		Breakpoint(SN::ErrorStop, SN::ErrorId, "", "Error", NULL, SN::ErrorPoint);
 	}
 
 	void SNI_Thread::Debug()
@@ -633,9 +597,9 @@ namespace SNI
 		m_DebugCommand.StepOver(m_FrameList.size());
 	}
 
-	void SNI_Thread::StepInto()
+	void SNI_Thread::StepInto(SN::DebuggingStop p_DebugStop)
 	{
-		m_DebugCommand.StepInto();
+		m_DebugCommand.StepInto(p_DebugStop);
 	}
 
 	void SNI_Thread::StepOut()
@@ -710,7 +674,7 @@ namespace SNI
 
 	string SNI_Thread::StepIntoWeb(enum DisplayOptionType p_OptionType)
 	{
-		m_DebugCommand.StepInto();
+		m_DebugCommand.StepInto(SN::DebugStop);
 		stringstream ss;
 		WriteWebPage(ss, true, p_OptionType);
 		return ss.str();
@@ -1143,7 +1107,6 @@ namespace SNI
 	void SNI_Thread::PushFrame(SNI_Frame *p_Frame)
 	{
 		LOG(WriteLine(SN::DebugLevel, "Pushing stack frame " + to_string(m_FrameList.size()+1)));
-		p_Frame->SetDebugId(m_DebugId);
 		Lock();
 		m_FrameList.push_back(p_Frame);
 		Unlock();
@@ -1178,6 +1141,9 @@ namespace SNI
 	{
 		m_BreakPoint = p_BreakPoint;
 		m_BreakPointJS = p_BreakPointJS;
+
+		SNI_Frame *topFrame = SNI_Frame::Top();
+		topFrame->SetBreakPoint(m_BreakPoint, m_BreakPointJS);
 	}
 
 	SN::SN_Error SNI_Thread::CheckForFails()
@@ -1227,7 +1193,7 @@ namespace SNI
 					SNI_WorldSet *ws = pair.second;
 					ws->BreakPointsForDeletedWorlds();
 				}
-				DebugCommand(SN::MirrorPoint, "Check dependencies", SN::CallId);
+				Breakpoint(SN::InfoStop, SN::CallId, "", "Check dependencies", NULL, SN::MirrorPoint);
 
 				Lock();
 				for (auto pair : *processMap)

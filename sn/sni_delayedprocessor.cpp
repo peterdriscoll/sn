@@ -50,7 +50,7 @@ namespace SNI
 		{
 			Request(call);
 		}
-		SNI_Thread::GetThread()->DebugCommand(SN::WarningPoint, "Delayed call.", SN::DelayId);
+		SNI_Thread::GetThread()->Breakpoint(SN::DebugStop, SN::DelayId, "Delay Processor", "Delayed call", p_Source, SN::WarningPoint);
 	}
 
 	void SNI_DelayedProcessor::DelayCall(SNI_DelayedCall * p_Call, SNI_World * p_World)

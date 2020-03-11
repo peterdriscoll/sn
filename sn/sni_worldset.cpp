@@ -396,7 +396,6 @@ namespace SNI
 	SN::SN_Error SNI_WorldSet::CheckDependentWorlds()
 	{
 		ScheduleCheckForFails();
-		SNI_Thread::GetThread()->SetDebugId("");
 		return SNI_Thread::GetThread()->CheckForFails();
 	}
 

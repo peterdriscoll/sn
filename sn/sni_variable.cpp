@@ -650,12 +650,17 @@ namespace SNI
 		{
 			SNI_Expression * l_clone = m_Value->Clone(this, NULL);
 			LOG(WriteClonedExpression(SN::DebugLevel, "Call var: ", l_clone));
-			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, "Variable.Call", SN::LeftId);
+			Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Call " + GetName(), NULL, SN::CallPoint);
+
 			SN::SN_Expression e = l_clone->Call(p_ParameterList, p_MetaLevel);
 			SNI_Frame::Pop();
 			if (e.IsNull())
 			{
 				return LOG_RETURN(context, skynet::Fail);
+			}
+			else
+			{
+				Breakpoint(SN::DebugStop, SN::RightId, GetTypeName(), "Return from call " + GetName(), NULL, SN::CallPoint);
 			}
 			return LOG_RETURN(context, e);
 		}
@@ -691,20 +696,19 @@ namespace SNI
 			{
 				topFrame->CreateParameter(j, (*p_ParameterList)[j]);
 			}
-			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before calculation", SN::LeftId);
+			Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Unify " + GetName(), NULL, SN::CallPoint);
 
-			SNI_Thread::GetThread()->SetDebugId(GetDebugId());
 			SN::SN_Expression e = l_clone->Unify(p_ParameterList);
 
 			SNI_Variable *result = topFrame->GetResult();
 			result->SetValue((*p_ParameterList)[0].GetVariableValue());
 			for (size_t j = 1; j < p_ParameterList->size(); j++)
-			{ // dog dog dog
+			{
 				SNI_Variable *param = topFrame->GetVariable(j);
 				topFrame->CreateParameter(j, (*p_ParameterList)[j]);
 			}
 			LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": End " + DisplayUnifyExp(p_ParameterList)));
-			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before calculation", SN::RightId);
+			Breakpoint(SN::DebugStop, SN::RightId, GetTypeName(), "Unify after calculation " + GetName(), NULL, SN::CallPoint);
 
 			SNI_Frame::Pop();
 			if (e.GetSNI_Error())

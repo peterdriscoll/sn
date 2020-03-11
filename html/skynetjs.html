@@ -90,8 +90,7 @@
                                     Goto step count<br>
                                     <input type='submit' value='Goto'><br>
                                 </summary>Step count : <br>
-                                <input type='text' ng-model='stepcount' name='stepcount'>
-                                <br>
+                                <input type='text' ng-model='stepcount' name='stepcount'><br>
                             </details>
                         </form>
                     </td>
@@ -101,9 +100,20 @@
                                 Dashboard Settings <br>
                                 <button title='Setup' ng-click='settings()' class=''>Settings</button>
                             </summary>
-                            Max frames : <br>
+                            <label for="debuglevel">Debug level</label><br/>
+                            <select id="debuglevel" ng-model="debugstop">
+                                <option value="0">none</option>
+                                <option value="1">end</option>
+                                <option value="2">task</option>
+                                <option value="3">error</option>
+                                <option value="4">warning</option>
+                                <option value="5">info</option>
+                                <option value="6">debug</option>
+                                <option value="7">detail</option>
+                            </select>
+                            Max frames : <br/>
                             <input type='text' ng-model='maxstackframes' name='maxstackframes'> <br>
-                            Max code : <br>
+                            Max code : <br/>
                             <input type='text' ng-model='maxcode' name='maxcode'> <br>
                             Max derivation : <br>
                             <input type='text' ng-model='maxderivation' name='maxderivation'> <br>
@@ -229,7 +239,7 @@
                                                 <td>{{f.function}}</td>
                                                 <td>STEP:{{f.stepcount}}</td>
                                                 <td>STACK:{{f.stackusage}}</td>
-                                                <td ng-bind-html="trustAsHtml(f.contextworld)" init-bind></tdng-bind-html="trustAsHtml(f.contextworld)">
+                                                <td ng-bind-html="trustAsHtml(f.contextworld)" init-bind></td>
                                                 <td ng-bind-html="trustAsHtml(f.functioncardinality)" init-bind></td>
                                                 <td></td>
                                                 <td></td>
@@ -323,6 +333,7 @@
             $scope.maxcode = 0;
             $scope.maxderivation = 40;
             $scope.maxlog = 10;
+            $scope.debugstop = 6;
 
             $scope.pollcount = 0;
             $scope.scheduled = 0;
@@ -378,7 +389,7 @@
                 };
             };
             $scope.submit = function (action) {
-                $http.get(home + action + '?threadnum=' + $scope.threadnum + '&stackdepth=' + $scope.stackdepth + '&breakpoints=' + Array.from($scope.breakpointCol).join(','))
+                $http.get(home + action + '?threadnum=' + $scope.threadnum + '&stackdepth=' + $scope.stackdepth + '&debugstop=' + $scope.debugstop + '&breakpoints=' + Array.from($scope.breakpointCol).join(','))
                     .then(function (response) { $scope.initFirst(); });
             };
             $scope.breakpointCol = new Set();

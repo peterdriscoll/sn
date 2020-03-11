@@ -23,11 +23,6 @@ namespace SNI
 		static void DisplayFrameStack(long p_ThreadNum, long p_Depth);
 		static void DisplayName(long p_ThreadNum, const string &p_Name);
 		static SNI_Variable *LookupVariable(long p_ThreadNum, const string & p_Name);
-
-		string GetDebugId() const;
-		void SetDebugId(const string & p_DebugId);
-		string GetBreakPoint(unsigned long p_BreakId);
-		string GetBreakPointJS(unsigned long p_BreakId);
 		SNI_Variable * LookupVariableInFrame(const string & p_Name);
 
 		SNI_Frame();

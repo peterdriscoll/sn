@@ -108,8 +108,7 @@ namespace SNI
 	void SNI_Log::WriteClonedExpression(SN::LoggingLevel p_DebugLevel, const string &p_Text, SN::SN_Expression p_Expression)
 	{
 		WriteLine(p_DebugLevel, p_Text + "Cloned " + p_Expression.DisplaySN());
-		SNI_Thread::GetThread()->SetDebugId("cloned");
-		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Cloned", SN::CallId);
+		SNI_Thread::GetThread()->Breakpoint(SN::DebugStop, SN::CallId, "", "Cloned", NULL, SN::ClonePoint);
 	}
 
 	void SNI_Log::WriteVariable(SN::LoggingLevel p_DebugLevel, SN::SN_Variable p_Variable)

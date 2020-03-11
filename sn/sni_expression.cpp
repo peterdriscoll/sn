@@ -135,7 +135,7 @@ namespace SNI
 			{
 				string breakPoint = p_DebugSource->GetBreakPointJS(p_Index);
 				return "<button title='" + breakPoint + "' ng-click='setbreakpoint(" + breakPoint + ")' ng-class='breakpointclass(" + breakPoint + ")'>" + p_Caption + "</button>";
-			}
+		}
 		}
 		return "";
 	}
@@ -159,6 +159,11 @@ namespace SNI
 		}
 		}
 		return "";
+	}
+
+	void SNI_Expression::Breakpoint(SN::DebuggingStop p_DebuggingStop, SN::BreakId p_BreakId, const string &p_TypeName, const string & p_Description, const SNI_Expression * p_Source, SN::InterruptPoint p_InterruptPoint) const
+	{
+		SNI_Thread::GetThread()->Breakpoint(p_DebuggingStop, p_BreakId, p_TypeName, p_Description, p_Source, p_InterruptPoint);
 	}
 
 	long SNI_Expression::GetPriority() const

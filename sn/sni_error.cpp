@@ -119,7 +119,7 @@ namespace SNI
 	{
 		m_CallHistory.push_back(p_CallRecord);
 		LOG(WriteLine(SN::InfoLevel, GetLogDescription()));
-		SNI_Thread::GetThread()->DebugCommand(SN::ErrorPoint, "Error", SN::ErrorId);
+		Breakpoint(SN::ErrorStop, SN::ErrorId, GetTypeName(), "Error", NULL, SN::ErrorPoint);
 	}
 
 	bool SNI_Error::IsNull() const
@@ -130,10 +130,6 @@ namespace SNI
 	void SNI_Error::AddError(SN::SN_Error &p_Error)
 	{
 		SNI_Error *e = p_Error.GetSNI_Error();
-		if (e == this)
-		{
-			long dog = 10;
-		}
 		ASSERTM(e != this, "Recursive error inclusion.");
 		m_ChildErrorList.push_back(e);
 	}

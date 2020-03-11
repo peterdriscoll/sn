@@ -1584,7 +1584,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Parse String", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(IsString);
 				SN_DECLARE(IsStringContent);
@@ -4048,7 +4048,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Parse Value", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, true);
 
 				CharacterSet characterSet;
 				Validate validate(characterSet);

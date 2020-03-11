@@ -216,7 +216,7 @@ namespace SNI
 	SNI_Manager::~SNI_Manager()
 	{
 		LOG(WriteHeading(SN::DebugLevel, "End - " + m_Description));
-		SNI_Thread::GetThread()->DebugCommand(SN::EndPoint, "Exit", SN::ExitId);
+		SNI_Thread::GetThread()->Breakpoint(SN::DebugStop, SN::ExitId, "", "Exit", NULL, SN::EndPoint);
 		SNI_Thread::GetThread()->SetTopManager(m_LastManager);
 		SNI_Thread::GetThread()->ClearDependencyChecks();
 		if (m_CommandServerThreadUsed)
@@ -443,7 +443,7 @@ namespace SNI
 					break;
 				case VK_F11:
 					cout << "F11 -  Step into\n";
-					l_thread->StepInto();
+					l_thread->StepInto(SN::DebugStop);
 					break;
 				case VK_SHIFT_F11:
 					cout << "Shift F11 - Step out\n";
@@ -631,8 +631,7 @@ namespace SNI
 
 	void SNI_Manager::Breakpoint()
 	{
-		SNI_Thread::GetThread()->SetDebugId("user");
-		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "User breakpoint", SN::UserId);
+		SNI_Thread::GetThread()->Breakpoint(SN::DebugStop, SN::UserId, "", "User breakpoint", NULL, SN::UserPoint);
 	}
 
 	void SNI_Manager::SetDebugAction(enum skynet::DebugAction p_DebugLevel)

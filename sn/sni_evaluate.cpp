@@ -65,14 +65,12 @@ namespace SNI
 	{
 		SN::SN_Expression clone = p_ParamList[PU1_First].GetSNI_Expression()->Clone(this, NULL);
 		LOG(WriteClonedExpression(SN::DebugLevel, "Eval: ", clone));
-		SNI_Thread::GetThread()->SetDebugId("evaluate");
-		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "evaluate", SN::CallId);
+		Breakpoint(SN::DebugStop, SN::CallId, GetTypeName(), "Evaluate call", this, SN::CallPoint);
 
 		SN::SN_Expression result = clone.DoEvaluate();
 		SNI_Frame::Pop();
 
-		SNI_Thread::GetThread()->SetDebugId("evaluate");
-		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Evaluate", SN::ReturnId);
+		Breakpoint(SN::DebugStop, SN::ReturnId, GetTypeName(), "Evaluate return", this, SN::CallPoint);
 
 		return p_ParamList[PU1_Result].AssertValue(result);
 	}

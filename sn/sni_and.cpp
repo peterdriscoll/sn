@@ -177,9 +177,6 @@ namespace SNI
 	/// @retval True if successful, false for failure.
 	SN::SN_Expression SNI_And::UnifyArray(SN::SN_Expression * p_ParameterList, const SNI_Expression *p_Source)
 	{
-		string debugId = SNI_Thread::GetThread()->GetDebugId();
-
-		SNI_Thread::GetThread()->SetDebugId(debugId);
 		SN::SN_Expression * firstParamList = new SN::SN_Expression[2];
 		firstParamList[0] = p_ParameterList[0];
 		firstParamList[1] = p_ParameterList[1];
@@ -196,7 +193,6 @@ namespace SNI
 			return e1;
 		}
 
-		SNI_Thread::GetThread()->SetDebugId(debugId);
 		SN::SN_Expression * secondParamList = new SN::SN_Expression[3];
 		secondParamList[0] = p_ParameterList[0];
 		secondParamList[1] = firstParamList[1];

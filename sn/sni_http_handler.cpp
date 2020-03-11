@@ -86,7 +86,8 @@ namespace SNI
 			}
 			else if (path == "/stepintojs")
 			{
-				l_thread->StepInto();
+				SN::DebuggingStop debugStop = (SN::DebuggingStop)atol(umap["debugstop"].c_str());
+				l_thread->StepInto(debugStop);
 			}
 			else if (path == "/stepout")
 			{

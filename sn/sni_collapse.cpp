@@ -78,7 +78,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_Collapse::UnifyArray(SN::SN_Expression * p_ParamList, const SNI_Expression *p_Source)
 	{
-		SN::SN_Error e = UnifyInternal(p_ParamList[1], p_ParamList[0]);
+		SN::SN_Error e = UnifyInternal(p_ParamList[1], p_ParamList[0], p_Source);
 		if (e.GetDelay())
 		{
 			SNI_Thread::GetThread()->GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), GetNumParameters(), p_ParamList, p_Source);
@@ -86,7 +86,7 @@ namespace SNI
 		return e;
 	}
 
-	SN::SN_Error SNI_Collapse::UnifyInternal(SN::SN_Expression &p_value, SN::SN_Expression &p_Result)
+	SN::SN_Error SNI_Collapse::UnifyInternal(SN::SN_Expression &p_value, SN::SN_Expression &p_Result, const SNI_Expression *p_Source)
 	{
 		LOGGING(SN::LogContext context("SNI_Unary::UnifyInternal ( " + p_value.DisplaySN() + " )"));
 
@@ -96,9 +96,7 @@ namespace SNI
 		SNI_Variable *resultParam = topFrame->CreateParameterByName("result", p_Result); // Result.
 		SNI_Variable *valueParam = topFrame->CreateParameterByName("param", p_value); // Param 1.
 
-		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before assert", SN::LeftId);
-
-		SNI_Thread::GetThread()->SetDebugId(GetDebugId()+"Collapse");
+		Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Unify before collapse", p_Source, SN::CallPoint);
 
 		SN::SN_Error err = skynet::OK;
 		if (SNI_Thread::TopManager()->GetLogicType() != skynet::FailAsNeg)
@@ -106,7 +104,7 @@ namespace SNI
 			err = p_value.AssertValue(p_Result);
 
 			valueParam->SetValue(p_Result);
-			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before collapse", SN::ParameterOneId);
+			Breakpoint(SN::DebugStop, SN::CallId, GetTypeName(), "Unify before collapse", p_Source, SN::CallPoint);
 
 			resultParam->SetValue(p_Result.GetVariableValue().GetSNI_Expression()->DoCollapse());
 		}
@@ -137,7 +135,7 @@ namespace SNI
 		}
 
 		LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": End " + p_Result.DisplayValueSN() + "=" + GetTypeName() + " " + p_value.DisplayValueSN()));
-		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after collapse", SN::RightId);
+		Breakpoint(SN::DebugStop, SN::RightId, GetTypeName(), "Unify after collapse", p_Source, SN::CallPoint);
 		SNI_Frame::Pop();
 		return LOG_RETURN(context, err);
 	}

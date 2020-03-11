@@ -207,13 +207,14 @@ namespace SNI
 
 	SN::SN_Expression SNI_FunctionDef::CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel /* = 0 */) const
 	{
+		const SNI_Expression *p_Source = this;
 		long depth = GetNumParameters() - 1;
 		SN::SN_Expression *inputList = new SN::SN_Expression[depth];
 		for (long j = 0; j < depth; j++)
 		{
 			inputList[j] = p_ParamList[j].GetVariableValue();
 		}
-		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Call", SN::LeftId);
+		Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Call", p_Source, SN::CallPoint);
 		size_t card = 0;
 		size_t maxCard = SNI_Thread::TopManager()->MaxCardinalityCall();
 		for (long j = 0; j < depth; j++)
@@ -225,12 +226,8 @@ namespace SNI
 				{
 					inputList[j] = p_ParamList[j].DoEvaluate();
 				}
-				SNI_Thread::GetThread()->DebugCommand(SN::ParameterPoint, GetTypeName() + ".Call parameter:" + inputList[j].DisplayValueSN(), SN::ParameterOneId+j);
 			}
-			else
-			{
-				SNI_Thread::GetThread()->DebugCommand(SN::ParameterPoint, GetTypeName() + ".Call parameter:" + inputList[j].DisplayValueSN(), SN::ParameterOneId + j);
-			}
+			Breakpoint(SN::DetailStop, (SN::BreakId)(SN::ParameterOneId + j), GetTypeName(), "Call parameter:" + to_string(j), p_Source, SN::ParameterPoint);
 		}
 		card = CardinalityOfCall(depth, inputList);
 		SN::SN_Value result;
@@ -242,7 +239,7 @@ namespace SNI
 		{
 			result = ForEachCall(card, depth, inputList);
 		}
-		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Call after calculation", SN::RightId);
+		Breakpoint(SN::DebugStop, SN::RightId, GetTypeName(), "Result calculated", p_Source, SN::CallPoint);
 		delete[] inputList;
 		result.GetSNI_Expression()->Validate();
 		return result;
@@ -295,8 +292,7 @@ namespace SNI
 		long calcPos = -1;
 		size_t maxCard = SNI_Thread::TopManager()->MaxCardinalityCall();
 		size_t card = -1;
-		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify before cardinality check", SN::LeftId);
-
+		Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Unify before checking parameter cardinality", p_Source, SN::CallPoint);
 		for (long j = 0; j < depth; j++)
 		{
 			if (!IsKnownValue(p_ParamList[j], j))
@@ -355,7 +351,7 @@ namespace SNI
 			}
 			if (j != 0 && j != depth-1)
 			{
-				SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify parameter: " + inputList[j].DisplayValueSN(), SN::ParameterOneId + j);
+				Breakpoint(SN::DetailStop, (SN::BreakId)(SN::ParameterOneId + j), GetTypeName(), "Unify parameter " + to_string(j) + " card " + to_string(card), p_Source, SN::CallPoint);
 			}
 		}
 		LOG(WriteLine(SN::DebugLevel, GetLogDescription(p_ParamList)));
@@ -363,7 +359,7 @@ namespace SNI
 		{
 			card = CardinalityOfUnify(depth, inputList, calcPos, totalCalc);
 			topFrame->RegisterCardinality(card);
-			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify parameter: " + inputList[depth-1].DisplayValueSN(), SN::ParameterOneId + depth - 1);
+			Breakpoint(SN::DetailStop, (SN::BreakId)(SN::ParameterOneId + depth - 1), GetTypeName(), "Unify parameter " + to_string(depth-1) + " card " + to_string(card), p_Source, SN::CallPoint);
 			if (0 < card)
 			{
 				LOG(WriteLine(SN::DebugLevel, "Cardinality " + to_string(card) + " with total fields " + to_string(totalCalc)));
@@ -392,11 +388,11 @@ namespace SNI
 						}
 					}
 				}
-				SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after calculation", SN::RightId);
+				Breakpoint(SN::DebugStop, SN::RightId, GetTypeName(), "Unify after calculation", p_Source, SN::CallPoint);
 			}
 			else if (!IgnoreNoConstraint())
 			{
-				SNI_Thread::GetThread()->DebugCommand(SN::WarningPoint, GetTypeName() + ".Unify no constraint", SN::NoConstraintId);
+				Breakpoint(SN::WarningStop, SN::RightId, GetTypeName(), "Unify after calculation", p_Source, SN::WarningPoint);
 			}
 		}
 		LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": End " + DisplayUnify(depth, p_ParamList, p_Source)));
@@ -461,7 +457,7 @@ namespace SNI
 				{
 					if (!SupportsMultipleOutputs())
 					{
-						SNI_Thread::GetThread()->DebugCommand(SN::WarningPoint, "Multiple outputs.", SN::MultipleOutputsId);
+						Breakpoint(SN::WarningStop, SN::MultipleOutputsId, GetTypeName(), "Multiple outputs" + to_string(j), p_Source, SN::CallPoint);
 					}
 				}
 			}

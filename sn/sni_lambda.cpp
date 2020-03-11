@@ -169,8 +169,8 @@ namespace SNI
 	{
 		LOGGING(SN::LogContext context(DisplaySN0() + "SNI_Lambda::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
-		SNI_Thread::GetThread()->SetDebugId(GetDebugId());
-		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, GetTypeName() + ".Call begin", SN::LeftId);
+		SNI_Expression *p_DebugSource = NULL;
+		Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Call", NULL, SN::CallPoint);
 
 		ASSERTM(p_ParameterList->size() >0, "Cannot call a lambda without a parameter");
 		SN::SN_Expression param = p_ParameterList->back().GetSNI_Expression();
@@ -192,19 +192,16 @@ namespace SNI
 		SN::SN_Expression result;
 		if (p_ParameterList->size() > 0)
 		{
-			SNI_Thread::GetThread()->SetDebugId(GetDebugId());
-			SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, GetTypeName() + ".Call before call", SN::ParameterOneId);
+			Breakpoint(SN::DebugStop, SN::ParameterOneId, GetTypeName(), "Call before calculation", p_DebugSource, SN::CallPoint);
 			result = m_Expression->Call(p_ParameterList, p_MetaLevel);
 		}
 		else
 		{
-			SNI_Thread::GetThread()->SetDebugId(GetDebugId());
-			SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, GetTypeName() + ".Call before evaluate", SN::ParameterOneId);
+			Breakpoint(SN::DebugStop, SN::ParameterOneId, GetTypeName(), "Call before evaluate", p_DebugSource, SN::CallPoint);
 			result = m_Expression->DoEvaluate(p_MetaLevel);
 		}
 
-		SNI_Thread::GetThread()->SetDebugId(GetDebugId());
-		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, GetTypeName() + ".Call return", SN::RightId);
+		Breakpoint(SN::DebugStop, SN::RightId, GetTypeName(), "Call return", p_DebugSource, SN::CallPoint);
 
 		return LOG_RETURN(context, result);
 	}
@@ -240,8 +237,7 @@ namespace SNI
 		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Lambda::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
 		ASSERTM(p_ParameterList->size() > 1, "Cannot unify to a lambda without a parameter");
-		SNI_Thread::GetThread()->SetDebugId(GetDebugId());
-		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, GetTypeName() + ".Unify begin", SN::LeftId);
+		Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Unify", this, SN::CallPoint);
 		SN::SN_Expression param = p_ParameterList->back();
 		p_ParameterList->pop_back();
 		SN::SN_Expression result = skynet::OK;
@@ -260,19 +256,16 @@ namespace SNI
 		LOG(WriteFrame(SNI_Thread::GetThread(), SN::DebugLevel));
 		if (p_ParameterList->size() > 1)
 		{
-			SNI_Thread::GetThread()->SetDebugId(GetDebugId());
-			SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, GetTypeName() + ".Unify before unify", SN::ParameterOneId);
+			Breakpoint(SN::DebugStop, SN::ParameterOneId, GetTypeName(), "Unify parameter", this, SN::CallPoint);
 			result = m_Expression->Unify(p_ParameterList);
 		}
 		else
 		{
-			SNI_Thread::GetThread()->SetDebugId(GetDebugId());
-			SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, GetTypeName() + ".Unify before assert", SN::ParameterOneId);
+			Breakpoint(SN::DebugStop, SN::ParameterOneId, GetTypeName(), "Assert value parameter", this, SN::CallPoint);
 			result = m_Expression->AssertValue(p_ParameterList->back());
 		}
 
-		SNI_Thread::GetThread()->SetDebugId(GetDebugId());
-		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, GetTypeName() + ".Unify return", SN::ReturnId);
+		Breakpoint(SN::DebugStop, SN::ReturnId, GetTypeName(), "Assert value return", this, SN::CallPoint);
 		return LOG_RETURN(context, result);
 	}
 

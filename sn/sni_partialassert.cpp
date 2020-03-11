@@ -72,8 +72,7 @@ namespace SNI
 
 		SNI_Thread::GetThread()->UpdateIncrementId();
 
-		SNI_Thread::GetThread()->SetDebugId("partialassert");
-		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Partial assert", SN::CallId);
+		Breakpoint(SN::DebugStop, SN::CallId, GetTypeName(), "Unify start", this, SN::CallPoint);
 
 		SN::SN_Error result = p_ParamList[PU1_First].DoPartialAssert();
 		if (result.IsSignificantError())
@@ -83,8 +82,7 @@ namespace SNI
 			result.GetSNI_Error()->AddNote(callRecord);
 		}
 
-		SNI_Thread::GetThread()->SetDebugId("partialassert");
-		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Partial assert", SN::ReturnId);
+		Breakpoint(SN::DebugStop, SN::ReturnId, GetTypeName(), "Unify end", this, SN::CallPoint);
 
 		return p_ParamList[PU1_Result].AssertValue(result);
 	}

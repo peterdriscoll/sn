@@ -68,26 +68,6 @@ namespace SNI
 		return SNI_Thread::GetThreadByNumber(p_ThreadNum)->LookupVariable(p_Name);
 	}
 
-	string SNI_Frame::GetDebugId() const
-	{
-		return m_DebugId;
-	}
-
-	void SNI_Frame::SetDebugId(const string & p_DebugId)
-	{
-		m_DebugId = p_DebugId;
-	}
-
-	string SNI_Frame::GetBreakPoint(unsigned long p_BreakId)
-	{
-		return MakeBreakPoint(m_DebugId, p_BreakId);
-	}
-
-	string SNI_Frame::GetBreakPointJS(unsigned long p_BreakId)
-	{
-		return MakeBreakPointJS(m_DebugId, p_BreakId);
-	}
-
 	SNI_Variable *SNI_Frame::LookupVariableInFrame(const string & p_Name)
 	{
 		for (SNI_Variable *v : m_VariableList)

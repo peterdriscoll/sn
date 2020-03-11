@@ -327,3 +327,30 @@ ul, #help-index {
 .active {
     display: block;
 }
+
+/* CSS Grid*/
+.sidebar {
+    grid-area: sidebar;
+}
+
+.content {
+    grid-area: content;
+}
+
+.header {
+    grid-area: header;
+}
+
+
+.wrapper {
+    display: grid;
+    grid-gap: 0px;
+    grid-template-columns: 2fr 1fr;
+    grid-template-areas: 
+        "worldsets worldsets" 
+        "delayedcalls delayedcalls"
+        "callstack callstack"
+        "detailedstack logging";
+    background-color: #fff;
+    color: #444;
+}

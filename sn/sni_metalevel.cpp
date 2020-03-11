@@ -99,8 +99,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_MetaLevel::UnifyArray(SN::SN_Expression * p_ParamList, const SNI_Expression *p_Source)
 	{
-		SNI_Thread::GetThread()->SetDebugId("meta");
-		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Meta", SN::CallId);
+		Breakpoint(SN::DebugStop, SN::CallId, GetTypeName(), "Unify start", p_Source, SN::CallPoint);
 
 		long metaLevel = 0;
 		SN::SN_Short shortValue = p_ParamList[PU2_Second];
@@ -126,8 +125,7 @@ namespace SNI
 		}
 		SN::SN_Error result = p_ParamList[PU2_First].DoEvaluate().DoMeta(metaLevel).GetError();
 
-		SNI_Thread::GetThread()->SetDebugId("meta");
-		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Meta", SN::ReturnId);
+		Breakpoint(SN::DebugStop, SN::ReturnId, GetTypeName(), "Unify end", p_Source, SN::CallPoint);
 
 		return p_ParamList[PU2_Result].AssertValue(result);
 	}

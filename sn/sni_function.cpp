@@ -174,7 +174,6 @@ namespace SNI
 
 	SN::SN_Expression SNI_Function::DoEvaluate(long p_MetaLevel /* = 0 */) const
 	{
-		SNI_Thread::GetThread()->SetDebugId(GetDebugId());
 		SN::SN_ExpressionList * l_ParameterList = new SN::SN_ExpressionList();
 		l_ParameterList->push_back(m_Parameter);
 		return m_Function->Call(l_ParameterList, p_MetaLevel);
@@ -221,14 +220,12 @@ namespace SNI
 			SNI_FunctionDef *functionDef = dynamic_cast<SNI_FunctionDef *>(function);
 			if (functionDef)
 			{
-				SNI_Thread::GetThread()->SetDebugId(GetDebugId());
 				SN::SN_Expression *param_List = functionDef->LoadParametersUnify(l_ParameterList);
 				function = functionDef->UnifyArray(param_List, this).GetSNI_Expression();
 				delete[] param_List;
 			}
 			else
 			{
-				SNI_Thread::GetThread()->SetDebugId(GetDebugId());
 				function = function->Unify(l_ParameterList).GetSNI_Expression();
 			}
 			e = dynamic_cast<SNI_Error *>(function);

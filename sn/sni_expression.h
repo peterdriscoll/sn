@@ -92,6 +92,8 @@ namespace SNI
 		string SetBreakPoint(const string &p_Caption, SNI_DisplayOptions & p_DisplayOptions, const SNI_Expression *p_DebugSource, long p_Index) const;
 		string SetStaticBreakPoint(const string & p_Caption, SNI_DisplayOptions & p_DisplayOptions, const SNI_Expression * p_DebugSource, long p_Index) const;
 
+		void Breakpoint(SN::DebuggingStop p_DebuggingStop, SN::BreakId p_BreakId, const string &p_TypeName, const string &p_Description, const SNI_Expression *p_Source = NULL, SN::InterruptPoint p_InterruptPoint = SN::CallPoint) const;
+
 		virtual long GetPriority() const;
 		virtual string GetOperator() const;
 		virtual string DisplaySN0() const;

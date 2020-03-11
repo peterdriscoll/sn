@@ -406,8 +406,8 @@ namespace SNI
 						SN::SN_Variable splitPoint = topFrame->CreateSplitVariable();
 						p_ParamList[PU2_First].AddValue(SN::SN_StringRef(p_Param, p_Param.GetSNI_String()->GetStart(), splitPoint), p_Depth, p_WorldList, worldSet);
 						p_ParamList[PU2_Second].AddValue(SN::SN_StringRef(p_Param, splitPoint, p_Param.GetSNI_String()->GetEnd()), p_Depth, p_WorldList, worldSet);
-						return skynet::OK;
 					}
+					return skynet::OK;
 				});
 				return skynet::OK;
 			}

@@ -13,6 +13,7 @@ namespace SNI
 	    , m_Running(false)
 		, m_ReadyForCommand(true)
 		, m_ReadyForProcessing(false)
+		, m_DebugStop(SN::DebugStop)
 	{
 	}
 
@@ -25,7 +26,7 @@ namespace SNI
 		return m_ThreadNum;
 	}
 
-	bool SNI_DebugCommand::IsBreakPoint(SN::InterruptPoint p_InterruptPoint, long p_ThreadNum, long p_FrameStackDepth, long p_StepCount, const string &p_BreakPoint)
+	bool SNI_DebugCommand::IsBreakPoint(SN::InterruptPoint p_InterruptPoint, long p_ThreadNum, long p_FrameStackDepth, long p_StepCount, const string &p_BreakPoint, SN::DebuggingStop p_DebuggingStop)
 	{
 		bool breakPoint = false;
 		unique_lock<mutex> mutex_lock(m_Mutex);
@@ -64,7 +65,7 @@ namespace SNI
 				breakPoint = baseInterrupt || (m_BreakPointSet.find(p_BreakPoint) != m_BreakPointSet.end());
 				break;
 			case skynet::StepInto:
-				breakPoint = baseInterrupt || callFound;
+				breakPoint = baseInterrupt || (callFound && (p_DebuggingStop < m_DebugStop));
 				break;
 			case skynet::StepOver:
 				breakPoint = baseInterrupt || (callFound && p_ThreadNum == m_ThreadNum && p_FrameStackDepth <= m_FrameStackDepth);
@@ -169,8 +170,9 @@ namespace SNI
 		ScheduleCommand(skynet::StepOver);
 	}
 
-	void SNI_DebugCommand::StepInto()
+	void SNI_DebugCommand::StepInto(SN::DebuggingStop p_DebugStop)
 	{
+		m_DebugStop = p_DebugStop;
 		ScheduleCommand(skynet::StepInto);
 	}
 
@@ -220,7 +222,7 @@ namespace SNI
 		return m_Text;
 	}
 
-	void SNI_DebugCommand::SetText(const string & p_Text)
+	void SNI_DebugCommand::SetDescription(const string & p_Text)
 	{
 		m_Text = p_Text;
 	}

@@ -446,8 +446,7 @@ namespace SNI
 		}
 		Validate();
 
-		SNI_Thread::GetThread()->SetDebugId(GetDebugId());
-		SNI_Thread::GetThread()->DebugCommand(SN::ClonePoint, GetTypeName() + ".Clone", SN::CloneId);
+		Breakpoint(SN::DebugStop, SN::CloneId, GetTypeName(), "Clone", this, SN::ClonePoint);
 		return dynamic_cast<SNI_Expression *>(result.GetSNI_ValueSet());
 	}
 
@@ -842,7 +841,7 @@ namespace SNI
 			}
 		}
 		worldSet->Complete();
-		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after all values", SN::LeftId);
+		Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Unify", this, SN::CallPoint);
 		if (success)
 		{
 			return SN::SN_Error(success, false);

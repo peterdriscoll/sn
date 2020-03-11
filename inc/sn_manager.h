@@ -24,9 +24,14 @@ namespace SN
 		ErrorLevel, WarningLevel, DebugLevel, InfoLevel, DetailLevel
 	};
 
+	enum DebuggingStop
+	{
+		NonStop, EndStop, TaskStop, ErrorStop, WarningStop, InfoStop, DebugStop, DetailStop
+	};
+
 	enum InterruptPoint
 	{
-		BreakPoint, CallPoint, ParameterPoint, ClonePoint, ErrorPoint, WarningPoint, EndPoint, MirrorPoint, FailPoint, StaticPoint
+		BreakPoint, CallPoint, ParameterPoint, ClonePoint, ErrorPoint, WarningPoint, EndPoint, MirrorPoint, FailPoint, StaticPoint, UserPoint, CodePoint
 	};
 
 	enum BreakId

@@ -69,20 +69,18 @@ namespace SNI
 	{
 		SN::SN_Expression clone = p_ParamList[PU1_First].GetSNI_Expression()->Clone(this, NULL);
 		LOG(WriteClonedExpression(SN::DebugLevel, "Assert: ", clone));
-		SNI_Thread::GetThread()->SetDebugId("assert");
-		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Assert", SN::CallId);
+		Breakpoint(SN::DebugStop, SN::CallId, GetTypeName(), "Assert", this, SN::CallPoint);
 
 		SN::SN_Error result = clone.DoAssert();
 		if (result.IsSignificantError())
 		{
-			SNI_CallRecord *callRecord = new SNI_CallRecord("Assert.", clone.GetSNI_Expression());
+			SNI_CallRecord *callRecord = new SNI_CallRecord("Assert call", clone.GetSNI_Expression());
 			LOGGING(callRecord->SetLogContext(context));
 			result.GetSNI_Error()->AddNote(callRecord);
 		}
 		SNI_Frame::Pop();
 
-		SNI_Thread::GetThread()->SetDebugId("assert");
-		SNI_Thread::GetThread()->DebugCommand(SN::StaticPoint, "Assert", SN::ReturnId);
+		Breakpoint(SN::DebugStop, SN::ReturnId, GetTypeName(), "Assert return", this, SN::CallPoint);
 
 		return p_ParamList[PU1_Result].AssertValue(result);
 	}

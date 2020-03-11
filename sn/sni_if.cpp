@@ -89,7 +89,8 @@ namespace SNI
 	/// @retval A value, expression (for meta code) or null.
 	SN::SN_Expression SNI_If::CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel /* = 0 */) const
 	{
-		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Call", SN::LeftId);
+		const SNI_Expression *p_Source = this; //pig
+		Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Call", p_Source, SN::CallPoint);
 
 		SN::SN_Value condition = p_ParamList[0].DoEvaluate(p_MetaLevel);
 		if (condition.IsNull())
@@ -107,7 +108,7 @@ namespace SNI
 		SN::SN_Value result = condition.DoIf(p_ParamList[1], p_ParamList[2]);
 		result.GetSNI_Expression()->Validate();
 
-		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after all values", SN::RightId);
+		Breakpoint(SN::DebugStop, SN::RightId, GetTypeName(), "Call return", p_Source, SN::CallPoint);
 
 		return result;
 	}
@@ -187,6 +188,7 @@ namespace SNI
 
 		SNI_DisplayOptions displayOptions(doTextOnly);
 		LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": Start " + DisplayUnify(GetNumParameters(), p_ParameterList, p_Source)));
+
 		SNI_Frame *topFrame = SNI_Frame::Top();
 		SNI_Variable* result_param = topFrame->CreateParameterByName("result", p_ParameterList[0]);
 		SNI_Variable* condition_param = topFrame->CreateParameterByName("condition", p_ParameterList[1]);
@@ -201,7 +203,8 @@ namespace SNI
 		condition_worldSet->Complete();
 
 		condition_param->SetValue(condition);
-		SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, GetTypeName() + ".Unify after all values", SN::LeftId);
+
+		Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Unify condition", p_Source, SN::CallPoint);
 
 		SN::SN_Error e = p_ParameterList[1].AssertValue(condition);
 		if (!e.IsError())
@@ -220,7 +223,8 @@ namespace SNI
 				paramList[0] = p_ParameterList[0];
 				paramList[1] = p_ParameterList[2];
 
-				SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, typeName + ".Unify after all values", SN::PositiveId);
+				Breakpoint(SN::DebugStop, SN::PositiveId, typeName, "Unify after condition", p_Source, SN::CallPoint);
+
 				e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList, p_Source).GetError();
 				delete[] paramList;
 				if (!e.IsError())
@@ -234,7 +238,8 @@ namespace SNI
 				paramList[0] = p_ParameterList[0];
 				paramList[1] = p_ParameterList[3];
 
-				SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, typeName + ".Unify after all values", SN::PositiveId);
+				Breakpoint(SN::DebugStop, SN::NegativeId, typeName, "Unify after condition", p_Source, SN::CallPoint);
+
 				e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList, p_Source).GetError();
 				delete[] paramList;
 				if (!e.IsError())
@@ -254,7 +259,6 @@ namespace SNI
 					{
 						SNI_Thread::GetThread()->PushContextWorld(p_World);
 					}
-					SNI_Thread::GetThread()->SetDebugId("");
 					SN::SN_Error e = skynet::OK;
 					if (p_Param.GetBool())
 					{
@@ -262,7 +266,8 @@ namespace SNI
 						paramList[0] = parameterList[0];
 						paramList[1] = parameterList[2];
 
-						SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, typeName + ".Unify after all values", SN::PositiveId);
+						SNI_Thread::GetThread()->Breakpoint(SN::DebugStop, SN::PositiveId, typeName, "Unify positive case", source, SN::CallPoint);
+
 						e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList, source).GetError();
 						delete[] paramList;
 					}
@@ -272,7 +277,8 @@ namespace SNI
 						paramList[0] = parameterList[0];
 						paramList[1] = parameterList[3];
 
-						SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, typeName + ".Unify after all values", SN::NegativeId);
+						SNI_Thread::GetThread()->Breakpoint(SN::DebugStop, SN::NegativeId, typeName, "Unify negative case", source, SN::CallPoint);
+
 						e = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList, source).GetError();
 						delete[] paramList;
 					}
@@ -320,7 +326,7 @@ namespace SNI
 			}
 
 			LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": End " + DisplayUnify(GetNumParameters(), p_ParameterList, p_Source)));
-			SNI_Thread::GetThread()->DebugCommand(SN::CallPoint, typeName + ".Unify after all values", SN::RightId);
+			Breakpoint(SN::DebugStop, SN::RightId, typeName, "Unify end", p_Source, SN::CallPoint);
 			SNI_Frame::Pop();
 			return e;
 		}
