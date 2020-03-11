@@ -49,7 +49,7 @@ namespace SNI
 		// Display actions
 		void SelectThread(long p_ThreadNum);
 
-		string Text();
+		string Description();
 		void SetDescription(const string &p_Text);
 
 		void SetRunning(bool p_Running);
@@ -60,7 +60,7 @@ namespace SNI
 		long m_ThreadNum;
 		long m_StepCount;
 		bool m_Running;
-		string m_Text;
+		string m_Description;
 		SN::DebuggingStop m_DebugStop;
 		set<string> m_BreakPointSet;
 		mutex m_Mutex;

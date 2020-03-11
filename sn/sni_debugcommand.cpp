@@ -33,7 +33,7 @@ namespace SNI
 		bool processCommand = m_ReadyForProcessing;
 		if (!m_ReadyForProcessing)
 		{
-			cout << m_Text << " >> ";
+			cout << m_Description << " >> ";
 		}
 		while (!m_ReadyForProcessing)
 		{
@@ -51,6 +51,8 @@ namespace SNI
 				(p_InterruptPoint == SN::FailPoint) ||
 				(p_InterruptPoint == SN::WarningPoint) ||
 				(p_InterruptPoint == SN::MirrorPoint) ||
+				(p_InterruptPoint == SN::ClonePoint) ||
+				(p_InterruptPoint == SN::DelayedPoint) ||
 				(p_InterruptPoint == SN::StaticPoint);
 
 			switch (m_DebugAction)
@@ -217,14 +219,14 @@ namespace SNI
 		m_ThreadNum = p_ThreadNum;
 	}
 
-	string SNI_DebugCommand::Text()
+	string SNI_DebugCommand::Description()
 	{
-		return m_Text;
+		return m_Description;
 	}
 
-	void SNI_DebugCommand::SetDescription(const string & p_Text)
+	void SNI_DebugCommand::SetDescription(const string & p_Description)
 	{
-		m_Text = p_Text;
+		m_Description = p_Description;
 	}
 	void SNI_DebugCommand::SetRunning(bool p_Running)
 	{
