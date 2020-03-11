@@ -265,7 +265,7 @@ namespace SNI
 			result = m_Expression->AssertValue(p_ParameterList->back());
 		}
 
-		Breakpoint(SN::DebugStop, SN::ReturnId, GetTypeName(), "Assert value return", this, SN::CallPoint);
+		Breakpoint(SN::DebugStop, SN::RightId, GetTypeName(), "Assert value return", this, SN::CallPoint);
 		return LOG_RETURN(context, result);
 	}
 

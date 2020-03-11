@@ -353,7 +353,7 @@ namespace SNI
 			delimeter = " ";
 			text += del + p.GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions);
 		}
-		return Bracket(p_Priority, SetBreakPoint(FrameName(), p_DisplayOptions, p_DebugSource, SN::LeftId) + " " + text, p_DisplayOptions, p_DebugSource);
+		return Bracket(p_Priority, SetBreakPoint(FrameName(), p_DisplayOptions, this, SN::LeftId) + " " + text, p_DisplayOptions, this);
 	}
 
 	long SNI_Variable::GetPriority() const
@@ -650,7 +650,7 @@ namespace SNI
 		{
 			SNI_Expression * l_clone = m_Value->Clone(this, NULL);
 			LOG(WriteClonedExpression(SN::DebugLevel, "Call var: ", l_clone));
-			Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Call " + GetName(), NULL, SN::CallPoint);
+			Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Call " + GetName(), this, SN::CallPoint);
 
 			SN::SN_Expression e = l_clone->Call(p_ParameterList, p_MetaLevel);
 			SNI_Frame::Pop();
@@ -660,7 +660,7 @@ namespace SNI
 			}
 			else
 			{
-				Breakpoint(SN::DebugStop, SN::RightId, GetTypeName(), "Return from call " + GetName(), NULL, SN::CallPoint);
+				Breakpoint(SN::DebugStop, SN::RightId, GetTypeName(), "Return from call " + GetName(), this, SN::CallPoint);
 			}
 			return LOG_RETURN(context, e);
 		}
@@ -696,7 +696,7 @@ namespace SNI
 			{
 				topFrame->CreateParameter(j, (*p_ParameterList)[j]);
 			}
-			Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Unify " + GetName(), NULL, SN::CallPoint);
+			Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Unify " + GetName(), this, SN::CallPoint);
 
 			SN::SN_Expression e = l_clone->Unify(p_ParameterList);
 
@@ -708,7 +708,7 @@ namespace SNI
 				topFrame->CreateParameter(j, (*p_ParameterList)[j]);
 			}
 			LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": End " + DisplayUnifyExp(p_ParameterList)));
-			Breakpoint(SN::DebugStop, SN::RightId, GetTypeName(), "Unify after calculation " + GetName(), NULL, SN::CallPoint);
+			Breakpoint(SN::DebugStop, SN::RightId, GetTypeName(), "Unify after calculation " + GetName(), this, SN::CallPoint);
 
 			SNI_Frame::Pop();
 			if (e.GetSNI_Error())
