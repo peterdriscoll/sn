@@ -90,7 +90,6 @@ namespace SNI
 		virtual string GetDebugId() const;
 
 		string SetBreakPoint(const string &p_Caption, SNI_DisplayOptions & p_DisplayOptions, const SNI_Expression *p_DebugSource, long p_Index) const;
-		string SetStaticBreakPoint(const string & p_Caption, SNI_DisplayOptions & p_DisplayOptions, const SNI_Expression * p_DebugSource, long p_Index) const;
 
 		void Breakpoint(SN::DebuggingStop p_DebuggingStop, SN::BreakId p_BreakId, const string &p_TypeName, const string &p_Description, const SNI_Expression *p_Source = NULL, SN::InterruptPoint p_InterruptPoint = SN::CallPoint) const;
 
@@ -272,7 +271,6 @@ namespace SNI
 		static SN::SN_Expression AddLambdas(SN::SN_ExpressionList * p_ParameterList);
 
 		string Bracket(long p_Priority, const string &p_Expression, SNI_DisplayOptions & p_DisplayOptions, const SNI_Expression *p_DebugSource) const;
-		string BracketStatic(long p_Priority, const string &p_Expression, SNI_DisplayOptions & p_DisplayOptions, const SNI_Expression *p_DebugSource) const;
 
 	private:
 		void HandleAction(SN::SN_Expression p_Result, OnErrorHandler * p_ErrorHandler);

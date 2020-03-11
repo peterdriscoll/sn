@@ -81,13 +81,13 @@ namespace SNI
 					if (p_DisplayOptions.CheckLevel())
 					{
 						p_DisplayOptions.IncrementLevel();
-						sValue = SetStaticBreakPoint(":", p_DisplayOptions, this, SN::ValueId) + value->DisplaySN(GetPriority(), p_DisplayOptions);
+						sValue = SetBreakPoint(":", p_DisplayOptions, this, SN::ValueId) + value->DisplaySN(GetPriority(), p_DisplayOptions);
 						p_DisplayOptions.DecrementLevel();
 					}
 				}
 			}
 		}
-		string text = SetStaticBreakPoint("@", p_DisplayOptions, this, SN::LeftId) + m_FormalParameter->DisplaySN(GetPriority(), p_DisplayOptions) + sValue + SetStaticBreakPoint(".", p_DisplayOptions, this, SN::ParameterOneId) + m_Expression->DisplaySN(GetPriority(), p_DisplayOptions);
+		string text = SetBreakPoint("@", p_DisplayOptions, this, SN::LeftId) + m_FormalParameter->DisplaySN(GetPriority(), p_DisplayOptions) + sValue + SetBreakPoint(".", p_DisplayOptions, this, SN::ParameterOneId) + m_Expression->DisplaySN(GetPriority(), p_DisplayOptions);
 		return Bracket(priority, text, p_DisplayOptions, this);
 	}
 

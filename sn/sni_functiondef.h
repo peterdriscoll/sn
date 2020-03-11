@@ -61,6 +61,7 @@ namespace SNI
 		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual long GetPriority() const;
 		virtual string GetOperator() const;
+		virtual string GetDebugId() const;
 
 		virtual bool AllowDelay() const;
 		virtual bool SupportsMultipleOutputs() const;

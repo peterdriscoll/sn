@@ -53,6 +53,11 @@ namespace SNI
 		return "";
 	}
 
+	string SNI_FunctionDef::GetDebugId() const
+	{
+		return GetTypeName();
+	}
+
 	long SNI_FunctionDef::GetNumParameters() const
 	{
 		return 0;

@@ -65,7 +65,7 @@ namespace SNI
 				breakPoint = baseInterrupt || (m_BreakPointSet.find(p_BreakPoint) != m_BreakPointSet.end());
 				break;
 			case skynet::StepInto:
-				breakPoint = baseInterrupt || (callFound && (p_DebuggingStop < m_DebugStop));
+				breakPoint = baseInterrupt || (callFound && (p_DebuggingStop <= m_DebugStop));
 				break;
 			case skynet::StepOver:
 				breakPoint = baseInterrupt || (callFound && p_ThreadNum == m_ThreadNum && p_FrameStackDepth <= m_FrameStackDepth);

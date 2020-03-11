@@ -276,17 +276,17 @@
                         <table class='noborder'>
                             <tr>
                                 <td>Call</td>
-                                <td><button ng-click='setbreakpoint(["assert",3])' ng-class='breakpointclass(["assert",3], breakpoint)'>Assert</button></td>
-                                <td><button ng-click='setbreakpoint(["partialassert",3])' ng-class='breakpointclass(["partialassert",3], breakpoint)'>Partial Assert</button></td>
-                                <td><button ng-click='setbreakpoint(["evaluate",3])' ng-class='breakpointclass(["evaluate",3], breakpoint)'>Evaluate</button></td>
-                                <td><button ng-click='setbreakpoint(["partialevaluate",3])' ng-class='breakpointclass(["partialevaluate",3], breakpoint)'>Partial Evakuate</button></td>
+                                <td><button ng-click='setbreakpoint(["Assert",3])' ng-class='breakpointclass(["Assert",3])'>Assert</button></td>
+                                <td><button ng-click='setbreakpoint(["PartialAssert",3])' ng-class='breakpointclass(["PartialAssert",3])'>Partial Assert</button></td>
+                                <td><button ng-click='setbreakpoint(["Evaluate",3])' ng-class='breakpointclass(["Evaluate",3])'>Evaluate</button></td>
+                                <td><button ng-click='setbreakpoint(["PartialEvaluate",3])' ng-class='breakpointclass(["PartialEvaluate",3])'>Partial Evakuate</button></td>
                             </tr>
                             <tr>
                                 <td>Return</td>
-                                <td><button ng-click='setbreakpoint(["assert",15])' ng-class='breakpointclass(["assert",15])'>Assert</button></td>
-                                <td><button ng-click='setbreakpoint(["partialassert",15])' ng-class='breakpointclass(["partialassert",15])'>Partial Assert</button></td>
-                                <td><button ng-click='setbreakpoint(["evaluate",15])' ng-class='breakpointclass(["evaluate",15])'>Evaluate</button></td>
-                                <td><button ng-click='setbreakpoint(["partialevaluate",15])' ng-class='breakpointclass(["partialevaluate",15])'>Partial Evakuate</button></td>
+                                <td><button ng-click='setbreakpoint(["Assert",15])' ng-class='breakpointclass(["Assert",15])'>Assert</button></td>
+                                <td><button ng-click='setbreakpoint(["PartialAssert",15])' ng-class='breakpointclass(["PartialAssert",15])'>Partial Assert</button></td>
+                                <td><button ng-click='setbreakpoint(["Evaluate",15])' ng-class='breakpointclass(["Evaluate",15])'>Evaluate</button></td>
+                                <td><button ng-click='setbreakpoint(["PartialEvaluate",15])' ng-class='breakpointclass(["PartialEvaluate",15])'>Partial Evakuate</button></td>
                             </tr>
                         </table>
                         <br />
@@ -326,17 +326,19 @@
         app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $window, $document) {
             $scope.trustAsHtml = $sce.trustAsHtml;
             $scope.threadnum = 0;
-            $scope.maxstackframes = -1;
 
+            // Default settings
             $scope.stepcount = '';
-            $scope.maxstackframes = 20;
+            $scope.maxstackframes = -1;
             $scope.maxcode = 0;
             $scope.maxderivation = 40;
             $scope.maxlog = 10;
             $scope.debugstop = 6;
 
-            $scope.pollcount = 0;
+            // Protect against requesting data again before data is retrieved.
             $scope.scheduled = 0;
+
+            // Request JSON data sets from the server.
             $scope.initFirst = function () {
                 if ($scope.closing) {
                 } else if (!$scope.scheduled) {
@@ -353,7 +355,6 @@
                                 $scope.maxstackframes = response.data.maxstackframes;
                             }
 
-                            $scope.pollcount = $scope.pollcount + 1;
                             $scope.scheduled = $scope.scheduled - 1;
 
                             if ($scope.closing) {
@@ -388,12 +389,54 @@
                         .then(function (response) { $scope.worldsets = response.data.records; });
                 };
             };
+
+            // Request an action from the server.
             $scope.submit = function (action) {
                 $http.get(home + action + '?threadnum=' + $scope.threadnum + '&stackdepth=' + $scope.stackdepth + '&debugstop=' + $scope.debugstop + '&breakpoints=' + Array.from($scope.breakpointCol).join(','))
                     .then(function (response) { $scope.initFirst(); });
             };
+
+            // Switch to a different thread.
+            $scope.setthread = function (newthreadnum) {
+                if (threadnum != newthreadnum) {
+                    $scope.threadnum = newthreadnum;
+                    $scope.initFirst();
+                }
+            };
+
+            // Open/close the goto drop down. On closing, request the server to run to the step count.
+            $scope.gotostepcount = function () {
+                var field = $document[0].getElementById('gotoid');
+                if (field.open) {
+                    field.open = 0;
+                    $http.get(home + 'gotostepcountjs?threadnum=' + $scope.threadnum + '&stepcount=' + $scope.stepcount)
+                        .then(function (response) { $scope.initFirst(); });
+                }
+                else {
+                    field.open = 1;
+                    field.focus();
+                }
+            };
+
+            // Open/close the settings drop down. 
+            $scope.settings = function () {
+                var field = $document[0].getElementById('settingsid');
+                if (field.open) {
+                    field.open = 0;
+                    $scope.initFirst();
+                }
+                else {
+                    field.open = 1;
+                    field.focus();
+                }
+            };
+
+            // Add or remove the breakpoint from the current breakpoint button
+            // From the set of breakpoint button. This also highlights or dehighlights
+            // buttons in the same group.
             $scope.breakpointCol = new Set();
             $scope.breakpointGroupCol = new Map();
+
             $scope.getGroupBreakpoint = function (breakpointCode) {
                 var count = $scope.breakpointGroupCol.get(breakpointCode);
                 if (count == undefined) {
@@ -401,6 +444,7 @@
                 };
                 return count > 0
             }
+
             $scope.setbreakpoint = function (breakpoint) {
                 var breakpointId = breakpoint[0] + "_" + breakpoint[1];
                 var breakpointCode = breakpoint[0];
@@ -424,15 +468,22 @@
                     $scope.breakpointGroupCol.set(breakpointCode, count);
                 }
             };
+
+            // Set default breakpoints.
             $scope.setbreakpoint(["Error", 16]);
             $scope.setbreakpoint(["Warning", 20]);
             $scope.setbreakpoint(["Warning", 19]);
             $scope.setbreakpoint(["Warning", 23]);
             $scope.setbreakpoint(["user", 22]);
-            $scope.setbreakpoint(["assert", 3]);
-            $scope.setbreakpoint(["partialassert", 3]);
-            $scope.setbreakpoint(["evaluate", 3]);
-            $scope.setbreakpoint(["partialevaluate", 3]);
+            $scope.setbreakpoint(["Assert", 3]);
+            $scope.setbreakpoint(["PartialAssert", 3]);
+            $scope.setbreakpoint(["Evaluate", 3]);
+            $scope.setbreakpoint(["PartialEvaluate", 3]);
+
+            // Create the breakpoint to display a breakpoint button by comparing
+            // current breakpoint and call stack in the running code with the
+            // breakpoint represented by the breakpoint button.
+            // breakpointdefaultclass passes in a default class
             $scope.breakpointclass = function (breakpoint) {
                 if (breakpoint == undefined || $scope.breakpoint == undefined) {
                     return "error";
@@ -457,42 +508,6 @@
                         return eclass == 'breakpointclear';
                     });
                 }
-                if (eclass == 'breakpointclear'){
-                    if ($scope.breakpointCol.has(breakpointId)) {
-                        eclass =  'breakpointset';
-                    } else {
-                        var breakpointCode = breakpoint[0];
-                        if ($scope.getGroupBreakpoint(breakpointCode)) {
-                            eclass = 'breakpointgroupset';
-                        }
-                    }
-                }
-                return eclass;
-            };
-            $scope.breakpointdefaultclass = function (breakpoint,c) {
-                if (breakpoint == undefined || $scope.breakpoint == undefined) {
-                    return "error";
-                }
-                var breakpointId = breakpoint[0] + "_" + breakpoint[1];
-                if ((breakpoint[0] == $scope.breakpoint[0]) && (breakpoint[1] == $scope.breakpoint[1])) {
-                    if ($scope.breakpointCol.has(breakpointId)) {
-                        return 'breakpointsetat ' +c;
-                    }
-                    return 'breakpointat ' + c;
-                }
-                var eclass = 'breakpointclear';
-                if ($scope.frames !== undefined) {
-                    $scope.frames.every(function (f) {
-                        if ((breakpoint[0] == f.breakpoint[0]) && (breakpoint[1] == f.breakpoint[1])) {
-                            if ($scope.breakpointCol.has(breakpointId)) {
-                                eclass = 'breakpointsetatstack';
-                            } else {
-                                eclass = 'breakpointatstack';
-                            }
-                        }
-                        return eclass == 'breakpointclear';
-                    });
-                }
                 if (eclass == 'breakpointclear') {
                     if ($scope.breakpointCol.has(breakpointId)) {
                         eclass = 'breakpointset';
@@ -503,62 +518,28 @@
                         }
                     }
                 }
-                return eclass + ' ' + c;
+                return eclass;
             };
-            $scope.setthread = function (newthreadnum) {
-                if (threadnum != newthreadnum) {
-                    $scope.threadnum = newthreadnum;
-                    $scope.initFirst();
-                }
+
+            // Same as breakpoint class but add a default class.
+            $scope.breakpointdefaultclass = function (breakpoint, c) {
+                return $scope.breakpointclass(breakpoint) + ' ' + c;
             };
-            $scope.gotostepcount = function () {
-                var field = $document[0].getElementById('gotoid');
-                if (field.open) {
-                    field.open = 0;
-                    $http.get(home + 'gotostepcountjs?threadnum=' + $scope.threadnum + '&stepcount=' + $scope.stepcount)
-                        .then(function (response) { $scope.initFirst(); });
-                }
-                else
-                {
-                    field.open = 1;
-                    field.focus();
-                }
-            };
-            $scope.settings = function () {
-                var field = $document[0].getElementById('settingsid');
-                if (field.open)
-                {
-                    field.open = 0;
-                    $scope.initFirst();
-                }
-                else
-                {
-                    field.open = 1;
-                    field.focus();
-                }
-            };
+
+            // Initial request for data.
             $scope.initFirst();
         })
-            .directive('initBind', function ($compile) {
-                return {
-                    restrict: 'A',
-                    link: function (scope, element, attr) {
-                        attr.$observe('ngBindHtml', function () {
-                            if (attr.ngBindHtml) {
-                                $compile(element[0].children)(scope);
-                            }
-                        })
-                    }
-                };
-            });
-        app.filter('code', function () {
-            return function (input) {
-                var out = [];
-                for (var i = 0; i < input.length; i++) {
-                    out.push(input[i]);
+        .directive('initBind', function ($compile) {
+            return {
+                restrict: 'A',
+                link: function (scope, element, attr) {
+                    attr.$observe('ngBindHtml', function () {
+                        if (attr.ngBindHtml) {
+                            $compile(element[0].children)(scope);
+                        }
+                    })
                 }
-                return out;
-            }
+            };
         });
     </script>
 </body>

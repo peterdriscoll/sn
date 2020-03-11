@@ -140,27 +140,6 @@ namespace SNI
 		return "";
 	}
 
-	string SNI_Expression::SetStaticBreakPoint(const string &p_Caption, SNI_DisplayOptions & p_DisplayOptions, const SNI_Expression *p_DebugSource, long p_Index) const
-	{
-		switch (p_DisplayOptions.GetDebugHTML())
-		{
-		case doTextOnly:
-			if (p_Caption == "~" || p_Caption == ";" || p_Caption == "end")
-			{
-				return "";
-			}
-			return p_Caption;
-		case doDebugPointsHTML:
-			return p_Caption;
-		case doDebugPointsJS:
-		{
-			string breakPoint = p_DebugSource->GetBreakPointJS(p_Index);
-			return "<button title='" + breakPoint + "' ng-click='setbreakpoint(" + breakPoint + ")' ng-class='breakpointclass(" + breakPoint + ", breakpoint)'>" + p_Caption + "</button>";
-		}
-		}
-		return "";
-	}
-
 	void SNI_Expression::Breakpoint(SN::DebuggingStop p_DebuggingStop, SN::BreakId p_BreakId, const string &p_TypeName, const string & p_Description, const SNI_Expression * p_Source, SN::InterruptPoint p_InterruptPoint) const
 	{
 		SNI_Thread::GetThread()->Breakpoint(p_DebuggingStop, p_BreakId, p_TypeName, p_Description, p_Source, p_InterruptPoint);
@@ -289,23 +268,6 @@ namespace SNI
 		{
 			bracketLeft = SetBreakPoint("(", p_DisplayOptions, p_DebugSource, SN::LeftId);
 			bracketRight = SetBreakPoint(")", p_DisplayOptions, p_DebugSource, SN::RightId);
-		}
-		else if (p_Priority > GetPriority())
-		{
-			bracketLeft = "(";
-			bracketRight = ")";
-		}
-		return bracketLeft + p_Expression + bracketRight;
-	}
-
-	string SNI_Expression::BracketStatic(long p_Priority, const string &p_Expression, SNI_DisplayOptions & p_DisplayOptions, const SNI_Expression *p_DebugSource) const
-	{
-		string bracketLeft;
-		string bracketRight;
-		if (p_DisplayOptions.GetDebugHTML())
-		{
-			bracketLeft = SetStaticBreakPoint("(", p_DisplayOptions, p_DebugSource, SN::LeftId);
-			bracketRight = SetStaticBreakPoint(")", p_DisplayOptions, p_DebugSource, SN::RightId);
 		}
 		else if (p_Priority > GetPriority())
 		{
