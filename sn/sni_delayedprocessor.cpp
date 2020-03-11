@@ -130,30 +130,31 @@ namespace SNI
 		do
 		{
 			SNI_DelayedCall *call = NULL;
-			size_t indet = CARDINALITY_MAX;
+			size_t card = CARDINALITY_MAX;
 			SNI_DelayedCallList::iterator it;
+			long id = 0;
 			m_SearchLock.lock();
 			for (SNI_DelayedCallList::iterator loopIt = m_DelayedCallList.begin(); loopIt != m_DelayedCallList.end(); loopIt++)
 			{
 				SNI_DelayedCall *loopCall = *loopIt;
 				if (!loopCall->IsLocked())
 				{
-					size_t loopIndet = loopCall->CallCardinality();
-					if (loopIndet < indet)
+					size_t loopCard = loopCall->CallCardinality();
+					if (loopCard < card)
 					{
 						call = loopCall;
-						indet = loopIndet;
+						card = loopCard;
 						it = loopIt;
 					}
 				}
 			}
-			if (indet < CARDINALITY_MAX)
+			if (card < CARDINALITY_MAX)
 			{
 				call->Lock();
 			}
 
 			m_SearchLock.unlock();
-			if (indet < CARDINALITY_MAX)
+			if (card < CARDINALITY_MAX)
 			{
 				if (!call->Run())
 				{
@@ -177,9 +178,11 @@ namespace SNI
 		p_Stream << "{\"records\":[\n";
 		string delimeter = "\n";
 		m_SearchLock.lock();
+		long id = 0;
 		for (SNI_DelayedCall *call : m_DelayedCallList)
 		{
 			p_Stream << delimeter << "\t{\n";
+			p_Stream << "\t\t\"id\" : \"" << id++ << "\",\n";
 			call->WriteJS(p_Stream, p_DisplayOptions);
 			p_Stream << "\t}";
 			delimeter = ",\n";

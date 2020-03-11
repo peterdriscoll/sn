@@ -155,7 +155,7 @@
                     <button title='Delay' ng-click='setbreakpoint(["Warning",20])' ng-class='breakpointdefaultclass(["Warning",20], "NONE")'>Delay</button>
                     <button title='No constraint' ng-click='setbreakpoint(["Warning",19])' ng-class='breakpointdefaultclass(["Warning",19], "NONE")'>No constraint</button>
                     <button title='Multiple out' ng-click='setbreakpoint(["Warning",23])' ng-class='breakpointdefaultclass(["Warning",23], "NONE")'>Multiple out</button>
-                    {{breakpoint}}
+                    {{breakpoint}} - {{breakpointdescription}}
                     <details open>
                         <summary>World Sets</summary>
                         <table class='frame'>
@@ -182,7 +182,9 @@
                             <tr ng-repeat="d in delayedcalls">
                                 <td ng-bind-html="trustAsHtml(d.expression)" init-bind></td>
                                 <td ng-bind-html="trustAsHtml(d.result)" init-bind></td>
-                                <td ng-bind-html="trustAsHtml(d.cardinality)" init-bind></td>
+                                <td>
+                                    <button title='{{["delayed",d.id]}}' ng-click='setbreakpoint(["delayed",d.id])' ng-class='breakpointclass(["delayed",d.id])' ng-bind-html="trustAsHtml(d.cardinality)" init-bind></button>
+                                </td>
                                 <td>{{d.world}}</td>
                             </tr>
                         </table>
@@ -351,6 +353,7 @@
                             $scope.threadnum = response.data.threadnum;
                             $scope.breakpoint = response.data.breakpoint;
                             $scope.taskdescription = response.data.taskdescription;
+                            $scope.breakpointdescription = response.data.breakpointdescription;
                             $scope.statusdescription = response.data.statusdescription;
                             $scope.running = response.data.running;
                             $scope.closing = response.data.closing;
