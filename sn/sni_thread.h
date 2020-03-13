@@ -39,7 +39,7 @@ namespace SNI
 		static void ThreadListLock();
 		static void ThreadListUnlock();
 
-		SNI_Thread(size_t p_ThreadNum);
+		SNI_Thread();
 
 		virtual ~SNI_Thread();
 

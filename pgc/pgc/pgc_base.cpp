@@ -61,9 +61,13 @@ namespace PGC
 	void PGC_Base::RequestPromotion(PGC_Base **p_Base)
 	{
 		PGC_Base *base = *p_Base;
-		if (base && (m_Transaction != base->GetTransaction()))
+		if (base)
 		{
-			PGC_Promotion::RequestPromotion(p_Base, GetTransaction());
+			PGC_Transaction *transaction = base->GetTransaction();
+			if (base && transaction && m_Transaction != transaction && !transaction->IsStatic())
+			{
+				PGC_Promotion::RequestPromotion(p_Base, GetTransaction());
+			}
 		}
 	}
 

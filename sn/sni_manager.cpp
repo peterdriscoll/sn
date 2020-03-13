@@ -126,17 +126,7 @@ namespace SNI
 		, m_EvaluationType(EVALUATION_TYPE)
 		, m_LogicType(LOGIC_TYPE)
 	{
-		LogicSetup();
-		if (!m_ErrorHandler)
-		{
-			m_ErrorHandler = ThrowErrorHandler;
-		}
-		m_LastManager = SNI_Thread::GetThread()->GetTopManager(false);
-		if (!m_LastManager)
-		{
-			m_Transaction.Init();
-		}
-		SNI_Thread::GetThread()->SetTopManager(this);
+		Initialize();
 	}
 
 	SNI_Manager::SNI_Manager(SNI_Manager *p_Manager)
@@ -162,17 +152,7 @@ namespace SNI
 		, m_EvaluationType(EVALUATION_TYPE)
 		, m_LogicType(LOGIC_TYPE)
 	{
-		LogicSetup();
-		if (!m_ErrorHandler)
-		{
-			m_ErrorHandler = ThrowErrorHandler;
-		}
-		m_LastManager = SNI_Thread::GetThread()->GetTopManager(false);
-		if (!m_LastManager)
-		{
-			m_Transaction.Init();
-		}
-		SNI_Thread::GetThread()->SetTopManager(this);
+		Initialize();
 	}
 
 	SNI_Manager::SNI_Manager(string p_Description, OnErrorHandler *p_ErrorHandler, bool p_DelayOnEvaluate, size_t p_MaxCardinalityCall, size_t p_MaxCardinalityUnify)
@@ -198,27 +178,23 @@ namespace SNI
 		, m_EvaluationType(EVALUATION_TYPE)
 		, m_LogicType(LOGIC_TYPE)
 	{
-		LogicSetup();
-		if (!m_ErrorHandler)
-		{
-			m_ErrorHandler = ThrowErrorHandler;
-		}
-		m_LastManager = SNI_Thread::GetThread()->GetTopManager(false);
-		if (!m_LastManager)
-		{
-			SNI_Thread::GetThread()->Init();
-			m_Transaction.Init();
-		}
-		SNI_Thread::GetThread()->SetTopManager(this);
-		LOG(WriteHeading(SN::DebugLevel, "Start - " + m_Description));
+		Initialize();
 	}
 	
 	SNI_Manager::~SNI_Manager()
 	{
 		LOG(WriteHeading(SN::DebugLevel, "End - " + m_Description));
-		SNI_Thread::GetThread()->Breakpoint(SN::DebugStop, SN::ExitId, "", "Exit", NULL, SN::EndPoint);
-		SNI_Thread::GetThread()->SetTopManager(m_LastManager);
-		SNI_Thread::GetThread()->ClearDependencyChecks();
+		SNI_Thread *thread = SNI_Thread::GetThread();
+		if (thread)
+		{
+			thread->Breakpoint(SN::DebugStop, SN::ExitId, "", "Exit", NULL, SN::EndPoint);
+			thread->SetTopManager(m_LastManager);
+			thread->ClearDependencyChecks();
+		}
+		else
+		{
+			long dog = 10;
+		}
 		if (m_CommandServerThreadUsed)
 		{
 			m_CommandServerThreadUsageCount--;
@@ -244,14 +220,24 @@ namespace SNI
 		}
 	}
 
-	void SNI_Manager::Init()
+	void SNI_Manager::Initialize()
 	{
-		m_LastManager = SNI_Thread::TopManager();
+		LogicSetup();
+		if (!m_ErrorHandler)
+		{
+			m_ErrorHandler = ThrowErrorHandler;
+		}
+		m_LastManager = SNI_Thread::GetThread()->GetTopManager(false);
 		if (!m_LastManager)
 		{
 			m_Transaction.Init();
 		}
+		else
+		{
+			long dog = 10;
+		}
 		SNI_Thread::GetThread()->SetTopManager(this);
+		LOG(WriteHeading(SN::DebugLevel, "Start - " + m_Description));
 	}
 
 	string SNI_Manager::Description()

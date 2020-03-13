@@ -140,6 +140,11 @@ namespace SNI
 				if (!loopCall->IsLocked())
 				{
 					size_t loopCard = loopCall->CallCardinality();
+					SNI_Thread *thread = SNI_Thread::GetThread();
+					if (thread)
+					{
+						thread->Breakpoint(SN::DebugStop, (SN::BreakId)id++, "Delayed", "Search min cardinality " + to_string(loopCard) + "<" + to_string(card), NULL, SN::DelayedPoint);
+					}
 					if (loopCard < card)
 					{
 						call = loopCall;

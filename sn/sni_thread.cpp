@@ -15,7 +15,7 @@
 
 namespace SNI
 {
-	thread_local SN::SN_Thread t_Thread;
+	thread_local SNI_Thread t_Thread;
 
 	/*static*/ vector<SNI_Thread *> SNI_Thread::m_ThreadList;
 	/*static*/ mutex SNI_Thread::m_ThreadListMutex;
@@ -28,8 +28,9 @@ namespace SNI
 
 	/*static*/ SNI_Thread *SNI_Thread::GetThread()
 	{
-		return SN::SN_Thread::GetThread().GetSNI_Thread();
+		return &t_Thread;
 	}
+
 	/*static*/ SNI_Thread *SNI_Thread::GetThreadByNumber(size_t p_ThreadNum)
 	{
 		if (p_ThreadNum < m_ThreadList.size())
@@ -46,12 +47,6 @@ namespace SNI
 	/*static*/ SNI_Manager *SNI_Thread::TopManager()
 	{
 		return GetThread()->GetTopManager();
-	}
-	/*static*/ SNI_Thread *SNI_Thread::BuildThread()
-	{
-		SNI_Thread *l_Thread = new SNI_Thread(m_ThreadList.size());
-		m_ThreadList.push_back(l_Thread);
-		return l_Thread;
 	}
 
 	/*static*/ string SNI_Thread::ThreadEnded(long p_ThreadNum)
@@ -99,11 +94,11 @@ namespace SNI
 		m_ThreadListMutex.unlock();
 	}
 
-	SNI_Thread::SNI_Thread(size_t p_ThreadNum)
+	SNI_Thread::SNI_Thread()
 		: m_ThreadStepCount(0)
 		, m_WebServerThreadUsed(false)
 		, m_TopManager(NULL)
-		, m_ThreadNum(p_ThreadNum)
+		, m_ThreadNum(m_ThreadList.size())
 		, m_MaxStackFrames(-1)
 		, m_Closing(false)
 		, m_DebugAction(skynet::StepInto)
@@ -115,6 +110,9 @@ namespace SNI
 		, m_Error(NULL)
 		, m_Processor(NULL)
 	{
+		ThreadListLock();
+		m_ThreadList.push_back(this);
+		ThreadListUnlock();
 	}
 
 	SNI_Thread::~SNI_Thread()
@@ -161,7 +159,8 @@ namespace SNI
 	void SNI_Thread::Breakpoint(SN::DebuggingStop p_DebuggingStop, SN::BreakId p_BreakId, const string &p_TypeName, const string &p_Description, const SNI_Expression *p_DebugSource, SN::InterruptPoint p_InterruptPoint, const string &p_DebugId)
 	{
 		m_ThreadStepCount++;
-		if (GetTopManager()->HasDebugServer())
+		SNI_Manager *topManager = GetTopManager(false);
+		if (topManager && topManager->HasDebugServer())
 		{
 			m_DebugCommand.SetDescription(p_Description);
 			string debugId;

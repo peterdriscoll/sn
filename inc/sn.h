@@ -130,6 +130,7 @@ namespace skynet
 	// Manager
 	typedef SN::SN_Manager Manager;
 	typedef SN::SN_Transaction Transaction;
+	typedef SN::SN_Thread Thread;
 
 	// Logging
 #ifdef USE_LOGGING

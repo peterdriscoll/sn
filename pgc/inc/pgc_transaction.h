@@ -52,7 +52,7 @@ namespace PGC
 	class PGC_EXPORT PGC_Transaction
 	{
 	public:
-		PGC_Transaction();
+		PGC_Transaction(bool p_IsStatic = false);
 		virtual ~PGC_Transaction();
 
 		void *Allocate(size_t p_size);
@@ -101,6 +101,7 @@ namespace PGC
 
 		virtual void PromoteExternals(PGC_Transaction *p_Direction);
 
+		bool IsStatic();
 	private:
 		void Promote(PGC_Base ** p_BaseRef);
 		PGC_Base * CopyMemory(PGC_Base * p_Base);
@@ -122,6 +123,7 @@ namespace PGC
 		bool *m_LiveTransaction;
 		bool m_Dieing;
 		PGC_Transaction *m_LastTopTransaction;
+		bool m_IsStatic;
 
 		// Multi threading
 		static bool m_MultiThreaded;

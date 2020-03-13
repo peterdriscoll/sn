@@ -15,7 +15,11 @@ namespace SNI
 
 	void SNI_Transaction::EndTransaction()
 	{
-		SNI_Thread::GetThread()->Clear();
+		SNI_Thread *thread = SNI_Thread::GetThread();
+		if (thread)
+		{
+			thread->Clear();
+		}
 		PGC_Transaction::EndTransaction();
 	}
 

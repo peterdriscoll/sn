@@ -48,7 +48,6 @@ namespace SNI
 		SNI_Expression * m_Expression;
 		SNI_Expression * m_ConstraintValue;
 
-	private:
 		static long m_Id;
 	};
 

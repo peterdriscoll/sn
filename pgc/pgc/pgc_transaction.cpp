@@ -31,12 +31,13 @@ namespace PGC
 		return m_InWebServer;
 	}
 
-	PGC_Transaction::PGC_Transaction()
+	PGC_Transaction::PGC_Transaction(bool p_IsStatic)
 		: m_FirstBlock(0)
 		, m_CurrentBlock(0)
 		, m_Dieing(false)
 		, m_NetMemoryUsed(0)
 		, m_ProcessThread(NULL)
+		, m_IsStatic(p_IsStatic)
 	{
 		if (m_InWebServer)
 		{
@@ -115,6 +116,7 @@ namespace PGC
 		}
 		m_AllocatingTransaction = this;
 		m_NetMemoryUsed += p_size - OVERHEAD;
+		ASSERTM(mem, "Memory allocation failure.");
 		return mem;
 	}
 
@@ -169,7 +171,7 @@ namespace PGC
 	{
 		if ((m_TopTransaction == 0) && !m_InWebServer)
 		{
-			new PGC_Transaction();
+			new PGC_Transaction(true);
 		}
 		return m_TopTransaction;
 	}
@@ -351,6 +353,11 @@ namespace PGC
 
 	void PGC_Transaction::PromoteExternals(PGC_Transaction *p_Direction)
 	{
+	}
+
+	bool PGC_Transaction::IsStatic()
+	{
+		return m_IsStatic;
 	}
 
 	void PGC_Transaction::Promote(PGC_Base **p_BaseRef)

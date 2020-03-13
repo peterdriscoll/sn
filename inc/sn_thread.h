@@ -19,13 +19,11 @@ namespace SN
 	class SN_EXPORT SN_Thread
 	{
 	public:
-		static SN_Thread & GetThread();
-		static SNI::SNI_Manager * TopManager();
-
 		SN_Thread();
-		SN_Thread(SNI::SNI_Thread *p_Thread);
 
 		virtual ~SN_Thread();
+
+		bool HasTopManager();
 
 		SNI::SNI_Thread *GetSNI_Thread();
 	private:

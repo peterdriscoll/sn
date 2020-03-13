@@ -42,6 +42,7 @@ namespace SNI
 	{
 		REQUESTPROMOTION(m_FormalParameter);
 		REQUESTPROMOTION(m_Expression);
+		REQUESTPROMOTION(m_ConstraintValue);
 	}
 
 	string SNI_Lambda::GetTypeName() const
