@@ -101,7 +101,7 @@
                                 <button title='Setup' ng-click='settings()' class=''>Settings</button>
                             </summary>
                             <label for="debugstop">Debug level</label><br/>
-                            <select id="debugstop" ng-model="debugstop" ng-options="option.name for option in debugstopoptions"> </select>
+                            <select id="debugstop" ng-model="debugstop" ng-options="option.name for option in debugstopoptions"> </select> <br/>
                             Max frames : <br/>
                             <input type='text' ng-model='maxstackframes' name='maxstackframes'> <br>
                             Max code : <br/>
@@ -149,7 +149,7 @@
                         </tr>
                     </table>
                     <button title='MIR' ng-click='setbreakpoint(["MIR",3])' ng-class='breakpointclass(["MIR",3])'>Check MIR</button>
-                    <button title='Cloned' ng-click='setbreakpoint(["cloned",3])' ng-class='breakpointdefaultclass(["cloned",3], "NONE")'>Cloned(see log)</button>
+                    <button title='Cloned' ng-click='setbreakpoint(["clone",3])' ng-class='breakpointdefaultclass(["clone",3], "NONE")'>Cloned(see log)</button>
                     <button title='User' ng-click='setbreakpoint(["user",22])' ng-class='breakpointclass(["user",22])'>User breakpoint</button>
                     <button title='Error' ng-click='setbreakpoint(["Error",16])' ng-class='breakpointdefaultclass(["Error",16], "NONE")'>Error</button>
                     <button title='Delay' ng-click='setbreakpoint(["Warning",20])' ng-class='breakpointdefaultclass(["Warning",20], "NONE")'>Delay</button>
@@ -230,8 +230,8 @@
                                             <tr>
                                                 <td>{{f.framepos}}</td>
                                                 <td>{{f.function}}</td>
-                                                <td>STEP:{{f.stepcount}}</td>
-                                                <td>STACK:{{f.stackusage}}</td>
+                                                <td>Step:{{f.stepcount}}</td>
+                                                <td>SMEM:{{f.stackusage}}</td>
                                                 <td ng-bind-html="trustAsHtml(f.contextworld)" init-bind></td>
                                                 <td ng-bind-html="trustAsHtml(f.functioncardinality)" init-bind></td>
                                                 <td></td>
@@ -335,10 +335,10 @@
 
             // Default settings
             $scope.stepcount = '';
-            $scope.maxstackframes = -1;
-            $scope.maxcode = 0;
+            $scope.maxstackframes = 30;
+            $scope.maxcode = 10;
             $scope.maxderivation = 40;
-            $scope.maxlog = 10;
+            $scope.maxlog = 0;
 
             // Protect against requesting data again before data is retrieved.
             $scope.scheduled = 0;

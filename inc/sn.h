@@ -24,6 +24,7 @@
 #define LOG_RETURN(context, result) result
 #endif
 
+//#define DIRECT_PASS_TYPE skynet::ReturnValueToVariable
 #define DIRECT_PASS_TYPE skynet::DirectPass
 #define EVALUATION_TYPE skynet::Lazy /*Lazy, Strict*/
 #define LOGIC_TYPE skynet::Parsing

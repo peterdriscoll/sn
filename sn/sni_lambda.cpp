@@ -72,7 +72,7 @@ namespace SNI
 	string SNI_Lambda::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
 		string sValue;
-		if (m_FormalParameter->IsVariable() && !m_FormalParameter->IsNullValue())
+		if (m_FormalParameter->IsVariable())
 		{
 			const SNI_Expression *value = m_FormalParameter->GetSafeValue();
 			if (value)
@@ -238,7 +238,7 @@ namespace SNI
 		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Lambda::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
 		ASSERTM(p_ParameterList->size() > 1, "Cannot unify to a lambda without a parameter");
-		Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Unify", this, SN::CallPoint);
+		Breakpoint(SN::DetailStop, SN::LeftId, GetTypeName(), "Unify", this, SN::CallPoint);
 		SN::SN_Expression param = p_ParameterList->back();
 		p_ParameterList->pop_back();
 		SN::SN_Expression result = skynet::OK;

@@ -23,13 +23,13 @@ namespace SNL
 
 	void SNL_Parse::Link()
 	{
-		SN_LINK(Integer);
-		SN_LINK(Scientific);
-		SN_LINK(Number);
+		SN_LINK(AsInteger);
+		SN_LINK(AsScientific);
+		SN_LINK(AsNumber);
 
-		SN_LINK(Name);
-		SN_LINK(String);
-		SN_LINK(Value);
+		SN_LINK(AsName);
+		SN_LINK(AsString);
+		SN_LINK(AsValue);
 	}
 
 	void SNL_Parse::Init()
@@ -38,14 +38,14 @@ namespace SNL
 			SN_LOCAL(s);
 			SN_LOCAL(i);
 
-			(Define(Integer)(s)(i) == (m_Validate.IsInteger(s) && (s.StringToInt() == i))).PartialAssert().Do();
+			(Define(AsInteger)(s)(i) == (m_Validate.IsInteger(s) && (s.StringToInt() == i))).PartialAssert().Do();
 		}
 
 		{
 			SN_LOCAL(s);
 			SN_LOCAL(i);
 
-			(Define(Scientific)(s)(i) == (m_Validate.IsExponential(s) && (s.StringToInt() == i))).PartialAssert().Do();
+			(Define(AsScientific)(s)(i) == (m_Validate.IsExponential(s) && (s.StringToInt() == i))).PartialAssert().Do();
 		}
 
 		{
@@ -60,24 +60,24 @@ namespace SNL
 			SN_LOCAL(Float_Extension);
 			SN_LOCAL(Exp_Extension);
 
-			(Define(Number)(s)(i) == (
-				Let(s = p + q
+			(Define(AsNumber)(s)(i) == (
+				Local(p, Local(q, Let(s == p + q
 					,	m_Validate.IsInteger(p)
 					&&	(	Float_Extension(s)(i)(q)
-						||	(q == String("") && (s.StringToDouble() == i)))
-				)));
+						||	(q == String("") && s.StringToInt() == i))
+				))))).PartialAssert().Do();
 
 			(Define(Float_Extension)(s)(i)(q) ==
-				Let(q == m + n
+				Local(m, Local(n, Let(q == m + n
 					,	m_Validate.IsFloatingPointExtension(m)
 					&&  (	Exp_Extension(s)(i)(n)
-						||	(n == String("") && (s.StringToDouble() == i))
-				)));
+						||	(n == String("") && (s.StringToDouble() == i)))
+				)))).PartialAssert().Do();
 
 			(Define(Exp_Extension)(s)(i)(n) ==
 					(m_Validate.IsExponentialExtension(n)
 				&&	(s.StringToDouble() == i)
-					));
+					)).PartialAssert().Do();
 		}
 
 		{
@@ -85,7 +85,7 @@ namespace SNL
 			SN_LOCAL(s);
 			SN_LOCAL(i);
 
-			(Define(Name)(d)(s)(i) == (m_Validate.IsName(s) && (i == d.CreateMetaVariable(s)))).PartialAssert().Do();
+			(Define(AsName)(d)(s)(i) == (m_Validate.IsName(s) && (i == d.CreateMetaVariable(s)))).PartialAssert().Do();
 		}
 
 		{
@@ -93,7 +93,7 @@ namespace SNL
 			SN_LOCAL(t);
 			SN_LOCAL(i);
 
-			(Define(String)(s)(i) == (m_Validate.IsString(s) && Local(t, Let(s == String("\"") + t + String("\""), t.Unescape(CPP) == i)))).PartialAssert().Do();
+			(Define(AsString)(s)(i) == (m_Validate.IsString(s) && Local(t, Let(s == String("\"") + t + String("\""), t.Unescape(CPP) == i)))).PartialAssert().Do();
 		}
 
 		{
@@ -102,7 +102,7 @@ namespace SNL
 			SN_LOCAL(i);
 
 
-			(Define(Value)(d)(s)(i) == (Name(d)(s)(i) || Number(s)(i) || String(s)(i))).PartialAssert().Do();
+			(Define(AsValue)(d)(s)(i) == (AsName(d)(s)(i) || AsNumber(s)(i) || AsString(s)(i))).PartialAssert().Do();
 		}
 	}
 }

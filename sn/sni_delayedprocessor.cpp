@@ -45,7 +45,9 @@ namespace SNI
 	{
 		SNI_DelayedCall *call = new SNI_DelayedCall(p_Function, p_NumParams, p_ParamList, p_Source, SNI_Frame::Top(), p_World);
 		call->LinkToVariables();
+		m_SearchLock.lock();
 		m_DelayedCallList.push_back(call);
+		m_SearchLock.unlock();
 		if (call->IsCallRequested())
 		{
 			Request(call);
@@ -143,7 +145,9 @@ namespace SNI
 					SNI_Thread *thread = SNI_Thread::GetThread();
 					if (thread)
 					{
+						m_SearchLock.unlock();
 						thread->Breakpoint(SN::DebugStop, (SN::BreakId)id++, "Delayed", "Search min cardinality " + to_string(loopCard) + "<" + to_string(card), NULL, SN::DelayedPoint);
+						m_SearchLock.lock();
 					}
 					if (loopCard < card)
 					{
@@ -157,15 +161,17 @@ namespace SNI
 			{
 				call->Lock();
 			}
-
 			m_SearchLock.unlock();
+
 			if (card < CARDINALITY_MAX)
 			{
 				if (!call->Run())
 				{
 					m_FailedList.push_back(call);
 				}
+				m_SearchLock.lock();
 				it = m_DelayedCallList.erase(it);
+				m_SearchLock.unlock();
 				call->Unlock();
 				success = true;
 			}

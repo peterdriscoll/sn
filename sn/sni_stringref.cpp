@@ -531,7 +531,7 @@ namespace SNI
 			SN::SN_Value start = m_Start.DoEvaluate();
 			if (start.IsNull())
 			{
-				return false;
+				return SN::SN_Error(false, false, "SNI_StringRef.AssertValue: Start is null.");
 			}
 
 			long start_pos = SN::SN_Long(start).GetNumber();
@@ -549,7 +549,12 @@ namespace SNI
 			SN::SN_ValueSet valueSet(p_Value);
 			return valueSet.AssertValue(this);
 		}
-		return skynet::Fail;
+		else if (p_Value.IsVariable())
+		{
+			SN::SN_Variable variable(p_Value);
+			return variable.AssertValue(this);
+		}
+		return SN::SN_Error(false, false, "SNI_StringRef.AssertValue: Cannot assert equal.");
 	}
 
 	SN::SN_Expression SNI_StringRef::DoEvaluate(long p_MetaLevel /* = 0 */) const
@@ -1267,5 +1272,17 @@ namespace SNI
 			return SN::SN_Long(stol(s));
 		}
 		return SN::SN_LongLong(stoll(s));
+	}
+
+	SN::SN_Value SNI_StringRef::DoStringToDouble() const
+	{
+		// Simple version, does not cope with value sets.
+		string s = GetString();
+		size_t len = s.size();
+		if (len < 18)
+		{
+			return SN::SN_Double(stod(s));
+		}
+		return SN::SN_LongDouble(stold(s));
 	}
 }

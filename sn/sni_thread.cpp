@@ -1039,16 +1039,18 @@ namespace SNI
 			SNI_Thread *l_thread = m_ThreadList[k];
 			if (l_thread)
 			{
+				p_Stream << delimeter;
+
 				l_thread->WriteStepCountJS(p_Stream, delimeter);
-				delimeter = ",";
+				delimeter = ",\n";
 			}
 		}
-		p_Stream << "]}\n";
+		p_Stream << "\n]}\n";
 	}
 
 	void SNI_Thread::WriteStepCountJS(ostream &p_Stream, const string &p_Delimeter)
 	{
-		p_Stream << "{\"threadnum\" : \"" << m_ThreadNum << "\", \"stepcount\" : \"" << m_ThreadStepCount << "\"}\n";
+		p_Stream << "{\"threadnum\" : \"" << m_ThreadNum << "\", \"stepcount\" : \"" << m_ThreadStepCount << "\"}";
 	}
 
 	void SNI_Thread::WriteWorldSetsJS(ostream &p_Stream, SNI_DisplayOptions &p_DisplayOptions)

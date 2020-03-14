@@ -87,6 +87,7 @@ namespace SNI
 		virtual SN::SN_Value DoEscape(enum skynet::EscapeType p_EscapeType) const;
 		virtual SN::SN_Value DoUnescape(enum skynet::EscapeType p_EscapeType) const;
 		virtual SN::SN_Value DoStringToInt() const;
+		virtual SN::SN_Value DoStringToDouble() const;
 
 	private:
 		string m_String;

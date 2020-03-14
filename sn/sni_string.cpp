@@ -259,15 +259,15 @@ namespace SNI
 
 	bool SNI_String::Equivalent(SNI_Object * p_Other) const
 	{
-		if (dynamic_cast<SNI_String *>(p_Other))
-		{
-			SNI_String * l_string = dynamic_cast<SNI_String *>(p_Other);
-			return m_String == l_string->m_String;
-		}
 		if (dynamic_cast<SNI_StringRef *>(p_Other))
 		{
 			SNI_StringRef * l_string = dynamic_cast<SNI_StringRef *>(p_Other);
 			return m_String == l_string->GetString();
+		}
+		if (dynamic_cast<SNI_String *>(p_Other))
+		{
+			SNI_String * l_string = dynamic_cast<SNI_String *>(p_Other);
+			return m_String == l_string->m_String;
 		}
 		if (dynamic_cast<SNI_Char *>(p_Other))
 		{
@@ -519,5 +519,16 @@ namespace SNI
 			return SN::SN_Long(stol(m_String));
 		}
 		return SN::SN_LongLong(stoll(m_String));
+	}
+
+	SN::SN_Value SNI_String::DoStringToDouble() const
+	{
+		size_t len = m_String.size();
+
+		if (len < 18)
+		{
+			return SN::SN_Double(stod(m_String));
+		}
+		return SN::SN_LongDouble(stold(m_String));
 	}
 }

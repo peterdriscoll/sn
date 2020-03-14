@@ -4064,11 +4064,10 @@ namespace test_sn
 
 		TEST_METHOD(TestParse_Value)
 		{
-			return;
 			Initialize();
 			{
 				Manager manager("Test Parse Value", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, true);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false);
 
 				CharacterSet characterSet;
 				Validate validate(characterSet);
@@ -4077,7 +4076,7 @@ namespace test_sn
 				// Name test.
 				SN_DOMAIN(MyDomain);
 				SN_DECLARE(i1);
-				(parse.Value(MyDomain)(String("Peter_1"))(i1)).Assert().Do();
+				(parse.AsValue(MyDomain)(String("Peter_1"))(i1)).Assert().Do();
 
 				SN_DECLARE(j1);
 				(j1 == Meta(1, MyDomain["Peter_1"])).Assert().Do();
@@ -4089,7 +4088,7 @@ namespace test_sn
 
 				// Integer test.
 				SN_DECLARE(i2);
-				(parse.Value(MyDomain)(String("543"))(i2)).Assert().Do();
+				(parse.AsValue(MyDomain)(String("543"))(i2)).Assert().Do();
 
 				SN_DECLARE(j2);
 				(j2 == Long(543)).Assert().Do();
@@ -4101,7 +4100,7 @@ namespace test_sn
 
 				// Floating point test.
 				SN_DECLARE(i4);
-				(parse.Value(MyDomain)(String("3.1415"))(i4)).Assert().Do();
+				(parse.AsValue(MyDomain)(String("3.1415"))(i4)).Assert().Do();
 
 				SN_DECLARE(j4);
 				(j4 == Double(3.1415)).Assert().Do();
@@ -4111,27 +4110,9 @@ namespace test_sn
 				string j4_string = j4.DisplayValueSN();
 				Assert::IsTrue(i4_string == j4_string);
 
-				// Exponential test.
-				SN_DECLARE(k5);
-				(parse.Number(MyDomain)(String("6.626176e-34"))(k5)).Assert().Do();
-
-				SN_DECLARE(i5);
-				(parse.Value(MyDomain)(String("6.626176e-34"))(i5)).Assert().Do();
-
-				SN_DECLARE(j5);
-				(j5 == Double(6.626176e-34)).Assert().Do();
-				(i5 == j5).Evaluate().Do();
-				(k5 == j5).Evaluate().Do();
-
-				string i5_string = i5.DisplayValueSN();
-				string k5_string = k5.DisplayValueSN();
-				string j5_string = j5.DisplayValueSN();
-				Assert::IsTrue(i5_string == j5_string);
-				Assert::IsTrue(k5_string == j5_string);
-
 				// String
 				SN_DECLARE(i3);
-				(parse.Value(MyDomain)(String("\"My test string\""))(i3)).Assert().Do();
+				(parse.AsValue(MyDomain)(String("\"My test string\""))(i3)).Assert().Do();
 
 				SN_DECLARE(j3);
 				(j3 == String("My test string")).Assert().Do();
@@ -4144,7 +4125,7 @@ namespace test_sn
 
 				// String sub string
 				SN_DECLARE(s1);
-				(parse.Value(MyDomain)(String("\"My test \\\"string\\\"\""))(s1)).Assert().Do();
+				(parse.AsValue(MyDomain)(String("\"My test \\\"string\\\"\""))(s1)).Assert().Do();
 
 				SN_DECLARE(s2);
 				(s2 == String("My test \"string\"")).Assert().Do();
@@ -4153,6 +4134,41 @@ namespace test_sn
 				string s1_string = s1.DisplayValueSN();
 				string s2_string = s2.DisplayValueSN();
 				Assert::IsTrue(s1_string == s2_string);
+			}
+		}
+
+		TEST_METHOD(TestParse_Value_Exponentials)
+		{
+			return; // to_string does not use scientific notation.
+
+			Initialize();
+			{
+				Manager manager("Test Parse Value Exponentials", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false);
+
+				CharacterSet characterSet;
+				Validate validate(characterSet);
+				Parse parse(validate);
+
+				// Exponential test.
+				SN_DOMAIN(MyDomain);
+				SN_DECLARE(k5);
+				(parse.AsNumber(String("6.626176e-34"))(k5)).Assert().Do();
+
+				SN_DECLARE(i5);
+				(parse.AsValue(MyDomain)(String("-6.626176e-34"))(i5)).Assert().Do();
+
+				SN_DECLARE(j5);
+				(j5 == Double(6.626176e-34)).Assert().Do();
+
+				string i5_string = i5.DisplayValueSN();
+				string k5_string = k5.DisplayValueSN();
+				string j5_string = j5.DisplayValueSN();
+				Assert::IsTrue(i5_string == j5_string);
+				Assert::IsTrue(k5_string == "-" + j5_string);
+
+				(i5 == j5).Evaluate().Do();
+				(k5 == -j5).Evaluate().Do();
 			}
 		}
 	};

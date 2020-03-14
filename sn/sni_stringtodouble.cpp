@@ -34,22 +34,22 @@ namespace SNI
 
 	SN::SN_Value SNI_StringToDouble::PrimaryFunctionValue(const SN::SN_Value &p_Param) const
 	{
-		return p_Param.GetSNI_Value()->DoStringToInt();
+		return p_Param.GetSNI_Value()->DoStringToDouble();
 	}
 
 	SN::SN_Expression SNI_StringToDouble::PrimaryFunctionExpression(const SN::SN_Expression &p_Param) const
 	{
-		return p_Param.StringToInt();
+		return p_Param.StringToDouble();
 	}
 
 	SN::SN_Value SNI_StringToDouble::InverseFunctionValue(const SN::SN_Value &p_Param) const
 	{
-		return p_Param.GetSNI_Value()->DoIntToString();
+		return p_Param.GetSNI_Value()->DoDoubleToString();
 	}
 
 	SN::SN_Expression SNI_StringToDouble::InverseFunctionExpression(const SN::SN_Expression & p_Param) const
 	{
-		return p_Param.IntToString();
+		return p_Param.DoubleToString();
 	}
 
 }

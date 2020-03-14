@@ -66,14 +66,12 @@ namespace SNL
 				Local(t, Local(u, Let(
 					f == t + u
 				,	IsInteger(t)
-				&&	IsFloatingPointExtension(u)
+				&&	(IsFloatingPointExtension(u) || u == String(""))
 				)))
 			).PartialAssert().Do();
 
 			(Define(IsFloatingPointExtension)(f) == (
-				(f.LookaheadLeft() == String("."))
-				.If(IsUnsignedInteger(f.SubtractLeftChar())
-					, f == String(""))
+				(f.LookaheadLeft() == String(".")) && IsUnsignedInteger(f.SubtractLeftChar())
 			)).PartialAssert().Do();
 		}
 
@@ -86,14 +84,12 @@ namespace SNL
 				Local(t, Local(u, Let(
 					f == t + u
 					,	IsFloatingPoint(t)
-					&&	IsExponentialExtension(u)
+					&&	(IsExponentialExtension(u) || u == String(""))
 				)))
 			)).PartialAssert().Do();
 
 			(Define(IsExponentialExtension)(f) == (
-				(f.LookaheadLeft() == (String("e") || String("E"))).Collapse().If(
-					IsInteger(f.SubtractLeftChar())
-				,	f == String(""))	
+				((f.LookaheadLeft() == (String("e") || String("E"))).Collapse() && IsInteger(f.SubtractLeftChar()))
 			)).PartialAssert().Do();
 		}
 

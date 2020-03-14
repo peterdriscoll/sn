@@ -14,13 +14,13 @@ namespace SNL
 	public:
 		SNL_Parse(const SNL_Validate &p_Validate);
 
-		skynet::Variable Integer;
-		skynet::Variable Scientific;
-		skynet::Variable Number;
+		skynet::Variable AsInteger;
+		skynet::Variable AsScientific;
+		skynet::Variable AsNumber;
 
-		skynet::Variable Name;
-		skynet::Variable String;
-		skynet::Variable Value;
+		skynet::Variable AsName;
+		skynet::Variable AsString;
+		skynet::Variable AsValue;
 
 		private:
 			void Setup();

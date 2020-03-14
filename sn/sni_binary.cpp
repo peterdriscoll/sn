@@ -311,8 +311,8 @@ namespace SNI
 			SN::SN_Value result = p_ParamList[PU2_Result].GetVariableValue();
 			if (result.IsStringValue())
 			{
-				if (result.IsReferableValue() && result.IsNull())
-				{   // A string ref can still be used in a split, even if it is null.
+				if (result.IsReferableValue())
+					{   // A string ref can still be used in a split, even if it is null.
 					if (p_TotalCalc <= 3)
 					{
 						return 1;
