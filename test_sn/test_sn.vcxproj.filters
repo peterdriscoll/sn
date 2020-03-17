@@ -32,5 +32,17 @@
     <ClCompile Include="test_sn_parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test_sn_logic.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test_sn_string.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test_sn_church.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test_sn_factorial.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

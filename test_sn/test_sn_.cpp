@@ -63,6 +63,349 @@ namespace test_sn
 		}
 
 	public:
+
+		//	TestStringValue
+		//		Test operator equals on program model string value gives the program model function call.
+		//
+		//		In the program model, operations dont return values.  Instead they return program model objects that represent the calculation of the values.
+		//		The function Equivalent determines if the project model produced by == is the application of Equals as a function call on the two parameters.
+		//
+		//		Equals is a FunctionDef object that defines the function.
+		TEST_METHOD(TestStringEquivalent)
+		{
+			Initialize();
+			Assert::IsTrue(Transaction::TotalNetMemoryUsed() == 0);
+			{
+				Manager manager("Test String Equivalent", AssertErrorHandler);
+				// manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				Assert::IsTrue((String("dog") == String("dog")).Equivalent(Function(Function(Equals, String("dog")), String("dog"))));
+				Assert::IsTrue(!(String("dog") == String("dog")).Equivalent(Function(Function(Equals, String("dog")), String("cat"))));
+				Assert::IsTrue((String("dog") + String("cat")).Equivalent(Function(Function(Add, String("dog")), String("cat"))));
+				Assert::IsTrue((String("dog") == String("dog")).Equivalent(Equals(String("dog"))(String("dog"))));
+				Assert::IsTrue(!(String("dog") == String("dog")).Equivalent(Equals(String("dog"))(String("cat"))));
+				Assert::IsTrue((String("dog") + String("cat")).Equivalent(Add(String("dog"))(String("cat"))));
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestStringEvaluate)
+		{
+			Initialize();
+			{
+				Manager manager("Test String Evaluate", AssertErrorHandler);
+
+				(String("dog") == String("dog")).Evaluate().Do();
+				(!(String("dog") == String("cat"))).Evaluate().Do();
+
+				SN_DECLARE_VALUE(z, String("dog"));
+				(String("dog") == z).Evaluate().Do();
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestStringPartialEvaluate)
+		{
+			Initialize();
+			{
+				Manager manager("Test String Partial Evaluate", AssertErrorHandler);
+
+				SN_DECLARE(y);
+				SN_DECLARE(x);
+				SN_DECLARE_VALUE(z, String("dog"));
+
+				Assert::IsTrue((String("dog") == y).DoPartialEvaluate().Equivalent(String("dog") == y));
+				Assert::IsTrue(!(String("dog") == y).DoPartialEvaluate().Equivalent(String("dog") == x));
+				Assert::IsTrue((String("dog") == String("dog")).DoPartialEvaluate().Equivalent(Bool(true)));
+				(String("dog") == z).DoPartialEvaluate().Do();
+
+				Assert::IsTrue((String("dog") + y == String("dogcat")).DoPartialEvaluate().Equivalent(Function(Function(Equals, Function(Function(Add, String("dog")), y)), String("dogcat"))));
+				(String("dog") + z == String("dogdog")).DoPartialEvaluate().Do();
+
+				(String("dog") + z == "dogdog").DoPartialEvaluate().Do();
+				(String("dog") + "dog" == "dogdog").DoPartialEvaluate().Do();
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestStringAssert)
+		{
+			Initialize();
+			{
+				Manager manager("Test String Assert", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				{
+					Transaction transaction;
+
+					SN_DECLARE(y);
+
+					(String("dog") == y).Assert().Do();
+					(String("dog") == y).Evaluate().Do();
+
+					SN_DECLARE(z);
+
+					(String("dog") + z == "dogcat").Assert().Do();
+					Value cat_value = z.GetValue();
+					string s_cat_value = cat_value.GetString();
+					Assert::IsTrue(s_cat_value == "cat");
+					(String("cat") == z).Evaluate().Do();
+				}
+				{
+					Transaction transaction;
+
+					SN_DECLARE(a);
+					(String("dog") + a == String("dogcat")).Assert().Do();
+					(a == String("cat")).Assert().Do();
+					SN_DECLARE(b);
+					(b + String("cat") == String("dogcat")).Assert().Do();
+					(b == String("dog")).Assert().Do();
+					SN_DECLARE(c);
+					(String("dog") + String("cat") == c).Assert().Do();
+					(c == String("dogcat")).Assert().Do();
+				}
+				{
+					Transaction transaction;
+
+					SN_DECLARE(a);
+					(String("dogcat").SubtractRight(String("cat")) == a).Assert().Do();
+					(a == String("dog")).Assert().Do();
+					SN_DECLARE(b);
+					(String("dogcat").SubtractRight(b) == String("dog")).Assert().Do();
+					(b == String("cat")).Assert().Do();
+					SN_DECLARE(c);
+					(c.SubtractRight(String("cat")) == String("dog")).Assert().Do();
+					(c == String("dogcat")).Assert().Do();
+				}
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestBoolEquivalent)
+		{
+			Initialize();
+			{
+				Manager manager("Test Bool Equivalent", AssertErrorHandler);
+
+				Assert::IsTrue((Bool(true) == Bool(true)).Equivalent(Function(Function(Equals, Bool(true)), Bool(true))));
+				Assert::IsTrue(!(Bool(true) == Bool(true)).Equivalent(Function(Function(Equals, Bool(true)), Bool(false))));
+				Assert::IsTrue((Bool(true) && Bool(false)).Equivalent(Function(Function(And, Bool(true)), Bool(false))));
+				Assert::IsTrue((Bool(false) || Bool(false)).Equivalent(Function(Function(Or, Bool(false)), Bool(false))));
+				Assert::IsTrue((!False).Equivalent(Function(Not, False)));
+				Assert::IsTrue(False.If(False, True).Equivalent(Function(Function(Function(If, False), False), True)));
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestBoolEvaluate)
+		{
+			Initialize();
+			{
+				Manager manager("Test Bool Evaluate", AssertErrorHandler);
+
+				{
+					Transaction transaction;
+
+					(Bool(true) == Bool(true)).Evaluate().Do();
+					(!(Bool(true) == Bool(false))).Evaluate().Do();
+				}
+				{
+					Transaction transaction;
+
+					SN_DECLARE_VALUE(z, Bool(true));
+					(Bool(true) == z).Evaluate().Do();
+
+					SN_DECLARE_VALUE(k, True);
+					SN_DECLARE_VALUE(l, False);
+					SN_DECLARE_VALUE(m, True);
+					(k.If(l, m) == False).Evaluate().Do();
+					(True.If("dog", "cat") == "dog").Evaluate().Do();
+					(False.If("dog", "cat") == "cat").Evaluate().Do();
+				}
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestBoolEvaluate2)
+		{
+			Initialize();
+			{
+				Manager manager("Test Bool Evaluate2", AssertErrorHandler);
+
+				{
+					Transaction transaction;
+					//Truth table AND
+					(!(Bool(false) && Bool(false))).Evaluate().Do();
+					(!(Bool(false) && Bool(true))).Evaluate().Do();
+					(!(Bool(true) && Bool(false))).Evaluate().Do();
+					(Bool(true) && Bool(true)).Evaluate().Do();
+				}
+				{
+					Transaction transaction;
+
+					// Truth table OR
+					(!(Bool(false) || Bool(false))).Evaluate().Do();
+					(Bool(false) || Bool(true)).Evaluate().Do();
+					(Bool(true) || Bool(false)).Evaluate().Do();
+					(Bool(true) || Bool(true)).Evaluate().Do();
+				}
+				{
+					Transaction transaction;
+
+					// Truth table AND
+					((Bool(false) && Bool(false)) == Bool(false)).Evaluate().Do();
+					((Bool(false) && Bool(true)) == Bool(false)).Evaluate().Do();
+					((Bool(true) && Bool(false)) == Bool(false)).Evaluate().Do();
+					((Bool(true) && Bool(true)) == Bool(true)).Evaluate().Do();
+				}
+				{
+					Transaction transaction;
+
+					// Truth table OR
+					((Bool(false) || Bool(false)) == Bool(false)).Evaluate().Do();
+					((Bool(false) || Bool(true)) == Bool(true)).Evaluate().Do();
+					((Bool(true) || Bool(false)) == Bool(true)).Evaluate().Do();
+					((Bool(true) || Bool(true)) == Bool(true)).Evaluate().Do();
+				}
+				{
+					Transaction transaction;
+
+					// Truth table if A then B else C
+					(False.If(False, False) == False).Evaluate().Do();
+					(False.If(False, True) == True).Evaluate().Do();
+					(False.If(True, False) == False).Evaluate().Do();
+					(False.If(True, True) == True).Evaluate().Do();
+					(True.If(False, False) == False).Evaluate().Do();
+					(True.If(False, True) == False).Evaluate().Do();
+					(True.If(True, False) == True).Evaluate().Do();
+					(True.If(True, True) == True).Evaluate().Do();
+				}
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestBoolPartialEvaluate)
+		{
+			Initialize();
+			{
+				Manager manager("Test Bool Partial Evaluate", AssertErrorHandler);
+
+				SN_DECLARE(y);
+				SN_DECLARE(x);
+				SN_DECLARE_VALUE(z, Bool(true));
+
+
+				Assert::IsTrue((Bool(true) == y).DoPartialEvaluate().Equivalent(Bool(true) == y));
+				Assert::IsTrue(!(Bool(true) == y).DoPartialEvaluate().Equivalent(Bool(true) == x));
+				Assert::IsTrue((Bool(true) == Bool(true)).DoPartialEvaluate().Equivalent(Bool(true)));
+				(Bool(true) == z).DoPartialEvaluate().Do();
+
+				Assert::IsTrue((Bool(false) || y).DoPartialEvaluate().Equivalent(y));
+				Assert::IsTrue((y || Bool(false)).DoPartialEvaluate().Equivalent(y));
+				Assert::IsTrue((Bool(true) || y).DoPartialEvaluate().Equivalent(Bool(true)));
+				Assert::IsTrue((y || Bool(true)).DoPartialEvaluate().Equivalent(Bool(true)));
+
+				Assert::IsTrue((Bool(true) && y).DoPartialEvaluate().Equivalent(y));
+				Assert::IsTrue((y && Bool(true)).DoPartialEvaluate().Equivalent(y));
+				Assert::IsTrue((Bool(false) && y).DoPartialEvaluate().Equivalent(Bool(false)));
+				Assert::IsTrue((y && Bool(false)).DoPartialEvaluate().Equivalent(Bool(false)));
+
+				(Bool(false) || z).DoPartialEvaluate().Do();
+				(Bool(true) && true).DoPartialEvaluate().Do();
+
+				(Bool(true) && true).DoPartialEvaluate().Do();
+
+				SN_DECLARE(i);
+				(i == i).DoPartialEvaluate().Do();
+
+				// If
+
+				SN_DECLARE(k);
+				SN_DECLARE(l);
+
+				Assert::IsTrue((k.If(False, True) == l).DoPartialEvaluate().Equivalent((!k == l).DoPartialEvaluate()));
+				Assert::IsTrue((k.If(True, False) == l).DoPartialEvaluate().Equivalent((k == l).DoPartialEvaluate()));
+				Assert::IsTrue(k.If(True, True).DoPartialEvaluate().Equivalent(True));
+				Assert::IsTrue(k.If(False, False).DoPartialEvaluate().Equivalent(False));
+				Assert::IsTrue(True.If(k, l).DoPartialEvaluate().Equivalent(k));
+				Assert::IsTrue(False.If(k, l).DoPartialEvaluate().Equivalent(l));
+
+				Assert::IsTrue(True.If(True, False).DoPartialEvaluate().Equivalent(True));
+
+				// Not
+				Assert::IsTrue((!!k).DoPartialEvaluate().Equivalent(k));
+				Assert::IsTrue((!(k.If(False, True))).DoPartialEvaluate().Equivalent(k));
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestBoolAssert)
+		{
+			Initialize();
+			{
+				Manager manager("Test Bool Assert", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(z);
+
+				(z || Bool(false) == Bool(true)).Assert().Do();
+
+				(Bool(true) == z).Evaluate().Do();
+				(!(Bool(false) && z)).DoPartialEvaluate().Do();
+				(Bool(true) && Bool(true)).DoPartialEvaluate().Do();
+
+
+				SN_DECLARE(y);
+
+				(Bool(true) == y.Debug()).Assert().Do();
+				(Bool(true) == y).Evaluate().Do();
+
+				SN_DECLARE(k1);
+				SN_DECLARE_VALUE(l1, False);
+
+				(k1.Debug().If(False, True) == l1).Assert().Do();
+				(k1 == !l1).Evaluate().Do();
+
+				SN_DECLARE(k2);
+				SN_DECLARE_VALUE(l2, True);
+
+				(k2.If(False, True) == l2).Assert().Do();
+				(k2 == !l2).Evaluate().Do();
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestBoolAssertIf)
+		{
+			Initialize();
+			{
+				Manager manager("Test Bool Assert If", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(m);
+				SN_DECLARE(n);
+				SN_DECLARE(o);
+
+				(o.If(False, True) == False).Assert().Do();
+				o.Evaluate().Do();
+				(o.If(m, n) == True).Assert().Do();
+				m.Evaluate().Do();
+				((!o).If(m, n) == m).Assert().Do();
+				n.Evaluate().Do();
+			}
+			Cleanup();
+		}
+		TEST_METHOD(TestBoolNotAndNot)
+		{
+			Initialize();
+			{
+				Manager manager("Test Bool Not And Not", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				(!((Bool(true) && Bool(false)))).Assert().Do();
+			}
+			Cleanup();
+		}
+
 		TEST_METHOD(TestDoubleEquivalent)
 		{
 			Initialize();
@@ -251,6 +594,103 @@ namespace test_sn
 			Cleanup();
 		}
 
+		TEST_METHOD(TestFunctionDefinition)
+		{
+			Initialize();
+			{
+				Manager manager("Test Function Definition", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				{
+					SN_DECLARE(RemovePrefix);
+					SN_DECLARE(p);
+					SN_DECLARE(x);
+
+					(Define(RemovePrefix) == Lambda(p, Lambda(x, x.SubtractLeft(p)))).PartialAssert().Do();
+					std::cout << std::endl << "Variable " << RemovePrefix.DisplaySN() << std::endl;
+					string s_RemovePrefix = RemovePrefix.GetVariableValue().DisplaySN();
+					Assert::IsTrue(s_RemovePrefix == "@p.@x.SubtractLeft x p");
+					string v_RemovePrefix = Lambda(p, Lambda(x, x.SubtractLeft(p))).DoPartialEvaluate().DisplaySN();
+					Assert::IsTrue(v_RemovePrefix == "@p.@x.SubtractLeft x p");
+					Assert::IsTrue(RemovePrefix.DoPartialEvaluate().Equivalent(Lambda(p, Lambda(x, x.SubtractLeft(p))).DoPartialEvaluate()));
+					(RemovePrefix(String("Atl"))(String("AtlDog")) == String("Dog")).Evaluate().Do();
+				}
+				{
+					SN_DECLARE(RemovePostfix);
+					SN_DECLARE(p);
+					SN_DECLARE(x);
+
+					(Define(RemovePostfix) == Lambda(p, Lambda(x, x.SubtractRight(p)))).PartialAssert().Do();
+					Assert::IsTrue(RemovePostfix.GetVariableValue().DisplaySN() == "@p.@x.SubtractRight x p");
+					std::cout << std::endl << "Variable " << RemovePostfix.DisplaySN() << std::endl;
+					Assert::IsTrue(RemovePostfix.DoPartialEvaluate().Equivalent(Lambda(p, Lambda(x, x.SubtractRight(p))).DoPartialEvaluate()));
+					(RemovePostfix(String("Atl"))(String("DogAtl")) == String("Dog")).Evaluate().Do();
+				}
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestRecursiveLambdaFunctionDefinition)
+		{
+			Initialize();
+			{
+				Manager manager("Test Function Definition", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(Factorial);
+				SN_DECLARE(n);
+
+				(Define(Factorial) == Lambda(n, (n == Long(0)).If(Long(1), n * Factorial(n - Long(1))))).PartialAssert().Do();
+				std::cout << std::endl << "Function " << Factorial.DisplaySN() << std::endl;
+				(Factorial(Long(3)) == Long(6)).Evaluate().Do();
+				(Factorial(Long(10)) == Long(3628800)).Evaluate().Do();
+				(Factorial(Long(12)) == Long(479001600)).Evaluate().Do();
+
+				SN_DECLARE(Fact);
+				SN_DECLARE(m);
+
+				(Define(Fact)(m) == (m == Long(0)).If(Long(1), m * Fact(m - Long(1)))).PartialAssert().Do();
+				std::cout << std::endl << "Function " << Fact.DisplaySN() << std::endl;
+				(Fact(Long(3)) == Long(6)).Evaluate().Do();
+				(Fact(Long(10)) == Long(3628800)).Evaluate().Do();
+				(Fact(Long(12)) == Long(479001600)).Evaluate().Do();
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestRecursiveFunctionDefinition)
+		{
+			Initialize();
+			{
+				Manager manager("Test Recursive Function Definition", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				{
+					Transaction transaction;
+
+					SN_DECLARE(Fact);
+					SN_DECLARE(m);
+
+					(Define(Fact)(m) == (m == Long(0)).If(Long(1), m * Fact(m - Long(1)))).PartialAssert().Do();
+
+					(Fact(Long(0)) == Long(1)).Assert().Do();
+					(Fact(Long(1)) == Long(1)).Assert().Do();
+					(Fact(Long(3)) == Long(6)).Assert().Do();
+					(Fact(Long(10)) == Long(3628800)).Assert().Do();
+					(Fact(Long(12)) == Long(479001600)).Assert().Do();
+				}
+				{
+					Transaction transaction;
+
+					SN_DECLARE(Fact);
+					SN_DECLARE(k);
+					SN_DECLARE(n);
+					// Fact 0 == 1 && Fact k : > 0 == k * Fact k-1 : < 0
+					((Fact(Long(0)) == Long(1)) && (Fact(k).Condition(Lambda(n, n > Long(0))) == k * Fact(k - Long(1)).Condition(Lambda(n, n < Long(0))))).PartialAssert().Do();
+				}
+			}
+			Cleanup();
+		}
+
 		TEST_METHOD(TestPartialCall)
 		{
 			Initialize();
@@ -271,6 +711,585 @@ namespace test_sn
 				Assert::IsTrue(c_string == "Long(20)");
 
 				(c == Long(20)).Assert().Do();
+			}
+			Cleanup();
+		}
+
+
+		TEST_METHOD(TestYCombinator)
+		{
+			Initialize();
+			{
+				Manager manager("Test Y Combinator", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				if (manager.GetEvaluationType() == skynet::Strict)
+				{
+					return;
+				}
+
+				SN_DECLARE(Y);
+				SN_DECLARE(f);
+				SN_DECLARE(x);
+
+				// Y = \f.(\x.x x) (\x.f (x x))
+				(Define(Y) == Lambda(f, Lambda(x, f(x(x)))(Lambda(x, f(x(x)))))).PartialAssert().Do();
+
+				SN_DECLARE(Fact);
+				SN_DECLARE(g);
+				SN_DECLARE(n);
+
+				(Define(Fact)(g)(n) == (n == Long(0)).If(Long(1), n * g(n - Long(1)))).PartialAssert().Do();
+
+				(Y(Fact)(Long(0)) == Long(1)).Evaluate().Do();
+				(Y(Fact)(Long(1)) == Long(1)).Evaluate().Do();
+				(Y(Fact)(Long(3)) == Long(6)).Evaluate().Do();
+				(Y(Fact)(Long(10)) == Long(3628800)).Evaluate().Do();
+				(Y(Fact)(Long(12)) == Long(479001600)).Evaluate().Do();
+
+				(Y(Fact)(Long(0)) == Long(1)).Assert().Do();
+				(Y(Fact)(Long(1)) == Long(1)).Assert().Do();
+				(Y(Fact)(Long(3)) == Long(6)).Assert().Do();
+				(Y(Fact)(Long(10)) == Long(3628800)).Assert().Do();
+				(Y(Fact)(Long(12)) == Long(479001600)).Assert().Do();
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestChurchSucc)
+		{
+			Initialize();
+			{
+				Manager manager("Test Church Succ", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(inc);
+				SN_DECLARE(succ);
+				SN_DECLARE(n);
+				SN_DECLARE(f);
+				SN_DECLARE(x);
+				SN_DECLARE(v);
+				SN_DECLARE(r0);
+				SN_DECLARE(r1);
+				SN_DECLARE(r2);
+				SN_DECLARE(r3);
+				(inc(v) == v + Long(1)).PartialAssert().Do();
+				(inc(inc(inc(Long(0)))) == Long(3)).Assert().Do();
+
+				// succ n f x = f (n f x)
+				(Define(succ)(n)(f)(x) == f(n(f)(x))).PartialAssert().Do();
+
+				(succ(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(1)).Evaluate().Do();
+				(succ(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == r0).Assert().Do();
+				(r0 == Long(1)).Evaluate().Do();
+
+
+				(succ(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(2)).Evaluate().Do();
+				(succ(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).Assert().Do();
+				(r1 == Long(2)).Evaluate().Do();
+
+				(succ(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(3)).Evaluate().Do();
+				(succ(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).Assert().Do();
+				(r2 == Long(3)).Evaluate().Do();
+
+				(succ(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(4)).Evaluate().Do();
+				(succ(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).Assert().Do();
+				(r3 == Long(4)).Evaluate().Do();
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestChurchPlus)
+		{
+			Initialize();
+			{
+				Manager manager("Test Church Plus", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(plus);
+				SN_DECLARE(n);
+				SN_DECLARE(m);
+				SN_DECLARE(f);
+				SN_DECLARE(inc);
+				SN_DECLARE(x);
+				SN_DECLARE(v);
+				SN_DECLARE(r0);
+				SN_DECLARE(r1);
+				SN_DECLARE(r2);
+				SN_DECLARE(r3);
+				(inc(v) == v + Long(1)).PartialAssert().Do();
+				(inc(inc(inc(Long(0)))) == Long(3)).Assert().Do();
+
+				// plus m n f x = m f (n f x) 
+				(Define(plus) == Lambda(m, Lambda(n, Lambda(f, Lambda(x, m(f)((n(f)(x)))))))).PartialAssert().Do();
+
+				(plus(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(0)).Evaluate().Do();
+				(plus(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == r0).Assert().Do();
+				(r0 == Long(0)).Evaluate().Do();
+
+				(plus(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(2)).Evaluate().Do();
+				(plus(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).Assert().Do();
+				(r1 == Long(2)).Evaluate().Do();
+
+				(plus(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(4)).Evaluate().Do();
+				(plus(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).Assert().Do();
+				(r2 == Long(4)).Evaluate().Do();
+
+				(plus(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(6)).Evaluate().Do();
+				(plus(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).Assert().Do();
+				(r3 == Long(6)).Evaluate().Do();
+			}
+			Cleanup();
+		}
+		
+		TEST_METHOD(TestChurchMultiply)
+		{
+			Initialize();
+			{
+				Manager manager("Test Church Multiply", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(mult);
+				SN_DECLARE(n);
+				SN_DECLARE(m);
+				SN_DECLARE(f);
+				SN_DECLARE(inc);
+				SN_DECLARE(x);
+				SN_DECLARE(v);
+				SN_DECLARE(r0);
+				SN_DECLARE(r1);
+				SN_DECLARE(r2);
+				SN_DECLARE(r3);
+				(inc(v) == v + Long(1)).PartialAssert().Do();
+				(inc(inc(inc(Long(0)))) == Long(3)).Assert().Do();
+
+				// multiply m n f x = m (n f) x
+				(Define(mult)(m)(n)(f)(x) == m(n(f))(x)).PartialAssert().Do();
+
+				(mult(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(0)).Evaluate().Do();
+				(mult(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == r0).Assert().Do();
+				(r0 == Long(0)).Evaluate().Do();
+
+				(mult(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(1)).Evaluate().Do();
+				(mult(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).Assert().Do();
+				(r1 == Long(1)).Evaluate().Do();
+
+				(mult(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(4)).Evaluate().Do();
+				(mult(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).Assert().Do();
+				(r2 == Long(4)).Evaluate().Do();
+
+				(mult(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(9)).Evaluate().Do();
+				(mult(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).Assert().Do();
+				(r3 == Long(9)).Evaluate().Do();
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestChurchExp)
+		{
+			Initialize();
+			{
+				Manager manager("Test Church Exp", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(exp);
+				SN_DECLARE(n);
+				SN_DECLARE(m);
+				SN_DECLARE(f);
+				SN_DECLARE(inc);
+				SN_DECLARE(x);
+				SN_DECLARE(v);
+				SN_DECLARE(r0);
+				SN_DECLARE(r1);
+				SN_DECLARE(r2);
+				SN_DECLARE(r3);
+				(inc(v) == v + Long(1)).PartialAssert().Do();
+				(inc(inc(inc(Long(0)))) == Long(3)).Assert().Do();
+
+				// exp m n f x = (n m) f x 
+				(Define(exp)(m)(n)(f)(x) == m(n)(f)(x)).PartialAssert().Do();
+
+				(exp(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(1)).Evaluate().Do();
+				(exp(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == r0).Assert().Do();
+				(r0 == Long(1)).Evaluate().Do();
+
+
+				(exp(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(1)).Evaluate().Do();
+				(exp(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).Assert().Do();
+				(r1 == Long(1)).Evaluate().Do();
+
+				(exp(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(4)).Evaluate().Do();
+				(exp(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).Assert().Do();
+				(r2 == Long(4)).Evaluate().Do();
+
+				(exp(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(27)).Evaluate().Do();
+				(exp(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).Assert().Do();
+				(r3 == Long(27)).Evaluate().Do();
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestChurchPred)
+		{
+			Initialize();
+			{
+				Manager manager("Test Church Pred", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(pred);
+				SN_DECLARE(n);
+				SN_DECLARE(m);
+				SN_DECLARE(h);
+				SN_DECLARE(g);
+				SN_DECLARE(u);
+				SN_DECLARE(f);
+				SN_DECLARE(inc);
+				SN_DECLARE(x);
+				SN_DECLARE(v);
+				SN_DECLARE(r0);
+				SN_DECLARE(r1);
+				SN_DECLARE(r2);
+				SN_DECLARE(r3);
+				(inc(v) == v + Long(1)).PartialAssert().Do();
+				(inc(inc(inc(Long(0)))) == Long(3)).Assert().Do();
+
+				// \n.\f.\x.n (\g.\h.h (g f)) (\u.x) (\u.u)
+				(Define(pred) == Lambda(n, Lambda(f, Lambda(x, n(Lambda(g, Lambda(h, h(g(f))))) (Lambda(u, x))(Lambda(u, u)))))).PartialAssert().Do();
+
+				(pred(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(0)).Evaluate().Do();
+				(pred(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == r0).Assert().Do();
+				(r0 == Long(0)).Evaluate().Do();
+
+				(pred(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(0)).Evaluate().Do();
+				(pred(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).Assert().Do();
+				(r1 == Long(0)).Evaluate().Do();
+
+				(pred(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(1)).Evaluate().Do();
+				(pred(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).Assert().Do();
+				(r2 == Long(1)).Evaluate().Do();
+
+				(pred(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(2)).Evaluate().Do();
+				(pred(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).Assert().Do();
+				(r3 == Long(2)).Evaluate().Do();
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestChurchMinus)
+		{
+			Initialize();
+			{
+				Manager manager("Test Church Minus", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(pred);
+				SN_DECLARE(h);
+				SN_DECLARE(g);
+				SN_DECLARE(u);
+				SN_DECLARE(minus);
+				SN_DECLARE(n);
+				SN_DECLARE(m);
+				SN_DECLARE(f);
+				SN_DECLARE(inc);
+				SN_DECLARE(x);
+				SN_DECLARE(v);
+				SN_DECLARE(r0);
+				SN_DECLARE(r1);
+				SN_DECLARE(r2);
+				SN_DECLARE(r3);
+				(inc(v) == v + Long(1)).PartialAssert().Do();
+				(inc(inc(inc(Long(0)))) == Long(3)).Assert().Do();
+
+				// \n.\f.\x.n (\g.\h.h (g f)) (\u.x) (\u.u)
+				(Define(pred) == Lambda(n, Lambda(f, Lambda(x, n(Lambda(g, Lambda(h, h(g(f))))) (Lambda(u, x))(Lambda(u, u)))))).PartialAssert().Do();
+
+				// minus m n = (n pred) m	
+				(Define(minus)(m)(n) == n(pred)(m)).PartialAssert().Do();
+
+				// This works too.
+				// (Define(minus)(m)(n)(f)(x) == n(pred)(m)(f)(x)).PartialAssert().Do();
+
+				(minus(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(1)).Evaluate().Do();
+				(minus(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == r0).Assert().Do();
+				(r0 == Long(1)).Evaluate().Do();
+
+				(minus(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(2)).Evaluate().Do();
+				(minus(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).Assert().Do();
+				(r1 == Long(2)).Evaluate().Do();
+
+				(minus(Lambda(f, Lambda(x, f(f(f(f(f(x))))))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(3)).Evaluate().Do();
+				(minus(Lambda(f, Lambda(x, f(f(f(f(f(x))))))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).Assert().Do();
+				(r2 == Long(3)).Evaluate().Do();
+
+				(minus(Lambda(f, Lambda(x, f(f(f(f(f(f(f(f(x)))))))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(5)).Evaluate().Do();
+				(minus(Lambda(f, Lambda(x, f(f(f(f(f(f(f(f(x)))))))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).Assert().Do();
+				(r3 == Long(5)).Evaluate().Do();
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestChurchDivide)
+		{
+			Initialize();
+			{
+				Manager manager("Test Church Divide", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				if (manager.GetEvaluationType() == skynet::Strict)
+				{
+					return;
+				}
+
+				SN_DECLARE(divide);
+
+				SN_DECLARE(div);
+				SN_DECLARE(divide1);
+				SN_DECLARE(succ);
+				SN_DECLARE(Y);
+				SN_DECLARE(zero);
+				SN_DECLARE(IsZero);
+				SN_DECLARE(falseL);
+				SN_DECLARE(trueL);
+				SN_DECLARE(minus);
+				SN_DECLARE(pred);
+
+				SN_DECLARE(inc);
+				SN_DECLARE(f);
+				SN_DECLARE(x);
+				SN_DECLARE(n);
+				SN_DECLARE(m);
+				SN_DECLARE(a);
+				SN_DECLARE(b);
+				SN_DECLARE(c);
+				SN_DECLARE(d);
+				SN_DECLARE(u);
+				SN_DECLARE(v);
+				SN_DECLARE(g);
+				SN_DECLARE(h);
+
+				SN_DECLARE(r1);
+				SN_DECLARE(r2);
+				SN_DECLARE(r3);
+
+				(inc(v) == v + Long(1)).PartialAssert().Do();
+				(inc(inc(inc(Long(0)))) == Long(3)).Assert().Do();
+
+				// Y = \f.(\x.x x) (\x.f (x x))
+				(Define(Y) == Lambda(f, Lambda(x, f(x(x)))(Lambda(x, f(x(x)))))).PartialAssert().Do();
+
+				// \n.\f.\x.n (\g.\h.h (g f)) (\u.x) (\u.u)
+				(Define(pred) == Lambda(n, Lambda(f, Lambda(x, n(Lambda(g, Lambda(h, h(g(f))))) (Lambda(u, x))(Lambda(u, u)))))).PartialAssert().Do();
+
+				// minus m n = (n pred) m	
+				(Define(minus)(m)(n) == n(pred)(m)).PartialAssert().Do();
+
+				// div = \c.\n.\m.\f.\x.(\d.IsZero d (0 f x) (f (c d m f x))) (minus n m)
+				(Define(div) == Lambda(c, Lambda(n, Lambda(m, Lambda(f, Lambda(x, (Lambda(d, IsZero(d)(zero(f)(x))(f(c(d)(m)(f)(x))))(minus(n)(m))))))))).PartialAssert().Do();
+
+				// divide1 == Y div
+				(Define(divide1) == Y(div)).PartialAssert().Do();
+
+				// divide = \n.divide1 (succ n)
+				(Define(divide) == Lambda(n, divide1(succ(n)))).PartialAssert().Do();
+
+				// succ n f x = f (n f x)
+				(Define(succ)(n)(f)(x) == f(n(f)(x))).PartialAssert().Do();
+
+				// zero = \f.\x.x
+				(Define(zero) == Lambda(f, Lambda(x, x))).PartialAssert().Do();
+
+				// trueL = \a.\b.a
+				(Define(trueL) == Lambda(a, Lambda(b, a))).PartialAssert().Do();
+
+				// falseL = \a.\b.a
+				(Define(falseL) == Lambda(a, Lambda(b, b))).PartialAssert().Do();
+
+				// IsZero = \n.n (\x.false) true
+				(Define(IsZero) == Lambda(n, n(Lambda(x, falseL))(trueL))).PartialAssert().Do();
+
+				(divide(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(1)).Evaluate().Do();
+				(divide(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).Assert().Do();
+				(r1 == Long(1)).Evaluate().Do();
+
+				(divide(Lambda(f, Lambda(x, f(f(f(f(x)))))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(2)).Evaluate().Do();
+				(divide(Lambda(f, Lambda(x, f(f(f(f(x)))))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).Assert().Do();
+				(r2 == Long(2)).Evaluate().Do();
+
+				(divide(Lambda(f, Lambda(x, f(f(f(f(f(f(f(f(f(x))))))))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(3)).Evaluate().Do();
+				(divide(Lambda(f, Lambda(x, f(f(f(f(f(f(f(f(f(x))))))))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).Assert().Do();
+				(r3 == Long(3)).Evaluate().Do();
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestStringRefDefinition)
+		{
+			Initialize();
+			{
+				Manager manager("Test String Ref Definition", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false);
+
+				SN_DECLARE(a);
+				SN_DECLARE(b);
+				SN_DECLARE(c);
+				SN_DECLARE(d);
+				(String("ratdogcat") == a + b).Assert().Do();
+				(a == d + c).Assert().Do();
+
+				(d == String("rat")).Assert().Do();
+				string d_string = d.GetString();
+				Assert::IsTrue(d_string == "rat");
+
+				(c == String("dog")).Assert().Do();
+				string c_string = c.GetString();
+				Assert::IsTrue(c_string == "dog");
+
+				Assert::IsTrue(b.DoEvaluate().Equivalent(String("cat")));
+				string b_string = b.GetString();
+				Assert::IsTrue(b_string == "cat");
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestOr1)
+		{
+			Initialize();
+			{
+				Manager manager("Test Or 1", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(x);
+				(x == Long(3)).Assert().Do();
+				string x_string = x.GetVariableValue().DisplayValueSN();
+
+				Assert::IsTrue(x_string == "Long(3)");
+				(x == Long(3)).Evaluate().Do();
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestOr2)
+		{
+			Initialize();
+			{
+				Manager manager("Test Or 2", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(x);
+				(x == Long(3) || x == Long(4)).Assert().Do();
+				string x_string = x.DisplaySN();
+				string x_valueset = x.DoEvaluate().DisplaySN();
+				string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
+				string t_valueset = (Long(3) || Long(4)).DoEvaluate().DisplaySN();
+				string t_buildset = (Long(3) || Long(4)).BuildSet().DoEvaluate().DisplaySN();
+				SN_DECLARE(y);
+				(y == (Long(3) || Long(4))).Assert().Do();
+				string y_string = y.DisplaySN();
+				string y_valueset = y.DoEvaluate().DisplaySN();
+				string y_buildset = y.BuildSet().DoEvaluate().DisplaySN();
+
+				(x.BuildSet() == y.BuildSet()).Evaluate().Do();
+				(x.BuildSet() == (Long(3) || Long(4)).BuildSet()).Evaluate().Do();
+				cout << x.DisplaySN();
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestOr3)
+		{
+			Initialize();
+			{
+				Manager manager("Test Or 3", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(x);
+				(x == Long(3) || x == Long(4) || x == Long(5)).Assert().Do();
+				string x_string = x.DisplaySN();
+				string x_valueset = x.DoEvaluate().DisplaySN();
+				string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
+				x.LogDisplaySN();
+				x.DoEvaluate().LogDisplaySN();
+				x.BuildSet().DoEvaluate().LogDisplaySN();
+
+				(x.BuildSet() == (Long(3) || Long(4) || Long(5)).BuildSet()).Evaluate().Do();
+				cout << x.DisplaySN();
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestOr4)
+		{
+			Initialize();
+			{
+				Manager manager("Test Or 4", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(x);
+				(x == Long(3) || x == Long(4) || x == Long(5) || x == Long(6)).Assert().Do();
+				string x_string = x.DisplaySN();
+				string x_valueset = x.DoEvaluate().DisplaySN();
+				string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
+
+				(x.BuildSet() == (Long(3) || Long(4) || Long(5) || Long(6)).BuildSet()).Evaluate().Do();
+				cout << x.DisplaySN();
+			}
+
+			Cleanup();
+		}
+
+		TEST_METHOD(TestOr4WithCalc)
+		{
+			Initialize();
+			{
+				Manager manager("Test Or 4 With Calc", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(x);
+				(x == Long(3)+Long(3) || x == Long(4)+Long(4) || x == Long(5)+Long(5) || x == Long(6)+Long(6)).Assert().Do();
+				string x_string = x.DisplaySN();
+				string x_valueset = x.DoEvaluate().DisplaySN();
+				string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
+
+				(x.BuildSet() == (Long(3)+Long(3) || Long(4)+Long(4) || Long(5)+Long(5) || Long(6)+Long(6)).BuildSet()).Evaluate().Do();
+				cout << x.DisplaySN();
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestOrReversed4WithCalc)
+		{
+			Initialize();
+			{
+				Manager manager("Test Or Reversed 4 With Calc", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(x);
+				(Long(3) + Long(3) == x || Long(4) + Long(4) == x || Long(5) + Long(5) == x || Long(6) + Long(6) == x).Assert().Do();
+				string x_string = x.DisplaySN();
+				string x_valueset = x.DoEvaluate().DisplaySN();
+				string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
+
+				(x.BuildSet() == (Long(3) + Long(3) || Long(4) + Long(4) || Long(5) + Long(5) || Long(6) + Long(6)).BuildSet()).Evaluate().Do();
+				cout << x.DisplaySN();
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestOrReversed4WithSolve)
+		{
+			Initialize();
+			{
+				Manager manager("Test Or Reversed 4 With Solve", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(x);
+				(Long(6) == x + Long(3) || Long(8) == x + Long(4) || Long(10) == x + Long(5) || Long(12) == x + Long(6)).Assert().Do();
+				string x_string = x.DisplaySN();
+				string x_valueset = x.DoEvaluate().DisplaySN();
+				string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
+
+				(x.BuildSet() == (Long(3) || Long(4) || Long(5) || Long(6)).BuildSet()).Evaluate().Do();
+				cout << x.DisplaySN();
 			}
 			Cleanup();
 		}
@@ -1150,6 +2169,45 @@ namespace test_sn
 			Cleanup();
 		}
 
+		TEST_METHOD(TestSubStrings)
+		{
+			Initialize();
+			{
+				Manager manager("Test Sub Strings", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				(String("catdog").SubtractRight(String("catdog").SubtractLeft(String("cat"))) == String("cat")).Assert().Do();
+				(String("catdog").SubtractLeft(String("catdog").SubtractRight(String("dog"))) == String("dog")).Assert().Do();
+
+				SN_DECLARE_VALUE(x, String("catdog"));
+				SN_DECLARE_VALUE(y, String("cat"));
+				SN_DECLARE_VALUE(z, String("dog"));
+
+				(x.SubtractRight(x.SubtractLeft(y)) == y).Assert().Do();
+				(x.SubtractLeft(x.SubtractRight(z)) == z).Assert().Do();
+
+				(String("GamesX").SubtractRightChar() + String("GamesX").SelectRightChar() == String("GamesX")).Assert().Do();
+				SN_DECLARE_VALUE(m, String("GamesX"));
+				(m.SubtractRightChar() + m.SelectRightChar() == m).Assert().Do();
+
+				(String("XGames").SelectLeftChar() + String("XGames").SubtractLeftChar() == String("XGames")).Assert().Do();
+				SN_DECLARE_VALUE(n, String("XGames"));
+				(n.SelectLeftChar() + n.SubtractLeftChar() == n).Assert().Do();
+			}
+			Cleanup();
+		}
+
+/*		TEST_METHOD(TestAssertNothing)
+		{
+			Initialize();
+			{
+				Manager manager("Test Assert Nothing", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer2);
+			}
+			Cleanup();
+		}
+*/
+
 		TEST_METHOD(TestAssertThrow)
 		{
 			Initialize();
@@ -1168,6 +2226,77 @@ namespace test_sn
 						Assert::IsTrue(e.IsError(), wstring(description.begin(), description.end()).c_str());
 					}
 				};
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestFileAccess)
+		{
+			Initialize();
+			{
+				string s_name_1 = "c:/temp/sn_test_testfileaccess_1.txt";
+				string s_name_2 = "c:/temp/sn_test_testfileaccess_2.txt";
+				string s_contents_1 = "Tora! Tora! Tora!";
+				string s_contents_2 = "Two dogs barking!";
+
+				remove(s_name_1.data());
+				remove(s_name_2.data());
+				{
+					ofstream out(s_name_1);
+					out << s_contents_1;
+					out.close();
+				}
+
+				Manager manager("Test File Access", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer2);
+				{
+					Transaction transaction;
+
+					SN_DECLARE_VALUE(name_1, String(s_name_1));
+					SN_DECLARE_VALUE(contents_1, String(s_contents_1));
+
+					(name_1.File() == contents_1).Assert().Do();
+
+					{
+						ofstream out(s_name_1);
+						out << s_contents_1;
+						out.close();
+					}
+
+					(name_1.File() == contents_1).Assert().Do();
+
+					SN_DECLARE_VALUE(name_2, String(s_name_2));
+					SN_DECLARE_VALUE(contents_2, String(s_contents_2));
+
+					(name_2.File() == contents_2).Assert().Do();
+
+					ifstream inFile;
+					inFile.open(s_name_2); // open the input file
+					Assert::IsTrue(inFile.is_open());
+
+					stringstream strStream;
+					strStream << inFile.rdbuf(); // read the file
+					Assert::IsTrue(strStream.str() == s_contents_2);
+
+					{
+						std::ofstream out(s_name_2);
+						out << s_contents_1;
+						out.close();
+					}
+
+					(name_2.File() == contents_2).Assert().Do(); // The assert still hold. For consistency, SN caches the value for the file name.
+				}
+
+				// Outside the transaction, the cache is cleared and the value is re-read.
+				{
+					Transaction transaction;
+
+					SN_DECLARE_VALUE(name_1, String(s_name_1));
+					SN_DECLARE_VALUE(name_2, String(s_name_2));
+					SN_DECLARE_VALUE(contents_1, String(s_contents_1));
+					(name_1.File() == name_2.File()).Assert().Do();
+					(name_2.File() == contents_1).Assert().Do();
+				}
 			}
 			Cleanup();
 		}
@@ -1273,6 +2402,129 @@ namespace test_sn
 			Cleanup();
 		}
 
+		TEST_METHOD(TestStringSearch)
+		{
+			Initialize();
+			{
+				Manager manager("Test String Search", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				{
+					Transaction transaction;
+
+					SN_DECLARE(money);
+					SN_DECLARE(evil);
+					(money + (String(" is the root of all ") + evil) == String("Money is the root of all evil")).Assert().Do();
+					string money_string = money.GetString();
+					string evil_string = evil.GetString();
+					Assert::IsTrue(money_string == "Money");
+					Assert::IsTrue(evil_string == "evil");
+				}
+				{
+					Transaction transaction;
+
+					SN_DECLARE(money);
+					SN_DECLARE(evil);
+					(money + String(" is the root of all ") + evil == String("Money is the root of all evil")).Assert().Do();
+					string money_string = money.GetString();
+					string evil_string = evil.GetString();
+					Assert::IsTrue(money_string == "Money");
+					Assert::IsTrue(evil_string == "evil");
+				}
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestStringSearchExample1)
+		{
+			Initialize();
+			{
+				Manager manager("Test String Search Example 1", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(firstname1);
+				SN_DECLARE(surname1);
+				(String("My first name is ") + (firstname1 + String(" and my surname is Fischer.")) == String("My first name is Bobby and my surname is Fischer.")).Assert().Do();
+				string firstname1_string = firstname1.GetString();
+				Assert::IsTrue(firstname1_string == "Bobby");
+
+				SN_DECLARE(firstname2);
+				SN_DECLARE(surname2);
+				(String("My first name is ") + (firstname2 + (String(" and my surname is ") + surname2)) == String("My first name is Bobby and my surname is Fischer")).Assert().Do();
+				string firstname2_string = firstname2.GetString();
+				string surname2_string = surname2.GetString();
+				Assert::IsTrue(firstname2_string == "Bobby");
+				Assert::IsTrue(surname2_string == "Fischer");
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestStringSearchExample2)
+		{
+			Initialize();
+			{
+				Manager manager("Test String Search Example 2", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				{
+					Transaction transaction;
+
+					SN_DECLARE(firstname);
+					SN_DECLARE(surname);
+
+					(String("My first name is ") + (firstname + (String(" and my surname is ") + (surname + String(".")))) == String("My first name is Bobby and my surname is Fischer.")).Assert().Do();
+
+					string firstname_string = firstname.GetString();
+					string surname_string = surname.GetString();
+					Assert::IsTrue(firstname_string == "Bobby");
+					Assert::IsTrue(surname_string == "Fischer");
+
+					(firstname == String("Bobby")).Assert().Do();
+					(surname == String("Fischer")).Assert().Do();
+				}
+				{
+					Transaction transaction;
+
+					SN_DECLARE(firstname);
+					SN_DECLARE(surname);
+
+					(String("My first name is ") + firstname + String(" and my surname is ") + (surname + String(".")) == String("My first name is Bobby and my surname is Fischer.")).Assert().Do();
+					(firstname == String("Bobby")).Assert().Do();
+					(surname == String("Fischer")).Assert().Do();
+					string firstname_string = firstname.GetString();
+					string surname_string = surname.GetString();
+					Assert::IsTrue(firstname_string == "Bobby");
+					Assert::IsTrue(surname_string == "Fischer");
+				}
+			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestStringAmbiguity)
+		{
+			Initialize();
+			{
+				Manager manager("Test String Ambiguity", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(firstClause);
+				SN_DECLARE(secondClause);
+				SN_DECLARE(sentence);
+				(firstClause + String(" and ") + secondClause == String("I love dogs and cats and dogs love me.")).Assert().Do();
+				string firstClause_string_vs = firstClause.DisplaySN();
+				string secondClause_string_vs = secondClause.DisplaySN();
+				
+				string firstClause_string = firstClause.BuildSet().DoEvaluate().DisplaySN();
+				string secondClause_string = secondClause.BuildSet().DoEvaluate().DisplaySN();
+				Assert::IsTrue(firstClause_string == "{String(\"I love dogs\"), String(\"I love dogs and cats\")}");
+				Assert::IsTrue(secondClause_string == "{String(\"cats and dogs love me.\"), String(\"dogs love me.\")}");
+				
+				(sentence == firstClause + (String(" and ") + secondClause)).Assert().Do();
+				string sentence_string_vs = sentence.DisplaySN();
+				string sentence_string = sentence.GetString();
+				Assert::IsTrue(sentence_string == "I love dogs and cats and dogs love me.");
+			}
+			Cleanup();
+		}
+		
 		TEST_METHOD(TestPythagoras)
 		{
 			Initialize();
