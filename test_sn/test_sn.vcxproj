@@ -178,6 +178,7 @@
     <ClCompile Include="test_sn_early_parser.cpp" />
     <ClCompile Include="test_sn_factorial.cpp" />
     <ClCompile Include="test_sn_logic.cpp" />
+    <ClCompile Include="test_sn_number.cpp" />
     <ClCompile Include="test_sn_parser.cpp" />
     <ClCompile Include="test_sn_pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
