@@ -43,6 +43,12 @@ namespace SNL
 		}
 
 		{
+			SN_LOCAL(c);
+
+			(Define(TimesDivide)(c) == (c == (String("*") || String("/"))).Collapse()).PartialAssert().Do();
+		}
+
+		{
 			SN_LOCAL(d);
 
 			(Define(Digit)(d) == (d == (String("0") || String("1") || String("2") || String("3") || String("4")

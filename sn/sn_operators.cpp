@@ -36,9 +36,14 @@ namespace SN
 			return SN::SN_Function(skynet::PartialEvaluate, p_Expression);
 		}
 
-		SN::SN_Expression Meta(const SN::SN_Expression &p_Expression, const SN::SN_Expression &p_MetaLevel)
+		SN::SN_Expression BuildMeta(const SN::SN_Expression &p_Expression, const SN::SN_Expression &p_MetaLevel)
 		{
 			return SN::SN_Function(SN::SN_Function(skynet::MetaLevel, p_Expression), p_MetaLevel);
+		}
+
+		SN::SN_Expression Notes(const SN::SN_Expression &p_Expression, const SN::SN_Expression &p_Before, const SN::SN_Expression &p_After)
+		{
+			return p_Expression;
 		}
 
 		// Logic

@@ -1,0 +1,192 @@
+<HTML>
+<HEAD>
+<META NAME="GENERATOR" Content="Microsoft Visual Studio">
+    <meta charset="utf-8">
+    <title>SKYNET Start</title>
+    <meta name="description" content="SKYNET">
+    <meta name="author" content="P.J.Driscoll">
+    <link rel='icon' href='favicon.png' sizes='32x32' type='image/png'>
+    <link rel='stylesheet' type='text/css' href='style.css'>
+</HEAD>
+<BODY>
+    <div>
+        <div class="help-heading1 left-float">
+            <h1>SKYNET&nbsp;&nbsp; </h1>
+        </div>
+        Imperative logic
+    </div>
+
+    <p class="clear">
+        <h2 class="help-heading2 ">Introduction</h2>
+    </p>
+
+    <p class="help-normal">
+        How to implement change and remain pure? Imperative code introduces complex dependencies. Often, the only way to know what a program does is to run it.</p>
+    <p class="help-normal">
+        Let&#39;s break this down. An imperative program uses assignment statements to modify a state. &quot;Modify&quot; is a dirty word in a functional language. I&#39;ll interpret this as meaning &quot;create a new state with an updated value.&quot; But that would be two ineffficient, wouldn&#39;t it? SKYNET supports it efficiently using the State object.</p>
+
+    <h2 class="help-heading2">State object</h2>
+
+    <p class="help-normal">
+        The SKYNET State allows the efficient copying of states.
+        Each state is a reference to a common state buffer.
+        When a new State is created from an old one, only the State is copied,
+        which internally references the common state buffer using an ID.
+        The state buffer tags each change to a value with an ID, so that the value may be retrieved from the State.
+    <p class="help-normal">
+        This state buffer purges states that are no longer accessible, except when debugging.
+        The history may assist a developer in understanding the chain of events.</p>
+    <p class="help-normal">
+        But recording state is only part of the problem. 
+        What about chaining statements together, so that state is passed from one to the next?
+    </p>
+
+    <h2 class="help-heading2">Chaining states.</h2>
+
+    <p class="help-normal">
+        Let&#39;s say there are two statements X1 and X2, separated by a semi-colon</p>
+    <p class="help-code">
+        X1;</p>
+    <p class="help-code">
+        X2;</p>
+    <p class="help-normal">
+        The semi-colon can be considered as an operator that combines statements. 
+        Then if X1 is an imperative statement, it is a function that takes a state and returns a state and a value.
+        SKYNET provides a type StateValue to record this pair. 
+        The state is passed to the statement.
+        The value is the result of the expression.
+        In an assignment statement, this is the value given to the variable. 
+    </p>
+    <p class="help-normal">
+        If x is a statement, s is a state, v is a value, the type expression for a statement is, </p>
+    <p class="help-code">
+        x s -&gt; (StateValue s v) s</p>
+    <p class="help-code">
+        Then also the type of x;x,</p>
+    <p class="help-code">
+        (x;x) s -&gt; (StateValue s v) s</p>
+    <p class="help-normal">
+        and the state produced by X1 is the input to X2.
+        The chaining of the state from one state from one statement to the next is represented in SKYNET as</p>
+    <p class="help-code">
+        (X1;X2) s = <b>local</b> s1, v1 <b>in</b> <b>let</b> X1 s = StateValue s1 v1 <b>in</b> X2 s1</p>
+    <p class="help-normal">
+        Imperative statements are functions that require a state.
+        This definition cleans them up and expresses their effect using pure functional logic.</p>
+
+    <h2 class="help-heading2">Chaining expressions.</h2>
+
+    <p class="help-normal">
+        Languages like C++ allow assignment statements to be included anywhere in an expression. How is state to be chained threw an expression that may have imperative statements embedded. To break it down consider a simple operator, say addition.</p>
+    <p class="help-code">
+        X1 + X2</p>
+    <p class="help-normal">
+        The rule for implementing addition of StateValues is,</p>
+    <p class="help-code">
+        (X1 + X2) s = <b>local</b> s1, v1, s1, v1 <b>in</b> <b>let</b> X1 s = StateValue s1 v1 &amp; X2 s1 = StateValue s2 v2 <b>in</b> StateValue s2 (v1+v2)</p>
+    <p class="help-normal">
+        So adding two state values chains the state output from X1 into X2 and returns the state from X2 along with the sum of the values. And the same is true for all binary operators and is generalized to all functions.</p>
+
+    <h2 class="help-heading2">How this all works in the language.</h2>
+
+    <p class="help-normal">
+        SKYNET supports State and StateValue as built in types, for efficiency sake.
+        But they they need not be.
+        The inheritance model supported by Virtual allows operator and functional overloading.
+        When a normal value is combined with a StateValue, the value is promoted to a StateValue
+        using the equivalence.</p>
+    <p class="help-code">
+        (X1;X2) = <b>local</b> s1, v1 <b>in let</b> X1 s = StateValue s1 v1 <b>in</b> X2 s1</p>
+    <p class="help-code">
+        (X1 + X2) = <b>lambda</b> s.<b>local</b> s1, v1, s1, v1 <b>in</b> <b>let</b> X1 s = StateValue s1 v1 &amp; X2 s1 = StateValue s2 v2 <b>in</b> StateValue s2 (v1+v2)
+    </p>
+    <p class="help-code">
+        v s = (StateValue s v) s</p>
+    <p class="help-normal">
+        The rule defined in the previous section is then applied.</p>
+    <p class="help-normal">
+        But what is actually happening here? 
+        How is this all evaluated? 
+        An imperative statement represents a function expression that requires a state as a parameter. 
+        The expression is evaluated to give a Lambda arround a state value.</p>
+    <p class="help-normal">
+        So what provdes the initial state? The Return function calls a StateValue, giving it an empty state, and returns only the value. </p>
+    <p class="help-normal">
+        The State is never visible as a variable in the program. It is always chained through functions. This allows all old states to be discarded, and only the current state to be recorded. The states are only visible in the debugger.</p>
+
+    <h2 class="help-heading2">The assignment statement.</h2>
+
+    <p class="help-normal">
+        The assignment statement,</p>
+    <p class="help-code">
+        N := V</p>
+    <p class="help-normal">
+        is defined by,</p>
+    <p class="help-code">
+        (N := V) = <b>local</b> s1, v1 <b>let</b> V s = StateValue s1 v1 <b>in</b> StateValue (s1.Add N V) v1</p>
+    <p class="help-normal">
+        N is a variable, and the Add function uses the identity of N, not the value. The value of the variable remains unaffected.</p>
+
+    <h2 class="help-heading2">Accessing a state&#39;s value</h2>
+
+    <p class="help-normal">
+        SKYNET variables are used by the State to record identity, not name.
+        Using a variable will give it's value, not it's value in the state.
+        A means of accessing the state value is needed. This is represented as,</p>
+    <p class="help-code">
+        [[N]]</p>
+    <p class="help-normal">
+        Which is defined by,</p>
+    <p class="help-code">
+        [[N]] s = (StateValue s s[N]) s</p>
+    <p class="help-normal">
+        The s[N] operator looks up the state s, and returns the value.</p>
+    <p class="help-normal">
+        To provide a more natural syntax, the variable can be set to it's state 
+        This can be hidden by declaring the value as,</p>
+    <p class="help-code">
+        <b>local</b> N = [[N]] <b>in</b> ...</p>
+    <p class="help-code">
+        <b>global</b> N = [[N]]</p>
+    <p class="help-normal">
+        Then the value of the variable is the StateValue object that looks up the value in the state.
+        The "mutable" keyword is equivalent to this.</p>
+    <p class="help-code">
+        <b>local mutable</b> N <b>in</b> ...</p>
+    <p class="help-code">
+        <b>global mutable</b> N</p>
+
+    <h2 class="help-heading2">Pointer arithmetic</h2>
+
+    <p class="help-normal">
+        C++ provides direct low level support for accessing memory.
+        SKYNET models state by values associated with variables.
+        At this stage, SKYNET does not support pointer arithmatic.
+        It may be useful to add this later as a means of interpreting and converting legacy programs.</p>
+    
+    <h2 class="help-heading2">Summary</h2>
+
+    <p class="help-normal">
+        Imperative programming is defined by chaing the states of imperative statements together. Each statement represents a StateValue object. The StateValue is a function that takes a state as a parameter.</p>
+    <p class="help-normal">
+        The logic here is simple but can be elusive.
+        It may not be necessary to understand it.
+        The effect is the same as imperative programming as commonly understand,
+        but implemented in a functional manner.</p>
+    <p class="help-normal">
+        The ideas used are somewhat similar to Monads.
+        But truth-be-told, I find the Monad concept to be difficult.
+        The SKYNET model provides a direct logical interpretation of imperative programming.</p>
+    <p class="help-normal">
+        Imperative programming is needed to model change.
+        The user perceives the world as changes, and this needs to be modelled.
+        But logic is simpler without the complications of state, 
+        so state should only be used where it is necessary.</p>
+    <p class="help-normal">
+        Programmmers code in an imperative languages for efficiency, at the expense of simplicity.
+        SKYNET is intended for meta programming.
+        The goal of meta programming is to provide another level of translation, 
+        where simple logic is converted to efficient code before execution. 
+    </p>
+</BODY>
+</HTML>

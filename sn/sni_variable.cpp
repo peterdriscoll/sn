@@ -775,7 +775,7 @@ namespace SNI
 		}
 	}
 
-	SN::SN_Expression SNI_Variable::DoMeta(long p_MetaLevel)
+	SN::SN_Expression SNI_Variable::DoBuildMeta(long p_MetaLevel)
 	{
 		SN::SN_Expression expression(this);
 		return SN::SN_Meta(p_MetaLevel, expression);

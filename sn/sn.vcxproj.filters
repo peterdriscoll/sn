@@ -69,9 +69,6 @@
     <ClInclude Include="..\inc\exp_ctrl_sn_lib.h">
       <Filter>Interface Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\inc\parser.h">
-      <Filter>Interface Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\inc\sn.h">
       <Filter>Interface Header Files</Filter>
     </ClInclude>
@@ -1007,6 +1004,9 @@
       <Filter>HTML Files</Filter>
     </None>
     <None Include="..\html\changehistoryjs.html">
+      <Filter>HTML Files</Filter>
+    </None>
+    <None Include="..\html\help_imperative.html">
       <Filter>HTML Files</Filter>
     </None>
   </ItemGroup>

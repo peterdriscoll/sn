@@ -7,9 +7,9 @@
 
 #include "sn.h"
 
-#include "snl_parse.h"
-#include "snl_validate.h"
 #include "snl_characterset.h"
+#include "snl_validate.h"
+#include "snl_parse.h"
 
 namespace skynet
 {

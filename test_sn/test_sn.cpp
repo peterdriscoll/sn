@@ -4071,7 +4071,7 @@ namespace test_sn
 
 				CharacterSet characterSet;
 				Validate validate(characterSet);
-				Parse parse(validate);
+				Parse parse(characterSet, validate);
 
 				// Name test.
 				SN_DOMAIN(MyDomain);
@@ -4148,7 +4148,7 @@ namespace test_sn
 
 				CharacterSet characterSet;
 				Validate validate(characterSet);
-				Parse parse(validate);
+				Parse parse(characterSet, validate);
 
 				// Exponential test.
 				SN_DOMAIN(MyDomain);

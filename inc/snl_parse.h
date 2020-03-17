@@ -5,29 +5,47 @@
 
 #include "exp_ctrl_sn_lib.h"
 #include "sn.h"
-#include "snl_Validate.h"
+#include "snl_validate.h"
 
 namespace SNL
 {
 	class SN_LIB_EXPORT SNL_Parse: public skynet::Domain
 	{
 	public:
-		SNL_Parse(const SNL_Validate &p_Validate);
+		SNL_Parse(const SNL_CharacterSet p_CharacterSet, const SNL_Validate &p_Validate);
 
 		skynet::Variable AsInteger;
 		skynet::Variable AsScientific;
 		skynet::Variable AsNumber;
 
-		skynet::Variable AsName;
 		skynet::Variable AsString;
 		skynet::Variable AsValue;
 
-		private:
-			void Setup();
-			void Link();
-			void Init();
+		skynet::Variable AsName;
+		skynet::Variable AsPath;
 
-			const SNL_Validate &m_Validate;
+		skynet::Variable AsCall;
+		skynet::Variable AsLambda;
+
+		skynet::Variable AsLambdaPart;
+		skynet::Variable AsLambdaTerm;
+
+		skynet::Variable AsFactor;
+		skynet::Variable AsTerm;
+		skynet::Variable AsExpression;
+
+	private:
+		void Setup();
+		void Link();
+		void Init();
+
+		void DefineValue();
+		void DefineReference();
+		void DefineLambdaCalculus();
+		void DefineExpression();
+
+		const SNL_CharacterSet &m_CharacterSet;
+		const SNL_Validate &m_Validate;
 	};
 }
 

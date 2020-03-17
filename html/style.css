@@ -273,6 +273,12 @@ p.clear {
 
 .help-normal {
     color: black;
+    margin-left: 40px;
+}
+
+.help-code {
+    color: darkblue;
+    margin-left: 90px;
 }
 
 .help-heading1 {

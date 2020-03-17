@@ -63,12 +63,12 @@ namespace SNI
 				}
 			}
 		}
-		return p_Left.GetSNI_Value()->DoMeta(metaLevel);
+		return p_Left.GetSNI_Value()->DoBuildMeta(metaLevel);
 	}
 
 	SN::SN_Expression SNI_MetaLevel::PrimaryFunctionExpression(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right) const
 	{
-		return p_Left.Meta(p_Right);
+		return p_Left.BuildMeta(p_Right);
 	}
 
 	SN::SN_Value SNI_MetaLevel::LeftInverseFunctionValue(const SN::SN_Value &p_Left, const SN::SN_Value &p_Right) const
@@ -123,7 +123,7 @@ namespace SNI
 				}
 			}
 		}
-		SN::SN_Error result = p_ParamList[PU2_First].DoEvaluate().DoMeta(metaLevel).GetError();
+		SN::SN_Error result = p_ParamList[PU2_First].DoEvaluate().DoBuildMeta(metaLevel).GetError();
 
 		Breakpoint(SN::DebugStop, SN::ReturnId, GetTypeName(), "Unify end", p_Source, SN::CallPoint);
 

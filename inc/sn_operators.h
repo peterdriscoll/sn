@@ -18,7 +18,8 @@ namespace SN
 		SN_EXPORT SN::SN_Expression PartialAssert(const SN::SN_Expression &p_Expression);
 		SN_EXPORT SN::SN_Expression Evaluate(const SN::SN_Expression &p_Expression);
 		SN_EXPORT SN::SN_Expression PartialEvaluate(const SN::SN_Expression &p_Expression);
-		SN_EXPORT SN::SN_Expression Meta(const SN::SN_Expression &p_Expression, const SN::SN_Expression &p_MetaLevel);
+		SN_EXPORT SN::SN_Expression BuildMeta(const SN::SN_Expression &p_Expression, const SN::SN_Expression &p_MetaLevel);
+		SN_EXPORT SN::SN_Expression Notes(const SN::SN_Expression &p_Expression, const SN::SN_Expression &p_Before, const SN::SN_Expression &p_After);
 
 		// Logic
 		SN_EXPORT SN::SN_Expression operator !(const SN::SN_Expression &p_Other);

@@ -4,7 +4,7 @@
 #pragma once
 
 #include "exp_ctrl_sn_lib.h"
-#include "snl.h"
+#include "sn.h"
 
 namespace SNL
 {
@@ -14,6 +14,7 @@ namespace SNL
 		SNL_CharacterSet();
 
 		skynet::Variable Sign;
+		skynet::Variable TimesDivide;
 		skynet::Variable Digit;
 		skynet::Variable AlphaLower;
 		skynet::Variable AlphaUpper;
@@ -23,10 +24,10 @@ namespace SNL
 		skynet::Variable AlphaUnderNumeric;
 		skynet::Variable White;
 
-		private:
-			void Setup();
-			void Link();
-			void Init();
+	private:
+		void Setup();
+		void Link();
+		void Init();
 	};
 }
 

@@ -586,7 +586,7 @@ namespace SNI
 		return skynet::Fail;
 	}
 
-	SN::SN_Expression SNI_Expression::DoMeta(long p_MetaLevel)
+	SN::SN_Expression SNI_Expression::DoBuildMeta(long p_MetaLevel)
 	{
 		SN::SN_Expression expression(this);
 		return SN::SN_Meta(p_MetaLevel, expression);
