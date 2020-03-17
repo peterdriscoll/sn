@@ -179,6 +179,7 @@
     <ClCompile Include="test_sn_factorial.cpp" />
     <ClCompile Include="test_sn_inherit.cpp" />
     <ClCompile Include="test_sn_logic.cpp" />
+    <ClCompile Include="test_sn_meta.cpp" />
     <ClCompile Include="test_sn_number.cpp" />
     <ClCompile Include="test_sn_parser.cpp" />
     <ClCompile Include="test_sn_pch.cpp">
@@ -189,6 +190,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="test_sn_string.cpp" />
+    <ClCompile Include="test_sn_valueset.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

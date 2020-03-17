@@ -53,5 +53,11 @@
     <ClCompile Include="test_sn_inherit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test_sn_meta.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test_sn_valueset.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
