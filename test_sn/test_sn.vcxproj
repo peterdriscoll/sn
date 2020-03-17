@@ -177,6 +177,7 @@
     <ClCompile Include="test_sn_church.cpp" />
     <ClCompile Include="test_sn_early_parser.cpp" />
     <ClCompile Include="test_sn_factorial.cpp" />
+    <ClCompile Include="test_sn_inherit.cpp" />
     <ClCompile Include="test_sn_logic.cpp" />
     <ClCompile Include="test_sn_number.cpp" />
     <ClCompile Include="test_sn_parser.cpp" />
