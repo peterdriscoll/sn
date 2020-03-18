@@ -19,8 +19,6 @@ namespace test_sn
 		const string doc_root = "C:/Users/peter_driscoll/Documents/Source/Repos/skynet2/html";
 
 		bool runWebServer = false;
-		bool runWebServer2 = false;
-		bool runWebServer3 = false;
 
 		static void AssertErrorHandler(SN::SN_Error p_Result)
 		{

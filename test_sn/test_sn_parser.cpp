@@ -19,8 +19,6 @@ namespace test_sn
 		const string doc_root = "C:/Users/peter_driscoll/Documents/Source/Repos/skynet2/html";
 
 		bool runWebServer = false;
-		bool runWebServer2 = false;
-		bool runWebServer3 = false;
 
 		static void AssertErrorHandler(SN::SN_Error p_Result)
 		{
@@ -923,6 +921,36 @@ namespace test_sn
 
 				(i5 == j5).Evaluate().Do();
 				(k5 == -j5).Evaluate().Do();
+			}
+		}
+
+		TEST_METHOD(TestParse_SimpleExpression)
+		{
+			return;
+			Initialize();
+			{
+				Manager manager("Test Parse Simple Expression", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false);
+
+				CharacterSet characterSet;
+				Validate validate(characterSet);
+				Parse parse(characterSet, validate);
+
+				// Name test.
+				SN_DOMAIN(MyDomain);
+				SN_DECLARE(i1);
+				(parse.AsExpression(MyDomain)(String("13+21"))(i1)).Assert().Do();
+
+				SN_DECLARE(j1);
+				(j1 == Meta(1, Long(13) + Long(21))).Assert().Do();
+
+				string i1_string = i1.DisplayValueSN();
+
+				string j1_string = j1.DisplayValueSN();
+				Assert::IsTrue(i1_string == j1_string);
+
+				(i1 == j1).Evaluate().Do();
+
 			}
 		}
 	};

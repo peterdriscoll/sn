@@ -175,6 +175,7 @@
   <ItemGroup>
     <ClCompile Include="test_sn.cpp" />
     <ClCompile Include="test_sn_church.cpp" />
+    <ClCompile Include="test_sn_collections.cpp" />
     <ClCompile Include="test_sn_early_parser.cpp" />
     <ClCompile Include="test_sn_factorial.cpp" />
     <ClCompile Include="test_sn_inherit.cpp" />
