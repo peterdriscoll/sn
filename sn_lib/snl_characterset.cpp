@@ -23,6 +23,7 @@ namespace SNL
 	{
 		SN_LINK(Sign);
 		SN_LINK(Digit);
+		SN_LINK(OperatorChar);
 		SN_LINK(AlphaLower);
 		SN_LINK(AlphaUpper);
 		SN_LINK(Alpha);
@@ -46,6 +47,16 @@ namespace SNL
 			SN_LOCAL(c);
 
 			(Define(TimesDivide)(c) == (c == (String("*") || String("/"))).Collapse()).PartialAssert().Do();
+		}
+
+		{
+			SN_LOCAL(c);
+
+			(Define(OperatorChar)(c) == (c == (
+				Char('&') || Char('|') || Char('!') || Char(':')
+			||	Char('<') || Char('>') || Char('=') || Char('/')
+			||	Char('+') || Char('-') || Char('*') || Char('/')
+			))).Collapse().PartialAssert().Do();
 		}
 
 		{

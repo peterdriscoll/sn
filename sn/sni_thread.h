@@ -51,6 +51,7 @@ namespace SNI
 		SNI_FrameList & GetFrameList();
 
 		size_t GetStepCount();
+		void ResetStepCount(size_t p_StepCount);
 
 		SNI_DelayedProcessor *GetProcessor();
 
@@ -63,6 +64,7 @@ namespace SNI
 		void RunToEnd();
 		void Debug();
 		void CodeBreak();
+		void Rerun();
 		void StepOver();
 		void StepInto(SN::DebuggingStop p_DebugStop);
 		void StepOut();

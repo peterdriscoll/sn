@@ -828,7 +828,7 @@ namespace test_sn
 				// Name test.
 				SN_DOMAIN(MyDomain);
 				SN_DECLARE(i1);
-				(parse.AsValue(MyDomain)(String("Peter_1"))(i1)).Assert().Do();
+				(parse.AsValueRef(MyDomain)(String("Peter_1"))(i1)).Assert().Do();
 
 				SN_DECLARE(j1);
 				(j1 == Meta(1, MyDomain["Peter_1"])).Assert().Do();
@@ -840,7 +840,7 @@ namespace test_sn
 
 				// Integer test.
 				SN_DECLARE(i2);
-				(parse.AsValue(MyDomain)(String("543"))(i2)).Assert().Do();
+				(parse.AsValueRef(MyDomain)(String("543"))(i2)).Assert().Do();
 
 				SN_DECLARE(j2);
 				(j2 == Long(543)).Assert().Do();
@@ -852,7 +852,7 @@ namespace test_sn
 
 				// Floating point test.
 				SN_DECLARE(i4);
-				(parse.AsValue(MyDomain)(String("3.1415"))(i4)).Assert().Do();
+				(parse.AsValueRef(MyDomain)(String("3.1415"))(i4)).Assert().Do();
 
 				SN_DECLARE(j4);
 				(j4 == Double(3.1415)).Assert().Do();
@@ -864,7 +864,7 @@ namespace test_sn
 
 				// String
 				SN_DECLARE(i3);
-				(parse.AsValue(MyDomain)(String("\"My test string\""))(i3)).Assert().Do();
+				(parse.AsValueRef(MyDomain)(String("\"My test string\""))(i3)).Assert().Do();
 
 				SN_DECLARE(j3);
 				(j3 == String("My test string")).Assert().Do();
@@ -877,7 +877,7 @@ namespace test_sn
 
 				// String sub string
 				SN_DECLARE(s1);
-				(parse.AsValue(MyDomain)(String("\"My test \\\"string\\\"\""))(s1)).Assert().Do();
+				(parse.AsValueRef(MyDomain)(String("\"My test \\\"string\\\"\""))(s1)).Assert().Do();
 
 				SN_DECLARE(s2);
 				(s2 == String("My test \"string\"")).Assert().Do();
@@ -908,7 +908,7 @@ namespace test_sn
 				(parse.AsNumber(String("6.626176e-34"))(k5)).Assert().Do();
 
 				SN_DECLARE(i5);
-				(parse.AsValue(MyDomain)(String("-6.626176e-34"))(i5)).Assert().Do();
+				(parse.AsValueRef(MyDomain)(String("-6.626176e-34"))(i5)).Assert().Do();
 
 				SN_DECLARE(j5);
 				(j5 == Double(6.626176e-34)).Assert().Do();

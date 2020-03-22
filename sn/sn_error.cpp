@@ -70,6 +70,11 @@ namespace SN
 	{
 		return m_Error->GetDelay();
 	}
+
+	bool SN_Error::RequestRerun()
+	{
+		return m_Error->RequestRerun();
+	}
 	
 	string SN_Error::GetDescription()
 	{

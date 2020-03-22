@@ -564,6 +564,26 @@ namespace SNI
 		SNI_Thread::GetThread()->Unlock();
 	}
 
+	void SNI_Frame::RecordSavePoint(vector<bool> p_SavePoint)
+	{
+		for (auto v : m_VariableList)
+		{
+			p_SavePoint.push_back(v->IsKnownValue());
+		}
+	}
+
+	void SNI_Frame::RestoreSavePoint(vector<bool> p_SavePoint)
+	{
+		size_t j = 0;
+		for (auto v : m_VariableList)
+		{
+			if (!p_SavePoint[j])
+			{
+				v->SetValue(skynet::Null);
+			}
+		}
+	}
+
 	void SNI_Frame::PromoteMembers()
 	{
 		REQUESTPROMOTION(m_Function);

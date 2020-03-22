@@ -39,6 +39,7 @@ namespace SN
 		bool IsNull();
 		bool GetBool();
 		bool GetDelay();
+		bool RequestRerun();
 		string GetDescription();
 
 		void AddError(SN::SN_Error & p_Error);

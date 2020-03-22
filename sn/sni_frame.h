@@ -58,6 +58,8 @@ namespace SNI
 
 		void AttachParameter(SN::SN_Expression p_Param);
 
+		void RecordSavePoint(vector<bool> p_SavePoint);
+		void RestoreSavePoint(vector<bool> p_SavePoint);
 	private:
 		virtual void PromoteMembers();
 

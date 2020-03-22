@@ -156,6 +156,12 @@ namespace SNI
 		return m_ThreadStepCount;
 	}
 
+	void SNI_Thread::ResetStepCount(size_t p_StepCount)
+	{
+		m_ThreadStepCount = p_StepCount;
+		m_FrameList.resize(1);
+	}
+
 	void SNI_Thread::Breakpoint(SN::DebuggingStop p_DebuggingStop, SN::BreakId p_BreakId, const string &p_TypeName, const string &p_Description, const SNI_Expression *p_DebugSource, SN::InterruptPoint p_InterruptPoint, const string &p_DebugId)
 	{
 		m_ThreadStepCount++;
@@ -592,6 +598,11 @@ namespace SNI
 	void SNI_Thread::CodeBreak()
 	{
 		m_DebugCommand.CodeBreak();
+	}
+
+	void SNI_Thread::Rerun()
+	{
+		m_DebugCommand.Rerun();
 	}
 
 	void SNI_Thread::StepOver()

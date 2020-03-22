@@ -86,6 +86,13 @@ namespace SNI
 				m_DebugAction = skynet::StepInto;
 				breakPoint = false;
 				break;
+			case skynet::Rerun:
+				{
+					SN::SN_Error e(false, false, "Rerun request.");
+					e.GetSNI_Error()->MakeRerunRequest();
+					throw e;
+				}
+				break;
 			case skynet::Quit:
 				breakPoint = false;
 				if (p_InterruptPoint != SN::EndPoint)
@@ -164,6 +171,11 @@ namespace SNI
 	void SNI_DebugCommand::CodeBreak()
 	{
 		ScheduleCommand(skynet::CodeBreak);
+	}
+
+	void SNI_DebugCommand::Rerun()
+	{
+		ScheduleCommand(skynet::Rerun);
 	}
 
 	void SNI_DebugCommand::StepOver(long p_StackDepth)

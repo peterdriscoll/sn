@@ -72,6 +72,10 @@ namespace SNI
 			{
 				l_thread->CodeBreak();
 			}
+			else if (path == "/rerunjs")
+			{
+				l_thread->Rerun();
+			}
 			else if (path == "/stepover")
 			{
 				m_response_data = l_thread->StepOverWeb(debugHTML);

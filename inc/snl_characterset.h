@@ -15,6 +15,7 @@ namespace SNL
 
 		skynet::Variable Sign;
 		skynet::Variable TimesDivide;
+		skynet::Variable OperatorChar;
 		skynet::Variable Digit;
 		skynet::Variable AlphaLower;
 		skynet::Variable AlphaUpper;

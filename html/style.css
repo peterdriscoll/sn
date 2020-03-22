@@ -152,6 +152,14 @@ table, tr, td {
         text-align: center;
     }
 
+.code {
+    resize: both;
+    max-width: 100%;
+    color: black;
+    background-color: beige;
+    word-wrap: break-word;
+    white-space: normal;
+}
 
 .noborder {
     border-style: none;

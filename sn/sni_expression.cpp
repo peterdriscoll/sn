@@ -634,11 +634,35 @@ namespace SNI
 	void SNI_Expression::DoWithHandler(OnErrorHandler * p_ErrorHandler)
 	{
 		LOG(WriteExp(this));
-
-		SN::SN_Variable resultVariable;
-		SN::SN_Error e = AssertValue(resultVariable);
-		HandleAction(e, p_ErrorHandler);
-		HandleAction(resultVariable.GetVariableValue(), p_ErrorHandler);
+		SNI_Thread *thread = SNI_Thread::GetThread();
+		bool finished = false;
+		long stepCount = thread->GetStepCount();
+		SNI_Frame* frame = thread->Top();
+		vector<bool> savePoint;
+		frame->RecordSavePoint(savePoint);
+		do
+		{
+			try
+			{
+				SN::SN_Variable resultVariable;
+				SN::SN_Error e = AssertValue(resultVariable);
+				HandleAction(e, p_ErrorHandler);
+				HandleAction(resultVariable.GetVariableValue(), p_ErrorHandler);
+				finished = true;
+			}
+			catch (SN::SN_Error &e)
+			{
+				if (e.RequestRerun())
+				{
+					thread->ResetStepCount(stepCount);
+					frame->RestoreSavePoint(savePoint);
+				}
+				else
+				{
+					throw e;
+				}
+			}
+		} while (!finished);
 	}
 
 	void SNI_Expression::HandleAction(SN::SN_Expression p_Result, OnErrorHandler *p_ErrorHandler)

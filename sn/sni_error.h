@@ -53,6 +53,8 @@ namespace SNI
 
 		virtual bool GetBool();
 		virtual bool GetDelay();
+		virtual bool RequestRerun();
+		void MakeRerunRequest();
 		virtual string GetDescription();
 
 		void WriteJS(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions);
@@ -62,6 +64,7 @@ namespace SNI
 	private:
 		bool m_Success;
 		bool m_Delay;
+		bool m_RequestRerun;
 		string m_Description;
 		SNI_CallRecordList m_CallHistory;
 		SNI_ErrorList m_ChildErrorList;

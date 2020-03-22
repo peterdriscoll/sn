@@ -38,6 +38,7 @@ namespace SNI
 		void RunToEnd();
 		void Debug();
 		void CodeBreak();
+		void Rerun();
 		void StepOver(long p_StackDepth);
 		void StepInto(SN::DebuggingStop p_DebugStop);
 		void StepOut(long p_StackDepth);

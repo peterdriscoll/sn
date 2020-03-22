@@ -47,6 +47,7 @@ namespace SNI
 	SNI_Error::SNI_Error(const SNI_Error &p_Other)
 		: m_Success(p_Other.m_Success)
 		, m_Delay(p_Other.m_Delay)
+		, m_RequestRerun(false)
 		, m_Description(p_Other.m_Description)
 		, m_CallHistory(p_Other.m_CallHistory)
 	{
@@ -55,6 +56,7 @@ namespace SNI
 	SNI_Error::SNI_Error(bool p_Success, bool p_Delay, const string & p_Description)
 		: m_Success(p_Success)
 		, m_Delay(p_Delay)
+		, m_RequestRerun(false)
 		, m_Description(p_Description)
 	{
 		if (!p_Success)
@@ -173,6 +175,16 @@ namespace SNI
 	bool SNI_Error::GetDelay()
 	{
 		return m_Delay;
+	}
+
+	bool SNI_Error::RequestRerun()
+	{
+		return m_RequestRerun;
+	}
+
+	void SNI_Error::MakeRerunRequest()
+	{
+		m_RequestRerun =  true;
 	}
 
 	string SNI_Error::GetDescription()

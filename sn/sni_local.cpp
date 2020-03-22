@@ -66,6 +66,10 @@ namespace SNI
 	string SNI_Local::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
 		string sValue;
+		if (!m_LocalVariable)
+		{
+			return "Local null";
+		}
 		if (m_LocalVariable->IsVariable() && !m_LocalVariable->IsNullValue())
 		{
 			const SNI_Expression *value = m_LocalVariable->GetSafeValue();

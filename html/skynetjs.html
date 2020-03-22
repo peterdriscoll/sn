@@ -60,6 +60,10 @@
                         </form>
                     </td>
                     <td>
+                        Rerun current command<br>
+                        <button ng-click='submit("rerunjs")'>Rerun</button>
+                    </td>
+                    <td>
                         <form ng-submit='submit("stepoverjs")'>
                             Step over call<br>
                             <input type='submit' value='Step over'>
@@ -100,11 +104,11 @@
                                 Dashboard Settings <br>
                                 <button title='Setup' ng-click='settings()' class=''>Settings</button>
                             </summary>
-                            <label for="debugstop">Debug level</label><br/>
-                            <select id="debugstop" ng-model="debugstop" ng-options="option.name for option in debugstopoptions"> </select> <br/>
-                            Max frames : <br/>
+                            <label for="debugstop">Debug level</label><br />
+                            <select id="debugstop" ng-model="debugstop" ng-options="option.name for option in debugstopoptions"> </select> <br />
+                            Max frames : <br />
                             <input type='text' ng-model='maxstackframes' name='maxstackframes'> <br>
-                            Max code : <br/>
+                            Max code : <br />
                             <input type='text' ng-model='maxcode' name='maxcode'> <br>
                             Max derivation : <br>
                             <input type='text' ng-model='maxderivation' name='maxderivation'> <br>
@@ -204,7 +208,7 @@
                                 <td>
                                     <div>
                                         <div ng-repeat="d in f.value">
-                                            <div ng-bind-html="trustAsHtml(d.text)" init-bind><br /></div>
+                                            <div class="code" ng-bind-html=" trustAsHtml(d.text)" init-bind><br /></div>
                                         </div>
                                     </div>
                                 </td>
@@ -226,7 +230,26 @@
                             <tr ng-repeat="f in frames">
                                 <td>
                                     <div style='overflow-x:auto;white-space:nowrap;width:900px'>
-                                        <table class="frameheading">
+                                        <details ng-if="f.hascode">
+                                            <summary>
+                                                <table class="frameheading">
+                                                    <tr>
+                                                        <td>{{f.framepos}}</td>
+                                                        <td>{{f.function}}</td>
+                                                        <td>Step:{{f.stepcount}}</td>
+                                                        <td>SMEM:{{f.stackusage}}</td>
+                                                        <td ng-bind-html="trustAsHtml(f.contextworld)" init-bind></td>
+                                                        <td ng-bind-html="trustAsHtml(f.functioncardinality)" init-bind></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                </table>
+                                            </summary>
+                                            <div ng-repeat="d in f.value">
+                                                <p class="code" ng-bind-html="trustAsHtml(d.text)" init-bind><br /></p>
+                                            </div>
+                                        </details>
+                                        <table class="frameheading" ng-if="!f.hascode">
                                             <tr>
                                                 <td>{{f.framepos}}</td>
                                                 <td>{{f.function}}</td>

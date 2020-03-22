@@ -58,6 +58,10 @@ namespace SNI
 
 	string SNI_Meta::DisplaySN(long /*priority*/, SNI_DisplayOptions &p_DisplayOptions) const
 	{
+		if (!m_Expression)
+		{
+			return "{null}";
+		}
 		string value = m_Expression->DisplaySN(GetPriority(), p_DisplayOptions);
 		if (m_DeltaMetaLevel < 0)
 		{
