@@ -1009,6 +1009,9 @@
     <None Include="..\html\help_imperative.html">
       <Filter>HTML Files</Filter>
     </None>
+    <None Include="..\html\skynetjs.js">
+      <Filter>HTML Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\html\favicon.ico">
