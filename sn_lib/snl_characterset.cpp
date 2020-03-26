@@ -22,8 +22,9 @@ namespace SNL
 	void SNL_CharacterSet::Link()
 	{
 		SN_LINK(Sign);
-		SN_LINK(Digit);
+		SN_LINK(TimesDivide);
 		SN_LINK(OperatorChar);
+		SN_LINK(Digit);
 		SN_LINK(AlphaLower);
 		SN_LINK(AlphaUpper);
 		SN_LINK(Alpha);
@@ -56,14 +57,15 @@ namespace SNL
 				Char('&') || Char('|') || Char('!') || Char(':')
 			||	Char('<') || Char('>') || Char('=') || Char('/')
 			||	Char('+') || Char('-') || Char('*') || Char('/')
-			))).Collapse().PartialAssert().Do();
+			||	String("")
+			)).Collapse()).PartialAssert().Do();
 		}
 
 		{
 			SN_LOCAL(d);
 
 			(Define(Digit)(d) == (d == (String("0") || String("1") || String("2") || String("3") || String("4")
-				|| String("5") || String("6") || String("7") || String("8") || String("9")))).PartialAssert().Do();
+				|| String("5") || String("6") || String("7") || String("8") || String("9"))).Collapse()).PartialAssert().Do();
 		}
 
 		{
@@ -84,27 +86,32 @@ namespace SNL
 
 		{
 			SN_LOCAL(a);
-			(Define(Alpha)(a) == (AlphaLower(a) || AlphaUpper(a))).PartialAssert().Do();
+			(Define(Alpha)(a) == (AlphaLower(a) || AlphaUpper(a)).Collapse()).PartialAssert().Do();
 		}
 
 		{
 			SN_LOCAL(a);
-			(Define(AlphaUnder)(a) == (AlphaLower(a) || AlphaUpper(a) || a == string("_"))).PartialAssert().Do();
+			(Define(AlphaUnder)(a) == (AlphaLower(a) || AlphaUpper(a) || a == string("_")).Collapse()).PartialAssert().Do();
 		}
 
 		{
 			SN_LOCAL(k);
-			(Define(AlphaNumeric)(k) == (Alpha(k) || Digit(k))).PartialAssert().Do();
+			(Define(AlphaNumeric)(k) == (Alpha(k) || Digit(k)).Collapse()).PartialAssert().Do();
 		}
 
 		{
 			SN_LOCAL(k);
-			(Define(AlphaUnderNumeric)(k) == (AlphaUnder(k) || Digit(k))).PartialAssert().Do();
+			(Define(AlphaUnderNumeric)(k) == (AlphaUnder(k) || Digit(k)).Collapse()).PartialAssert().Do();
 		}
 
 		{
 			SN_LOCAL(w);
 			(Define(White)(w) == (w == (String(" ") || String("\t") || String("\n") || String("\r"))).Collapse()).PartialAssert().Do();
+		}
+
+		{
+			SN_LOCAL(l);
+			(Define(Lambda)(l) == (l == (String("&lambda;") || Char('\\') || String("&lambda;"))).Collapse()).PartialAssert().Do();
 		}
 	}
 }

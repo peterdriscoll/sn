@@ -68,6 +68,7 @@ namespace SNI
 		void StepOver();
 		void StepInto(SN::DebuggingStop p_DebugStop);
 		void StepOut();
+		void StepOutCall();
 		void StepParam();
 		void GotoStepCount(long p_StepCount);
 		void SetMaxStackFrames(long p_MaxStackFrames);

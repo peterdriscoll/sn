@@ -90,6 +90,11 @@ namespace SNI
 		return !m_Value || m_Value->IsNull();
 	}
 
+	bool SNI_Variable::IsValue() const
+	{
+		return m_Value && m_Value->IsValue();
+	}
+
 	bool SNI_Variable::IsKnownValue() const
 	{
 		return m_Value && m_Value->IsKnownValue();
@@ -321,11 +326,21 @@ namespace SNI
 	
 	string SNI_Variable::DisplayCpp() const
 	{
-		return "SN_Variable(" + FrameName() + ")";
+		return "SN_Variable(" + GetName() + ")";
 	}
 
 	string SNI_Variable::DisplaySN(long p_Priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
+		if (m_Value && m_Value->IsValue() && !m_Value->IsValueSet() && p_DisplayOptions.GetDebugHTML() == doDebugPointsJS)
+		{
+			if (p_DisplayOptions.GetLevel() == 0)
+			{
+				p_DisplayOptions.IncrementLevel();
+				string sValue = "<button class='name' ng-click='selectvar(\"" + FrameName() + "\")'>{{ selecttext('" + FrameName() + "','" + FramePathName()+":"+m_Value->DisplayValueSN(p_Priority, p_DisplayOptions) + "')}}</button>";
+				p_DisplayOptions.DecrementLevel();
+				return sValue;
+			}
+		}
 		return FrameName();
 	}
 
@@ -408,9 +423,13 @@ namespace SNI
 		REQUESTPROMOTION(m_Frame);
 	}
 
-	SNI_Expression * SNI_Variable::Clone(SNI_Frame *p_Frame, bool &p_Changed)
+	SNI_Expression * SNI_Variable::Clone(long p_MetaLevel, SNI_Frame *p_Frame, bool &p_Changed)
 	{
-		return p_Frame->ReplaceVariable(this, p_Changed);
+		if (p_MetaLevel <= 0)
+		{
+			return p_Frame->ReplaceVariable(this, p_Changed);
+		}
+		return this;
 	}
 
 	bool SNI_Variable::Equivalent(SNI_Object * p_Other) const
@@ -696,7 +715,6 @@ namespace SNI
 			{
 				topFrame->CreateParameter(j, (*p_ParameterList)[j]);
 			}
-			Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Unify " + GetName(), this, SN::CallPoint);
 
 			SN::SN_Expression e = l_clone->Unify(p_ParameterList);
 
@@ -708,7 +726,6 @@ namespace SNI
 				topFrame->CreateParameter(j, (*p_ParameterList)[j]);
 			}
 			LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": End " + DisplayUnifyExp(p_ParameterList)));
-			Breakpoint(SN::DebugStop, SN::RightId, GetTypeName(), "Unify after calculation " + GetName(), this, SN::CallPoint);
 
 			SNI_Frame::Pop();
 			if (e.GetSNI_Error())

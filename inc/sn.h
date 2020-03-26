@@ -254,6 +254,8 @@ namespace skynet
 	extern SN_EXPORT SN::SN_Error OK;
 	extern SN_EXPORT SN::SN_Error Fail;
 
+	extern SN_EXPORT SN::SN_Error RerunRequest;
+
 	extern SN_EXPORT SN::SN_Expression Null;
 
 	// * Types

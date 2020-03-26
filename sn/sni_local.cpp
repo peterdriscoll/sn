@@ -83,7 +83,11 @@ namespace SNI
 				}
 			}
 		}
-		string text = SetBreakPoint("#", p_DisplayOptions, this, SN::LeftId) + m_LocalVariable->DisplaySN(GetPriority(), p_DisplayOptions) + sValue + SetBreakPoint(".", p_DisplayOptions, this, SN::ParameterOneId) + m_Expression->DisplaySN(GetPriority(), p_DisplayOptions);
+		p_DisplayOptions.IncrementLevel();
+		string sParam = m_LocalVariable->DisplaySN(GetPriority(), p_DisplayOptions) + sValue;
+		p_DisplayOptions.DecrementLevel();
+
+		string text = SetBreakPoint("#", p_DisplayOptions, this, SN::LeftId) + sParam + SetBreakPoint(".", p_DisplayOptions, this, SN::ParameterOneId) + m_Expression->DisplaySN(GetPriority(), p_DisplayOptions);
 		return Bracket(priority, text, p_DisplayOptions, this);
 	}
 
@@ -107,7 +111,7 @@ namespace SNI
 		return m_LocalVariable;
 	}
 
-	SNI_Expression * SNI_Local::Clone(SNI_Frame *p_Frame, bool &p_Changed)
+	SNI_Expression * SNI_Local::Clone(long p_MetaLevel, SNI_Frame *p_Frame, bool &p_Changed)
 	{
 		bool changed = false;
 		SNI_Variable *l_NewVariable = new SNI_Variable(m_LocalVariable->GetName());

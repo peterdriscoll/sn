@@ -73,31 +73,31 @@ namespace test_sn
 				Assert::IsTrue(Meta(1, String("Vincent ") + String("Emma ")).DoEvaluate().Equivalent(Meta(1, Function(Function(Add, String("Vincent ")), String("Emma ")))));
 				Assert::IsTrue(Meta(1, dog + cat).DoEvaluate().Equivalent(Meta(1, Function(Function(Add, dog), cat))));
 
-				std::cout << std::endl << Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoEvaluate().DisplaySN() << std::endl;
+				string s1 = Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoEvaluate().DisplaySN();
 
 				Assert::IsTrue(Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoEvaluate().Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
 
-				std::cout << std::endl << Meta(-1, Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoEvaluate()).DoEvaluate().DisplaySN() << std::endl;
+				string s2 = Meta(-1, Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoEvaluate()).DoEvaluate().DisplaySN();
 
 				Assert::IsTrue(Meta(-1, Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoEvaluate()).DoEvaluate().Equivalent(String("Vincent Emma ")));
 
-				std::cout << std::endl << Meta(1, Meta(-1, dog)).DoEvaluate().DisplaySN() << std::endl;
+				string s3 = Meta(1, Meta(-1, dog)).DoEvaluate().DisplaySN();
 
 				Assert::IsTrue(Meta(1, Meta(-1, dog)).DoEvaluate().Equivalent(Meta(1, dog.DoEvaluate())));
 
 				SN_DECLARE_VALUE(e, Meta(2, Meta(-1, dog) + Meta(-1, cat)));
 
-				std::cout << std::endl << e.DoEvaluate().DisplaySN() << std::endl;
+				string s4 = e.DoEvaluate().DisplaySN();
 
 				Assert::IsTrue(e.DoEvaluate().Equivalent(Meta(2, Meta(-1, dog) + Meta(-1, cat))));
 
-				std::cout << std::endl << Meta(-1, e).DoEvaluate().DisplaySN() << std::endl;
+				string s5 = Meta(-1, e).DoEvaluate().DisplaySN();
 
 
 				Assert::IsTrue(Meta(-1, e).DoEvaluate().Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
 				Assert::IsTrue(e.DoEvaluate(-1).Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
 
-				std::cout << std::endl << Meta(-1, Meta(-1, e).DoEvaluate()).DoEvaluate().DisplaySN() << std::endl;
+				string s6 = Meta(-1, Meta(-1, e).DoEvaluate()).DoEvaluate().DisplaySN();
 
 				Assert::IsTrue(Meta(-1, Meta(-1, e).DoEvaluate()).DoEvaluate().Equivalent(String("Vincent Emma ")));
 				Assert::IsTrue(e.DoEvaluate(-1).DoEvaluate(-1).Equivalent(String("Vincent Emma ")));

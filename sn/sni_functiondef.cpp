@@ -95,7 +95,7 @@ namespace SNI
 
 	bool SNI_FunctionDef::IsKnownValue(const SN::SN_Expression &p_Param, long) const
 	{
-		return p_Param.IsKnownValue() && !p_Param.IsReferableValue();
+		return p_Param.IsKnownValue();
 	}
 
 	size_t SNI_FunctionDef::ParamCardinality(const SN::SN_Expression &p_Param, long j) const

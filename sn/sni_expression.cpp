@@ -219,7 +219,7 @@ namespace SNI
 		return result;
 	}
 
-	SNI_Expression * SNI_Expression::Clone(SNI_Frame *p_Frame, bool &/*p_Changed*/)
+	SNI_Expression * SNI_Expression::Clone(long p_MetaLevel, SNI_Frame *p_Frame, bool &/*p_Changed*/)
 	{
 		return this;
 	}
@@ -228,7 +228,7 @@ namespace SNI
 	{
 		bool changed = false;
 		SNI_Frame *frame = SNI_Frame::Push(p_Function, p_Result);
-		SNI_Expression *function = Clone(frame, changed);
+		SNI_Expression *function = Clone(0, frame, changed);
 		frame->SetCloneFunction(function);
 		return function;
 	}
@@ -338,6 +338,11 @@ namespace SNI
 	}
 
 	bool SNI_Expression::IsNull() const
+	{
+		return false;
+	}
+
+	bool SNI_Expression::IsValue() const
 	{
 		return false;
 	}
@@ -812,7 +817,7 @@ namespace SNI
 		return SN::SN_Bool(Equivalent(dynamic_cast<SNI_Object *>(p_Other)));
 	}
 
-	SN::SN_Error SNI_Expression::DoAssertEqualsValue(SNI_Value *p_Other, SNI_Value *p_Result) const
+	SN::SN_Error SNI_Expression::DoAssertEqualsValue(SNI_Value *p_Other, SNI_Value *p_Result)
 	{
 		if (SN::Is<SNI_StringRef *>(p_Other))
 		{

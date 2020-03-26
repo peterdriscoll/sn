@@ -82,7 +82,7 @@ namespace SNI
 			}
 			else if (path == "/stepoverjs")
 			{
-				l_thread->StepOverWeb(debugHTML);
+				l_thread->StepOver();
 			}
 			else if (path == "/stepinto")
 			{
@@ -99,7 +99,11 @@ namespace SNI
 			}
 			else if (path == "/stepoutjs")
 			{
-				l_thread->StepOutWeb(debugHTML);
+				l_thread->StepOut();
+			}
+			else if (path == "/stepoutcalljs")
+			{
+				l_thread->StepOutCall();
 			}
 			else if (path == "/stepparam")
 			{
@@ -107,7 +111,7 @@ namespace SNI
 			}
 			else if (path == "/stepparamjs")
 			{
-				l_thread->StepParamWeb(debugHTML);
+				l_thread->StepParam();
 			}
 			else if (path == "/gotostepcount")
 			{

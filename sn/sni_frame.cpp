@@ -88,6 +88,7 @@ namespace SNI
 		, m_Cardinality(0)
 		, m_StackUsage(StackMemory())
 		, m_ContextWorld(SNI_Thread::GetThread()->ContextWorld())
+		, m_ResultIndex(0)
 	{
 	}
 
@@ -100,6 +101,7 @@ namespace SNI
 		, m_Cardinality(0)
 		, m_StackUsage(StackMemory())
 		, m_ContextWorld(SNI_Thread::GetThread()->ContextWorld())
+		, m_ResultIndex(0)
 	{
 	}
 
@@ -143,7 +145,7 @@ namespace SNI
 	SNI_Expression * SNI_Frame::CloneReplace(bool &p_Changed, SNI_Variable *p_From, SNI_Variable *p_To, SNI_Expression *p_Expression)
 	{
 		m_ReplacementList.push_back(SNI_Replacement(p_From, p_To));
-		SNI_Expression * result = p_Expression->Clone(this, p_Changed);
+		SNI_Expression * result = p_Expression->Clone(0, this, p_Changed);
 		m_ReplacementList.pop_back();
 		return result;
 	}
@@ -317,7 +319,7 @@ namespace SNI
 						valueText = p_Expression.DisplaySN(p_DisplayOptions) + string(p_World ? "::" + p_World->DisplaySN(p_DisplayOptions) : "");
 					}
 					p_Stream << delimeter << Details(valueText, p_DebugFieldWidth);
-					delimeter = "<br>";
+					delimeter = "<br/>";
 					return skynet::OK;
 				}
 			);
@@ -402,12 +404,22 @@ namespace SNI
 				p_DisplayOptions.SetVarName(v->FrameName());
 				p_Stream << delimeter << "\t\t\t{\n";
 				WriteVariable(p_Stream, var, val, index++, "\t\t\t\t", p_DebugFieldWidth, p_DisplayOptions);
-				p_Stream << "\n\t\t\t}";
+				p_Stream << "\t\t\t}";
 				delimeter = ",\n";
 			}
 		}
-		p_Stream << "\n\t\t]\n";
-		p_Stream << "\t}";
+		p_Stream << "\n\t\t]";
+
+		if (m_ResultIndex < m_VariableList.size())
+		{
+			SN::SN_Expression result_var(m_VariableList[m_ResultIndex]);
+			SN::SN_Expression result_val = m_VariableList[m_ResultIndex]->GetSafeValue();
+			p_Stream << ",\n\t\t\"result\" : {\n";
+			WriteVariable(p_Stream, result_var, result_val, index++, "\t\t\t", p_DebugFieldWidth, p_DisplayOptions);
+			p_Stream << "\t\t}";
+		}
+
+		p_Stream << "\n\t}";
 	}
 
 	void SNI_Frame::WriteStackJS(ostream &p_Stream, string &p_Delimeter, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
@@ -543,6 +555,10 @@ namespace SNI
 		{
 			paramName = "param" + to_string(p_ParamNum);
 		}
+		else
+		{
+			m_ResultIndex = 0;
+		}
 		return CreateParameterByName(paramName, p_Value);
 	}
 
@@ -577,7 +593,7 @@ namespace SNI
 		size_t j = 0;
 		for (auto v : m_VariableList)
 		{
-			if (!p_SavePoint[j])
+			if (j >= p_SavePoint.size() || !p_SavePoint[j])
 			{
 				v->SetValue(skynet::Null);
 			}

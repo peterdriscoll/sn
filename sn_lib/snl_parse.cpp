@@ -104,6 +104,7 @@ namespace SNL
 
 			SN_LOCAL(m);
 			SN_LOCAL(n);
+			SN_LOCAL(l);
 
 			SN_LOCAL(p);
 			SN_LOCAL(q);
@@ -112,13 +113,15 @@ namespace SNL
 			SN_LOCAL(w2);
 
 			(Define(AsLambda)(d)(s)(i) == (
-				Local(m, Local(n, Local(p, Local(q, Let(s == w1 + Char('\\') + m + Char('\\') + w2 + n,
-					m_Validate.IsWhiteSpaceContinuation(w1)
+				Local(m, Local(n, Local(l, Local(p, Local(q, 
+					s == w1 + l + m + Char('.') + w2 + n
+				&&	m_CharacterSet.Lambda(l)
+				&&	m_Validate.IsWhiteSpaceContinuation(w1)
 				&&	AsName(d)(m)(p)
 				&&	m_Validate.IsWhiteSpaceContinuation(w2)
 				&&	AsExpression(d)(n)(q)
-				&&	i == Meta(1, Lambda(Meta(-1, p), Meta(-1, q)).Notes(w1, w2)
-				))))))
+				&&	i == Meta(1, Lambda(Meta(-1, p), Meta(-1, q))).Notes(w1, w2)
+				)))))
 			)).PartialAssert().Do();
 		}
 		string sAsLambda = AsLambda.DisplayValueSN();
@@ -136,11 +139,12 @@ namespace SNL
 			SN_LOCAL(q);
 
 			(Define(AsLet)(d)(s)(i) == (
-				Local(m, Local(n, Local(p, Local(q, Let(s == String("let") + m + String("in") + n,
-					AsExpression(d)(m)(p)
+				Local(m, Local(n, Local(p, Local(q,
+					s == String("let") + m + String("in") + n
+				&&	AsExpression(d)(m)(p)
 				&&	AsExpression(d)(n)(q)
 				&&	i == Meta(1, Let(Meta(-1, p), Meta(-1, q))
-				))))))
+				)))))
 			)).PartialAssert().Do();
 		}
 		string sAsLet = AsLet.DisplayValueSN();
@@ -160,9 +164,10 @@ namespace SNL
 			SN_LOCAL(AsLocalInternal);
 
 			(Define(AsLocal)(d)(s)(i) == (
-				Local(m, Let(s == String("local") + m,
-					AsLocalInternal(d)(m)(i)
-				))
+				Local(m,
+					s == String("local") + m
+				&&	AsLocalInternal(d)(m)(i)
+				)
 			)).PartialAssert().Do();
 
 			(Define(AsLocalInternal)(d)(s)(i) == (
@@ -192,12 +197,12 @@ namespace SNL
 			SN_LOCAL(r);
 
 			(Define(AsIf)(d)(s)(i) == (
-				Local(m, Local(n, Local(p, Local(q, Let(s == String("if") + m + String("then") + n + String("else") + o,
+				Local(m, Local(n, Local(o, Local(p, Local(q, Local(r, Let(s == String("if") + m + String("then") + n + String("else") + o,
 					AsExpression(d)(m)(p)
 				&&	AsExpression(d)(n)(q)
-				&&	AsExpression(d)(n)(r)
+				&&	AsExpression(d)(o)(r)
 				&&	i == Meta(1, Meta(-1, p).If(Meta(-1, q), Meta(-1, r)))
-				)))))
+				)))))))
 			)).PartialAssert().Do();
 		}
 		string sAsIf = AsIf.DisplayValueSN();
@@ -219,8 +224,8 @@ namespace SNL
 
 			(Define(AsBooleanExpression)(d)(s)(i) ==
 				Local(m, Local(n, Local(p, Local(q, Let(s == m + n,
-					AsBooleanTerm(d)(s)(p)
-				&&	(	n.LookaheadLeft() == Char('|') && AsExpression(d)(s)(q) && i == Meta(1, Meta(-1, p) || Meta(-1, q)))
+					AsBooleanTerm(d)(m)(p)
+				&&	(	n.LookaheadLeft() == Char('|') && AsExpression(d)(n.SubtractLeftChar())(q) && i == Meta(1, Meta(-1, p) || Meta(-1, q)))
 					||	(n == String("") && i == p))
 				))))
 			).PartialAssert().Do();
@@ -242,7 +247,7 @@ namespace SNL
 			(Define(AsBooleanTerm)(d)(s)(i) ==
 				Local(m, Local(n, Local(p, Local(q, Let(s == m + n,
 					AsBooleanFactor(d)(m)(p)
-				&&	(	n.LookaheadLeft() == Char('&') && AsBooleanTerm(d)(s)(q) && i == Meta(1, Meta(-1, p) && Meta(-1, q))
+				&&	(	n.LookaheadLeft() == Char('&') && AsBooleanTerm(d)(n.SubtractLeftChar())(q) && i == Meta(1, Meta(-1, p) && Meta(-1, q))
 					||	(n == String("") && i == p))
 				)))))
 			).PartialAssert().Do();
@@ -281,12 +286,12 @@ namespace SNL
 
 			(Define(AsComparisonExpression)(d)(s)(i) ==
 				Local(m, Local(n, Local(p, Local(q, Let(s == m + n,
-					AsArithmeticExpression(d)(s)(p)
-					&&	(	n.LookaheadLeft() == Char('<') && AsArithmeticExpression(d)(s)(q) && i == Meta(1, Meta(-1, p) < Meta(-1, q))
-						||	n.LookaheadLeft() == Char('>') && AsArithmeticExpression(d)(s)(q) && i == Meta(1, Meta(-1, p) > Meta(-1, q))
-						||	n.LookaheadLeft() == Char('=') && AsArithmeticExpression(d)(s)(q) && i == Meta(1, Meta(-1, p) = Meta(-1, q))
-						||	n.LookStringLeft(String("<=")) && AsArithmeticExpression(d)(s)(q) && i == Meta(1, Meta(-1, p) <= Meta(-1, q))
-						||	n.LookStringLeft(String(">=")) && AsArithmeticExpression(d)(s)(q) && i == Meta(1, Meta(-1, p) > Meta(-1, q))
+					AsArithmeticExpression(d)(m)(p)
+					&&	(	n.LookaheadLeft() == Char('<') && AsArithmeticExpression(d)(n.SubtractLeftChar())(q) && i == Meta(1, Meta(-1, p) < Meta(-1, q))
+						||	n.LookaheadLeft() == Char('>') && AsArithmeticExpression(d)(n.SubtractLeftChar())(q) && i == Meta(1, Meta(-1, p) > Meta(-1, q))
+						||	n.LookaheadLeft() == Char('=') && AsArithmeticExpression(d)(n.SubtractLeftChar())(q) && i == Meta(1, Meta(-1, p) = Meta(-1, q))
+						||	n.LookStringLeft(String("<=")) && AsArithmeticExpression(d)(n.SubtractLeft(String("<=")))(q) && i == Meta(1, Meta(-1, p) <= Meta(-1, q))
+						||	n.LookStringLeft(String(">=")) && AsArithmeticExpression(d)(n.SubtractLeft(String(">=")))(q) && i == Meta(1, Meta(-1, p) > Meta(-1, q))
 						||	(n == String("") && i == p)) // Allow a comparison to be an arithmetic expression.
 				)))))
 			).PartialAssert().Do();
@@ -310,10 +315,13 @@ namespace SNL
 
 			(Define(AsArithmeticExpression)(d)(s)(i) ==
 				Local(m, Local(n, Local(p, Local(q, Let(s == m + n,
-					AsArithmeticTerm(d)(s)(p)
-					&&	(	n.LookaheadLeft() == Char('+') && AsArithmeticExpression(d)(s)(i) && i == Meta(1, Meta(-1, p) + Meta(-1, q))
-						||	n.LookaheadLeft() == Char('-') && AsArithmeticExpression(d)(s)(i) && i == Meta(1, Meta(-1, p) - Meta(-1, q))
-						||	(n == String("") && i == p))
+					AsArithmeticTerm(d)(m)(p)
+					&&	(n.LookaheadLeft() == (Char('+') || Char('-'))).Collapse().If(
+							AsArithmeticExpression(d)(n.SubtractLeftChar())(q)
+							&&	i == (n.LookaheadLeft() == Char('+')).If(
+									Meta(1, Meta(-1, p) + Meta(-1, q))
+								,	Meta(1, Meta(-1, p) - Meta(-1, q)))
+						,	(n == String("") && i == p))
 				)))))
 			).PartialAssert().Do();
 		}
@@ -334,9 +342,12 @@ namespace SNL
 			(Define(AsArithmeticTerm)(d)(s)(i) ==
 				Local(m, Local(n, Local(p, Local(q, Let(s == m + n,
 					AsArithmeticFactor(d)(m)(p)
-					&&	(	n.LookaheadLeft() == Char('*') && AsArithmeticTerm(d)(s)(q) && i == Meta(1, Meta(-1, p) * Meta(-1, q))
-						||	n.LookaheadLeft() == Char('/') && AsArithmeticTerm(d)(s)(q) && i == Meta(1, Meta(-1, p) / Meta(-1, q))
-						||	(n == String("") && i == p))
+					&& (n.LookaheadLeft() == (Char('*') || Char('/'))).Collapse().If(
+						AsArithmeticTerm(d)(n.SubtractLeftChar())(q)
+						&& i == (n.LookaheadLeft() == Char('*')).If(
+							Meta(1, Meta(-1, p) * Meta(-1, q))
+							, Meta(1, Meta(-1, p) / Meta(-1, q)))
+						, (n == String("") && i == p))
 				)))))
 			).PartialAssert().Do();
 		}
@@ -366,18 +377,18 @@ namespace SNL
 			SN_LOCAL(q);
 
 			(Define(AsFunctionCall)(d)(s)(i) == (
-				Local(m, Local(n, Local(p, Local(q, Let(s == m + n,
+				Local(m, Local(n, Local(p, Let(s == m + n,
 					AsSubscript(d)(m)(p)
-				&&	AsFunctionCallExt(d)(n)(q)(p)
-				)))))
+				&&	AsFunctionCallExt(d)(n)(i)(p)
+				))))
 			)).PartialAssert().Do();
 
 			(Define(AsFunctionCallExt)(d)(s)(i)(p) == (
 				Local(m, Local(w, Local(n, Local(q, Let(s == w + m + n,
-					(m_Validate.IsWhiteSpace(w) && !m_CharacterSet.OperatorChar(m.LookaheadLeft())).If(
+					(m_Validate.IsWhiteSpaceContinuation(w) && !m_CharacterSet.OperatorChar(m.LookaheadLeft())).If(
 						AsSubscript(d)(m)(i)(q)
 					&&  AsFunctionCallExt(d)(n)(i)(Meta(1, Meta(-1, p)[Meta(-1, q)]))
-						, i == p
+						, s == w && i == p
 					)
 				)))))
 			)).PartialAssert().Do();
@@ -403,20 +414,20 @@ namespace SNL
 			SN_LOCAL(q);
 
 			(Define(AsSubscript)(d)(s)(i) == (
-				Local(m, Local(n, Local(p, Local(q, Let(s == m + n,
+				Local(m, Local(n, Local(p, Let(s == m + n,
 					AsPath(d)(m)(p)
-					&& AsSubscriptExt(d)(n)(q)(p)
-				)))))
+					&& AsSubscriptExt(d)(n)(i)(p)
+				))))
 				)).PartialAssert().Do();
 
 			(Define(AsSubscriptExt)(d)(s)(i)(p) == (
 				(s.LookaheadLeft() == Char('[')).If(
 					Local(m, Local(n, Local(q, Let(s == Char('[') + m + n,
-						AsPath(d)(m)(i)(p)
+						AsExpression(d)(m)(q)
 					&&	n.LookaheadLeft() == Char(']')
-					&&	AsSubscriptExt)(d)(n.SubtractLeftChar())(i)(Meta(1, Function(Meta(-1, p), Meta(-1, q))))
-					)))
-				,	i == p
+					&&	AsSubscriptExt(d)(n.SubtractLeftChar())(i)(Meta(1, Function(Meta(-1, p), Meta(-1, q))))
+					))))
+				,	s == String("") && i == p
 				)
 			)).PartialAssert().Do();
 			string sAsSubscriptExt = AsSubscriptExt.DisplayValueSN();
@@ -439,10 +450,10 @@ namespace SNL
 			SN_LOCAL(q);
 
 			(Define(AsPath)(d)(s)(i) == (
-				Local(m, Local(n, Local(p, Local(q, Let(s == m + n,
+				Local(m, Local(n, Local(p, Let(s == m + n,
 					AsValueRef(d)(m)(p)
-				&&	AsPathExt(d)(n)(q)(p)
-				)))))
+				&&	AsPathExt(d)(n)(i)(p)
+				))))
 				)).PartialAssert().Do();
 
 			(Define(AsPathExt)(d)(s)(i)(p) == (
@@ -451,7 +462,7 @@ namespace SNL
 						AsValueRef(d)(m)(i)(p)
 					&&	AsPathExt)(d)(n)(i)(Meta(1, Meta(-1, p)[Meta(-1, q)]))
 					)))
-				, i == p
+				, s == String("") && i == p
 				)
 				)).PartialAssert().Do();
 			string sAsPathExt = AsPathExt.DisplayValueSN();

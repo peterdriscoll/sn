@@ -65,7 +65,7 @@ namespace SNI
 
 	SN::SN_Value SNI_Add::LeftInverseFunctionValue(const SN::SN_Value &p_Result, const SN::SN_Value &p_Left) const
 	{
-		if (SN::Is<SNI_String*>(p_Result))
+		if (p_Result.IsString())
 		{
 			return p_Result.GetSNI_Value()->DoSubtractLeft(p_Left.GetSNI_Value());
 		}
@@ -74,7 +74,7 @@ namespace SNI
 
 	SN::SN_Value SNI_Add::RightInverseFunctionValue(const SN::SN_Value &p_Result, const SN::SN_Value &p_Right) const
 	{
-		if (SN::Is<SNI_String*>(p_Result))
+		if (p_Result.IsString())
 		{
 			return p_Result.GetSNI_Value()->DoSubtractRight(p_Right.GetSNI_Value());
 		}

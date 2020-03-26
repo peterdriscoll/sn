@@ -617,8 +617,23 @@ namespace SNI
 
 	void SNI_Thread::StepOut()
 	{
-		m_DebugCommand.StepOut(m_FrameList.size());
+		m_DebugCommand.StepOut(m_FrameList.size()-1);
 	}
+
+	void SNI_Thread::StepOutCall()
+	{
+		size_t lastCode = m_FrameList.size();
+		for (auto it = m_FrameList.rbegin(); it != m_FrameList.rend(); it++)
+		{
+			if ((*it)->HasCode())
+			{
+				break;
+			}
+			lastCode--;
+		}
+		m_DebugCommand.StepOut(lastCode-1);
+	}
+
 
 	void SNI_Thread::StepParam()
 	{
@@ -858,11 +873,11 @@ namespace SNI
 	void SNI_Thread::WriteSubmit(ostream &p_Stream, const string &p_Action, const string &p_Name, const string &p_Description)
 	{
 		p_Stream << "<td>\n";
-		p_Stream << p_Description << "<br>\n";
+		p_Stream << p_Description << "<br/>\n";
 		p_Stream << "<form action = '/" << p_Action << "' method='get'>\n";
-		p_Stream << "<input type = 'hidden' name = 'thread' value = '" << m_ThreadNum << "'>\n";
-		p_Stream << "<input type = 'hidden' name = 'stackdepth' value = '" << m_FrameList.size() << "'>\n";
-		p_Stream << "<input type = 'submit' value = '" << p_Name << "'>\n";
+		p_Stream << "<input type = 'hidden' name = 'thread' value = '" << m_ThreadNum << "' />\n";
+		p_Stream << "<input type = 'hidden' name = 'stackdepth' value = '" << m_FrameList.size() << "' />\n";
+		p_Stream << "<input type = 'submit' value = '" << p_Name << "' />\n";
 		p_Stream << "</form>\n";
 		p_Stream << "</td>\n";
 	}
@@ -871,8 +886,8 @@ namespace SNI
 	{
 		p_Stream << "<td>\n";
 		p_Stream << "<form ng-submit = 'submit(\"" << p_Action << "\")'>\n";
-		p_Stream << p_Description << "<br>\n";
-		p_Stream << "<input type = 'submit' value = '" << p_Name << "'>\n";
+		p_Stream << p_Description << "<br/>\n";
+		p_Stream << "<input type = 'submit' value = '" << p_Name << "' />\n";
 		p_Stream << "</form>\n";
 		p_Stream << "</td>\n";
 	}
@@ -883,14 +898,14 @@ namespace SNI
 		p_Stream << "<form action = '/gotostepcount' method='get'>\n";
 		p_Stream << "<details>";
 		p_Stream << "<summary>";
-		p_Stream << "Goto step count<br>\n";
-		p_Stream << "<input type = 'submit' value = 'Goto'><br>\n";
+		p_Stream << "Goto step count<br/>\n";
+		p_Stream << "<input type = 'submit' value = 'Goto' /><br/>\n";
 		p_Stream << "</summary>";
-		p_Stream << "Step count : <br>\n";
-		p_Stream << "<input type = 'text' name = 'stepcount'>\n";
-		p_Stream << "<br>\n";
-		p_Stream << "Thread : <br>\n";
-		p_Stream << "<input type = 'text' name = 'threadnum' value = '0'>\n";
+		p_Stream << "Step count : <br/>\n";
+		p_Stream << "<input type = 'text' name = 'stepcount' />\n";
+		p_Stream << "<br/>\n";
+		p_Stream << "Thread : <br/>\n";
+		p_Stream << "<input type = 'text' name = 'threadnum' value = '0' />\n";
 		p_Stream << "</details>";
 		p_Stream << "</form>\n";
 		p_Stream << "</td>\n";
@@ -902,12 +917,12 @@ namespace SNI
 		p_Stream << "<form ng-submit = 'gotostepcount()'>\n";
 		p_Stream << "<details>";
 		p_Stream << "<summary>";
-		p_Stream << "Goto step count<br>\n";
-		p_Stream << "<input type = 'submit' value = 'Goto'><br>\n";
+		p_Stream << "Goto step count<br/>\n";
+		p_Stream << "<input type = 'submit' value = 'Goto' /><br/>\n";
 		p_Stream << "</summary>";
-		p_Stream << "Step count : <br>\n";
-		p_Stream << "<input type = 'text' ng-model='stepcount' name = 'stepcount'>\n";
-		p_Stream << "<br>\n";
+		p_Stream << "Step count : <br/>\n";
+		p_Stream << "<input type = 'text' ng-model='stepcount' name = 'stepcount' />\n";
+		p_Stream << "<br/>\n";
 		p_Stream << "</form>\n";
 		p_Stream << "</td>\n";
 	}
@@ -918,11 +933,11 @@ namespace SNI
 		p_Stream << "<form action = '/maxstackframes' method='get'>\n";
 		p_Stream << "<details>";
 		p_Stream << "<summary>";
-		p_Stream << "Max stack frames<br>\n";
-		p_Stream << "<input type = 'submit' value = 'Stack depth'><br>\n";
+		p_Stream << "Max stack frames<br/>\n";
+		p_Stream << "<input type = 'submit' value = 'Stack depth' /><br/>\n";
 		p_Stream << "</summary>";
-		p_Stream << "Number of stack frames to display :<br>\n";
-		p_Stream << "<input type = 'text' name = 'maxstackframes' value = '" << m_MaxStackFrames << "'>\n";
+		p_Stream << "Number of stack frames to display :<br/>\n";
+		p_Stream << "<input type = 'text' name = 'maxstackframes' value = '" << m_MaxStackFrames << "' />\n";
 		p_Stream << "</details>";
 		p_Stream << "</form>\n";
 		p_Stream << "</td>\n";
@@ -934,11 +949,11 @@ namespace SNI
 		p_Stream << "<form ng-submit = 'initFirst()'>\n";
 		p_Stream << "<details>";
 		p_Stream << "<summary>";
-		p_Stream << "Max stack frames<br>\n";
-		p_Stream << "<input type = 'submit' value = 'Stack depth'><br>\n";
+		p_Stream << "Max stack frames<br/>\n";
+		p_Stream << "<input type = 'submit' value = 'Stack depth' /><br/>\n";
 		p_Stream << "</summary>";
-		p_Stream << "Number of stack frames to display :<br>\n";
-		p_Stream << "<input type = 'text' ng-model='maxstackframes' name = 'maxstackframes'>\n";
+		p_Stream << "Number of stack frames to display :<br/>\n";
+		p_Stream << "<input type = 'text' ng-model='maxstackframes' name = 'maxstackframes' />\n";
 		p_Stream << "</details>";
 		p_Stream << "</form>\n";
 		p_Stream << "</td>\n";

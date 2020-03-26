@@ -38,7 +38,7 @@ namespace SNI
 
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 		SN::SN_Error AssertValue(const SN::SN_Expression & p_Value);
-		virtual SNI_Expression * Clone(SNI_Frame *p_Frame, bool &p_Changed);
+		virtual SNI_Expression * Clone(long p_MetaLevel, SNI_Frame *p_Frame, bool &p_Changed);
 
 		virtual SN::SN_Expression Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const;

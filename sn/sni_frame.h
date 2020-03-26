@@ -76,6 +76,7 @@ namespace SNI
 		size_t						   m_Cardinality;
 		size_t						   m_StackUsage;
 		SNI_World *                    m_ContextWorld;
+		size_t						   m_ResultIndex;
 	};
 }
 

@@ -53,6 +53,11 @@ namespace SNI
 		--m_Level;
 	}
 
+	long SNI_DisplayOptions::GetLevel()
+	{
+		return m_Level;
+	}
+
 	bool SNI_DisplayOptions::CheckLevel()
 	{
 		return m_Level < m_MaxLevel;

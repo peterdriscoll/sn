@@ -53,6 +53,7 @@ namespace SNI
 
 		virtual bool IsRequested() const;
 		virtual bool IsNullValue() const;
+		virtual bool IsValue() const;
 		virtual bool IsKnownValue() const;
 		virtual bool IsLeftKnownValue() const;
 		virtual bool IsRightKnownValue() const;
@@ -72,7 +73,7 @@ namespace SNI
 		virtual void Fix();
 		virtual SN::SN_Error AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World ** p_WorldList, SNI_WorldSet *p_WorldSet);
 
-		virtual SNI_Expression * Clone(SNI_Frame *p_Frame, bool &p_Changed);
+		virtual SNI_Expression * Clone(long p_MetaLevel, SNI_Frame *p_Frame, bool &p_Changed);
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 		virtual size_t Hash() const;
 		virtual SNI_WorldSet * GetWorldSet();

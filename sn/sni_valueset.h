@@ -64,7 +64,7 @@ namespace SNI
 		void AddTaggedValue(const SN::SN_Expression &p_Value, SNI_World *p_World);
 		SN::SN_Error AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World **p_WorldList, SNI_WorldSet *p_WorldSet);
 		virtual SN::SN_ValueSet DoRemove(const SN::SN_Value &p_Other);
-		virtual SNI_Expression * Clone(SNI_Frame *p_Frame, bool &p_Changed);
+		virtual SNI_Expression * Clone(long p_MetaLevel, SNI_Frame *p_Frame, bool &p_Changed);
 		void AssignToVariable(SNI_Variable * p_Variable);
 		virtual void Simplify();
 		virtual void Validate();

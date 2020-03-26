@@ -67,13 +67,13 @@ namespace SNI
 				breakPoint = baseInterrupt || (m_BreakPointSet.find(p_BreakPoint) != m_BreakPointSet.end());
 				break;
 			case skynet::StepInto:
-				breakPoint = baseInterrupt || (callFound && (p_DebuggingStop <= m_DebugStop));
+				breakPoint = baseInterrupt || (callFound && p_DebuggingStop <= m_DebugStop);
 				break;
 			case skynet::StepOver:
-				breakPoint = baseInterrupt || (callFound && p_ThreadNum == m_ThreadNum && p_FrameStackDepth <= m_FrameStackDepth);
+				breakPoint = baseInterrupt || (callFound && p_DebuggingStop <= m_DebugStop && p_ThreadNum == m_ThreadNum && p_FrameStackDepth <= m_FrameStackDepth);
 				break;
 			case skynet::StepOut:
-				breakPoint = baseInterrupt || (callFound && p_ThreadNum == m_ThreadNum && (m_FrameStackDepth == 0 || p_FrameStackDepth < m_FrameStackDepth));
+				breakPoint = baseInterrupt || (callFound && p_ThreadNum == m_ThreadNum && (m_FrameStackDepth == 0 || p_FrameStackDepth <= m_FrameStackDepth));
 				break;
 			case skynet::StepParameter:
 				breakPoint = p_InterruptPoint == SN::BreakPoint || callFound || p_InterruptPoint == SN::ParameterPoint;
@@ -88,9 +88,8 @@ namespace SNI
 				break;
 			case skynet::Rerun:
 				{
-					SN::SN_Error e(false, false, "Rerun request.");
-					e.GetSNI_Error()->MakeRerunRequest();
-					throw e;
+				m_DebugAction = skynet::StepInto;
+				throw skynet::RerunRequest;
 				}
 				break;
 			case skynet::Quit:

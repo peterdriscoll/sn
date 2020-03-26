@@ -29,6 +29,7 @@ namespace SNI
 
 		void IncrementLevel();
 		void DecrementLevel();
+		long GetLevel();
 		bool CheckLevel();
 	private:
 		map<string, long> m_TypeMap;

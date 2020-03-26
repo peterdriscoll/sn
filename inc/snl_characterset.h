@@ -25,6 +25,8 @@ namespace SNL
 		skynet::Variable AlphaUnderNumeric;
 		skynet::Variable White;
 
+		skynet::Variable Lambda;
+
 	private:
 		void Setup();
 		void Link();

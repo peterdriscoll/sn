@@ -40,7 +40,7 @@ namespace SNI
 		virtual bool IsFixed() const;
 		virtual void Fix();
 
-		virtual SNI_Expression * Clone(SNI_Frame * p_Frame, bool & p_Changed);
+		virtual SNI_Expression * Clone(long p_MetaLevel, SNI_Frame * p_Frame, bool & p_Changed);
 
 		virtual SN::SN_Expression Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel) const;
 		virtual SN::SN_Expression PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel) const;

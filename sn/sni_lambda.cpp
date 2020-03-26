@@ -59,6 +59,11 @@ namespace SNI
 		return GetTypeName();
 	}
 
+	bool SNI_Lambda::IsValue() const
+	{
+		return false;
+	}
+
 	bool SNI_Lambda::IsLambdaValue() const
 	{
 		return true;
@@ -88,7 +93,11 @@ namespace SNI
 				}
 			}
 		}
-		string text = SetBreakPoint("@", p_DisplayOptions, this, SN::LeftId) + m_FormalParameter->DisplaySN(GetPriority(), p_DisplayOptions) + sValue + SetBreakPoint(".", p_DisplayOptions, this, SN::ParameterOneId) + m_Expression->DisplaySN(GetPriority(), p_DisplayOptions);
+		p_DisplayOptions.IncrementLevel();
+		string sParam = m_FormalParameter->DisplaySN(GetPriority(), p_DisplayOptions) + sValue;
+		p_DisplayOptions.DecrementLevel();
+
+		string text = SetBreakPoint("@", p_DisplayOptions, this, SN::LeftId) + sParam + SetBreakPoint(".", p_DisplayOptions, this, SN::ParameterOneId) + m_Expression->DisplaySN(GetPriority(), p_DisplayOptions);
 		return Bracket(priority, text, p_DisplayOptions, this);
 	}
 
@@ -112,7 +121,7 @@ namespace SNI
 		return m_FormalParameter;
 	}
 
-	SNI_Expression * SNI_Lambda::Clone(SNI_Frame *p_Frame, bool &p_Changed)
+	SNI_Expression * SNI_Lambda::Clone(long p_MetaLevel, SNI_Frame *p_Frame, bool &p_Changed)
 	{
 		bool changed = true;
 		SNI_Variable *l_FormalParameter = dynamic_cast<SNI_Variable *>(m_FormalParameter);
@@ -132,7 +141,7 @@ namespace SNI
 		}
 		else
 		{
-			SNI_Expression *l_expression = m_Expression->Clone(p_Frame, changed);
+			SNI_Expression *l_expression = m_Expression->Clone(p_MetaLevel, p_Frame, changed);
 			if (changed)
 			{
 				p_Changed = true;

@@ -926,7 +926,6 @@ namespace test_sn
 
 		TEST_METHOD(TestParse_SimpleExpression)
 		{
-			return;
 			Initialize();
 			{
 				Manager manager("Test Parse Simple Expression", AssertErrorHandler);
@@ -939,15 +938,19 @@ namespace test_sn
 				// Name test.
 				SN_DOMAIN(MyDomain);
 				SN_DECLARE(i1);
-				(parse.AsExpression(MyDomain)(String("13+21"))(i1)).Assert().Do();
+				(parse.AsArithmeticExpression(MyDomain)(String("13+21"))(i1)).Assert().Do();
 
 				SN_DECLARE(j1);
-				(j1 == Meta(1, Long(13) + Long(21))).Assert().Do();
+				(j1 == Meta(1, Meta(-1, Long(13)) + Meta(-1, Long(21)))).Assert().Do();
 
-				string i1_string = i1.DisplayValueSN();
+				string i1_string = i1.DoEvaluate(0).DisplayValueSN();
+				string i1_value = i1.DoEvaluate(-1).DisplayValueSN();
 
-				string j1_string = j1.DisplayValueSN();
+				string j1_string = j1.DoEvaluate(0).DisplayValueSN();
+				string j1_value = j1.DoEvaluate(-1).DisplayValueSN();
+
 				Assert::IsTrue(i1_string == j1_string);
+				Assert::IsTrue(i1_value == j1_value);
 
 				(i1 == j1).Evaluate().Do();
 

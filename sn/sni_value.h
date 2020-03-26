@@ -25,6 +25,7 @@ namespace SNI
 		virtual string DisplayValueSN(long priority, SNI_DisplayOptions & p_DisplayOptions) const;
 		virtual long GetPriority() const;
 
+		virtual bool IsValue() const;
 		virtual bool IsKnownValue() const;
 		virtual bool IsReferableValue() const;
 		SN::SN_Expression GetVariableValue(bool p_IfComplete = true);

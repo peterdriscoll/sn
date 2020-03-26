@@ -142,11 +142,11 @@ namespace SNI
 		return m_Parameter;
 	}
 
-	SNI_Expression * SNI_Function::Clone(SNI_Frame *p_Frame, bool &p_Changed)
+	SNI_Expression * SNI_Function::Clone(long p_MetaLevel, SNI_Frame *p_Frame, bool &p_Changed)
 	{
 		bool changed = false;
-		SNI_Expression * l_Function = m_Function->Clone(p_Frame, changed);
-		SNI_Expression * l_Parameter = m_Parameter->Clone(p_Frame, changed);
+		SNI_Expression * l_Function = m_Function->Clone(p_MetaLevel, p_Frame, changed);
+		SNI_Expression * l_Parameter = m_Parameter->Clone(p_MetaLevel, p_Frame, changed);
 		if (changed)
 		{
 			p_Changed = true;

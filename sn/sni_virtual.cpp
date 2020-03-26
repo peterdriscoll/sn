@@ -258,11 +258,11 @@ namespace SNI
 		m_CallExpression = CreateImplementation();
 	}
 
-	SNI_Expression * SNI_Virtual::Clone(SNI_Frame *p_Frame, bool &p_Changed)
+	SNI_Expression * SNI_Virtual::Clone(long p_MetaLevel, SNI_Frame *p_Frame, bool &p_Changed)
 	{
 		if (m_Fixed)
 		{
-			return m_CallExpression.GetSNI_Expression()->Clone(p_Frame, p_Changed);
+			return m_CallExpression.GetSNI_Expression()->Clone(p_MetaLevel, p_Frame, p_Changed);
 		}
 
 		bool changed = false;
@@ -274,7 +274,7 @@ namespace SNI
 			SN::SN_Expression item = m_CallList[j];
 			if (!item.IsNull())
 			{
-				l_clone->m_CallList[j] = item.GetSNI_Expression()->Clone(p_Frame, changed);
+				l_clone->m_CallList[j] = item.GetSNI_Expression()->Clone(p_MetaLevel, p_Frame, changed);
 			}
 		}
 

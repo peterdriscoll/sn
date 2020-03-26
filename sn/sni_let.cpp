@@ -79,11 +79,11 @@ namespace SNI
 		return m_Condition;
 	}
 
-	SNI_Expression * SNI_Let::Clone(SNI_Frame *p_Frame, bool &p_Changed)
+	SNI_Expression * SNI_Let::Clone(long p_MetaLevel, SNI_Frame *p_Frame, bool &p_Changed)
 	{
 		bool changed = false;
-		SNI_Expression * condition = m_Condition->Clone(p_Frame, changed);
-		SNI_Expression * expression = m_Expression->Clone(p_Frame, changed);
+		SNI_Expression * condition = m_Condition->Clone(p_MetaLevel, p_Frame, changed);
+		SNI_Expression * expression = m_Expression->Clone(p_MetaLevel, p_Frame, changed);
 		if (changed)
 		{
 			p_Changed = true;

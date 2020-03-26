@@ -677,7 +677,7 @@ namespace SNI
 		{
 			return skynet::Null;
 		}
-		if (!SN::Is<SNI_String *>(part))
+		if (!part.IsString())
 		{
 			return SN::SN_Error(false, false, "StringRef.SubtractLeft: Expected a string to subtract: " + DisplayPmExpression(part));
 		}
@@ -1141,7 +1141,7 @@ namespace SNI
 		return skynet::False;
 	}
 
-	SN::SN_Error SNI_StringRef::DoAssertEqualsValue(SNI_Value * p_Other, SNI_Value * p_Result) const
+	SN::SN_Error SNI_StringRef::DoAssertEqualsValue(SNI_Value * p_Other, SNI_Value * p_Result)
 	{
 		SN::SN_Value start = m_Start.DoEvaluate();
 		SN::SN_Value end = m_End.DoEvaluate();
@@ -1150,78 +1150,74 @@ namespace SNI
 		ASSERTM(!start.GetSafeValue().GetSNI_ValueSet(), "If start point is valueset, string ref should have been simplified.");
 		ASSERTM(!end.GetSafeValue().GetSNI_ValueSet(), "If end point is valueset, string ref should have been simplified.");
 
-		if (dynamic_cast<SNI_StringRef *>(p_Other))
+		if (!p_Other->IsKnownValue())
 		{
-			if (!start.IsNullValue() && !end.IsNullValue())
+			if (start.IsKnownValue() && end.IsKnownValue())
 			{
-				return p_Other->DoAssertEqualsValue(SN::SN_String(GetString()).GetSNI_String(), p_Result);
+				return p_Other->DoAssertEqualsValue(this, p_Result);
 			}
 			//	Maybe this could be implemented in the future. It is unclear.
 			return SN::SN_Error(false, false, "Not implemented. Trying to compare two string refs with unknown start or end.");
 		}
-		if (dynamic_cast<SNI_String *>(p_Other))
+		if (start.IsKnownValue() && end.IsKnownValue())
 		{
-			if (!start.IsNullValue() && !end.IsNullValue())
-			{
-				return SN::SN_Error((GetString() == p_Other->GetString()) == result.GetBool(), false);
-			}
-			if (!start.IsNullValue() && m_End.IsVariable() && end.IsNullValue())
-			{
-				long start_pos = SN::SN_Long(start).GetNumber();
-				string other = p_Other->GetString();
-				string source = GetSourceString();
-				string sourcePart = source.substr(start_pos, other.length());
-				if (sourcePart != other)
-				{
-					return SN::SN_Error(!result.GetBool(), false);
-				}
-				else
-				{
-					if (result.GetBool())
-					{
-						m_End.GetSNI_Variable()->SetValue(SN::SN_Long((long)(start_pos + other.length())));
-						return skynet::OK;
-					}
-					else
-					{
-						SN::SN_Expression *l_ParameterList = new SN::SN_Expression[3];
-						l_ParameterList[0] = skynet::False;
-						l_ParameterList[1] = m_End;
-						l_ParameterList[2] = SN::SN_Long((long)(start_pos + other.length()));
-						SNI_Thread::GetThread()->GetProcessor()->Delay(skynet::Equals, 3, l_ParameterList, this);
-						return skynet::OK;
-					}
-				}
-			}
-			if (m_Start.IsVariable() && start.IsNullValue() && !end.IsNullValue())
-			{
-				long end_pos = SN::SN_Long(end).GetNumber();
-				string source = GetSourceString().substr(end_pos - p_Other->GetString().length());
-				if (source != p_Other->GetString())
-				{
-					return SN::SN_Error(!result.GetBool(), false);
-				}
-				else
-				{
-					if (result.GetBool())
-					{
-						m_Start.GetSNI_Variable()->SetValue(SN::SN_Long((long)(end_pos - p_Other->GetString().length())));
-						return skynet::OK;
-					}
-					else
-					{
-						SN::SN_Expression *l_ParameterList = new SN::SN_Expression[3];
-						l_ParameterList[0] = skynet::False;
-						l_ParameterList[1] = start;
-						l_ParameterList[2] = SN::SN_Long((long)(end_pos - p_Other->GetString().length()));
-						SNI_Thread::GetThread()->GetProcessor()->Delay(skynet::Equals, 3, l_ParameterList, this);
-						return skynet::OK;
-					}
-				}
-			}
-			return skynet::Fail;
+			return SN::SN_Error((GetString() == p_Other->GetString()) == result.GetBool(), false);
 		}
-		return skynet::OK;
+		if (!start.IsNullValue() && m_End.IsVariable() && end.IsNullValue())
+		{
+			long start_pos = SN::SN_Long(start).GetNumber();
+			string other = p_Other->GetString();
+			string source = GetSourceString();
+			string sourcePart = source.substr(start_pos, other.length());
+			if (sourcePart != other)
+			{
+				return SN::SN_Error(!result.GetBool(), false);
+			}
+			else
+			{
+				if (result.GetBool())
+				{
+					m_End.GetSNI_Variable()->SetValue(SN::SN_Long((long)(start_pos + other.length())));
+					return skynet::OK;
+				}
+				else
+				{
+					SN::SN_Expression *l_ParameterList = new SN::SN_Expression[3];
+					l_ParameterList[0] = skynet::False;
+					l_ParameterList[1] = m_End;
+					l_ParameterList[2] = SN::SN_Long((long)(start_pos + other.length()));
+					SNI_Thread::GetThread()->GetProcessor()->Delay(skynet::Equals, 3, l_ParameterList, this);
+					return skynet::OK;
+				}
+			}
+		}
+		if (m_Start.IsVariable() && start.IsNullValue() && !end.IsNullValue())
+		{
+			long end_pos = SN::SN_Long(end).GetNumber();
+			string source = GetSourceString().substr(end_pos - p_Other->GetString().length());
+			if (source != p_Other->GetString())
+			{
+				return SN::SN_Error(!result.GetBool(), false);
+			}
+			else
+			{
+				if (result.GetBool())
+				{
+					m_Start.GetSNI_Variable()->SetValue(SN::SN_Long((long)(end_pos - p_Other->GetString().length())));
+					return skynet::OK;
+				}
+				else
+				{
+					SN::SN_Expression *l_ParameterList = new SN::SN_Expression[3];
+					l_ParameterList[0] = skynet::False;
+					l_ParameterList[1] = start;
+					l_ParameterList[2] = SN::SN_Long((long)(end_pos - p_Other->GetString().length()));
+					SNI_Thread::GetThread()->GetProcessor()->Delay(skynet::Equals, 3, l_ParameterList, this);
+					return skynet::OK;
+				}
+			}
+		}
+		return skynet::Fail;
 	}
 
 	void SNI_StringRef::SetStart(SN::SN_Expression p_Expression)

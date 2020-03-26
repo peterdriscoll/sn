@@ -113,7 +113,7 @@ namespace SNI
 		m_Fixed = true;
 	}
 
-	SNI_Expression * SNI_Derived::Clone(SNI_Frame *p_Frame, bool &p_Changed)
+	SNI_Expression * SNI_Derived::Clone(long p_MetaLevel, SNI_Frame *p_Frame, bool &p_Changed)
 	{
 		bool changed = false;
 
@@ -128,7 +128,7 @@ namespace SNI
 			SNI_Expression *item = m_Vector[j];
 			if (item)
 			{
-				l_clone->m_Vector[j] = item->Clone(p_Frame, changed);
+				l_clone->m_Vector[j] = item->Clone(p_MetaLevel, p_Frame, changed);
 			}
 		}
 

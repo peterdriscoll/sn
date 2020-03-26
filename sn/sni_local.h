@@ -41,7 +41,7 @@ namespace SNI
 		virtual string GetOperator() const;
 
 		virtual bool Equivalent(SNI_Object * p_Other) const;
-		virtual SNI_Expression * Clone(SNI_Frame *p_Frame, bool &p_Changed);
+		virtual SNI_Expression * Clone(long p_MetaLevel, SNI_Frame *p_Frame, bool &p_Changed);
 
 		virtual SN::SN_Expression DoEvaluate(long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression DoPartialEvaluate(long p_MetaLevel = 0) const;

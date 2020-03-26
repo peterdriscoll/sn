@@ -37,7 +37,7 @@ namespace SNL
 		SN_LINK(IsLineComment);
 		SN_LINK(IsComment);
 		SN_LINK(IsWhiteSpace);
-
+		SN_LINK(IsWhiteSpaceContinuation);
 		SN_LINK(IsName);
 		SN_LINK(IsPath);
 
@@ -124,16 +124,21 @@ namespace SNL
 		}
 
 		{
-			SN_LOCAL(IgnoreText);
 			SN_LOCAL(s);
-			(Define(IgnoreText)(s) == (m_CharacterSet.White(s) || IsComment(s))).PartialAssert().Do();
 
-			SN_LOCAL(i);
-			(Define(IsWhiteSpace)(i) == (i.LookaheadLeft() != "" && m_CharacterSet.White(i.SelectLeftChar()) && IsWhiteSpaceContinuation(i.SubtractLeftChar()))).PartialAssert().Do();
-			(Define(IsWhiteSpaceContinuation)(i) == (
-				(i.LookaheadLeft() != "" && IgnoreText(i.LookaheadLeft()))
-				.If(IsWhiteSpaceContinuation(i.SubtractLeftChar()), i == "")
-				)).PartialAssert().Do();
+			SN_LOCAL(m);
+			SN_LOCAL(n);
+
+			(Define(IsWhiteSpace)(s) == (
+				m_CharacterSet.White(s.LookaheadLeft()) && IsWhiteSpaceContinuation(s.SubtractLeftChar())
+			||	Local(m, Local(n, Let(s == m + n,
+					IsComment(m) && IsWhiteSpace(n)
+				)))
+			)).PartialAssert().Do();
+
+			(Define(IsWhiteSpaceContinuation)(s) == (
+				IsWhiteSpace(s).If(True, s == String(""))
+			)).PartialAssert().Do();
 		}
 	}
 

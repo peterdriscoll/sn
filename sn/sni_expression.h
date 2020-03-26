@@ -107,7 +107,7 @@ namespace SNI
 		virtual string DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression *p_DebugSource) const;
 		virtual string DisplayUnify(size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression * p_DebugSource) const;
 		virtual string DisplayUnifyExp(SN::SN_ExpressionList * p_ParameterList) const;
-		virtual SNI_Expression * Clone(SNI_Frame *p_Frame, bool &p_Changed);
+		virtual SNI_Expression * Clone(long p_MetaLevel, SNI_Frame *p_Frame, bool &p_Changed);
 		virtual SNI_Expression * Clone(const SNI_Expression *p_Function, SNI_Expression *p_Result);
 		virtual SNI_Expression * Copy() const;
 		virtual bool GetBool() const;
@@ -123,6 +123,7 @@ namespace SNI
 		virtual SNI_WorldSet *GetWorldSet();
 
 		virtual bool IsNull() const;
+		virtual bool IsValue() const;
 		virtual bool IsKnownValue() const;
 		virtual bool IsLeftKnownValue() const;
 		virtual bool IsRightKnownValue() const;
@@ -215,7 +216,7 @@ namespace SNI
 
 		// Comparison
 		virtual SN::SN_Value DoEquals(SNI_Value *p_Other) const;
-		virtual SN::SN_Error DoAssertEqualsValue(SNI_Value * p_Other, SNI_Value * p_Result) const;
+		virtual SN::SN_Error DoAssertEqualsValue(SNI_Value * p_Other, SNI_Value * p_Result);
 		virtual SN::SN_Value DoLessThan(SNI_Value * p_Other) const;
 		virtual SN::SN_Value DoGreaterThan(SNI_Value * p_Other) const;
 		virtual SN::SN_Value DoLessEquals(SNI_Value * p_Other) const;

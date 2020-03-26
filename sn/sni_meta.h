@@ -33,6 +33,7 @@ namespace SNI
 
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 		virtual size_t Hash() const;
+		virtual SNI_Expression *Clone(long p_MetaLevel, SNI_Frame * p_Frame, bool &);
 		virtual SN::SN_Expression DoEvaluate(long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression DoPartialEvaluate(long p_MetaLevel = 0) const;
 

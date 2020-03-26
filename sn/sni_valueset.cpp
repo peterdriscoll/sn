@@ -416,7 +416,7 @@ namespace SNI
 		return found;
 	}
 
-	SNI_Expression * SNI_ValueSet::Clone(SNI_Frame *p_Frame, bool &p_Changed)
+	SNI_Expression * SNI_ValueSet::Clone(long p_MetaLevel, SNI_Frame *p_Frame, bool &p_Changed)
 	{
 		Validate();
 		SN::SN_ValueSet result;
@@ -440,7 +440,7 @@ namespace SNI
 					{
 						cloneWorld = worldSetClone->CreateCloneWorld(world);
 					}
-					result.AddTaggedValue(tv.GetValue().GetSNI_Expression()->Clone(p_Frame, p_Changed), cloneWorld);
+					result.AddTaggedValue(tv.GetValue().GetSNI_Expression()->Clone(p_MetaLevel, p_Frame, p_Changed), cloneWorld);
 				}
 			}
 		}

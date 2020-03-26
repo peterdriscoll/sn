@@ -48,12 +48,21 @@ namespace SNI
 
 	string SNI_Value::DisplayValueSN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
+		if (p_DisplayOptions.GetDebugHTML() == doDebugPointsJS)
+		{
+			return DisplaySN(priority, p_DisplayOptions);
+		}
 		return GetTypeName() + "(" + DisplaySN(priority, p_DisplayOptions) + ")";
 	}
 
 	long SNI_Value::GetPriority() const
 	{
 		return 1;
+	}
+
+	bool SNI_Value::IsValue() const
+	{
+		return true;
 	}
 
 	bool SNI_Value::IsKnownValue() const

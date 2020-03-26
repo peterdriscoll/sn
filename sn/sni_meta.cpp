@@ -120,6 +120,19 @@ namespace SNI
 		return _Hash_array_representation(data.c_str(), data.size());
 	}
 
+	SNI_Expression *SNI_Meta::Clone(long p_MetaLevel, SNI_Frame *p_Frame, bool &p_Changed)
+	{
+		bool changed = false;
+		SNI_Expression * l_Meta = m_Expression->Clone(p_MetaLevel+ m_DeltaMetaLevel, p_Frame, changed);
+		if (changed)
+		{
+			p_Changed = true;
+			return new SNI_Meta(m_DeltaMetaLevel, l_Meta);
+		}
+		return this;
+	}
+
+
 	SN::SN_Expression SNI_Meta::DoEvaluate(long p_MetaLevel /* = 0 */) const
 	{
 		long l_DeltaMetaLevel = m_DeltaMetaLevel;
