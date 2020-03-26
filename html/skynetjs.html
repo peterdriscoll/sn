@@ -81,10 +81,13 @@
                     <form ng-submit='gotostepcount()'>
                         <details id='gotoid'>
                             <summary>
-                                Goto step count<br/>
-                                <input type='submit' value='Goto' /><br/>
-                            </summary>Step count : <br/>
-                            <input id='stepcountid' type='text' ng-model='stepcount' name='stepcount'><br/>
+                                <label>Goto step count</label><br />
+                                <input type='submit' value='Goto' />
+                            </summary>
+                            <label>Step count :</label><br />
+                            <input id='stepcountid' type='number' ng-change='updatereruncommand()' ng-model='stepcount' name='stepcount'><br />
+                            <label>Rerun command</label>
+                            <input type="checkbox" disabled ng-model="reruncommand"><br />
                         </details>
                     </form>
                 </td>
@@ -98,13 +101,13 @@
                             <label for="debugstop">Debug level</label><br/>
                             <select id="debugstop" ng-model="debugstop" ng-options="option.name for option in debugstopoptions"> </select> <br />
                             Max frames : <br />
-                            <input type='text' ng-model='maxstackframes' name='maxstackframes' /> <br/>
+                            <input type='number' ng-model='maxstackframes' name='maxstackframes' /> <br/>
                             Max code : <br />
-                            <input type='text' ng-model='maxcode' name='maxcode' /> <br/>
+                            <input type='number' ng-model='maxcode' name='maxcode' /> <br/>
                             Max derivation : <br/>
-                            <input type='text' ng-model='maxderivation' name='maxderivation' /> <br/>
+                            <input type='number' ng-model='maxderivation' name='maxderivation' /> <br/>
                             Max log : <br/>
-                            <input type='text' ng-model='maxlog' name='maxlog' />
+                            <input type='number' ng-model='maxlog' name='maxlog' />
                         </details>
                     </form>
                 </td>
@@ -231,7 +234,7 @@
                                                     <tr>
                                                         <td>{{f.framepos}}</td>
                                                         <td>{{f.function}}</td>
-                                                        <td>Step:{{f.stepcount}}</td>
+                                                        <td><button ng-click='reruntostackpoint(f.stepcount)'>Step:{{f.stepcount}}</button></td>
                                                         <td>SMEM:{{f.stackusage}}</td>
                                                         <td ng-bind-html="trustAsHtml(f.contextworld)" init-bind></td>
                                                         <td ng-bind-html="trustAsHtml(f.functioncardinality)" init-bind></td>
@@ -248,7 +251,7 @@
                                             <tr>
                                                 <td>{{f.framepos}}</td>
                                                 <td>{{f.function}}</td>
-                                                <td>Step:{{f.stepcount}}</td>
+                                                <td><button ng-click='reruntostackpoint(f.stepcount)'>Step:{{f.stepcount}}</button></td>
                                                 <td>SMEM:{{f.stackusage}}</td>
                                                 <td ng-bind-html="trustAsHtml(f.contextworld)" init-bind></td>
                                                 <td ng-bind-html="trustAsHtml(f.functioncardinality)" init-bind></td>
@@ -337,6 +340,8 @@
         app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $window, $document, hotkeys) {
             $scope.trustAsHtml = $sce.trustAsHtml;
             $scope.threadnum = 0;
+            $scope.currentstepcount = 0;
+            $scope.laststepcount = 0;
 
             $scope.debugstopoptions = [
                 { name: 'none', value: '0' },
@@ -375,6 +380,8 @@
                             $scope.statusdescription = response.data.statusdescription;
                             $scope.running = response.data.running;
                             $scope.closing = response.data.closing;
+                            $scope.currentstepcount = response.data.currentstepcount;
+                            $scope.laststepcount = response.data.laststepcount;
                             if ($scope.maxstackframes == -1) {
                                 $scope.maxstackframes = response.data.maxstackframes;
                             }
@@ -554,6 +561,11 @@
                 }
             };
 
+            $scope.updatereruncommand = function () {
+                $scope.reruncommand = $scope.laststepcount < $scope.stepcount && $scope.stepcount < $scope.currentstepcount;
+            }
+            
+
             // Open/close the settings drop down.
             $scope.settings = function () {
                 var field = $document[0].getElementById('settingsid');
@@ -567,6 +579,19 @@
                 }
             };
 
+            $scope.reruntostackpoint = function (stepcount) {
+                $scope.stepcount = stepcount;
+                $scope.updatereruncommand();
+                var field = $document[0].getElementById('gotoid');
+                if (!field.open) {
+                    field.open = 1;
+                    var stepCountField = $document[0].getElementById('stepcountid');
+                    stepCountField.value = stepcount;
+                    stepCountField.focus();
+                    stepCountField.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+                }
+            }
+             
             // Add or remove the breakpoint from the current breakpoint button
             // From the set of breakpoint button. This also highlights or dehighlights
             // buttons in the same group.

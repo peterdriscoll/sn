@@ -51,7 +51,8 @@ namespace SNI
 		SNI_FrameList & GetFrameList();
 
 		size_t GetStepCount();
-		void ResetStepCount(size_t p_StepCount);
+		void SaveStepCount();
+		void ResetStepCount();
 
 		SNI_DelayedProcessor *GetProcessor();
 
@@ -178,6 +179,7 @@ namespace SNI
 		SNI_DebugCommand m_DebugCommand;
 		SNI_FrameList m_FrameList;
 		size_t m_ThreadStepCount;
+		size_t m_LastThreadStepCount;
 		bool m_WebServerThreadUsed;
 		SNI_Manager *m_TopManager;
 		bool m_Ended;

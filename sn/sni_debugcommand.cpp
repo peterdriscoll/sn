@@ -86,6 +86,12 @@ namespace SNI
 				m_DebugAction = skynet::StepInto;
 				breakPoint = false;
 				break;
+			case skynet::GoBackToStepCount:
+				{
+				m_DebugAction = skynet::GotoStepCount;
+				throw skynet::RerunRequest;
+				}
+				break;
 			case skynet::Rerun:
 				{
 				m_DebugAction = skynet::StepInto;
@@ -200,14 +206,14 @@ namespace SNI
 		ScheduleCommand(skynet::StepParameter);
 	}
 
-	void SNI_DebugCommand::GotoStepCount(long p_StepCount, long p_ThreadNum)
+	void SNI_DebugCommand::GotoStepCount(skynet::DebugAction p_DebugAction, long p_StepCount, long p_ThreadNum)
 	{
 		unique_lock<mutex> mutex_lock(m_Mutex);
 		while (!m_ReadyForCommand)
 		{
 			m_ReadyForCommandCond.wait(mutex_lock);
 		}
-		m_DebugAction = skynet::GotoStepCount;
+		m_DebugAction = p_DebugAction;
 		m_StepCount = p_StepCount;
 		m_ThreadNum = p_ThreadNum;
 		m_ReadyForProcessing = true;

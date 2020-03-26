@@ -33,7 +33,7 @@ namespace skynet
 {
 	enum DebugAction
 	{
-		None, Run, RunToEnd, Rerun, Debug, CodeBreak, StepOver, StepInto, StepParameter, StepOut, GotoStepCount, Quit, Abort
+		None, Run, RunToEnd, Rerun, Debug, CodeBreak, StepOver, StepInto, StepParameter, StepOut, GotoStepCount, GoBackToStepCount, Quit, Abort
 	};
 
 	enum EscapeType

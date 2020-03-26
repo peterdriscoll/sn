@@ -96,6 +96,7 @@ namespace SNI
 
 	SNI_Thread::SNI_Thread()
 		: m_ThreadStepCount(0)
+		, m_LastThreadStepCount(0)
 		, m_WebServerThreadUsed(false)
 		, m_TopManager(NULL)
 		, m_ThreadNum(m_ThreadList.size())
@@ -156,9 +157,14 @@ namespace SNI
 		return m_ThreadStepCount;
 	}
 
-	void SNI_Thread::ResetStepCount(size_t p_StepCount)
+	void SNI_Thread::SaveStepCount()
 	{
-		m_ThreadStepCount = p_StepCount;
+		m_LastThreadStepCount = m_ThreadStepCount;
+	}
+
+	void SNI_Thread::ResetStepCount()
+	{
+		m_ThreadStepCount = m_LastThreadStepCount;
 		m_FrameList.resize(1);
 	}
 
@@ -642,7 +648,14 @@ namespace SNI
 
 	void SNI_Thread::GotoStepCount(long p_StepCount)
 	{
-		m_DebugCommand.GotoStepCount(p_StepCount, m_ThreadNum);
+		if (m_ThreadStepCount < p_StepCount)
+		{
+			m_DebugCommand.GotoStepCount(skynet::GotoStepCount, p_StepCount, m_ThreadNum);
+		}
+		else if (m_LastThreadStepCount < p_StepCount)
+		{
+			m_DebugCommand.GotoStepCount(skynet::GoBackToStepCount, p_StepCount, m_ThreadNum);
+		}
 	}
 
 	void SNI_Thread::SetMaxStackFrames(long p_MaxStackFrames)
@@ -726,7 +739,7 @@ namespace SNI
 
 	string SNI_Thread::GotoStepCountWeb(long p_StepCount, enum DisplayOptionType p_OptionType)
 	{
-		m_DebugCommand.GotoStepCount(p_StepCount, m_ThreadNum);
+		m_DebugCommand.GotoStepCount(skynet::GotoStepCount, p_StepCount, m_ThreadNum);
 		stringstream ss;
 		WriteWebPage(ss, true, p_OptionType);
 		return ss.str();
@@ -1032,7 +1045,10 @@ namespace SNI
 		}
 		p_Stream << "\t\"statusdescription\" : \"" << statusDescription << "\",\n";
 		p_Stream << "\t\"running\" : " << running << ",\n";
-		p_Stream << "\t\"closing\" : " << closing << "\n";
+		p_Stream << "\t\"closing\" : " << closing << ",\n";
+		p_Stream << "\t\"currentstepcount\" : " << m_ThreadStepCount << ",\n";
+		p_Stream << "\t\"laststepcount\" : " << m_LastThreadStepCount << "\n";
+
 		p_Stream << "}\n";
 	}
 

@@ -43,7 +43,7 @@ namespace SNI
 		void StepInto(SN::DebuggingStop p_DebugStop);
 		void StepOut(long p_StackDepth);
 		void StepParam();
-		void GotoStepCount(long p_StepCount, long p_ThreadNum);
+		void GotoStepCount(skynet::DebugAction p_DebugAction, long p_StepCount, long p_ThreadNum);
 		void Quit();
 		void Abort();
 

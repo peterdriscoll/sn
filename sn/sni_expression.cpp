@@ -641,10 +641,10 @@ namespace SNI
 		LOG(WriteExp(this));
 		SNI_Thread *thread = SNI_Thread::GetThread();
 		bool finished = false;
-		long stepCount = thread->GetStepCount();
 		SNI_Frame* frame = thread->Top();
 		vector<bool> savePoint;
 		frame->RecordSavePoint(savePoint);
+		thread->SaveStepCount();
 		do
 		{
 			try
@@ -659,7 +659,7 @@ namespace SNI
 			{
 				if (e.RequestRerun())
 				{
-					thread->ResetStepCount(stepCount);
+					thread->ResetStepCount();
 					frame->RestoreSavePoint(savePoint);
 				}
 				else
