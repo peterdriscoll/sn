@@ -16,214 +16,205 @@
     <script src="hotkeys.min.js"></script>
     <script src="skynetjs.js"></script>
     <div ng-app="skynetApp" ng-controller='commandCtrl'>
-        <div>
-            <div class="left-float">
-                <h1>SKYNET Dashboard - {{taskdescription}} {{statusdescription}}</h1>
-            </div>
-            <div class="right-float">
-                <table>
-                    <tr>
-                        <td class="help-link"><a href="runjs.html">Running Dashboard</a></td>
-                        <td class="help-link"><a href="skynetjs.html">Developer Dashboard</a></td>
-                        <td class="help-link"><a href="derivationjs.html">Derivation</a></td>
-                        <td class="help-link"><a href="changehistoryjs.html">Change History</a></td>
-                        <td class="help-link"><a href="explorerjs.html">Object Explorer</a></td>
-                        <td class="help-link"><a href="help_index.html">Help</a></td>
-                        <td class="help-link"><a href="help_start.html">Get Started</a></td>
-                    </tr>
-                </table>
-            </div>
-        </div>
+        <div class='main'>
+            <div class="header_wrapper">
+                <div class="title">
+                    SKYNET Dashboard
+                </div>
+                <div class="links">
+                    <table>
+                        <tr>
+                            <td class="help-link"><a href="runjs.html">Running Dashboard</a></td>
+                            <td class="help-link"><a href="skynetjs.html">Developer Dashboard</a></td>
+                            <td class="help-link"><a href="derivationjs.html">Derivation</a></td>
+                            <td class="help-link"><a href="changehistoryjs.html">Change History</a></td>
+                            <td class="help-link"><a href="explorerjs.html">Object Explorer</a></td>
+                            <td class="help-link"><a href="help_index.html">Help</a></td>
+                            <td class="help-link"><a href="help_start.html">Get Started</a></td>
+                        </tr>
+                    </table>
+                </div>
 
-        <p class='clear' />
-        <table class='command clear'>
-            <tr>
-                <td>
-                    Run<br />
-                    <button ng-click='submit("runjs")'>Run</button>
-                </td>
-                <td>
-                    Run to end<br />
-                    <button ng-click='submit("runtoendjs")'>End</button>
-                </td>
-                <td>
-                    Run to breakpoint<br />
-                    <button ng-click='submit("debugjs")'>Debug</button>
-                </td>
-                <td>
-                    Code debug break C++<br />
-                    <button ng-click='submit("codebreakjs")'>Code break</button>
-                </td>
-                <td>
-                    Rerun current command<br />
-                    <button ng-click='submit("rerunjs")'>Rerun</button>
-                </td>
-                <td>
-                    Step over call<br />
-                    <button ng-click='submit("stepoverjs")'>Step over</button>
-                </td>
-                <td>
-                    Step into call<br />
-                    <button ng-click='submit("stepintojs")'>Step into</button>
-                </td>
-                <td>
-                    Step out of call<br />
-                    <button ng-click='submit("stepoutjs")'>Step out</button>
-                </td>
-                <td>
-                    Step out of func<br />
-                    <button ng-click='submit("stepoutcalljs")'>Step out call</button>
-                </td>
-                <td>
-                    Step into parameters<br />
-                    <button ng-click='submit("stepparamjs")'>Step parameter</button>
-                </td>
-                <td>
-                    <form ng-submit='gotostepcount()'>
-                        <details id='gotoid'>
-                            <summary>
-                                <label>Goto step count</label><br />
-                                <input type='submit' value='Goto' />
-                            </summary>
-                            <label>Step count :</label><br />
-                            <input id='stepcountid' type='number' ng-change='updatereruncommand()' ng-model='stepcount' name='stepcount'><br />
-                            <label>Rerun command</label>
-                            <input type="checkbox" disabled ng-model="reruncommand"><br />
-                        </details>
-                    </form>
-                </td>
-                <td>
-                    <form ng-submit='settings()'>
-                        <details id='settingsid'>
-                            <summary>
-                                Dashboard Settings <br />
-                                <input type='submit' value='Settings' /><br />
-                            </summary>
-                            <label for="debugstop">Debug level</label><br />
-                            <select id="debugstop" ng-model="debugstop" ng-options="option.name for option in debugstopoptions"> </select> <br />
-                            Max frames : <br />
-                            <input type='number' ng-model='maxstackframes' name='maxstackframes' /> <br />
-                            Max code : <br />
-                            <input type='number' ng-model='maxcode' name='maxcode' /> <br />
-                            Max derivation : <br />
-                            <input type='number' ng-model='maxderivation' name='maxderivation' /> <br />
-                            Max log : <br />
-                            <input type='number' ng-model='maxlog' name='maxlog' />
-                        </details>
-                    </form>
-                </td>
-                <td>
-                    Abort thread<br />
-                    <button ng-click='submit("quitjs")'>Quit</button>
-                </td>
-            </tr>
-        </table>
-        <div>
-            <table class='thread'>
-                <caption>Threads</caption>
-                <tr>
-                    <td ng-repeat="sc in stepcounts">
-                        <form ng-submit='setthread(sc.threadnum)'>
-                            <input type='submit' name='threadnum' value='{{sc.threadnum}} : {{sc.stepcount}}' />
-                        </form>
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <table class='group'>
-            <tr>
-                <td>
-                    <table class='frame'>
-                        <caption><pre>{{error.description}}</pre></caption>
-                        <tr ng-repeat="ch in error.callhistory">
-                            <td>
-                                {{ch.purpose}}
-                            </td>
-                            <td ng-bind-html="trustAsHtml(ch.expression)" init-bind></td>
-                            <td>
-                                {{ch.logcontext}}
+                <div class='threadtabs'>
+                    <table class='thread'>
+                        <tr>
+                            <td ng-repeat="sc in stepcounts">
+                                <form ng-submit='setthread(sc.threadnum)'>
+                                    <input type='submit' name='threadnum' value='{{sc.threadnum}} : {{sc.stepcount}}' />
+                                </form>
                             </td>
                         </tr>
                     </table>
-                    <button title='MIR' ng-click='setbreakpoint(["MIR",3])' ng-class='breakpointclass(["MIR",3])'>Check MIR</button>
-                    <button title='Cloned' ng-click='setbreakpoint(["clone",3])' ng-class='breakpointdefaultclass(["clone",3], "NONE")'>Cloned(see log)</button>
-                    <button title='User' ng-click='setbreakpoint(["user",22])' ng-class='breakpointclass(["user",22])'>User breakpoint</button>
-                    <button title='Error' ng-click='setbreakpoint(["Error",16])' ng-class='breakpointdefaultclass(["Error",16], "NONE")'>Error</button>
-                    <button title='Delay' ng-click='setbreakpoint(["Warning",20])' ng-class='breakpointdefaultclass(["Warning",20], "NONE")'>Delay</button>
-                    <button title='No constraint' ng-click='setbreakpoint(["Warning",19])' ng-class='breakpointdefaultclass(["Warning",19], "NONE")'>No constraint</button>
-                    <button title='Multiple out' ng-click='setbreakpoint(["Warning",23])' ng-class='breakpointdefaultclass(["Warning",23], "NONE")'>Multiple out</button>
-                    {{breakpoint}} - {{breakpointdescription}}
-                    <details open>
-                        <summary>World Sets</summary>
+                </div>
+
+                <div class='toolbar'>
+                    <table class='command clear'>
+                        <tr>
+                            <td>
+                                <button title='Run' ng-click='submit("runjs")'>Run</button>
+                            </td>
+                            <td>
+                                <button title='Run to end' ng-click='submit("runtoendjs")'>End</button>
+                            </td>
+                            <td>
+                                <button title='Run to breakpoint' ng-click='submit("debugjs")'>Debug</button>
+                            </td>
+                            <td>
+                                <button title='Code debug break C++' ng-click='submit("codebreakjs")'>Code break</button>
+                            </td>
+                            <td>
+                                <button title='Rerun current command' ng-click='submit("rerunjs")'>Rerun</button>
+                            </td>
+                            <td>
+                                <button title='Step over call' ng-click='submit("stepoverjs")'>Step over</button>
+                            </td>
+                            <td>
+                                <button title='Step into call' ng-click='submit("stepintojs")'>Step into</button>
+                            </td>
+                            <td>
+                                <button title='Step out of call' ng-click='submit("stepoutjs")'>Step out</button>
+                            </td>
+                            <td>
+                                <button title='Step out of func' ng-click='submit("stepoutcalljs")'>Step out call</button>
+                            </td>
+                            <td>
+                                <form ng-submit='gotostepcount()'>
+                                    <details id='gotoid'>
+                                        <summary>
+                                            <input title='Goto step count' type='submit' value='Goto' />
+                                        </summary>
+                                        <label>Step count :</label><br />
+                                        <input id='stepcountid' type='number' ng-change='updatereruncommand()' ng-model='stepcount' name='stepcount'><br />
+                                        <label>Rerun command</label>
+                                        <input type="checkbox" disabled ng-model="reruncommand"><br />
+                                    </details>
+                                </form>
+                            </td>
+                            <td>
+                                <form ng-submit='settings()'>
+                                    <details id='settingsid'>
+                                        <summary>
+                                            <input title='Dashboard Settings' type='submit' value='Settings' /><br />
+                                        </summary>
+                                        <label for="debugstop">Debug level</label><br />
+                                        <select id="debugstop" ng-model="debugstop" ng-options="option.name for option in debugstopoptions"> </select> <br />
+                                        Max frames : <br />
+                                        <input type='number' ng-model='maxstackframes' name='maxstackframes' /> <br />
+                                        Max code : <br />
+                                        <input type='number' ng-model='maxcode' name='maxcode' /> <br />
+                                        Max derivation : <br />
+                                        <input type='number' ng-model='maxderivation' name='maxderivation' /> <br />
+                                        Max log : <br />
+                                        <input type='number' ng-model='maxlog' name='maxlog' />
+                                    </details>
+                                </form>
+                            </td>
+                            <td>
+                                <button title='Abort thread' ng-click='submit("quitjs")'>Quit</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class='main_frame'>
+                <div class=main_wrapper>
+                    <div class='breakpoints'>
+                        <button title='MIR' ng-click='setbreakpoint(["MIR",3])' ng-class='breakpointclass(["MIR",3])'>Check MIR</button>
+                        <button title='Cloned' ng-click='setbreakpoint(["clone",3])' ng-class='breakpointdefaultclass(["clone",3], "NONE")'>Cloned(see log)</button>
+                        <button title='User' ng-click='setbreakpoint(["user",22])' ng-class='breakpointclass(["user",22])'>User breakpoint</button>
+                        <button title='Error' ng-click='setbreakpoint(["Error",16])' ng-class='breakpointdefaultclass(["Error",16], "NONE")'>Error</button>
+                        <button title='Delay' ng-click='setbreakpoint(["Warning",20])' ng-class='breakpointdefaultclass(["Warning",20], "NONE")'>Delay</button>
+                        <button title='No constraint' ng-click='setbreakpoint(["Warning",19])' ng-class='breakpointdefaultclass(["Warning",19], "NONE")'>No constraint</button>
+                        <button title='Multiple out' ng-click='setbreakpoint(["Warning",23])' ng-class='breakpointdefaultclass(["Warning",23], "NONE")'>Multiple out</button>
+                        {{breakpoint}} - {{breakpointdescription}}
+                    </div>
+
+                    <div class="status">
+                        <b>{{taskdescription}} {{statusdescription}}</b>
+                    </div>
+
+                    <div class='errors'>
                         <table class='frame'>
-                            <tr ng-repeat="ws in worldsets">
+                            <caption><pre>{{error.description}}</pre></caption>
+                            <tr ng-repeat="ch in error.callhistory">
                                 <td>
-                                    {{ws.expression}}
+                                    {{ch.purpose}}
                                 </td>
+                                <td ng-bind-html="trustAsHtml(ch.expression)" init-bind></td>
                                 <td>
-                                    <button ng-repeat="w in ws.worlds" ng-title='w.breakpoint' ng-click='setbreakpoint(w.breakpoint)' ng-class='breakpointdefaultclass(w.breakpoint, w.reason)'>{{w.condition}}</button>
-                                </td>
-                                <td ng-repeat="cws in ws.childsets">
-                                    <button ng-repeat="u in cws.worlds" ng-title='u.breakpoint' ng-click='setbreakpoint(u.breakpoint)' ng-class='breakpointdefaultclass(u.breakpoint, u.reason)'>{{u.condition}}</button>
+                                    {{ch.logcontext}}
                                 </td>
                             </tr>
                         </table>
-                    </details>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <details open>
-                        <summary>Delayed Calls</summary>
-                        <table class='frame'>
-                            <tr ng-repeat="d in delayedcalls">
-                                <td ng-bind-html="trustAsHtml(d.expression)" init-bind></td>
-                                <td ng-bind-html="trustAsHtml(d.result)" init-bind></td>
-                                <td>
-                                    <button title='{{["delayed",d.id]}}' ng-click='setbreakpoint(["delayed",d.id])' ng-class='breakpointclass(["delayed",d.id])' ng-bind-html="trustAsHtml(d.cardinality)" init-bind></button>
-                                </td>
-                                <td>{{d.world}}</td>
-                            </tr>
-                        </table>
-                    </details>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <details open>
-                        <summary>Call stack</summary>
-                        <table class='frame'>
-                            <tr ng-repeat="f in callstack">
-                                <td>
-                                    {{f.name}}
-                                </td>
-                                <td>
-                                    <div>
-                                        <div ng-repeat="d in f.value">
-                                            <div class="code" ng-bind-html=" trustAsHtml(d.text)" init-bind><br /></div>
+                    </div>
+
+                    <div class='worldsets'>
+                        <details open>
+                            <summary>World Sets</summary>
+                            <table class='frame'>
+                                <tr ng-repeat="ws in worldsets">
+                                    <td>
+                                        {{ws.expression}}
+                                    </td>
+                                    <td>
+                                        <button ng-repeat="w in ws.worlds" ng-title='w.breakpoint' ng-click='setbreakpoint(w.breakpoint)' ng-class='breakpointdefaultclass(w.breakpoint, w.reason)'>{{w.condition}}</button>
+                                    </td>
+                                    <td ng-repeat="cws in ws.childsets">
+                                        <button ng-repeat="u in cws.worlds" ng-title='u.breakpoint' ng-click='setbreakpoint(u.breakpoint)' ng-class='breakpointdefaultclass(u.breakpoint, u.reason)'>{{u.condition}}</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </details>
+                    </div>
+
+                    <div class='delayedcalls'>
+                        <details open>
+                            <summary>Delayed Calls</summary>
+                            <table class='frame'>
+                                <tr ng-repeat="d in delayedcalls">
+                                    <td ng-bind-html="trustAsHtml(d.expression)" init-bind></td>
+                                    <td ng-bind-html="trustAsHtml(d.result)" init-bind></td>
+                                    <td>
+                                        <button title='{{["delayed",d.id]}}' ng-click='setbreakpoint(["delayed",d.id])' ng-class='breakpointclass(["delayed",d.id])' ng-bind-html="trustAsHtml(d.cardinality)" init-bind></button>
+                                    </td>
+                                    <td>{{d.world}}</td>
+                                </tr>
+                            </table>
+                        </details>
+                    </div>
+
+                    <div class='callstack'>
+                        <details open>
+                            <summary>Call stack</summary>
+                            <table class='frame'>
+                                <tr ng-repeat="f in callstack">
+                                    <td>
+                                        {{f.name}}
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <div ng-repeat="d in f.value">
+                                                <div class="code" ng-bind-html=" trustAsHtml(d.text)" init-bind><br /></div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div>
-                                        <div ng-repeat="d in f.result.value">
-                                            <div class="code" ng-bind-html=" trustAsHtml(d.text)" init-bind><br /></div>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <div ng-repeat="d in f.result.value">
+                                                <div class="code" ng-bind-html=" trustAsHtml(d.text)" init-bind><br /></div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    {{f.breakpoint}}
-                                </td>
-                            </tr>
-                        </table>
-                    </details>
-                </td>
-            </tr>
-        </table>
-        <table class='group'>
-            <tr>
-                <td>
-                    <div class='group'>
+                                    </td>
+                                    <td>
+                                        {{f.breakpoint}}
+                                    </td>
+                                </tr>
+                            </table>
+                        </details>
+                    </div>
+
+                    <div class='stack'>
                         <table class='stack'>
                             <caption>Detailed stack</caption>
                             <tr ng-repeat="f in frames">
@@ -285,9 +276,8 @@
                             </tr>
                         </table>
                     </div>
-                </td>
-                <td>
-                    <div class='group'>
+
+                    <div class="commandbreakpoints">
                         <table class='noborder'>
                             <tr>
                                 <td>Call</td>
@@ -304,35 +294,47 @@
                                 <td><button ng-click='setbreakpoint(["PartialEvaluate",15])' ng-class='breakpointclass(["PartialEvaluate",15])'>Partial Evakuate</button></td>
                             </tr>
                         </table>
-                        <br />
+                    </div>
+
+                    <div class="codelog">
                         <details open>
                             <summary>Code</summary>
                             <table class='log'>
                                 <tr ng-repeat="l in logexps"><td ng-bind-html="trustAsHtml(l.expression)" init-bind></td></tr>
                             </table>
                         </details>
-                        <br />
-                        <table class='log'>
-                            <caption>Derivation</caption>
-                            <tr><td class='log' ng-bind-html="trustAsHtml(derivationhtml)" init-bind></td></tr>
-                        </table>
-                        <table class='log'>
-                            <caption>Logging</caption>
-                            <tr ng-repeat="l in logs"><td>{{l.text}}</td></tr>
-                        </table>
                     </div>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div>
-        <p>
-            <a href='http://jigsaw.w3.org/css-validator/check/referer'>
-                <img style='border:0;width:88px;height:31px'
-                     src='http://jigsaw.w3.org/css-validator/images/vcss-blue'
-                     alt='Valid CSS!' />
-            </a>
-        </p>
+
+                    <div class="derivation">
+                        <details open>
+                            <summary>Derivation</summary>
+                            <table class='log'>
+                                <tr><td class='log' ng-bind-html="trustAsHtml(derivationhtml)" init-bind></td></tr>
+                            </table>
+                        </details>
+                    </div>
+
+                    <div class="simplelog">
+                        <details open>
+                            <summary>Logging</summary>
+                            <table class='log'>
+                                <tr ng-repeat="l in logs"><td>{{l.text}}</td></tr>
+                            </table>
+                        </details>
+                    </div>
+
+                    <div class='css_valid'>
+                        <p>
+                            <a href='http://jigsaw.w3.org/css-validator/check/referer'>
+                                <img style='border:0;width:88px;height:31px'
+                                     src='http://jigsaw.w3.org/css-validator/images/vcss-blue'
+                                     alt='Valid CSS!' />
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

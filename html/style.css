@@ -20,18 +20,21 @@ table, caption, tbody, tfoot, thead, tr, th, td {
     font-family: inherit;
     text-align: left;
     vertical-align: baseline;
+    color: black;
 }
 
 h1 {
-    font-size: 36px;
-    line-height: 40px;
+    font-size: 20px;
+    line-height: 20px;
     font-family: verdana;
     color: darkolivegreen
 }
 
 h2 {
-    font-size: 30px;
-    line-height: 40px;
+    font-size: 12px;
+    line-height: 12px;
+    font-family: verdana;
+    color: darkblue
 }
 
 h3 {
@@ -258,10 +261,6 @@ blockquote:before, blockquote:after {
     content: "";
 }
 
-h2 {
-    color: red;
-}
-
 .right-float {
     float: right;
 }
@@ -343,28 +342,123 @@ ul, #help-index {
 }
 
 /* CSS Grid*/
-.sidebar {
-    grid-area: sidebar;
+.title {
+    grid-area: title;
+    font-size: 20px;
+    line-height: 20px;
+    font-family: verdana;
+    font-weight: bold;
+    color: darkolivegreen
 }
 
-.content {
-    grid-area: content;
+.links {
+    grid-area: links;
+    display: flex;
+    justify-content: flex-end
 }
 
-.header {
-    grid-area: header;
+
+.threadtabs {
+    grid-area: threadtabs;
 }
 
+.toolbar {
+    grid-area: toolbar;
+    display: flex;
+    justify-content: flex-end
+}
 
-.wrapper {
+.header_wrapper {
+    height: 10%;
     display: grid;
-    grid-gap: 0px;
-    grid-template-columns: 2fr 1fr;
-    grid-template-areas: 
-        "worldsets worldsets" 
-        "delayedcalls delayedcalls"
-        "callstack callstack"
-        "detailedstack logging";
+    grid-gap: 2px;
+    grid-template-areas: "title status links" "threadtabs threadtabs toolbar";
     background-color: #fff;
     color: #444;
 }
+
+.breakpoints {
+    grid-area: breakpoints;
+    color: darkolivegreen
+}
+
+.status {
+    grid-area: status;
+    color: darkolivegreen
+}
+
+.errors {
+    grid-area: errors;
+}
+
+.worldsets {
+    grid-area: worldsets;
+}
+
+.delayedcalls {
+    grid-area: delayedcalls;
+}
+
+.callstack {
+    grid-area: callstack;
+}
+
+.stack {
+    grid-area: stack;
+}
+
+.commandbreakpoints {
+    grid-area: commandbreakpoints;
+}
+
+.codelog {
+    grid-area: codelog;
+}
+
+.derivation {
+    grid-area: derivation;
+}
+
+.simplelog {
+    grid-area: simplelog;
+}
+
+.css_valid {
+    grid-area: css_valid;
+}
+
+body {
+    height:100vh;
+}
+
+.main {
+    height: 100vh;
+}
+
+.main_frame {
+    height: 90%;
+    overflow-y: scroll;
+}
+
+.main_wrapper {
+    display: grid;
+    grid-gap: 5px;
+    min-height: 100%;
+
+    grid-template-columns: 2fr 1fr;
+
+    grid-template-areas: 
+        "breakpoints status"
+        "errors errors"
+        "worldsets delayedcalls"
+        "callstack callstack"
+        "stack commandbreakpoints"
+        "stack codelog"
+        "stack derivation"
+        "stack simplelog"
+        "css_valid css_valid";
+
+    background-color: #fff;
+    color: #444;
+}
+
