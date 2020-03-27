@@ -213,47 +213,32 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
 
     // Open/close the goto drop down. On closing, request the server to run to the step count.
     $scope.gotostepcount = function () {
-        var field = $document[0].getElementById('gotoid');
-        if (field.open) {
-            field.open = 0;
-            $http.get(home + 'gotostepcountjs?threadnum=' + $scope.threadnum + '&stepcount=' + $scope.stepcount)
-                .then(function (response) { $scope.initFirst(); });
-        }
-        else {
-            field.open = 1;
-            $document[0].getElementById('stepcountid').focus();
-        }
+        $http.get(home + 'gotostepcountjs?threadnum=' + $scope.threadnum + '&stepcount=' + $scope.stepcount)
+            .then(function (response) { $scope.initFirst(); });
     };
 
     $scope.updatereruncommand = function () {
-        $scope.reruncommand = $scope.laststepcount < $scope.stepcount && $scope.stepcount < $scope.currentstepcount;
-    }
+        $scope.reruncommand = ($scope.laststepcount < $scope.stepcount) && ($scope.stepcount < $scope.currentstepcount);
+    };
             
 
     // Open/close the settings drop down.
     $scope.settings = function () {
-        var field = $document[0].getElementById('settingsid');
-        if (field.open) {
-            field.open = 0;
-            $scope.initFirst();
-        }
-        else {
-            field.open = 1;
-            $document[0].getElementById('debugstop').focus();
-        }
+        $scope.initFirst();
+    };
+
+    $scope.gotostepcountsetfocus = function () {
+        var stepCountField = $document[0].getElementById('stepcountid');
+        stepCountField.focus();
     };
 
     $scope.reruntostackpoint = function (stepcount) {
         $scope.stepcount = stepcount;
         $scope.updatereruncommand();
-        var field = $document[0].getElementById('gotoid');
-        if (!field.open) {
-            field.open = 1;
-            var stepCountField = $document[0].getElementById('stepcountid');
-            stepCountField.value = stepcount;
-            stepCountField.focus();
-            stepCountField.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
-        }
+        var stepCountField = $document[0].getElementById('stepcountid');
+        stepCountField.value = stepcount;
+        stepCountField.focus();
+        stepCountField.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
     }
              
     // Add or remove the breakpoint from the current breakpoint button

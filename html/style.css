@@ -261,21 +261,9 @@ blockquote:before, blockquote:after {
     content: "";
 }
 
-.right-float {
-    float: right;
-}
-
-.left-float {
-    float: left;
-}
-
-p.clear {
-    clear: both;
-}
-
 .help-link {
-    border-width: thick;
-    border-color: darkblue;
+    border-width: thin;
+    border-color: gold;
 }
 
 .help-normal {
@@ -369,10 +357,10 @@ ul, #help-index {
 }
 
 .header_wrapper {
-    height: 10%;
+    height: 12%;
     display: grid;
     grid-gap: 2px;
-    grid-template-areas: "title status links" "threadtabs threadtabs toolbar";
+    grid-template-areas: "title links" "threadtabs toolbar";
     background-color: #fff;
     color: #444;
 }
@@ -384,7 +372,6 @@ ul, #help-index {
 
 .status {
     grid-area: status;
-    color: darkolivegreen
 }
 
 .errors {
@@ -436,7 +423,7 @@ body {
 }
 
 .main_frame {
-    height: 90%;
+    height: 88%;
     overflow-y: scroll;
 }
 
@@ -445,7 +432,7 @@ body {
     grid-gap: 5px;
     min-height: 100%;
 
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 2fr 1.3fr;
 
     grid-template-areas: 
         "breakpoints status"

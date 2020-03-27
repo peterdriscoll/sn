@@ -15,6 +15,13 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.0/angular-sanitize.js"></script>
     <script src="hotkeys.min.js"></script>
     <script src="skynetjs.js"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
     <div ng-app="skynetApp" ng-controller='commandCtrl'>
         <div class='main'>
             <div class="header_wrapper">
@@ -48,54 +55,41 @@
                 </div>
 
                 <div class='toolbar'>
-                    <table class='command clear'>
-                        <tr>
-                            <td>
-                                <button title='Run' ng-click='submit("runjs")'>Run</button>
-                            </td>
-                            <td>
-                                <button title='Run to end' ng-click='submit("runtoendjs")'>End</button>
-                            </td>
-                            <td>
-                                <button title='Run to breakpoint' ng-click='submit("debugjs")'>Debug</button>
-                            </td>
-                            <td>
-                                <button title='Code debug break C++' ng-click='submit("codebreakjs")'>Code break</button>
-                            </td>
-                            <td>
-                                <button title='Rerun current command' ng-click='submit("rerunjs")'>Rerun</button>
-                            </td>
-                            <td>
-                                <button title='Step over call' ng-click='submit("stepoverjs")'>Step over</button>
-                            </td>
-                            <td>
-                                <button title='Step into call' ng-click='submit("stepintojs")'>Step into</button>
-                            </td>
-                            <td>
-                                <button title='Step out of call' ng-click='submit("stepoutjs")'>Step out</button>
-                            </td>
-                            <td>
-                                <button title='Step out of func' ng-click='submit("stepoutcalljs")'>Step out call</button>
-                            </td>
-                            <td>
-                                <form ng-submit='gotostepcount()'>
-                                    <details id='gotoid'>
-                                        <summary>
-                                            <input title='Goto step count' type='submit' value='Goto' />
-                                        </summary>
+                    <ul class="nav nav-pills command">
+                        <li>
+                            <button title='Step over call' ng-click='submit("stepoverjs")'>Step over</button>
+                        </li>
+                        <li>
+                            <button title='Step into call' ng-click='submit("stepintojs")'>Step into</button>
+                        </li>
+                        <li>
+                            <button title='Step out of call' ng-click='submit("stepoutjs")'>Step out</button>
+                        </li>
+                        <li>
+                            <button title='Step out of func' ng-click='submit("stepoutcalljs")'>Step out call</button>
+                        </li>
+                        <li>
+                            <button title='Rerun current command' ng-click='submit("rerunjs")'>Rerun</button>
+                        </li>
+                        <li class="dropdown">
+                            <button title='Goto step count' ng-click="gotostepcountsetfocus()" data-toggle="dropdown">Goto<b class="caret"></b></button>
+                            <ul class="dropdown-menu">
+                                <li class="command">
+                                    <form ng-submit='gotostepcount()' >
                                         <label>Step count :</label><br />
                                         <input id='stepcountid' type='number' ng-change='updatereruncommand()' ng-model='stepcount' name='stepcount'><br />
                                         <label>Rerun command</label>
                                         <input type="checkbox" disabled ng-model="reruncommand"><br />
-                                    </details>
-                                </form>
-                            </td>
-                            <td>
-                                <form ng-submit='settings()'>
-                                    <details id='settingsid'>
-                                        <summary>
-                                            <input title='Dashboard Settings' type='submit' value='Settings' /><br />
-                                        </summary>
+                                        <input type='submit' value='Run' />
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <button title='Dashboard settings' ng-click='settingssetfocus()' data-toggle="dropdown">Settings<b class="caret"></b></button>
+                            <ul class="dropdown-menu">
+                                <li class="command">
+                                    <form ng-submit='settings()'>
                                         <label for="debugstop">Debug level</label><br />
                                         <select id="debugstop" ng-model="debugstop" ng-options="option.name for option in debugstopoptions"> </select> <br />
                                         Max frames : <br />
@@ -106,14 +100,24 @@
                                         <input type='number' ng-model='maxderivation' name='maxderivation' /> <br />
                                         Max log : <br />
                                         <input type='number' ng-model='maxlog' name='maxlog' />
-                                    </details>
-                                </form>
-                            </td>
-                            <td>
-                                <button title='Abort thread' ng-click='submit("quitjs")'>Quit</button>
-                            </td>
-                        </tr>
-                    </table>
+                                        <input type='submit' value='Enter' /><br />
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <button title='Run' ng-click='submit("runjs")'>Run</button>
+                        </li>
+                        <li>
+                            <button title='Run to end' ng-click='submit("runtoendjs")'>End</button>
+                        </li>
+                        <li>
+                            <button title='Run to breakpoint' ng-click='submit("debugjs")'>Debug</button>
+                        </li>
+                        <li>
+                            <button title='Code debug break C++' ng-click='submit("codebreakjs")'>Code break</button>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
@@ -127,11 +131,11 @@
                         <button title='Delay' ng-click='setbreakpoint(["Warning",20])' ng-class='breakpointdefaultclass(["Warning",20], "NONE")'>Delay</button>
                         <button title='No constraint' ng-click='setbreakpoint(["Warning",19])' ng-class='breakpointdefaultclass(["Warning",19], "NONE")'>No constraint</button>
                         <button title='Multiple out' ng-click='setbreakpoint(["Warning",23])' ng-class='breakpointdefaultclass(["Warning",23], "NONE")'>Multiple out</button>
-                        {{breakpoint}} - {{breakpointdescription}}
+                        {{breakpoint}}
                     </div>
 
                     <div class="status">
-                        <b>{{taskdescription}} {{statusdescription}}</b>
+                        {{taskdescription}} {{statusdescription}} - {{breakpointdescription}}
                     </div>
 
                     <div class='errors'>
@@ -284,14 +288,14 @@
                                 <td><button ng-click='setbreakpoint(["Assert",3])' ng-class='breakpointclass(["Assert",3])'>Assert</button></td>
                                 <td><button ng-click='setbreakpoint(["PartialAssert",3])' ng-class='breakpointclass(["PartialAssert",3])'>Partial Assert</button></td>
                                 <td><button ng-click='setbreakpoint(["Evaluate",3])' ng-class='breakpointclass(["Evaluate",3])'>Evaluate</button></td>
-                                <td><button ng-click='setbreakpoint(["PartialEvaluate",3])' ng-class='breakpointclass(["PartialEvaluate",3])'>Partial Evakuate</button></td>
+                                <td><button ng-click='setbreakpoint(["PartialEvaluate",3])' ng-class='breakpointclass(["PartialEvaluate",3])'>Partial Evaluate</button></td>
                             </tr>
                             <tr>
                                 <td>Return</td>
                                 <td><button ng-click='setbreakpoint(["Assert",15])' ng-class='breakpointclass(["Assert",15])'>Assert</button></td>
                                 <td><button ng-click='setbreakpoint(["PartialAssert",15])' ng-class='breakpointclass(["PartialAssert",15])'>Partial Assert</button></td>
                                 <td><button ng-click='setbreakpoint(["Evaluate",15])' ng-class='breakpointclass(["Evaluate",15])'>Evaluate</button></td>
-                                <td><button ng-click='setbreakpoint(["PartialEvaluate",15])' ng-class='breakpointclass(["PartialEvaluate",15])'>Partial Evakuate</button></td>
+                                <td><button ng-click='setbreakpoint(["PartialEvaluate",15])' ng-class='breakpointclass(["PartialEvaluate",15])'>Partial Evaluate</button></td>
                             </tr>
                         </table>
                     </div>
