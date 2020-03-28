@@ -4,6 +4,8 @@
 #pragma once
 
 #include "../sn/sni_object.h"
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
 
 namespace SNI
 {
@@ -50,6 +52,7 @@ namespace SNI
 
 		void WriteWebFrame(ostream &p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
 		void WriteJS(ostream & p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
+		void WriteCallJS(boost::property_tree::ptree &callStackNode, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions & p_DisplayOptions);
 		void WriteStackJS(ostream & p_Stream, string &p_Delimeter, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions & p_DisplayOptions);
 		void WriteVariable(ostream &p_Stream, SN::SN_Expression &p_Variable, SN::SN_Expression &p_Value, long j, const string &p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
 

@@ -23,17 +23,33 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
     // Default settings
     $scope.stepcount = '';
     $scope.maxstackframes = 10;
+    $scope.maxcallstackframes = 4;
     $scope.maxcode = 0;
     $scope.maxderivation = 0;
     $scope.maxlog = 0;
+    $scope.countcalls = 0;
 
     // Protect against requesting data again before data is retrieved.
     $scope.scheduled = 0;
 
+    $scope.loadcallstack = function (opening) {
+        var callStackField = $document[0].getElementById('callstackid');
+        if (opening && !callStackField.open || !opening && callStackField.open) {
+            var clientHeight = document.getElementById('callstackdivid').clientHeight;
+            var maxcallstackframes = clientHeight / 70 + 1;
+            if (clientHeight === 0) {
+                maxcallstackframes = $scope.maxcallstackframes;
+            }
+            $http.get(home + 'callstackjs?threadnum=' + $scope.threadnum + '&maxcallstackframes=' + maxcallstackframes)
+                .then(function (response) {
+                    $scope.callstack = response.data.records;
+                });
+        }
+    };
+
     // Request JSON data sets from the server.
     $scope.initFirst = function () {
-        if ($scope.closing) {
-        } else if (!$scope.scheduled) {
+        if (!$scope.closing && !$scope.scheduled) {
             $scope.scheduled = $scope.scheduled + 1;
             $http.get(home + 'dashboardjs?threadnum=' + $scope.threadnum)
                 .then(function (response) {
@@ -46,6 +62,8 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
                     $scope.closing = response.data.closing;
                     $scope.currentstepcount = response.data.currentstepcount;
                     $scope.laststepcount = response.data.laststepcount;
+                    $scope.countcalls = response.data.countcalls;
+
                     if ($scope.maxstackframes == -1) {
                         $scope.maxstackframes = response.data.maxstackframes;
                     }
@@ -61,13 +79,8 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
             $http.get(home + 'stackjs?threadnum=' + $scope.threadnum + '&maxstackframes=' + $scope.maxstackframes)
                 .then(function (response) {
                     $scope.frames = response.data.records;
-                    $scope.callstack = [];
-                    for (var i = 0; i < $scope.frames.length; i++) {
-                        if ($scope.frames[i].hascode) {
-                            $scope.callstack.push($scope.frames[i]);
-                        }
-                    }
                 });
+            $scope.loadcallstack(false);
             $http.get(home + 'derivationjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxderivation)
                 .then(function (response) { $scope.derivationhtml = response.data.derivationhtml; });
             $http.get(home + 'logjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxlog)
@@ -220,7 +233,7 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
     $scope.updatereruncommand = function () {
         $scope.reruncommand = ($scope.laststepcount < $scope.stepcount) && ($scope.stepcount < $scope.currentstepcount);
     };
-            
+
 
     // Open/close the settings drop down.
     $scope.settings = function () {
@@ -240,7 +253,7 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
         stepCountField.focus();
         stepCountField.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
     }
-             
+
     // Add or remove the breakpoint from the current breakpoint button
     // From the set of breakpoint button. This also highlights or dehighlights
     // buttons in the same group.
@@ -338,22 +351,18 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
 
     $scope.selectedvar = '';
     $scope.selectvar = function (name) {
-        if ($scope.selectedvar == name)
-        {
+        if ($scope.selectedvar === name) {
             $scope.selectedvar = '';
         }
-        else
-        {
+        else {
             $scope.selectedvar = name;
         }
     }
     $scope.selecttext = function (name, text) {
-        if ($scope.selectedvar == name)
-        {
+        if ($scope.selectedvar === name) {
             return text;
         }
-        else
-        {
+        else {
             return name;
         }
     }

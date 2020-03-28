@@ -422,6 +422,62 @@ namespace SNI
 		p_Stream << "\n\t}";
 	}
 
+	void SNI_Frame::WriteCallJS(boost::property_tree::ptree &callStackNode, size_t p_FrameStackPos, SNI::SNI_DisplayOptions & p_DisplayOptions)
+	{
+		callStackNode.put("name", m_Function.GetSNI_Variable()->FramePathName());
+
+		if (m_CloneFunction.GetSNI_Expression())
+		{
+			boost::property_tree::ptree functionNode;
+			boost::property_tree::ptree valueNode;
+
+			m_CloneFunction.GetSafeValue().ForEach(
+				[&valueNode, &p_DisplayOptions](const SN::SN_Expression &p_Expression, SNI_World *p_World)->SN::SN_Error
+			{
+				if (p_Expression.GetSNI_Expression())
+				{
+					string valueTextHTML = p_Expression.DisplaySN(p_DisplayOptions) + string(p_World ? "::" + p_World->DisplaySN(p_DisplayOptions) : "");
+						
+					boost::property_tree::ptree worldNode;
+					worldNode.put("text", valueTextHTML);
+					valueNode.push_back(std::make_pair("", worldNode));
+				}
+				return skynet::OK;
+			});
+
+			functionNode.push_back(make_pair("value", valueNode));
+			callStackNode.push_back(make_pair("function", functionNode));
+		}
+
+		SNI_Variable *result = m_VariableList[m_ResultIndex];
+		if (result)
+		{
+			boost::property_tree::ptree resultNode;
+
+			SN::SN_Expression value = result;
+			boost::property_tree::ptree valueNode;
+
+			value.GetSafeValue().ForEach(
+				[&valueNode, &p_DisplayOptions](const SN::SN_Expression &p_Expression, SNI_World *p_World)->SN::SN_Error
+			{
+				if (p_Expression.GetSNI_Expression())
+				{
+					string valueTextHTML = p_Expression.DisplaySN(p_DisplayOptions) + string(p_World ? "::" + p_World->DisplaySN(p_DisplayOptions) : "");
+
+					boost::property_tree::ptree worldNode;
+					worldNode.put("text", valueTextHTML);
+					valueNode.push_back(std::make_pair("", worldNode));
+				}
+				return skynet::OK;
+			});
+
+			resultNode.push_back(make_pair("value", valueNode));
+			callStackNode.push_back(make_pair("result", resultNode));
+		}
+
+		callStackNode.put("breakpoint", m_BreakPointJS);
+	}
+	
 	void SNI_Frame::WriteStackJS(ostream &p_Stream, string &p_Delimeter, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
 	{
 		if (m_Function.IsVariable())

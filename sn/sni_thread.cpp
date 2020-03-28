@@ -11,6 +11,9 @@
 #include <thread>
 #include <WinBase.h>
 
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+
 #include "sn_pch.h"
 
 namespace SNI
@@ -309,6 +312,15 @@ namespace SNI
 		{
 			ss << "{\"records\":[]}\n";
 		}
+		return ss.str();
+	}
+
+	string SNI_Thread::CallStackJS(long p_MaxCallStackFrame, enum DisplayOptionType p_OptionType)
+	{
+		stringstream ss;
+		cout << "CallStackJS\n";
+		SNI_DisplayOptions l_DisplayOptions(p_OptionType);
+		WriteCallStackJS(ss, p_MaxCallStackFrame, l_DisplayOptions);
 		return ss.str();
 	}
 
@@ -1047,7 +1059,8 @@ namespace SNI
 		p_Stream << "\t\"running\" : " << running << ",\n";
 		p_Stream << "\t\"closing\" : " << closing << ",\n";
 		p_Stream << "\t\"currentstepcount\" : " << m_ThreadStepCount << ",\n";
-		p_Stream << "\t\"laststepcount\" : " << m_LastThreadStepCount << "\n";
+		p_Stream << "\t\"laststepcount\" : " << m_LastThreadStepCount << ",\n";
+		p_Stream << "\t\"countcalls\" : " << CountCalls() << "\n";
 
 		p_Stream << "}\n";
 	}
@@ -1070,6 +1083,34 @@ namespace SNI
 		}
 		Unlock();
 		p_Stream << "\n]}\n";
+	}
+
+	void SNI_Thread::WriteCallStackJS(ostream &p_Stream, size_t p_Depth, SNI::SNI_DisplayOptions &p_DisplayOptions)
+	{
+		namespace pt = boost::property_tree;
+		pt::ptree oroot;
+		pt::ptree records_node;
+		size_t base = 0;
+		string delimeter;
+		Lock();
+
+		size_t count = 0;
+		for (size_t j = m_FrameList.size(); j > 1 && p_Depth > count; j--)
+		{
+			SNI_Frame * frame = m_FrameList[j - 1];
+
+			if (frame->HasCode())
+			{
+				pt::ptree callStackNode;
+				frame->WriteCallJS(callStackNode, j, p_DisplayOptions);
+				records_node.push_back(std::make_pair("", callStackNode));
+				count++;
+			}
+		}
+		Unlock();
+
+		oroot.add_child("records", records_node);
+		pt::write_json(p_Stream, oroot);
 	}
 
 	void SNI_Thread::WriteStepCountListJS(ostream &p_Stream)
@@ -1115,6 +1156,18 @@ namespace SNI
 		p_Stream << "\n]}\n";
 	}
 
+	size_t SNI_Thread::CountCalls()
+	{
+		size_t count = 0;
+		for (SNI_Frame * frame : m_FrameList)
+		{
+			if (frame->HasCode())
+			{
+				count++;
+			}
+		}
+		return count;
+	}
 
 	void SNI_Thread::DisplayFrameStack(long p_Depth)
 	{

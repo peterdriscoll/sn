@@ -161,6 +161,12 @@ namespace SNI
 				m_response_data = l_thread->StackJS(maxStackFrames, debugJS);
 				m_extension = "json";
 			}
+			else if (path == "/callstackjs")
+			{
+				long maxStackFrames = atol(umap["maxcallstackframes"].c_str());
+				m_response_data = l_thread->CallStackJS(maxStackFrames, debugJS);
+				m_extension = "json";
+			}
 			else if (path == "/changehistoryjs")
 			{
 				size_t fromstep = atol(umap["fromstep"].c_str());

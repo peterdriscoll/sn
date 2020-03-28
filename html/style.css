@@ -388,6 +388,8 @@ ul, #help-index {
 
 .callstack {
     grid-area: callstack;
+    resize: vertical;
+    overflow: auto;
 }
 
 .stack {
