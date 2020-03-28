@@ -201,4 +201,9 @@ namespace SNI
 		m_SearchLock.unlock();
 		p_Stream << "\n]}\n";
 	}
+
+	size_t SNI_DelayedProcessor::CountDelayedCalls()
+	{
+		return m_DelayedCallList.size();
+	}
 }

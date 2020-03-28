@@ -61,6 +61,8 @@ namespace SNI
 		void DerivationJS(ostream & p_Stream, long p_MaxLogEntries);
 		void LogExpressionTableJS(ostream & p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_DisplayOptions);
 
+		size_t CountLogEntries();
+		size_t CountCodeEntries();
 	private:
 		boost::circular_buffer<SNI_LogLine> m_Buffer;
 		boost::circular_buffer<SN::SN_Expression> m_ExpressionBuffer;

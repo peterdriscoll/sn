@@ -174,6 +174,24 @@ namespace SNI
 		}
 	}
 
+	size_t SNI_Log::CountLogEntries()
+	{
+		if (m_LogBuffer)
+		{
+			return m_LogBuffer->CountLogEntries();
+		}
+		return 0;
+	}
+
+	size_t SNI_Log::CountCodeEntries()
+	{
+		if (m_LogBuffer)
+		{
+			return m_LogBuffer->CountCodeEntries();
+		}
+		return 0;
+	}
+
 	void SNI_Log::DerivationJS(ostream & p_Stream, long p_MaxLogEntries)
 	{
 		if (m_LogBuffer)
@@ -186,7 +204,7 @@ namespace SNI
 		}
 	}
 
-	void SNI_Log::LogExpTableJS(ostream & p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_DisplayOptions)
+	void SNI_Log::CodeTableJS(ostream & p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_DisplayOptions)
 	{
 		if (m_LogBuffer)
 		{

@@ -141,23 +141,25 @@
                     </div>
 
                     <div class='errors'>
-                        <table class='frame'>
-                            <caption><pre>{{error.description}}</pre></caption>
-                            <tr ng-repeat="ch in error.callhistory">
-                                <td>
-                                    {{ch.purpose}}
-                                </td>
-                                <td ng-bind-html="trustAsHtml(ch.expression)" init-bind></td>
-                                <td>
-                                    {{ch.logcontext}}
-                                </td>
-                            </tr>
-                        </table>
+                        <details open id='errorsid'>
+                            <summary>{{error.description}}</summary>
+                            <table class='frame'>
+                                <tr ng-repeat="ch in error.callhistory">
+                                    <td>
+                                        {{ch.purpose}}
+                                    </td>
+                                    <td ng-bind-html="trustAsHtml(ch.expression)" init-bind></td>
+                                    <td>
+                                        {{ch.logcontext}}
+                                    </td>
+                                </tr>
+                            </table>
+                        </details>
                     </div>
 
                     <div class='worldsets'>
-                        <details open>
-                            <summary>World Sets</summary>
+                        <details open  id='worldsetsid' ng-click='loadworldsets(true)'>
+                            <summary>World Sets - {{ countworldsets }} records</summary>
                             <table class='frame'>
                                 <tr ng-repeat="ws in worldsets">
                                     <td>
@@ -175,8 +177,8 @@
                     </div>
 
                     <div class='delayedcalls'>
-                        <details open>
-                            <summary>Delayed Calls</summary>
+                        <details id='delayedcallsid' ng-click='loaddelayedcalls(true)' open>
+                            <summary>Delayed Calls - {{ countdelayedcalls }} records</summary>
                             <table class='frame'>
                                 <tr ng-repeat="d in delayedcalls">
                                     <td ng-bind-html="trustAsHtml(d.expression)" init-bind></td>
@@ -221,66 +223,69 @@
                     </div>
 
                     <div class='stack'>
-                        <table class='stack'>
-                            <caption>Detailed stack</caption>
-                            <tr ng-repeat="f in frames">
-                                <td>
-                                    <div style='overflow-x:auto;white-space:nowrap;width:900px'>
-                                        <details ng-if="f.hascode">
-                                            <summary>
-                                                <table class="frameheading">
-                                                    <tr>
-                                                        <td>{{f.framepos}}</td>
-                                                        <td>{{f.function}}</td>
-                                                        <td><button ng-click='reruntostackpoint(f.stepcount)'>Step:{{f.stepcount}}</button></td>
-                                                        <td>SMEM:{{f.stackusage}}</td>
-                                                        <td ng-bind-html="trustAsHtml(f.contextworld)" init-bind></td>
-                                                        <td ng-bind-html="trustAsHtml(f.functioncardinality)" init-bind></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                    </tr>
-                                                </table>
-                                            </summary>
-                                            <div ng-repeat="d in f.value">
-                                                <p class="code" ng-bind-html="trustAsHtml(d.text)" init-bind><br /></p>
-                                            </div>
-                                        </details>
-                                        <table class="frameheading" ng-if="!f.hascode">
-                                            <tr>
-                                                <td>{{f.framepos}}</td>
-                                                <td>{{f.function}}</td>
-                                                <td><button ng-click='reruntostackpoint(f.stepcount)'>Step:{{f.stepcount}}</button></td>
-                                                <td>SMEM:{{f.stackusage}}</td>
-                                                <td ng-bind-html="trustAsHtml(f.contextworld)" init-bind></td>
-                                                <td ng-bind-html="trustAsHtml(f.functioncardinality)" init-bind></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                        </table>
-                                        <table class='frame'>
-                                            <tr>
-                                                <th ng-repeat="v in f.variables">{{ v.name }}</th>
-                                            </tr>
-                                            <tr>
-                                                <td ng-repeat="v in f.variables">{{ v.typetext }} : <span ng-bind-html="trustAsHtml(v.cardinality)" init-bind></span></td>
-                                            </tr>
-                                            <tr>
-                                                <td ng-repeat="v in f.variables">
-                                                    <div class='frame'>
-                                                        <div ng-repeat="d in v.value">
-                                                            <details ng-if="d.abbreviation">
-                                                                <summary>{{d.abbreviation}}...</summary><p ng-bind-html="trustAsHtml(d.text)" init-bind></p>
-                                                            </details>
-                                                            <div ng-if="!d.abbreviation" ng-bind-html="trustAsHtml(d.text)" init-bind><br /></div>
+                        <details id='stackid' ng-click="loadstack(true)" open>
+                            <summary>Detailed stack - {{ countframes }} records</summary>
+                            <table class='stack'>
+                                <caption>Detailed stack</caption>
+                                <tr ng-repeat="f in frames">
+                                    <td>
+                                        <div style='overflow-x:auto;white-space:nowrap;width:900px'>
+                                            <details ng-if="f.hascode">
+                                                <summary>
+                                                    <table class="frameheading">
+                                                        <tr>
+                                                            <td>{{f.framepos}}</td>
+                                                            <td>{{f.function}}</td>
+                                                            <td><button ng-click='reruntostackpoint(f.stepcount)'>Step:{{f.stepcount}}</button></td>
+                                                            <td>SMEM:{{f.stackusage}}</td>
+                                                            <td ng-bind-html="trustAsHtml(f.contextworld)" init-bind></td>
+                                                            <td ng-bind-html="trustAsHtml(f.functioncardinality)" init-bind></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                        </tr>
+                                                    </table>
+                                                </summary>
+                                                <div ng-repeat="d in f.value">
+                                                    <p class="code" ng-bind-html="trustAsHtml(d.text)" init-bind><br /></p>
+                                                </div>
+                                            </details>
+                                            <table class="frameheading" ng-if="!f.hascode">
+                                                <tr>
+                                                    <td>{{f.framepos}}</td>
+                                                    <td>{{f.function}}</td>
+                                                    <td><button ng-click='reruntostackpoint(f.stepcount)'>Step:{{f.stepcount}}</button></td>
+                                                    <td>SMEM:{{f.stackusage}}</td>
+                                                    <td ng-bind-html="trustAsHtml(f.contextworld)" init-bind></td>
+                                                    <td ng-bind-html="trustAsHtml(f.functioncardinality)" init-bind></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            </table>
+                                            <table class='frame'>
+                                                <tr>
+                                                    <th ng-repeat="v in f.variables">{{ v.name }}</th>
+                                                </tr>
+                                                <tr>
+                                                    <td ng-repeat="v in f.variables">{{ v.typetext }} : <span ng-bind-html="trustAsHtml(v.cardinality)" init-bind></span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td ng-repeat="v in f.variables">
+                                                        <div class='frame'>
+                                                            <div ng-repeat="d in v.value">
+                                                                <details ng-if="d.abbreviation">
+                                                                    <summary>{{d.abbreviation}}...</summary><p ng-bind-html="trustAsHtml(d.text)" init-bind></p>
+                                                                </details>
+                                                                <div ng-if="!d.abbreviation" ng-bind-html="trustAsHtml(d.text)" init-bind><br /></div>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </details>
                     </div>
 
                     <div class="commandbreakpoints">
@@ -303,17 +308,17 @@
                     </div>
 
                     <div class="codelog">
-                        <details open>
-                            <summary>Code</summary>
+                        <details open id='codeid' ng-click='loadcode(true)'>
+                            <summary>Code - {{countcodeentries}} records</summary>
                             <table class='log'>
-                                <tr ng-repeat="l in logexps"><td ng-bind-html="trustAsHtml(l.expression)" init-bind></td></tr>
+                                <tr ng-repeat="l in code"><td ng-bind-html="trustAsHtml(l.expression)" init-bind></td></tr>
                             </table>
                         </details>
                     </div>
 
                     <div class="derivation">
-                        <details open>
-                            <summary>Derivation</summary>
+                        <details open id='derivationsid' ng-click="loadderivations(true)">
+                            <summary>Derivation - {{ countlogentries }} records</summary>
                             <table class='log'>
                                 <tr><td class='log' ng-bind-html="trustAsHtml(derivationhtml)" init-bind></td></tr>
                             </table>
@@ -321,8 +326,8 @@
                     </div>
 
                     <div class="simplelog">
-                        <details open>
-                            <summary>Logging</summary>
+                        <details open id='logid' ng-click='loadlog(true)'>
+                            <summary>Logging - {{ countlogentries }}</summary>
                             <table class='log'>
                                 <tr ng-repeat="l in logs"><td>{{l.text}}</td></tr>
                             </table>

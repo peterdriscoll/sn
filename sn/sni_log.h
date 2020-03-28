@@ -53,10 +53,13 @@ namespace SNI
 		void LogTableToStream(ostream & p_Stream, long p_MaxLogEntries);
 		void LogTableJS(ostream & p_Stream, long p_MaxLogEntries);
 		void DerivationJS(ostream & p_Stream, long p_MaxLogEntries);
-		void LogExpTableJS(ostream & p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_DisplayOptions);
+		void CodeTableJS(ostream & p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_DisplayOptions);
 
 		void WriteExp(SN::SN_Expression p_Expression);
 		void ClearLogExpressions();
+
+		size_t CountLogEntries();
+		size_t CountCodeEntries();
 	private:
 		static SNI_Log *m_Log;
 

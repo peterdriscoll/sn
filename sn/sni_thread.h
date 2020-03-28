@@ -71,7 +71,7 @@ namespace SNI
 		void StepOut();
 		void StepOutCall();
 		void StepParam();
-		void GotoStepCount(long p_StepCount);
+		void GotoStepCount(size_t p_StepCount);
 		void SetMaxStackFrames(long p_MaxStackFrames);
 		void Quit();
 		void Abort();
@@ -96,7 +96,7 @@ namespace SNI
 		string StepCountJS();
 		string LogJS(long p_MaxLogEntries);
 		string DerivationJS(long p_MaxLogEntries);
-		string LogExpJS(long p_MaxLogEntries, enum DisplayOptionType p_OptionType);
+		string CodeJS(long p_MaxLogEntries, enum DisplayOptionType p_OptionType);
 		string ErrorJS(enum DisplayOptionType p_OptionType);
 		string WorldSetsJS(DisplayOptionType p_OptionType);
 		string DelayedJS(DisplayOptionType p_OptionType);
@@ -170,12 +170,16 @@ namespace SNI
 		void WriteCallStackJS(ostream & p_Stream, size_t p_Depth, SNI::SNI_DisplayOptions & p_DisplayOptions);
 		void WriteLogJS(ostream & p_Stream, long p_MaxLogEntries);
 		void WriteDerivationJS(ostream & p_Stream, long p_MaxLogEntries);
-		void WriteLogExpJS(ostream & p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_DisplayOptions);
+		void WriteCodeJS(ostream & p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_DisplayOptions);
 		void WriteStepCountListJS(ostream & p_Stream);
 		void WriteStepCountJS(ostream & p_Stream, const string &p_Delimeter);
 		void WriteWorldSetsJS(ostream & p_Stream, SNI_DisplayOptions &p_DisplayOptions);
 
+		size_t CountDelayedCalls();
+		size_t CountWorldSets();
 		size_t CountCalls();
+		size_t CountLogEntries();
+		size_t CountCodeEntries();
 
 		size_t m_ThreadNum;
 		mutex m_Mutex;

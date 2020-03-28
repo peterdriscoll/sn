@@ -347,12 +347,12 @@ namespace SNI
 		return ss.str();
 	}
 
-	string SNI_Thread::LogExpJS(long p_MaxLogEntries, enum DisplayOptionType p_OptionType)
+	string SNI_Thread::CodeJS(long p_MaxLogEntries, enum DisplayOptionType p_OptionType)
 	{
 		stringstream ss;
 		SNI_DisplayOptions displayOptions(p_OptionType);
 		cout << "LogJS\n";
-		WriteLogExpJS(ss, p_MaxLogEntries, displayOptions);
+		WriteCodeJS(ss, p_MaxLogEntries, displayOptions);
 		return ss.str();
 	}
 
@@ -658,7 +658,7 @@ namespace SNI
 		m_DebugCommand.StepParam();
 	}
 
-	void SNI_Thread::GotoStepCount(long p_StepCount)
+	void SNI_Thread::GotoStepCount(size_t p_StepCount)
 	{
 		if (m_ThreadStepCount < p_StepCount)
 		{
@@ -1009,14 +1009,24 @@ namespace SNI
 		SNI_Log::GetLog()->LogTableJS(p_Stream, p_MaxLogEntries);
 	}
 
+	size_t SNI_Thread::CountLogEntries()
+	{
+		return SNI_Log::GetLog()->CountLogEntries();
+	}
+
+	size_t SNI_Thread::CountCodeEntries()
+	{
+		return SNI_Log::GetLog()->CountCodeEntries();
+	}
+
 	void SNI_Thread::WriteDerivationJS(ostream &p_Stream, long p_MaxLogEntries)
 	{
 		SNI_Log::GetLog()->DerivationJS(p_Stream, p_MaxLogEntries);
 	}
 
-	void SNI_Thread::WriteLogExpJS(ostream &p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_displayOptions)
+	void SNI_Thread::WriteCodeJS(ostream &p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_displayOptions)
 	{
-		SNI_Log::GetLog()->LogExpTableJS(p_Stream, p_MaxLogEntries, p_displayOptions);
+		SNI_Log::GetLog()->CodeTableJS(p_Stream, p_MaxLogEntries, p_displayOptions);
 	}
 
 	void SNI_Thread::WriteDashboardJS(ostream &p_Stream, SNI::SNI_DisplayOptions &p_DisplayOptions)
@@ -1060,8 +1070,13 @@ namespace SNI
 		p_Stream << "\t\"closing\" : " << closing << ",\n";
 		p_Stream << "\t\"currentstepcount\" : " << m_ThreadStepCount << ",\n";
 		p_Stream << "\t\"laststepcount\" : " << m_LastThreadStepCount << ",\n";
-		p_Stream << "\t\"countcalls\" : " << CountCalls() << "\n";
 
+		p_Stream << "\t\"countcalls\" : " << CountCalls() << ",\n";
+		p_Stream << "\t\"countframes\" : " << m_FrameList.size() << ",\n";
+		p_Stream << "\t\"countdelayedcalls\" : " << CountDelayedCalls() << ",\n";
+		p_Stream << "\t\"countworldsets\" : " << CountWorldSets() << ",\n";
+		p_Stream << "\t\"countlogentries\" : " << CountLogEntries() << ",\n";
+		p_Stream << "\t\"countcodeentries\" : " << CountCodeEntries() << "\n";
 		p_Stream << "}\n";
 	}
 
@@ -1154,6 +1169,24 @@ namespace SNI
 			Unlock();
 		}
 		p_Stream << "\n]}\n";
+	}
+
+	size_t SNI_Thread::CountDelayedCalls()
+	{
+		if (m_Processor)
+		{
+			return m_Processor->CountDelayedCalls();
+		}
+		return 0;
+	}
+	
+	size_t SNI_Thread::CountWorldSets()
+	{
+		if (m_WorldSetProcessMap)
+		{
+			return m_WorldSetProcessMap->size();
+		}
+		return 0;
 	}
 
 	size_t SNI_Thread::CountCalls()

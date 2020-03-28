@@ -88,6 +88,16 @@ namespace SNI
 		m_Mutex.unlock();
 	}
 
+	size_t SNI_LogBuffer::CountLogEntries()
+	{
+		return m_Buffer.size();
+	}
+
+	size_t SNI_LogBuffer::CountCodeEntries()
+	{
+		return m_ExpressionBuffer.size();
+	}
+
 	void SNI_LogBuffer::DerivationJS(ostream & p_Stream, long p_MaxLogEntries)
 	{
 		p_Stream << "{\"derivationhtml\": \"";

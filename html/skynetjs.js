@@ -28,13 +28,60 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
     $scope.maxderivation = 0;
     $scope.maxlog = 0;
     $scope.countcalls = 0;
+    $scope.countframes = 0;
+    $scope.countdelayedcalls = 0;
+    $scope.countworldsets = 0;
+    $scope.countlogentries = 0;
+    $scope.countcodeentries = 0;
 
     // Protect against requesting data again before data is retrieved.
     $scope.scheduled = 0;
 
+    // Load the error history.
+    $scope.loadthreadstepcounts = function () {
+        $http.get(home + "stepcountjs")
+            .then(function (response) { $scope.stepcounts = response.data.records; });
+    };
+
+    // Load the error history.
+    $scope.loaderrors = function () {
+        $http.get(home + 'errorjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxcode)
+            .then(function (response) { $scope.error = response.data; });
+    };
+
+    // Load the world sets, if the detail for it is open.
+    $scope.loadworldsets = function (opening) {
+        var field = $document[0].getElementById('worldsetsid');
+        if (opening && !field.open || !opening && field.open) {
+            $http.get(home + 'worldsetsjs?threadnum=' + $scope.threadnum)
+                .then(function (response) { $scope.worldsets = response.data.records; });
+        }
+    };
+
+    // Load the delayed calls, if the detail for it is open.
+    $scope.loaddelayedcalls = function (opening) {
+        var field = $document[0].getElementById('delayedcallsid');
+        if (opening && !field.open || !opening && field.open) {
+            $http.get(home + 'delayedjs?threadnum=' + $scope.threadnum)
+                .then(function (response) { $scope.delayedcalls = response.data.records; });
+        }
+    };
+
+    // Load the stack if the detail for it is open.
+    $scope.loadstack = function (opening) {
+        var field = $document[0].getElementById('stackid');
+        if (opening && !field.open || !opening && field.open) {
+            $http.get(home + 'stackjs?threadnum=' + $scope.threadnum + '&maxstackframes=' + $scope.maxstackframes)
+                .then(function (response) {
+                    $scope.frames = response.data.records;
+                });
+        }
+    };
+
+    // Load the call stack if the detail for it is open.
     $scope.loadcallstack = function (opening) {
-        var callStackField = $document[0].getElementById('callstackid');
-        if (opening && !callStackField.open || !opening && callStackField.open) {
+        var field = $document[0].getElementById('callstackid');
+        if (opening && !field.open || !opening && field.open) {
             var clientHeight = document.getElementById('callstackdivid').clientHeight;
             var maxcallstackframes = clientHeight / 70 + 1;
             if (clientHeight === 0) {
@@ -44,6 +91,33 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
                 .then(function (response) {
                     $scope.callstack = response.data.records;
                 });
+        }
+    };
+
+    // Load the derivation interpretation of the log, if the detail for it is open.
+    $scope.loadderivations = function (opening) {
+        var field = $document[0].getElementById('derivationsid');
+        if (opening && !field.open || !opening && field.open) {
+            $http.get(home + 'derivationjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxderivation)
+                .then(function (response) { $scope.derivationhtml = response.data.derivationhtml; });
+        }
+    };
+
+    // Load the log  of code expressions, if the detail for it is open.
+    $scope.loadcode = function (opening) {
+        var field = $document[0].getElementById('codeid');
+        if (opening && !field.open || !opening && field.open) {
+            $http.get(home + 'codejs?threadnum=' + $scope.threadnum + '&maxcode=' + $scope.maxcode)
+                .then(function (response) { $scope.code = response.data.records; });
+        }
+    };
+
+    // Load the log  of code expressions, if the detail for it is open.
+    $scope.loadlog = function (opening) {
+        var field = $document[0].getElementById('logid');
+        if (opening && !field.open || !opening && field.open) {
+            $http.get(home + 'logjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxlog)
+                .then(function (response) { $scope.logs = response.data.records; });
         }
     };
 
@@ -63,8 +137,13 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
                     $scope.currentstepcount = response.data.currentstepcount;
                     $scope.laststepcount = response.data.laststepcount;
                     $scope.countcalls = response.data.countcalls;
+                    $scope.countframes = response.data.countframes;
+                    $scope.countdelayedcalls = response.data.countdelayedcalls;
+                    $scope.countworldsets = response.data.countworldsets;
+                    $scope.countlogentries = response.data.countlogentries;
+                    $scope.countcodeentries = response.data.countcodeentries;
 
-                    if ($scope.maxstackframes == -1) {
+                    if ($scope.maxstackframes === -1) {
                         $scope.maxstackframes = response.data.maxstackframes;
                     }
 
@@ -74,28 +153,18 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
                         $timeout(function () { $scope.initFirst(); }, 5000);
                     } else if ($scope.running) {
                         $timeout(function () { $scope.initFirst(); }, 2000);
-                    };
+                    }
                 });
-            $http.get(home + 'stackjs?threadnum=' + $scope.threadnum + '&maxstackframes=' + $scope.maxstackframes)
-                .then(function (response) {
-                    $scope.frames = response.data.records;
-                });
+            $scope.loadstack(false);
             $scope.loadcallstack(false);
-            $http.get(home + 'derivationjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxderivation)
-                .then(function (response) { $scope.derivationhtml = response.data.derivationhtml; });
-            $http.get(home + 'logjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxlog)
-                .then(function (response) { $scope.logs = response.data.records; });
-            $http.get(home + 'logexpjs?threadnum=' + $scope.threadnum + '&maxcode=' + $scope.maxcode)
-                .then(function (response) { $scope.logexps = response.data.records; });
-            $http.get(home + "stepcountjs")
-                .then(function (response) { $scope.stepcounts = response.data.records; });
-            $http.get(home + 'errorjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxcode)
-                .then(function (response) { $scope.error = response.data; });
-            $http.get(home + 'delayedjs?threadnum=' + $scope.threadnum)
-                .then(function (response) { $scope.delayedcalls = response.data.records; });
-            $http.get(home + 'worldsetsjs?threadnum=' + $scope.threadnum)
-                .then(function (response) { $scope.worldsets = response.data.records; });
-        };
+            $scope.loadderivations(false);
+            $scope.loadcode(false);
+            $scope.loadlog(false);
+            $scope.loadthreadstepcounts();
+            $scope.loaderrors();
+            $scope.loaddelayedcalls(false);
+            $scope.loadworldsets(false);
+        }
     };
 
     // Request an action from the server.
@@ -218,7 +287,7 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
 
     // Switch to a different thread.
     $scope.setthread = function (newthreadnum) {
-        if (threadnum != newthreadnum) {
+        if (threadnum !== newthreadnum) {
             $scope.threadnum = newthreadnum;
             $scope.initFirst();
         }
@@ -231,7 +300,7 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
     };
 
     $scope.updatereruncommand = function () {
-        $scope.reruncommand = ($scope.laststepcount < $scope.stepcount) && ($scope.stepcount < $scope.currentstepcount);
+        $scope.reruncommand = $scope.laststepcount < $scope.stepcount && $scope.stepcount < $scope.currentstepcount;
     };
 
 
@@ -252,7 +321,7 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
         stepCountField.value = stepcount;
         stepCountField.focus();
         stepCountField.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
-    }
+    };
 
     // Add or remove the breakpoint from the current breakpoint button
     // From the set of breakpoint button. This also highlights or dehighlights
@@ -262,17 +331,17 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
 
     $scope.getGroupBreakpoint = function (breakpointCode) {
         var count = $scope.breakpointGroupCol.get(breakpointCode);
-        if (count == undefined) {
+        if (count === undefined) {
             count = 0;
-        };
-        return count > 0
-    }
+        }
+        return count > 0;
+    };
 
     $scope.setbreakpoint = function (breakpoint) {
         var breakpointId = breakpoint[0] + "_" + breakpoint[1];
         var breakpointCode = breakpoint[0];
         var count = $scope.breakpointGroupCol.get(breakpointCode);
-        if (count == undefined) {
+        if (count === undefined) {
             count = 0;
         }
         if ($scope.breakpointCol.has(breakpointId)) {
@@ -308,11 +377,11 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
     // breakpoint represented by the breakpoint button.
     // breakpointdefaultclass passes in a default class
     $scope.breakpointclass = function (breakpoint) {
-        if (breakpoint == undefined || $scope.breakpoint == undefined) {
+        if (breakpoint === undefined || $scope.breakpoint === undefined) {
             return "error";
         }
         var breakpointId = breakpoint[0] + "_" + breakpoint[1];
-        if ((breakpoint[0] == $scope.breakpoint[0]) && (breakpoint[1] == $scope.breakpoint[1])) {
+        if (breakpoint[0] === $scope.breakpoint[0] && breakpoint[1] === $scope.breakpoint[1]) {
             if ($scope.breakpointCol.has(breakpointId)) {
                 return 'breakpointsetat';
             }
@@ -321,17 +390,17 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
         var eclass = 'breakpointclear';
         if ($scope.frames !== undefined) {
             $scope.frames.every(function (f) {
-                if ((breakpoint[0] == f.breakpoint[0]) && (breakpoint[1] == f.breakpoint[1])) {
+                if (breakpoint[0] === f.breakpoint[0] && breakpoint[1] === f.breakpoint[1]) {
                     if ($scope.breakpointCol.has(breakpointId)) {
                         eclass = 'breakpointsetatstack';
                     } else {
                         eclass = 'breakpointatstack';
                     }
                 }
-                return eclass == 'breakpointclear';
+                return eclass === 'breakpointclear';
             });
         }
-        if (eclass == 'breakpointclear') {
+        if (eclass === 'breakpointclear') {
             if ($scope.breakpointCol.has(breakpointId)) {
                 eclass = 'breakpointset';
             } else {
@@ -357,7 +426,8 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
         else {
             $scope.selectedvar = name;
         }
-    }
+    };
+
     $scope.selecttext = function (name, text) {
         if ($scope.selectedvar === name) {
             return text;
@@ -365,12 +435,13 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
         else {
             return name;
         }
-    }
+    };
 
     // Initial request for data.
     $scope.initFirst();
-})
-.directive('initBind', function ($compile) {
+});
+
+app.directive('initBind', function ($compile) {
     return {
         restrict: 'A',
         link: function (scope, element, attr) {
@@ -378,7 +449,7 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
                 if (attr.ngBindHtml) {
                     $compile(element[0].children)(scope);
                 }
-            })
+            });
         }
     };
 });

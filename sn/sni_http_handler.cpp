@@ -187,10 +187,10 @@ namespace SNI
 				m_response_data = l_thread->DerivationJS(maxLogEntries);
 				m_extension = "json";
 			}
-			else if (path == "/logexpjs")
+			else if (path == "/codejs")
 			{
 				long maxCode = atol(umap["maxcode"].c_str());
-				m_response_data = l_thread->LogExpJS(maxCode, debugJS);
+				m_response_data = l_thread->CodeJS(maxCode, debugJS);
 				m_extension = "json";
 			}
 			else if (path == "/stepcountjs")

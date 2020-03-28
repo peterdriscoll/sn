@@ -38,6 +38,7 @@ namespace SNI
 		virtual void Display();
 
 		void WriteJS(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions);
+		size_t CountDelayedCalls();
 	private:
 		SNI_DelayedCallList  m_DelayedCallList;
 		SNI_DelayedCallList  m_FailedList;
