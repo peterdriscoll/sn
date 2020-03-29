@@ -23,10 +23,16 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
     // Default settings
     $scope.stepcount = '';
     $scope.maxstackframes = 10;
-    $scope.maxcallstackframes = 4;
     $scope.maxcode = 0;
     $scope.maxderivation = 0;
     $scope.maxlog = 0;
+
+    // Call stack
+    $scope.maxcallstackframes = 4;
+    $scope.bufcallstackframes = 2;
+    $scope.startcallstackframes = 0;
+    $scope.callStackStepcount = 0;
+
     $scope.countcalls = 0;
     $scope.countframes = 0;
     $scope.countdelayedcalls = 0;
@@ -82,14 +88,25 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
     $scope.loadcallstack = function (opening) {
         var field = $document[0].getElementById('callstackid');
         if (opening && !field.open || !opening && field.open) {
-            var clientHeight = document.getElementById('callstackdivid').clientHeight;
-            var maxcallstackframes = clientHeight / 70 + 1;
-            if (clientHeight === 0) {
-                maxcallstackframes = $scope.maxcallstackframes;
+            if ($scope.callStackStepcount !== $scope.currentstepcount) {
+                $scope.callStackStepcount = $scope.currentstepcount;
+                $scope.startcallstackframes = 0;
             }
-            $http.get(home + 'callstackjs?threadnum=' + $scope.threadnum + '&maxcallstackframes=' + maxcallstackframes)
+            $http.get(home + 'callstackjs?threadnum=' + $scope.threadnum + '&maxcallstackframes=' + $scope.bufcallstackframes + '&startcallstackframes=' + $scope.startcallstackframes)
                 .then(function (response) {
-                    $scope.callstack = response.data.records;
+                    if ($scope.callStackStepcount === $scope.currentstepcount) {
+                        if ($scope.startcallstackframes === 0) {
+                            $scope.callstack = response.data.records;
+                        } else {
+                            for (var i = 0; i < response.data.records.length; i++) {
+                                $scope.callstack.push(response.data.records[i]);
+                            }
+                        }
+                        $scope.startcallstackframes += $scope.bufcallstackframes;
+                        if ($scope.startcallstackframes < $scope.maxcallstackframes && $scope.startcallstackframes < $scope.countcalls) {
+                            $scope.loadcallstack(false);
+                        }
+                    }
                 });
         }
     };
@@ -148,6 +165,7 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
                     }
 
                     $scope.scheduled = $scope.scheduled - 1;
+                    $scope.loadcallstack(false);
 
                     if ($scope.closing) {
                         $timeout(function () { $scope.initFirst(); }, 5000);
@@ -156,7 +174,6 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
                     }
                 });
             $scope.loadstack(false);
-            $scope.loadcallstack(false);
             $scope.loadderivations(false);
             $scope.loadcode(false);
             $scope.loadlog(false);

@@ -94,8 +94,9 @@
                                         <select id="debugstop" ng-model="debugstop" ng-options="option.name for option in debugstopoptions"> </select> <br />
                                         Max frames : <br />
                                         <input type='number' ng-model='maxstackframes' name='maxstackframes' /> <br />
-                                        Max call frames : <br />
-                                        <input type='number' ng-model='maxcallstackframes' name='maxcallstackframes' /> <br />
+                                        Call frames : <br />
+                                        <label>Max</label><input title='Max calls loaded' type='number' ng-model='maxcallstackframes' name='maxcallstackframes' />
+                                        <label>Buf</label><input title='Load per request.' type='number' ng-model='bufcallstackframes' name='bufcallstackframes' /> <br />
                                         Max code : <br />
                                         <input type='number' ng-model='maxcode' name='maxcode' /> <br />
                                         Max derivation : <br />

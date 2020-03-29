@@ -315,12 +315,12 @@ namespace SNI
 		return ss.str();
 	}
 
-	string SNI_Thread::CallStackJS(long p_MaxCallStackFrame, enum DisplayOptionType p_OptionType)
+	string SNI_Thread::CallStackJS(long p_MaxCallStackFrame, long p_StartCallStackFrame, enum DisplayOptionType p_OptionType)
 	{
 		stringstream ss;
 		cout << "CallStackJS\n";
 		SNI_DisplayOptions l_DisplayOptions(p_OptionType);
-		WriteCallStackJS(ss, p_MaxCallStackFrame, l_DisplayOptions);
+		WriteCallStackJS(ss, p_MaxCallStackFrame, p_StartCallStackFrame, l_DisplayOptions);
 		return ss.str();
 	}
 
@@ -1100,7 +1100,7 @@ namespace SNI
 		p_Stream << "\n]}\n";
 	}
 
-	void SNI_Thread::WriteCallStackJS(ostream &p_Stream, size_t p_Depth, SNI::SNI_DisplayOptions &p_DisplayOptions)
+	void SNI_Thread::WriteCallStackJS(ostream &p_Stream, size_t p_Depth, size_t p_Start, SNI::SNI_DisplayOptions &p_DisplayOptions)
 	{
 		namespace pt = boost::property_tree;
 		pt::ptree oroot;
@@ -1110,16 +1110,19 @@ namespace SNI
 		Lock();
 
 		size_t count = 0;
-		for (size_t j = m_FrameList.size(); j > 1 && p_Depth > count; j--)
+		for (size_t j = m_FrameList.size(); j > 1 && p_Start+p_Depth > count; j--)
 		{
 			SNI_Frame * frame = m_FrameList[j - 1];
 
 			if (frame->HasCode())
 			{
-				pt::ptree callStackNode;
-				frame->WriteCallJS(callStackNode, j, p_DisplayOptions);
-				records_node.push_back(std::make_pair("", callStackNode));
 				count++;
+				if (count > p_Start)
+				{
+					pt::ptree callStackNode;
+					frame->WriteCallJS(callStackNode, j, p_DisplayOptions);
+					records_node.push_back(std::make_pair("", callStackNode));
+				}
 			}
 		}
 		Unlock();
