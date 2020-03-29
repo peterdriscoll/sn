@@ -339,11 +339,18 @@ namespace SNI
 		return ss.str();
 	}
 
-	string SNI_Thread::LogJS(long p_MaxLogEntries)
+	string SNI_Thread::LogJS(long p_MaxLogEntries, long p_StartLogEntries, long p_StartStepCount)
 	{
 		stringstream ss;
 		cout << "LogJS\n";
-		WriteLogJS(ss, p_MaxLogEntries);
+		if (p_StartStepCount == 0 || p_StartStepCount == m_ThreadStepCount)
+		{
+			WriteLogJS(ss, p_MaxLogEntries, p_StartLogEntries);
+		}
+		else
+		{
+			ss << "{\"records\":[]}\n";
+		}
 		return ss.str();
 	}
 
@@ -354,12 +361,19 @@ namespace SNI
 		return ss.str();
 	}
 
-	string SNI_Thread::CodeJS(long p_MaxLogEntries, enum DisplayOptionType p_OptionType)
+	string SNI_Thread::CodeJS(long p_MaxLogEntries, long p_StartCode, long p_StepCount, enum DisplayOptionType p_OptionType)
 	{
 		stringstream ss;
 		SNI_DisplayOptions displayOptions(p_OptionType);
 		cout << "LogJS\n";
-		WriteCodeJS(ss, p_MaxLogEntries, displayOptions);
+		if (p_StepCount == 0 || p_StepCount == m_ThreadStepCount)
+		{
+			WriteCodeJS(ss, p_MaxLogEntries, p_StartCode, displayOptions);
+		}
+		else
+		{
+			ss << "{\"records\":[]}\n";
+		}
 		return ss.str();
 	}
 
@@ -1011,9 +1025,13 @@ namespace SNI
 		p_Stream << "</table>\n";
 	}
 
-	void SNI_Thread::WriteLogJS(ostream &p_Stream, long p_MaxLogEntries)
+	void SNI_Thread::WriteLogJS(ostream &p_Stream, long p_MaxLogEntries, long p_StartLog)
 	{
-		SNI_Log::GetLog()->LogTableJS(p_Stream, p_MaxLogEntries);
+		p_Stream << "{\n";
+		p_Stream << "\"stepcount\":" << m_ThreadStepCount << ",\n";
+		p_Stream << "\"records\":[\n";
+		SNI_Log::GetLog()->LogTableJS(p_Stream, p_MaxLogEntries, p_StartLog);
+		p_Stream << "]}\n";
 	}
 
 	size_t SNI_Thread::CountLogEntries()
@@ -1031,9 +1049,13 @@ namespace SNI
 		SNI_Log::GetLog()->DerivationJS(p_Stream, p_MaxLogEntries);
 	}
 
-	void SNI_Thread::WriteCodeJS(ostream &p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_displayOptions)
+	void SNI_Thread::WriteCodeJS(ostream &p_Stream, long p_MaxLogEntries, long p_StartCode, SNI_DisplayOptions &p_displayOptions)
 	{
-		SNI_Log::GetLog()->CodeTableJS(p_Stream, p_MaxLogEntries, p_displayOptions);
+		p_Stream << "{\n";
+		p_Stream << "\"stepcount\":" << m_ThreadStepCount << ",\n";
+		p_Stream << "\"records\":[\n";
+		SNI_Log::GetLog()->CodeTableJS(p_Stream, p_MaxLogEntries, p_StartCode, p_displayOptions);
+		p_Stream << "]}\n";
 	}
 
 	void SNI_Thread::WriteDashboardJS(ostream &p_Stream, SNI::SNI_DisplayOptions &p_DisplayOptions)

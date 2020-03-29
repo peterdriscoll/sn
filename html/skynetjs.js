@@ -22,9 +22,8 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
 
     // Default settings
     $scope.stepcount = '';
-    $scope.maxcode = 10;
-    $scope.maxderivation = 10;
-    $scope.maxlog = 10;
+    $scope.maxderivation = 30;
+    $scope.errorstepcount = 0;
 
     // Call stack frames
     $scope.maxcallstackframes = 4;
@@ -37,8 +36,22 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
     $scope.maxstackframes = 30;
     $scope.bufstackframes = 5;
     $scope.startstackframes = 0;
-    $scope.stackStepcount = 0;
+    $scope.stackstepcount = 0;
     $scope.displayedstackframes = 0;
+
+    // Code history
+    $scope.maxcode = 30;
+    $scope.bufcode = 10;
+    $scope.startcode = 0;
+    $scope.codestepcount = 0;
+    $scope.displayedcode = 0;
+
+    // Log
+    $scope.maxlog = 30;
+    $scope.buflog = 10;
+    $scope.startlog = 0;
+    $scope.logstepcount = 0;
+    $scope.displayedlogentries = 0;
 
     $scope.countcalls = 0;
     $scope.countframes = 0;
@@ -58,10 +71,13 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
 
     // Load the error history.
     $scope.loaderrors = function () {
+        $scope.errorstepcount = $scope.currentstepcount;
         $http.get(home + 'errorjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxcode)
             .then(function (response) {
                 $scope.error = response.data;
-                $scope.loadsecondarydata();
+                if ($scope.errorstepcount === $scope.currentstepcount) {
+                    $scope.loadsecondarydata();
+                }
             });
     };
 
@@ -86,58 +102,64 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
     // Load the stack if the detail for it is open.
     $scope.loadstack = function (opening) {
         var field = $document[0].getElementById('stackid');
+        if ($scope.stackstepcount !== $scope.currentstepcount) {
+            $scope.stackstepcount = $scope.currentstepcount;
+            $scope.startstackframes = 0;
+            $scope.displayedstackframes = 0;
+        }
         if (opening && !field.open || !opening && field.open) {
-            if ($scope.stackStepcount !== $scope.currentstepcount) {
-                $scope.stackStepcount = $scope.currentstepcount;
-                $scope.startstackframes = 0;
-                $scope.displayedstackframes = 0;
-            }
-            $http.get(home + 'stackjs?threadnum=' + $scope.threadnum + '&maxstackframes=' + $scope.bufstackframes + '&startstackframes=' + $scope.startstackframes)
-                .then(function (response) {
-                    if ($scope.stackStepcount === $scope.currentstepcount && $scope.stackStepcount == response.data.stepcount) {
-                        $scope.displayedstackframes += response.data.records.length;
-                        if ($scope.startstackframes === 0) {
-                            $scope.frames = response.data.records;
-                        } else {
-                            for (var i = 0; i < response.data.records.length; i++) {
-                                $scope.frames.push(response.data.records[i]);
+            if ($scope.startstackframes < $scope.maxstackframes && $scope.startstackframes < $scope.countframes) {
+                $http.get(home + 'stackjs?threadnum=' + $scope.threadnum + '&maxstackframes=' + $scope.bufstackframes + '&startstackframes=' + $scope.startstackframes + "&stepcount=" + $scope.stackstepcount)
+                    .then(function (response) {
+                        if ($scope.stackstepcount === $scope.currentstepcount && $scope.stackstepcount == response.data.stepcount) {
+                            if ($scope.startstackframes === 0) {
+                                $scope.displayedstackframes = 0;
+                                $scope.frames = response.data.records;
+                            } else {
+                                for (var i = 0; i < response.data.records.length; i++) {
+                                    $scope.frames.push(response.data.records[i]);
+                                }
+                            }
+                            $scope.displayedstackframes += response.data.records.length;
+                            $scope.startstackframes += $scope.bufstackframes;
+                            if ($scope.startstackframes < $scope.maxstackframes && $scope.startstackframes < $scope.countframes) {
+                                $scope.loadstack(false);
                             }
                         }
-                        $scope.startstackframes += $scope.bufstackframes;
-                        if ($scope.startstackframes < $scope.maxstackframes && $scope.startstackframes < $scope.countframes) {
-                            $scope.loadstack(false);
-                        }
-                    }
-                });
+                    });
+            }
         }
     };
 
     // Load the call stack if the detail for it is open.
     $scope.loadcallstack = function (opening) {
         var field = $document[0].getElementById('callstackid');
+        if ($scope.callstackstepcount !== $scope.currentstepcount) {
+            $scope.callstackstepcount = $scope.currentstepcount;
+            $scope.startcallstackframes = 0;
+            $scope.displayedcallstackframes = 0;
+        }
         if (opening && !field.open || !opening && field.open) {
-            if ($scope.callStackStepcount !== $scope.currentstepcount) {
-                $scope.callStackStepcount = $scope.currentstepcount;
-                $scope.startcallstackframes = 0;
-                $scope.displayedcallstackframes = 0;
-            }
-            $http.get(home + 'callstackjs?threadnum=' + $scope.threadnum + '&maxcallstackframes=' + $scope.bufcallstackframes + '&startcallstackframes=' + $scope.startcallstackframes)
-                .then(function (response) {
-                    if ($scope.callStackStepcount === $scope.currentstepcount && $scope.callStackStepcount == response.data.stepcount) {
-                        $scope.displayedcallstackframes += response.data.records.length;
-                        if ($scope.startcallstackframes === 0) {
-                            $scope.callstack = response.data.records;
-                        } else {
-                            for (var i = 0; i < response.data.records.length; i++) {
-                                $scope.callstack.push(response.data.records[i]);
+            if ($scope.startcallstackframes < $scope.maxcallstackframes && $scope.startcallstackframes < $scope.countcalls) {
+                $http.get(home + 'callstackjs?threadnum=' + $scope.threadnum + '&maxcallstackframes=' + $scope.bufcallstackframes + '&startcallstackframes=' + $scope.startcallstackframes + "&stepcount=" + $scope.callstackstepcount)
+                    .then(function (response) {
+                        if ($scope.callstackstepcount === $scope.currentstepcount && $scope.callstackstepcount == response.data.stepcount) {
+                            if ($scope.startcallstackframes === 0) {
+                                $scope.displayedcallstackframes = 0;
+                                $scope.callstack = response.data.records;
+                            } else {
+                                for (var i = 0; i < response.data.records.length; i++) {
+                                    $scope.callstack.push(response.data.records[i]);
+                                }
+                            }
+                            $scope.displayedcallstackframes += response.data.records.length;
+                            $scope.startcallstackframes += $scope.bufcallstackframes;
+                            if ($scope.startcallstackframes < $scope.maxcallstackframes && $scope.startcallstackframes < $scope.countcalls) {
+                                $scope.loadcallstack(false);
                             }
                         }
-                        $scope.startcallstackframes += $scope.bufcallstackframes;
-                        if ($scope.startcallstackframes < $scope.maxcallstackframes && $scope.startcallstackframes < $scope.countcalls) {
-                            $scope.loadcallstack(false);
-                        }
-                    }
-                });
+                    });
+            }
         }
     };
 
@@ -153,18 +175,64 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
     // Load the log  of code expressions, if the detail for it is open.
     $scope.loadcode = function (opening) {
         var field = $document[0].getElementById('codeid');
+        if ($scope.codestepcount !== $scope.currentstepcount) {
+            $scope.codestepcount = $scope.currentstepcount;
+            $scope.startcode = 0;
+            $scope.displayedcode = 0;
+        }
         if (opening && !field.open || !opening && field.open) {
-            $http.get(home + 'codejs?threadnum=' + $scope.threadnum + '&maxcode=' + $scope.maxcode)
-                .then(function (response) { $scope.code = response.data.records; });
+            if ($scope.startcode < $scope.maxcode && $scope.startcode < $scope.countcodeentries) {
+                $http.get(home + 'codejs?threadnum=' + $scope.threadnum + '&maxcode=' + $scope.bufcode + '&startcode=' + $scope.startcode + "&stepcount=" + $scope.codestepcount)
+                    .then(function (response) {
+                        if ($scope.codestepcount === $scope.currentstepcount && $scope.codestepcount === response.data.stepcount) {
+                            if ($scope.startcode === 0) {
+                                $scope.displayedcode = 0;
+                                $scope.code = response.data.records;
+                            } else {
+                                for (var i = 0; i < response.data.records.length; i++) {
+                                    $scope.code.push(response.data.records[i]);
+                                }
+                            }
+                            $scope.displayedcode += response.data.records.length;
+                            $scope.startcode += $scope.bufcode;
+                            if ($scope.startcode < $scope.maxcode && $scope.startcode < $scope.countcodeentries) {
+                                $scope.loadcode(false);
+                            }
+                        }
+                    });
+            }
         }
     };
 
     // Load the log  of code expressions, if the detail for it is open.
     $scope.loadlog = function (opening) {
         var field = $document[0].getElementById('logid');
+        if ($scope.logstepcount !== $scope.currentstepcount) {
+            $scope.logstepcount = $scope.currentstepcount;
+            $scope.startlog = 0;
+            $scope.displayedlogentries = 0;
+        }
         if (opening && !field.open || !opening && field.open) {
-            $http.get(home + 'logjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxlog)
-                .then(function (response) { $scope.logs = response.data.records; });
+            if ($scope.startlog < $scope.maxlog && $scope.startlog < $scope.countlogentries) {
+                $http.get(home + 'logjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.buflog + '&startlog=' + $scope.startlog + "&stepcount=" + $scope.logstepcount)
+                    .then(function (response) {
+                        if ($scope.logstepcount === $scope.currentstepcount && $scope.logstepcount === response.data.stepcount) {
+                            if ($scope.startlog === 0) {
+                                $scope.displayedlogentries = 0;
+                                $scope.logs = response.data.records;
+                            } else {
+                                for (var i = 0; i < response.data.records.length; i++) {
+                                    $scope.logs.push(response.data.records[i]);
+                                }
+                            }
+                            $scope.displayedlogentries += response.data.records.length;
+                            $scope.startlog += $scope.buflog;
+                            if ($scope.startlog < $scope.maxlog && $scope.startlog < $scope.countlogentries) {
+                                $scope.loadlog(false);
+                            }
+                        }
+                    });
+            }
         }
     };
 
@@ -198,7 +266,6 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
 
                     $scope.loaderrors();
                     $scope.loadcallstack(false);
-                    $scope.loadstack(false);
 
                     if ($scope.closing) {
                         $timeout(function () { $scope.loaddata(); }, 5000);
@@ -211,6 +278,7 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
 
     // Request JSON secondary data sets from the server. These are less immediate.
     $scope.loadsecondarydata = function () {
+        $scope.loadstack(false);
         $scope.loadderivations(false);
         $scope.loadcode(false);
         $scope.loadlog(false);

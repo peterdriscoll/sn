@@ -159,16 +159,16 @@ namespace SNI
 			{
 				long maxStackFrames = atol(umap["maxstackframes"].c_str());
 				long startStackFrames = atol(umap["startstackframes"].c_str());
-				long startStepCount = atol(umap["startstepcount"].c_str());
-				m_response_data = l_thread->StackJS(maxStackFrames, startStackFrames, startStepCount, debugJS);
+				long stepCount = atol(umap["stepcount"].c_str());
+				m_response_data = l_thread->StackJS(maxStackFrames, startStackFrames, stepCount, debugJS);
 				m_extension = "json";
 			}
 			else if (path == "/callstackjs")
 			{
 				long maxCallStackFrames = atol(umap["maxcallstackframes"].c_str());
 				long startCallStackFrames = atol(umap["startcallstackframes"].c_str());
-				long startStepCount = atol(umap["startstepcount"].c_str());
-				m_response_data = l_thread->CallStackJS(maxCallStackFrames, startCallStackFrames, startStepCount, debugJS);
+				long stepCount = atol(umap["stepcount"].c_str());
+				m_response_data = l_thread->CallStackJS(maxCallStackFrames, startCallStackFrames, stepCount, debugJS);
 				m_extension = "json";
 			}
 			else if (path == "/changehistoryjs")
@@ -182,7 +182,9 @@ namespace SNI
 			else if (path == "/logjs")
 			{
 				long maxLogEntries = atol(umap["maxlogentries"].c_str());
-				m_response_data = l_thread->LogJS(maxLogEntries);
+				long startLog = atol(umap["startlog"].c_str());
+				long stepCount = atol(umap["stepcount"].c_str());
+				m_response_data = l_thread->LogJS(maxLogEntries, startLog, stepCount);
 				m_extension = "json";
 			}
 			else if (path == "/derivationjs")
@@ -194,7 +196,9 @@ namespace SNI
 			else if (path == "/codejs")
 			{
 				long maxCode = atol(umap["maxcode"].c_str());
-				m_response_data = l_thread->CodeJS(maxCode, debugJS);
+				long startCode = atol(umap["startcode"].c_str());
+				long stepCount = atol(umap["stepcount"].c_str());
+				m_response_data = l_thread->CodeJS(maxCode, startCode, stepCount, debugJS);
 				m_extension = "json";
 			}
 			else if (path == "/stepcountjs")

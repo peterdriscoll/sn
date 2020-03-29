@@ -51,9 +51,9 @@ namespace SNI
 		void WriteFrameStack(SN::LoggingLevel p_DebugLevel, long p_ThreadNum, long p_Depth);
 
 		void LogTableToStream(ostream & p_Stream, long p_MaxLogEntries);
-		void LogTableJS(ostream & p_Stream, long p_MaxLogEntries);
+		void LogTableJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartLog);
 		void DerivationJS(ostream & p_Stream, long p_MaxLogEntries);
-		void CodeTableJS(ostream & p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_DisplayOptions);
+		void CodeTableJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartCode, SNI_DisplayOptions &p_DisplayOptions);
 
 		void WriteExp(SN::SN_Expression p_Expression);
 		void ClearLogExpressions();

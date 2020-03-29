@@ -162,15 +162,11 @@ namespace SNI
 		}
 	}
 
-	void SNI_Log::LogTableJS(ostream & p_Stream, long p_MaxLogEntries)
+	void SNI_Log::LogTableJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartLog)
 	{
 		if (m_LogBuffer)
 		{
-			m_LogBuffer->LogTableJS(p_Stream, p_MaxLogEntries);
-		}
-		else
-		{
-			p_Stream << "{\"records\":[]}\n";
+			m_LogBuffer->LogTableJS(p_Stream, p_MaxLogEntries, p_StartLog);
 		}
 	}
 
@@ -204,15 +200,11 @@ namespace SNI
 		}
 	}
 
-	void SNI_Log::CodeTableJS(ostream & p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_DisplayOptions)
+	void SNI_Log::CodeTableJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartCode, SNI_DisplayOptions &p_DisplayOptions)
 	{
 		if (m_LogBuffer)
 		{
-			m_LogBuffer->LogExpressionTableJS(p_Stream, p_MaxLogEntries, p_DisplayOptions);
-		}
-		else
-		{
-			p_Stream << "{\"records\":[]}\n";
+			m_LogBuffer->LogExpressionTableJS(p_Stream, p_MaxLogEntries, p_StartCode, p_DisplayOptions);
 		}
 	}
 

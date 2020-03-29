@@ -98,12 +98,14 @@
                                         Call frames : <br />
                                         <label>Max</label><input title='Max calls loaded' type='number' ng-model='maxcallstackframes' name='maxcallstackframes' />
                                         <label>Buf</label><input title='Load per request' type='number' ng-model='bufcallstackframes' name='bufcallstackframes' /> <br />
-                                        Max code : <br />
-                                        <input type='number' ng-model='maxcode' name='maxcode' /> <br />
+                                        Code : <br />
+                                        <label>Max</label><input type='number' ng-model='maxcode' name='maxcode' />
+                                        <label>Buf</label><input type='number' ng-model='bufcode' name='maxcode' /> <br />
                                         Max derivation : <br />
                                         <input type='number' ng-model='maxderivation' name='maxderivation' /> <br />
-                                        Max log : <br />
-                                        <input type='number' ng-model='maxlog' name='maxlog' />
+                                        Log : <br />
+                                        <label>Max</label><input type='number' ng-model='maxlog' name='maxlog' />
+                                        <label>Buf</label><input type='number' ng-model='buflog' name='maxlog' /> <br />
                                         <input type='submit' value='Enter' /><br />
                                     </form>
                                 </li>
@@ -311,7 +313,7 @@
 
                     <div class="codelog">
                         <details open id='codeid' ng-click='loadcode(true)'>
-                            <summary>Code - {{countcodeentries}} records</summary>
+                            <summary>Code - {{countcodeentries}} records {{ displayedcode }} displayed</summary>
                             <table class='log'>
                                 <tr ng-repeat="l in code"><td ng-bind-html="trustAsHtml(l.expression)" init-bind></td></tr>
                             </table>
@@ -329,7 +331,7 @@
 
                     <div class="simplelog">
                         <details open id='logid' ng-click='loadlog(true)'>
-                            <summary>Logging - {{ countlogentries }}</summary>
+                            <summary>Logging - {{ countlogentries }} records {{ displayedlogentries }} displayed</summary>
                             <table class='log'>
                                 <tr ng-repeat="l in logs"><td>{{l.text}}</td></tr>
                             </table>

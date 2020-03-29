@@ -71,20 +71,21 @@ namespace SNI
 		m_Mutex.unlock();
 	}
 
-	void SNI_LogBuffer::LogTableJS(ostream & p_Stream, long p_MaxLogEntries)
+	void SNI_LogBuffer::LogTableJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartLog)
 	{
-		p_Stream << "{\"records\":[\n";
 		m_Mutex.lock();
 		string delimeter = " ";
 		long entries = 0;
-		for (auto it = m_Buffer.rbegin(); it != m_Buffer.rend() && (p_MaxLogEntries <= 0 || entries < p_MaxLogEntries); it++, entries++)
+		for (auto it = m_Buffer.rbegin(); it != m_Buffer.rend() && (p_MaxLogEntries <= 0 || entries < p_StartLog + p_MaxLogEntries); it++, entries++)
 		{
-			string html = EscapeStringToHTML(it->m_String);
-			string quotedString = EscapeStringToJSON(html);
-			p_Stream << delimeter << "{\"text\" : \"" << quotedString << "\"}\n";
-			delimeter = ",";
+			if (p_StartLog <= entries)
+			{
+				string html = EscapeStringToHTML(it->m_String);
+				string quotedString = EscapeStringToJSON(html);
+				p_Stream << delimeter << "{\"text\" : \"" << quotedString << "\"}\n";
+				delimeter = ",";
+			}
 		}
-		p_Stream << "]}\n";
 		m_Mutex.unlock();
 	}
 
@@ -184,19 +185,20 @@ namespace SNI
 		m_Mutex.unlock();
 	}
 
-	void SNI_LogBuffer::LogExpressionTableJS(ostream & p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_DisplayOptions)
+	void SNI_LogBuffer::LogExpressionTableJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartCode, SNI_DisplayOptions &p_DisplayOptions)
 	{
-		p_Stream << "{\"records\":[\n";
 		m_Mutex.lock();
 		string delimeter = " ";
 		long entries = 0;
-		for (auto it = m_ExpressionBuffer.rbegin(); it != m_ExpressionBuffer.rend() && (p_MaxLogEntries < 0 || entries < p_MaxLogEntries); it++, entries++)
+		for (auto it = m_ExpressionBuffer.rbegin(); it != m_ExpressionBuffer.rend() && (p_MaxLogEntries <= 0 || entries < p_StartCode + p_MaxLogEntries); it++, entries++)
 		{
-			string quotedString = EscapeStringToJSON(it->DisplaySN(p_DisplayOptions));
-			p_Stream << delimeter << "{\"expression\" : \"" << quotedString << "\"}\n";
-			delimeter = ",";
+			if (p_StartCode <= entries)
+			{
+				string quotedString = EscapeStringToJSON(it->DisplaySN(p_DisplayOptions));
+				p_Stream << delimeter << "{\"expression\" : \"" << quotedString << "\"}\n";
+				delimeter = ",";
+			}
 		}
-		p_Stream << "]}\n";
 		m_Mutex.unlock();
 	}
 }
