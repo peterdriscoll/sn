@@ -935,7 +935,7 @@ namespace test_sn
 				Validate validate(characterSet);
 				Parse parse(characterSet, validate);
 
-				// Name test.
+				// Arithmetic Expression.
 				SN_DOMAIN(MyDomain);
 				SN_DECLARE(i1);
 				(parse.AsArithmeticExpression(MyDomain)(String("13+21"))(i1)).Assert().Do();
@@ -954,6 +954,23 @@ namespace test_sn
 
 				(i1 == j1).Evaluate().Do();
 
+				// Expression.
+				SN_DECLARE(i2);
+				(parse.AsBooleanExpression(MyDomain)(String("13+21"))(i2)).Assert().Do();
+
+				SN_DECLARE(j2);
+				(j2 == Meta(1, Meta(-1, Long(13)) + Meta(-1, Long(21)))).Assert().Do();
+
+				string i2_string = i2.DoEvaluate(0).DisplayValueSN();
+				string i2_value = i2.DoEvaluate(-1).DisplayValueSN();
+
+				string j2_string = j2.DoEvaluate(0).DisplayValueSN();
+				string j2_value = j2.DoEvaluate(-1).DisplayValueSN();
+
+				Assert::IsTrue(i2_string == j2_string);
+				Assert::IsTrue(i2_value == j2_value);
+
+				(i2 == j2).Evaluate().Do();
 			}
 		}
 	};

@@ -225,9 +225,11 @@ namespace SNL
 			(Define(AsBooleanExpression)(d)(s)(i) ==
 				Local(m, Local(n, Local(p, Local(q, Let(s == m + n,
 					AsBooleanTerm(d)(m)(p)
-				&&	(	n.LookaheadLeft() == Char('|') && AsExpression(d)(n.SubtractLeftChar())(q) && i == Meta(1, Meta(-1, p) || Meta(-1, q)))
-					||	(n == String("") && i == p))
-				))))
+					&& (n.LookaheadLeft() == Char('|')).If(
+						AsBooleanExpression(d)(n.SubtractLeftChar())(q)
+					&&	i == Meta(1, Meta(-1, p) || Meta(-1, q))
+					, (n == String("") && i == p))
+				)))))
 			).PartialAssert().Do();
 		}
 		string sAsBooleanExpression = AsBooleanExpression.DisplayValueSN();
@@ -247,8 +249,10 @@ namespace SNL
 			(Define(AsBooleanTerm)(d)(s)(i) ==
 				Local(m, Local(n, Local(p, Local(q, Let(s == m + n,
 					AsBooleanFactor(d)(m)(p)
-				&&	(	n.LookaheadLeft() == Char('&') && AsBooleanTerm(d)(n.SubtractLeftChar())(q) && i == Meta(1, Meta(-1, p) && Meta(-1, q))
-					||	(n == String("") && i == p))
+					&& (n.LookaheadLeft() == Char('&')).If(
+						AsBooleanTerm(d)(n.SubtractLeftChar())(q)
+						&& i == Meta(1, Meta(-1, p) && Meta(-1, q))
+						, (n == String("") && i == p))
 				)))))
 			).PartialAssert().Do();
 		}
