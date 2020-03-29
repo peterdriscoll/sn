@@ -158,14 +158,17 @@ namespace SNI
 			else if (path == "/stackjs")
 			{
 				long maxStackFrames = atol(umap["maxstackframes"].c_str());
-				m_response_data = l_thread->StackJS(maxStackFrames, debugJS);
+				long startStackFrames = atol(umap["startstackframes"].c_str());
+				long startStepCount = atol(umap["startstepcount"].c_str());
+				m_response_data = l_thread->StackJS(maxStackFrames, startStackFrames, startStepCount, debugJS);
 				m_extension = "json";
 			}
 			else if (path == "/callstackjs")
 			{
 				long maxCallStackFrames = atol(umap["maxcallstackframes"].c_str());
 				long startCallStackFrames = atol(umap["startcallstackframes"].c_str());
-				m_response_data = l_thread->CallStackJS(maxCallStackFrames, startCallStackFrames, debugJS);
+				long startStepCount = atol(umap["startstepcount"].c_str());
+				m_response_data = l_thread->CallStackJS(maxCallStackFrames, startCallStackFrames, startStepCount, debugJS);
 				m_extension = "json";
 			}
 			else if (path == "/changehistoryjs")

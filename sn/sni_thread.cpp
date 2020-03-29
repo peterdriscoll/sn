@@ -298,15 +298,15 @@ namespace SNI
 		return ss.str();
 	}
 
-	string SNI_Thread::StackJS(long p_MaxStackFrame, enum DisplayOptionType p_OptionType)
+	string SNI_Thread::StackJS(long p_MaxStackFrame, long p_StartStackFrame, long p_StartStepCount, enum DisplayOptionType p_OptionType)
 	{
 		stringstream ss;
 		SNI_Manager *manager = GetTopManager(false);
 		cout << "StackJS\n";
-		if (manager)
+		if (manager && (p_StartStepCount == 0 || p_StartStepCount == m_ThreadStepCount))
 		{
 			SNI_DisplayOptions l_DisplayOptions(p_OptionType);
-			WriteStackJS(ss, p_MaxStackFrame, manager->DebugFieldWidth(), l_DisplayOptions);
+			WriteStackJS(ss, p_MaxStackFrame, p_StartStackFrame, manager->DebugFieldWidth(), l_DisplayOptions);
 		}
 		else
 		{
@@ -315,12 +315,19 @@ namespace SNI
 		return ss.str();
 	}
 
-	string SNI_Thread::CallStackJS(long p_MaxCallStackFrame, long p_StartCallStackFrame, enum DisplayOptionType p_OptionType)
+	string SNI_Thread::CallStackJS(long p_MaxCallStackFrame, long p_StartCallStackFrame, long p_StartStepCount, enum DisplayOptionType p_OptionType)
 	{
 		stringstream ss;
 		cout << "CallStackJS\n";
-		SNI_DisplayOptions l_DisplayOptions(p_OptionType);
-		WriteCallStackJS(ss, p_MaxCallStackFrame, p_StartCallStackFrame, l_DisplayOptions);
+		if (p_StartStepCount == 0 || p_StartStepCount == m_ThreadStepCount)
+		{
+			SNI_DisplayOptions l_DisplayOptions(p_OptionType);
+			WriteCallStackJS(ss, p_MaxCallStackFrame, p_StartCallStackFrame, l_DisplayOptions);
+		}
+		else
+		{
+			ss << "{\"records\":[]}\n";
+		}
 		return ss.str();
 	}
 
@@ -971,7 +978,7 @@ namespace SNI
     /*static*/ void SNI_Thread::WriteSetMaxStackFramesJS(ostream &p_Stream)
 	{
 		p_Stream << "<td>\n";
-		p_Stream << "<form ng-submit = 'initFirst()'>\n";
+		p_Stream << "<form ng-submit = 'loaddata()'>\n";
 		p_Stream << "<details>";
 		p_Stream << "<summary>";
 		p_Stream << "Max stack frames<br/>\n";
@@ -1080,17 +1087,25 @@ namespace SNI
 		p_Stream << "}\n";
 	}
 
-	void SNI_Thread::WriteStackJS(ostream &p_Stream, size_t p_Depth, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
+	void SNI_Thread::WriteStackJS(ostream &p_Stream, size_t p_Depth, size_t p_Start, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
 	{
-		p_Stream << "{\"records\":[\n";
+		p_Stream << "{\n";
+		p_Stream << "\"stepcount\":" << m_ThreadStepCount << ",\n";
+		p_Stream << "\"records\":[\n";
 		size_t base = 0;
 		string delimeter;
 		Lock();
-		if (0 < p_Depth && p_Depth < m_FrameList.size())
+		long start = m_FrameList.size() - p_Start;
+		if (start < 0)
 		{
-			base = m_FrameList.size() - p_Depth;
+			start = 0;
 		}
-		for (size_t j = m_FrameList.size(); j > base; j--)
+		size_t effectiveDepth = p_Start + p_Depth;
+		if (0 < effectiveDepth && effectiveDepth < m_FrameList.size())
+		{
+			base = m_FrameList.size() - effectiveDepth;
+		}
+		for (size_t j = start; j > base; j--)
 		{
 			p_Stream << delimeter << "\t{\n";
 			m_FrameList[j - 1]->WriteJS(p_Stream, j, p_DebugFieldWidth, p_DisplayOptions);
@@ -1104,13 +1119,19 @@ namespace SNI
 	{
 		namespace pt = boost::property_tree;
 		pt::ptree oroot;
+		oroot.put("stepcount", m_ThreadStepCount);
 		pt::ptree records_node;
 		size_t base = 0;
 		string delimeter;
+		long start = p_Start + p_Depth;
+		if (start <= 0)
+		{
+			start = m_FrameList.size();
+		}
 		Lock();
 
 		size_t count = 0;
-		for (size_t j = m_FrameList.size(); j > 1 && p_Start+p_Depth > count; j--)
+		for (size_t j = m_FrameList.size(); j > 1 && start > count; j--)
 		{
 			SNI_Frame * frame = m_FrameList[j - 1];
 

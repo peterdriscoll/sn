@@ -113,7 +113,7 @@
             $scope.tostep = 0;
             $scope.columnwidth = 10;
             $scope.stepcounts = [];
-            $scope.initFirst = function () {
+            $scope.loaddata = function () {
                 $http.get(home + 'dashboardjs?threadnum=' + $scope.threadnum)
                     .then(function (response) {
                         $scope.threadnum = response.data.threadnum;
@@ -129,7 +129,7 @@
                         $scope.tostep = stepcounts[0].stepcount;
                     });
             };
-            $scope.initFirst();
+            $scope.loaddata();
             $scope.load = function (action) {
                 $http.get(home + 'changehistoryjs?threadnum=' + $scope.threadnum + '&columnwidth=' + $scope.columnwidth + '&fromstep=' + $scope.fromstep + '&tostep=' + $scope.tostep)
                     .then(function (response) {

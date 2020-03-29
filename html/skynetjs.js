@@ -22,16 +22,23 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
 
     // Default settings
     $scope.stepcount = '';
-    $scope.maxstackframes = 10;
-    $scope.maxcode = 0;
-    $scope.maxderivation = 0;
-    $scope.maxlog = 0;
+    $scope.maxcode = 10;
+    $scope.maxderivation = 10;
+    $scope.maxlog = 10;
 
-    // Call stack
+    // Call stack frames
     $scope.maxcallstackframes = 4;
     $scope.bufcallstackframes = 2;
     $scope.startcallstackframes = 0;
-    $scope.callStackStepcount = 0;
+    $scope.callstackstepcount = 0;
+    $scope.displayedcallstackframes = 0;
+
+    // Stack frames
+    $scope.maxstackframes = 30;
+    $scope.bufstackframes = 5;
+    $scope.startstackframes = 0;
+    $scope.stackStepcount = 0;
+    $scope.displayedstackframes = 0;
 
     $scope.countcalls = 0;
     $scope.countframes = 0;
@@ -52,7 +59,10 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
     // Load the error history.
     $scope.loaderrors = function () {
         $http.get(home + 'errorjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxcode)
-            .then(function (response) { $scope.error = response.data; });
+            .then(function (response) {
+                $scope.error = response.data;
+                $scope.loadsecondarydata();
+            });
     };
 
     // Load the world sets, if the detail for it is open.
@@ -77,9 +87,27 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
     $scope.loadstack = function (opening) {
         var field = $document[0].getElementById('stackid');
         if (opening && !field.open || !opening && field.open) {
-            $http.get(home + 'stackjs?threadnum=' + $scope.threadnum + '&maxstackframes=' + $scope.maxstackframes)
+            if ($scope.stackStepcount !== $scope.currentstepcount) {
+                $scope.stackStepcount = $scope.currentstepcount;
+                $scope.startstackframes = 0;
+                $scope.displayedstackframes = 0;
+            }
+            $http.get(home + 'stackjs?threadnum=' + $scope.threadnum + '&maxstackframes=' + $scope.bufstackframes + '&startstackframes=' + $scope.startstackframes)
                 .then(function (response) {
-                    $scope.frames = response.data.records;
+                    if ($scope.stackStepcount === $scope.currentstepcount && $scope.stackStepcount == response.data.stepcount) {
+                        $scope.displayedstackframes += response.data.records.length;
+                        if ($scope.startstackframes === 0) {
+                            $scope.frames = response.data.records;
+                        } else {
+                            for (var i = 0; i < response.data.records.length; i++) {
+                                $scope.frames.push(response.data.records[i]);
+                            }
+                        }
+                        $scope.startstackframes += $scope.bufstackframes;
+                        if ($scope.startstackframes < $scope.maxstackframes && $scope.startstackframes < $scope.countframes) {
+                            $scope.loadstack(false);
+                        }
+                    }
                 });
         }
     };
@@ -91,10 +119,12 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
             if ($scope.callStackStepcount !== $scope.currentstepcount) {
                 $scope.callStackStepcount = $scope.currentstepcount;
                 $scope.startcallstackframes = 0;
+                $scope.displayedcallstackframes = 0;
             }
             $http.get(home + 'callstackjs?threadnum=' + $scope.threadnum + '&maxcallstackframes=' + $scope.bufcallstackframes + '&startcallstackframes=' + $scope.startcallstackframes)
                 .then(function (response) {
-                    if ($scope.callStackStepcount === $scope.currentstepcount) {
+                    if ($scope.callStackStepcount === $scope.currentstepcount && $scope.callStackStepcount == response.data.stepcount) {
+                        $scope.displayedcallstackframes += response.data.records.length;
                         if ($scope.startcallstackframes === 0) {
                             $scope.callstack = response.data.records;
                         } else {
@@ -139,7 +169,7 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
     };
 
     // Request JSON data sets from the server.
-    $scope.initFirst = function () {
+    $scope.loaddata = function () {
         if (!$scope.closing && !$scope.scheduled) {
             $scope.scheduled = $scope.scheduled + 1;
             $http.get(home + 'dashboardjs?threadnum=' + $scope.threadnum)
@@ -165,29 +195,34 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
                     }
 
                     $scope.scheduled = $scope.scheduled - 1;
+
+                    $scope.loaderrors();
                     $scope.loadcallstack(false);
+                    $scope.loadstack(false);
 
                     if ($scope.closing) {
-                        $timeout(function () { $scope.initFirst(); }, 5000);
+                        $timeout(function () { $scope.loaddata(); }, 5000);
                     } else if ($scope.running) {
-                        $timeout(function () { $scope.initFirst(); }, 2000);
+                        $timeout(function () { $scope.loaddata(); }, 2000);
                     }
                 });
-            $scope.loadstack(false);
-            $scope.loadderivations(false);
-            $scope.loadcode(false);
-            $scope.loadlog(false);
-            $scope.loadthreadstepcounts();
-            $scope.loaderrors();
-            $scope.loaddelayedcalls(false);
-            $scope.loadworldsets(false);
         }
+    };
+
+    // Request JSON secondary data sets from the server. These are less immediate.
+    $scope.loadsecondarydata = function () {
+        $scope.loadderivations(false);
+        $scope.loadcode(false);
+        $scope.loadlog(false);
+        $scope.loadthreadstepcounts();
+        $scope.loaddelayedcalls(false);
+        $scope.loadworldsets(false);
     };
 
     // Request an action from the server.
     $scope.submit = function (action) {
         $http.get(home + action + '?threadnum=' + $scope.threadnum + '&stackdepth=' + $scope.stackdepth + '&debugstop=' + $scope.debugstop.value + '&breakpoints=' + Array.from($scope.breakpointCol).join(','))
-            .then(function (response) { $scope.initFirst(); });
+            .then(function (response) { $scope.loaddata(); });
     };
 
     hotkeys.add({
@@ -306,14 +341,14 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
     $scope.setthread = function (newthreadnum) {
         if (threadnum !== newthreadnum) {
             $scope.threadnum = newthreadnum;
-            $scope.initFirst();
+            $scope.loaddata();
         }
     };
 
     // Open/close the goto drop down. On closing, request the server to run to the step count.
     $scope.gotostepcount = function () {
         $http.get(home + 'gotostepcountjs?threadnum=' + $scope.threadnum + '&stepcount=' + $scope.stepcount)
-            .then(function (response) { $scope.initFirst(); });
+            .then(function (response) { $scope.loaddata(); });
     };
 
     $scope.updatereruncommand = function () {
@@ -323,7 +358,7 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
 
     // Open/close the settings drop down.
     $scope.settings = function () {
-        $scope.initFirst();
+        $scope.loaddata();
     };
 
     $scope.gotostepcountsetfocus = function () {
@@ -455,7 +490,7 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
     };
 
     // Initial request for data.
-    $scope.initFirst();
+    $scope.loaddata();
 });
 
 app.directive('initBind', function ($compile) {
