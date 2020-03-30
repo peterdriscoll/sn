@@ -106,7 +106,14 @@ namespace SNI
 			valueParam->SetValue(p_Result);
 			Breakpoint(SN::DebugStop, SN::CallId, GetTypeName(), "Unify before collapse", p_Source, SN::CallPoint);
 
-			resultParam->SetValue(p_Result.GetVariableValue().GetSNI_Expression()->DoCollapse());
+			if (p_Result.IsKnownValue())
+			{
+				resultParam->SetValue(p_Result.GetVariableValue().GetSNI_Expression()->DoCollapse());
+			}
+			else
+			{
+				Delay(p_value, p_Result, p_Source);
+			}
 		}
 		else
 		{
@@ -138,5 +145,15 @@ namespace SNI
 		Breakpoint(SN::DebugStop, SN::RightId, GetTypeName(), "Unify after collapse", p_Source, SN::CallPoint);
 		SNI_Frame::Pop();
 		return LOG_RETURN(context, err);
+	}
+
+	void SNI_Collapse::Delay(SN::SN_Expression & p_value, SN::SN_Expression & p_Result, const SNI::SNI_Expression * p_Source)
+	{
+		SN::SN_ExpressionList l_ParameterList;
+		l_ParameterList.push_back(p_value);
+		l_ParameterList.push_back(p_Result);
+		SN::SN_Expression *param_List = LoadParametersUnify(&l_ParameterList);
+		SNI_Thread::GetThread()->GetProcessor()->Delay(this, GetNumParameters(), param_List, p_Source, SNI_Thread::GetThread()->ContextWorld());
+		delete param_List;
 	}
 }

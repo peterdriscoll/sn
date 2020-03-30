@@ -57,10 +57,13 @@
                 <div class='toolbar'>
                     <ul class="nav nav-pills command">
                         <li>
-                            <button title='Step over call' ng-click='submit("stepoverjs")'>Step over</button>
+                            <button title='Run to breakpoint' ng-click='submit("debugjs")'>Debug</button>
                         </li>
                         <li>
                             <button title='Step into call' ng-click='submit("stepintojs")'>Step into</button>
+                        </li>
+                        <li>
+                            <button title='Step over call' ng-click='submit("stepoverjs")'>Step over</button>
                         </li>
                         <li>
                             <button title='Step out of call' ng-click='submit("stepoutjs")'>Step out</button>
@@ -116,9 +119,6 @@
                         </li>
                         <li>
                             <button title='Run to end' ng-click='submit("runtoendjs")'>End</button>
-                        </li>
-                        <li>
-                            <button title='Run to breakpoint' ng-click='submit("debugjs")'>Debug</button>
                         </li>
                         <li>
                             <button title='Code debug break C++' ng-click='submit("codebreakjs")'>Code break</button>

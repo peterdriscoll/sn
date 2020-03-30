@@ -924,19 +924,20 @@ namespace test_sn
 			}
 		}
 
-		TEST_METHOD(TestParse_SimpleExpression)
+		TEST_METHOD(TestParse_SimpleExpression1)
 		{
 			Initialize();
 			{
-				Manager manager("Test Parse Simple Expression", AssertErrorHandler);
+				Manager manager("Test Parse Simple Expression1", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false);
 
 				CharacterSet characterSet;
 				Validate validate(characterSet);
 				Parse parse(characterSet, validate);
 
-				// Arithmetic Expression.
 				SN_DOMAIN(MyDomain);
+
+				// Arithmetic Expression.
 				SN_DECLARE(i1);
 				(parse.AsArithmeticExpression(MyDomain)(String("13+21"))(i1)).Assert().Do();
 
@@ -953,8 +954,23 @@ namespace test_sn
 				Assert::IsTrue(i1_value == j1_value);
 
 				(i1 == j1).Evaluate().Do();
+			}
+		}
 
-				// Expression.
+		TEST_METHOD(TestParse_SimpleExpression2)
+		{
+			Initialize();
+			{
+				Manager manager("Test Parse Simple Expression2", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false);
+
+				CharacterSet characterSet;
+				Validate validate(characterSet);
+				Parse parse(characterSet, validate);
+
+				SN_DOMAIN(MyDomain);
+
+				// Boolean Expression.
 				SN_DECLARE(i2);
 				(parse.AsBooleanExpression(MyDomain)(String("13+21"))(i2)).Assert().Do();
 
@@ -971,6 +987,60 @@ namespace test_sn
 				Assert::IsTrue(i2_value == j2_value);
 
 				(i2 == j2).Evaluate().Do();
+
+				if (false)
+				{
+					// Expression.
+					SN_DECLARE(i3);
+					(parse.AsExpression(MyDomain)(String("13+21"))(i2)).Assert().Do();
+
+					SN_DECLARE(j3);
+					(j3 == Meta(1, Meta(-1, Long(13)) + Meta(-1, Long(21)))).Assert().Do();
+
+					string i3_string = i3.DoEvaluate(0).DisplayValueSN();
+					string i3_value = i3.DoEvaluate(-1).DisplayValueSN();
+
+					string j3_string = j3.DoEvaluate(0).DisplayValueSN();
+					string j3_value = j3.DoEvaluate(-1).DisplayValueSN();
+
+					Assert::IsTrue(i3_string == j3_string);
+					Assert::IsTrue(i3_value == j3_value);
+
+					(i3 == j3).Evaluate().Do();
+				}
+			}
+		}
+
+		TEST_METHOD(TestParse_SimpleExpression3)
+		{
+			Initialize();
+			{
+				Manager manager("Test Parse Simple Expression3", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false);
+
+				CharacterSet characterSet;
+				Validate validate(characterSet);
+				Parse parse(characterSet, validate);
+
+				SN_DOMAIN(MyDomain);
+
+				// Expression.
+				SN_DECLARE(i3);
+				(parse.AsExpression(MyDomain)(String("13+21"))(i3)).Assert().Do();
+
+				SN_DECLARE(j3);
+				(j3 == Meta(1, Meta(-1, Long(13)) + Meta(-1, Long(21)))).Assert().Do();
+
+				string i3_string = i3.DoEvaluate(0).DisplayValueSN();
+				string i3_value = i3.DoEvaluate(-1).DisplayValueSN();
+
+				string j3_string = j3.DoEvaluate(0).DisplayValueSN();
+				string j3_value = j3.DoEvaluate(-1).DisplayValueSN();
+
+				Assert::IsTrue(i3_string == j3_string);
+				Assert::IsTrue(i3_value == j3_value);
+
+				(i3 == j3).Evaluate().Do();
 			}
 		}
 	};

@@ -247,7 +247,7 @@ namespace SNI
 		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Lambda::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
 		ASSERTM(p_ParameterList->size() > 1, "Cannot unify to a lambda without a parameter");
-		Breakpoint(SN::DetailStop, SN::LeftId, GetTypeName(), "Unify", this, SN::CallPoint);
+		Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Unify", this, SN::CallPoint);
 		SN::SN_Expression param = p_ParameterList->back();
 		p_ParameterList->pop_back();
 		SN::SN_Expression result = skynet::OK;

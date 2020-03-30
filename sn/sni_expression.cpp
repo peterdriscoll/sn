@@ -191,14 +191,11 @@ namespace SNI
 	string SNI_Expression::DisplayCall(long priority, SNI_DisplayOptions &p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const
 	{
 		string text;
-		string delimeter;
 		for (size_t j = 0; j < p_NumParams; j++)
 		{
-			SN::SN_Expression &p = p_ParamList[j];
-			text += delimeter + p.GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions);
-			delimeter = ",";
+			text += " " + p_ParamList[j].GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions);
 		}
-		return Bracket(priority, DisplaySN(GetPriority(), p_DisplayOptions), p_DisplayOptions, p_DebugSource) + "(" + text + ")";
+		return Bracket(priority, DisplaySN(GetPriority(), p_DisplayOptions), p_DisplayOptions, p_DebugSource) + text;
 	}
 
 	string SNI_Expression::DisplayUnify(size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const

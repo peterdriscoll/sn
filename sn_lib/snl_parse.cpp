@@ -105,6 +105,7 @@ namespace SNL
 			SN_LOCAL(m);
 			SN_LOCAL(n);
 			SN_LOCAL(l);
+			SN_LOCAL(c);
 
 			SN_LOCAL(p);
 			SN_LOCAL(q);
@@ -113,15 +114,16 @@ namespace SNL
 			SN_LOCAL(w2);
 
 			(Define(AsLambda)(d)(s)(i) == (
-				Local(m, Local(n, Local(l, Local(p, Local(q, 
-					s == w1 + l + m + Char('.') + w2 + n
+				Local(m, Local(n, Local(l, Local(p, Local(q, Local(c, Let(
+					s == w1 + l + m + c + w2 + n
+				,	m_Validate.IsWhiteSpaceContinuation(w1)
 				&&	m_CharacterSet.Lambda(l)
-				&&	m_Validate.IsWhiteSpaceContinuation(w1)
 				&&	AsName(d)(m)(p)
+				&&	c == Char('.')
 				&&	m_Validate.IsWhiteSpaceContinuation(w2)
 				&&	AsExpression(d)(n)(q)
 				&&	i == Meta(1, Lambda(Meta(-1, p), Meta(-1, q))).Notes(w1, w2)
-				)))))
+				)))))))
 			)).PartialAssert().Do();
 		}
 		string sAsLambda = AsLambda.DisplayValueSN();
@@ -135,16 +137,21 @@ namespace SNL
 			SN_LOCAL(m);
 			SN_LOCAL(n);
 
+			SN_LOCAL(l);
+			SN_LOCAL(k);
+
 			SN_LOCAL(p);
 			SN_LOCAL(q);
 
 			(Define(AsLet)(d)(s)(i) == (
-				Local(m, Local(n, Local(p, Local(q,
-					s == String("let") + m + String("in") + n
+				Local(m, Local(n, Local(p, Local(q, Local(l, Local(k, Let(
+					s == l + m + k + n
+				,	l == String("let")
 				&&	AsExpression(d)(m)(p)
+				&&	k == String("in")
 				&&	AsExpression(d)(n)(q)
 				&&	i == Meta(1, Let(Meta(-1, p), Meta(-1, q))
-				)))))
+				))))))))
 			)).PartialAssert().Do();
 		}
 		string sAsLet = AsLet.DisplayValueSN();
@@ -160,14 +167,17 @@ namespace SNL
 
 			SN_LOCAL(p);
 			SN_LOCAL(q);
-			
+
+			SN_LOCAL(l);
+
 			SN_LOCAL(AsLocalInternal);
 
 			(Define(AsLocal)(d)(s)(i) == (
-				Local(m,
-					s == String("local") + m
+				Local(m, Local(l, Let(
+					s == l + m
+				,	l == String("local")
 				&&	AsLocalInternal(d)(m)(i)
-				)
+				)))
 			)).PartialAssert().Do();
 
 			(Define(AsLocalInternal)(d)(s)(i) == (
@@ -196,13 +206,20 @@ namespace SNL
 			SN_LOCAL(q);
 			SN_LOCAL(r);
 
+			SN_LOCAL(c);
+			SN_LOCAL(t);
+			SN_LOCAL(e);
+
 			(Define(AsIf)(d)(s)(i) == (
-				Local(m, Local(n, Local(o, Local(p, Local(q, Local(r, Let(s == String("if") + m + String("then") + n + String("else") + o,
-					AsExpression(d)(m)(p)
+				Local(m, Local(n, Local(o, Local(p, Local(q, Local(r, Local(c, Local(t, Local(e, Let(s == c + m + t + n + e + o,
+					c == String("if")
+				&&	AsExpression(d)(m)(p)
+				&&	t == String("then")
 				&&	AsExpression(d)(n)(q)
+				&&	e == String("else")
 				&&	AsExpression(d)(o)(r)
 				&&	i == Meta(1, Meta(-1, p).If(Meta(-1, q), Meta(-1, r)))
-				)))))))
+				))))))))))
 			)).PartialAssert().Do();
 		}
 		string sAsIf = AsIf.DisplayValueSN();

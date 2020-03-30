@@ -21,7 +21,7 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
     $scope.debugstop = $scope.debugstopoptions[6];
 
     // Default settings
-    $scope.stepcount = '';
+    $scope.stepcount = 0;
     $scope.maxderivation = 30;
     $scope.errorstepcount = 0;
 
@@ -422,7 +422,6 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
     $scope.updatereruncommand = function () {
         $scope.reruncommand = $scope.laststepcount < $scope.stepcount && $scope.stepcount < $scope.currentstepcount;
     };
-
 
     // Open/close the settings drop down.
     $scope.settings = function () {

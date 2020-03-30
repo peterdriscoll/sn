@@ -109,20 +109,21 @@ namespace SNI
 
 	string SNI_Function::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
-		SN::SN_ExpressionList * l_ParameterList = new SN::SN_ExpressionList();
-		SNI_Expression *nextFunction = LoadParameters(l_ParameterList);
+		SN::SN_ExpressionList l_ParameterList;
+		SNI_Expression *nextFunction = LoadParameters(&l_ParameterList);
 		SNI_Expression *function = NULL;
 		while (nextFunction)
 		{
 			function = nextFunction;
-			nextFunction = function->LoadParameters(l_ParameterList);
+			nextFunction = function->LoadParameters(&l_ParameterList);
 		}
 		if (function)
 		{
-			SN::SN_Expression *param_List = function->LoadParametersCall(l_ParameterList);
-			string result = function->DisplayCall(GetPriority(), p_DisplayOptions, l_ParameterList->size(), param_List, this);
+			SN::SN_Expression *param_List = function->LoadParametersCall(&l_ParameterList);
+			string result = function->DisplayCall(GetPriority(), p_DisplayOptions, l_ParameterList.size(), param_List, this);
 			delete[] param_List;
 			return result;
+		//			return function->DisplayParameters(GetPriority(), p_DisplayOptions, l_ParameterList, this);
 		}
 		return "";
 	}
@@ -221,6 +222,7 @@ namespace SNI
 			if (functionDef)
 			{
 				SN::SN_Expression *param_List = functionDef->LoadParametersUnify(l_ParameterList);
+				delete l_ParameterList;
 				function = functionDef->UnifyArray(param_List, this).GetSNI_Expression();
 				delete[] param_List;
 			}

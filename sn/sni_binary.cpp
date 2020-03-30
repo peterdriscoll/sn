@@ -306,8 +306,8 @@ namespace SNI
 				return MultiplyCardinality(p_ParamList[PU2_First].Cardinality(), p_ParamList[PU2_Second].Cardinality());
 			}
 		}
-		else if (p_Depth == 3)
-		{  // This is for SNI_Add. Move. ????
+		else
+		{  // This is for SNI_Add, SNI_Concat.
 			SN::SN_Value result = p_ParamList[PU2_Result].GetVariableValue();
 			if (result.IsStringValue())
 			{

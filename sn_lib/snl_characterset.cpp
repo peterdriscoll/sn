@@ -32,6 +32,7 @@ namespace SNL
 		SN_LINK(AlphaNumeric);
 		SN_LINK(AlphaUnderNumeric);
 		SN_LINK(White);
+		SN_LINK(Lambda);
 	}
 
 	void SNL_CharacterSet::Init()
@@ -111,7 +112,7 @@ namespace SNL
 
 		{
 			SN_LOCAL(l);
-			(Define(Lambda)(l) == (l == (String("&lambda;") || Char('\\') || String("&lambda;"))).Collapse()).PartialAssert().Do();
+			(Define(Lambda)(l) == (l == (String("lambda") || Char('\\') || String("&lambda;"))).Collapse()).PartialAssert().Do();
 		}
 	}
 }
