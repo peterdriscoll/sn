@@ -145,6 +145,11 @@ namespace SNI
 		return m_IsExiting;
 	}
 
+	void SNI_DebugCommand::SetDebugAction(enum skynet::DebugAction p_DebugAction)
+	{
+		m_DebugAction = p_DebugAction;
+	}
+
 	void SNI_DebugCommand::ScheduleCommand(skynet::DebugAction p_DebugAction)
 	{
 		unique_lock<mutex> mutex_lock(m_Mutex);

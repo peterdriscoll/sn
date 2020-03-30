@@ -42,19 +42,19 @@ namespace SNI
 
 		virtual ~SNI_Manager();
 
-		string Description();
+		string Description()  const;
 
-		string LogFilePath();
+		string LogFilePath()  const;
 		void SetLogFilePath(string p_LogFilePath);
 
 		OnErrorHandler *ErrorHandler();
 		void SetErrorHandler(OnErrorHandler * p_ErrorHandler);
 
-		size_t MaxCardinalityCall();
-		size_t MaxCardinalityUnify();
+		size_t MaxCardinalityCall() const;
+		size_t MaxCardinalityUnify() const;
 		void SetMaxCardinality(size_t p_MaxCardinalityCall, size_t p_MaxCardinalityUnify);
 
-		bool DelayOnEvaluate();
+		bool DelayOnEvaluate() const;
 		void SetDelayOnEvaluate(bool p_DelayOnEvaluate);
 
 		void StartLogging(SN::LoggingLevel p_LoggingLevel, ostream *p_Stream);
@@ -62,37 +62,40 @@ namespace SNI
 		void StartDebugCommandLineServer(skynet::DebugAction p_DebugAction, int p_KbHit(), int p_GetCh());
 		void StartWebServer(skynet::DebugAction p_DebugAction, const string& p_Address, const string& p_Port, const string& p_DocRoot);
 
-		bool HasConsole();
+		bool HasConsole() const;
 		bool KbHit();
 		int  GetCh();
-		bool HasDebugServer();
+		bool HasDebugServer() const;
 
-		size_t DebugFieldWidth();
+		size_t DebugFieldWidth() const;
 		void SetDebugFieldWidth(size_t p_DebugFieldWidth);
 
-		size_t DebugTitleWidth();
+		size_t DebugTitleWidth() const;
 		void SetDebugTitleWidth(size_t p_DebugFieldWidth);
 
 		ostream * CreateLogFile(SN::LoggingLevel);
 
-		size_t LogBufferCapacity();
+		size_t LogBufferCapacity() const;
 		void SetLogBufferCapacity(size_t p_LogBufferCapacity);
 
-		size_t LogExpressionBufferCapacity();
+		size_t LogExpressionBufferCapacity() const;
 		void SetLogExpressionBufferCapacity(size_t p_LogExpressionBufferCapacity);
 
-		size_t MaxStackFrames();
+		size_t MaxStackFrames() const;
 		void SetMaxStackFrames(size_t p_MaxStackFrame);
 
 		// Processing options
-		skynet::DirectPassType GetDirectPassType();
+		skynet::DirectPassType GetDirectPassType() const;
 		void SetDirectPassType(skynet::DirectPassType p_DirectPassType);
 
-		skynet::EvaluationType GetEvaluationType();
+		skynet::EvaluationType GetEvaluationType() const;
 		void SetEvaluationType(skynet::EvaluationType p_EvaluationType);
 
-		skynet::LogicType GetLogicType();
+		skynet::LogicType GetLogicType() const;
 		void SetLogicType(skynet::LogicType p_LogicType);
+
+		bool TailCallOptimization() const;
+		void SetTailCallOptimization(bool p_TailCallOptimization);
 
 		// debugging
 		void Breakpoint();
@@ -125,7 +128,7 @@ namespace SNI
 		skynet::DirectPassType m_DirectPassType;
 		skynet::EvaluationType m_EvaluationType;
 		skynet::LogicType m_LogicType;
-
+		bool m_TailCallOptimization;
 		bool m_HasConsole;
 
 		int (*m_KbHit)();

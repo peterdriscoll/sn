@@ -731,9 +731,8 @@ namespace SNI
 			if (e.GetSNI_Error())
 			{
 				return e;
-			} else 
-			if (e.IsNull())
-			{ // dog dog dog
+			} else if (e.IsNull())
+			{
 				return skynet::OK;
 			}
 			return e;

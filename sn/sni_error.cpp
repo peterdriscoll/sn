@@ -162,6 +162,11 @@ namespace SNI
 		return !m_Success;
 	}
 
+	bool SNI_Error::IsErrorType() const
+	{
+		return true;
+	}
+
 	bool SNI_Error::IsSignificantError() const
 	{
 		return !m_Success && !m_Description.empty() && !SNI_Thread::GetThread()->ContextWorld() && !ErrorIsHandled();

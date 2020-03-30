@@ -101,11 +101,6 @@ namespace SNI
 		LongDouble::Class().GetSNI_Class()->Fix();
 	}
 
-	bool SNI_Manager::HasDebugServer()
-	{
-		return m_HasDebugServer;
-	}
-
 	SNI_Manager::SNI_Manager()
 		: m_ErrorHandler(ThrowErrorHandler)
 		, m_DelayOnEvaluate(false)
@@ -127,6 +122,7 @@ namespace SNI
 		, m_DirectPassType(DIRECT_PASS_TYPE)
 		, m_EvaluationType(EVALUATION_TYPE)
 		, m_LogicType(LOGIC_TYPE)
+		, m_TailCallOptimization(TAIL_CALL_OPTIMIZATION)
 	{
 		Initialize();
 	}
@@ -153,6 +149,7 @@ namespace SNI
 		, m_DirectPassType(DIRECT_PASS_TYPE)
 		, m_EvaluationType(EVALUATION_TYPE)
 		, m_LogicType(LOGIC_TYPE)
+		, m_TailCallOptimization(TAIL_CALL_OPTIMIZATION)
 	{
 		Initialize();
 	}
@@ -179,6 +176,7 @@ namespace SNI
 		, m_DirectPassType(DIRECT_PASS_TYPE)
 		, m_EvaluationType(EVALUATION_TYPE)
 		, m_LogicType(LOGIC_TYPE)
+		, m_TailCallOptimization(TAIL_CALL_OPTIMIZATION)
 	{
 		Initialize();
 	}
@@ -192,10 +190,6 @@ namespace SNI
 			thread->Breakpoint(SN::DebugStop, SN::ExitId, "", "Exit", NULL, SN::EndPoint);
 			thread->SetTopManager(m_LastManager);
 			thread->ClearDependencyChecks();
-		}
-		else
-		{
-			long dog = 10;
 		}
 		if (m_CommandServerThreadUsed)
 		{
@@ -234,15 +228,16 @@ namespace SNI
 		{
 			m_Transaction.Init();
 		}
-		else
-		{
-			long dog = 10;
-		}
 		SNI_Thread::GetThread()->SetTopManager(this);
 		LOG(WriteHeading(SN::DebugLevel, "Start - " + m_Description));
 	}
 
-	string SNI_Manager::Description()
+	bool SNI_Manager::HasDebugServer() const
+	{
+		return m_HasDebugServer;
+	}
+
+	string SNI_Manager::Description() const
 	{
 		return m_Description;
 	}
@@ -253,7 +248,7 @@ namespace SNI
 		m_MaxCardinalityUnify = p_MaxCardinalityUnify;
 	}
 
-	string SNI_Manager::LogFilePath()
+	string SNI_Manager::LogFilePath() const
 	{
 		return m_LogFilePath;
 	}
@@ -279,7 +274,7 @@ namespace SNI
 		}
 	}
 
-	bool SNI_Manager::DelayOnEvaluate()
+	bool SNI_Manager::DelayOnEvaluate() const
 	{
 		return m_DelayOnEvaluate;
 	}
@@ -289,12 +284,12 @@ namespace SNI
 		m_DelayOnEvaluate = p_DelayOnEvaluate;
 	}
 
-	size_t SNI_Manager::MaxCardinalityCall()
+	size_t SNI_Manager::MaxCardinalityCall() const
 	{
 		return m_MaxCardinalityCall;
 	}
 
-	size_t SNI_Manager::MaxCardinalityUnify()
+	size_t SNI_Manager::MaxCardinalityUnify() const
 	{
 		return m_MaxCardinalityUnify;
 	}
@@ -511,7 +506,7 @@ namespace SNI
 		m_WebServerThreadUsageCount++;
 	}
 
-	bool SNI_Manager::HasConsole()
+	bool SNI_Manager::HasConsole() const
 	{
 		return m_GetCh;
 	}
@@ -526,7 +521,7 @@ namespace SNI
 		return (*m_GetCh)();
 	}
 
-	size_t SNI_Manager::DebugFieldWidth()
+	size_t SNI_Manager::DebugFieldWidth() const
 	{
 		return m_DebugFieldWidth;
 	}
@@ -536,7 +531,7 @@ namespace SNI
 		m_DebugFieldWidth = p_DebugFieldWidth;
 	}
 
-	size_t SNI_Manager::DebugTitleWidth()
+	size_t SNI_Manager::DebugTitleWidth() const
 	{
 		return m_DebugTitleWidth;
 	}
@@ -562,7 +557,7 @@ namespace SNI
 		}
 		return logFile;
 	}
-	size_t SNI_Manager::LogBufferCapacity()
+	size_t SNI_Manager::LogBufferCapacity() const
 	{
 		return m_LogBufferCapacity;
 	}
@@ -570,7 +565,7 @@ namespace SNI
 	{
 		m_LogBufferCapacity = p_LogBufferCapacity;
 	}
-	size_t SNI_Manager::LogExpressionBufferCapacity()
+	size_t SNI_Manager::LogExpressionBufferCapacity() const
 	{
 		return m_LogExpressionBufferCapacity;
 	}
@@ -578,7 +573,7 @@ namespace SNI
 	{
 		m_LogExpressionBufferCapacity = p_LogExpressionBufferCapacity;
 	}
-	size_t SNI_Manager::MaxStackFrames()
+	size_t SNI_Manager::MaxStackFrames() const
 	{
 		return m_MaxStackFrames;
 	}
@@ -587,7 +582,7 @@ namespace SNI
 		m_MaxStackFrames = p_MaxStackFrame;
 	}
 
-	skynet::DirectPassType SNI_Manager::GetDirectPassType()
+	skynet::DirectPassType SNI_Manager::GetDirectPassType() const
 	{
 		return m_DirectPassType;
 	}
@@ -597,7 +592,7 @@ namespace SNI
 		m_DirectPassType = p_DirectPassType;
 	}
 
-	skynet::EvaluationType SNI_Manager::GetEvaluationType()
+	skynet::EvaluationType SNI_Manager::GetEvaluationType() const
 	{
 		return m_EvaluationType;
 	}
@@ -607,7 +602,7 @@ namespace SNI
 		m_EvaluationType = p_EvaluationType;
 	}
 
-	skynet::LogicType SNI_Manager::GetLogicType()
+	skynet::LogicType SNI_Manager::GetLogicType() const
 	{
 		return m_LogicType;
 	}
@@ -615,6 +610,16 @@ namespace SNI
 	void SNI_Manager::SetLogicType(skynet::LogicType p_LogicType)
 	{
 		m_LogicType = p_LogicType;
+	}
+
+	bool SNI_Manager::TailCallOptimization() const
+	{
+		return m_TailCallOptimization;
+	}
+
+	void SNI_Manager::SetTailCallOptimization(bool p_TailCallOptimization)
+	{
+		m_TailCallOptimization = p_TailCallOptimization;
 	}
 
 	void SNI_Manager::Breakpoint()

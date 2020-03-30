@@ -413,6 +413,11 @@ namespace SNI
 		return false;
 	}
 
+	bool SNI_Expression::IsErrorType() const
+	{
+		return false;
+	}
+
 	bool SNI_Expression::IsFixed() const
 	{
 		return false;

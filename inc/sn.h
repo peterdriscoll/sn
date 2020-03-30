@@ -28,6 +28,7 @@
 #define DIRECT_PASS_TYPE skynet::DirectPass
 #define EVALUATION_TYPE skynet::Lazy /*Lazy, Strict*/
 #define LOGIC_TYPE skynet::Parsing
+#define TAIL_CALL_OPTIMIZATION true
 
 namespace skynet
 {

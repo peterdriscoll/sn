@@ -219,6 +219,14 @@ namespace SNI
 
 			if (useAllValuesEqual && sCondition.AllValuesEqual(skynet::True))
 			{
+				if (SNI_Thread::TopManager()->TailCallOptimization())
+				{
+					LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": TCO " + DisplayUnify(GetNumParameters(), p_ParameterList, p_Source)));
+					Breakpoint(SN::DebugStop, SN::RightId, typeName, "Tail Call Optimization", p_Source, SN::CallPoint);
+					SNI_Frame::Pop();
+					//SNI_Thread::TopManager()->Breakpoint();
+					return p_ParameterList[2];
+				}
 				SN::SN_Expression *paramList = new SN::SN_Expression[2];
 				paramList[0] = p_ParameterList[0];
 				paramList[1] = p_ParameterList[2];
@@ -234,6 +242,14 @@ namespace SNI
 			}
 			else if (useAllValuesEqual && sCondition.AllValuesEqual(skynet::False))
 			{
+				if (SNI_Thread::TopManager()->TailCallOptimization())
+				{
+					LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": TCO " + DisplayUnify(GetNumParameters(), p_ParameterList, p_Source)));
+					Breakpoint(SN::DebugStop, SN::RightId, typeName, "Tail Call Optimization", p_Source, SN::CallPoint);
+					SNI_Frame::Pop();
+					//SNI_Thread::TopManager()->Breakpoint();
+					return p_ParameterList[3];
+				}
 				SN::SN_Expression *paramList = new SN::SN_Expression[2];
 				paramList[0] = p_ParameterList[0];
 				paramList[1] = p_ParameterList[3];

@@ -31,6 +31,7 @@ namespace SNI
 		bool IsQuitting();
 		bool IsExiting();
 
+		void SetDebugAction(skynet::DebugAction p_DebugAction);
 		void ScheduleCommand(skynet::DebugAction p_DebugAction);
 
 		// Debug break actions.

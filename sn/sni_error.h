@@ -49,6 +49,7 @@ namespace SNI
 		void AddError(SN::SN_Error & p_Error);
 		void CheckChildError();
 		virtual bool IsError() const;
+		bool IsErrorType() const;
 		bool IsSignificantError() const;
 
 		virtual bool GetBool();

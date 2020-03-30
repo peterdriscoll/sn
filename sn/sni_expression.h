@@ -142,6 +142,7 @@ namespace SNI
 		virtual const SNI_Expression *GetSafeValue() const;
 		virtual bool IsError() const;
 		virtual bool IsSignificantError() const;
+		virtual bool IsErrorType() const;
 		virtual bool IsFixed() const;
 		virtual bool AllValues() const;
 		virtual bool AllValuesEqual(const SN::SN_Expression & p_Value) const;
