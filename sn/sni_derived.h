@@ -37,6 +37,7 @@ namespace SNI
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 		virtual size_t Hash() const;
 
+		virtual bool IsValue() const;
 		virtual bool IsFixed() const;
 		virtual void Fix();
 

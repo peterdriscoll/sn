@@ -218,38 +218,40 @@ namespace SNI
 		SNI_Error *e = dynamic_cast<SNI_Error *>(function);
 		while (!e)
 		{
+			if (!l_ParameterList)
+			{
+				l_ParameterList = new SN::SN_ExpressionList();
+				l_ParameterList->push_back(p_Value);
+			}
 			SNI_FunctionDef *functionDef = dynamic_cast<SNI_FunctionDef *>(function);
 			if (functionDef)
 			{
 				SN::SN_Expression *param_List = functionDef->LoadParametersUnify(l_ParameterList);
 				delete l_ParameterList;
+				l_ParameterList = NULL;
 				function = functionDef->UnifyArray(param_List, this).GetSNI_Expression();
 				delete[] param_List;
-				if (!function->IsErrorType())
-				{
-
-					l_ParameterList = new SN::SN_ExpressionList();
-					l_ParameterList->push_back(p_Value);
-					if (function->IsValue())
-					{
-						SN::SN_Expression *paramList = new SN::SN_Expression[2];
-						paramList[0] = p_Value;
-						paramList[1] = function;
-						function = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList, this).GetSNI_Expression();;
-						delete[] paramList;
-					}
-					else
-					{
-						l_ParameterList->push_back(function);
-						function = skynet::Same.GetSNI_FunctionDef();
-					}
-				}
 			}
 			else
 			{
-				function = function->Unify(l_ParameterList).GetSNI_Expression();
+				if (function->IsValue() && l_ParameterList->size() == 1)
+				{
+					SN::SN_Expression *paramList = new SN::SN_Expression[2];
+					paramList[0] = p_Value;
+					paramList[1] = function;
+					function = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList, this).GetSNI_Expression();;
+					delete[] paramList;
+				}
+				else
+				{
+					function = function->Unify(l_ParameterList).GetSNI_Expression();
+				}
 			}
 			e = dynamic_cast<SNI_Error *>(function);
+		}
+		if (l_ParameterList)
+		{
+			delete l_ParameterList;;
 		}
 		SN::SN_Error err(e);
 		ASSERTM(e == err.GetSNI_Error(), "Must be equal.");

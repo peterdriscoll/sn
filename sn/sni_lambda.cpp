@@ -272,7 +272,14 @@ namespace SNI
 		else
 		{
 			Breakpoint(SN::DebugStop, SN::ParameterOneId, GetTypeName(), "Assert value parameter", this, SN::CallPoint);
-			result = m_Expression->AssertValue(p_ParameterList->back());
+			if (SNI_Thread::TopManager()->TailCallOptimization())
+			{
+				result = m_Expression; // Let the AssertValue lower down the stack asert it.
+			}
+			else
+			{
+				result = m_Expression->AssertValue(p_ParameterList->back());
+			}
 		}
 
 		Breakpoint(SN::DebugStop, SN::RightId, GetTypeName(), "Assert value return", this, SN::CallPoint);

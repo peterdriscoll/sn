@@ -103,6 +103,11 @@ namespace SNI
 		return 0; // _Hash_representation(m_Vector);
 	}
 
+	bool SNI_Derived::IsValue() const
+	{
+		return false;
+	}
+
 	bool SNI_Derived::IsFixed() const
 	{
 		return m_Fixed;

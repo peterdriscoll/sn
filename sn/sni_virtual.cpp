@@ -218,6 +218,11 @@ namespace SNI
 		return 0; // _Hash_representation(m_CallList);
 	}
 
+	bool SNI_Virtual::IsValue() const
+	{
+		return false;
+	}
+
 	bool SNI_Virtual::IsFixed() const
 	{
 		return m_Fixed;

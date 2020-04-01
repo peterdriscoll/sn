@@ -172,11 +172,11 @@ namespace test_sn
 
 				SN_DECLARE(f);
 				(f == (plus || times)).Assert().Do();
-				string f_string = f.DisplaySN();
+				string f_string = f.DisplayValueSN();
 
 				SN_DECLARE(x);
 				(x == f(long(5))(long(8))).Assert().Do();
-				string x_string = x.DisplaySN();
+				string x_string = x.DisplayValueSN();
 				(x < long(20)).Assert().Do();
 				(x == long(13)).Assert().Do();
 			}
@@ -212,7 +212,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Value Set Of String Functions", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false);
 
 				SN_DECLARE(f);
 
@@ -232,11 +232,11 @@ namespace test_sn
 				string f_before_string = f.DisplaySN();
 
 				(Define(f) == (wrap || map)).PartialAssert().Do();
-				string f_string = f.DisplaySN();
+				string f_string = f.DisplayValueSN();
 
 				SN_DECLARE(x);
 				(String("{{expression}}") == f(x)).Assert().Do();
-				string x_display = x.DisplaySN();
+				string x_display = x.DisplayValueSN();
 				string x_string = x.BuildSet().DoEvaluate().DisplaySN();
 				string x_compare_string = "{String(\"expression\"), String(\"{expression}\"), String(\"{{expression}}\")}";
 

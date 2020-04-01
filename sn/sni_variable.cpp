@@ -706,6 +706,11 @@ namespace SNI
 		if (m_Value)
 		{
 			SNI_Expression * l_clone = m_Value->Clone(this, (*p_ParameterList)[0].GetSNI_Expression());
+			
+			if (SNI_Thread::TopManager()->TailCallOptimization())
+			{
+				LOG(WriteExp(l_clone));
+			}
 
 			LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": Start " + DisplayUnifyExp(p_ParameterList)));
 			LOG(WriteClonedExpression(SN::DebugLevel, "Unify var: ", l_clone));
@@ -739,7 +744,7 @@ namespace SNI
 		}
 		else
 		{
-			m_Value = AddLambdas(p_ParameterList).GetSNI_Expression();
+			AssertValue(AddLambdas(p_ParameterList).GetSNI_Expression());
 			SNI_Thread::GetThread()->RegisterChange(dynamic_cast<SNI_Variable *>(this));
 			REQUESTPROMOTION(m_Value);
 			return skynet::OK;

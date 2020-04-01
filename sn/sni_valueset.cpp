@@ -793,6 +793,7 @@ namespace SNI
 		bool success = false;
 		SNI_World *contextWorld = SNI_Thread::GetThread()->ContextWorld();
 		SNI_WorldSet *worldSet = GetWorldSet();
+		SN::SN_Expression &value = (*p_ParameterList)[0];
 		for (SNI_TaggedValue &tv : m_ValueList)
 		{
 			SNI_World *world = tv.GetWorld();
@@ -808,23 +809,42 @@ namespace SNI
 			{
 				if (!contextWorld || contextWorld->CompatibleWorld(world))
 				{
-					SN::SN_ExpressionList paramListClone = *p_ParameterList;
+					SN::SN_ExpressionList *paramListClone = new SN::SN_ExpressionList();
+					*paramListClone = *p_ParameterList;
 					// Flatten the call stack, by returning the function to be called from Unify, instead of calling it there.
 					SNI_Expression *function = tv.GetValue().GetSNI_Expression();
 					SNI_Error *e = dynamic_cast<SNI_Error *>(function);
 					SNI_Thread::GetThread()->PushContextWorld(world);
 					while (!e)
 					{
+						if (!paramListClone)
+						{
+							paramListClone = new SN::SN_ExpressionList();
+							paramListClone->push_back(value);
+						}
 						SNI_FunctionDef *functionDef = dynamic_cast<SNI_FunctionDef *>(function);
 						if (functionDef)
 						{
-							SN::SN_Expression *param_List = functionDef->LoadParametersUnify(&paramListClone);
+							SN::SN_Expression *param_List = functionDef->LoadParametersUnify(paramListClone);
+							delete paramListClone;
+							paramListClone = NULL;
 							function = functionDef->UnifyArray(param_List, this).GetSNI_Expression();
 							delete[] param_List;
 						}
 						else
 						{
-							function = function->Unify(&paramListClone).GetSNI_Expression();
+							if (function->IsValue() && paramListClone->size() == 1)
+							{
+								SN::SN_Expression *paramList = new SN::SN_Expression[2];
+								paramList[0] = value;
+								paramList[1] = function;
+								function = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList, this).GetSNI_Expression();;
+								delete[] paramList;
+							}
+							else
+							{
+								function = function->Unify(paramListClone).GetSNI_Expression();
+							}
 						}
 						e = dynamic_cast<SNI_Error *>(function);
 					}
