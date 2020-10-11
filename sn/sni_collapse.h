@@ -20,8 +20,8 @@ namespace SNI
 		virtual string SNI_Collapse::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression * p_DebugSource) const;
 		virtual long GetPriority() const;
 
-		SN::SN_Value PrimaryFunctionValue(const SN::SN_Value &p_Param) const;
-		SN::SN_Expression PrimaryFunctionExpression(const SN::SN_Expression &p_Param) const;
+		virtual SN::SN_Value PrimaryFunctionValue(const SN::SN_Value &p_Param) const;
+		virtual SN::SN_Expression PrimaryFunctionExpression(const SN::SN_Expression &p_Param) const;
 		virtual SN::SN_Value InverseFunctionValue(const SN::SN_Value &p_Param) const;
 		virtual SN::SN_Expression InverseFunctionExpression(const SN::SN_Expression &p_Param) const;
 
