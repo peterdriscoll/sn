@@ -9,3 +9,5 @@
 #include <fstream>
 
 #include "snl.h"
+
+const string doc_root = SOLUTION_DIR "html";

@@ -16,8 +16,6 @@ namespace test_sn
 	TEST_CLASS(test_sn_number)
 	{
 	private:
-		const string doc_root = "C:/Users/peter/Documents/Source/Repos/skynet2/html";
-
 		bool runWebServer = false;
 
 		static void AssertErrorHandler(SN::SN_Error p_Result)

@@ -6,7 +6,7 @@
 using namespace PGCX;
 using namespace skynet; // Interface namespace for SN.
 
-string doc_root = "C:/Users/peter/Documents/Source/Repos/skynet2/html";
+string doc_root = SOLUTION_DIR "html";
 
 void TestValidate_IsString()
 {
