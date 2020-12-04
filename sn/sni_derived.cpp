@@ -65,6 +65,20 @@ namespace SNI
 
 	string SNI_Derived::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
+		if (p_DisplayOptions.GetLevel() == 0)
+		{
+			p_DisplayOptions.IncrementLevel();
+			string result = GetTypeName() + "(";
+			string delimeter;
+			for (const SN::SN_Expression &call : m_Vector)
+			{
+				result += delimeter + call.GetSNI_Expression()->DisplaySN(priority, p_DisplayOptions);
+				delimeter = ",";
+			}
+			result += ")";
+			p_DisplayOptions.DecrementLevel();
+			return result;
+		}
 		return GetTypeName() + "()";
 	}
 
@@ -120,28 +134,6 @@ namespace SNI
 
 	SNI_Expression * SNI_Derived::Clone(long p_MetaLevel, SNI_Frame *p_Frame, bool &p_Changed)
 	{
-		bool changed = false;
-
-		SNI_Derived *l_clone = new SNI_Derived();
-		if (m_Fixed)
-		{
-			l_clone->Fix();
-		}
-		l_clone->m_Vector.resize(m_Vector.size());
-		for (size_t j = 0; j < m_Vector.size(); j++)
-		{
-			SNI_Expression *item = m_Vector[j];
-			if (item)
-			{
-				l_clone->m_Vector[j] = item->Clone(p_MetaLevel, p_Frame, changed);
-			}
-		}
-
-		if (changed)
-		{
-			p_Changed = true;
-			return dynamic_cast<SNI_Expression *>(l_clone);
-		}
 		return this;
 	}
 
@@ -162,8 +154,9 @@ namespace SNI
 			{
 				Breakpoint(SN::DebugStop, (SN::BreakId)(SN::ParameterOneId+id), GetTypeName(), "Call hierarchy " + to_string(id), NULL, SN::CallPoint);
 				++id;
+				SNI_Expression * l_clone = item->Clone(this, NULL);
 				SN::SN_ExpressionList paramListClone = *p_ParameterList;
-				SN::SN_Expression result = item->Call(&paramListClone, p_MetaLevel);
+				SN::SN_Expression result = l_clone->Call(&paramListClone, p_MetaLevel);
 				if (result.IsError())
 				{
 					return result;
@@ -198,7 +191,13 @@ namespace SNI
 
 		if (!m_Fixed)
 		{
-			return LOG_RETURN(context, SN::SN_Error(false, false, GetTypeName() + " Fix the derived calls. There maybe be more defines, so the define is undefined."));
+			SN::SN_Expression result(this);
+			while (!p_ParameterList->empty())
+			{
+				result = SN::SN_Function(result, p_ParameterList->back().DoPartialEvaluate(p_MetaLevel));
+				p_ParameterList->pop_back();
+			}
+			return LOG_RETURN(context, result);
 		}
 		SN::SN_Expression finalResult;
 		unsigned long id = 0;
@@ -251,14 +250,13 @@ namespace SNI
 				{
 					Breakpoint(SN::DebugStop, (SN::BreakId)(SN::ParameterOneId + id), GetTypeName(), "Unify hierarchy " + to_string(id), NULL, SN::CallPoint);
 					++id;
+					SNI_Expression * l_clone = item->Clone(this, NULL);
 					SN::SN_ExpressionList paramListClone = *p_ParameterList;
-					SN::SN_Expression e = item->Unify(&paramListClone);
+					SN::SN_Expression e = l_clone->Unify(&paramListClone);
 					if (e.IsError())
 					{
 						return e;
 					}
-					SNI_Variable *result = SNI_Frame::Top()->GetResult();
-					result->SetValue((*p_ParameterList)[0].GetVariableValue());
 				}
 				else
 				{
