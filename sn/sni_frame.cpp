@@ -157,7 +157,7 @@ namespace SNI
 
 	SNI_Variable * SNI_Frame::GetResult()
 	{
-		ASSERTM(m_VariableList.size(), "Result is first parameter of.");
+		ASSERTM(m_VariableList.size(), "Result is first parameter of frame.");
 		return m_VariableList[0];
 	}
 
