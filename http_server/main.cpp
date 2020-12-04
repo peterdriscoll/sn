@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
     }
 
     // Initialise the server.
-	char *doc_root = "C:/Users/peter_driscoll/Documents/Source/Repos/skynet2/html";
+	char *doc_root = "C:/Users/peter/Documents/Source/Repos/skynet2/html";
 
 	IHTTP_Server *server = SN::SN_Factory<IHTTP_Server>::CreateObject();
 	

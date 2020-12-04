@@ -16,7 +16,7 @@ namespace test_sn
 	TEST_CLASS(test_sn_parser)
 	{
 	private:
-		const string doc_root = "C:/Users/peter_driscoll/Documents/Source/Repos/skynet2/html";
+		const string doc_root = "C:/Users/peter/Documents/Source/Repos/skynet2/html";
 
 		bool runWebServer = false;
 
