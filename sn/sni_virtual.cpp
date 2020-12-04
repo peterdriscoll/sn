@@ -168,19 +168,25 @@ namespace SNI
 
 	string SNI_Virtual::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
-		if (m_Fixed)
+		if (p_DisplayOptions.GetLevel() == 0)
 		{
-			return m_CallExpression.GetSNI_Expression()->DisplaySN(priority, p_DisplayOptions);
+			p_DisplayOptions.IncrementLevel();
+			if (m_Fixed)
+			{
+				return m_CallExpression.GetSNI_Expression()->DisplaySN(priority, p_DisplayOptions);
+			}
+			string result = GetTypeName() + "(";
+			string delimeter;
+			for (const SN::SN_Expression &call : m_CallList)
+			{
+				result += delimeter + call.GetSNI_Expression()->DisplaySN(priority, p_DisplayOptions);
+				delimeter = ",";
+			}
+			result += ")";
+			p_DisplayOptions.DecrementLevel();
+			return result;
 		}
-		string result = GetTypeName() + "(";
-		string delimeter;
-		for (const SN::SN_Expression &call : m_CallList)
-		{
-			result += delimeter + call.GetSNI_Expression()->DisplaySN(priority, p_DisplayOptions);
-			delimeter = ",";
-		}
-		result += ")";
-		return result;
+		return GetTypeName() + "()";
 	}
 
 	long SNI_Virtual::GetPriority() const
@@ -255,7 +261,7 @@ namespace SNI
 			return SN::SN_Error(false, false, GetTypeName() + " - No function definitions.");
 		}
 		ConstructionTree *tree = BuildTree();
-		return tree->CreateExpression();
+		return tree->CreateExpression().DoPartialEvaluate();
 	}
 
 	void SNI_Virtual::BuildImplementation()
@@ -265,29 +271,6 @@ namespace SNI
 
 	SNI_Expression * SNI_Virtual::Clone(long p_MetaLevel, SNI_Frame *p_Frame, bool &p_Changed)
 	{
-		if (m_Fixed)
-		{
-			return m_CallExpression.GetSNI_Expression()->Clone(p_MetaLevel, p_Frame, p_Changed);
-		}
-
-		bool changed = false;
-
-		SNI_Virtual *l_clone = new SNI_Virtual();
-		l_clone->m_CallList.resize(m_CallList.size());
-		for (size_t j = 0; j < m_CallList.size(); j++)
-		{
-			SN::SN_Expression item = m_CallList[j];
-			if (!item.IsNull())
-			{
-				l_clone->m_CallList[j] = item.GetSNI_Expression()->Clone(p_MetaLevel, p_Frame, changed);
-			}
-		}
-
-		if (changed)
-		{
-			p_Changed = true;
-			return dynamic_cast<SNI_Expression *>(l_clone);
-		}
 		return this;
 	}
 
@@ -298,7 +281,9 @@ namespace SNI
 		{
 			return LOG_RETURN(context, SN::SN_Error(false, false, GetTypeName() + " Fix the virtual calls. There maybe be more defines, so the call is undefined."));
 		}
-		return LOG_RETURN(context, m_CallExpression.GetSNI_Expression()->Call(p_ParameterList, p_MetaLevel));
+		SNI_Expression * l_clone = m_CallExpression.GetSNI_Expression()->Clone(this, NULL);
+
+		return LOG_RETURN(context, l_clone->Call(p_ParameterList, p_MetaLevel));
 	}
 
 	SN::SN_Expression SNI_Virtual::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
@@ -307,7 +292,13 @@ namespace SNI
 
 		if (!m_Fixed)
 		{
-			return LOG_RETURN(context, SN::SN_Error(false, false, GetTypeName() + " Fix the virtual calls. There maybe be more defines, so the define is undefined."));
+			SN::SN_Expression result(this);
+			while (!p_ParameterList->empty())
+			{
+				result = SN::SN_Function(result, p_ParameterList->back().DoPartialEvaluate(p_MetaLevel));
+				p_ParameterList->pop_back();
+			}
+			return LOG_RETURN(context, result);
 		}
 		return LOG_RETURN(context, m_CallExpression.GetSNI_Expression()->PartialCall(p_ParameterList, p_MetaLevel));
 	}
@@ -316,7 +307,9 @@ namespace SNI
 	{
 		if (m_Fixed)
 		{
-			return m_CallExpression.GetSNI_Expression()->Unify(p_ParameterList);
+			SNI_Expression * l_clone = m_CallExpression.GetSNI_Expression()->Clone(this, NULL);
+
+			return l_clone->Unify(p_ParameterList);
 		}
 		else
 		{
