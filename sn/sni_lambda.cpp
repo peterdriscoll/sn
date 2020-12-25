@@ -222,14 +222,18 @@ namespace SNI
 
 		ASSERTM(p_ParameterList->size() >0, "Cannot call a lambda without a parameter");
 
-		SNI_Expression * param = p_ParameterList->front().GetSNI_Expression();
-		p_ParameterList->erase(p_ParameterList->begin());
-		param->PartialAssertValue(SN::SN_Expression(m_FormalParameter));
-		if (p_ParameterList->size() > 0)
+		SN::SN_Expression param = p_ParameterList->back().DoPartialEvaluate(p_MetaLevel);
+		p_ParameterList->pop_back();
+		if (param.IsKnownValue() && !param.IsLambdaValue())
 		{
-			return m_Expression->PartialCall(p_ParameterList, p_MetaLevel);
+			m_FormalParameter->PartialAssertValue(param);
+			if (p_ParameterList->size() > 0)
+			{
+				return m_Expression->PartialCall(p_ParameterList, p_MetaLevel);
+			}
+			return LOG_RETURN(context, m_Expression->DoPartialEvaluate(p_MetaLevel));
 		}
-		return LOG_RETURN(context, m_Expression->DoPartialEvaluate(p_MetaLevel));
+		return LOG_RETURN(context, SN::SN_Function(DoPartialEvaluate(p_MetaLevel), param));
 	}
 
 	SN::SN_Expression SNI_Lambda::DoEvaluate(long p_MetaLevel /* = 0 */) const
@@ -239,7 +243,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_Lambda::DoPartialEvaluate(long p_MetaLevel /* = 0 */) const
 	{
-		return this;
+		return SN::SN_Lambda(m_FormalParameter, m_Expression->DoPartialEvaluate(p_MetaLevel), m_ConstraintValue->DoPartialEvaluate(p_MetaLevel));
 	}
 
 	SN::SN_Expression SNI_Lambda::Unify(SN::SN_ExpressionList * p_ParameterList)
@@ -291,8 +295,8 @@ namespace SNI
 		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Lambda::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )"));
 
 		ASSERTM(p_ParameterList->size() >0, "Cannot call a lambda without a parameter");
-		SNI_Expression * param = p_ParameterList->front().GetValue().GetSNI_Expression();
-		p_ParameterList->erase(p_ParameterList->begin());
+		SN::SN_Expression param = p_ParameterList->back().GetValue();
+		p_ParameterList->pop_back();
 		SN::SN_Error e = SN::SN_Expression(m_FormalParameter).PartialAssertValue(param, true);
 		if (e.IsError())
 		{
