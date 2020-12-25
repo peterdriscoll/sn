@@ -110,6 +110,7 @@ namespace SNI
 		, m_HasConsole(false)
 		, m_DebugFieldWidth(20)
 		, m_DebugTitleWidth(40)
+		, m_AutoDefine(true)
 		, m_KbHit(NULL)
 	    , m_GetCh(NULL)
 		, m_WebServerThreadUsed(false)
@@ -137,6 +138,7 @@ namespace SNI
 		, m_HasConsole(p_Manager->m_HasConsole)
 		, m_DebugFieldWidth(p_Manager->m_DebugFieldWidth)
 		, m_DebugTitleWidth(p_Manager->m_DebugTitleWidth)
+		, m_AutoDefine(true)
 		, m_KbHit(p_Manager->m_KbHit)
 		, m_GetCh(p_Manager->m_GetCh)
 		, m_WebServerThreadUsed(false)
@@ -164,6 +166,7 @@ namespace SNI
 		, m_DebugTitleWidth(40)
 		, m_LogFilePath(DefaultLogFilePath)
 		, m_HasConsole(false)
+		, m_AutoDefine(true)
 		, m_KbHit(NULL)
 		, m_GetCh(NULL)
 		, m_WebServerThreadUsed(false)
@@ -580,6 +583,16 @@ namespace SNI
 	void SNI_Manager::SetMaxStackFrames(size_t p_MaxStackFrame)
 	{
 		m_MaxStackFrames = p_MaxStackFrame;
+	}
+
+	bool SNI_Manager::AutoDefine() const
+	{
+		return m_AutoDefine;
+	}
+
+	void SNI_Manager::SetAutoDefine(bool p_AutoDefine)
+	{
+		m_AutoDefine = p_AutoDefine;
 	}
 
 	skynet::DirectPassType SNI_Manager::GetDirectPassType() const

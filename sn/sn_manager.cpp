@@ -167,6 +167,16 @@ namespace SN
 		m_Manager->SetDebugTitleWidth(p_DebugTitleWidth);
 	}
 
+	bool SN_Manager::AutoDefine()
+	{
+		return m_Manager->AutoDefine();
+	}
+
+	void SN_Manager::SetAutoDefine(bool p_AutoDefine)
+	{
+		m_Manager->SetAutoDefine(p_AutoDefine);
+	}
+
 	skynet::DirectPassType SN_Manager::GetDirectPassType()
 	{
 		return m_Manager->GetDirectPassType();
@@ -195,6 +205,16 @@ namespace SN
 	void SN_Manager::SetLogicType(skynet::LogicType p_LogicType)
 	{
 		m_Manager->SetLogicType(p_LogicType);
+	}
+
+	bool SN_Manager::TailCallOptimization() const
+	{
+		return m_Manager->TailCallOptimization();
+	}
+
+	void SN_Manager::SetTailCallOptimization(bool p_TailCallOptimization)
+	{
+		m_Manager->SetTailCallOptimization(p_TailCallOptimization);
 	}
 
 	void SN_Manager::Breakpoint()

@@ -195,7 +195,16 @@ namespace SNI
 			}
 			else
 			{
-				return SN::SN_Error(PrimaryFunctionValue(p_ParamList[PU1_First].GetVariableValue()).Equivalent(p_ParamList[PU1_Result].GetVariableValue()), false);
+				SN::SN_Expression value = PrimaryFunctionValue(p_ParamList[PU1_First].GetVariableValue());
+				if (value.IsError())
+				{
+					return value.GetSNI_Error();
+				}
+				if (value.IsNull())
+				{
+					return skynet::OK;
+				}
+				return SN::SN_Error(value.Equivalent(p_ParamList[PU1_Result].GetVariableValue()), false);
 			}
 		}
 		break;

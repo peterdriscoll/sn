@@ -546,12 +546,18 @@ namespace SNI
 		{
 			return this;
 		}
-		SN::SN_Expression result = m_Value->DoPartialEvaluate(p_MetaLevel);
-		if (result.IsNull())
-		{ // Expression could not be reduced further, because a variable is unknown, or calling a lambda expression might lead to recursion.
-			return this;
+		if (!dynamic_cast<SNI_Lambda*>(m_Value)
+			&& !dynamic_cast<SNI_Virtual*>(m_Value)
+			&& !dynamic_cast<SNI_Derived*>(m_Value))
+		{
+			SN::SN_Expression result = m_Value->DoPartialEvaluate(p_MetaLevel);
+			if (result.IsNull())
+			{ // Expression could not be reduced further, because a variable is unknown, or calling a lambda expression might lead to recursion.
+				return this;
+			}
+			return result;
 		}
-		return result;
+		return this;
 	}
 
 	SN::SN_Error SNI_Variable::SelfAssert()
@@ -656,7 +662,7 @@ namespace SNI
 		}
 		if (dynamic_cast<SNI_Value *>(p_Expression.GetSNI_Expression()))
 		{
-			return SN::SN_Expression(m_Value).PartialAssertValue(p_Expression);//Equivalent(dynamic_cast<SNI_Object>(p_Expression.GetSNI_Expression()));
+			return SN::SN_Expression(m_Value).PartialAssertValue(p_Expression, p_Define);
 		}
 		return skynet::Fail; // to be implemented, or too hard
 	}
@@ -690,15 +696,24 @@ namespace SNI
 	{
 		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Variable::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
+		SN::SN_Expression result(this);
 		if (m_Value)
 		{
-			if (dynamic_cast<SNI_Lambda*>(m_Value))
+			if (!dynamic_cast<SNI_Lambda*>(m_Value)
+				&& !dynamic_cast<SNI_Virtual*>(m_Value)
+				&& !dynamic_cast<SNI_Derived*>(m_Value))
 			{
-				return LOG_RETURN(context, skynet::Null); // Don't want to do a partial call because it might lead to recursion.
+				SNI_Expression * l_clone = m_Value->Clone(this, (*p_ParameterList)[0].GetSNI_Expression());
+
+				return LOG_RETURN(context, l_clone->PartialCall(p_ParameterList, p_MetaLevel));
 			}
-			return LOG_RETURN(context, m_Value->PartialCall(p_ParameterList, p_MetaLevel));
 		}
-		return LOG_RETURN(context, SN::SN_Error(false, false, GetTypeName() + " partial function to call to null value."));
+		while (!p_ParameterList->empty())
+		{
+			result = SN::SN_Function(result, p_ParameterList->back().DoPartialEvaluate(p_MetaLevel));
+			p_ParameterList->pop_back();
+		}
+		return LOG_RETURN(context, result);
 	}
 
 	SN::SN_Expression SNI_Variable::Unify(SN::SN_ExpressionList * p_ParameterList)
@@ -753,7 +768,7 @@ namespace SNI
 
 	SN::SN_Error SNI_Variable::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
-		if (m_Value && (!p_Define || dynamic_cast<SNI_Derived *>(m_Value) || dynamic_cast<SNI_Virtual *>(m_Value)))
+		if (m_Value)
 		{
 			SN::SN_Error e = m_Value->PartialUnify(p_ParameterList, p_Result, p_Define);
 			if (e.IsNull())
@@ -762,13 +777,14 @@ namespace SNI
 			}
 			return e;
 		}
-		else
+		else if (p_Define || SNI_Thread::TopManager()->AutoDefine())
 		{
 			m_Value = AddLambdasPartial(p_ParameterList, p_Result).GetSNI_Expression();
 			SNI_Thread::GetThread()->RegisterChange(dynamic_cast<SNI_Variable *>(this));
 			REQUESTPROMOTION(m_Value);
 			return skynet::OK;
 		}
+		return skynet::Fail;
 	}
 
 	void SNI_Variable::AttachDelayedCall(SNI_DelayedCall *p_Call)

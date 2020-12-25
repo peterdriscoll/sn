@@ -192,6 +192,22 @@ namespace SNI
 		return text;
 	}
 
+	SN::SN_Expression * SNI_FunctionDef::LoadParametersCall(SN::SN_ExpressionList * p_ParameterList) const
+	{
+		size_t numParams = GetNumParameters()-1;
+		if (numParams > p_ParameterList->size())
+		{
+			numParams = p_ParameterList->size();
+		}
+		SN::SN_Expression *paramList = new SN::SN_Expression[numParams];
+		for (size_t j = 0; j < numParams; j++)
+		{
+			paramList[j] = p_ParameterList->back();
+			p_ParameterList->pop_back();
+		}
+		return paramList;
+	}
+
 	SN::SN_Expression SNI_FunctionDef::DoEvaluate(long  /* = 0 */) const
 	{
 		return this;

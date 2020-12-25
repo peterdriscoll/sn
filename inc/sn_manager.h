@@ -86,6 +86,9 @@ namespace SN
 		size_t DebugTitleWidth();
 		void SetDebugTitleWidth(size_t p_DebugFieldWidth);
 
+		bool AutoDefine();
+		void SetAutoDefine(bool p_AutoDefine);
+
 		// Processing options
 		skynet::DirectPassType GetDirectPassType();
 		void SetDirectPassType(skynet::DirectPassType p_DirectPassType);
@@ -104,6 +107,9 @@ namespace SN
 		//	a value set.
 		//  This may not be necessary. Changes to Collapse may achieve the same result.
 		//	I'll try to get it working with the flag defined or not defined.
+
+		bool TailCallOptimization() const;
+		void SetTailCallOptimization(bool p_TailCallOptimization);
 
 		// Debugging
 		void Breakpoint();

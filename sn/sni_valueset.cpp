@@ -812,7 +812,7 @@ namespace SNI
 					SN::SN_ExpressionList *paramListClone = new SN::SN_ExpressionList();
 					*paramListClone = *p_ParameterList;
 					// Flatten the call stack, by returning the function to be called from Unify, instead of calling it there.
-					SNI_Expression *function = tv.GetValue().GetSNI_Expression();
+					SNI_Expression *function = tv.GetValue().GetSNI_Expression()->Clone(this, NULL);
 					SNI_Error *e = dynamic_cast<SNI_Error *>(function);
 					SNI_Thread::GetThread()->PushContextWorld(world);
 					while (!e)

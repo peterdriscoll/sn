@@ -226,11 +226,18 @@ namespace SNI
 			SNI_FunctionDef *functionDef = dynamic_cast<SNI_FunctionDef *>(function);
 			if (functionDef)
 			{
-				SN::SN_Expression *param_List = functionDef->LoadParametersUnify(l_ParameterList);
-				delete l_ParameterList;
-				l_ParameterList = NULL;
-				function = functionDef->UnifyArray(param_List, this).GetSNI_Expression();
-				delete[] param_List;
+				if (functionDef->GetNumParameters() == l_ParameterList->size())
+				{
+					SN::SN_Expression *param_List = functionDef->LoadParametersUnify(l_ParameterList);
+					delete l_ParameterList;
+					l_ParameterList = NULL;
+					function = functionDef->UnifyArray(param_List, this).GetSNI_Expression();
+					delete[] param_List;
+				}
+				else
+				{
+					function = functionDef->Call(l_ParameterList).GetSNI_Expression();
+				}
 			}
 			else
 			{

@@ -84,6 +84,9 @@ namespace SNI
 		size_t MaxStackFrames() const;
 		void SetMaxStackFrames(size_t p_MaxStackFrame);
 
+		bool AutoDefine() const;
+		void SetAutoDefine(bool p_AutoDefine);
+
 		// Processing options
 		skynet::DirectPassType GetDirectPassType() const;
 		void SetDirectPassType(skynet::DirectPassType p_DirectPassType);
@@ -123,6 +126,8 @@ namespace SNI
 
 		long m_DebugFieldWidth;
 		long m_DebugTitleWidth;
+
+		bool m_AutoDefine;
 
 		// Processing options.
 		skynet::DirectPassType m_DirectPassType;
