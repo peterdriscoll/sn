@@ -123,12 +123,12 @@ namespace SN
 
 	SN_Expression SN_String::operator +(const SN_Expression  &p_Other) const
 	{
-		return SN_Function(SN_Function(skynet::Add, *this), p_Other);
+		return SN_Operators::operator +(*this, p_Other);
 	}
 
 	SN_Expression SN_String::operator-(const SN_Expression & p_Other) const
 	{
-		return SN_Function(SN_Function(skynet::SubtractRight, *this), p_Other);
+		return SN_Operators::SubtractRight(*this, p_Other);
 	}
 
 	SN_Expression SN_String::Concat(const SN_Expression &p_Other) const
