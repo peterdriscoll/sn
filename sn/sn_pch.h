@@ -60,6 +60,7 @@
 #include "sni_unary.h"
 #include "sni_binary.h"
 #include "sni_comparison.h"
+#include "sni_functioncall.h"
 
 // Numbers
 #include "sni_negative.h"

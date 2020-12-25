@@ -531,6 +531,9 @@
     <ClInclude Include="sni_lookstringright.h">
       <Filter>Function Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sni_functioncall.h">
+      <Filter>Expression Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -988,6 +991,9 @@
     </ClCompile>
     <ClCompile Include="sni_lookstringright.cpp">
       <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_functioncall.cpp">
+      <Filter>Expression Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

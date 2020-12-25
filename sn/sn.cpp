@@ -6,6 +6,7 @@
 #include "sni_unary.h"
 #include "sni_binary.h"
 #include "sni_comparison.h"
+#include "sni_functioncall.h"
 
 // Numbers
 #include "sni_negative.h"
@@ -162,6 +163,9 @@ namespace skynet
 	// Sets
 	SN::SN_FunctionDef BuildSet(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_BuildSet()));
 	SN::SN_FunctionDef HasMember(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_HasMember()));
+
+	// Function Call
+	SN::SN_Expression FunctionCall(dynamic_cast<SNI::SNI_Expression *>(new SNI::SNI_FunctionCall()));
 
 	// Constants
 	SN::SN_Bool True(true);

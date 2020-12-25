@@ -257,6 +257,7 @@
     <ClInclude Include="sni_file.h" />
     <ClInclude Include="sni_frame.h" />
     <ClInclude Include="sni_function.h" />
+    <ClInclude Include="sni_functioncall.h" />
     <ClInclude Include="sni_functiondef.h" />
     <ClInclude Include="sni_greaterequals.h" />
     <ClInclude Include="sni_greaterthan.h" />
@@ -378,6 +379,7 @@
     <ClCompile Include="sni_file.cpp" />
     <ClCompile Include="sni_frame.cpp" />
     <ClCompile Include="sni_function.cpp" />
+    <ClCompile Include="sni_functioncall.cpp" />
     <ClCompile Include="sni_functiondef.cpp" />
     <ClCompile Include="sni_greaterequals.cpp" />
     <ClCompile Include="sni_greaterthan.cpp" />
