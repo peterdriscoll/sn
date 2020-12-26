@@ -39,11 +39,6 @@ namespace SNI
 		return p_Param.GetSNI_Value()->DoStringToInt();
 	}
 
-	SN::SN_Expression SNI_StringToInt::PrimaryFunctionExpression(const SN::SN_Expression &p_Param) const
-	{
-		return p_Param.StringToInt();
-	}
-
 	SN::SN_Value SNI_StringToInt::InverseFunctionValue(const SN::SN_Value &p_Param) const
 	{
 		return p_Param.GetSNI_Value()->DoIntToString();
@@ -51,6 +46,6 @@ namespace SNI
 
 	SN::SN_Expression SNI_StringToInt::InverseFunctionExpression(const SN::SN_Expression & p_Param) const
 	{
-		return p_Param.IntToString();
+		return skynet::IntToString.PrimaryFunctionExpression(p_Param);
 	}
 }

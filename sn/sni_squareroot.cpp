@@ -51,11 +51,6 @@ namespace SNI
 		return p_Param.GetSNI_Value()->DoSquareRoot();
 	}
 
-	SN::SN_Expression SNI_SquareRoot::PrimaryFunctionExpression(const SN::SN_Expression &p_Param) const
-	{
-		return p_Param.SquareRoot();
-	}
-
 	SN::SN_Value SNI_SquareRoot::InverseFunctionValue(const SN::SN_Value &p_Param) const
 	{
 		return p_Param.GetSNI_Value()->DoSquare();
@@ -63,7 +58,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_SquareRoot::InverseFunctionExpression(const SN::SN_Expression & p_Param) const
 	{
-		return p_Param.Square();
+		return skynet::Square.PrimaryFunctionExpression(p_Param);
 	}
 
 	SN::SN_Expression SNI_SquareRoot::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
