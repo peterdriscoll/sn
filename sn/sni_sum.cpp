@@ -45,11 +45,6 @@ namespace SNI
 		return p_Left.GetSNI_Value()->DoSum();
 	}
 
-	SN::SN_Expression SNI_Sum::PrimaryFunctionExpression(const SN::SN_Expression &p_Left) const
-	{
-		return p_Left.Sum();
-	}
-
 	SN::SN_Value SNI_Sum::InverseFunctionValue(const SN::SN_Value & p_Param) const
 	{
 		return skynet::Null;

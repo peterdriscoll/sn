@@ -39,11 +39,6 @@ namespace SNI
 		return p_Param.GetSNI_Value()->DoUnescape(m_EscapeType);
 	}
 
-	SN::SN_Expression SNI_Unescape::PrimaryFunctionExpression(const SN::SN_Expression &p_Param) const
-	{
-		return p_Param.Unescape(m_EscapeType);
-	}
-
 	SN::SN_Value SNI_Unescape::InverseFunctionValue(const SN::SN_Value &p_Param) const
 	{
 		return p_Param.GetSNI_Value()->DoEscape(m_EscapeType);
@@ -51,6 +46,16 @@ namespace SNI
 
 	SN::SN_Expression SNI_Unescape::InverseFunctionExpression(const SN::SN_Expression & p_Param) const
 	{
-		return p_Param.Escape(m_EscapeType);
+		SN::SN_FunctionDef def(skynet::EscapeCPP);
+		switch (m_EscapeType)
+		{
+		case skynet::CPP:
+			def = skynet::EscapeCPP;
+			break;
+		case skynet::JSON:
+			def = skynet::EscapeJSON;
+			break;
+		}
+		return def.PrimaryFunctionExpression(p_Param);
 	}
 }

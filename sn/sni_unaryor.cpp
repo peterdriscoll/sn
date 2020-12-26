@@ -47,11 +47,6 @@ namespace SNI
 		return p_Param.GetSNI_Value()->DoUnaryOr();
 	}
 
-	SN::SN_Expression SNI_UnaryOr::PrimaryFunctionExpression(const SN::SN_Expression &p_Param) const
-	{
-		return p_Param.UnaryOr();
-	}
-
 	SN::SN_Value SNI_UnaryOr::InverseFunctionValue(const SN::SN_Value & p_Param) const
 	{
 		return p_Param.GetSNI_Value()->DoUnaryAnd();
@@ -59,7 +54,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_UnaryOr::InverseFunctionExpression(const SN::SN_Expression & p_Param) const
 	{
-		return p_Param.UnaryAnd();
+		return skynet::UnaryAnd.PrimaryFunctionExpression(p_Param);
 	}
 
 	size_t SNI_UnaryOr::CardinalityOfUnify(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const

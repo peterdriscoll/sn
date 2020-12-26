@@ -23,7 +23,6 @@ namespace SNI
 		virtual bool AllowDelay() const;
 
 		virtual SN::SN_Value PrimaryFunctionValue(const SN::SN_Value &p_Param) const;
-		virtual SN::SN_Expression PrimaryFunctionExpression(const SN::SN_Expression &p_Param) const;
 		virtual SN::SN_Value InverseFunctionValue(const SN::SN_Value & p_Param) const;
 		virtual SN::SN_Expression InverseFunctionExpression(const SN::SN_Expression & p_Param) const;
 
