@@ -21,8 +21,10 @@ namespace SNI
 		virtual long GetPriority() const;
 		virtual long GetNumParameters() const;
 
+		virtual SN::SN_Expression PrimaryFunctionExpressionOp(const SN::SN_Expression & p_Param) const;
+		virtual SN::SN_Expression PrimaryFunctionExpression(const SN::SN_Expression &p_Left) const;
+
 		virtual SN::SN_Value PrimaryFunctionValue(const SN::SN_Value &p_Left) const = 0;
-		virtual SN::SN_Expression PrimaryFunctionExpression(const SN::SN_Expression &p_Left) const = 0;
 		virtual SN::SN_Value InverseFunctionValue(const SN::SN_Value &p_Param) const;
 		virtual SN::SN_Expression InverseFunctionExpression(const SN::SN_Expression &p_Param) const;
 

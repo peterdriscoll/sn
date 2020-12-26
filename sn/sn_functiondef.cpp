@@ -49,6 +49,35 @@ namespace SN
 		return SN_Operators::operator ||(*this, p_Other);
 	}
 
+	SN::SN_Expression SN_FunctionDef::PrimaryFunctionExpressionOp(const SN::SN_Expression& p_Result) const
+	{
+		return m_FunctionDef->PrimaryFunctionExpressionOp(p_Result);
+	}
+
+	SN::SN_Expression SN_FunctionDef::PrimaryFunctionExpression(const SN::SN_Expression& p_Result) const
+	{
+		return m_FunctionDef->PrimaryFunctionExpression(p_Result);
+	}
+
+	SN::SN_Expression SN_FunctionDef::PrimaryFunctionExpressionOp(const SN::SN_Expression& p_Left, const SN::SN_Expression& p_Right) const
+	{
+		return m_FunctionDef->PrimaryFunctionExpressionOp(p_Left, p_Right);
+	}
+
+	SN::SN_Expression SN_FunctionDef::PrimaryFunctionExpression(const SN::SN_Expression& p_Left, const SN::SN_Expression& p_Right) const
+	{
+		return m_FunctionDef->PrimaryFunctionExpression(p_Left, p_Right);
+	}
+
+	SN::SN_Expression SN_FunctionDef::PrimaryFunctionExpressionOp(const SN::SN_Expression& p_Condition, const SN::SN_Expression& p_PositiveCase, const SN::SN_Expression& p_NegativeCase) const
+	{
+		return m_FunctionDef->PrimaryFunctionExpressionOp(p_Condition, p_PositiveCase, p_NegativeCase);
+	}
+
+	SN::SN_Expression SN_FunctionDef::PrimaryFunctionExpression(const SN::SN_Expression& p_Condition, const SN::SN_Expression& p_PositiveCase, const SN::SN_Expression& p_NegativeCase) const
+	{
+		return m_FunctionDef->PrimaryFunctionExpression(p_Condition, p_PositiveCase, p_NegativeCase);
+	}
 	SNI::SNI_FunctionDef * SN_FunctionDef::GetSNI_FunctionDef() const
 	{
 		return m_FunctionDef;

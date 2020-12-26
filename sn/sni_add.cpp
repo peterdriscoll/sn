@@ -58,11 +58,6 @@ namespace SNI
 		return p_Left.GetSNI_Value()->DoAdd(p_Right.GetSNI_Value());
 	}
 
-	SN::SN_Expression SNI_Add::PrimaryFunctionExpression(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right) const
-	{
-		return p_Left + p_Right;
-	}
-
 	SN::SN_Value SNI_Add::LeftInverseFunctionValue(const SN::SN_Value &p_Result, const SN::SN_Value &p_Left) const
 	{
 		if (p_Result.IsString())
@@ -83,11 +78,11 @@ namespace SNI
 
 	SN::SN_Expression SNI_Add::LeftInverseFunctionExpression(const SN::SN_Expression &p_Result, const SN::SN_Expression &p_Right) const
 	{
-		return p_Result - p_Right;
+		return skynet::Subtract.PrimaryFunctionExpression(p_Result, p_Right);
 	}
 
 	SN::SN_Expression SNI_Add::RightInverseFunctionExpression(const SN::SN_Expression &p_Result, const SN::SN_Expression &p_Right) const
 	{
-		return p_Result - p_Right;
+		return skynet::Subtract.PrimaryFunctionExpression(p_Result, p_Right);
 	}
 }

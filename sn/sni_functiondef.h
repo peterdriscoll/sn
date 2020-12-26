@@ -81,6 +81,13 @@ namespace SNI
 
 		string GetLogDescription(SN::SN_Expression * p_ParamList) const;
 
+		SN::SN_Expression PrimaryFunctionExpressionOp(const SN::SN_Expression & p_Result) const;
+		SN::SN_Expression PrimaryFunctionExpression(const SN::SN_Expression & p_Result) const;
+		SN::SN_Expression PrimaryFunctionExpressionOp(const SN::SN_Expression & p_Left, const SN::SN_Expression & p_Right) const;
+		SN::SN_Expression PrimaryFunctionExpression(const SN::SN_Expression & p_Left, const SN::SN_Expression & p_Right) const;
+		SN::SN_Expression PrimaryFunctionExpressionOp(const SN::SN_Expression & p_Cond, const SN::SN_Expression & p_PositiveCase, const SN::SN_Expression & p_NegativeCase) const;
+		SN::SN_Expression PrimaryFunctionExpression(const SN::SN_Expression & p_Cond, const SN::SN_Expression & p_PositiveCase, const SN::SN_Expression & p_NegativeCase) const;
+
 		virtual SN::SN_Expression * LoadParametersCall(SN::SN_ExpressionList * p_ParameterList) const;
 
 		virtual SN::SN_Expression DoEvaluate(long p_MetaLevel = 0) const;

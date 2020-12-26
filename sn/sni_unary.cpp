@@ -70,6 +70,16 @@ namespace SNI
 	{
 		return 2;
 	}
+	
+	SN::SN_Expression SNI_Unary::PrimaryFunctionExpressionOp(const SN::SN_Expression &p_Param) const
+	{
+		return SN::SN_Operators::FunctionCall(this, p_Param);
+	}
+
+	SN::SN_Expression SNI_Unary::PrimaryFunctionExpression(const SN::SN_Expression &p_Param) const
+	{
+		return SN::SN_Function(this, p_Param);
+	}
 
 	SN::SN_Value SNI_Unary::InverseFunctionValue(const SN::SN_Value & p_Param) const
 	{
@@ -85,7 +95,7 @@ namespace SNI
 	{
 		if (0 < p_MetaLevel)
 		{
-			return PrimaryFunctionExpression(p_ParamList[0].DoEvaluate(p_MetaLevel));
+			return PrimaryFunctionExpressionOp(p_ParamList[0].DoEvaluate(p_MetaLevel));
 		}
 
 		return SNI_FunctionDef::CallArray(p_ParamList, p_MetaLevel);
@@ -103,8 +113,9 @@ namespace SNI
 			{
 				return LOG_RETURN(context, PrimaryFunctionValue(value));
 			}
+			return LOG_RETURN(context, PrimaryFunctionExpression(value));
 		}
-		return LOG_RETURN(context, PrimaryFunctionExpression(value));
+		return LOG_RETURN(context, PrimaryFunctionExpressionOp(value));
 	}
 
 	SN::SN_Error SNI_Unary::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)

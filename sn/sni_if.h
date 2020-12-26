@@ -24,6 +24,9 @@ namespace SNI
 		virtual string DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression *p_DebugSource) const;
 		/// @endcond
 
+		virtual SN::SN_Expression PrimaryFunctionExpressionOp(const SN::SN_Expression & p_Condition, const SN::SN_Expression & p_PositiveCase, const SN::SN_Expression & p_NegativeCase) const;
+		virtual SN::SN_Expression PrimaryFunctionExpression(const SN::SN_Expression & p_Condition, const SN::SN_Expression & p_PositiveCase, const SN::SN_Expression & p_NegativeCase) const;
+
 		virtual SN::SN_Expression CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression UnifyArray(SN::SN_Expression * p_ParameterList, const SNI_Expression *p_Source);

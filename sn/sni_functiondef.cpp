@@ -192,6 +192,35 @@ namespace SNI
 		return text;
 	}
 
+	SN::SN_Expression SNI_FunctionDef::PrimaryFunctionExpressionOp(const SN::SN_Expression& p_Result) const
+	{
+		return SN::SN_Error(false, false, GetTypeName() + ": PrimaryFunctionExpressionOp 1 -Function does not have two parameters.");
+	}
+
+	SN::SN_Expression SNI_FunctionDef::PrimaryFunctionExpression(const SN::SN_Expression& p_Result) const
+	{
+		return SN::SN_Error(false, false, GetTypeName() + ": PrimaryFunctionExpression 1 -Function does not have two parameters.");
+	}
+
+	SN::SN_Expression SNI_FunctionDef::PrimaryFunctionExpressionOp(const SN::SN_Expression& p_Left, const SN::SN_Expression& p_Right) const
+	{
+		return SN::SN_Error(false, false, GetTypeName() + ": PrimaryFunctionExpressionOp 2 -Function does not have two parameters.");
+	}
+
+	SN::SN_Expression SNI_FunctionDef::PrimaryFunctionExpression(const SN::SN_Expression& p_Left, const SN::SN_Expression& p_Right) const
+	{
+		return SN::SN_Error(false, false, GetTypeName() + ": PrimaryFunctionExpression 2 -Function does not have two parameters.");
+	}
+
+	SN::SN_Expression SNI_FunctionDef::PrimaryFunctionExpressionOp(const SN::SN_Expression& p_Cond, const SN::SN_Expression& p_PositiveCase, const SN::SN_Expression& p_NegativeCase) const
+	{
+		return SN::SN_Error(false, false, GetTypeName() + ": PrimaryFunctionExpressionOp 3 -Function does not have three parameters.");
+	}
+
+	SN::SN_Expression SNI_FunctionDef::PrimaryFunctionExpression(const SN::SN_Expression& p_Cond, const SN::SN_Expression& p_PositiveCase, const SN::SN_Expression& p_NegativeCase) const
+	{
+		return SN::SN_Error(false, false, GetTypeName() + ": PrimaryFunctionExpression 3 -Function does not have three parameters.");
+	}
 	SN::SN_Expression * SNI_FunctionDef::LoadParametersCall(SN::SN_ExpressionList * p_ParameterList) const
 	{
 		size_t numParams = GetNumParameters()-1;

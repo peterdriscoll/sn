@@ -42,8 +42,16 @@ namespace SN
 		// Valuesets of functions
 		SN::SN_Expression operator ||(const SN::SN_Expression &p_Other) const;
 
+		SN::SN_Expression PrimaryFunctionExpressionOp(const SN::SN_Expression & p_Result) const;
+		SN::SN_Expression PrimaryFunctionExpression(const SN::SN_Expression & p_Result) const;
+		SN::SN_Expression PrimaryFunctionExpressionOp(const SN::SN_Expression & p_Left, const SN::SN_Expression & p_Right) const;
+		SN::SN_Expression PrimaryFunctionExpression(const SN::SN_Expression & p_Left, const SN::SN_Expression & p_Right) const;
+		SN::SN_Expression PrimaryFunctionExpressionOp(const SN::SN_Expression & p_Condition, const SN::SN_Expression & p_PositiveCase, const SN::SN_Expression & p_NegativeCase) const;
+		SN::SN_Expression PrimaryFunctionExpression(const SN::SN_Expression & p_Condition, const SN::SN_Expression & p_PositiveCase, const SN::SN_Expression & p_NegativeCase) const;
+
 		SNI::SNI_Binary * GetSNI_Binary() const;
 		SNI::SNI_Unary * GetSNI_Unary() const;
+
 
 		SNI::SNI_FunctionDef * GetSNI_FunctionDef() const;
 

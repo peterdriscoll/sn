@@ -71,6 +71,15 @@ namespace SNI
 			   SetBreakPoint("end", p_DisplayOptions, p_DebugSource, SN::RightId);
 	}
 
+	SN::SN_Expression SNI_If::PrimaryFunctionExpressionOp(const SN::SN_Expression& p_Condition, const SN::SN_Expression& p_PositiveCase, const SN::SN_Expression& p_NegativeCase) const
+	{
+		return SN::SN_Operators::FunctionCall(SN::SN_Operators::FunctionCall(SN::SN_Operators::FunctionCall(skynet::If, p_Condition), p_PositiveCase), p_NegativeCase);
+	}
+
+	SN::SN_Expression SNI_If::PrimaryFunctionExpression(const SN::SN_Expression & p_Condition, const SN::SN_Expression & p_PositiveCase, const SN::SN_Expression & p_NegativeCase) const
+	{
+		return SN::SN_Function(SN::SN_Function(SN::SN_Function(skynet::If, p_Condition), p_PositiveCase), p_NegativeCase);
+	}
 	/// @endcond
 
 	/// \brief Evaluate if bool then value else value, and return the result.

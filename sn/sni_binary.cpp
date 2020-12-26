@@ -67,6 +67,16 @@ namespace SNI
 		return Bracket(priority, p_ParamList[PC2_First].DisplaySN(GetPriority(), p_DisplayOptions) + SetBreakPoint(GetOperator(), p_DisplayOptions, p_DebugSource, SN::ParameterTwoId) + p_ParamList[PC2_Second].DisplaySN(GetPriority(), p_DisplayOptions) + SetBreakPoint(";", p_DisplayOptions, p_DebugSource, SN::ParameterThreeId), p_DisplayOptions, p_DebugSource);
 	}
 
+	SN::SN_Expression SNI_Binary::PrimaryFunctionExpressionOp(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right) const
+	{
+		return SN::SN_Operators::FunctionCall(SN::SN_Operators::FunctionCall(this, p_Left), p_Right);
+	}
+
+	SN::SN_Expression SNI_Binary::PrimaryFunctionExpression(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right) const
+	{
+		return SN::SN_Function(SN::SN_Function(this, p_Left), p_Right);
+	}
+
 	SN::SN_Value SNI_Binary::RightInverseFunctionValue(const SN::SN_Value &p_Left, const SN::SN_Value &p_Right) const
 	{
 		return LeftInverseFunctionValue(p_Left, p_Right);
@@ -91,7 +101,7 @@ namespace SNI
 	{
 		if (0 < p_MetaLevel)
 		{
-			return PrimaryFunctionExpression(p_ParamList[0].DoEvaluate(p_MetaLevel), p_ParamList[1].DoEvaluate(p_MetaLevel));
+			return PrimaryFunctionExpressionOp(p_ParamList[0].DoEvaluate(p_MetaLevel), p_ParamList[1].DoEvaluate(p_MetaLevel));
 		}
 
 		return SNI_FunctionDef::CallArray(p_ParamList, p_MetaLevel);
@@ -119,12 +129,13 @@ namespace SNI
 
 		if (0 == p_MetaLevel)
 		{
-			if ((p_MetaLevel <= 0) && SN::Is<SNI_Value *>(left_value) && SN::Is<SNI_Value *>(right_value))
+			if ((p_MetaLevel <= 0) && left_value.IsKnownValue() && right_value.IsKnownValue())
 			{
 				return LOG_RETURN(context, PrimaryFunctionValue(left_value, right_value));
 			}
+			return LOG_RETURN(context, PrimaryFunctionExpression(left_value, right_value));
 		}
-		return LOG_RETURN(context, PrimaryFunctionExpression(left_value, right_value));
+		return LOG_RETURN(context, PrimaryFunctionExpressionOp(left_value, right_value));
 	}
 
 	/// \brief Extract the left and right values from the parameter list and call PartialUnifyInternal.
