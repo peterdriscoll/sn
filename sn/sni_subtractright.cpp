@@ -37,11 +37,6 @@ namespace SNI
 		return p_Result.GetSNI_Value()->DoSubtractRight(p_Right.GetSNI_Value());
 	}
 
-	SN::SN_Expression SNI_SubtractRight::PrimaryFunctionExpression(const SN::SN_Expression &p_Result, const SN::SN_Expression &p_Right) const
-	{
-		return p_Result.SubtractRight(p_Right);
-	}
-
 	SN::SN_Value SNI_SubtractRight::LeftInverseFunctionValue(const SN::SN_Value &p_Left, const SN::SN_Value &p_Result) const
 	{
 		return p_Result.GetSNI_Value()->DoSubtractLeft(p_Left.GetSNI_Value());
@@ -49,7 +44,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_SubtractRight::LeftInverseFunctionExpression(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Result) const
 	{
-		return p_Result.SubtractLeft(p_Left);
+		return skynet::SubtractLeft.PrimaryFunctionExpression(p_Result, p_Left);
 	}
 
 	SN::SN_Value SNI_SubtractRight::RightInverseFunctionValue(const SN::SN_Value &p_Left, const SN::SN_Value &p_Right) const
@@ -59,7 +54,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_SubtractRight::RightInverseFunctionExpression(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right) const
 	{
-		return p_Left.Concat(p_Right);
+		return skynet::Concat.PrimaryFunctionExpression(p_Left, p_Right);
 	}
 
 	bool SNI_SubtractRight::IsKnownValue(const SN::SN_Expression &p_Param, long j) const
