@@ -62,11 +62,6 @@ namespace SNI
 		return p_Left.DoImplies(p_Right);
 	}
 
-	SN::SN_Expression SNI_Implies::PrimaryFunctionExpression(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right) const
-	{
-		return p_Left.Implies(p_Right);
-	}
-
 	SN::SN_Value SNI_Implies::LeftInverseFunctionValue(const SN::SN_Value &p_Result, const SN::SN_Value &p_Left) const
 	{
 		return p_Left.DoImplies(p_Result);
@@ -74,7 +69,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_Implies::LeftInverseFunctionExpression(const SN::SN_Expression &p_Result, const SN::SN_Expression &p_Left) const
 	{
-		return p_Left.Implies(p_Result);
+		return PrimaryFunctionExpression(p_Left, p_Result);
 	}
 
 	SN::SN_Value SNI_Implies::RightInverseFunctionValue(const SN::SN_Value &p_Result, const SN::SN_Value &p_Right) const

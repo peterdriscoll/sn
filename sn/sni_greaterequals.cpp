@@ -41,11 +41,4 @@ namespace SNI
 	{
 		return p_Left.GetSNI_Value()->DoGreaterEquals(p_Right.GetSNI_Value());
 	}
-
-
-
-	SN::SN_Expression SNI_GreaterEquals::PrimaryFunctionExpression(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right) const
-	{
-		return (SN::SN_Operators::operator >=)(p_Left, p_Right);
-	}
 }

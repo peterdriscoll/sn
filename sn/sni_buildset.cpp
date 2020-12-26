@@ -50,11 +50,6 @@ namespace SNI
 		return p_Param.GetSNI_Value()->DoBuildSet();
 	}
 
-	SN::SN_Expression SNI_BuildSet::PrimaryFunctionExpression(const SN::SN_Expression &p_Param) const
-	{
-		return p_Param.BuildSet();
-	}
-
 	SN::SN_Value SNI_BuildSet::InverseFunctionValue(const SN::SN_Value &p_Param) const
 	{
 		return skynet::Null;
@@ -77,7 +72,7 @@ namespace SNI
 
 		if (0 < p_MetaLevel)
 		{
-			return LOG_RETURN(context, PrimaryFunctionExpression(value));
+			return LOG_RETURN(context, PrimaryFunctionExpressionOp(value));
 		}
 
 		return LOG_RETURN(context, PrimaryFunctionValue(value));

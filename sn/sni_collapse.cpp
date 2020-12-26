@@ -61,11 +61,6 @@ namespace SNI
 		return p_Param.DoCollapse();
 	}
 
-	SN::SN_Expression SNI_Collapse::PrimaryFunctionExpression(const SN::SN_Expression &p_Param) const
-	{
-		return p_Param.Collapse();
-	}
-
 	SN::SN_Value SNI_Collapse::InverseFunctionValue(const SN::SN_Value & p_Param) const
 	{
 		return p_Param;
@@ -73,7 +68,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_Collapse::InverseFunctionExpression(const SN::SN_Expression & p_Param) const
 	{
-		return p_Param.Collapse();
+		return PrimaryFunctionExpression(p_Param);
 	}
 
 	SN::SN_Expression SNI_Collapse::UnifyArray(SN::SN_Expression * p_ParamList, const SNI_Expression *p_Source)

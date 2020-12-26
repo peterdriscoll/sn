@@ -63,8 +63,9 @@ namespace SNI
 			{
 				return LOG_RETURN(context, PrimaryFunctionValue(left_value, right_value));
 			}
+			return LOG_RETURN(context, PrimaryFunctionExpression(left_value, right_value));
 		}
-		return LOG_RETURN(context, PrimaryFunctionExpression(left_value, right_value));
+		return LOG_RETURN(context, PrimaryFunctionExpressionOp(left_value, right_value));
 	}
 
 	SN::SN_Error SNI_Comparison::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)

@@ -62,11 +62,6 @@ namespace SNI
 		return p_Left.DoAnd(p_Right);
 	}
 
-	SN::SN_Expression SNI_And::PrimaryFunctionExpression(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right) const
-	{
-		return p_Left && p_Right;
-	}
-
 	SN::SN_Value SNI_And::LeftInverseFunctionValue(const SN::SN_Value &p_Result, const SN::SN_Value &p_Left) const
 	{
 		return p_Result.DoRevAnd(p_Left);
@@ -74,7 +69,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_And::LeftInverseFunctionExpression(const SN::SN_Expression &p_Result, const SN::SN_Expression &p_Left) const
 	{
-		return p_Result.RevAnd(p_Left);
+		return skynet::RevAnd.PrimaryFunctionExpression(p_Result, p_Left);
 	}
 
 	SN::SN_Value SNI_And::RightInverseFunctionValue(const SN::SN_Value &p_Result, const SN::SN_Value &p_Right) const
@@ -84,7 +79,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_And::RightInverseFunctionExpression(const SN::SN_Expression &p_Result, const SN::SN_Expression &p_Right) const
 	{
-		return p_Result.RevAnd(p_Right);
+		return skynet::RevAnd.PrimaryFunctionExpression(p_Result, p_Right);
 	}
 
 	/// \brief Partially evaluate the Boolean conjunction of two booleans, If both are true return true. If either are false return false.
@@ -166,8 +161,9 @@ namespace SNI
 					return LOG_RETURN(context, left_value);
 				}
 			}
+			return LOG_RETURN(context, PrimaryFunctionExpression(left_value, right_value));
 		}
-		return LOG_RETURN(context, left_value && right_value);
+		return LOG_RETURN(context, PrimaryFunctionExpressionOp(left_value, right_value));
 	}
 
 	/// @brief Extract the left and right values from the parameter list and call UnifyInternal.

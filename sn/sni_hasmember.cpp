@@ -50,11 +50,6 @@ namespace SNI
 		return p_Left.GetSNI_Value()->DoHasMember(p_Right.GetSNI_Value());
 	}
 
-	SN::SN_Expression SNI_HasMember::PrimaryFunctionExpression(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right) const
-	{
-		return p_Left.HasMember(p_Right);
-	}
-
 	SN::SN_Value SNI_HasMember::LeftInverseFunctionValue(const SN::SN_Value &p_Result, const SN::SN_Value &p_Left) const
 	{
 		return skynet::Null;

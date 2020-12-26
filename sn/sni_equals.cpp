@@ -85,11 +85,6 @@ namespace SNI
 		return p_Left.GetSNI_Value()->DoAssertEqualsValue(p_Right.GetSNI_Value(), p_Result.GetSNI_Value());
 	}
 
-	SN::SN_Expression SNI_Equals::PrimaryFunctionExpression(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right) const
-	{
-		return p_Left == p_Right;
-	}
-
 	SN::SN_Value SNI_Equals::LeftInverseFunctionValue(const SN::SN_Value &p_Result, const SN::SN_Value &p_Left) const
 	{
 		if (p_Result.GetBool())
@@ -151,9 +146,10 @@ namespace SNI
 			{
 				return LOG_RETURN(context, skynet::True);
 			}
+			return LOG_RETURN(context, PrimaryFunctionExpression(left_value, right_value));
 		}
 
-		return LOG_RETURN(context, left_value == right_value);
+		return LOG_RETURN(context, PrimaryFunctionExpressionOp(left_value, right_value));
 	}
 
 	/// \brief Extract the left and right values from the parameter list and call PartialUnifyInternal.

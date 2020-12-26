@@ -111,7 +111,7 @@ namespace SNI
 		{
 			SN::SN_Expression positiveCase = p_ParamList[1].DoPartialEvaluate(p_MetaLevel);
 			SN::SN_Expression negativeCase = p_ParamList[2].DoPartialEvaluate(p_MetaLevel);
-			return condition.If(positiveCase, negativeCase);
+			return PrimaryFunctionExpressionOp(condition, positiveCase, negativeCase);
 		}
 
 		SN::SN_Value result = condition.DoIf(p_ParamList[1], p_ParamList[2]);
@@ -184,11 +184,12 @@ namespace SNI
 				}
 				else
 				{
-					return LOG_RETURN(context, !condition);
+					return LOG_RETURN(context, skynet::Not.PrimaryFunctionExpression(condition));
 				}
 			}
+			return LOG_RETURN(context, PrimaryFunctionExpression(condition, positiveCase, negativeCase));
 		}
-		return LOG_RETURN(context, condition.If(positiveCase, negativeCase));
+		return LOG_RETURN(context, PrimaryFunctionExpressionOp(condition, positiveCase, negativeCase));
 	}
 
 	SN::SN_Expression SNI_If::UnifyArray(SN::SN_Expression * p_ParameterList, const SNI_Expression *p_Source)

@@ -41,11 +41,6 @@ namespace SNI
 		return p_Param.GetSNI_Value()->DoFile();
 	}
 
-	SN::SN_Expression SNI_File::PrimaryFunctionExpression(const SN::SN_Expression &p_Param) const
-	{
-		return p_Param.File();
-	}
-
 	SN::SN_Value SNI_File::InverseFunctionValue(const SN::SN_Value &p_Param) const
 	{
 		return skynet::Null;

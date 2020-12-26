@@ -42,11 +42,6 @@ namespace SNI
 		return p_Left.GetSNI_Value()->DoDivide(p_Right.GetSNI_Value());
 	}
 
-	SN::SN_Expression SNI_Divide::PrimaryFunctionExpression(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right) const
-	{
-		return p_Left / p_Right;
-	}
-
 	SN::SN_Value SNI_Divide::LeftInverseFunctionValue(const SN::SN_Value &p_Result, const SN::SN_Value &p_Left) const
 	{
 		return p_Left.GetSNI_Value()->DoDivide(p_Result.GetSNI_Value());
@@ -54,7 +49,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_Divide::LeftInverseFunctionExpression(const SN::SN_Expression &p_Result, const SN::SN_Expression &p_Left) const
 	{
-		return p_Left / p_Result;
+		return skynet::Divide.PrimaryFunctionExpression(p_Left, p_Result);
 	}
 
 	SN::SN_Value SNI_Divide::RightInverseFunctionValue(const SN::SN_Value &p_Result, const SN::SN_Value &p_Right) const
@@ -64,7 +59,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_Divide::RightInverseFunctionExpression(const SN::SN_Expression &p_Result, const SN::SN_Expression &p_Right) const
 	{
-		return p_Result * p_Right;
+		return skynet::Multiply.PrimaryFunctionExpression(p_Result, p_Right);
 	}
 
 }

@@ -82,7 +82,13 @@ namespace SNI
 		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Define::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
 
 		ASSERTM(m_Variable && dynamic_cast<SNI_Variable *>(m_Variable), "The defined expression must be a variable.");
-		return LOG_RETURN(context, m_Variable->PartialCall(p_ParameterList, p_MetaLevel));
+		SN::SN_Expression result(this);
+		while (!p_ParameterList->empty())
+		{
+			result = SN::SN_Function(result, p_ParameterList->back().DoPartialEvaluate(p_MetaLevel));
+			p_ParameterList->pop_back();
+		}
+		return LOG_RETURN(context, result);
 	}
 
 	SN::SN_Error SNI_Define::PartialAssertValue(const SN::SN_Expression &p_Expression, bool /* p_Define = false */)
