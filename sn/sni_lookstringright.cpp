@@ -39,11 +39,6 @@ namespace SNI
 		return p_Left.GetSNI_Value()->DoLookStringRight(p_Right.GetSNI_Value());
 	}
 
-	SN::SN_Expression SNI_LookStringRight::PrimaryFunctionExpression(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right) const
-	{
-		return p_Left.LookStringRight(p_Right);
-	}
-
 	SN::SN_Value SNI_LookStringRight::LeftInverseFunctionValue(const SN::SN_Value &p_Left, const SN::SN_Value &p_Right) const
 	{
 		return skynet::Null;

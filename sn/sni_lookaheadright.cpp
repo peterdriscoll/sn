@@ -39,11 +39,6 @@ namespace SNI
 		return p_Param.GetSNI_Value()->DoLookaheadRight();
 	}
 
-	SN::SN_Expression SNI_LookaheadRight::PrimaryFunctionExpression(const SN::SN_Expression &p_Param) const
-	{
-		return p_Param.LookaheadRight();
-	}
-
 	SN::SN_Value SNI_LookaheadRight::InverseFunctionValue(const SN::SN_Value &p_Param) const
 	{
 		return skynet::Null;
