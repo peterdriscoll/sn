@@ -42,11 +42,6 @@ namespace SNI
 		return p_Param.GetSNI_Value()->DoNegative();
 	}
 
-	SN::SN_Expression SNI_Negative::PrimaryFunctionExpression(const SN::SN_Expression &p_Param) const
-	{
-		return -p_Param;
-	}
-
 	SN::SN_Expression SNI_Negative::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
 		LOGGING(SN::LogContext context("SNI_Unary::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
@@ -68,7 +63,8 @@ namespace SNI
 					return LOG_RETURN(context, function.GetParameter());
 				}
 			}
+			return LOG_RETURN(context, PrimaryFunctionExpression(value));
 		}
-		return LOG_RETURN(context, PrimaryFunctionExpression(value));
+		return LOG_RETURN(context, PrimaryFunctionExpressionOp(value));
 	}
 }
