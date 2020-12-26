@@ -65,12 +65,12 @@ namespace test_sn
 			{
 				Manager manager("Test Bool Equivalent", AssertErrorHandler);
 
-				Assert::IsTrue((Bool(true) == Bool(true)).Equivalent(Function(Function(Equals, Bool(true)), Bool(true))));
-				Assert::IsTrue(!(Bool(true) == Bool(true)).Equivalent(Function(Function(Equals, Bool(true)), Bool(false))));
-				Assert::IsTrue((Bool(true) && Bool(false)).Equivalent(Function(Function(And, Bool(true)), Bool(false))));
-				Assert::IsTrue((Bool(false) || Bool(false)).Equivalent(Function(Function(Or, Bool(false)), Bool(false))));
-				Assert::IsTrue((!False).Equivalent(Function(Not, False)));
-				Assert::IsTrue(False.If(False, True).Equivalent(Function(Function(Function(If, False), False), True)));
+				Assert::IsTrue((Bool(true) == Bool(true)).Equivalent(Function(Function(FunctionCall, Function(Function(FunctionCall, Equals), Bool(true))), Bool(true))));
+				Assert::IsTrue(!(Bool(true) == Bool(true)).Equivalent(Function(Function(FunctionCall, Function(Function(FunctionCall, Equals), Bool(true))), Bool(false))));
+				Assert::IsTrue((Bool(true) && Bool(false)).Equivalent(Function(Function(FunctionCall, Function(Function(FunctionCall, And), Bool(true))), Bool(false))));
+				Assert::IsTrue((Bool(false) || Bool(false)).Equivalent(Function(Function(FunctionCall, Function(Function(FunctionCall, Or), Bool(false))), Bool(false))));
+				Assert::IsTrue((!False).Equivalent(Function(Function(FunctionCall, Not), Bool(false))));
+				Assert::IsTrue(False.If(False, True).Equivalent(Function(Function(FunctionCall, Function(Function(FunctionCall, Function(Function(FunctionCall, If), False)), False)), True)));				
 			}
 			Cleanup();
 		}
@@ -173,8 +173,8 @@ namespace test_sn
 				SN_DECLARE_VALUE(z, Bool(true));
 
 
-				Assert::IsTrue((Bool(true) == y).DoPartialEvaluate().Equivalent(Bool(true) == y));
-				Assert::IsTrue(!(Bool(true) == y).DoPartialEvaluate().Equivalent(Bool(true) == x));
+				Assert::IsTrue((Bool(true) == y).DoPartialEvaluate().Equivalent(Function(Function(Equals, Bool(true)), y)));
+				Assert::IsTrue(!(Bool(true) == y).DoPartialEvaluate().Equivalent(Function(Function(Equals, Bool(true)), x)));
 				Assert::IsTrue((Bool(true) == Bool(true)).DoPartialEvaluate().Equivalent(Bool(true)));
 				(Bool(true) == z).DoPartialEvaluate().Do();
 

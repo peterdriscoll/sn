@@ -111,12 +111,12 @@ namespace test_sn
 				SN_DECLARE_VALUE(z, Double(3.1415));
 
 
-				Assert::IsTrue((Double(3.1415) == y).DoPartialEvaluate().Equivalent(Double(3.1415) == y));
-				Assert::IsTrue(!(Double(9.7) == y).DoPartialEvaluate().Equivalent(Double(9.7) == x));
+				Assert::IsTrue((Double(3.1415) == y).DoPartialEvaluate().Equivalent(Function(Function(Equals, Double(3.1415)), y)));
+				Assert::IsTrue(!(Double(9.7) == y).DoPartialEvaluate().Equivalent(Function(Function(Equals, Double(3.1415)), x)));
 				Assert::IsTrue((Double(9.7) == Double(9.7)).DoPartialEvaluate().Equivalent(Bool(true)));
 				(Double(3.1415) == z).DoPartialEvaluate().Do();
 
-				Assert::IsTrue((Double(5.5) + y == Double(10)).DoPartialEvaluate().Equivalent(Equals(Add(Double(5.5))(y))(Double(10))));
+				Assert::IsTrue((Double(5.5) + y == Double(10)).DoPartialEvaluate().Equivalent(Equals.PrimaryFunctionExpression(Add.PrimaryFunctionExpression(Double(5.5), y), Double(10))));
 				(Double(8.0) + z == Double(11.1415)).DoPartialEvaluate().Do();
 
 				(Double(3.1415) + z == Double(3.1415)*Double(2.0)).DoPartialEvaluate().Do();

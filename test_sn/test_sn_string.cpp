@@ -72,11 +72,11 @@ namespace test_sn
 			Assert::IsTrue(Transaction::TotalNetMemoryUsed() == 0);
 			{
 				Manager manager("Test String Equivalent", AssertErrorHandler);
-				// manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
-				Assert::IsTrue((String("dog") == String("dog")).Equivalent(Function(Function(Equals, String("dog")), String("dog"))));
-				Assert::IsTrue(!(String("dog") == String("dog")).Equivalent(Function(Function(Equals, String("dog")), String("cat"))));
-				Assert::IsTrue((String("dog") + String("cat")).Equivalent(Function(Function(Add, String("dog")), String("cat"))));
+				Assert::IsTrue((String("dog") == String("dog")).Equivalent(Function(Function(FunctionCall, Function(Function(FunctionCall, Equals), String("dog"))), String("dog"))));
+				Assert::IsTrue(!(String("dog") == String("dog")).Equivalent(Function(Function(FunctionCall, Function(Function(FunctionCall, Equals), String("dog"))), String("cat"))));
+				Assert::IsTrue((String("dog") + String("cat")).Equivalent(Function(Function(FunctionCall, Function(Function(FunctionCall, Add), String("dog"))), String("cat"))));
 				Assert::IsTrue((String("dog") == String("dog")).Equivalent(Equals(String("dog"))(String("dog"))));
 				Assert::IsTrue(!(String("dog") == String("dog")).Equivalent(Equals(String("dog"))(String("cat"))));
 				Assert::IsTrue((String("dog") + String("cat")).Equivalent(Add(String("dog"))(String("cat"))));
@@ -109,8 +109,8 @@ namespace test_sn
 				SN_DECLARE(x);
 				SN_DECLARE_VALUE(z, String("dog"));
 
-				Assert::IsTrue((String("dog") == y).DoPartialEvaluate().Equivalent(String("dog") == y));
-				Assert::IsTrue(!(String("dog") == y).DoPartialEvaluate().Equivalent(String("dog") == x));
+				Assert::IsTrue((String("dog") == y).DoPartialEvaluate().Equivalent(Function(Function(Equals, String("dog")), y)));
+				Assert::IsTrue(!(String("dog") == y).DoPartialEvaluate().Equivalent(Function(Function(Equals, String("dog")), x)));
 				Assert::IsTrue((String("dog") == String("dog")).DoPartialEvaluate().Equivalent(Bool(true)));
 				(String("dog") == z).DoPartialEvaluate().Do();
 

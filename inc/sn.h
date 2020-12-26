@@ -247,6 +247,9 @@ namespace skynet
 	extern SN_EXPORT SN::SN_FunctionDef BuildSet;
 	extern SN_EXPORT SN::SN_FunctionDef HasMember;
 
+	// * Function call
+	extern SN_EXPORT SN::SN_Expression FunctionCall;
+
 	// * Constants
 	extern SN_EXPORT SN::SN_Bool True;
 	extern SN_EXPORT SN::SN_Bool False;
