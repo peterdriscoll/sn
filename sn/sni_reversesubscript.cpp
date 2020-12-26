@@ -55,11 +55,6 @@ namespace SNI
 		return p_Left.GetSNI_Value()->DoReverseSubscript(p_Right.GetSNI_Value());
 	}
 
-	SN::SN_Expression SNI_ReverseSubscript::PrimaryFunctionExpression(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right) const
-	{
-		return p_Left.ReverseSubscript(p_Right.GetSNI_Value());
-	}
-
 	SN::SN_Value SNI_ReverseSubscript::LeftInverseFunctionValue(const SN::SN_Value & p_Left, const SN::SN_Value & p_Right) const
 	{
 		return p_Left.GetSNI_Value()->DoSubscriptCall(p_Right.GetSNI_Value());
@@ -67,7 +62,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_ReverseSubscript::LeftInverseFunctionExpression(const SN::SN_Expression & p_Left, const SN::SN_Expression & p_Right) const
 	{
-		return p_Left[p_Right];
+		return skynet::Subscript.PrimaryFunctionExpression(p_Left, p_Right);
 	}
 
 	SN::SN_Value SNI_ReverseSubscript::RightInverseFunctionValue(const SN::SN_Value & p_Left, const SN::SN_Value & p_Right) const

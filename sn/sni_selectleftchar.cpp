@@ -39,11 +39,6 @@ namespace SNI
 		return p_Param.GetSNI_Value()->DoSelectLeftChar();
 	}
 
-	SN::SN_Expression SNI_SelectLeftChar::PrimaryFunctionExpression(const SN::SN_Expression &p_Param) const
-	{
-		return p_Param.SelectLeftChar();
-	}
-
 	SN::SN_Value SNI_SelectLeftChar::InverseFunctionValue(const SN::SN_Value &p_Param) const
 	{
 		return skynet::Null;

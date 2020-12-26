@@ -62,11 +62,6 @@ namespace SNI
 		return p_Left.DoRevAnd(p_Right);
 	}
 
-	SN::SN_Expression SNI_RevAnd::PrimaryFunctionExpression(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right) const
-	{
-		return p_Left.RevAnd(p_Right);
-	}
-
 	SN::SN_Value SNI_RevAnd::LeftInverseFunctionValue(const SN::SN_Value &p_Result, const SN::SN_Value &p_Left) const
 	{
 		return p_Left.DoRevAnd(p_Result);
@@ -74,7 +69,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_RevAnd::LeftInverseFunctionExpression(const SN::SN_Expression &p_Result, const SN::SN_Expression &p_Left) const
 	{
-		return p_Left.RevAnd(p_Result);
+		return PrimaryFunctionExpression(p_Left, p_Result);
 	}
 
 	SN::SN_Value SNI_RevAnd::RightInverseFunctionValue(const SN::SN_Value &p_Result, const SN::SN_Value &p_Right) const
@@ -84,7 +79,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_RevAnd::RightInverseFunctionExpression(const SN::SN_Expression &p_Result, const SN::SN_Expression &p_Right) const
 	{
-		return p_Right && p_Result;
+		return skynet::RevAnd.PrimaryFunctionExpression(p_Right, p_Result);
 	}
 
 	size_t SNI_RevAnd::CardinalityOfCall(long p_Depth, SN::SN_Expression * p_ParamList) const
