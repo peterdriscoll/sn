@@ -534,6 +534,9 @@
     <ClInclude Include="sni_functioncall.h">
       <Filter>Expression Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\inc\sn_operatorvariables.h">
+      <Filter>Interface Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -994,6 +997,9 @@
     </ClCompile>
     <ClCompile Include="sni_functioncall.cpp">
       <Filter>Expression Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_operatorvariables.cpp">
+      <Filter>Interface Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

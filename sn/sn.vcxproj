@@ -208,6 +208,7 @@
     <ClInclude Include="..\inc\sn_number.h" />
     <ClInclude Include="..\inc\sn_object.h" />
     <ClInclude Include="..\inc\sn_operators.h" />
+    <ClInclude Include="..\inc\sn_operatorvariables.h" />
     <ClInclude Include="..\inc\sn_parameter.h" />
     <ClInclude Include="..\inc\sn_real.h" />
     <ClInclude Include="..\inc\sn_set.h" />
@@ -480,6 +481,7 @@
     <ClCompile Include="sn_number.cpp" />
     <ClCompile Include="sn_object.cpp" />
     <ClCompile Include="sn_operators.cpp" />
+    <ClCompile Include="sn_operatorvariables.cpp" />
     <ClCompile Include="sn_parameter.cpp" />
     <ClCompile Include="sn_pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

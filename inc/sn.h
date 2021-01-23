@@ -56,6 +56,11 @@ namespace skynet
 	{
 		Pure, Parsing, FailAsNeg
 	};
+
+	enum DefineType
+	{
+		Inname, Inline
+	};
 }
 
 #ifdef USE_LOGGING
@@ -100,6 +105,7 @@ namespace skynet
 #include "sn_derived.h"
 #include "sn_virtual.h"
 #include "sn_domain.h"
+#include "sn_operatorvariables.h"
 
 // Declare a variable, and tell the variable its variable name.
 // When the program and the program model generated the variable will know its human readable name.
@@ -116,6 +122,11 @@ namespace skynet
 #define SN_LINK(n) \
 	(*this)[#n] = n; \
 	n.SetName(#n);
+
+#define SN_LINK_VALUE(n, r, i) \
+	(*this)[#n] = n; \
+	n.SetName(#n); \
+	n.SetValue(r, i)
 
 #define SN_DECLARE_VALUE(n, r) \
     SN::SN_Variable n(string(#n), r)
