@@ -12,8 +12,8 @@ namespace SN
 	{
 	}
 
-	SN_Define::SN_Define(const SN_Variable &p_Variable)
-		: SN_Expression(new SNI::SNI_Define(p_Variable.GetSNI_Variable()))
+	SN_Define::SN_Define(const SN_Variable &p_Variable, enum skynet::DefineType p_DefineType)
+		: SN_Expression(new SNI::SNI_Define(p_Variable.GetSNI_Variable(), p_DefineType))
 	{
 	}
 

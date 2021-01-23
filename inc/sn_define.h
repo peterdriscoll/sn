@@ -20,7 +20,7 @@ namespace SN
 	{
 	public:
 		SN_Define();
-		SN_Define(const SN_Variable &p_Variable);
+		SN_Define(const SN_Variable &p_Variable, enum skynet::DefineType p_DefineType = skynet::Inname);
 		virtual ~SN_Define();
 
 		SNI::SNI_Define * GetSNI_Define() const;

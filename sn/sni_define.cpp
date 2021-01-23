@@ -14,11 +14,14 @@
 namespace SNI
 {
 	SNI_Define::SNI_Define()
+		: m_Variable(NULL)
+		, m_DefineType(skynet::Inname)
 	{
 	}
 
-	SNI_Define::SNI_Define(SNI_Variable *p_Variable)
+	SNI_Define::SNI_Define(SNI_Variable *p_Variable, enum skynet::DefineType p_DefineType)
 		: m_Variable(p_Variable)
+		, m_DefineType(p_DefineType)
 	{
 		REQUESTPROMOTION(m_Variable);
 	}

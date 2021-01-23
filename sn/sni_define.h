@@ -13,7 +13,7 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Define);
 	public:
-		SNI_Define(SNI_Variable *p_Variable);
+		SNI_Define(SNI_Variable *p_Variable, enum skynet::DefineType p_DefineType);
 		SNI_Define();
 		virtual ~SNI_Define();
 
@@ -37,6 +37,7 @@ namespace SNI
 		virtual void PromoteMembers();
 
 		SNI_Variable* m_Variable;
+		enum skynet::DefineType m_DefineType;
 	};
 }
 
