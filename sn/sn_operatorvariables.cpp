@@ -20,6 +20,6 @@ namespace SN
 	}
 	void SN_OperatorVariables::Link()
 	{
-//		SN_LINK_VALUE(FunctionCall, skynet::FunctionCall, skynet::DefineType::Inline);
+		SN_LINK_VALUE(FunctionCall, skynet::FunctionCall, skynet::DefineType::Inline);
 	}
 }

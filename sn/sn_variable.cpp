@@ -108,6 +108,12 @@ namespace SN
 		return GetSNI_Variable()->GetValue();
 	}
 
+	void SN_Variable::SetValue(SN_Expression p_Value, enum skynet::DefineType p_DefineType)
+	{
+		GetSNI_Variable()->SetValue(p_Value);
+		GetSNI_Variable()->SetInline(p_DefineType == skynet::Inline);
+	}
+
 	SNI::SNI_Variable* SN_Variable::GetSNI_Variable() const
 	{
 		return dynamic_cast<SNI::SNI_Variable*>(m_Expression);

@@ -32,6 +32,7 @@ namespace SNI
 		, m_Value(NULL)
 		, m_Frame(NULL)
 		, m_Requested(false)
+		, m_Inline(false)
 	{
 	}
 
@@ -39,6 +40,7 @@ namespace SNI
 		: m_Frame(NULL)
 		, m_Value(NULL)
 		, m_Requested(false)
+		, m_Inline(false)
 	{
 		SetName(p_Name);
 	}
@@ -47,6 +49,7 @@ namespace SNI
 		: m_Value(p_Other.GetSNI_Expression())
 		, m_Frame(NULL)
 		, m_Requested(false)
+		, m_Inline(false)
 	{
 		REQUESTPROMOTION(m_Value);
 	}
@@ -810,6 +813,11 @@ namespace SNI
 			SNI_Thread::GetThread()->RegisterChange(dynamic_cast<SNI_Variable *>(this));
 			REQUESTPROMOTION(m_Value);
 		}
+	}
+
+	void SNI_Variable::SetInline(bool p_Inline)
+	{
+		m_Inline = p_Inline;
 	}
 
 	SN::SN_Expression SNI_Variable::DoBuildMeta(long p_MetaLevel)

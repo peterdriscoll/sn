@@ -48,6 +48,7 @@ namespace SN
 		string FrameName();
 
 		SN_Expression GetValue() const;
+		void SetValue(SN_Expression p_Value, enum skynet::DefineType p_DefineType = skynet::Inname);
 
 		SN_Expression DoPartialEvaluate(long p_MetaLevel = 0) const;
 

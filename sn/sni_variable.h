@@ -99,6 +99,7 @@ namespace SNI
 
 		void AttachDelayedCall(SNI_DelayedCall *p_Call);
 		void SetValue(const SN::SN_Expression & p_Value);
+		void SetInline(bool p_Inline);
 	protected:
 		virtual void PromoteMembers();
 
@@ -106,6 +107,7 @@ namespace SNI
 		SNI_Expression * m_Value;
 		SNI_Frame      * m_Frame;
 		bool           m_Requested;
+		bool           m_Inline;
 	};
 
 	typedef vector<SNI_Variable> SNI_VariableList;
