@@ -46,7 +46,7 @@ namespace SNI
 
 		SNI_Variable *CreateTemporary();
 		SNI_Variable *CreateSplitVariable();
-		SNI_Variable *CreateVariable(const string & p_Name, const string & p_DomainName);
+		SNI_Variable *CreateVariable(const string & p_Name, const string & p_DomainName, enum skynet::DefineType p_DefineType = skynet::DefineType::Inname);
 		SNI_Variable *CreateParameter(size_t p_ParamNum, SN::SN_Expression p_Value);
 		SNI_Variable *CreateParameterByName(const string &p_ParamName, SN::SN_Expression p_Value);
 

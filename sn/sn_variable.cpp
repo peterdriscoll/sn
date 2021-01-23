@@ -35,8 +35,8 @@ namespace SN
 	{
 	}
 
-	SN_Variable::SN_Variable(const string &p_Name, const SN_Expression &p_Value)
-		: SN_Expression(SNI_Frame::Top()->CreateVariable(p_Name, ""))
+	SN_Variable::SN_Variable(const string &p_Name, const SN_Expression &p_Value, enum skynet::DefineType p_DefineType)
+		: SN_Expression(SNI_Frame::Top()->CreateVariable(p_Name, "", p_DefineType))
 	{
 		GetSNI_Variable()->AssertValue(p_Value.DoEvaluate(0));
 	}
