@@ -595,10 +595,7 @@ namespace SNI
 
 	SNI_Variable * SNI_Frame::CreateVariable(const string &p_Name, const string & p_DomainName, enum skynet::DefineType p_DefineType)
 	{
-		SNI_Variable * result = new SNI_Variable();
-		result->SetName(p_Name);
-		result->SetDomainName(p_DomainName);
-		result->SetInline(p_DefineType == skynet::DefineType::Inline);
+		SNI_Variable * result = new SNI_Variable(p_Name, p_DomainName, p_DefineType);
 		SNI_Thread::GetThread()->Lock();
 		m_VariableList.push_back(result);
 		SNI_Thread::GetThread()->Unlock();

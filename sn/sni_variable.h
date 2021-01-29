@@ -26,6 +26,7 @@ namespace SNI
 	public:
 		SNI_Variable();
 		SNI_Variable(const string &p_Name);
+		SNI_Variable(const string & p_Name, const string & p_DomainName, skynet::DefineType p_DefineType = skynet::DefineType::Inname);
 		SNI_Variable(const SN::SN_Expression &p_other);
 		virtual ~SNI_Variable();
 

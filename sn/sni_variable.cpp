@@ -45,6 +45,16 @@ namespace SNI
 		SetName(p_Name);
 	}
 
+	SNI_Variable::SNI_Variable(const string &p_Name, const string &p_DomainName, enum skynet::DefineType p_DefineType)
+		: m_Frame(NULL)
+		, m_Value(NULL)
+		, m_Requested(false)
+		, m_Inline(p_DefineType = skynet::Inline)
+	{
+		SetName(p_Name);
+		SetDomainName(p_DomainName);
+	}
+
 	SNI_Variable::SNI_Variable(const SN::SN_Expression &p_Other)
 		: m_Value(p_Other.GetSNI_Expression())
 		, m_Frame(NULL)
