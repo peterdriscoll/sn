@@ -61,7 +61,7 @@ namespace SNI
 		m_End = p_End;
 		REQUESTPROMOTION(m_Source.GetSNI_ExpressionRef());
 		REQUESTPROMOTION(m_Start.GetSNI_ExpressionRef());
-		REQUESTPROMOTION(m_End);
+		REQUESTPROMOTION(m_End.GetSNI_ExpressionRef());
 	}
 
 	SNI_StringRef::~SNI_StringRef()

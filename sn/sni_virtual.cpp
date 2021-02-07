@@ -332,12 +332,12 @@ namespace SNI
 			{
 				m_DefineId = l_DefineId;
 				m_CallList.push_back(AddLambdasPartial(p_ParameterList, p_Result).GetSNI_Expression());
-				REQUESTPROMOTION(m_CallList.back());
+				REQUESTPROMOTION(m_CallList.back().GetSNI_ExpressionRef());
 			}
 			else if ((m_CallList.back().IsNull()) || p_Define)
 			{
 				m_CallList.back() = AddLambdasPartial(p_ParameterList, p_Result).GetSNI_Expression();
-				REQUESTPROMOTION(m_CallList.back());
+				REQUESTPROMOTION(m_CallList.back().GetSNI_ExpressionRef());
 			}
 			return skynet::OK;
 		}
