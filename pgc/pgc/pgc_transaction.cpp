@@ -8,6 +8,7 @@ namespace PGC
 {
 	thread_local PGC_Transaction *m_TopTransaction = 0;
 	thread_local PGC_Transaction *m_AllocatingTransaction = 0;
+	thread_local long m_AllocatingDepth = 0;
 
 	/*static*/ size_t PGC_Transaction::m_TotalNetMemoryUsed = 0;
 	/*static*/ size_t PGC_Transaction::m_TotalGrossMemoryUsed = 0;
@@ -161,8 +162,17 @@ namespace PGC
 		m_CurrentBlock->RegisterForDestruction(p_Base);
 	}
 
+	void *PGC_Transaction::CreateNew(size_t p_size)
+	{
+		ASSERTM(m_AllocatingDepth == 0, "Nested memory allocation.");
+		++m_AllocatingDepth;
+		return Allocate(p_size);
+	}
+
 	/*static*/ PGC_Transaction* PGC_Transaction::RegisterLastForDestruction(PGC_Base *p_Base)
 	{
+		ASSERTM(m_AllocatingDepth == 1, "Nested memory destruction.");
+		--m_AllocatingDepth;
 		m_AllocatingTransaction->RegisterForDestruction(p_Base);
 		return m_AllocatingTransaction;
 	}

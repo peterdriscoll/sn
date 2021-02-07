@@ -60,6 +60,7 @@ namespace PGC
 		virtual void EndTransaction();
 
 		void RegisterForDestruction(PGC_Base *p_Base);
+		void *CreateNew(size_t p_size);
 		static PGC_Transaction *RegisterLastForDestruction(PGC_Base *p_Base);
 
 		bool Dieing();

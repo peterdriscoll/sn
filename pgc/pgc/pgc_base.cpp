@@ -148,12 +148,12 @@ namespace PGC
 
 	void * PGC_Base::operator new(size_t p_size, PGC_Transaction &p_Transaction)
 	{
-		return p_Transaction.Allocate(p_size);
+		return p_Transaction.CreateNew(p_size);
 	}
 
 	void * PGC_Base::operator new(size_t p_size)
 	{
-		return PGC_Transaction::TopTransaction()->Allocate(p_size);
+		return PGC_Transaction::TopTransaction()->CreateNew(p_size);
 	}
 
 	void PGC_Base::operator delete(void * /* p_Object */, PGC_Transaction & /* p_Transaction */)
