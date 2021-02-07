@@ -60,6 +60,7 @@ namespace SNI
 		virtual bool IsRightKnownValue() const;
 		virtual bool IsKnownTypeValue() const;
 		virtual bool IsLambdaValue() const;
+		virtual bool IsInline() const;
 		virtual bool IsStringValue() const;
 		virtual bool IsVariable() const;
 		virtual bool IsValueHolder() const;

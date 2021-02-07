@@ -234,6 +234,10 @@ namespace SNI
 		return m_Fixed;
 	}
 
+	bool SNI_Virtual::IsInline() const
+	{
+		return false;
+	}
 
 	void SNI_Virtual::Fix()
 	{

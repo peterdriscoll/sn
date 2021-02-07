@@ -273,7 +273,9 @@ namespace skynet
 
 	extern SN_EXPORT SN::SN_Expression Null;
 
-	// * Types
+	// * Operator Variables
+
+	extern SN_EXPORT SN::SN_OperatorVariables Operators;
 };
 
 #endif // SN_H_INCLUDED

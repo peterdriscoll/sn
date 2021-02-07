@@ -175,6 +175,11 @@ namespace SN
 			return GetSNI_Base() && GetSNI_Base()->IsLambdaValue();
 		}
 
+		bool IsInline() const
+		{
+			return GetSNI_Base() && GetSNI_Base()->IsInline();
+		}
+
 		bool IsVariable() const
 		{
 			return GetSNI_Base() && GetSNI_Base()->IsVariable();

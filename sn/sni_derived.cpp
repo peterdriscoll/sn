@@ -127,6 +127,11 @@ namespace SNI
 		return m_Fixed;
 	}
 
+	bool SNI_Derived::IsInline() const
+	{
+		return false;
+	}
+
 	void SNI_Derived::Fix()
 	{
 		m_Fixed = true;

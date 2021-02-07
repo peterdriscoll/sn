@@ -69,6 +69,11 @@ namespace SNI
 		return true;
 	}
 
+	bool SNI_Lambda::IsInline() const
+	{
+		return false;
+	}
+
 	string SNI_Lambda::DisplayCpp() const
 	{
 		return "Lambda(" + m_FormalParameter->DisplayCpp() + ", " + m_Expression->DisplayCpp() + ")";

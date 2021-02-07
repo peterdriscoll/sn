@@ -26,6 +26,7 @@ namespace SNI
 
 		virtual bool IsValue() const;
 		virtual bool IsLambdaValue() const;
+		virtual bool IsInline() const;
 
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 		virtual size_t Cardinality(size_t p_MaxCardinality = CARDINALITY_MAX) const;

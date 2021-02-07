@@ -369,6 +369,11 @@ namespace SNI
 		return false;
 	}
 
+	bool SNI_Expression::IsInline() const
+	{
+		return false;
+	}
+
 	bool SNI_Expression::IsComplete() const
 	{
 		return true;

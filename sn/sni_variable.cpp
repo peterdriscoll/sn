@@ -133,9 +133,14 @@ namespace SNI
 		return m_Value && m_Value->IsLambdaValue();
 	}
 
+	bool SNI_Variable::IsInline() const
+	{
+		return m_Inline || (m_Value && m_Value->IsInline());
+	}
+
 	bool SNI_Variable::IsStringValue() const
 	{
-		return m_Value && m_Value->IsLambdaValue();
+		return m_Value && m_Value->IsStringValue();
 	}
 
 	bool SNI_Variable::IsVariable() const

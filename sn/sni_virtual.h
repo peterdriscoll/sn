@@ -72,6 +72,8 @@ namespace SNI
 		virtual bool IsValue() const;
 		virtual bool IsFixed() const;
 
+		virtual bool IsInline() const;
+
 		virtual void Fix();
 
 		virtual SNI_Expression * Clone(long p_MetaLevel, SNI_Frame * p_Frame, bool & p_Changed);
