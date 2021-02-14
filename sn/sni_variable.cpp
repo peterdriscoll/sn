@@ -785,10 +785,6 @@ namespace SNI
 		if (m_Value)
 		{
 			SN::SN_Error e = m_Value->PartialUnify(p_ParameterList, p_Result, p_Define);
-			if (e.IsNull())
-			{
-				return skynet::Fail;
-			}
 			return e;
 		}
 		else if (p_Define || SNI_Thread::TopManager()->AutoDefine())
