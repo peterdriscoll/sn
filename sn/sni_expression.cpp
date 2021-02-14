@@ -371,7 +371,7 @@ namespace SNI
 
 	bool SNI_Expression::IsInline() const
 	{
-		return false;
+		return true;
 	}
 
 	bool SNI_Expression::IsComplete() const

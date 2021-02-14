@@ -49,7 +49,7 @@ namespace SNI
 		: m_Frame(NULL)
 		, m_Value(NULL)
 		, m_Requested(false)
-		, m_Inline(p_DefineType = skynet::Inline)
+		, m_Inline(p_DefineType == skynet::Inline)
 	{
 		SetName(p_Name);
 		SetDomainName(p_DomainName);
@@ -564,9 +564,7 @@ namespace SNI
 		{
 			return this;
 		}
-		if (!dynamic_cast<SNI_Lambda*>(m_Value)
-			&& !dynamic_cast<SNI_Virtual*>(m_Value)
-			&& !dynamic_cast<SNI_Derived*>(m_Value))
+		if (IsInline())
 		{
 			SN::SN_Expression result = m_Value->DoPartialEvaluate(p_MetaLevel);
 			if (result.IsNull())
@@ -717,9 +715,7 @@ namespace SNI
 		SN::SN_Expression result(this);
 		if (m_Value)
 		{
-			if (!dynamic_cast<SNI_Lambda*>(m_Value)
-				&& !dynamic_cast<SNI_Virtual*>(m_Value)
-				&& !dynamic_cast<SNI_Derived*>(m_Value))
+			if (IsInline())
 			{
 				SNI_Expression * l_clone = m_Value->Clone(this, (*p_ParameterList)[0].GetSNI_Expression());
 
