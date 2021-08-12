@@ -150,76 +150,70 @@ namespace SNI
 			{
 				m_response_data = l_thread->Skynet(debugHTML);
 			}
-			else if (path == "/dashboardjs")
+			else if (path == "/dashboard.json")
 			{
 				m_response_data = l_thread->DashboardJS(debugJS);
-				m_extension = "json";
 			}
-			else if (path == "/stackjs")
+			else if (path == "/stack.json")
 			{
 				long maxStackFrames = atol(umap["maxstackframes"].c_str());
 				long startStackFrames = atol(umap["startstackframes"].c_str());
 				long stepCount = atol(umap["stepcount"].c_str());
 				m_response_data = l_thread->StackJS(maxStackFrames, startStackFrames, stepCount, debugJS);
-				m_extension = "json";
 			}
-			else if (path == "/callstackjs")
+			else if (path == "/callstack.json")
 			{
 				long maxCallStackFrames = atol(umap["maxcallstackframes"].c_str());
 				long startCallStackFrames = atol(umap["startcallstackframes"].c_str());
 				long stepCount = atol(umap["stepcount"].c_str());
 				m_response_data = l_thread->CallStackJS(maxCallStackFrames, startCallStackFrames, stepCount, debugJS);
-				m_extension = "json";
 			}
-			else if (path == "/changehistoryjs")
+			else if (path == "/watchlist.json")
+			{
+				long stepCount = atol(umap["stepcount"].c_str());
+				m_response_data = l_thread->WatchListJS(stepCount, debugJS);
+			}
+			else if (path == "/changehistory.json")
 			{
 				size_t fromstep = atol(umap["fromstep"].c_str());
 				size_t tostep = atol(umap["tostep"].c_str());
 				size_t columnwidth = atol(umap["columnwidth"].c_str());
 				m_response_data = l_thread->ChangeHistoryJS(debugJS, columnwidth, fromstep, tostep);
-				m_extension = "json";
 			}
-			else if (path == "/logjs")
+			else if (path == "/log.json")
 			{
 				long maxLogEntries = atol(umap["maxlogentries"].c_str());
 				long startLog = atol(umap["startlog"].c_str());
 				long stepCount = atol(umap["stepcount"].c_str());
 				m_response_data = l_thread->LogJS(maxLogEntries, startLog, stepCount);
-				m_extension = "json";
 			}
-			else if (path == "/derivationjs")
+			else if (path == "/derivation.json")
 			{
 				long maxLogEntries = atol(umap["maxlogentries"].c_str());
 				m_response_data = l_thread->DerivationJS(maxLogEntries);
-				m_extension = "json";
 			}
-			else if (path == "/codejs")
+			else if (path == "/code.json")
 			{
 				long maxCode = atol(umap["maxcode"].c_str());
 				long startCode = atol(umap["startcode"].c_str());
 				long stepCount = atol(umap["stepcount"].c_str());
 				m_response_data = l_thread->CodeJS(maxCode, startCode, stepCount, debugJS);
-				m_extension = "json";
 			}
-			else if (path == "/stepcountjs")
+			else if (path == "/stepcount.json")
 			{
 				m_response_data = l_thread->StepCountJS();
-				m_extension = "json";
 			}
-			else if (path == "/errorjs")
+			else if (path == "/error.json")
 			{
 				m_response_data = l_thread->ErrorJS(debugJS);
-				m_extension = "json";
 			}
-			else if (path == "/worldsetsjs")
+			else if (path == "/worldsets.json")
 			{
 				m_response_data = l_thread->WorldSetsJS(debugJS);
-				m_extension = "json";
 			}
-			else if (path == "/delayedjs")
+			else if (path == "/delayed.json")
 			{
 				m_response_data = l_thread->DelayedJS(debugJS);
-				m_extension = "json";
 			}
 			else
 			{

@@ -157,7 +157,7 @@ namespace SNI
 		return text;
 	}
 
-	void SNI_World::WriteJS(ostream & p_Stream, const string & tabs, SNI_DisplayOptions &p_DisplayOptions) const
+	void SNI_World::WriteJSON(ostream & p_Stream, const string & tabs, SNI_DisplayOptions &p_DisplayOptions) const
 	{
 		p_Stream << tabs << "\t\"id\" : \"" << DisplayShort() << "\",\n";
 		p_Stream << tabs << "\t\"breakpoint\" : " << DisplayShortJS() << ",\n";

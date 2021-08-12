@@ -110,7 +110,7 @@ namespace SNI
 	string SNI_ValueSet::DisplayCpp() const
 	{
 		SNI_DisplayOptions displayOptions(doTextOnly);
-		return "sn_ValueSet( [" + DisplayPmTaggedValueList(m_ValueList, displayOptions) + "] )";
+		return "sn_ValueSet( [" + DisplaySnTaggedValueList(m_ValueList, displayOptions) + "] )";
 	}
 
 	string SNI_ValueSet::DisplaySN(long /*priority*/, SNI_DisplayOptions & p_DisplayOptions) const
@@ -120,7 +120,7 @@ namespace SNI
 		{
 			status = "incomplete:";
 		}
-		return status + "[" + DisplayPmTaggedExpressionList(m_ValueList, p_DisplayOptions) + "]";
+		return status + "[" + DisplaySnTaggedExpressionList(m_ValueList, p_DisplayOptions) + "]";
 	}
 
 	long SNI_ValueSet::GetPriority() const
@@ -764,6 +764,18 @@ namespace SNI
 		m_WorldSet = p_WorldSet;
 	}
 
+	void SNI_ValueSet::AddVariables(SNI_VariablePointerMap& p_Map)
+	{
+		for (const SNI_TaggedValue& tv : m_ValueList)
+		{
+			SNI_Expression *v = tv.GetValue().GetSNI_Expression();
+			if (v)
+			{
+				v->AddVariables(p_Map);
+			}
+		}
+	}
+
 	SN::SN_Expression SNI_ValueSet::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel) const
 	{
 		SN::SN_ValueSet vs;
@@ -786,7 +798,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_ValueSet::Unify(SN::SN_ExpressionList * p_ParameterList)
 	{
-		LOGGING(SN::LogContext context("SNI_ValueSet::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
+		LOGGING(SN::LogContext context("SNI_ValueSet::Unify ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
 		
 		Validate();
 		SN::SN_Error err = skynet::OK;
@@ -973,7 +985,7 @@ namespace SNI
 
 	SN::SN_ValueSet SNI_ValueSet::DoRemove(const SN::SN_Value &p_Other)
 	{
-		LOGGING(SN::LogContext context("SNI_ValueSet::DoRemove ( " + DisplayPmTaggedValueList(m_ValueList) + " )"));
+		LOGGING(SN::LogContext context("SNI_ValueSet::DoRemove ( " + DisplaySnTaggedValueList(m_ValueList) + " )"));
 
 		SN::SN_ValueSet valueSet;
 		SNI_World *contextWorld = SNI_Thread::GetThread()->ContextWorld();

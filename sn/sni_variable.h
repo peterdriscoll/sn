@@ -37,6 +37,9 @@ namespace SNI
 		virtual string DisplaySN(long p_Priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual string DisplayValueSN(long priority, SNI_DisplayOptions & p_DisplayOptions) const;
 		virtual string DisplayCall(long p_Priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const;
+		virtual string SetWatch(const string& p_Caption, SNI_DisplayOptions& p_DisplayOptions) const;
+		void WriteJSON(ostream& p_Stream, const string& p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions& p_DisplayOptions) const;
+		virtual void AddVariables(SNI_VariablePointerMap& p_Map);
 		virtual long GetPriority() const;
 
 		virtual bool GetBool() const;
@@ -66,7 +69,7 @@ namespace SNI
 		virtual bool IsValueHolder() const;
 		virtual bool IsReferableValue() const;
 		virtual void Request();
-		virtual SNI_Expression * GetValue(bool p_Request = true) const;
+		virtual SNI_Expression *GetValue(bool p_Request = true) const;
 		virtual const SNI_Expression *GetSafeValue() const;
 		virtual void Simplify();
 		virtual SN::SN_Expression SimplifyValue();

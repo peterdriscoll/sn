@@ -65,7 +65,7 @@ namespace SNI
 		string DisplaySNChildWorlds(SNI_DisplayOptions & p_DisplayOptions) const;
 		string SetBreakPoint(const string & p_Caption, SNI_DisplayOptions & p_DisplayOptions) const;
 		string LogText(SN::LogContext & context, long p_Width) const;
-		void WriteJS(ostream &p_Stream, const string &tabs, SNI_DisplayOptions & p_DisplayOptions) const;
+		void WriteJSON(ostream &p_Stream, const string &tabs, SNI_DisplayOptions & p_DisplayOptions) const;
 
 		bool IsEmpty() const;
 		bool HasEmptyChild() const;

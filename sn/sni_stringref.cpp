@@ -679,13 +679,13 @@ namespace SNI
 		}
 		if (!part.IsString())
 		{
-			return SN::SN_Error(false, false, "StringRef.SubtractLeft: Expected a string to subtract: " + DisplayPmExpression(part));
+			return SN::SN_Error(false, false, "StringRef.SubtractLeft: Expected a string to subtract: " + DisplaySnExpression(part));
 		}
 		string part_text = part.GetString();
 		long part_len = (long) part_text.length();
 		if (part_len == 0)
 		{
-			return SN::SN_Error(false, false, "StringRef.SubtractLeft: Expected a string to subtract: " + DisplayPmExpression(part));
+			return SN::SN_Error(false, false, "StringRef.SubtractLeft: Expected a string to subtract: " + DisplaySnExpression(part));
 		}
 		SN::SN_Value start = m_Start.DoEvaluate();
 		if (!start.IsNull())
@@ -706,12 +706,12 @@ namespace SNI
 				SN::SN_Long end = m_End.DoEvaluate();
 				if (end.IsNullValue())
 				{
-					return SN::SN_Error(false, false, "StringRef.SubtractLeft: End is not known: " + DisplaySN0() + " < " + DisplayPmExpression(part));
+					return SN::SN_Error(false, false, "StringRef.SubtractLeft: End is not known: " + DisplaySN0() + " < " + DisplaySnExpression(part));
 				}
 				long end_pos = end.GetNumber();
 				if (start_pos + part_len > end_pos)
 				{
-					return SN::SN_Error(false, false, "StringRef.SubtractLeft: Not enough characters to subtract: " + DisplaySN0() + " < " + DisplayPmExpression(part));
+					return SN::SN_Error(false, false, "StringRef.SubtractLeft: Not enough characters to subtract: " + DisplaySN0() + " < " + DisplaySnExpression(part));
 				}
 			}
 
@@ -728,7 +728,7 @@ namespace SNI
 			long end_pos = GetRightMostPos();
 			if (start_pos + part_len > end_pos)
 			{
-				return SN::SN_Error(false, false, "StringRef.SubtractLeft: Not enough characters to subtract: " + DisplaySN0() + " < " + DisplayPmExpression(part));
+				return SN::SN_Error(false, false, "StringRef.SubtractLeft: Not enough characters to subtract: " + DisplaySN0() + " < " + DisplaySnExpression(part));
 			}
 			SN::SN_ValueSet vs_start;
 			SN::SN_ValueSet vs_end;
@@ -750,7 +750,7 @@ namespace SNI
 				return SN::SN_StringRef(this, vs_end.SimplifyValue(), m_End);
 			}
 		}
-		return SN::SN_Error(false, false, "StringRef.SubtractLeft: Left string not matched in search: " + DisplaySN0() + " < " + DisplayPmExpression(part));
+		return SN::SN_Error(false, false, "StringRef.SubtractLeft: Left string not matched in search: " + DisplaySN0() + " < " + DisplaySnExpression(part));
 	}
 
 	SN::SN_Value SNI_StringRef::DoSubtractRight(SNI_Value * p_Part) const
@@ -762,7 +762,7 @@ namespace SNI
 		}
 		if (!SN::Is<SNI_String *>(part))
 		{
-			return SN::SN_Error(false, false, "SubtractLeft: Expected a string to subtract: " + DisplayPmExpression(part));
+			return SN::SN_Error(false, false, "SubtractLeft: Expected a string to subtract: " + DisplaySnExpression(part));
 		}
 		SN::SN_Value start = m_Start.DoPartialEvaluate();
 		if (SN::Is<SNI_Value *>(start))
@@ -780,7 +780,7 @@ namespace SNI
 		long part_len = (long) part_text.length();
 		if (part_len == 0)
 		{
-			return SN::SN_Error(false, false, "StringRef.SubtractLeft: Expected a string to subtract: " + DisplayPmExpression(part));
+			return SN::SN_Error(false, false, "StringRef.SubtractLeft: Expected a string to subtract: " + DisplaySnExpression(part));
 		}
 		SN::SN_Value end = m_End.DoEvaluate();
 		if (!end.IsNull())
@@ -805,7 +805,7 @@ namespace SNI
 			size_t end_pos = GetRightMostPos();
 			if (start_pos + part_len > end_pos)
 			{
-				return SN::SN_Error(false, false, "StringRef.SubtractLeft: Not enough characters to subtract: " + DisplaySN0() + " < " + DisplayPmExpression(part));
+				return SN::SN_Error(false, false, "StringRef.SubtractLeft: Not enough characters to subtract: " + DisplaySN0() + " < " + DisplaySnExpression(part));
 			}
 			SN::SN_ValueSet vs_start;
 			SN::SN_ValueSet vs_end;
@@ -831,7 +831,7 @@ namespace SNI
 				return SN::SN_StringRef(this, m_Start, vs_start.SimplifyValue());
 			}
 		}
-		return SN::SN_Error(false, false, "StringRef.SubtractRight: Right string not matched in search: " + DisplaySN0() + " < " + DisplayPmExpression(part));
+		return SN::SN_Error(false, false, "StringRef.SubtractRight: Right string not matched in search: " + DisplaySN0() + " < " + DisplaySnExpression(part));
 	}
 
 	SN::SN_Value SNI_StringRef::DoSubtractLeftChar() const

@@ -58,7 +58,7 @@ namespace SNI
 		void MakeRerunRequest();
 		virtual string GetDescription();
 
-		void WriteJS(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions);
+		void WriteJSON(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions);
 		string GetLogDescription();
 		virtual void Log();
 

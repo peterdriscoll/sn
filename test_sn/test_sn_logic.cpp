@@ -334,7 +334,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Or 3", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false);
 
 				SN_DECLARE(x);
 				(x == Long(3) || x == Long(4) || x == Long(5)).Assert().Do();

@@ -207,6 +207,14 @@ table, tr, td {
     background-color: #e6ffe6;
 }
 
+.watchset {
+    background-color: papayawhip;
+}
+
+.watchclear {
+    background-color: white;
+}
+
 .error {
     background-color: red;
 }
@@ -440,6 +448,7 @@ body {
         "breakpoints status"
         "errors errors"
         "worldsets delayedcalls"
+        "watchlist watchlist"
         "callstack callstack"
         "stack commandbreakpoints"
         "stack codelog"

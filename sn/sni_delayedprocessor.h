@@ -37,7 +37,7 @@ namespace SNI
 		unordered_map<string, SN::SN_String> &GetPreventReread();
 		virtual void Display();
 
-		void WriteJS(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions);
+		void WriteJSON(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions);
 		size_t CountDelayedCalls();
 	private:
 		SNI_DelayedCallList  m_DelayedCallList;

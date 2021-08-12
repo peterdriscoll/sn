@@ -113,14 +113,14 @@ namespace SNI
 	/// @retval An expression or value  for the conjunction of the two values or error.
 	SN::SN_Expression SNI_And::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		LOGGING(SN::LogContext context("SNI_And::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
+		LOGGING(SN::LogContext context("SNI_And::PartialCall ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
 
 		SN::SN_Expression left_value = (*p_ParameterList)[1].DoPartialEvaluate(p_MetaLevel);
 		if (SN::Is<SNI_Value *>(left_value))
 		{
 			if (!SN::Is<SNI_Bool *>(left_value))
 			{
-				return LOG_RETURN(context, SN::SN_Error(false, false, "Invalid type for: " + DisplayPmExpression(left_value)));
+				return LOG_RETURN(context, SN::SN_Error(false, false, "Invalid type for: " + DisplaySnExpression(left_value)));
 			}
 			if (!left_value.GetBool())
 			{
@@ -133,7 +133,7 @@ namespace SNI
 		{
 			if (!SN::Is<SNI_Bool *>(right_value))
 			{
-				return LOG_RETURN(context, SN::SN_Error(false, false, "Invalid type for: " + DisplayPmExpression(right_value)));
+				return LOG_RETURN(context, SN::SN_Error(false, false, "Invalid type for: " + DisplaySnExpression(right_value)));
 			}
 			if (!right_value.GetBool())
 			{
@@ -215,7 +215,7 @@ namespace SNI
 	/// @retval True if successful, false for failure.
 	SN::SN_Error SNI_And::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
-		LOGGING(SN::LogContext context("SNI_And::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )"));
+		LOGGING(SN::LogContext context("SNI_And::PartialUnify ( " + DisplaySnParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )"));
 
 		return LOG_RETURN(context, PartialUnifyInternal((*p_ParameterList)[1].GetValue(), (*p_ParameterList)[0].GetValue(), p_Result));
 	}

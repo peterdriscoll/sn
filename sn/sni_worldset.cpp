@@ -33,7 +33,7 @@ namespace SNI
 		string delimeter = " ";
 		for (SNI_WorldSet *ws: m_ChangedList)
 		{
-			ws->WriteJS(p_Stream, tabs+"\t", p_DisplayOptions);
+			ws->WriteJSON(p_Stream, tabs+"\t", p_DisplayOptions);
 		}
 		p_Stream << "],\n";
 	}
@@ -128,7 +128,7 @@ namespace SNI
 		return DisplayShort() + "=" + p_Value.DisplaySN(p_DisplayOptions);
 	}
 
-	void SNI_WorldSet::WriteJS(ostream &p_Stream, const string &tabs, SNI_DisplayOptions & p_DisplayOptions) const
+	void SNI_WorldSet::WriteJSON(ostream &p_Stream, const string &tabs, SNI_DisplayOptions & p_DisplayOptions) const
 	{
 		p_Stream << tabs << "\"id\" : \"" << DisplayShort() << "\",\n";
 		p_Stream << tabs << "\"expression\" : \"" << EscapeStringToJSON(m_Expression.DisplaySN()) << "\",\n";
@@ -140,7 +140,7 @@ namespace SNI
 			if (!contextWorld || contextWorld->CompatibleWorld(const_cast<SNI_World *>(w)))
 			{
 				p_Stream << delimeter << "\n" << tabs << "\t{\n";
-				w->WriteJS(p_Stream, tabs + "\t", p_DisplayOptions);
+				w->WriteJSON(p_Stream, tabs + "\t", p_DisplayOptions);
 				p_Stream << tabs << "\t}";
 				delimeter = ",";
 			}
@@ -170,7 +170,7 @@ namespace SNI
 			if (!contextWorld || contextWorld->CompatibleWorld(const_cast<SNI_World *>(w)))
 			{
 				p_Stream << delimeter << "\n" << tabs << "\t{\n";
-				w->WriteJS(p_Stream, tabs + "\t", p_DisplayOptions);
+				w->WriteJSON(p_Stream, tabs + "\t", p_DisplayOptions);
 				p_Stream << tabs << "\t}";
 				delimeter = ",";
 			}

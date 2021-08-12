@@ -49,6 +49,7 @@ namespace SNI
 	class SNI_Variable;
 	typedef vector<const SNI_Variable *> SNI_VariableConstPointerList;
 	typedef vector<SNI_Variable *> SNI_VariablePointerList;
+	typedef map<string, SNI_Variable *> SNI_VariablePointerMap;
 
 	typedef void OnErrorHandler(SN::SN_Error p_Result);
 
@@ -79,6 +80,7 @@ namespace SNI
 		virtual string DisplayCpp() const;
 		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual string DisplayValueSN(long, SNI_DisplayOptions & p_DisplayOptions) const;
+		virtual void WriteJSON(ostream& p_Stream, const string& p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions& p_DisplayOptions) const;
 
 		//---------------------------------------------------------------
 		// Debugging
@@ -118,6 +120,7 @@ namespace SNI
 		virtual void Validate();
 		virtual SN::SN_Expression SimplifyValue();
 		virtual void AttachDelayedCall(SNI_DelayedCall * p_Call);
+		virtual void AddVariables(SNI_VariablePointerMap& p_Map);
 		virtual bool IsRequested() const;
 		virtual void Request();
 		virtual SNI_WorldSet *GetWorldSet();

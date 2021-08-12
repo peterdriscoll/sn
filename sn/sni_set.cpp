@@ -80,12 +80,12 @@ namespace SNI
 
 	string SNI_Set::DisplayCpp() const
 	{
-		return "sn_Set( {" + DisplayPmValueList(m_SetList) + "} )";
+		return "sn_Set( {" + DisplaySnValueList(m_SetList) + "} )";
 	}
 
 	string SNI_Set::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
-		return "{" + DisplayPmValueList(m_SetList) + "}";
+		return "{" + DisplaySnValueList(m_SetList) + "}";
 	}
 
 	long SNI_Set::GetPriority() const
@@ -106,7 +106,7 @@ namespace SNI
 
 	SN::SN_Set SNI_Set::Remove(const SN::SN_Value &p_Other)
 	{
-		LOGGING(SN::LogContext context("SNI_Set::DoRemove ( " + DisplayPmValueList(m_SetList) + " )"));
+		LOGGING(SN::LogContext context("SNI_Set::DoRemove ( " + DisplaySnValueList(m_SetList) + " )"));
 
 		SN::SN_Set Set;
 		for (size_t i = 0; i<m_SetList.size(); i++)

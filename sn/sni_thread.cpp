@@ -331,6 +331,22 @@ namespace SNI
 		return ss.str();
 	}
 
+	string SNI_Thread::WatchListJS(long p_StartStepCount, enum DisplayOptionType p_OptionType)
+	{
+		stringstream ss;
+		SNI_Manager* manager = GetTopManager(false);
+		if (p_StartStepCount == 0 || p_StartStepCount == m_ThreadStepCount)
+		{
+			SNI_DisplayOptions l_DisplayOptions(p_OptionType);
+			WriteWatchListJS(ss, manager->DebugFieldWidth(), l_DisplayOptions);
+		}
+		else
+		{
+			ss << "{\"records\":[]}\n";
+		}
+		return ss.str();
+	}
+
 	string SNI_Thread::StepCountJS()
 	{
 		stringstream ss;
@@ -384,7 +400,7 @@ namespace SNI
 			Lock();
 			stringstream ss;
 			SNI_DisplayOptions displayOptions(p_OptionType);
-			m_Error->WriteJS(ss, displayOptions);
+			m_Error->WriteJSON(ss, displayOptions);
 			Unlock();
 			return ss.str();
 		}
@@ -414,7 +430,7 @@ namespace SNI
 		SNI_DisplayOptions displayOptions(p_OptionType);
 		if (m_Processor)
 		{
-			m_Processor->WriteJS(ss, displayOptions);
+			m_Processor->WriteJSON(ss, displayOptions);
 		}
 		else
 		{
@@ -1130,7 +1146,7 @@ namespace SNI
 		for (size_t j = start; j > base; j--)
 		{
 			p_Stream << delimeter << "\t{\n";
-			m_FrameList[j - 1]->WriteJS(p_Stream, j, p_DebugFieldWidth, p_DisplayOptions);
+			m_FrameList[j - 1]->WriteJSON(p_Stream, j, p_DebugFieldWidth, p_DisplayOptions);
 			delimeter = ",\n";
 		}
 		Unlock();
@@ -1174,6 +1190,45 @@ namespace SNI
 		pt::write_json(p_Stream, oroot);
 	}
 
+	void SNI_Thread::WriteWatchListJS(ostream& p_Stream, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions& p_DisplayOptions)
+	{
+		Lock();
+		SNI_VariablePointerMap watchList;
+		for (auto f : m_FrameList)
+		{
+			f->AddVariables(watchList);
+		}
+		Unlock();
+		p_Stream << "{\n";
+		p_Stream << "\"records\":[\n";
+		string delimeter;
+		string prefix = "\t";
+		for (auto p : watchList)
+		{
+			SNI_Variable* v = p.second;
+			if (v)
+			{
+				const SNI_Expression *value = v->GetSafeValue();
+				p_Stream << delimeter << prefix << "{\n";
+				v->WriteJSON(p_Stream, prefix+"\t", p_DebugFieldWidth, p_DisplayOptions);
+				if (value)
+				{
+					string card_string = "&infin;";
+					size_t card = value->Cardinality();
+					if (card < CARDINALITY_MAX)
+					{
+						card_string = to_string(card);
+					}
+					p_Stream << ",\n" << prefix << "\t\"cardinality\" : \"" << card_string << "\",\n";
+					value->WriteJSON(p_Stream, prefix + "\t", p_DebugFieldWidth, p_DisplayOptions);
+				}
+				p_Stream << "\n" << prefix << "}";
+				delimeter = ",\n";
+			}
+		}
+		p_Stream << "\n]}\n";
+	}
+
 	void SNI_Thread::WriteStepCountListJS(ostream &p_Stream)
 	{
 		p_Stream << "{\"records\":[\n";
@@ -1208,7 +1263,7 @@ namespace SNI
 			{
 				SNI_WorldSet *ws = pair.second;
 				p_Stream << delimeter << "\t{\n";
-				ws->WriteJS(p_Stream, "\t\t", p_DisplayOptions);
+				ws->WriteJSON(p_Stream, "\t\t", p_DisplayOptions);
 				p_Stream << "\t}";
 				delimeter = ",\n";
 			}

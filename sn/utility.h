@@ -57,13 +57,13 @@ namespace SNI
 	string Details(const string &p_Text, size_t p_Width);
 	string DetailsFS(const string &p_Text, const string &p_TextHTML, size_t p_Width);
 
-	string DisplayPmExpressionList(SN::SN_ExpressionList * p_ParameterList);
-	string DisplayPmValueList(const SN::SN_ValueList &p_ParameterList);
-	string DisplayPmParameterList(SN::SN_ParameterList * p_ParameterList);
-	string DisplayPmTaggedValueList(const SNI_TaggedValueList &p_TaggedValueList, SNI_DisplayOptions & p_DisplayOptions);
-	string DisplayPmTaggedExpressionList(const SNI_TaggedValueList &p_TaggedValueList, SNI_DisplayOptions & p_DisplayOptions);
-	string DisplayPmExpression(SNI_Expression *p_Expression);
-	string DisplayPmExpression(const SN::SN_Expression &p_Expression);
+	string DisplaySnExpressionList(SN::SN_ExpressionList * p_ParameterList);
+	string DisplaySnValueList(const SN::SN_ValueList &p_ParameterList);
+	string DisplaySnParameterList(SN::SN_ParameterList * p_ParameterList);
+	string DisplaySnTaggedValueList(const SNI_TaggedValueList &p_TaggedValueList, SNI_DisplayOptions & p_DisplayOptions);
+	string DisplaySnTaggedExpressionList(const SNI_TaggedValueList &p_TaggedValueList, SNI_DisplayOptions & p_DisplayOptions);
+	string DisplaySnExpression(SNI_Expression *p_Expression);
+	string DisplaySnExpression(const SN::SN_Expression &p_Expression);
 	string DisplayWorlds(long p_NumWorlds, SNI_World ** p_World);
 	string DisplayWorldsD(SNI_DisplayOptions & p_DisplayOptions, long p_NumWorlds, SNI_World ** p_World);
 	string DisplayValues(long p_NumWorlds, SN::SN_Expression * p_ParamList, SNI_World ** p_World = NULL);

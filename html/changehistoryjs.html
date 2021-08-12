@@ -114,7 +114,7 @@
             $scope.columnwidth = 10;
             $scope.stepcounts = [];
             $scope.loaddata = function () {
-                $http.get(home + 'dashboardjs?threadnum=' + $scope.threadnum)
+                $http.get(home + 'dashboard.json?threadnum=' + $scope.threadnum)
                     .then(function (response) {
                         $scope.threadnum = response.data.threadnum;
                         $scope.breakpoint = response.data.breakpoint;
@@ -123,7 +123,7 @@
                         $scope.running = response.data.running;
                         $scope.closing = response.data.closing;
                     });
-                $http.get(home + "stepcountjs")
+                $http.get(home + "stepcount.json")
                     .then(function (response) {
                         $scope.stepcounts = response.data.records;
                         $scope.tostep = stepcounts[0].stepcount;
@@ -131,7 +131,7 @@
             };
             $scope.loaddata();
             $scope.load = function (action) {
-                $http.get(home + 'changehistoryjs?threadnum=' + $scope.threadnum + '&columnwidth=' + $scope.columnwidth + '&fromstep=' + $scope.fromstep + '&tostep=' + $scope.tostep)
+                $http.get(home + 'changehistory.json?threadnum=' + $scope.threadnum + '&columnwidth=' + $scope.columnwidth + '&fromstep=' + $scope.fromstep + '&tostep=' + $scope.tostep)
                     .then(function (response) {
                         $scope.changes = response.data.records;
                     });

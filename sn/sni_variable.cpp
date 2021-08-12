@@ -349,15 +349,9 @@ namespace SNI
 
 	string SNI_Variable::DisplaySN(long p_Priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
-		if (m_Value && m_Value->IsValue() && !m_Value->IsValueSet() && p_DisplayOptions.GetDebugHTML() == doDebugPointsJS)
+		if (p_DisplayOptions.GetDebugHTML() == doDebugPointsJS)
 		{
-			if (p_DisplayOptions.GetLevel() == 0)
-			{
-				p_DisplayOptions.IncrementLevel();
-				string sValue = "<button class='name' ng-click='selectvar(\"" + FrameName() + "\")'>{{ selecttext('" + FrameName() + "','" + FramePathName()+":"+m_Value->DisplayValueSN(p_Priority, p_DisplayOptions) + "')}}</button>";
-				p_DisplayOptions.DecrementLevel();
-				return sValue;
-			}
+			return SetWatch(FrameName(), p_DisplayOptions);
 		}
 		return FrameName();
 	}
@@ -387,6 +381,44 @@ namespace SNI
 			text += del + p.GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions);
 		}
 		return Bracket(p_Priority, SetBreakPoint(FrameName(), p_DisplayOptions, this, SN::LeftId) + " " + text, p_DisplayOptions, this);
+	}
+
+	string SNI_Variable::SetWatch(const string& p_Caption, SNI_DisplayOptions& p_DisplayOptions) const
+	{
+		switch (p_DisplayOptions.GetDebugHTML())
+		{
+			case doTextOnly:
+				return p_Caption;
+			case doDebugPointsHTML:
+				return p_Caption;
+			case doDebugPointsJS:
+			{
+				string debugId = GetDebugId();
+				return "<button title='" + debugId + "' ng-click='setWatch(\"" + debugId + "\")' ng-class='watchClass(\"" + debugId + "\")'>" + p_Caption + "</button>";
+			}
+		}
+		return "";
+	}
+
+	void SNI_Variable::WriteJSON(ostream& p_Stream, const string& p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions& p_DisplayOptions) const
+	{
+		p_Stream << p_Prefix << "\"id\" : \"" << GetDebugId() << "\",\n";
+		p_Stream << p_Prefix << "\"name\" : \"" << FramePathName() << "\",\n";
+		p_Stream << p_Prefix << "\"typetext\" : \"" << GetValueTypeName() << "\"";
+	}
+
+	void SNI_Variable::AddVariables(SNI_VariablePointerMap& p_Map)
+	{
+		string id = GetDebugId();
+		auto it = p_Map.find(id);
+		if (it == p_Map.end())
+		{
+			p_Map[id] = this;
+			if (m_Value)
+			{
+				m_Value->AddVariables(p_Map);
+			}
+		}
 	}
 
 	long SNI_Variable::GetPriority() const
@@ -685,7 +717,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_Variable::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Variable::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Variable::Call ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
 
 		if (m_Value)
 		{
@@ -710,7 +742,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_Variable::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Variable::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Variable::PartialCall ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
 
 		SN::SN_Expression result(this);
 		if (m_Value)

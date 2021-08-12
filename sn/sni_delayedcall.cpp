@@ -167,7 +167,7 @@ namespace SNI
 		m_Scheduled = true;
 	}
 
-	void SNI_DelayedCall::WriteJS(ostream &p_Stream, SNI::SNI_DisplayOptions &p_DisplayOptions)
+	void SNI_DelayedCall::WriteJSON(ostream &p_Stream, SNI::SNI_DisplayOptions &p_DisplayOptions)
 	{
 		if (!m_World || !m_World->IsEmpty())
 		{

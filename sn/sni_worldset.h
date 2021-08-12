@@ -65,7 +65,7 @@ namespace SNI
 		string DisplayWorlds(SNI_DisplayOptions & p_DisplayOptions) const;
 		string DisplayVariable(SNI_DisplayOptions & p_DisplayOptions) const;
 		string DisplayCondition(SNI_DisplayOptions & p_DisplayOptions, const SN::SN_Expression &p_Value) const;
-		void WriteJS(ostream & p_Stream, const string &tabs, SNI_DisplayOptions & p_DisplayOptions) const;
+		void WriteJSON(ostream & p_Stream, const string &tabs, SNI_DisplayOptions & p_DisplayOptions) const;
 		void WriteUnmarkedJS(ostream & p_Stream, const string &tabs, SNI_DisplayOptions & p_DisplayOptions) const;
 		string LogHeading(SN::LogContext &context, long p_Width) const;
 		string LogUnderline(SN::LogContext &context, long p_Width) const;

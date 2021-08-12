@@ -37,7 +37,7 @@ namespace SNI
 		void Display();
 		bool IsScheduled();
 		void MarkScheduled();
-		void WriteJS(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions);
+		void WriteJSON(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions);
 
 	private:
 		SN::SN_FunctionDef    m_Function;

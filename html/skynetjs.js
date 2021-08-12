@@ -65,14 +65,14 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
 
     // Load the error history.
     $scope.loadthreadstepcounts = function () {
-        $http.get(home + "stepcountjs")
+        $http.get(home + "stepcount.json")
             .then(function (response) { $scope.stepcounts = response.data.records; });
     };
 
     // Load the error history.
     $scope.loaderrors = function () {
         $scope.errorstepcount = $scope.currentstepcount;
-        $http.get(home + 'errorjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxcode)
+        $http.get(home + 'error.json?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxcode)
             .then(function (response) {
                 $scope.error = response.data;
                 if ($scope.errorstepcount === $scope.currentstepcount) {
@@ -85,7 +85,7 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
     $scope.loadworldsets = function (opening) {
         var field = $document[0].getElementById('worldsetsid');
         if (opening && !field.open || !opening && field.open) {
-            $http.get(home + 'worldsetsjs?threadnum=' + $scope.threadnum)
+            $http.get(home + 'worldsets.json?threadnum=' + $scope.threadnum)
                 .then(function (response) { $scope.worldsets = response.data.records; });
         }
     };
@@ -94,7 +94,7 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
     $scope.loaddelayedcalls = function (opening) {
         var field = $document[0].getElementById('delayedcallsid');
         if (opening && !field.open || !opening && field.open) {
-            $http.get(home + 'delayedjs?threadnum=' + $scope.threadnum)
+            $http.get(home + 'delayed.json?threadnum=' + $scope.threadnum)
                 .then(function (response) { $scope.delayedcalls = response.data.records; });
         }
     };
@@ -109,7 +109,7 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
         }
         if (opening && !field.open || !opening && field.open) {
             if ($scope.startstackframes < $scope.maxstackframes && $scope.startstackframes < $scope.countframes) {
-                $http.get(home + 'stackjs?threadnum=' + $scope.threadnum + '&maxstackframes=' + $scope.bufstackframes + '&startstackframes=' + $scope.startstackframes + "&stepcount=" + $scope.stackstepcount)
+                $http.get(home + 'stack.json?threadnum=' + $scope.threadnum + '&maxstackframes=' + $scope.bufstackframes + '&startstackframes=' + $scope.startstackframes + "&stepcount=" + $scope.stackstepcount)
                     .then(function (response) {
                         if ($scope.stackstepcount === $scope.currentstepcount && $scope.stackstepcount == response.data.stepcount) {
                             if ($scope.startstackframes === 0) {
@@ -141,7 +141,7 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
         }
         if (opening && !field.open || !opening && field.open) {
             if ($scope.startcallstackframes < $scope.maxcallstackframes && $scope.startcallstackframes < $scope.countcalls) {
-                $http.get(home + 'callstackjs?threadnum=' + $scope.threadnum + '&maxcallstackframes=' + $scope.bufcallstackframes + '&startcallstackframes=' + $scope.startcallstackframes + "&stepcount=" + $scope.callstackstepcount)
+                $http.get(home + 'callstack.json?threadnum=' + $scope.threadnum + '&maxcallstackframes=' + $scope.bufcallstackframes + '&startcallstackframes=' + $scope.startcallstackframes + "&stepcount=" + $scope.callstackstepcount)
                     .then(function (response) {
                         if ($scope.callstackstepcount === $scope.currentstepcount && $scope.callstackstepcount == response.data.stepcount) {
                             if ($scope.startcallstackframes === 0) {
@@ -163,11 +163,20 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
         }
     };
 
+    // Load the call stack if the detail for it is open.
+    $scope.loadwatchlist = function (opening) {
+        var field = $document[0].getElementById('watchlistid');
+        if (opening && !field.open || !opening && field.open) {
+            $http.get(home + 'watchlist.json?threadnum=' + $scope.threadnum)
+                .then(function (response) { $scope.watchlist = response.data.records; });
+        }
+    };
+
     // Load the derivation interpretation of the log, if the detail for it is open.
     $scope.loadderivations = function (opening) {
         var field = $document[0].getElementById('derivationsid');
         if (opening && !field.open || !opening && field.open) {
-            $http.get(home + 'derivationjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxderivation)
+            $http.get(home + 'derivation.json?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxderivation)
                 .then(function (response) { $scope.derivationhtml = response.data.derivationhtml; });
         }
     };
@@ -182,7 +191,7 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
         }
         if (opening && !field.open || !opening && field.open) {
             if ($scope.startcode < $scope.maxcode && $scope.startcode < $scope.countcodeentries) {
-                $http.get(home + 'codejs?threadnum=' + $scope.threadnum + '&maxcode=' + $scope.bufcode + '&startcode=' + $scope.startcode + "&stepcount=" + $scope.codestepcount)
+                $http.get(home + 'code.json?threadnum=' + $scope.threadnum + '&maxcode=' + $scope.bufcode + '&startcode=' + $scope.startcode + "&stepcount=" + $scope.codestepcount)
                     .then(function (response) {
                         if ($scope.codestepcount === $scope.currentstepcount && $scope.codestepcount === response.data.stepcount) {
                             if ($scope.startcode === 0) {
@@ -214,7 +223,7 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
         }
         if (opening && !field.open || !opening && field.open) {
             if ($scope.startlog < $scope.maxlog && $scope.startlog < $scope.countlogentries) {
-                $http.get(home + 'logjs?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.buflog + '&startlog=' + $scope.startlog + "&stepcount=" + $scope.logstepcount)
+                $http.get(home + 'log.json?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.buflog + '&startlog=' + $scope.startlog + "&stepcount=" + $scope.logstepcount)
                     .then(function (response) {
                         if ($scope.logstepcount === $scope.currentstepcount && $scope.logstepcount === response.data.stepcount) {
                             if ($scope.startlog === 0) {
@@ -240,7 +249,7 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
     $scope.loaddata = function () {
         if (!$scope.closing && !$scope.scheduled) {
             $scope.scheduled = $scope.scheduled + 1;
-            $http.get(home + 'dashboardjs?threadnum=' + $scope.threadnum)
+            $http.get(home + 'dashboard.json?threadnum=' + $scope.threadnum)
                 .then(function (response) {
                     $scope.threadnum = response.data.threadnum;
                     $scope.breakpoint = response.data.breakpoint;
@@ -285,6 +294,7 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
         $scope.loadthreadstepcounts();
         $scope.loaddelayedcalls(false);
         $scope.loadworldsets(false);
+        $scope.loadwatchlist(false);
     };
 
     // Request an action from the server.
@@ -537,6 +547,35 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
         return $scope.breakpointclass(breakpoint) + ' ' + c;
     };
 
+    $scope.watchListDisplayAll = false;
+    $scope.watchList = new Set();
+
+    $scope.setWatch = function (id) {
+        if ($scope.watchList.has(id)) {
+            $scope.watchList.delete(id);
+        }
+        else
+        {
+            $scope.watchList.add(id);
+        }
+    }
+ 
+    $scope.getWatch = function (id) {
+        return $scope.watchList.has(id);
+    }
+ 
+    $scope.watchClass = function (id) {
+        if ($scope.getWatch(id))
+        {
+            return 'watchset'
+        }
+        return 'watchclear';
+    };
+
+    $scope.getWatchDisplay = function (id) {
+        return $scope.watchListDisplayAll || $scope.watchList.has(id);
+    }
+ 
     $scope.selectedvar = '';
     $scope.selectvar = function (name) {
         if ($scope.selectedvar === name) {

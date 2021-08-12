@@ -93,6 +93,7 @@ namespace SNI
 		string DashboardJS(enum DisplayOptionType p_OptionType);
 		string StackJS(long p_MaxStackFrame, long p_StartStackFrame, long p_StartStepCount, enum DisplayOptionType p_OptionType);
 		string CallStackJS(long p_MaxCallStackFrame, long p_StartCallStackFrame, long p_StartStepCount, enum DisplayOptionType p_OptionType);
+		string WatchListJS(long p_StartStepCount, enum DisplayOptionType p_OptionType);
 		string StepCountJS();
 		string LogJS(long p_MaxLogEntries, long p_StartLogEntries, long p_StartStepCount);
 		string DerivationJS(long p_MaxLogEntries);
@@ -168,6 +169,7 @@ namespace SNI
 		void WriteDashboardJS(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions);
 		void WriteStackJS(ostream & p_Stream, size_t  p_Depth, size_t p_Start, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
 		void WriteCallStackJS(ostream & p_Stream, size_t p_Depth, size_t p_Start, SNI::SNI_DisplayOptions & p_DisplayOptions);
+		void WriteWatchListJS(ostream& p_Stream, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions& p_DisplayOptions);
 		void WriteLogJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartLog);
 		void WriteDerivationJS(ostream & p_Stream, long p_MaxLogEntries);
 		void WriteCodeJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartCode, SNI_DisplayOptions &p_DisplayOptions);

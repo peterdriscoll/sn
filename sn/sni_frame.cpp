@@ -328,7 +328,7 @@ namespace SNI
 		p_Stream << "</tr></table></div>\n";
 	}
 
-	void SNI_Frame::WriteJS(ostream &p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
+	void SNI_Frame::WriteJSON(ostream &p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
 	{
 		string function;
 		if (HasCode())
@@ -494,20 +494,30 @@ namespace SNI
 		SNI_Variable *v = p_Variable.GetSNI_Variable();
 		if (v)
 		{
-			p_Stream << p_Prefix << "\"name\" : \"" << v->FramePathName() << "\",\n";
+			v->WriteJSON(p_Stream, p_Prefix, p_DebugFieldWidth, p_DisplayOptions);
 		}
 		else
 		{
-			p_Stream << p_Prefix << "\"name\" : \"\",\n";
+			p_Stream << p_Prefix << "\"name\" : \"\"";
 		}
-		size_t card = p_Variable.Cardinality();
-		SNI_FunctionDef *functionDef = m_Function.GetSNI_FunctionDef();
+		const SNI_Expression* value = p_Value.GetSNI_Expression();
+		if (value)
+		{
+			WriteCardinalityJSON(p_Stream, p_Value, j, p_Prefix + "\t");
+			value->WriteJSON(p_Stream, p_Prefix + "\t", p_DebugFieldWidth, p_DisplayOptions);
+		}
+	}
+
+	void SNI_Frame::WriteCardinalityJSON(ostream& p_Stream, SN::SN_Expression& p_Value, long p_ParamNum, const string& p_Prefix) const
+	{
+		size_t card = p_Value.Cardinality();
+		SNI_FunctionDef* functionDef = m_Function.GetSNI_FunctionDef();
 		string context_card;
 		if (functionDef)
 		{
-			if (0 <= j && j < functionDef->GetNumParameters())
+			if (0 <= p_ParamNum && p_ParamNum < functionDef->GetNumParameters())
 			{
-				size_t cardParam = functionDef->ParamCardinality(p_Variable, j);
+				size_t cardParam = functionDef->ParamCardinality(p_Value, p_ParamNum);
 				if (card != cardParam)
 				{
 					context_card = "/&infin;";
@@ -523,46 +533,9 @@ namespace SNI
 		{
 			card_string = to_string(card);
 		}
-		p_Stream << p_Prefix << "\"cardinality\" : \"" << card_string << context_card << "\",\n";
-		p_Stream << p_Prefix << "\"typetext\" : \"" << p_Variable.GetValueTypeName() << "\"";
-		if (p_Value.GetSNI_Expression())
-		{
-			SN::SN_Expression value = p_Value.GetSafeValue();
-			p_Stream << ",\n" << p_Prefix << "\"value\" : [\n";
-			string prefix = p_Prefix;
-			if (value.IsStringValue())
-			{
-				// Problem calling ForEach from HTTP server.
-				// It creates SNI objects. It is supposed to be watching only, not changing things.
-				SNI::SNI_DisplayOptions plainText(doTextOnly);
-				string valueText;
-				string valueTextHTML;
-				valueText = p_Value.DisplayValueSN(plainText);
-				valueTextHTML = p_Value.DisplayValueSN(p_DisplayOptions);
-				p_Stream << prefix << "\t" << DetailsFS(valueText, valueTextHTML, p_DebugFieldWidth);
-			}
-			else
-			{
-				string delimeter;
-				p_Value.GetSafeValue().ForEach(
-					[&p_Stream, &delimeter, p_DebugFieldWidth, &p_DisplayOptions, &prefix](const SN::SN_Expression &p_Expression, SNI_World *p_World)->SN::SN_Error
-				{
-					SNI::SNI_DisplayOptions plainText(doTextOnly);
-					string valueText;
-					string valueTextHTML;
-					if (p_Expression.GetSNI_Expression())
-					{
-						valueText = p_Expression.DisplaySN(plainText) + string(p_World ? "::" + p_World->DisplaySN(plainText) : "");
-						valueTextHTML = p_Expression.DisplaySN(p_DisplayOptions) + string(p_World ? "::" + p_World->DisplaySN(p_DisplayOptions) : "");
-					}
-					p_Stream << delimeter << prefix << "\t" << DetailsFS(valueText, valueTextHTML, p_DebugFieldWidth);
-					delimeter = ",\n";
-					return skynet::OK;
-				});
-			}
-			p_Stream << "\n" << p_Prefix << "]\n";
-		}
+		p_Stream << ",\n" << p_Prefix << "\"cardinality\" : \"" << card_string << context_card << "\",\n";
 	}
+
 
 	string SNI_Frame::GetLogShortDescription(SNI_Manager *p_Manager)
 	{
@@ -632,6 +605,14 @@ namespace SNI
 		SNI_Thread::GetThread()->Lock();
 		m_VariableList.push_back(p_Param.GetSNI_Variable());
 		SNI_Thread::GetThread()->Unlock();
+	}
+
+	void SNI_Frame::AddVariables(SNI_VariablePointerMap &p_Map)
+	{
+		for (SNI_Variable *v: m_VariableList)
+		{
+			v->AddVariables(p_Map);
+		}
 	}
 
 	void SNI_Frame::RecordSavePoint(vector<bool> p_SavePoint)

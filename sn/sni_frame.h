@@ -51,15 +51,18 @@ namespace SNI
 		SNI_Variable *CreateParameterByName(const string &p_ParamName, SN::SN_Expression p_Value);
 
 		void WriteWebFrame(ostream &p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
-		void WriteJS(ostream & p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
+		void WriteJSON(ostream & p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
 		void WriteCallJS(boost::property_tree::ptree &callStackNode, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions & p_DisplayOptions);
 		void WriteStackJS(ostream & p_Stream, string &p_Delimeter, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions & p_DisplayOptions);
-		void WriteVariable(ostream &p_Stream, SN::SN_Expression &p_Variable, SN::SN_Expression &p_Value, long j, const string &p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
+		void WriteCardinalityJSON(ostream& p_Stream, SN::SN_Expression& p_Value, long p_ParamNum, const string& p_Prefix) const;
+		void WriteVariable(ostream& p_Stream, SN::SN_Expression& p_Variable, SN::SN_Expression& p_Value, long j, const string& p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions& p_DisplayOptions);
 
 		void RegisterCardinality(size_t p_Cardinality);
 		void PromoteExternals(PGC::PGC_Transaction * p_Transaction);
 
 		void AttachParameter(SN::SN_Expression p_Param);
+
+		void AddVariables(SNI_VariablePointerMap& p_Map);
 
 		void RecordSavePoint(vector<bool> p_SavePoint);
 		void RestoreSavePoint(vector<bool> p_SavePoint);

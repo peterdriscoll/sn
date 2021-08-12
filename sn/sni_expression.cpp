@@ -76,6 +76,45 @@ namespace SNI
 		return GetTypeName();
 	}
 
+	void SNI_Expression::WriteJSON(ostream& p_Stream, const string& p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions& p_DisplayOptions) const
+	{
+		p_Stream << p_Prefix << "\"typetext\" : \"" << GetTypeName() << "\"";
+		p_Stream << ",\n" << p_Prefix << "\"value\" : [\n";
+		string prefix = p_Prefix;
+		if (IsStringValue())
+		{
+			// Problem calling ForEach from HTTP server.
+			// It creates SNI objects. It is supposed to be watching only, not changing things.
+			SNI::SNI_DisplayOptions plainText(doTextOnly);
+			string valueText;
+			string valueTextHTML;
+			valueText = DisplayValueSN(0, plainText);
+			valueTextHTML = DisplayValueSN(0, p_DisplayOptions);
+			p_Stream << prefix << "\t" << DetailsFS(valueText, valueTextHTML, p_DebugFieldWidth);
+		}
+		else
+		{
+			string delimeter;
+			SNI_Expression* value = const_cast<SNI_Expression*>(this);
+			value->ForEach(
+				[&p_Stream, &delimeter, p_DebugFieldWidth, &p_DisplayOptions, &prefix](const SN::SN_Expression& p_Expression, SNI_World* p_World)->SN::SN_Error
+				{
+					SNI::SNI_DisplayOptions plainText(doTextOnly);
+					string valueText;
+					string valueTextHTML;
+					if (p_Expression.GetSNI_Expression())
+					{
+						valueText = p_Expression.DisplaySN(plainText) + string(p_World ? "::" + p_World->DisplaySN(plainText) : "");
+						valueTextHTML = p_Expression.DisplaySN(p_DisplayOptions) + string(p_World ? "::" + p_World->DisplaySN(p_DisplayOptions) : "");
+					}
+					p_Stream << delimeter << prefix << "\t" << DetailsFS(valueText, valueTextHTML, p_DebugFieldWidth);
+					delimeter = ",\n";
+					return skynet::OK;
+				});
+		}
+		p_Stream << "\n" << p_Prefix << "]\n";
+	}
+
 	string SNI_Expression::DisplayValueSN(long priority, SNI_DisplayOptions & p_DisplayOptions) const
 	{
 		return DisplaySN(priority, p_DisplayOptions);
@@ -135,7 +174,7 @@ namespace SNI
 			{
 				string breakPoint = p_DebugSource->GetBreakPointJS(p_Index);
 				return "<button title='" + breakPoint + "' ng-click='setbreakpoint(" + breakPoint + ")' ng-class='breakpointclass(" + breakPoint + ")'>" + p_Caption + "</button>";
-		}
+			}
 		}
 		return "";
 	}
@@ -272,6 +311,10 @@ namespace SNI
 			bracketRight = ")";
 		}
 		return bracketLeft + p_Expression + bracketRight;
+	}
+
+	void SNI_Expression::AddVariables(SNI_VariablePointerMap& p_Map)
+	{
 	}
 
 	string SNI_Expression::DisplaySN0() const
@@ -611,14 +654,14 @@ namespace SNI
 
 	SN::SN_Expression SNI_Expression::Call(SN::SN_ExpressionList * p_ParameterList, long  /* p_MetaLevel = 0 */) const
 	{
-		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Expression::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Expression::Call ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
 
 		return LOG_RETURN(context, SN::SN_Error(false, false, GetTypeName() + " Call not implemented."));
 	}
 
 	SN::SN_Expression SNI_Expression::PartialCall(SN::SN_ExpressionList * p_ParameterList, long  /* p_MetaLevel = 0 */) const
 	{
-		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Concat::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Concat::PartialCall ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
 
 		return LOG_RETURN(context, SN::SN_Error(false, false, GetTypeName() + " Partial Call not implemented."));
 	}

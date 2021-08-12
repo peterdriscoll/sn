@@ -184,7 +184,7 @@ namespace SNI
 		return success;
 	}
 
-	void SNI_DelayedProcessor::WriteJS(ostream &p_Stream, SNI::SNI_DisplayOptions &p_DisplayOptions)
+	void SNI_DelayedProcessor::WriteJSON(ostream &p_Stream, SNI::SNI_DisplayOptions &p_DisplayOptions)
 	{
 		p_Stream << "{\"records\":[\n";
 		string delimeter = "\n";
@@ -194,7 +194,7 @@ namespace SNI
 		{
 			p_Stream << delimeter << "\t{\n";
 			p_Stream << "\t\t\"id\" : \"" << id++ << "\",\n";
-			call->WriteJS(p_Stream, p_DisplayOptions);
+			call->WriteJSON(p_Stream, p_DisplayOptions);
 			p_Stream << "\t}";
 			delimeter = ",\n";
 		}

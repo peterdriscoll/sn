@@ -162,7 +162,7 @@
                     </div>
 
                     <div class='worldsets'>
-                        <details open  id='worldsetsid' ng-click='loadworldsets(true)'>
+                        <details open id='worldsetsid' ng-click='loadworldsets(true)'>
                             <summary>World Sets - {{ countworldsets }} records</summary>
                             <table class='frame'>
                                 <tr ng-repeat="ws in worldsets">
@@ -191,6 +191,36 @@
                                         <button title='{{["delayed",d.id]}}' ng-click='setbreakpoint(["delayed",d.id])' ng-class='breakpointclass(["delayed",d.id])' ng-bind-html="trustAsHtml(d.cardinality)" init-bind></button>
                                     </td>
                                     <td>{{d.world}}</td>
+                                </tr>
+                            </table>
+                        </details>
+                    </div>
+
+                    <div class='watchlist' id='watchlistdivid'>
+                        <details id='watchlistid' ng-click="loadwatchlist(true)" open>
+                            <summary>
+                                Watch list - All
+                                <input type="checkbox" enabled ng-model="watchListDisplayAll">
+                            </summary>
+                            <table class='frame'>
+                                <tr ng-repeat="w in watchlist" ng-if="getWatchDisplay(w.id)">
+                                    <td>
+                                        {{w.name}}
+                                    </td>
+                                    <td>
+                                        {{w.typetext}}
+                                    </td>
+                                    <td>
+                                        <div ng-repeat="d in w.value">
+                                            <details ng-if="d.abbreviation">
+                                                <summary>{{d.abbreviation}}...</summary><p ng-bind-html="trustAsHtml(d.text)" init-bind></p>
+                                            </details>
+                                            <div ng-if="!d.abbreviation" ng-bind-html="trustAsHtml(d.text)" init-bind><br /></div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" enabled ng-click="setWatch(w.id)" ng-checked="getWatch(w.id)">
+                                    </td>
                                 </tr>
                             </table>
                         </details>

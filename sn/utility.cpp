@@ -208,7 +208,7 @@ namespace SNI
 		return ReplaceAll(p_Unescaped, "&", "&amp;");
 	}
 
-	string DisplayPmExpressionList(SN::SN_ExpressionList * p_ParameterList)
+	string DisplaySnExpressionList(SN::SN_ExpressionList * p_ParameterList)
 	{
 		string result;
 		string separator;
@@ -274,7 +274,7 @@ namespace SNI
 		return "{\"abbreviation\" : \"" + abbreviation + "\",\"text\" : \"" + textHTML + "\"}";
 	}
 
-	string DisplayPmValueList(const SN::SN_ValueList &p_ParameterList)
+	string DisplaySnValueList(const SN::SN_ValueList &p_ParameterList)
 	{
 		string result;
 		string separator;
@@ -286,7 +286,7 @@ namespace SNI
 		return result;
 	}
 
-	string DisplayPmParameterList(SN::SN_ParameterList * p_ParameterList)
+	string DisplaySnParameterList(SN::SN_ParameterList * p_ParameterList)
 	{
 		string result;
 		string separator;
@@ -302,7 +302,7 @@ namespace SNI
 		return result;
 	}
 
-	string DisplayPmTaggedValueList(const SNI_TaggedValueList &p_TaggedValueList, SNI_DisplayOptions & p_DisplayOptions)
+	string DisplaySnTaggedValueList(const SNI_TaggedValueList &p_TaggedValueList, SNI_DisplayOptions & p_DisplayOptions)
 	{
 		string result;
 		string separator;
@@ -320,7 +320,7 @@ namespace SNI
 		return result;
 	}
 
-	string DisplayPmTaggedExpressionList(const SNI_TaggedValueList &p_TaggedValueList, SNI_DisplayOptions & p_DisplayOptions)
+	string DisplaySnTaggedExpressionList(const SNI_TaggedValueList &p_TaggedValueList, SNI_DisplayOptions & p_DisplayOptions)
 	{
 		string result;
 		string separator;
@@ -340,7 +340,7 @@ namespace SNI
 		return result;
 	}
 
-	string DisplayPmExpression(SNI_Expression *p_Expression)
+	string DisplaySnExpression(SNI_Expression *p_Expression)
 	{
 		if (p_Expression)
 		{
@@ -349,7 +349,7 @@ namespace SNI
 		return "Null";
 	}
 
-	string DisplayPmExpression(const SN::SN_Expression &p_Expression)
+	string DisplaySnExpression(const SN::SN_Expression &p_Expression)
 	{
 		if (p_Expression.GetSNI_Expression())
 		{
