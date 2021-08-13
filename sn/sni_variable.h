@@ -68,6 +68,7 @@ namespace SNI
 		virtual bool IsVariable() const;
 		virtual bool IsValueHolder() const;
 		virtual bool IsReferableValue() const;
+		virtual bool AllValuesBoolean() const;
 		virtual void Request();
 		virtual SNI_Expression *GetValue(bool p_Request = true) const;
 		virtual const SNI_Expression *GetSafeValue() const;

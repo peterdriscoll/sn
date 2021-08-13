@@ -513,7 +513,12 @@ namespace SNI
 		return this;
 	}
 
-	const SNI_Expression *SNI_Expression::GetSafeValue() const
+	SNI_Expression* SNI_Expression::GetValue(bool p_Request) const
+	{
+		return const_cast<SNI_Expression*>(this);
+	}
+	
+	const SNI_Expression* SNI_Expression::GetSafeValue() const
 	{
 		return this;
 	}

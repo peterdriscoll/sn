@@ -122,7 +122,7 @@ namespace SNI
 	/// @retval An expression or value for the operation on two values
 	SN::SN_Expression SNI_Binary::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		LOGGING(SN::LogContext context("SNI_Binary::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
+		LOGGING(SN::LogContext context("SNI_Binary::PartialCall ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
 
 		SN::SN_Expression left_value = (*p_ParameterList)[1].DoPartialEvaluate(p_MetaLevel);
 		SN::SN_Expression right_value = (*p_ParameterList)[0].DoPartialEvaluate(p_MetaLevel);
@@ -145,7 +145,7 @@ namespace SNI
 	/// @retval True if successful, false for failure.
 	SN::SN_Error SNI_Binary::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
-		LOGGING(SN::LogContext context("SNI_Binary::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )"));
+		LOGGING(SN::LogContext context("SNI_Binary::PartialUnify ( " + DisplaySnParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )"));
 
 		SN::SN_Error e = LOG_RETURN(context, PartialUnifyInternal((*p_ParameterList)[1].GetValue(), (*p_ParameterList)[0].GetValue(), p_Result));
 		return e;

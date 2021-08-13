@@ -158,6 +158,11 @@ namespace SNI
 		return m_Value && m_Value->IsReferableValue();
 	}
 
+	bool SNI_Variable::AllValuesBoolean() const
+	{
+		return !m_Value || m_Value->AllValuesBoolean();
+	}
+
 	void SNI_Variable::Request()
 	{
 		m_Requested = true;

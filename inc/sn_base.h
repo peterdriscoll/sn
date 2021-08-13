@@ -286,6 +286,15 @@ namespace SN
 			return skynet::Null;
 		}
 
+		Exp GetValue() const
+		{
+			if (GetSNI_Base())
+			{
+				return GetSNI_Base()->GetValue();
+			}
+			return skynet::Null;
+		}
+
 		Exp DoEvaluate(long p_MetaLevel = 0) const
 		{
 			return GetSNI_Base()->DoEvaluate(p_MetaLevel);

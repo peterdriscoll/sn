@@ -105,4 +105,9 @@ namespace SNI
 			}
 		);
 	}
+
+	SN::SN_Error SNI_Null::AssertValue(const SN::SN_Expression& p_Value)
+	{
+		return skynet::OK;
+	}
 }

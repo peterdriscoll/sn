@@ -39,6 +39,7 @@ namespace SNI
 		virtual bool IsReferableValue() const;
 
 		virtual SN::SN_Error AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World ** p_WorldList, SNI_WorldSet * p_WorldSet);
+		virtual SN::SN_Error AssertValue(const SN::SN_Expression& p_Value);
 	};
 
 	typedef vector<SNI_Null> SNI_NullList;
