@@ -615,8 +615,11 @@ namespace SNI
 
 	void SNI_WorldSet::AttachExpression(const SN::SN_Expression & p_Expression)
 	{
-		m_Expression = p_Expression;
-		m_ExpressionString = m_Expression.DisplaySN();
+		if (m_Expression.IsNull())
+		{
+			m_Expression = p_Expression;
+			m_ExpressionString = m_Expression.DisplaySN();
+		}
 		ASSERTM(m_Expression.IsNull()|| m_Expression.IsVariable(), "Expected variable.");
 	}
 }
