@@ -92,15 +92,21 @@ namespace SNI
 		}
 		else
 		{
+			long calcPos = m_CalcPos;
+			if (calcPos < 0)
+			{
+				calcPos = m_ValueCalcPos[p_Depth + 1];
+			}
 			size_t maxCard = SNI_Thread::TopManager()->MaxCardinalityUnify();
-			size_t card = m_FunctionDef->CardinalityOfUnify(p_Depth + 1, m_ValueList, m_ValueCalcPos[p_Depth + 1], m_ValueTotalCalc[p_Depth + 1]);
+			size_t card = m_FunctionDef->CardinalityOfUnify(p_Depth + 1, m_ValueList, calcPos, m_ValueTotalCalc[p_Depth + 1]);
+
 			if (maxCard < card)
 			{
 				e = DelayUnify();
 			}
 			else
 			{
-				e = m_FunctionDef->UnifyElement(p_Depth + 1, m_ValueList, m_WorldList, m_ValueCalcPos[p_Depth + 1], m_ValueTotalCalc[p_Depth + 1], m_WorldSet, m_Source);
+				e = m_FunctionDef->UnifyElement(p_Depth + 1, m_ValueList, m_WorldList, calcPos, m_ValueTotalCalc[p_Depth + 1], m_WorldSet, m_Source);
 			}
 		}
 		return e;
@@ -159,18 +165,23 @@ namespace SNI
 			{
 				if (j == m_CalcPos)
 				{
-					SN::SN_ValueSet vs = m_ValueList[m_CalcPos].GetVariableValue(false);
-					if (vs.IsNull())
+					SN::SN_Expression value = m_ValueList[m_CalcPos].GetVariableValue(true);
+					if (value.IsValueSet())
 					{
-						FORCE_ASSERTM("Unexpected null value.");
+						SNI_Frame* topFrame = SNI_Frame::Top();
+						SN::SN_ValueSet vs = value;
+						SN::SN_Variable var(topFrame->CreateTemporary());
+						var.SetName(vs.GenerateTempVariableName() + "_" + to_string(j));
+						if (!vs.IsNull())
+						{
+							vs.AddTaggedValue(var, world);
+						}
+						l_ParamList[j] = var;
 					}
-					SN::SN_Variable var;
-					var.SetName(vs.GenerateTempVariableName() + "_" + to_string(j));
-					if (!vs.IsNull())
+					else
 					{
-						vs.AddTaggedValue(var, world);
+						l_ParamList[j] = value;
 					}
-					l_ParamList[j] =  var;
 				}
 				else
 				{
