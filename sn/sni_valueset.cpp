@@ -552,38 +552,88 @@ namespace SNI
 		CheckWorldSetConsistency();
 	}
 
-	void SNI_ValueSet::FlattenValueSets()
+	bool SNI_ValueSet::NeedsFlattening()
 	{
+		bool needsFlattening = false;
 		for (size_t j = 0; j < m_ValueList.size(); j++)
 		{
-			SNI_World *world = m_ValueList[j].GetWorld();
+			SNI_World* world = m_ValueList[j].GetWorld();
 			if (!world || !world->IsEmpty())
 			{
 				SN::SN_Expression loopValue = m_ValueList[j].GetValue();
-				if (loopValue.GetSNI_Expression()->MarkComplete())
+				if (loopValue.IsKnownValue() && loopValue.Cardinality())
 				{
-					SNI_World *loopWorld = m_ValueList[j].GetWorld();
-					SNI_ValueSet *vs = SN::Is<SNI_ValueSet *>(loopValue.GetSafeValue());
+					if (loopValue.GetSNI_Expression()->MarkComplete())
+					{
+						SN::SN_Expression value = loopValue.GetSafeValue();
+						SNI_ValueSet* vs = value.GetSNI_ValueSet();
+						if (vs)
+						{
+							needsFlattening = true;
+						}
+						else if (loopValue.IsVariable() && loopValue.IsKnownValue())
+						{
+							m_ValueList[j].SetValue(value);
+						}
+					}
+				}
+			}
+		}
+		return needsFlattening;
+	}
+
+	void SNI_ValueSet::FlattenValueSets()
+	{
+		SNI_TaggedValueList valueList = m_ValueList;
+		m_ValueList.clear();
+		SNI_WorldSet* vsWorldSet = new SNI_WorldSet();
+		for (auto taggedValue : valueList)
+		{
+			SNI_World *world = taggedValue.GetWorld();
+			if (!world || !world->IsEmpty())
+			{
+				SN::SN_Expression loopValue = taggedValue.GetValue();
+				if (loopValue.IsKnownValue() && loopValue.Cardinality())
+				{
+					SN::SN_Expression value = loopValue.GetValue();
+					SNI_ValueSet* vs = value.GetSNI_ValueSet();
 					if (vs)
 					{
-						m_ValueList[j].MarkForDeletion();
-						SNI_WorldSet *vsWorldSet = new SNI_WorldSet();
-						for (SNI_TaggedValue &tvLoop : vs->m_ValueList)
+						for (SNI_TaggedValue& tvLoop : vs->m_ValueList)
 						{
 							SN::SN_Expression vsValue = tvLoop.GetValue();
-							SNI_World *vsWorld = tvLoop.GetWorld();
+							SNI_World* vsWorld = tvLoop.GetWorld();
 							bool exists = false;
-							SNI_World *splitWorld = vsWorldSet->JoinWorldsArgs(AutoAddWorld, CreateIfActiveParents, exists, loopWorld, vsWorld);
+							SNI_World* splitWorld = vsWorldSet->JoinWorldsArgs(AutoAddWorld, CreateIfActiveParents, exists, world, vsWorld);
 							if (exists)
 							{
 								AddTaggedValue(vsValue, splitWorld);
 							}
 						}
-						vsWorldSet->Complete();
+					}
+					else 
+					{
+						bool exists = false;
+						SNI_World* splitWorld = vsWorldSet->JoinWorldsArgs(AutoAddWorld, CreateIfActiveParents, exists, world);
+						if (exists)
+						{
+							AddTaggedValue(value, splitWorld);
+						}
+					}
+				}
+				else
+				{
+					bool exists = false;
+					SNI_World* splitWorld = vsWorldSet->JoinWorldsArgs(AutoAddWorld, CreateIfActiveParents, exists, world);
+					if (exists)
+					{
+						AddTaggedValue(loopValue, splitWorld);
 					}
 				}
 			}
 		}
+		vsWorldSet->Complete();
+		m_WorldSet = vsWorldSet;
 	}
 
 	SN::SN_Expression SNI_ValueSet::CommonValue()
@@ -670,7 +720,10 @@ namespace SNI
 	void SNI_ValueSet::Simplify()
 	{
 		RemoveFailedWorlds();
-		FlattenValueSets();
+		if (NeedsFlattening())
+		{
+			FlattenValueSets();
+		}
 	}
 
 	void SNI_ValueSet::Validate()
@@ -703,7 +756,7 @@ namespace SNI
 			SNI_World *world = it->GetWorld();
 			if (!world || !world->IsEmpty())
 			{
-				SN::SN_Expression loopValue = it->GetValue().GetVariableValue();
+				SN::SN_Expression loopValue = it->GetValue().GetSafeValue();
 				if (it->IsMarkedForDeletion())
 				{
 					it = m_ValueList.erase(it);

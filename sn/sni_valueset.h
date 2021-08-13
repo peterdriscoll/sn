@@ -111,7 +111,8 @@ namespace SNI
 		SN::SN_Expression CommonValue();
 		virtual bool ExtractBooleanValue(bool & p_Value);
 		virtual void RemoveFailedWorlds();
-		virtual void FlattenValueSets();
+		bool NeedsFlattening();
+		void FlattenValueSets();
 		void CheckWorldSetConsistency();
 
 		SNI_WorldSet        *m_WorldSet;
