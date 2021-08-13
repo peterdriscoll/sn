@@ -27,6 +27,7 @@ namespace SNI
 		SNI_Expression * Copy() const;
 
 		virtual string GetTypeName() const;
+		virtual bool AllValuesBoolean() const;
 		virtual string DisplayCpp() const;
 		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual long GetPriority() const;

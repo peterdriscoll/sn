@@ -59,6 +59,11 @@ namespace SNI
 		return "Bool";
 	}
 
+	bool SNI_Bool::AllValuesBoolean() const
+	{
+		return true;
+	}
+
 	string SNI_Bool::DisplayCpp() const
 	{
 		if (m_Expression)

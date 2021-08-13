@@ -94,6 +94,7 @@ namespace SNI
 		virtual bool IsError() const = 0;
 		virtual bool IsSignificantError() const = 0;
 		virtual bool IsFixed() const = 0;
+		virtual bool AllValuesBoolean() const = 0;
 
 		//---------------------------------------------------------------
 		// Base

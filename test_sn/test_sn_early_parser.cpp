@@ -231,7 +231,6 @@ namespace test_sn
 				SN_DECLARE(x6);
 				(ConvertInteger(c6) == x6).Assert().Do();
 				(x6 == Long(123456789)).Evaluate().Do();
-				SN_DECLARE(PmGenInteger);
 			}
 			Cleanup();
 		}

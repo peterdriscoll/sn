@@ -55,6 +55,7 @@ namespace SNI
 		SN::SN_Expression GetVariableValue(bool p_IfComplete);
 		virtual bool AllValuesEqual(const SN::SN_Expression & p_Value) const;
 		virtual bool AllValues() const;
+		virtual bool AllValuesBoolean() const;
 		virtual size_t Length() const;
 		SNI_TaggedValue &operator[](long p_index);
 		SNI_TaggedValue At(const long &p_Value);

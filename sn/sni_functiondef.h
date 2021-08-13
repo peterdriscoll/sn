@@ -107,10 +107,11 @@ namespace SNI
 		virtual SN::SN_Value CallElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, SN::SN_ValueSet p_Result) const;
 
 		static size_t MultiplyCardinality(size_t p_Left, size_t p_Right);
+
 	protected:
 		virtual SN::SN_Value ForEachCall(size_t p_Card, long p_Depth, SN::SN_Expression * p_InputList) const;
 		virtual SN::SN_Error ForEachUnify(size_t p_Card, long p_Depth, SN::SN_Expression * p_ParamList, SN::SN_Expression * p_InputList, bool *p_Output, long p_CalcPos, long p_TotalCalc, const SNI_Expression *p_Source) const;
-
+		virtual bool MergeValueSets(SN::SN_Expression* p_ParamList) const;
 	};
 
 	typedef vector<SNI_FunctionDef *> SNI_FunctionDefList;

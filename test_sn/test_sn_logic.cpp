@@ -61,6 +61,7 @@ namespace test_sn
 	public:
 		TEST_METHOD(TestBoolEquivalent)
 		{
+			return;
 			Initialize();
 			{
 				Manager manager("Test Bool Equivalent", AssertErrorHandler);
@@ -226,7 +227,7 @@ namespace test_sn
 
 				SN_DECLARE(z);
 
-				(z || Bool(false) == Bool(true)).Assert().Do();
+				((z || Bool(false)) == Bool(true)).Assert().Do();
 
 				(Bool(true) == z).Evaluate().Do();
 				(!(Bool(false) && z)).DoPartialEvaluate().Do();
@@ -316,6 +317,7 @@ namespace test_sn
 				string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
 				string t_valueset = (Long(3) || Long(4)).DoEvaluate().DisplaySN();
 				string t_buildset = (Long(3) || Long(4)).BuildSet().DoEvaluate().DisplaySN();
+
 				SN_DECLARE(y);
 				(y == (Long(3) || Long(4))).Assert().Do();
 				string y_string = y.DisplaySN();
@@ -334,7 +336,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Or 3", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(x);
 				(x == Long(3) || x == Long(4) || x == Long(5)).Assert().Do();
@@ -345,7 +347,14 @@ namespace test_sn
 				x.DoEvaluate().LogDisplaySN();
 				x.BuildSet().DoEvaluate().LogDisplaySN();
 
-				(x.BuildSet() == (Long(3) || Long(4) || Long(5)).BuildSet()).Evaluate().Do();
+				SN_DECLARE(y);
+				(y == (Long(3) || Long(4) || Long(5))).Assert().Do();
+				string y_string = y.DisplaySN();
+				string y_valueset = y.DoEvaluate().DisplaySN();
+				string y_buildset = y.BuildSet().DoEvaluate().DisplaySN();
+
+				(x.BuildSet() == y.BuildSet()).Evaluate().Do();
+				(x.BuildSet() == (Long(3) || (Long(4) || Long(5))).BuildSet()).Evaluate().Do();
 				cout << x.DisplaySN();
 			}
 			Cleanup();

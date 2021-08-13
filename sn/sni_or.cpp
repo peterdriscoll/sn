@@ -61,6 +61,18 @@ namespace SNI
 		return "|";
 	}
 
+	bool SNI_Or::MergeValueSets(SN::SN_Expression* p_ParamList) const
+	{
+		if (p_ParamList[PU2_First].IsKnownValue() && !p_ParamList[PU2_First].AllValuesBoolean())
+		{
+			if (p_ParamList[PU2_Second].IsKnownValue())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	SN::SN_Value SNI_Or::PrimaryFunctionValue(const SN::SN_Value &p_Left, const SN::SN_Value &p_Right) const
 	{
 		return p_Left.DoOr(p_Right);
@@ -93,7 +105,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_Or::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		LOGGING(SN::LogContext context("SNI_Or::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
+		LOGGING(SN::LogContext context("SNI_Or::PartialCall ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
 
 		SN::SN_Expression left_value = (*p_ParameterList)[1].DoPartialEvaluate(p_MetaLevel);
 		SN::SN_Expression right_value = (*p_ParameterList)[0].DoPartialEvaluate(p_MetaLevel);
@@ -162,7 +174,7 @@ namespace SNI
 
 	SN::SN_Error SNI_Or::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
-		LOGGING(SN::LogContext context("SNI_Or::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )"));
+		LOGGING(SN::LogContext context("SNI_Or::PartialUnify ( " + DisplaySnParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )"));
 
 		return LOG_RETURN(context, PartialUnifyInternal((*p_ParameterList)[1].GetValue(), (*p_ParameterList)[0].GetValue(), p_Result));
 	}
@@ -237,8 +249,17 @@ namespace SNI
 		}
 		return e;
 	}
+
 	size_t SNI_Or::CardinalityOfCall(long p_Depth, SN::SN_Expression * p_ParamList) const
 	{
+		if (p_ParamList[PC2_First].IsKnownValue() && !p_ParamList[PC2_First].AllValuesBoolean())
+		{
+			if (p_ParamList[PC2_Second].IsKnownValue())
+			{
+				return 1;
+			}
+			return CARDINALITY_MAX;
+		}
 		if (p_ParamList[PC2_First].IsNullValue())
 		{
 			return CARDINALITY_MAX;
@@ -274,6 +295,14 @@ namespace SNI
 			switch (p_CalcPos)
 			{
 			case PU2_Result:
+				if (p_ParamList[PU2_First].IsKnownValue() && !p_ParamList[PU2_First].AllValuesBoolean())
+				{
+					if (p_ParamList[PU2_Second].IsKnownValue())
+					{
+						return 1;
+					}
+					return CARDINALITY_MAX;
+				}
 				if (p_ParamList[PU2_First].IsKnownValue() && p_ParamList[PU2_First].AllValuesEqual(skynet::True))
 				{
 					return p_ParamList[PU2_First].Cardinality();

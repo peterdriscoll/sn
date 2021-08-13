@@ -481,7 +481,10 @@ namespace SNI
 			if (m_ContextWorld)
 			{
 				SNI_WorldSet *ws = m_ContextWorld->GetWorldSet();
-				ws->AddCloselyRelated(p_ProcessMap);
+				if (ws)
+				{
+					ws->AddCloselyRelated(p_ProcessMap);
+				}
 			}
 		}
 	}
@@ -494,7 +497,10 @@ namespace SNI
 			if (m_ContextWorld)
 			{
 				SNI_WorldSet *ws = m_ContextWorld->GetWorldSet();
-				ws->AddCloselyRelated(p_ProcessMap);
+				if (ws)
+				{
+					ws->AddCloselyRelated(p_ProcessMap);
+				}
 			}
 		}
 	}

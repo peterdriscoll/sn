@@ -361,6 +361,27 @@ namespace SNI
 		return trueFound && falseFound;
 	}
 
+	bool SNI_ValueSet::AllValuesBoolean() const
+	{
+		SNI_World* contextWorld = SNI_Thread::GetThread()->ContextWorld();
+		for (const SNI_TaggedValue& tv : m_ValueList)
+		{
+			SNI_World* world = tv.GetWorld();
+			if (!world || !world->IsEmpty())
+			{
+				if (!contextWorld || contextWorld->CompatibleWorld(world))
+				{
+					SN::SN_Expression b = tv.GetValue();
+					if (!b.AllValuesBoolean())
+					{
+						return false;
+					}
+				}
+			}
+		}
+		return true;
+	}
+
 	SN::SN_Expression SNI_ValueSet::GetVariableValue(bool p_IfComplete)
 	{
 		if (p_IfComplete && !IsComplete())
@@ -443,6 +464,7 @@ namespace SNI
 					result.AddTaggedValue(tv.GetValue().GetSNI_Expression()->Clone(p_MetaLevel, p_Frame, p_Changed), cloneWorld);
 				}
 			}
+			worldSetClone->Complete();
 		}
 		Validate();
 
@@ -1104,53 +1126,33 @@ namespace SNI
 
 	SN::SN_Value SNI_ValueSet::DoOr(SNI_Expression * p_Other) const
 	{
-		SN::SN_ValueSet result(this);
-		if (m_Variable)
-		{
-			result = new SNI_ValueSet;
-			SNI_WorldSet *worldSet = new SNI_WorldSet();
-			for (const SNI_TaggedValue &tv : m_ValueList)
-			{
-				bool exists = false;
-				SNI_World * newWorld = worldSet->JoinWorldsArgs(AutoAddWorld, CreateIfActiveParents, exists, tv.GetWorld());
-				if (exists)
-				{
-					result.AddTaggedValue(tv.GetValue(), newWorld);
-				}
-			}
-			worldSet->Complete();
-		}
-		SN::SN_Expression other_expression = p_Other;
-		if (SN::Is<SNI_ValueSet *>(other_expression))
-		{
-			SNI_WorldSet *worldSet = new SNI_WorldSet();
-			SN::SN_ValueSet other = other_expression;
-			for (size_t j = 0; j<other.Length(); j++)
-			{
-				bool exists = false;
-				SNI_World * newWorld = worldSet->JoinWorldsArgs(AutoAddWorld, CreateIfActiveParents, exists, other[j].GetWorld());
-				if (exists)
-				{
-					result.AddTaggedValue(other[j].GetValue(), newWorld);
-				}
-			}
-			worldSet->Complete();
-		}
-		else
-		{
-			result.AddTaggedValue(other_expression, NULL);
-		}
-
-		return result;
+		return SNI_ValueSet::GeneralDoOr(this, p_Other);
 	}
 
 	/*static*/SN::SN_Value SNI_ValueSet::GeneralDoOr(const SNI_Value *p_Left, SNI_Expression *p_Right)
 	{
 		SN::SN_Value left_value(p_Left);
 		SN::SN_Value right_value(p_Right);
-		SNI_WorldSet * worldSet = new SNI_WorldSet();
 		SN::SN_ValueSet result;
-		result.AddTaggedValue(left_value, NULL);
+		SNI_WorldSet* worldSet = result.GetWorldSet();
+
+		if (SN::Is<SNI_ValueSet*>(left_value))
+		{
+			SN::SN_ValueSet leftValueSet = left_value;
+			for (size_t j = 0; j < leftValueSet.Length(); j++)
+			{
+				bool exists = false;
+				SNI_World* world = worldSet->JoinWorldsArgs(AutoAddWorld, CreateIfActiveParents, exists, leftValueSet[j].GetWorld());
+				if (exists)
+				{
+					result.AddTaggedValue(leftValueSet[j].GetValue(), world);
+				}
+			}
+		}
+		else
+		{
+			result.AddTaggedValue(left_value, worldSet->CreateWorld());
+		}
 
 		if (SN::Is<SNI_ValueSet *>(right_value))
 		{
@@ -1167,9 +1169,9 @@ namespace SNI
 		}
 		else
 		{
-			result.AddTaggedValue(right_value, NULL);
+			result.AddTaggedValue(right_value, worldSet->CreateWorld());
 		}
-
+		result.GetSNI_ValueSet()->Complete();
 		return result;
 	}
 

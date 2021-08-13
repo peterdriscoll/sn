@@ -225,6 +225,11 @@ namespace SN
 			return !GetSNI_Base() || GetSNI_Base()->IsFixed();
 		}
 
+		bool AllValuesBoolean() const
+		{
+			return GetSNI_Base() && GetSNI_Base()->AllValuesBoolean();
+		}
+
 		bool Equivalent(const Exp &p_Other) const
 		{
 			return GetSNI_Base()->Equivalent(dynamic_cast<SNI::SNI_Object *>(p_Other.GetSNI_Expression()));

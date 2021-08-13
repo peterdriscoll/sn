@@ -511,7 +511,7 @@ namespace SNI
 					}
 				}
 			}
-			else if (p_InputList[j].IsValueSet())
+			else if (!MergeValueSets(p_InputList) && p_InputList[j].IsValueSet())
 			{
 				single = false;
 			}
@@ -608,5 +608,10 @@ namespace SNI
 			}
 			return e;
 		}
+	}
+
+	bool SNI_FunctionDef::MergeValueSets(SN::SN_Expression* p_ParamList) const
+	{
+		return false;
 	}
 }

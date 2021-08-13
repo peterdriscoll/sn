@@ -481,6 +481,11 @@ namespace SNI
 		return false;
 	}
 
+	bool SNI_Expression::AllValuesBoolean() const
+	{
+		return false;
+	}
+
 	SN::SN_Error SNI_Expression::AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World ** p_World, SNI_WorldSet * p_WorldSet)
 	{
 		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Expression::AddValue ( )"));
