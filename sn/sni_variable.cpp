@@ -303,23 +303,36 @@ namespace SNI
 				{
 					l_WorldSet = GetWorldSet();
 				}
-				SNI_World *world = l_WorldSet->JoinWorldsArray(ManualAddWorld, AlwaysCreateWorld, exists, p_NumWorlds, p_WorldList);
-				if (exists)
+				if (l_WorldSet)
 				{
-					LOGGING(context.LogExpression(world->DisplaySN(), p_Value));
-					SN::SN_Error e = AssertValue(p_Value);
-					if (e.GetBool())
+					SNI_World* world = l_WorldSet->JoinWorldsArray(ManualAddWorld, AlwaysCreateWorld, exists, p_NumWorlds, p_WorldList);
+					if (exists)
 					{
-						l_WorldSet->AddToSetList(world);
+						LOGGING(context.LogExpression(world->DisplaySN(), p_Value));
+						SN::SN_Error e = AssertValue(p_Value);
+						if (e.GetBool())
+						{
+							l_WorldSet->AddToSetList(world);
+						}
+						return LOG_RETURN(context, e);
 					}
-					return LOG_RETURN(context, e);
+					else
+					{
+						LOGGING(context.LogText("Fail", "JoinWorlds failed on " + worldString));
+						return LOG_RETURN(context, SN::SN_Error(false, false, "SNI_Variable::AddValue: JoinWorlds failed on " + DisplayWorlds(p_NumWorlds, p_WorldList)));
+					}
 				}
 				else
 				{
-					LOGGING(context.LogText("Fail", "JoinWorlds failed on " + worldString));
-					return LOG_RETURN(context, SN::SN_Error(false, false, "SNI_Variable::AddValue: JoinWorlds failed on " + DisplayWorlds(p_NumWorlds, p_WorldList)));
+					if (!m_Value || m_Value->IsNull())
+					{
+						m_Value = new SNI_ValueSet();
+						REQUESTPROMOTION(m_Value);
+					}
+					SN::SN_Error e = m_Value->AddValue(p_Value, p_NumWorlds, p_WorldList, p_WorldSet);
+					SNI_Thread::GetThread()->RegisterChange(dynamic_cast<SNI_Variable*>(this));
+					return e;
 				}
-
 			}
 			else
 			{
