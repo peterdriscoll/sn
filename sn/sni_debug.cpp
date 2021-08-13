@@ -103,28 +103,28 @@ namespace SNI
 
 	SN::SN_Expression SNI_Debug::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		LOGGING(SN::LogContext context(DisplaySN0() + ".Call ( " + DisplayPmExpressionList(p_ParameterList) + " )", LOG_DEBUG_INDEX));
+		LOGGING(SN::LogContext context(DisplaySN0() + ".Call ( " + DisplaySnExpressionList(p_ParameterList) + " )", LOG_DEBUG_INDEX));
 
 		return LOG_RETURN(context, m_Expression->Call(p_ParameterList, p_MetaLevel));
 	}
 
 	SN::SN_Expression SNI_Debug::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		LOGGING(SN::LogContext context(DisplaySN0() + ".PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )", LOG_DEBUG_INDEX));
+		LOGGING(SN::LogContext context(DisplaySN0() + ".PartialCall ( " + DisplaySnExpressionList(p_ParameterList) + " )", LOG_DEBUG_INDEX));
 
 		return LOG_RETURN(context, m_Expression->PartialCall(p_ParameterList, p_MetaLevel).Debug());
 	}
 
 	SN::SN_Expression SNI_Debug::Unify(SN::SN_ExpressionList * p_ParameterList)
 	{
-		LOGGING(SN::LogContext context(DisplaySN0() + ".Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )", LOG_DEBUG_INDEX));
+		LOGGING(SN::LogContext context(DisplaySN0() + ".Unify ( " + DisplaySnExpressionList(p_ParameterList) + " )", LOG_DEBUG_INDEX));
 
 		return LOG_RETURN(context, m_Expression->Unify(p_ParameterList));
 	}
 
 	SN::SN_Error SNI_Debug::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
-		LOGGING(SN::LogContext context(DisplaySN0() + ".PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )", LOG_DEBUG_INDEX));
+		LOGGING(SN::LogContext context(DisplaySN0() + ".PartialUnify ( " + DisplaySnParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )", LOG_DEBUG_INDEX));
 
 		return LOG_RETURN(context, m_Expression->PartialUnify(p_ParameterList, p_Result.Debug()));
 	}

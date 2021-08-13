@@ -62,7 +62,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_BuildSet::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel  /* = 0 */) const
 	{
-		LOGGING(SN::LogContext context("SNI_Unary::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
+		LOGGING(SN::LogContext context("SNI_Unary::PartialCall ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
 
 		SN::SN_Value value = (*p_ParameterList)[0].DoEvaluate(p_MetaLevel);
 		if (value.IsNull())

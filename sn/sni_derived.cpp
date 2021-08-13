@@ -144,7 +144,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_Derived::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Derived::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Derived::Call ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
 		if (!m_Fixed)
 		{
 			return LOG_RETURN(context, SN::SN_Error(false, false, GetTypeName() + " Fix the derived calls. There maybe be more defines, so the call is undefined."));
@@ -192,7 +192,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_Derived::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Derived::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Derived::PartialCall ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
 
 		if (!m_Fixed)
 		{

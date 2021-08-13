@@ -280,7 +280,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_Virtual::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Virtual::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Virtual::Call ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
 		if (!m_Fixed)
 		{
 			return LOG_RETURN(context, SN::SN_Error(false, false, GetTypeName() + " Fix the virtual calls. There maybe be more defines, so the call is undefined."));
@@ -292,7 +292,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_Virtual::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Virtual::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Virtual::PartialCall ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
 
 		if (!m_Fixed)
 		{

@@ -182,7 +182,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_Lambda::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		LOGGING(SN::LogContext context(DisplaySN0() + "SNI_Lambda::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
+		LOGGING(SN::LogContext context(DisplaySN0() + "SNI_Lambda::Call ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
 
 		SNI_Expression *p_DebugSource = NULL;
 		Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Call", NULL, SN::CallPoint);
@@ -223,7 +223,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_Lambda::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Lambda::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Lambda::PartialCall ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
 
 		ASSERTM(p_ParameterList->size() >0, "Cannot call a lambda without a parameter");
 
@@ -253,7 +253,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_Lambda::Unify(SN::SN_ExpressionList * p_ParameterList)
 	{
-		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Lambda::Unify ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Lambda::Unify ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
 
 		ASSERTM(p_ParameterList->size() > 1, "Cannot unify to a lambda without a parameter");
 		Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Unify", this, SN::CallPoint);
@@ -297,7 +297,7 @@ namespace SNI
 
 	SN::SN_Error SNI_Lambda::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
-		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Lambda::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )"));
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Lambda::PartialUnify ( " + DisplaySnParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )"));
 
 		ASSERTM(p_ParameterList->size() >0, "Cannot call a lambda without a parameter");
 		SN::SN_Expression param = p_ParameterList->back().GetValue();

@@ -536,7 +536,6 @@ namespace SNI
 		p_Stream << ",\n" << p_Prefix << "\"cardinality\" : \"" << card_string << context_card << "\",\n";
 	}
 
-
 	string SNI_Frame::GetLogShortDescription(SNI_Manager *p_Manager)
 	{
 		size_t debugTitleWidth = p_Manager->DebugTitleWidth();

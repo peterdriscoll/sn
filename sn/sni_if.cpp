@@ -147,7 +147,7 @@ namespace SNI
 	/// @retval An expression or value.
 	SN::SN_Expression SNI_If::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		LOGGING(SN::LogContext context("SNI_If::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
+		LOGGING(SN::LogContext context("SNI_If::PartialCall ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
 		
 		SN::SN_Expression condition = (*p_ParameterList)[2].DoPartialEvaluate(p_MetaLevel);
 
@@ -367,7 +367,7 @@ namespace SNI
 	/// @retval True if successful.
 	SN::SN_Error SNI_If::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
-		LOGGING(SN::LogContext context("SNI_If::PartialUnify ( " + DisplayPmParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )"));
+		LOGGING(SN::LogContext context("SNI_If::PartialUnify ( " + DisplaySnParameterList(p_ParameterList) + " = " + p_Result.DisplaySN() + " )"));
 		return LOG_RETURN(context, PartialUnifyInternal((*p_ParameterList)[2].GetValue(), (*p_ParameterList)[1].GetValue(), (*p_ParameterList)[0].GetValue(), p_Result));
 	}
 

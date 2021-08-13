@@ -189,14 +189,14 @@ namespace SNI
 
 	SN::SN_Expression SNI_Meta::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Meta::Call ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Meta::Call ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
 
 		return LOG_RETURN(context, m_Expression->Call(p_ParameterList, p_MetaLevel + m_DeltaMetaLevel));
 	}
 
 	SN::SN_Expression SNI_Meta::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Meta::PartialCall ( " + DisplayPmExpressionList(p_ParameterList) + " )"));
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Meta::PartialCall ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
 
 		return LOG_RETURN(context, m_Expression->PartialCall(p_ParameterList, p_MetaLevel + m_DeltaMetaLevel));
 	}
