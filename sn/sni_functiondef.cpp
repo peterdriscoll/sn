@@ -434,6 +434,22 @@ namespace SNI
 			Breakpoint(SN::DetailStop, (SN::BreakId)(SN::ParameterOneId + depth - 1), GetTypeName(), "Unify parameter " + to_string(depth-1) + " card " + to_string(card), p_Source, SN::CallPoint);
 			if (0 < card)
 			{
+				if (GetBoolResult() && maxCard < card  && !IsKnownValue(inputList[PU2_Result], PU2_Result))
+				{
+					SN::SN_ValueSet condition;
+					SNI_WorldSet* condition_worldSet = new SNI_WorldSet();
+					condition.SetWorldSet(condition_worldSet);
+					condition.AddTaggedValue(skynet::True, condition_worldSet->CreateWorld());
+					condition.AddTaggedValue(skynet::False, condition_worldSet->CreateWorld());
+					condition_worldSet->Complete();
+					inputList[PU2_Result] = condition;
+					p_ParamList[PU2_Result].GetSNI_Variable()->SetValue(condition);
+					condition.GetSNI_ValueSet()->AssignToVariable(p_ParamList[PU2_Result].GetSNI_Variable());
+
+					output[PU2_Result] = false;
+					totalCalc--;
+					card = CardinalityOfUnify(depth, inputList, calcPos, totalCalc);
+				}
 				LOG(WriteLine(SN::DebugLevel, "Cardinality " + to_string(card) + " with total fields " + to_string(totalCalc)));
 				if (maxCard < card)
 				{

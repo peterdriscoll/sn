@@ -29,6 +29,7 @@ namespace SNI
 		long threadNum = atol(umap["threadnum"].c_str());
 		DisplayOptionType debugHTML = doDebugPointsHTML;
 		DisplayOptionType debugJS = doDebugPointsJS;
+		DisplayOptionType debugText = doTextOnly;
 		bool result = true;
 
 		SNI::SNI_Thread *l_thread = SNI::SNI_Thread::GetThreadByNumber(threadNum);
@@ -209,7 +210,7 @@ namespace SNI
 			}
 			else if (path == "/worldsets.json")
 			{
-				m_response_data = l_thread->WorldSetsJS(debugJS);
+				m_response_data = l_thread->WorldSetsJS(debugText);
 			}
 			else if (path == "/delayed.json")
 			{
