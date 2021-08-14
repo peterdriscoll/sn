@@ -28,6 +28,7 @@ namespace SNI
 		~SNI_DelayedProcessor();
 
 		void Delay(SN::SN_FunctionDef p_Function, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_Source, SNI_World *p_World = NULL);
+		void Run(SN::SN_FunctionDef p_Function, size_t p_NumParams, SN::SN_Expression* p_ParamList, const SNI_Expression* p_Source, SNI_World* p_World);
 		void DelayCall(SNI_DelayedCall *p_Call, SNI_World *p_World);
 		bool Process();
 		void Request(SNI_DelayedCall *p_Call);

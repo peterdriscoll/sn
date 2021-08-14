@@ -34,7 +34,7 @@ namespace SNI
 		, m_Scheduled(false)
 		, m_Locked(false)
 		, m_Frame(p_Frame)
-		, m_World(NULL)
+		, m_World(p_World)
 		, m_Error(skynet::OK)
 	{
 		ASSERTM(m_NumParams == m_Function.GetSNI_FunctionDef()->GetNumParameters(), "Inconsistent number of parameters.");
@@ -68,6 +68,11 @@ namespace SNI
 	size_t SNI_DelayedCall::CallCardinality() const
 	{
 		return m_Function.GetSNI_FunctionDef()->Cardinality(m_ParamList);
+	}
+
+	void SNI_DelayedCall::ExpandedBooleanResult()
+	{
+		//m_Function.GetSNI_FunctionDef()->ExpandedBooleanResult(m_ParamList);
 	}
 
 	bool SNI_DelayedCall::IsNull() const

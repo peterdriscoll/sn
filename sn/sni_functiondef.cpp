@@ -103,6 +103,11 @@ namespace SNI
 		return p_Param.Cardinality();
 	}
 
+	bool SNI_FunctionDef::GetBoolResult() const
+	{
+		return false;
+	}
+
 	size_t SNI_FunctionDef::Cardinality(SN::SN_Expression * p_ParamList) const
 	{
 		long depth = GetNumParameters();
@@ -120,6 +125,23 @@ namespace SNI
 			}
 		}
 		return CardinalityOfUnify(depth, p_ParamList, calcPos, totalCalc);
+	}
+
+	void SNI_FunctionDef::ExpandedBooleanResult(SN::SN_Expression* p_ParamList) const
+	{
+		size_t maxCard = SNI_Thread::TopManager()->MaxCardinalityCall();
+		size_t card = Cardinality(p_ParamList);
+		if (GetBoolResult() && maxCard < card && !IsKnownValue(p_ParamList[PU2_Result], PU2_Result))
+		{
+			SN::SN_ValueSet condition;
+			SNI_WorldSet* condition_worldSet = new SNI_WorldSet();
+			condition.SetWorldSet(condition_worldSet);
+			condition.AddTaggedValue(skynet::True, condition_worldSet->CreateWorld());
+			condition.AddTaggedValue(skynet::False, condition_worldSet->CreateWorld());
+			condition_worldSet->Complete();
+			p_ParamList[PU2_Result].GetSNI_Variable()->SetValue(condition);
+			condition.GetSNI_ValueSet()->AssignToVariable(p_ParamList[PU2_Result].GetSNI_Variable());
+		}
 	}
 
 	string SNI_FunctionDef::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression *p_DebugSource) const

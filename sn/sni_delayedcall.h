@@ -26,6 +26,7 @@ namespace SNI
 		virtual string DisplaySN(long, SNI_DisplayOptions &) const;
 
 		virtual size_t CallCardinality() const;
+		virtual void ExpandedBooleanResult();
 		virtual bool IsNull() const;
 
 		bool Run();

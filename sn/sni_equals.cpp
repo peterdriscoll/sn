@@ -75,6 +75,11 @@ namespace SNI
 		return p_Param.IsKnownValue() || p_Param.IsReferableValue();
 	}
 
+	bool SNI_Equals::GetBoolResult() const
+	{
+		return true;
+	}
+
 	SN::SN_Value SNI_Equals::PrimaryFunctionValue(const SN::SN_Value &p_Left, const SN::SN_Value &p_Right) const
 	{
 		return p_Left.GetSNI_Value()->DoEquals(p_Right.GetSNI_Value());

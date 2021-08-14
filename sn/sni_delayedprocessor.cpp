@@ -141,6 +141,7 @@ namespace SNI
 				SNI_DelayedCall *loopCall = *loopIt;
 				if (!loopCall->IsLocked())
 				{
+					loopCall->ExpandedBooleanResult();
 					size_t loopCard = loopCall->CallCardinality();
 					SNI_Thread *thread = SNI_Thread::GetThread();
 					if (thread)
@@ -205,5 +206,31 @@ namespace SNI
 	size_t SNI_DelayedProcessor::CountDelayedCalls()
 	{
 		return m_DelayedCallList.size();
+	}
+
+	// Create a delayed call and link it in as the value of the variables..
+	void SNI_DelayedProcessor::Run(SN::SN_FunctionDef p_Function, size_t p_NumParams, SN::SN_Expression* p_ParamList, const SNI_Expression* p_Source, SNI_World* p_World)
+	{
+		SNI_DelayedCall* call = new SNI_DelayedCall(p_Function, p_NumParams, p_ParamList, p_Source, SNI_Frame::Top(), p_World);
+		call->LinkToVariables();
+		call->ExpandedBooleanResult();
+		if (call->CallCardinality() < CARDINALITY_MAX)
+		{
+			if (!call->Run())
+			{
+				m_FailedList.push_back(call);
+			}
+		}
+		else
+		{
+			m_SearchLock.lock();
+			m_DelayedCallList.push_back(call);
+			m_SearchLock.unlock();
+			if (call->IsCallRequested())
+			{
+				Request(call);
+			}
+		}
+		SNI_Thread::GetThread()->Breakpoint(SN::DebugStop, SN::DelayId, "Delay Processor", "Delayed call", p_Source, SN::WarningPoint);
 	}
 }

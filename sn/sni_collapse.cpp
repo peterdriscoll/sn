@@ -149,6 +149,6 @@ namespace SNI
 		l_ParameterList.push_back(p_Result);
 		SN::SN_Expression *param_List = LoadParametersUnify(&l_ParameterList);
 		SNI_Thread::GetThread()->GetProcessor()->Delay(this, GetNumParameters(), param_List, p_Source, SNI_Thread::GetThread()->ContextWorld());
-		delete param_List;
+		delete[] param_List;
 	}
 }
