@@ -158,7 +158,7 @@ namespace SNI
 		}
 
 		SN::SN_Expression* secondParamList = new SN::SN_Expression[3];
-		secondParamList[0] = p_ParameterList[PU2_Result];
+		secondParamList[0] = firstParamList[0];
 		secondParamList[1] = firstParamList[1];
 		secondParamList[2] = p_ParameterList[PU2_Second];
 		SN::SN_Error e2 = SNI_Binary::UnifyArray(secondParamList, p_Source).GetError();
@@ -383,7 +383,7 @@ namespace SNI
 		case 2:
 		{
 			SN::SN_Bool cond = p_ParamList[PU2_First].GetVariableValue();
-			if (!cond.IsNull() && !cond.GetBool())
+			if (!cond.IsNull() && cond.GetBool())
 			{
 				p_ParamList[PU2_Result].AddValue(skynet::True, p_Depth, p_WorldList, worldSet);
 				p_ParamList[PU2_Second].AddValue(skynet::Null, p_Depth, p_WorldList, worldSet);
