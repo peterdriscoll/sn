@@ -204,7 +204,7 @@ namespace test_sn
 						(age[String("Roger")] == Long(43)).Assert().Do();
 						(age[String("Bob")] == Long(43)).Assert().Do();
 						(age[String("Ken")] == Long(55)).Assert().Do();
-
+						age.Fix(Long(0));
 						(age.CountIf(Lambda(X, X == Long(43))) == count43).Assert().Do();
 					}
 					catch (Error e)

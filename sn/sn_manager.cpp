@@ -217,6 +217,16 @@ namespace SN
 		m_Manager->SetTailCallOptimization(p_TailCallOptimization);
 	}
 
+	bool SN_Manager::AutoExpandNull() const
+	{
+		return m_Manager->AutoExpandNull();
+	}
+
+	void SN_Manager::SetAutoExpandNull(bool p_AutoExpandNull)
+	{
+		return m_Manager->SetAutoExpandNull(p_AutoExpandNull);
+	}
+
 	void SN_Manager::Breakpoint()
 	{
 		m_Manager->Breakpoint();

@@ -234,7 +234,16 @@ namespace SNI
 		return skynet::Fail;
 	}
 
-	size_t SNI_Equals::CardinalityOfUnify(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const
+	size_t SNI_Equals::CardinalityOfUnify(long p_Depth, SN::SN_Expression* p_ParamList, long p_CalcPos, long p_TotalCalc) const
+	{
+		if (SNI_Thread::TopManager()->AutoExpandNull())
+		{
+			return CardinalityOfUnifyExpanded(p_Depth, p_ParamList, p_CalcPos, p_TotalCalc);
+		}
+		return CardinalityOfUnifyNormal(p_Depth, p_ParamList, p_CalcPos, p_TotalCalc);
+	}
+	
+	size_t SNI_Equals::CardinalityOfUnifyNormal(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const
 	{
 		if (p_TotalCalc <= 2)
 		{
@@ -266,6 +275,56 @@ namespace SNI
 					return CARDINALITY_MAX;
 				}
 			}
+			return SNI_Binary::CardinalityOfUnify(p_Depth, p_ParamList, calcPos, totalCalc);
+		}
+		return CARDINALITY_MAX;
+	}
+
+	size_t SNI_Equals::CardinalityOfUnifyExpanded(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const
+	{
+		if (p_TotalCalc <= 2)
+		{
+			long totalCalc = p_TotalCalc;
+			long calcPos = p_CalcPos;
+
+			SN::SN_Bool result = p_ParamList[PU2_Result].GetSafeValue();
+
+			if (totalCalc > 0)
+			{
+				if (!result.IsNull() && !result.GetBool())
+				{
+					return CARDINALITY_MAX;
+				}
+				else if (!p_ParamList[PU2_Result].IsKnownValue())
+				{
+					if (totalCalc > 1)
+					{
+						return CARDINALITY_MAX;
+					}
+
+					return MultiplyCardinality(p_ParamList[PU2_First].Cardinality(), p_ParamList[PU2_Second].Cardinality());
+				}
+				else if (p_ParamList[PU2_First].IsKnownValue())
+				{
+					if (totalCalc > 1)
+					{
+						return CARDINALITY_MAX;
+					}
+
+					return MultiplyCardinality(p_ParamList[PU2_Result].Cardinality(), p_ParamList[PU2_First].Cardinality());
+				}
+				else if (p_ParamList[PU2_Second].IsKnownValue())
+				{
+					if (totalCalc > 1)
+					{
+						return CARDINALITY_MAX;
+					}
+
+					return MultiplyCardinality(p_ParamList[PU2_Result].Cardinality(), p_ParamList[PU2_Second].Cardinality());
+				}
+				return CARDINALITY_MAX;
+			}
+
 			return SNI_Binary::CardinalityOfUnify(p_Depth, p_ParamList, calcPos, totalCalc);
 		}
 		return CARDINALITY_MAX;

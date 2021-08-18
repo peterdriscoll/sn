@@ -80,11 +80,44 @@ namespace SNI
 
 	SN::SN_Expression SNI_BuildSet::UnifyArray(SN::SN_Expression * p_ParamList, const SNI_Expression *p_Source)
 	{
+		SNI_Frame::Push(this, NULL);
+		SNI_Frame* topFrame = SNI_Frame::Top();
+		topFrame->CreateParameter(PU1_Result, p_ParamList[PU1_Result]);
+		topFrame->CreateParameter(PU1_First, p_ParamList[PU1_First]);
+		
+		Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Unify before checking parameter cardinality", p_Source, SN::CallPoint);
+
+		SN::SN_Error e = skynet::OK;
 		if (!p_ParamList[PU1_First].IsKnownValue())
 		{
-			SNI_Thread::GetThread()->GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), GetNumParameters(), p_ParamList, p_Source);
-			return skynet::OK;
+			if (p_ParamList[PU1_First].IsVariable())
+			{
+				e = p_ParamList[PU1_First].GetSNI_Expression()->SelfAssert();
+			}
+			else if (p_ParamList[PU1_First].IsComplete())
+			{
+				SNI_Variable* v = topFrame->GetVariable(PU1_First);
+				v->SetValue(SN::SN_Expression());
+				e = p_ParamList[PU1_First].AssertValue(v);
+				p_ParamList[PU1_First] = v;
+			}
 		}
-		return p_ParamList[PU1_Result].AssertValue(PrimaryFunctionValue(p_ParamList[PU1_First].GetVariableValue()));
+
+		Breakpoint(SN::DetailStop, SN::ParameterOneId, GetTypeName(), "Unified parameter 1", p_Source, SN::CallPoint);
+
+		if (!e.IsError())
+		{
+			if (!p_ParamList[PU1_First].IsKnownValue())
+			{
+				SNI_Thread::GetThread()->GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), GetNumParameters(), p_ParamList, p_Source);
+				return skynet::OK;
+			}
+
+			e = p_ParamList[PU1_Result].AssertValue(PrimaryFunctionValue(p_ParamList[PU1_First].GetVariableValue()));
+		}
+		Breakpoint(SN::WarningStop, SN::RightId, GetTypeName(), "Unify after calculation", p_Source, SN::WarningPoint);
+		SNI_Frame::Pop();
+
+		return e;
 	}
 }

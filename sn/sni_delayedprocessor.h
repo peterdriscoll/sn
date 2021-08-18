@@ -38,6 +38,8 @@ namespace SNI
 		unordered_map<string, SN::SN_String> &GetPreventReread();
 		virtual void Display();
 
+		void RemoveEmptyCalls();
+
 		void WriteJSON(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions);
 		size_t CountDelayedCalls();
 	private:

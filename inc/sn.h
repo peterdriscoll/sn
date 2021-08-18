@@ -29,6 +29,7 @@
 #define EVALUATION_TYPE skynet::Lazy /*Lazy, Strict*/
 #define LOGIC_TYPE skynet::Parsing
 #define TAIL_CALL_OPTIMIZATION true
+#define AUTO_EXPAND_NULL true
 
 namespace skynet
 {

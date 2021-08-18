@@ -111,6 +111,9 @@ namespace SN
 		bool TailCallOptimization() const;
 		void SetTailCallOptimization(bool p_TailCallOptimization);
 
+		bool AutoExpandNull() const;
+		void SetAutoExpandNull(bool p_AutoExpandNull);
+
 		// Debugging
 		void Breakpoint();
 		void SetDebugAction(enum skynet::DebugAction p_DebugAction);

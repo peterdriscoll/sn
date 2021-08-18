@@ -38,6 +38,7 @@ namespace SNI
 		void Display();
 		bool IsScheduled();
 		void MarkScheduled();
+		bool EmptyWorld();
 		void WriteJSON(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions);
 
 	private:

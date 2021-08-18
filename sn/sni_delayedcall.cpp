@@ -72,7 +72,10 @@ namespace SNI
 
 	void SNI_DelayedCall::ExpandedBooleanResult()
 	{
-		//m_Function.GetSNI_FunctionDef()->ExpandedBooleanResult(m_ParamList);
+		if (SNI_Thread::TopManager()->AutoExpandNull())
+		{
+			m_Function.GetSNI_FunctionDef()->ExpandedBooleanResult(m_ParamList);
+		}
 	}
 
 	bool SNI_DelayedCall::IsNull() const
@@ -172,9 +175,14 @@ namespace SNI
 		m_Scheduled = true;
 	}
 
+	bool SNI_DelayedCall::EmptyWorld()
+	{
+		return m_World && m_World->IsEmpty();
+	}
+	
 	void SNI_DelayedCall::WriteJSON(ostream &p_Stream, SNI::SNI_DisplayOptions &p_DisplayOptions)
 	{
-		if (!m_World || !m_World->IsEmpty())
+		if (!EmptyWorld())
 		{
 			p_Stream << "\t\t\"expression\" : \"" << EscapeStringToJSON(m_Function.GetSNI_FunctionDef()->DisplayCall(0, p_DisplayOptions, m_NumParams, m_ParamList + 1, m_Source)) << "\",\n";
 			p_Stream << "\t\t\"result\" : \"" << EscapeStringToJSON(m_ParamList[PU1_Result].DisplayValueSN(p_DisplayOptions)) << "\",\n";

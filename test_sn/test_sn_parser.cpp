@@ -65,6 +65,7 @@ namespace test_sn
 			{
 				Manager manager("Test CharacterSets", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.SetAutoExpandNull(false);
 
 				CharacterSet characterSet;
 
@@ -127,7 +128,8 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Validate IsInteger", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.SetAutoExpandNull(false);
 
 				CharacterSet characterSet;
 				Validate validate(characterSet);
@@ -217,6 +219,7 @@ namespace test_sn
 			{
 				Manager manager("Test Validate IsFloatingPoint", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.SetAutoExpandNull(false);
 
 				CharacterSet characterSet;
 				Validate validate(characterSet);
@@ -315,6 +318,7 @@ namespace test_sn
 			{
 				Manager manager("Test Validate IsExponential", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.SetAutoExpandNull(false);
 
 				CharacterSet characterSet;
 				Validate validate(characterSet);
@@ -436,6 +440,7 @@ namespace test_sn
 			{
 				Manager manager("Test Validate IsString", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.SetAutoExpandNull(false);
 
 				CharacterSet characterSet;
 				Validate validate(characterSet);
@@ -520,6 +525,7 @@ namespace test_sn
 			{
 				Manager manager("Test Validate IsName", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.SetAutoExpandNull(false);
 
 				CharacterSet characterSet;
 				Validate validate(characterSet);
@@ -586,6 +592,7 @@ namespace test_sn
 			{
 				Manager manager("Test Validate IsWhiteSpaceOnly", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.SetAutoExpandNull(false);
 
 				CharacterSet characterSet;
 				Validate validate(characterSet);
@@ -674,6 +681,7 @@ namespace test_sn
 			{
 				Manager manager("Test Validate IsSimpleComment", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.SetAutoExpandNull(false);
 
 				CharacterSet characterSet;
 				Validate validate(characterSet);
@@ -746,6 +754,7 @@ namespace test_sn
 			{
 				Manager manager("Test Validate TestValidate_IsLineComment", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.SetAutoExpandNull(false);
 
 				CharacterSet characterSet;
 				Validate validate(characterSet);
@@ -818,6 +827,7 @@ namespace test_sn
 			{
 				Manager manager("Test Parse Value", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false);
+				manager.SetAutoExpandNull(false);
 
 				CharacterSet characterSet;
 				Validate validate(characterSet);
@@ -895,6 +905,7 @@ namespace test_sn
 			{
 				Manager manager("Test Parse Value Exponentials", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false);
+				manager.SetAutoExpandNull(false);
 
 				CharacterSet characterSet;
 				Validate validate(characterSet);
@@ -923,20 +934,22 @@ namespace test_sn
 		}
 
 		TEST_METHOD(TestParse_SimpleExpression1)
-		{
+		{ // dog dog dog.
 			Initialize();
 			{
 				Manager manager("Test Parse Simple Expression1", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.SetAutoExpandNull(false);
 
 				CharacterSet characterSet;
 				Validate validate(characterSet);
 				Parse parse(characterSet, validate);
 
 				SN_DOMAIN(MyDomain);
-
+				manager.Breakpoint();
 				// Arithmetic Expression.
 				SN_DECLARE(i1);
+				manager.Breakpoint();
 				(parse.AsArithmeticExpression(MyDomain)(String("13+21"))(i1)).Assert().Do();
 
 				SN_DECLARE(j1);
@@ -961,6 +974,7 @@ namespace test_sn
 			{
 				Manager manager("Test Parse Simple Expression2", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false);
+				manager.SetAutoExpandNull(false);
 
 				CharacterSet characterSet;
 				Validate validate(characterSet);
@@ -1015,6 +1029,7 @@ namespace test_sn
 			{
 				Manager manager("Test Parse Simple Expression3", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false);
+				manager.SetAutoExpandNull(false);
 
 				CharacterSet characterSet;
 				Validate validate(characterSet);

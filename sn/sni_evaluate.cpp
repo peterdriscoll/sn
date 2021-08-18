@@ -72,6 +72,12 @@ namespace SNI
 
 		Breakpoint(SN::DebugStop, SN::ReturnId, GetTypeName(), "Evaluate return", this, SN::CallPoint);
 
+		if (result.GetSNI_Error())
+		{
+			SN::SN_Error r = result.GetSNI_Error();
+			SN::SN_Error e(false, r.GetDelay(), "Unknown result: " + r.GetDescription());
+			return p_ParamList[PU1_Result].AssertValue(e);
+		}
 		return p_ParamList[PU1_Result].AssertValue(result);
 	}
 }

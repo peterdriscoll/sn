@@ -100,6 +100,9 @@ namespace SNI
 		bool TailCallOptimization() const;
 		void SetTailCallOptimization(bool p_TailCallOptimization);
 
+		bool AutoExpandNull() const;
+		void SetAutoExpandNull(bool p_AutoExpandNull);
+
 		// debugging
 		void Breakpoint();
 		void SetDebugAction(enum skynet::DebugAction p_DebugLevel);
@@ -134,6 +137,10 @@ namespace SNI
 		skynet::EvaluationType m_EvaluationType;
 		skynet::LogicType m_LogicType;
 		bool m_TailCallOptimization;
+
+		bool m_AutoExpandNull;
+		
+		// Console
 		bool m_HasConsole;
 
 		int (*m_KbHit)();

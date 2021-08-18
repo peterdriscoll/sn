@@ -89,8 +89,9 @@ namespace SNI
 
 	bool SNI_DelayedProcessor::Complete()
 	{
-		Process();
-		return m_DelayedCallList.size() == 0;
+		return true;
+		// Process();
+		// return m_DelayedCallList.size() == 0;
 	}
 
 	void SNI_DelayedProcessor::Promote(PGC::PGC_Transaction * p_Transaction)
@@ -122,6 +123,23 @@ namespace SNI
 		}
 	}
 
+	void SNI_DelayedProcessor::RemoveEmptyCalls()
+	{
+		for (SNI_DelayedCallList::iterator callIt = m_DelayedCallList.begin(); callIt != m_DelayedCallList.end(); )
+		{
+			SNI_DelayedCall* call = *callIt;
+			if (call->EmptyWorld())
+			{
+				callIt = m_DelayedCallList.erase(callIt);
+			}
+			else
+			{
+				callIt++;
+			}
+		}
+	}
+
+
 	// Process those calls in the list that can be processed, starting with the least cardinality.
 	// Here, cardinality refers to the number of values. Nothing to do with multi threading.
 	bool SNI_DelayedProcessor::Process()
@@ -136,6 +154,7 @@ namespace SNI
 			SNI_DelayedCallList::iterator it;
 			long id = 0;
 			m_SearchLock.lock();
+			RemoveEmptyCalls();
 			for (SNI_DelayedCallList::iterator loopIt = m_DelayedCallList.begin(); loopIt != m_DelayedCallList.end(); loopIt++)
 			{
 				SNI_DelayedCall *loopCall = *loopIt;

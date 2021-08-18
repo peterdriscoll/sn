@@ -124,6 +124,7 @@ namespace SNI
 		, m_EvaluationType(EVALUATION_TYPE)
 		, m_LogicType(LOGIC_TYPE)
 		, m_TailCallOptimization(TAIL_CALL_OPTIMIZATION)
+		, m_AutoExpandNull(AUTO_EXPAND_NULL)
 	{
 		Initialize();
 	}
@@ -152,6 +153,7 @@ namespace SNI
 		, m_EvaluationType(EVALUATION_TYPE)
 		, m_LogicType(LOGIC_TYPE)
 		, m_TailCallOptimization(TAIL_CALL_OPTIMIZATION)
+		, m_AutoExpandNull(AUTO_EXPAND_NULL)
 	{
 		Initialize();
 	}
@@ -180,6 +182,7 @@ namespace SNI
 		, m_EvaluationType(EVALUATION_TYPE)
 		, m_LogicType(LOGIC_TYPE)
 		, m_TailCallOptimization(TAIL_CALL_OPTIMIZATION)
+		, m_AutoExpandNull(AUTO_EXPAND_NULL)
 	{
 		Initialize();
 	}
@@ -633,6 +636,16 @@ namespace SNI
 	void SNI_Manager::SetTailCallOptimization(bool p_TailCallOptimization)
 	{
 		m_TailCallOptimization = p_TailCallOptimization;
+	}
+
+	bool SNI_Manager::AutoExpandNull() const
+	{
+		return m_AutoExpandNull;
+	}
+
+	void SNI_Manager::SetAutoExpandNull(bool p_AutoExpandNull)
+	{
+		m_AutoExpandNull = p_AutoExpandNull;
 	}
 
 	void SNI_Manager::Breakpoint()
