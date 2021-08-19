@@ -133,14 +133,21 @@ namespace SNI
 		size_t card = Cardinality(p_ParamList);
 		if (GetBoolResult() && maxCard < card && !IsKnownValue(p_ParamList[PU2_Result], PU2_Result))
 		{
-			SN::SN_ValueSet condition;
-			SNI_WorldSet* condition_worldSet = new SNI_WorldSet();
-			condition.SetWorldSet(condition_worldSet);
-			condition.AddTaggedValue(skynet::True, condition_worldSet->CreateWorld());
-			condition.AddTaggedValue(skynet::False, condition_worldSet->CreateWorld());
-			condition_worldSet->Complete();
-			p_ParamList[PU2_Result].GetSNI_Variable()->SetValue(condition);
-			condition.GetSNI_ValueSet()->AssignToVariable(p_ParamList[PU2_Result].GetSNI_Variable());
+			if (SNI_Thread::TopManager()->AutoExpandNull())
+			{
+				SN::SN_ValueSet condition;
+				SNI_WorldSet* condition_worldSet = new SNI_WorldSet();
+				condition.SetWorldSet(condition_worldSet);
+				condition.AddTaggedValue(skynet::True, condition_worldSet->CreateWorld());
+				condition.AddTaggedValue(skynet::False, condition_worldSet->CreateWorld());
+				condition_worldSet->Complete();
+				p_ParamList[PU2_Result].GetSNI_Variable()->SetValue(condition);
+				condition.GetSNI_ValueSet()->AssignToVariable(p_ParamList[PU2_Result].GetSNI_Variable());
+			}
+			else
+			{
+				SNI_Thread::TopManager()->Breakpoint("Expand boolean result.");
+			}
 		}
 	}
 

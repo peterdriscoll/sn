@@ -104,7 +104,7 @@ namespace SNI
 		void SetAutoExpandNull(bool p_AutoExpandNull);
 
 		// debugging
-		void Breakpoint();
+		void Breakpoint(string p_Description = "User breakpoint");
 		void SetDebugAction(enum skynet::DebugAction p_DebugLevel);
 
 	private:

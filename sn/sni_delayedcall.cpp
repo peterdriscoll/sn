@@ -72,10 +72,7 @@ namespace SNI
 
 	void SNI_DelayedCall::ExpandedBooleanResult()
 	{
-		if (SNI_Thread::TopManager()->AutoExpandNull())
-		{
-			m_Function.GetSNI_FunctionDef()->ExpandedBooleanResult(m_ParamList);
-		}
+		m_Function.GetSNI_FunctionDef()->ExpandedBooleanResult(m_ParamList);
 	}
 
 	bool SNI_DelayedCall::IsNull() const

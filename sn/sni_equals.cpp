@@ -236,11 +236,18 @@ namespace SNI
 
 	size_t SNI_Equals::CardinalityOfUnify(long p_Depth, SN::SN_Expression* p_ParamList, long p_CalcPos, long p_TotalCalc) const
 	{
+		size_t resultExpanded = CardinalityOfUnifyExpanded(p_Depth, p_ParamList, p_CalcPos, p_TotalCalc);
+
 		if (SNI_Thread::TopManager()->AutoExpandNull())
 		{
-			return CardinalityOfUnifyExpanded(p_Depth, p_ParamList, p_CalcPos, p_TotalCalc);
+			return resultExpanded;
 		}
-		return CardinalityOfUnifyNormal(p_Depth, p_ParamList, p_CalcPos, p_TotalCalc);
+		size_t resultNormal = CardinalityOfUnifyNormal(p_Depth, p_ParamList, p_CalcPos, p_TotalCalc);
+		if (resultExpanded != resultNormal)
+		{
+			SNI_Thread::TopManager()->Breakpoint("Equals expanded " + to_string(resultExpanded) + " != normal " + to_string(resultNormal));
+		}
+		return resultNormal;
 	}
 	
 	size_t SNI_Equals::CardinalityOfUnifyNormal(long p_Depth, SN::SN_Expression * p_ParamList, long p_CalcPos, long p_TotalCalc) const
@@ -322,7 +329,6 @@ namespace SNI
 
 					return MultiplyCardinality(p_ParamList[PU2_Result].Cardinality(), p_ParamList[PU2_Second].Cardinality());
 				}
-				return CARDINALITY_MAX;
 			}
 
 			return SNI_Binary::CardinalityOfUnify(p_Depth, p_ParamList, calcPos, totalCalc);

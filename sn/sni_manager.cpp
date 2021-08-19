@@ -648,9 +648,9 @@ namespace SNI
 		m_AutoExpandNull = p_AutoExpandNull;
 	}
 
-	void SNI_Manager::Breakpoint()
+	void SNI_Manager::Breakpoint(string p_Description)
 	{
-		SNI_Thread::GetThread()->Breakpoint(SN::DebugStop, SN::UserId, "", "User breakpoint", NULL, SN::UserPoint);
+		SNI_Thread::GetThread()->Breakpoint(SN::DebugStop, SN::UserId, "", p_Description, NULL, SN::UserPoint);
 	}
 
 	void SNI_Manager::SetDebugAction(enum skynet::DebugAction p_DebugLevel)
