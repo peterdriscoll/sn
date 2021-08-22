@@ -32,8 +32,9 @@ namespace PGC
 	class PGC_EXPORT PGC_Task
 	{
 	public:
+		virtual ~PGC_Task() {};
 		virtual void Run() = 0; // Perform acivities that can be gainfully done now, and return when complete. The method will be called periodically.
-		virtual bool Complete() = 0; // Attempt to complete all outstanding processing. Return false if this cannot be reasonably done.
+		virtual bool Finish() = 0; // Attempt to complete all outstanding processing. Return false if this cannot be reasonably done.
 		virtual void Promote(PGC_Transaction *p_Transaction) = 0;
 	};
 }

@@ -37,7 +37,6 @@ namespace SNI
 
 	SNI_DelayedProcessor::~SNI_DelayedProcessor()
 	{
-		delete m_Manager;
 	}
 
 	// Create a delayed call and link it in as the value of the variables..
@@ -87,7 +86,7 @@ namespace SNI
 		Process();
 	}
 
-	bool SNI_DelayedProcessor::Complete()
+	bool SNI_DelayedProcessor::Finish()
 	{
 		return true;
 		// Process();

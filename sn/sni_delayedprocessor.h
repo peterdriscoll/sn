@@ -33,7 +33,7 @@ namespace SNI
 		bool Process();
 		void Request(SNI_DelayedCall *p_Call);
 		virtual void Run();
-		virtual bool Complete();
+		virtual bool Finish();
 		virtual void Promote(PGC::PGC_Transaction *p_Transaction);
 		unordered_map<string, SN::SN_String> &GetPreventReread();
 		virtual void Display();

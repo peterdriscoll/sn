@@ -81,6 +81,7 @@ namespace PGC
 	void PGC_Transaction::ReleaseBlocks()
 	{
 		PGC_Block *theBlock = m_FirstBlock;
+		m_FirstBlock = NULL;
 		while (theBlock)
 		{
 			PGC_Block *nextBlock = theBlock->GetNextBlock();
@@ -267,7 +268,7 @@ namespace PGC
 		for (TaskList::iterator it = m_TaskList.begin(); it != m_TaskList.end(); it++)
 		{
 			PGC_Task *task = (*it);
-			if (!task->Complete())
+			if (!task->Finish())
 			{
 				task->Promote(m_LastTopTransaction);
 			}
