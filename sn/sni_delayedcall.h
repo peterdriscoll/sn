@@ -28,8 +28,9 @@ namespace SNI
 		virtual size_t CallCardinality() const;
 		virtual void ExpandedBooleanResult();
 		virtual bool IsNull() const;
+		SN::SN_Error GetError() const;
 
-		bool Run();
+		SN::SN_Error Run();
 		bool IsCallRequested() const;
 		void SetWorld(SNI_World *p_World);
 		bool IsLocked() const;

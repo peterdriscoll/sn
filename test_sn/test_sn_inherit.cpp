@@ -18,10 +18,9 @@ namespace test_sn
 	private:
 		bool runWebServer = false;
 
-		static void AssertErrorHandler(SN::SN_Error p_Result)
+		static void AssertErrorHandler(bool p_Err, const string& p_Description)
 		{
-			string description = p_Result.GetDescription();
-			Assert::IsTrue(p_Result.GetBool(), wstring(description.begin(), description.end()).c_str());
+			Assert::IsTrue(p_Err, wstring(p_Description.begin(), p_Description.end()).c_str());
 		}
 
 		void Initialize()
@@ -299,6 +298,8 @@ namespace test_sn
 				(fib(Long(5)) == Long(8)).Assert().Do();
 				(fib(Long(6)) == Long(13)).Assert().Do();
 
+				manager.DelayedCalls().Assert().Do();
+				manager.DelayedCalls().Evaluate().Do();
 			}
 			Cleanup();
 		}

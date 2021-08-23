@@ -703,7 +703,10 @@ namespace SNI
 		bool finished = false;
 		SNI_Frame* frame = thread->Top();
 		vector<bool> savePoint;
-		frame->RecordSavePoint(savePoint);
+		if (frame)
+		{
+			frame->RecordSavePoint(savePoint);
+		}
 		thread->SaveStepCount();
 		do
 		{
@@ -720,7 +723,10 @@ namespace SNI
 				if (e.RequestRerun())
 				{
 					thread->ResetStepCount();
-					frame->RestoreSavePoint(savePoint);
+					if (frame)
+					{
+						frame->RestoreSavePoint(savePoint);
+					}
 				}
 				else
 				{
@@ -755,8 +761,23 @@ namespace SNI
 		if (e.IsError())
 		{
 			e.Log();
-			p_ErrorHandler(e);
+			p_ErrorHandler(e.IsError(), e.GetDescription());
 		}
+	}
+
+	SN::SN_Error SNI_Expression::GetError()
+	{
+		SNI_Error* err = dynamic_cast<SNI_Error*>(this);
+		if (err)
+		{
+			return err;
+		}
+		SNI_Bool* result = dynamic_cast<SNI_Bool*>(this);
+		if (result)
+		{
+			return SN::SN_Error(result->GetBool(), false);
+		}
+		return SN::SN_Error(false, false, "Bool or error expected.");
 	}
 
 	SN::SN_Expression SNI_Expression::Meta(long p_MetaLevel)

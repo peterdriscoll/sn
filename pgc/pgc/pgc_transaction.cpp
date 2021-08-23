@@ -70,7 +70,7 @@ namespace PGC
 	void PGC_Transaction::EndTransaction()
 	{
 		m_Dieing = true;
-		Complete();
+		Finish();
 		PromoteExternals(m_LastTopTransaction);
 		PGC_Promotion::PromoteRequests();  // Promote requests away from this transaction.
 		ReleaseBlocks();
@@ -259,7 +259,7 @@ namespace PGC
 	}
 
 	// Perform final processing;
-	void PGC_Transaction::Complete()
+	void PGC_Transaction::Finish()
 	{
 		if (m_ProcessThread)
 		{
@@ -272,7 +272,6 @@ namespace PGC
 			{
 				task->Promote(m_LastTopTransaction);
 			}
-			delete task;
 		}
 		m_TaskList.clear();
 	}

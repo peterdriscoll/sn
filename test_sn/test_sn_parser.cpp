@@ -19,10 +19,9 @@ namespace test_sn
 		bool runWebServer = false;
 		bool autoExpand = true;
 
-		static void AssertErrorHandler(SN::SN_Error p_Result)
+		static void AssertErrorHandler(bool p_Err, const string& p_Description)
 		{
-			string description = p_Result.GetDescription();
-			Assert::IsTrue(p_Result.GetBool(), wstring(description.begin(), description.end()).c_str());
+			Assert::IsTrue(!p_Err, wstring(p_Description.begin(), p_Description.end()).c_str());
 		}
 
 		void Initialize()
@@ -431,6 +430,7 @@ namespace test_sn
 					string t_comp = "StringRef(\"A2.1X dog\"[_split_";
 					Assert::IsTrue(t_part == t_comp);
 				}
+				manager.DelayedCalls().Evaluate().Do();
 			}
 			Cleanup();
 		}

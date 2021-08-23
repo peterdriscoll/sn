@@ -17,7 +17,7 @@ namespace SN
 {
 	class SN_Error;
 
-	typedef void OnErrorHandler(SN_Error p_Result);
+	typedef void OnErrorHandler(bool p_Err, const string &p_Description);
 
 	enum LoggingLevel
 	{
@@ -53,6 +53,8 @@ namespace SN
 		SN_Manager(string p_Description, OnErrorHandler p_Handler = NULL, bool p_DelayOnEvaluate = false, size_t p_MaxCardinalityCall = 100, size_t p_MaxCardinalityUnify = 100);
 
 		virtual ~SN_Manager();
+
+		SN_Expression DelayedCalls();
 
 		string Description();
 

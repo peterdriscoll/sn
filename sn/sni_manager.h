@@ -25,7 +25,7 @@ namespace HTTP
 
 namespace SNI
 {
-	typedef void OnErrorHandler(SN::SN_Error p_Result);
+	typedef void OnErrorHandler(bool p_Err, const string& p_Description);
 
 	class SNI_Frame;
 	typedef vector<SNI_Frame *> SNI_FrameList;
@@ -33,7 +33,7 @@ namespace SNI
 	class SNI_Manager
 	{
 	public:
-		static void ThrowErrorHandler(SN::SN_Error p_Result);
+		static void ThrowErrorHandler(bool p_Err, const string& p_Description);
 		static void LogicSetup();
 
 		SNI_Manager();
@@ -41,6 +41,8 @@ namespace SNI
 		SNI_Manager(string p_Description, OnErrorHandler *p_ErrorHandler, bool p_DelayOnEvaluate, size_t p_MaxCardinalityCall, size_t p_MaxCardinalityUnify);
 
 		virtual ~SNI_Manager();
+
+		SN::SN_Expression DelayedCalls();
 
 		string Description()  const;
 

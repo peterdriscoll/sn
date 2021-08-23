@@ -93,7 +93,7 @@ namespace PGC
 		bool Running();
 		static void StartProcessing(PGC_Transaction *);
 		void Process();
-		void Complete();
+		void Finish();
 
 		static void RegisterInWebServer();
 		static bool InWebServer();

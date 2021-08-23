@@ -17,7 +17,7 @@ namespace SN
 
 namespace SNI
 {
-	typedef void OnErrorHandler(SN::SN_Error p_Result);
+	typedef void OnErrorHandler(bool p_Err, const string& p_Description);
 
 	class SNI_Variable;
 	class SNI_Error;

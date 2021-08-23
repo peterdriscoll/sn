@@ -81,6 +81,16 @@ namespace SNI
 		}
 	}
 
+	SN::SN_Error SNI_DelayedProcessor::DoAssert()
+	{
+		return Process();
+	}
+
+	SN::SN_Expression SNI_DelayedProcessor::DoEvaluate(long p_MetaLevel) const
+	{
+		return Check();
+	}
+
 	void SNI_DelayedProcessor::Run()
 	{
 		Process();
@@ -141,11 +151,12 @@ namespace SNI
 
 	// Process those calls in the list that can be processed, starting with the least cardinality.
 	// Here, cardinality refers to the number of values. Nothing to do with multi threading.
-	bool SNI_DelayedProcessor::Process()
+	SN::SN_Error SNI_DelayedProcessor::Process()
 	{
 		m_Processing = true;
 		bool found = true;
 		bool success = false;
+		SN::SN_Error e = skynet::OK;
 		do
 		{
 			SNI_DelayedCall *call = NULL;
@@ -184,7 +195,8 @@ namespace SNI
 
 			if (card < CARDINALITY_MAX)
 			{
-				if (!call->Run())
+				e = call->Run();
+				if (e.IsError())
 				{
 					m_FailedList.push_back(call);
 				}
@@ -200,7 +212,25 @@ namespace SNI
 			}
 		} while (found);
 		m_Processing = false;
-		return success;
+		return e;
+	}
+
+	SN::SN_Error SNI_DelayedProcessor::Check() const
+	{
+		for (SNI_DelayedCall* call : m_FailedList)
+		{
+			return call->GetError();
+		}
+
+		for (SNI_DelayedCall* call: m_DelayedCallList)
+		{
+			if (!call->EmptyWorld())
+			{
+				return SN::SN_Error(false, false, "Incomplete delayed calls.");
+			}
+		}
+
+		return skynet::OK;
 	}
 
 	void SNI_DelayedProcessor::WriteJSON(ostream &p_Stream, SNI::SNI_DisplayOptions &p_DisplayOptions)
@@ -227,14 +257,16 @@ namespace SNI
 	}
 
 	// Create a delayed call and link it in as the value of the variables..
-	void SNI_DelayedProcessor::Run(SN::SN_FunctionDef p_Function, size_t p_NumParams, SN::SN_Expression* p_ParamList, const SNI_Expression* p_Source, SNI_World* p_World)
+	SN::SN_Error SNI_DelayedProcessor::Run(SN::SN_FunctionDef p_Function, size_t p_NumParams, SN::SN_Expression* p_ParamList, const SNI_Expression* p_Source, SNI_World* p_World)
 	{
+		SN::SN_Error e = skynet::OK;
 		SNI_DelayedCall* call = new SNI_DelayedCall(p_Function, p_NumParams, p_ParamList, p_Source, SNI_Frame::Top(), p_World);
 		call->LinkToVariables();
 		call->ExpandedBooleanResult();
 		if (call->CallCardinality() < CARDINALITY_MAX)
 		{
-			if (!call->Run())
+			e = call->Run();
+			if (e.IsError())
 			{
 				m_FailedList.push_back(call);
 			}
@@ -250,5 +282,6 @@ namespace SNI
 			}
 		}
 		SNI_Thread::GetThread()->Breakpoint(SN::DebugStop, SN::DelayId, "Delay Processor", "Delayed call", p_Source, SN::WarningPoint);
+		return e;
 	}
 }

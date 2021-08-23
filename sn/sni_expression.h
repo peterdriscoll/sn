@@ -51,7 +51,7 @@ namespace SNI
 	typedef vector<SNI_Variable *> SNI_VariablePointerList;
 	typedef map<string, SNI_Variable *> SNI_VariablePointerMap;
 
-	typedef void OnErrorHandler(SN::SN_Error p_Result);
+	typedef void OnErrorHandler(bool p_Err, const string& p_Description);
 
 	class SNI_UnifyContext
 	{
@@ -282,6 +282,7 @@ namespace SNI
 
 	private:
 		void HandleAction(SN::SN_Expression p_Result, OnErrorHandler * p_ErrorHandler);
+		virtual SN::SN_Error GetError();
 		static map<string, unsigned long> m_IdMap;
 
 	private:

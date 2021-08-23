@@ -103,7 +103,7 @@ namespace SNI
 				if (p_InterruptPoint != SN::EndPoint)
 				{
 					SN::SN_Error e(false, true, "User abort.");
-					SNI_Thread::TopManager()->ErrorHandler()(e);
+					SNI_Thread::TopManager()->ErrorHandler()(e.IsError(), e.GetDescription());
 					m_DebugAction = skynet::StepInto;
 				}
 				break;

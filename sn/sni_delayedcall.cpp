@@ -80,7 +80,12 @@ namespace SNI
 		return true;
 	}
 
-	bool SNI_DelayedCall::Run()
+	SN::SN_Error SNI_DelayedCall::GetError() const
+	{
+		return m_Error;
+	}
+
+	SN::SN_Error SNI_DelayedCall::Run()
 	{
 		if (m_Frame)
 		{
@@ -98,12 +103,11 @@ namespace SNI
 				SN::SN_Error err = m_World->Fail(IncompatibleValue);
 				if (err.IsError())
 				{
-					return err.IsError();
+					return err;
 				}
-				return true;
 			}
 		}
-		return m_Error.GetBool();
+		return m_Error;
 	}
 
 	bool SNI_DelayedCall::IsCallRequested() const

@@ -19,8 +19,9 @@ namespace SNI
 	class SNI_DelayedCall;
 	typedef list<SNI_DelayedCall*> SNI_DelayedCallList;
 
-	class SNI_DelayedProcessor : public PGCX::Task
+	class SNI_DelayedProcessor : public SNI_Expression, public PGCX::Task
 	{
+		PGC_CLASS(SNI_DelayedProcessor);
 	public:
 		static SNI_DelayedProcessor *GetProcessor();
 
@@ -28,10 +29,13 @@ namespace SNI
 		~SNI_DelayedProcessor();
 
 		void Delay(SN::SN_FunctionDef p_Function, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_Source, SNI_World *p_World = NULL);
-		void Run(SN::SN_FunctionDef p_Function, size_t p_NumParams, SN::SN_Expression* p_ParamList, const SNI_Expression* p_Source, SNI_World* p_World);
+		SN::SN_Error Run(SN::SN_FunctionDef p_Function, size_t p_NumParams, SN::SN_Expression* p_ParamList, const SNI_Expression* p_Source, SNI_World* p_World);
 		void DelayCall(SNI_DelayedCall *p_Call, SNI_World *p_World);
-		bool Process();
+		SN::SN_Error Process();
+		SN::SN_Error Check() const;
 		void Request(SNI_DelayedCall *p_Call);
+		virtual SN::SN_Error DoAssert();
+		virtual SN::SN_Expression DoEvaluate(long p_MetaLevel = 0) const;
 		virtual void Run();
 		virtual bool Finish();
 		virtual void Promote(PGC::PGC_Transaction *p_Transaction);

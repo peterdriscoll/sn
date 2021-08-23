@@ -66,9 +66,9 @@ namespace SNI
 	/*static*/ long SNI_Manager::m_WebServerThreadUsageCount = 0;
 	/*static*/ bool SNI_Manager::m_LogicSetupDone = false;
 
-	/*static*/ void SNI_Manager::ThrowErrorHandler(SN::SN_Error p_Result)
+	/*static*/ void SNI_Manager::ThrowErrorHandler(bool p_Err, const string& p_Description)
 	{
-		throw p_Result;
+		throw SN::SN_Error(!p_Err, false, p_Description);
 	}
 	
 	/*static*/ void SNI_Manager::LogicSetup()
@@ -220,6 +220,11 @@ namespace SNI
 				// m_WebServerThread = NULL;
 			}
 		}
+	}
+
+	SN::SN_Expression SNI_Manager::DelayedCalls()
+	{
+		return SNI_Thread::GetThread()->GetProcessor();
 	}
 
 	void SNI_Manager::Initialize()
