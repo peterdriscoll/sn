@@ -83,6 +83,14 @@ namespace SNI
 
 	SN::SN_Error SNI_DelayedProcessor::DoAssert()
 	{
+		for (SNI_DelayedCall* call : m_FailedList)
+		{
+			SN::SN_Error e = call->GetError();
+			if (e.IsError())
+			{
+				return e;
+			}
+		}
 		return Process();
 	}
 

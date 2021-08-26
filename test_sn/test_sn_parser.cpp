@@ -245,7 +245,8 @@ namespace test_sn
 					SN_LOCAL(s);
 					SN_LOCAL(t);
 					(s + t == String("536. dog")).Assert().Do();
-					(!validate.IsFloatingPoint(s)).Assert().Do();
+					(validate.IsFloatingPoint(s)).Assert().Do();
+					(t == String(". dog")).Evaluate().Do();
 				}
 
 				{
@@ -346,22 +347,24 @@ namespace test_sn
 					SN_LOCAL(s);
 					SN_LOCAL(t);
 					(s + t == String("536. dog")).Assert().Do();
-					(!validate.IsExponential(s)).Assert().Do();
+					(validate.IsExponential(s)).Assert().Do();
+					(t == String(". dog")).Assert().Do();
 				}
 
 				{
 					SN_LOCAL(s);
 					SN_LOCAL(t);
 					(s + t == String("536.89e dog")).Assert().Do();
-					manager.Breakpoint();
-					(!validate.IsExponential(s)).Assert().Do();
+					(validate.IsExponential(s)).Assert().Do();
+					(t == String("e dog")).Assert().Do();
 				}
 
 				{
 					SN_LOCAL(s);
 					SN_LOCAL(t);
 					(s + t == String("536.e45 dog")).Assert().Do();
-					(!validate.IsExponential(s)).Assert().Do();
+					(validate.IsExponential(s)).Assert().Do();
+					(t == String(".e45 dog")).Assert().Do();
 				}
 
 				{

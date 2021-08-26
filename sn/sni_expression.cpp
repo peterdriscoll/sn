@@ -738,24 +738,13 @@ namespace SNI
 
 	void SNI_Expression::HandleAction(SN::SN_Expression p_Result, OnErrorHandler *p_ErrorHandler)
 	{
-		SNI_DelayedProcessor *processor = SNI_Thread::GetThread()->GetProcessor();
-		if (processor)
-		{
-			processor->Run();
-		}
 		SN::SN_Error e = p_Result.GetError();
-		if (!e.GetSNI_Error())
+		if (!e.IsError())
 		{
-			if (p_Result.GetSNI_Bool())
+			SNI_DelayedProcessor* processor = SNI_Thread::GetThread()->GetProcessor();
+			if (processor)
 			{
-				if (!p_Result.GetBool())
-				{
-					e = SN::SN_Error(false, false, "Expected true, returned " + p_Result.DisplayValueSN() + " from " + SN::SN_Expression(this).DisplayValueSN());
-				}
-			}
-			else
-			{
-				e = SN::SN_Error(false, false, "Expected bool or error, returned " + p_Result.DisplayValueSN() + " from " + SN::SN_Expression(this).DisplayValueSN());
+				e = processor->DoAssert();
 			}
 		}
 		if (e.IsError())
