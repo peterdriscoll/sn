@@ -39,7 +39,7 @@ namespace SNI
 		virtual string DisplayCall(long p_Priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const;
 		virtual string SetWatch(const string& p_Caption, SNI_DisplayOptions& p_DisplayOptions) const;
 		void WriteJSON(ostream& p_Stream, const string& p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions& p_DisplayOptions) const;
-		virtual void AddVariables(SNI_VariablePointerMap& p_Map);
+		virtual void AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map);
 		virtual long GetPriority() const;
 
 		virtual bool GetBool() const;

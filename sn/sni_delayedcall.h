@@ -24,6 +24,7 @@ namespace SNI
 
 		virtual string GetTypeName() const;
 		virtual string DisplaySN(long, SNI_DisplayOptions &) const;
+		virtual void AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map);
 
 		virtual size_t CallCardinality() const;
 		virtual void ExpandedBooleanResult();

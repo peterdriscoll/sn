@@ -26,6 +26,7 @@ namespace SNI
 		virtual string GetTypeName() const;
 		virtual string DisplayCpp() const;
 		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
+		virtual void AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map);
 		virtual long GetPriority() const;
 
 		virtual bool IsKnownValue() const;

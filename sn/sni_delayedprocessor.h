@@ -28,6 +28,8 @@ namespace SNI
 		SNI_DelayedProcessor(SNI_Manager *p_Manager);
 		~SNI_DelayedProcessor();
 
+		virtual void AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map);
+
 		void Delay(SN::SN_FunctionDef p_Function, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_Source, SNI_World *p_World = NULL);
 		SN::SN_Error Run(SN::SN_FunctionDef p_Function, size_t p_NumParams, SN::SN_Expression* p_ParamList, const SNI_Expression* p_Source, SNI_World* p_World);
 		void DelayCall(SNI_DelayedCall *p_Call, SNI_World *p_World);

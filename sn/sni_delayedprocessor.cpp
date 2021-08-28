@@ -39,6 +39,17 @@ namespace SNI
 	{
 	}
 
+	void SNI_DelayedProcessor::AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map)
+	{
+		for (SNI_DelayedCall* call : m_DelayedCallList)
+		{
+			if (call)
+			{
+				call->AddVariables(p_MetaLevel, p_Map);
+			}
+		}
+	}
+
 	// Create a delayed call and link it in as the value of the variables..
 	void SNI_DelayedProcessor::Delay(SN::SN_FunctionDef p_Function, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_Source, SNI_World *p_World)
 	{

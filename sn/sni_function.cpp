@@ -128,6 +128,25 @@ namespace SNI
 		return "";
 	}
 
+	void SNI_Function::AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map)
+	{
+		SNI_Expression* function = m_Function;
+		if (function)
+		{
+			function->AddVariables(p_MetaLevel, p_Map);
+		}
+		SNI_Expression* parameter = m_Parameter;
+		if (parameter)
+		{
+			parameter->AddVariables(p_MetaLevel, p_Map);
+		}
+		SNI_Expression* condition = m_Condition;
+		if (condition)
+		{
+			condition->AddVariables(p_MetaLevel, p_Map);
+		}
+	}
+
 	long SNI_Function::GetPriority() const
 	{
 		return 0;

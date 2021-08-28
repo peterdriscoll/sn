@@ -34,6 +34,7 @@ namespace SNI
 		virtual string GetTypeName() const;
 		virtual string DisplayCpp() const;
 		virtual string DisplaySN(long, SNI_DisplayOptions &) const;
+		virtual void AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map);
 		virtual long GetPriority() const;
 
 		virtual size_t Cardinality(size_t p_MaxCardinality = CARDINALITY_MAX) const;

@@ -120,7 +120,7 @@ namespace SNI
 		virtual void Validate();
 		virtual SN::SN_Expression SimplifyValue();
 		virtual void AttachDelayedCall(SNI_DelayedCall * p_Call);
-		virtual void AddVariables(SNI_VariablePointerMap& p_Map);
+		virtual void AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map);
 		virtual bool IsRequested() const;
 		virtual void Request();
 		virtual SNI_WorldSet *GetWorldSet();

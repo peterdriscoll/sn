@@ -180,7 +180,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test String Ref Definition", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(a);
 				SN_DECLARE(b);

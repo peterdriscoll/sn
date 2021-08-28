@@ -79,6 +79,15 @@ namespace SNI
 		return "";
 	}
 
+	void SNI_Meta::AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map)
+	{
+		SNI_Expression* expression = m_Expression;
+		if (expression)
+		{
+			expression->AddVariables(p_MetaLevel+m_DeltaMetaLevel,p_Map);
+		}
+	}
+
 	long SNI_Meta::GetPriority() const
 	{
 		return 0;

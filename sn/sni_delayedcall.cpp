@@ -64,6 +64,11 @@ namespace SNI
 			+ "]]";
 	}
 
+	void SNI_DelayedCall::AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map)
+	{
+		m_Function.GetSNI_FunctionDef()->AddVariablesForCall(p_MetaLevel, p_Map, m_NumParams, m_ParamList);
+	}
+
 	// Estimate the number of values that will be created in the unknown variable. This value may be infinite, represented by LONG_MAX.
 	size_t SNI_DelayedCall::CallCardinality() const
 	{

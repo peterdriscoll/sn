@@ -126,6 +126,25 @@ namespace SNI
 		return "\"" + EscapeStringToCPP(GetSourceString()) + "\"[" + GetStart().GetSNI_Expression()->DisplayValueSN(GetPriority(), p_DisplayOptions) + ".." + GetEnd().GetSNI_Expression()->DisplayValueSN(GetPriority(), p_DisplayOptions) + "]";
 	}
 
+	void SNI_StringRef::AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map)
+	{
+		SNI_String* source = m_Source.GetSNI_String();
+		if (source)
+		{
+			source->AddVariables(p_MetaLevel, p_Map);
+		}
+		SNI_Expression* start = m_Start.GetSNI_Expression();
+		if (start)
+		{
+			start->AddVariables(p_MetaLevel, p_Map);
+		}
+		SNI_Expression* end = m_End.GetSNI_Expression();
+		if (end)
+		{
+			end->AddVariables(p_MetaLevel, p_Map);
+		}
+	}
+
 	bool SNI_StringRef::IsKnownTypeValue() const
 	{
 		return true;

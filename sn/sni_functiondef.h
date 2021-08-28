@@ -82,6 +82,7 @@ namespace SNI
 		virtual void ExpandedBooleanResult(SN::SN_Expression* p_ParamList) const;
 
 		virtual string DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression *p_DebugSource) const;
+		virtual void AddVariablesForCall(long p_MetaLevel, SNI_VariablePointerMap& p_Map, size_t p_NumParams, SN::SN_Expression* p_ParamList) const;
 
 		string GetLogDescription(SN::SN_Expression * p_ParamList) const;
 

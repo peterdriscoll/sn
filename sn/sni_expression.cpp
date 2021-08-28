@@ -313,7 +313,7 @@ namespace SNI
 		return bracketLeft + p_Expression + bracketRight;
 	}
 
-	void SNI_Expression::AddVariables(SNI_VariablePointerMap& p_Map)
+	void SNI_Expression::AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map)
 	{
 	}
 

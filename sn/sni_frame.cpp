@@ -610,7 +610,7 @@ namespace SNI
 	{
 		for (SNI_Variable *v: m_VariableList)
 		{
-			v->AddVariables(p_Map);
+			v->AddVariables(0, p_Map);
 		}
 	}
 

@@ -106,6 +106,25 @@ namespace SNI
 		return Bracket(priority, text, p_DisplayOptions, this);
 	}
 
+	void SNI_Lambda::AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map)
+	{
+		SNI_Expression* formalParameter = m_FormalParameter;
+		if (formalParameter)
+		{
+			formalParameter->AddVariables(p_MetaLevel, p_Map);
+		}
+		SNI_Expression* expression = m_Expression;
+		if (expression)
+		{
+			expression->AddVariables(p_MetaLevel, p_Map);
+		}
+		SNI_Expression* constraintValue = m_ConstraintValue;
+		if (constraintValue)
+		{
+			constraintValue->AddVariables(p_MetaLevel, p_Map);
+		}
+	}
+
 	long SNI_Lambda::GetPriority() const
 	{
 		return 1000;

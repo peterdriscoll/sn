@@ -839,14 +839,14 @@ namespace SNI
 		m_WorldSet = p_WorldSet;
 	}
 
-	void SNI_ValueSet::AddVariables(SNI_VariablePointerMap& p_Map)
+	void SNI_ValueSet::AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map)
 	{
 		for (const SNI_TaggedValue& tv : m_ValueList)
 		{
 			SNI_Expression *v = tv.GetValue().GetSNI_Expression();
 			if (v)
 			{
-				v->AddVariables(p_Map);
+				v->AddVariables(p_MetaLevel, p_Map);
 			}
 		}
 	}

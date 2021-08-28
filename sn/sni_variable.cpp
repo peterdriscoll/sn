@@ -425,16 +425,19 @@ namespace SNI
 		p_Stream << p_Prefix << "\"typetext\" : \"" << GetValueTypeName() << "\"";
 	}
 
-	void SNI_Variable::AddVariables(SNI_VariablePointerMap& p_Map)
+	void SNI_Variable::AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map)
 	{
-		string id = GetDebugId();
-		auto it = p_Map.find(id);
-		if (it == p_Map.end())
+		if (p_MetaLevel <= 0)
 		{
-			p_Map[id] = this;
-			if (m_Value)
+			string id = GetDebugId();
+			auto it = p_Map.find(id);
+			if (it == p_Map.end())
 			{
-				m_Value->AddVariables(p_Map);
+				p_Map[id] = this;
+				if (m_Value)
+				{
+					m_Value->AddVariables(p_MetaLevel, p_Map);
+				}
 			}
 		}
 	}

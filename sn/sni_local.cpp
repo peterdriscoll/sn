@@ -91,6 +91,20 @@ namespace SNI
 		return Bracket(priority, text, p_DisplayOptions, this);
 	}
 
+	void SNI_Local::AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map)
+	{
+		SNI_Expression* localVariable = m_LocalVariable;
+		if (localVariable)
+		{
+			localVariable->AddVariables(p_MetaLevel, p_Map);
+		}
+		SNI_Expression* expression = m_Expression;
+		if (expression)
+		{
+			expression->AddVariables(p_MetaLevel, p_Map);
+		}
+	}
+
 	long SNI_Local::GetPriority() const
 	{
 		return 1000;

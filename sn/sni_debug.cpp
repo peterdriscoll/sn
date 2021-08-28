@@ -46,6 +46,15 @@ namespace SNI
 		return m_Expression->DisplaySN(p_priority, p_DisplayOptions) + ".Debug()";
 	}
 
+	void SNI_Debug::AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map)
+	{
+		SNI_Expression* expression = m_Expression;
+		if (expression)
+		{
+			expression->AddVariables(p_MetaLevel, p_Map);
+		}
+	}
+
 	long SNI_Debug::GetPriority() const
 	{
 		return m_Expression->GetPriority();

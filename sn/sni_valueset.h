@@ -74,7 +74,7 @@ namespace SNI
 		virtual SN::SN_Error AssertValue(const SN::SN_Expression &p_Value);
 		virtual SNI_WorldSet *GetWorldSet();
 		virtual void SetWorldSet(SNI_WorldSet *p_WorldSet);
-		virtual void AddVariables(SNI_VariablePointerMap& p_Map);
+		virtual void AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map);
 
 		virtual SN::SN_Expression Call(SN::SN_ExpressionList * p_ParameterList, long  p_MetaLevel = 0) const;
 		virtual SN::SN_Expression Unify(SN::SN_ExpressionList * p_ParameterList);

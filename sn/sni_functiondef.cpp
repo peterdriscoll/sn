@@ -180,6 +180,19 @@ namespace SNI
 		return Bracket(priority, text, p_DisplayOptions, p_DebugSource);
 	}
 
+	void SNI_FunctionDef::AddVariablesForCall(long p_MetaLevel, SNI_VariablePointerMap& p_Map, size_t p_NumParams, SN::SN_Expression* p_ParamList) const
+	{
+		long depth = GetNumParameters();
+		for (long j = 0; j < depth; j++)
+		{
+			SNI_Expression *p = p_ParamList[j].GetSNI_Expression();
+			if (p)
+			{
+				p->AddVariables(p_MetaLevel, p_Map);
+			}
+		}
+	}
+
 	string SNI_FunctionDef::GetLogDescription(SN::SN_Expression * p_ParamList) const
 	{
 		long depth = GetNumParameters();
