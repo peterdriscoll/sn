@@ -109,6 +109,7 @@ namespace SNI
 		virtual string DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression *p_DebugSource) const;
 		virtual string DisplayUnify(size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression * p_DebugSource) const;
 		virtual string DisplayUnifyExp(SN::SN_ExpressionList * p_ParameterList) const;
+		virtual string DisplayCallExp(const SN::SN_Expression& result, SN::SN_ExpressionList* p_ParameterList) const;
 		virtual SNI_Expression * Clone(long p_MetaLevel, SNI_Frame *p_Frame, bool &p_Changed);
 		virtual SNI_Expression * Clone(const SNI_Expression *p_Function, SNI_Expression *p_Result);
 		virtual SNI_Expression * Copy() const;

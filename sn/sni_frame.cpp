@@ -608,6 +608,16 @@ namespace SNI
 
 	void SNI_Frame::AddVariables(SNI_VariablePointerMap &p_Map)
 	{
+		SNI_Expression* function = m_Function.GetSNI_Expression();
+		if (function)
+		{
+			function->AddVariables(0, p_Map);
+		}
+		SNI_Expression* cloneFunction = m_CloneFunction.GetSNI_Expression();
+		if (cloneFunction)
+		{
+			cloneFunction->AddVariables(0, p_Map);
+		}
 		for (SNI_Variable *v: m_VariableList)
 		{
 			v->AddVariables(0, p_Map);

@@ -429,11 +429,11 @@ namespace SNI
 	{
 		if (p_MetaLevel <= 0)
 		{
-			string id = GetDebugId();
-			auto it = p_Map.find(id);
+			string name = FrameName();
+			auto it = p_Map.find(name);
 			if (it == p_Map.end())
 			{
-				p_Map[id] = this;
+				p_Map[name] = this;
 				if (m_Value)
 				{
 					m_Value->AddVariables(p_MetaLevel, p_Map);
@@ -742,23 +742,35 @@ namespace SNI
 
 		if (m_Value)
 		{
-			SNI_Expression * l_clone = m_Value->Clone(this, NULL);
-			LOG(WriteClonedExpression(SN::DebugLevel, "Call var: ", l_clone));
-			Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Call " + GetName(), this, SN::CallPoint);
+			SNI_Expression* l_clone = m_Value->Clone(this, NULL);
 
-			SN::SN_Expression e = l_clone->Call(p_ParameterList, p_MetaLevel);
+			if (SNI_Thread::TopManager()->TailCallOptimization())
+			{
+				LOG(WriteExp(l_clone));
+			}
+
+			LOG(WriteClonedExpression(SN::DebugLevel, "Call var: ", l_clone));
+
+			SNI_Frame* topFrame = SNI_Frame::Top();
+			topFrame->CreateParameter(0, skynet::Null);
+			for (size_t j = 0; j < p_ParameterList->size(); j++)
+			{
+				topFrame->CreateParameter(j+1, (*p_ParameterList)[j]);
+			}
+
+			//Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Call " + GetName(), this, SN::CallPoint);
+
+			SN::SN_Expression result = l_clone->Call(p_ParameterList, p_MetaLevel);
+
+			//SNI_Variable* resultVar = topFrame->GetResult();
+			//resultVar->SetValue(result);
+			LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": End " + DisplayCallExp(result, p_ParameterList)));
+			//Breakpoint(SN::DebugStop, SN::RightId, GetTypeName(), "Return from call " + GetName(), this, SN::CallPoint);
 			SNI_Frame::Pop();
-			if (e.IsNull())
-			{
-				return LOG_RETURN(context, skynet::Fail);
-			}
-			else
-			{
-				Breakpoint(SN::DebugStop, SN::RightId, GetTypeName(), "Return from call " + GetName(), this, SN::CallPoint);
-			}
-			return LOG_RETURN(context, e);
+
+			return LOG_RETURN(context, result);
 		}
-		return LOG_RETURN(context, dynamic_cast<SNI_Expression *>(SN::SN_Error(false, false, GetTypeName() + " function to call is unknown.").GetSNI_Error()));
+		return LOG_RETURN(context, dynamic_cast<SNI_Expression*>(SN::SN_Error(false, false, GetTypeName() + " function to call is unknown.").GetSNI_Error()));
 	}
 
 	SN::SN_Expression SNI_Variable::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const

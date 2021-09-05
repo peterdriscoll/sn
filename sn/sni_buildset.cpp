@@ -78,6 +78,50 @@ namespace SNI
 		return LOG_RETURN(context, PrimaryFunctionValue(value));
 	}
 
+	SN::SN_Expression SNI_BuildSet::CallArray(SN::SN_Expression* p_ParamList, long p_MetaLevel /* = 0 */) const
+	{
+		if (0 < p_MetaLevel)
+		{
+			return PrimaryFunctionExpression(p_ParamList[PC1_First].DoEvaluate(p_MetaLevel));
+		}
+
+		SNI_Frame::Push(this, NULL);
+		SNI_Frame* topFrame = SNI_Frame::Top();
+		SN::SN_Expression input = p_ParamList[PC1_First];
+
+		topFrame->CreateParameter(0, skynet::Null);
+		topFrame->CreateParameter(PC1_First + 1, input);
+
+		Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Call before checking parameter cardinality", this, SN::CallPoint);
+
+		if (!p_ParamList[PC1_First].IsKnownValue())
+		{
+			input = p_ParamList[PC1_First].DoEvaluate();
+			SNI_Variable* v = topFrame->GetVariable(PU1_First);
+			v->SetValue(input);
+		}
+
+		Breakpoint(SN::DetailStop, SN::ParameterOneId, GetTypeName(), "Input calculated", this, SN::CallPoint);
+
+		SN::SN_Value result;
+		if (!input.IsKnownValue())
+		{
+			result = SN::SN_Error(true, true, "Input to build set is not known.");
+		}
+		else
+		{
+			result = PrimaryFunctionValue(input.GetVariableValue());
+		}
+
+		SNI_Variable* v = topFrame->GetResult();
+		v->SetValue(result);
+
+		Breakpoint(SN::WarningStop, SN::RightId, GetTypeName(), "Call after calculation", this, SN::WarningPoint);
+		SNI_Frame::Pop();
+
+		return result;
+	}
+
 	SN::SN_Expression SNI_BuildSet::UnifyArray(SN::SN_Expression * p_ParamList, const SNI_Expression *p_Source)
 	{
 		SNI_Frame::Push(this, NULL);

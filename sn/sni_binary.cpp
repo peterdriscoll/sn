@@ -88,25 +88,6 @@ namespace SNI
 		return LeftInverseFunctionExpression(p_Left, p_Right);
 	}
 
-	/// - Extract second element from list as right and evaluate it.
-	///   + If unknown then return unknown
-	/// - If meta level is greater than 0
-	///   + Return the expression for the operation (but dont evaluate it).
-	/// - Perfom the operation on the left and right values and return the result.
-	///
-	/// @param p_ParameterList List of two parameters to be concatenated.
-	/// @param p_MetaLevel The meta level; 0 means evaluate the value. > 0 means return the expression to concatenate left and right.
-	/// @retval A value for the operation applied to two values.
-	SN::SN_Expression SNI_Binary::CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel /* = 0 */) const
-	{
-		if (0 < p_MetaLevel)
-		{
-			return PrimaryFunctionExpressionOp(p_ParamList[0].DoEvaluate(p_MetaLevel), p_ParamList[1].DoEvaluate(p_MetaLevel));
-		}
-
-		return SNI_FunctionDef::CallArray(p_ParamList, p_MetaLevel);
-	}
-
 	/// \brief Return an expression or a value for the operation applied to two values.
 	///
 	/// Partial evaluation returns an expression if not all values are known.

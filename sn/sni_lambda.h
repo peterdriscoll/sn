@@ -51,8 +51,6 @@ namespace SNI
 		SNI_Expression * m_FormalParameter;
 		SNI_Expression * m_Expression;
 		SNI_Expression * m_ConstraintValue;
-
-		static long m_Id;
 	};
 
 	typedef vector<SNI_Lambda> SNI_LambdaList;

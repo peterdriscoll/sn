@@ -179,6 +179,7 @@ namespace SNI
 			{
 				++count;
 			}
+			Breakpoint(SN::DebugStop, SN::RightId, GetTypeName(), "Process next value", this, SN::CallPoint);
 		}
 		return SN::SN_Long(count);
 	}

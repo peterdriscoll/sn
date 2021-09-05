@@ -24,7 +24,6 @@ namespace SNI
 		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const = 0;
 		/// @endcond
 
-		virtual SN::SN_Expression CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const;
 
 		virtual SN::SN_Expression PrimaryFunctionExpressionOp(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right) const;

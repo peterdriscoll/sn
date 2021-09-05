@@ -68,12 +68,14 @@ namespace SNI
 		if (p_DisplayOptions.GetLevel() == 0)
 		{
 			p_DisplayOptions.IncrementLevel();
-			string result = GetTypeName() + "(";
+			long param = SN::DerivedOneId;
+			string result = SetBreakPoint(GetTypeName() + "(", p_DisplayOptions, this, param);
 			string delimeter;
 			for (const SN::SN_Expression &call : m_Vector)
 			{
+				++param;
 				result += delimeter + call.GetSNI_Expression()->DisplaySN(priority, p_DisplayOptions);
-				delimeter = ",";
+				delimeter = SetBreakPoint(",", p_DisplayOptions, this, param);
 			}
 			result += ")";
 			p_DisplayOptions.DecrementLevel();
@@ -153,15 +155,28 @@ namespace SNI
 
 		SN::SN_Expression finalResult;
 		bool resultFound = false;
+		size_t numParams = p_ParameterList->size();
 		for (auto &item : m_Vector)
 		{
 			if (item && !item->IsNull())
 			{
-				Breakpoint(SN::DebugStop, (SN::BreakId)(SN::ParameterOneId+id), GetTypeName(), "Call hierarchy " + to_string(id), NULL, SN::CallPoint);
-				++id;
 				SNI_Expression * l_clone = item->Clone(this, NULL);
 				SN::SN_ExpressionList paramListClone = *p_ParameterList;
+				SNI_Frame* topFrame = SNI_Frame::Top();
+				topFrame->CreateParameter(0, skynet::Null);
+				Breakpoint(SN::DebugStop, (SN::BreakId)(SN::DerivedOneId + id++), GetTypeName(), "Call hierarchy " + to_string(id), this, SN::CallPoint);
+
 				SN::SN_Expression result = l_clone->Call(&paramListClone, p_MetaLevel);
+				if (paramListClone.size() < numParams)
+				{
+					numParams = paramListClone.size();
+				}
+
+				SNI_Variable* resultVar = topFrame->GetResult();
+				resultVar->SetValue(result);
+				Breakpoint(SN::DebugStop, (SN::BreakId)(SN::DerivedOneId + id), GetTypeName(), "Call hierarchy " + to_string(id), this, SN::CallPoint);
+				SNI_Frame::Pop();
+
 				if (result.IsError())
 				{
 					return result;
@@ -181,12 +196,14 @@ namespace SNI
 						finalResult = result;
 					}
 				}
+
 			}
 			else
 			{
 				return LOG_RETURN(context, SN::SN_Error(false, false, GetTypeName() + " function to call is unknown."));
 			}
 		}
+		p_ParameterList->resize(numParams);
 		return LOG_RETURN(context, finalResult);
 	}
 
@@ -253,7 +270,7 @@ namespace SNI
 			{
 				if (item && !item->IsNull())
 				{
-					Breakpoint(SN::DebugStop, (SN::BreakId)(SN::ParameterOneId + id), GetTypeName(), "Unify hierarchy " + to_string(id), NULL, SN::CallPoint);
+					Breakpoint(SN::DebugStop, (SN::BreakId)(SN::DerivedOneId + id), GetTypeName(), "Unify hierarchy " + to_string(id), this, SN::CallPoint);
 					++id;
 					SNI_Expression * l_clone = item->Clone(this, NULL);
 					SN::SN_ExpressionList paramListClone = *p_ParameterList;

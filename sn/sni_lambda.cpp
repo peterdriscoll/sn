@@ -16,8 +16,6 @@
 
 namespace SNI
 {
-	/*static*/ long SNI_Lambda::m_Id = 0;
-
 	SNI_Lambda::SNI_Lambda()
 	{
 	}
@@ -81,25 +79,8 @@ namespace SNI
 
 	string SNI_Lambda::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
-		string sValue;
-		if (m_FormalParameter->IsVariable())
-		{
-			const SNI_Expression *value = m_FormalParameter->GetSafeValue();
-			if (value)
-			{
-				if (!dynamic_cast<const SNI_Value *>(value) || value->Cardinality() == 1)
-				{ // Too long to display here.
-					if (p_DisplayOptions.CheckLevel())
-					{
-						p_DisplayOptions.IncrementLevel();
-						sValue = SetBreakPoint(":", p_DisplayOptions, this, SN::ValueId) + value->DisplaySN(GetPriority(), p_DisplayOptions);
-						p_DisplayOptions.DecrementLevel();
-					}
-				}
-			}
-		}
 		p_DisplayOptions.IncrementLevel();
-		string sParam = m_FormalParameter->DisplaySN(GetPriority(), p_DisplayOptions) + sValue;
+		string sParam = m_FormalParameter->DisplaySN(GetPriority(), p_DisplayOptions);
 		p_DisplayOptions.DecrementLevel();
 
 		string text = SetBreakPoint("@", p_DisplayOptions, this, SN::LeftId) + sParam + SetBreakPoint(".", p_DisplayOptions, this, SN::ParameterOneId) + m_Expression->DisplaySN(GetPriority(), p_DisplayOptions);
@@ -158,7 +139,7 @@ namespace SNI
 			{
 				p_Changed = true;
 				l_NewVariable->AssertIsA(m_ConstraintValue);
-				SNI_Expression *lambda = new SNI_Lambda(dynamic_cast<SNI_Expression *>(l_NewVariable), l_expression, m_ConstraintValue, m_Id);
+				SNI_Expression *lambda = new SNI_Lambda(dynamic_cast<SNI_Expression *>(l_NewVariable), l_expression, m_ConstraintValue, GetId());
 				LOG(WriteClonedExpression(SN::DebugLevel, "", lambda));
 				return lambda;
 			}
@@ -170,7 +151,7 @@ namespace SNI
 			{
 				p_Changed = true;
 				m_FormalParameter->AssertIsA(m_ConstraintValue);
-				SNI_Expression *lambda = new SNI_Lambda(m_FormalParameter, l_expression, m_ConstraintValue, m_Id);
+				SNI_Expression *lambda = new SNI_Lambda(m_FormalParameter, l_expression, m_ConstraintValue, GetId());
 				return lambda;
 			}
 		}
@@ -203,8 +184,7 @@ namespace SNI
 	{
 		LOGGING(SN::LogContext context(DisplaySN0() + "SNI_Lambda::Call ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
 
-		SNI_Expression *p_DebugSource = NULL;
-		Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Call", NULL, SN::CallPoint);
+		Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Call", this, SN::CallPoint);
 
 		ASSERTM(p_ParameterList->size() >0, "Cannot call a lambda without a parameter");
 		SN::SN_Expression param = p_ParameterList->back().GetSNI_Expression();
@@ -226,16 +206,23 @@ namespace SNI
 		SN::SN_Expression result;
 		if (p_ParameterList->size() > 0)
 		{
-			Breakpoint(SN::DebugStop, SN::ParameterOneId, GetTypeName(), "Call before calculation", p_DebugSource, SN::CallPoint);
+			Breakpoint(SN::DebugStop, SN::ParameterOneId, GetTypeName(), "Call before calculation", this, SN::CallPoint);
 			result = m_Expression->Call(p_ParameterList, p_MetaLevel);
 		}
 		else
 		{
-			Breakpoint(SN::DebugStop, SN::ParameterOneId, GetTypeName(), "Call before evaluate", p_DebugSource, SN::CallPoint);
-			result = m_Expression->DoEvaluate(p_MetaLevel);
+			Breakpoint(SN::DebugStop, SN::ParameterOneId, GetTypeName(), "Call before evaluate", this, SN::CallPoint);
+			if (SNI_Thread::TopManager()->TailCallOptimization())
+			{
+				result = m_Expression; // Let the DoEvaluate lower down the stack evaluate it.
+			}
+			else
+			{
+				result = m_Expression->DoEvaluate(p_MetaLevel);
+			}
 		}
 
-		Breakpoint(SN::DebugStop, SN::RightId, GetTypeName(), "Call return", p_DebugSource, SN::CallPoint);
+		Breakpoint(SN::DebugStop, SN::RightId, GetTypeName(), "Call return", this, SN::CallPoint);
 
 		return LOG_RETURN(context, result);
 	}

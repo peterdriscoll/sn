@@ -58,7 +58,14 @@ namespace SNI
 
 	SN::SN_Expression SNI_PartialEvaluate::CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel /* = 0 */) const
 	{
-		return p_ParamList[PC1_First].DoPartialEvaluate();
+		SN::SN_Expression input = p_ParamList[PC1_First].DoPartialEvaluate(p_MetaLevel);
+
+		if (0 < p_MetaLevel)
+		{
+			return PrimaryFunctionExpression(input.GetVariableValue());
+		}
+
+		return input;
 	}
 
 	SN::SN_Expression SNI_PartialEvaluate::UnifyArray(SN::SN_Expression * p_ParamList, const SNI_Expression *p_Source)

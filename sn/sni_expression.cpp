@@ -143,7 +143,7 @@ namespace SNI
 			}
 			else
 			{
-				m_Id = m_IdMap[typeNameString]++;
+				m_Id = ++m_IdMap[typeNameString];
 			}
 		}
 	}
@@ -243,7 +243,7 @@ namespace SNI
 		return "dummy"; // p_ParamList[0].DisplaySN() + " = " + DisplayCall(0, displayOptions, p_NumParams - 1, p_ParamList + 1, NULL);
 	}
 
-	string SNI_Expression::DisplayUnifyExp(SN::SN_ExpressionList * p_ParameterList) const
+	string SNI_Expression::DisplayUnifyExp(SN::SN_ExpressionList* p_ParameterList) const
 	{
 		size_t numParams = p_ParameterList->size();
 		SNI_DisplayOptions displayOptions(doTextOnly);
@@ -251,6 +251,18 @@ namespace SNI
 		for (size_t j = 1; j < numParams; j++)
 		{
 			result += " " + (*p_ParameterList)[numParams - j].DisplaySN();
+		}
+		return result;
+	}
+
+	string SNI_Expression::DisplayCallExp(const SN::SN_Expression & p_Result, SN::SN_ExpressionList* p_ParameterList) const
+	{
+		size_t numParams = p_ParameterList->size();
+		SNI_DisplayOptions displayOptions(doTextOnly);
+		string result = p_Result.DisplaySN() + " = " + DisplayValueSN(0, displayOptions);
+		for (size_t j = 0; j < numParams; j++)
+		{
+			result += " " + (*p_ParameterList)[numParams - j - 1].DisplaySN();
 		}
 		return result;
 	}

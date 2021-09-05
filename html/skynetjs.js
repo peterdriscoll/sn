@@ -133,32 +133,40 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
 
     // Load the call stack if the detail for it is open.
     $scope.loadcallstack = function (opening) {
-        var field = $document[0].getElementById('callstackid');
-        if ($scope.callstackstepcount !== $scope.currentstepcount) {
-            $scope.callstackstepcount = $scope.currentstepcount;
-            $scope.startcallstackframes = 0;
+        if ($scope.countcalls == 0)
+        {
+            $scope.callstack = {};
             $scope.displayedcallstackframes = 0;
         }
-        if (opening && !field.open || !opening && field.open) {
-            if ($scope.startcallstackframes < $scope.maxcallstackframes && $scope.startcallstackframes < $scope.countcalls) {
-                $http.get(home + 'callstack.json?threadnum=' + $scope.threadnum + '&maxcallstackframes=' + $scope.bufcallstackframes + '&startcallstackframes=' + $scope.startcallstackframes + "&stepcount=" + $scope.callstackstepcount)
-                    .then(function (response) {
-                        if ($scope.callstackstepcount === $scope.currentstepcount && $scope.callstackstepcount == response.data.stepcount) {
-                            if ($scope.startcallstackframes === 0) {
-                                $scope.displayedcallstackframes = 0;
-                                $scope.callstack = response.data.records;
-                            } else {
-                                for (var i = 0; i < response.data.records.length; i++) {
-                                    $scope.callstack.push(response.data.records[i]);
+        else
+        {
+            var field = $document[0].getElementById('callstackid');
+            if ($scope.callstackstepcount !== $scope.currentstepcount) {
+                $scope.callstackstepcount = $scope.currentstepcount;
+                $scope.startcallstackframes = 0;
+                $scope.displayedcallstackframes = 0;
+            }
+            if (opening && !field.open || !opening && field.open) {
+                if ($scope.startcallstackframes < $scope.maxcallstackframes && $scope.startcallstackframes < $scope.countcalls) {
+                    $http.get(home + 'callstack.json?threadnum=' + $scope.threadnum + '&maxcallstackframes=' + $scope.bufcallstackframes + '&startcallstackframes=' + $scope.startcallstackframes + "&stepcount=" + $scope.callstackstepcount)
+                        .then(function (response) {
+                            if ($scope.callstackstepcount === $scope.currentstepcount && $scope.callstackstepcount == response.data.stepcount) {
+                                if ($scope.startcallstackframes === 0) {
+                                    $scope.displayedcallstackframes = 0;
+                                    $scope.callstack = response.data.records;
+                                } else {
+                                    for (var i = 0; i < response.data.records.length; i++) {
+                                        $scope.callstack.push(response.data.records[i]);
+                                    }
+                                }
+                                $scope.displayedcallstackframes += response.data.records.length;
+                                $scope.startcallstackframes += $scope.bufcallstackframes;
+                                if ($scope.startcallstackframes < $scope.maxcallstackframes && $scope.startcallstackframes < $scope.countcalls) {
+                                    $scope.loadcallstack(false);
                                 }
                             }
-                            $scope.displayedcallstackframes += response.data.records.length;
-                            $scope.startcallstackframes += $scope.bufcallstackframes;
-                            if ($scope.startcallstackframes < $scope.maxcallstackframes && $scope.startcallstackframes < $scope.countcalls) {
-                                $scope.loadcallstack(false);
-                            }
-                        }
-                    });
+                        });
+                }
             }
         }
     };

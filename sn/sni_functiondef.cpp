@@ -263,6 +263,7 @@ namespace SNI
 	{
 		return SN::SN_Error(false, false, GetTypeName() + ": PrimaryFunctionExpression 3 -Function does not have three parameters.");
 	}
+
 	SN::SN_Expression * SNI_FunctionDef::LoadParametersCall(SN::SN_ExpressionList * p_ParameterList) const
 	{
 		size_t numParams = GetNumParameters()-1;
@@ -302,8 +303,25 @@ namespace SNI
 		const SNI_Expression *p_Source = this;
 		long depth = GetNumParameters() - 1;
 		SN::SN_Expression *inputList = new SN::SN_Expression[depth];
+		SNI_Frame::Push(this, NULL);
+		SNI_Frame* topFrame = SNI_Frame::Top();
+
+		SNI_DisplayOptions displayOptions(doTextOnly);
+		LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": Start " + DisplayUnify(depth, p_ParamList, p_Source)));
+
+		if (0 < p_MetaLevel)
+		{
+			SN::SN_Expression function(this);
+			for (long j = 0; j < depth; j++)
+			{
+				function = SN::SN_Function(function, p_ParamList[j].DoEvaluate(p_MetaLevel));
+			}
+			return function;
+		}
+
 		for (long j = 0; j < depth; j++)
 		{
+			topFrame->CreateParameter(j, p_ParamList[j]);
 			inputList[j] = p_ParamList[j].GetVariableValue();
 		}
 		Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Call", p_Source, SN::CallPoint);
@@ -316,11 +334,12 @@ namespace SNI
 				card = CardinalityOfCall(depth, inputList);
 				if (maxCard < card)
 				{
-					inputList[j] = p_ParamList[j].DoEvaluate();
+					inputList[j] = p_ParamList[j].DoEvaluate(p_MetaLevel);
 				}
 			}
 			Breakpoint(SN::DetailStop, (SN::BreakId)(SN::ParameterOneId + j), GetTypeName(), "Call parameter:" + to_string(j), p_Source, SN::ParameterPoint);
 		}
+
 		card = CardinalityOfCall(depth, inputList);
 		SN::SN_Value result;
 		if (maxCard < card)
@@ -331,9 +350,14 @@ namespace SNI
 		{
 			result = ForEachCall(card, depth, inputList);
 		}
+
+		SNI_Variable* resultVar = topFrame->GetResult();
+		resultVar->SetValue(result);
 		Breakpoint(SN::DebugStop, SN::RightId, GetTypeName(), "Result calculated", p_Source, SN::CallPoint);
+
 		delete[] inputList;
 		result.GetSNI_Expression()->Validate();
+		SNI_Frame::Pop();
 		return result;
 	}
 

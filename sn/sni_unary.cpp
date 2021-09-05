@@ -91,16 +91,6 @@ namespace SNI
 		return PrimaryFunctionExpression(p_Param);
 	}
 
-	SN::SN_Expression SNI_Unary::CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel /* = 0 */) const
-	{
-		if (0 < p_MetaLevel)
-		{
-			return PrimaryFunctionExpressionOp(p_ParamList[0].DoEvaluate(p_MetaLevel));
-		}
-
-		return SNI_FunctionDef::CallArray(p_ParamList, p_MetaLevel);
-	}
-
 	SN::SN_Expression SNI_Unary::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
 		LOGGING(SN::LogContext context("SNI_Unary::PartialCall ( " + DisplaySnExpressionList(p_ParameterList) + " )"));

@@ -209,7 +209,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Pythagoras", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				SN_DECLARE(X);
 				(Double(245.67).Square() + X.Square() == Double(357.56).Square()).Assert().Do();
