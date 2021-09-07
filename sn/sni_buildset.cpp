@@ -90,7 +90,7 @@ namespace SNI
 		SN::SN_Expression input = p_ParamList[PC1_First];
 
 		topFrame->CreateParameter(0, skynet::Null);
-		topFrame->CreateParameter(PC1_First + 1, input);
+		topFrame->CreateParameter(PU1_First, input);
 
 		Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Call before checking parameter cardinality", this, SN::CallPoint);
 

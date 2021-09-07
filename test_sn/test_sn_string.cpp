@@ -409,6 +409,7 @@ namespace test_sn
 				SN_DECLARE(firstClause);
 				SN_DECLARE(secondClause);
 				SN_DECLARE(sentence);
+
 				(firstClause + String(" and ") + secondClause == String("I love dogs and cats and dogs love me.")).Assert().Do();
 				string firstClause_string_vs = firstClause.DisplaySN();
 				string secondClause_string_vs = secondClause.DisplaySN();
