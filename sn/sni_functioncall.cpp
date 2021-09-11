@@ -67,7 +67,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_FunctionCall::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		if (p_ParameterList->size() <= 2)
+		if (p_ParameterList->size() < 2)
 		{
 			return SN::SN_Error(false, false, "FunctionCall operator must have two parameters.");
 		}
