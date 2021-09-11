@@ -65,6 +65,7 @@ namespace SNI
 		{
 			return e;
 		}
+		m_Result.GetSNI_Expression()->Complete();
 		return m_Result.SimplifyValue();
 	}
 }

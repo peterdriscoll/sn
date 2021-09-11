@@ -20,7 +20,7 @@ namespace test_sn
 
 		static void AssertErrorHandler(bool p_Err, const string& p_Description)
 		{
-			Assert::IsTrue(p_Err, wstring(p_Description.begin(), p_Description.end()).c_str());
+			Assert::IsTrue(!p_Err, wstring(p_Description.begin(), p_Description.end()).c_str());
 		}
 
 		void Initialize()
@@ -63,6 +63,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Set Evaluate", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
 				Expression a;
 				(((Long(2) || Long(-2))*(Long(3) || Long(-3))).BuildSet() == ((Long(6) || Long(-6)).BuildSet())).Evaluate().Do();

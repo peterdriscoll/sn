@@ -293,14 +293,13 @@ namespace SNI
 	SN::SN_Expression SNI_FunctionDef::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
 		SN::SN_Expression *paramList = LoadParametersCall(p_ParameterList);
-		SN::SN_Expression result = CallArray(paramList, p_MetaLevel);
+		SN::SN_Expression result = CallArray(paramList, p_MetaLevel, this);
 		delete[] paramList;
 		return result;
 	}
 
-	SN::SN_Expression SNI_FunctionDef::CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel /* = 0 */) const
+	SN::SN_Expression SNI_FunctionDef::CallArray(SN::SN_Expression* p_ParamList, long p_MetaLevel, const SNI_Expression* p_Source) const
 	{
-		const SNI_Expression *p_Source = this;
 		long depth = GetNumParameters() - 1;
 		SN::SN_Expression *inputList = new SN::SN_Expression[depth];
 		SNI_Frame::Push(this, NULL);
@@ -321,7 +320,7 @@ namespace SNI
 
 		for (long j = 0; j < depth; j++)
 		{
-			topFrame->CreateParameter(j, p_ParamList[j]);
+			topFrame->CreateParameter(j+1, p_ParamList[j]);
 			inputList[j] = p_ParamList[j].GetVariableValue();
 		}
 		Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Call", p_Source, SN::CallPoint);
@@ -335,6 +334,8 @@ namespace SNI
 				if (maxCard < card)
 				{
 					inputList[j] = p_ParamList[j].DoEvaluate(p_MetaLevel);
+					SNI_Variable* v = topFrame->GetVariable(j+1);
+					v->SetValue(inputList[j]);
 				}
 			}
 			Breakpoint(SN::DetailStop, (SN::BreakId)(SN::ParameterOneId + j), GetTypeName(), "Call parameter:" + to_string(j), p_Source, SN::ParameterPoint);
@@ -344,7 +345,7 @@ namespace SNI
 		SN::SN_Value result;
 		if (maxCard < card)
 		{
-			result = SN::SN_Error(true, true, "Cardinality " + to_string(card) + " exceeds max cardinality " + to_string(maxCard));
+			result = SN::SN_Error(false, true, "Cardinality " + to_string(card) + " exceeds max cardinality " + to_string(maxCard));
 		}
 		else
 		{

@@ -20,7 +20,7 @@ namespace test_sn
 
 		static void AssertErrorHandler(bool p_Err, const string& p_Description)
 		{
-			Assert::IsTrue(p_Err, wstring(p_Description.begin(), p_Description.end()).c_str());
+			Assert::IsTrue(!p_Err, wstring(p_Description.begin(), p_Description.end()).c_str());
 		}
 
 		void Initialize()

@@ -56,7 +56,7 @@ namespace SNI
 		return p_Result.AssertValue(p_value.DoPartialEvaluate());
 	}
 
-	SN::SN_Expression SNI_Evaluate::CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel /* = 0 */) const
+	SN::SN_Expression SNI_Evaluate::CallArray(SN::SN_Expression* p_ParamList, long p_MetaLevel, const SNI_Expression* p_Source) const
 	{
 		SN::SN_Expression input = p_ParamList[PC1_First].DoEvaluate(p_MetaLevel);
 
@@ -75,16 +75,15 @@ namespace SNI
 		Breakpoint(SN::DebugStop, SN::CallId, GetTypeName(), "Evaluate call", this, SN::CallPoint);
 
 		SN::SN_Expression result = clone.DoEvaluate();
-		SNI_Frame::Pop();
+
+		SNI_Frame* topFrame = SNI_Frame::Top();
+		SNI_Variable* resultVar = topFrame->GetResult();
+		resultVar->SetValue(result);
 
 		Breakpoint(SN::DebugStop, SN::ReturnId, GetTypeName(), "Evaluate return", this, SN::CallPoint);
 
-//		if (result.GetSNI_Error())
-//		{
-//			SN::SN_Error r = result.GetSNI_Error();
-//			SN::SN_Error e(false, r.GetDelay(), "Unknown result: " + r.GetDescription());
-//			return p_ParamList[PU1_Result].AssertValue(e);
-//		}
+		SNI_Frame::Pop();
+
 		return p_ParamList[PU1_Result].AssertValue(result);
 	}
 }

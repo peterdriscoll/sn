@@ -24,7 +24,7 @@ namespace SNI
 		virtual SN::SN_Expression PrimaryFunctionExpression(const SN::SN_Expression &p_Left) const;
 
 		virtual SN::SN_Error PartialUnifyInternal(SN::SN_Expression & p_value, SN::SN_Expression & p_Result);
-		virtual SN::SN_Expression CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel) const;
+		virtual SN::SN_Expression CallArray(SN::SN_Expression* p_ParamList, long p_MetaLevel, const SNI_Expression* p_Source) const;
 		virtual SN::SN_Expression UnifyArray(SN::SN_Expression * p_ParamList, const SNI_Expression *p_Source);
 	};
 }

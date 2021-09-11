@@ -19,10 +19,7 @@ namespace SNI
 	/*static*/ SNI_Frame *SNI_Frame::Push(const SNI_Expression *p_Function, SNI_Expression *p_Result)
 	{
 		SNI_Frame *newFrame = new SNI_Frame(p_Function);
-		if (p_Result)
-		{
-			newFrame->CreateParameter(0, p_Result);
-		}
+		newFrame->CreateParameter(0, p_Result);
 		PushFrame(newFrame);
 		return newFrame;
 	}

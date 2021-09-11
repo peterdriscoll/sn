@@ -78,7 +78,7 @@ namespace SNI
 		return LOG_RETURN(context, PrimaryFunctionValue(value));
 	}
 
-	SN::SN_Expression SNI_BuildSet::CallArray(SN::SN_Expression* p_ParamList, long p_MetaLevel /* = 0 */) const
+	SN::SN_Expression SNI_BuildSet::CallArray(SN::SN_Expression* p_ParamList, long p_MetaLevel, const SNI_Expression* p_Source) const
 	{
 		if (0 < p_MetaLevel)
 		{
@@ -89,10 +89,9 @@ namespace SNI
 		SNI_Frame* topFrame = SNI_Frame::Top();
 		SN::SN_Expression input = p_ParamList[PC1_First];
 
-		topFrame->CreateParameter(0, skynet::Null);
 		topFrame->CreateParameter(PU1_First, input);
 
-		Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Call before checking parameter cardinality", this, SN::CallPoint);
+		Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Call before checking parameter cardinality", p_Source, SN::CallPoint);
 
 		if (!p_ParamList[PC1_First].IsKnownValue())
 		{
@@ -101,7 +100,7 @@ namespace SNI
 			v->SetValue(input);
 		}
 
-		Breakpoint(SN::DetailStop, SN::ParameterOneId, GetTypeName(), "Input calculated", this, SN::CallPoint);
+		Breakpoint(SN::DetailStop, SN::ParameterOneId, GetTypeName(), "Input calculated", p_Source, SN::CallPoint);
 
 		SN::SN_Value result;
 		if (!input.IsKnownValue())

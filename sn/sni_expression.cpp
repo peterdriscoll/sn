@@ -325,6 +325,46 @@ namespace SNI
 		return bracketLeft + p_Expression + bracketRight;
 	}
 
+	SNI_Expression* SNI_Expression::FlattenStackCall(long p_MetaLevel, SNI_Expression* p_Function, SN::SN_ExpressionList* p_ParameterList) const
+	{
+		// Flatten the call stack, by returning the function to be called from Unify, instead of calling it there.
+		while (p_MetaLevel == 0 && p_Function && !p_Function->IsValue() || (p_ParameterList && p_ParameterList->size()))
+		{
+			if (!p_ParameterList)
+			{
+				p_ParameterList = new SN::SN_ExpressionList();
+			}
+			SNI_FunctionDef* functionDef = dynamic_cast<SNI_FunctionDef*>(p_Function);
+			if (functionDef)
+			{
+				if (functionDef->GetNumParameters() - 1 == p_ParameterList->size())
+				{
+					SN::SN_Expression* param_List = functionDef->LoadParametersCall(p_ParameterList);
+					delete p_ParameterList;
+					p_ParameterList = NULL;
+					p_Function = functionDef->CallArray(param_List, p_MetaLevel, this).GetSNI_Expression();
+					delete[] param_List;
+				}
+				else
+				{
+					p_Function = functionDef->Call(p_ParameterList, p_MetaLevel).GetSNI_Expression();
+				}
+			}
+			else
+			{
+				if (!p_Function->IsValue() || p_ParameterList->size() != 0)
+				{
+					p_Function = p_Function->Call(p_ParameterList, p_MetaLevel).GetSNI_Expression();
+				}
+			}
+		}
+		if (p_ParameterList)
+		{
+			delete p_ParameterList;
+		}
+		return LOG_RETURN(context, p_Function);
+	}
+
 	void SNI_Expression::AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map)
 	{
 	}

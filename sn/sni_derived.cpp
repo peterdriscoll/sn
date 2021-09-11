@@ -155,22 +155,22 @@ namespace SNI
 
 		SN::SN_Expression finalResult;
 		bool resultFound = false;
-		size_t numParams = p_ParameterList->size();
+		size_t numParams = 0; // p_ParameterList->size();
 		for (auto &item : m_Vector)
 		{
 			if (item && !item->IsNull())
 			{
 				SNI_Expression * l_clone = item->Clone(this, NULL);
-				SN::SN_ExpressionList paramListClone = *p_ParameterList;
+				SN::SN_ExpressionList* paramListClone = new SN::SN_ExpressionList(*p_ParameterList);
 				SNI_Frame* topFrame = SNI_Frame::Top();
-				topFrame->CreateParameter(0, skynet::Null);
 				Breakpoint(SN::DebugStop, (SN::BreakId)(SN::DerivedOneId + id++), GetTypeName(), "Call hierarchy " + to_string(id), this, SN::CallPoint);
 
-				SN::SN_Expression result = l_clone->Call(&paramListClone, p_MetaLevel);
-				if (paramListClone.size() < numParams)
-				{
-					numParams = paramListClone.size();
-				}
+				SN::SN_Expression result = FlattenStackCall(p_MetaLevel, l_clone, paramListClone);
+
+				//if (paramListClone->size() < numParams)
+				//{
+				//	numParams = paramListClone->size();
+				//}
 
 				SNI_Variable* resultVar = topFrame->GetResult();
 				resultVar->SetValue(result);
@@ -181,22 +181,29 @@ namespace SNI
 				{
 					return result;
 				}
-				if (result.IsKnownValue())
+				if (!result.IsNullValue())
 				{
-					if (resultFound)
+					if (result.IsKnownValue())
 					{
-						if (!finalResult.Equivalent(result.GetSNI_Expression()))
+						if (resultFound)
 						{
-							return LOG_RETURN(context, SN::SN_Error(false, false, GetTypeName() + " Polymorphic calls gave different results. Did you mean to use Virtual instead of Derived?"));
+							if (!finalResult.Equivalent(result.GetSNI_Expression()))
+							{
+								return LOG_RETURN(context, SN::SN_Error(false, false, GetTypeName() + " Polymorphic calls gave different results. Did you mean to use Virtual instead of Derived?"));
+							}
+						}
+						else
+						{
+							resultFound = true;
+							finalResult = result;
 						}
 					}
 					else
 					{
-						resultFound = true;
-						finalResult = result;
+						p_ParameterList->resize(numParams);
+						return result;
 					}
 				}
-
 			}
 			else
 			{

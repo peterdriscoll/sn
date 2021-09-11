@@ -56,7 +56,7 @@ namespace SNI
 		return p_Result.AssertValue(p_value.DoPartialEvaluate(0));
 	}
 
-	SN::SN_Expression SNI_PartialEvaluate::CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel /* = 0 */) const
+	SN::SN_Expression SNI_PartialEvaluate::CallArray(SN::SN_Expression* p_ParamList, long p_MetaLevel, const SNI_Expression* p_Source) const
 	{
 		SN::SN_Expression input = p_ParamList[PC1_First].DoPartialEvaluate(p_MetaLevel);
 

@@ -61,7 +61,7 @@ namespace SNI
 		return skynet::Fail;
 	}
 
-	SN::SN_Expression SNI_PartialAssert::CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel /* = 0 */) const
+	SN::SN_Expression SNI_PartialAssert::CallArray(SN::SN_Expression* p_ParamList, long p_MetaLevel, const SNI_Expression* p_Source) const
 	{
 		SN::SN_Expression input = p_ParamList[PC1_First].DoPartialEvaluate(p_MetaLevel);
 

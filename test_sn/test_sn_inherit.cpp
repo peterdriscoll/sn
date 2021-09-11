@@ -20,7 +20,7 @@ namespace test_sn
 
 		static void AssertErrorHandler(bool p_Err, const string& p_Description)
 		{
-			Assert::IsTrue(p_Err, wstring(p_Description.begin(), p_Description.end()).c_str());
+			Assert::IsTrue(!p_Err, wstring(p_Description.begin(), p_Description.end()).c_str());
 		}
 
 		void Initialize()
@@ -285,6 +285,7 @@ namespace test_sn
 				(fib(Long(0)) == Long(1)).Evaluate().Do();
 				(fib(Long(1)) == Long(1)).Evaluate().Do();
 				(fib(Long(2)) == Long(2)).Evaluate().Do();
+
 				(fib(Long(3)) == Long(3)).Evaluate().Do();
 				(fib(Long(4)) == Long(5)).Evaluate().Do();
 				(fib(Long(5)) == Long(8)).Evaluate().Do();

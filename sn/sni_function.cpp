@@ -194,48 +194,12 @@ namespace SNI
 
 	SN::SN_Expression SNI_Function::DoEvaluate(long p_MetaLevel /* = 0 */) const
 	{
-		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Function::DoEvaluate (" + to_string(p_MetaLevel) +")"));
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Function::DoEvaluate (" + to_string(p_MetaLevel) + ")"));
 
 		SN::SN_ExpressionList* l_ParameterList = new SN::SN_ExpressionList();
 		l_ParameterList->push_back(m_Parameter);
 
-		// Flatten the call stack, by returning the function to be called from Unify, instead of calling it there.
-		SNI_Expression* function = m_Function;
-		while (p_MetaLevel == 0 && function && !function->IsValue() || (l_ParameterList && l_ParameterList->size()))
-		{
-			if (!l_ParameterList)
-			{
-				l_ParameterList = new SN::SN_ExpressionList();
-			}
-			SNI_FunctionDef* functionDef = dynamic_cast<SNI_FunctionDef*>(function);
-			if (functionDef)
-			{
-				if (functionDef->GetNumParameters()-1 == l_ParameterList->size())
-				{
-					SN::SN_Expression* param_List = functionDef->LoadParametersCall(l_ParameterList);
-					delete l_ParameterList;
-					l_ParameterList = NULL;
-					function = functionDef->CallArray(param_List, p_MetaLevel).GetSNI_Expression();
-					delete[] param_List;
-				}
-				else
-				{
-					function = functionDef->Call(l_ParameterList, p_MetaLevel).GetSNI_Expression();
-				}
-			}
-			else
-			{
-				if (!function->IsValue() || l_ParameterList->size() != 0)
-				{
-					function = function->Call(l_ParameterList, p_MetaLevel).GetSNI_Expression();
-				}
-			}
-		}
-		if (l_ParameterList)
-		{
-			delete l_ParameterList;;
-		}
-		return LOG_RETURN(context, function);
+		return FlattenStackCall(p_MetaLevel, m_Function, l_ParameterList);
 	}
 
 	SN::SN_Expression SNI_Function::DoPartialEvaluate(long p_MetaLevel /* = 0 */) const

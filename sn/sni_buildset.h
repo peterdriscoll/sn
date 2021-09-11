@@ -24,7 +24,7 @@ namespace SNI
 		virtual SN::SN_Expression InverseFunctionExpression(const SN::SN_Expression &p_Param) const;
 
 		virtual SN::SN_Expression Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel) const;
-		virtual SN::SN_Expression CallArray(SN::SN_Expression* p_ParamList, long p_MetaLevel) const;
+		virtual SN::SN_Expression CallArray(SN::SN_Expression* p_ParamList, long p_MetaLevel, const SNI_Expression* p_Source) const;
 		virtual SN::SN_Expression UnifyArray(SN::SN_Expression * p_ParamList, const SNI_Expression *p_Source);
 	};
 }

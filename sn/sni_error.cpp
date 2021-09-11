@@ -99,15 +99,19 @@ namespace SNI
 		return "Error(" + m_Description + ")";
 	}
 
-	string SNI_Error::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	string SNI_Error::DisplaySN(long /*priority*/, SNI_DisplayOptions & p_DisplayOptions) const
 	{
 		if (m_Success)
 		{
-			return "true";
+			return "OK";
 		}
-		else if (m_Description.empty())
+		if (m_Delay && p_DisplayOptions.GetDebugHTML() == doTextOnly)
 		{
-			return "false";
+			return "delayed";
+		}
+		if (m_Description.empty())
+		{
+			return "fail";
 		}
 		return "Error(\"" + m_Description + "\")";
 	}

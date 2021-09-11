@@ -281,6 +281,8 @@ namespace SNI
 
 		string Bracket(long p_Priority, const string &p_Expression, SNI_DisplayOptions & p_DisplayOptions, const SNI_Expression *p_DebugSource) const;
 
+		SNI_Expression* FlattenStackCall(long p_MetaLevel, SNI_Expression* function, SN::SN_ExpressionList* l_ParameterList) const;
+
 	private:
 		void HandleAction(SN::SN_Expression p_Result, OnErrorHandler * p_ErrorHandler);
 		virtual SN::SN_Error GetError();

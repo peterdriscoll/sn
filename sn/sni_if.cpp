@@ -96,29 +96,45 @@ namespace SNI
 	/// @param p_ParameterList List of three parameters (condition, positive case, negative case).
 	/// @param p_MetaLevel The meta level; 0 means evaluate the value. > 0 means return the expression to concatenate left and right.
 	/// @retval A value, expression (for meta code) or null.
-	SN::SN_Expression SNI_If::CallArray(SN::SN_Expression * p_ParamList, long p_MetaLevel /* = 0 */) const
+	SN::SN_Expression SNI_If::CallArray(SN::SN_Expression* p_ParamList, long p_MetaLevel, const SNI_Expression* p_Source) const
 	{
-		const SNI_Expression *p_Source = this; //pig
+		if (0 < p_MetaLevel)
+		{
+			SN::SN_Value condition = p_ParamList[0].DoEvaluate(p_MetaLevel);
+			SN::SN_Expression positiveCase = p_ParamList[1].DoEvaluate(p_MetaLevel);
+			SN::SN_Expression negativeCase = p_ParamList[2].DoEvaluate(p_MetaLevel);
+			return PrimaryFunctionExpression(condition, positiveCase, negativeCase);
+		}
+
+		SNI_Frame::Push(this, NULL);
+
+		SNI_DisplayOptions displayOptions(doTextOnly);
+		// LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": Start " + DisplayCall(GetNumParameters(), p_ParameterList, p_Source)));
+
+		SNI_Frame* topFrame = SNI_Frame::Top();
+		SNI_Variable* result_param = topFrame->GetResult();
+		SNI_Variable* condition_param = topFrame->CreateParameterByName("condition", p_ParamList[0]);
+		SNI_Variable* positive_param = topFrame->CreateParameterByName("positive", p_ParamList[1]);
+		SNI_Variable* negative_param = topFrame->CreateParameterByName("negative", p_ParamList[2]);
+
 		Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Call", p_Source, SN::CallPoint);
 
 		SN::SN_Value condition = p_ParamList[0].DoEvaluate(p_MetaLevel);
+		condition_param->SetValue(condition);
 		if (condition.IsNull())
 		{
+			SNI_Frame::Pop();
 			return condition;
 		}
 
-		if (0 < p_MetaLevel)
-		{
-			SN::SN_Expression positiveCase = p_ParamList[1].DoPartialEvaluate(p_MetaLevel);
-			SN::SN_Expression negativeCase = p_ParamList[2].DoPartialEvaluate(p_MetaLevel);
-			return PrimaryFunctionExpressionOp(condition, positiveCase, negativeCase);
-		}
 
 		SN::SN_Value result = condition.DoIf(p_ParamList[1], p_ParamList[2]);
 		result.GetSNI_Expression()->Validate();
+		result_param->SetValue(result);
 
 		Breakpoint(SN::DebugStop, SN::RightId, GetTypeName(), "Call return", p_Source, SN::CallPoint);
 
+		SNI_Frame::Pop();
 		return result;
 	}
 
