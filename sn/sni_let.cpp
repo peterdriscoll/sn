@@ -162,14 +162,9 @@ namespace SNI
 
 	SN::SN_Expression SNI_Let::DoPartialEvaluate(long p_MetaLevel /* = 0 */) const
 	{
-		if (0 < p_MetaLevel)
-		{
-			SN::SN_Expression condition = m_Condition;
-			SN::SN_Expression expression = m_Expression;
-			return SN::SN_Let(condition.DoPartialEvaluate(p_MetaLevel), expression.DoPartialEvaluate(p_MetaLevel));
-		}
-
-		return this;
+		SN::SN_Expression condition = m_Condition;
+		SN::SN_Expression expression = m_Expression;
+		return SN::SN_Let(condition.DoPartialEvaluate(p_MetaLevel), expression.DoPartialEvaluate(p_MetaLevel));
 	}
 
 	SN::SN_Error SNI_Let::DoPartialAssert()
