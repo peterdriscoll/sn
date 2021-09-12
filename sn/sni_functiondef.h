@@ -103,6 +103,7 @@ namespace SNI
 
 		virtual SN::SN_Error DoAssert();
 		virtual SN::SN_Error DoPartialAssert();
+		virtual SN::SN_Expression Unify(SN::SN_ExpressionList* p_ParameterList);
 		virtual SN::SN_Expression UnifyArray(SN::SN_Expression* p_ParamList, const SNI_Expression *p_Source);
 		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Expression, bool p_Define = false) = 0;
 

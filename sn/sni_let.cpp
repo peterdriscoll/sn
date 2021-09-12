@@ -117,6 +117,93 @@ namespace SNI
 		return false;
 	}
 
+	SN::SN_Expression SNI_Let::DoEvaluate(long p_MetaLevel /* = 0 */) const
+	{
+		if (0 < p_MetaLevel)
+		{
+			SN::SN_Expression condition = m_Condition;
+			SN::SN_Expression expression = m_Expression;
+			return SN::SN_Let(condition.DoEvaluate(p_MetaLevel), expression.DoEvaluate(p_MetaLevel));
+		}
+
+		SNI_Frame* topFrame = SNI_Frame::Push(this, NULL);
+
+		SNI_DisplayOptions displayOptions(doTextOnly);
+		LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": Start " + DisplaySN(0, displayOptions)));
+
+		SNI_Variable* condition_param = topFrame->CreateParameterByName("Condition", m_Condition);
+		SNI_Variable* expression_param = topFrame->CreateParameterByName("Expression", m_Expression);
+		Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Assert value before condition check", this, SN::CallPoint);
+
+		SN::SN_Error e = m_Condition->DoAssert();
+		SN::SN_Expression result = e;
+
+		condition_param->SetValue(e);
+		Breakpoint(SN::DebugStop, SN::CallId, GetTypeName(), "Assert value before call", this, SN::CallPoint);
+
+		if (e.IsError())
+		{
+			if (e.IsSignificantError())
+			{
+				SNI_CallRecord* callRecord = new SNI_CallRecord("Asserting let condition.", this);
+				LOGGING(callRecord->SetLogContext(context));
+				e.GetSNI_Error()->AddNote(callRecord);
+			}
+		}
+		else
+		{
+			result = m_Expression->DoEvaluate(p_MetaLevel);
+			condition_param->SetValue(result);
+		}
+		Breakpoint(SN::DebugStop, SN::RightId, GetTypeName(), "Assert value after call", this, SN::CallPoint);
+		SNI_Frame::Pop();
+		return result;
+	}
+
+	SN::SN_Expression SNI_Let::DoPartialEvaluate(long p_MetaLevel /* = 0 */) const
+	{
+		if (0 < p_MetaLevel)
+		{
+			SN::SN_Expression condition = m_Condition;
+			SN::SN_Expression expression = m_Expression;
+			return SN::SN_Let(condition.DoPartialEvaluate(p_MetaLevel), expression.DoPartialEvaluate(p_MetaLevel));
+		}
+
+		return this;
+	}
+
+	SN::SN_Error SNI_Let::DoPartialAssert()
+	{
+		return PartialAssertValue(skynet::True);
+	}
+
+	SN::SN_Error SNI_Let::PartialAssertValue(const SN::SN_Expression& p_Expression, bool p_Define /* = false */)
+	{
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Let::PartialAssertValue ( " + p_Value.DisplaySN() + " )"));
+
+		SN::SN_Error e = m_Condition->DoPartialAssert();
+
+		if (e.IsError())
+		{
+			if (e.IsSignificantError())
+			{
+				SNI_CallRecord* callRecord = new SNI_CallRecord("Asserting let condition.", this);
+				LOGGING(callRecord->SetLogContext(context));
+				e.GetSNI_Error()->AddNote(callRecord);
+			}
+		}
+		else
+		{
+			e = m_Expression->PartialAssertValue(p_Expression, p_Define);
+		}
+		return e;
+	}
+
+	SN::SN_Error SNI_Let::DoAssert()
+	{
+		return AssertValue(skynet::True);
+	}
+
 	SN::SN_Error SNI_Let::AssertValue(const SN::SN_Expression &p_Value)
 	{
 		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Let::AssertValue ( " + p_Value.DisplaySN() + " )"));
@@ -127,6 +214,7 @@ namespace SNI
 		LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": Start " + DisplaySN(0, displayOptions)));
 
 		SNI_Variable* condition_param = topFrame->CreateParameterByName("Condition", m_Condition);
+		SNI_Variable* expression_param = topFrame->CreateParameterByName("Expression", m_Expression);
 		Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Assert value before condition check", this, SN::CallPoint);
 
 		SN::SN_Error e = m_Condition->DoAssert();
@@ -146,6 +234,7 @@ namespace SNI
 		else
 		{
 			e = m_Expression->AssertValue(p_Value);
+			expression_param->SetValue(e);
 		}
 		LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": End " + DisplaySN(0, displayOptions)));
 		Breakpoint(SN::DebugStop, SN::RightId, GetTypeName(), "Assert value after call", this, SN::CallPoint);

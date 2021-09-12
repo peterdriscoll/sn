@@ -272,12 +272,20 @@ namespace SNI
 		return this;
 	}
 
-	SNI_Expression * SNI_Expression::Clone(const SNI_Expression *p_Function, SNI_Expression *p_Result)
+	SNI_Expression* SNI_Expression::Clone(const SNI_Expression* p_Function, SNI_Expression* p_Result)
 	{
 		bool changed = false;
-		SNI_Frame *frame = SNI_Frame::Push(p_Function, p_Result);
-		SNI_Expression *function = Clone(0, frame, changed);
+		SNI_Frame* frame = SNI_Frame::Push(p_Function, p_Result);
+		SNI_Expression* function = Clone(0, frame, changed);
 		frame->SetCloneFunction(function);
+		return function;
+	}
+
+	SNI_Expression* SNI_Expression::PartialClone(const SNI_Expression* p_Function, SNI_Expression* p_Result)
+	{
+		bool changed = false;
+		SNI_Frame* frame = new SNI_Frame(p_Function);
+		SNI_Expression* function = Clone(0, frame, changed);
 		return function;
 	}
 

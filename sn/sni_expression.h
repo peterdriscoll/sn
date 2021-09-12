@@ -112,6 +112,7 @@ namespace SNI
 		virtual string DisplayCallExp(const SN::SN_Expression& result, SN::SN_ExpressionList* p_ParameterList) const;
 		virtual SNI_Expression * Clone(long p_MetaLevel, SNI_Frame *p_Frame, bool &p_Changed);
 		virtual SNI_Expression * Clone(const SNI_Expression *p_Function, SNI_Expression *p_Result);
+		virtual SNI_Expression* PartialClone(const SNI_Expression* p_Function, SNI_Expression* p_Result);
 		virtual SNI_Expression * Copy() const;
 		virtual bool GetBool() const;
 		virtual string GetString() const;

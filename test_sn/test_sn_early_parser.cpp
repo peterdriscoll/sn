@@ -157,6 +157,7 @@ namespace test_sn
 				SN_DECLARE(Digit);
 				SN_DECLARE(d);
 				SN_DECLARE(i);
+				SN_DECLARE(j);
 
 				(Define(Digit)(d) == (d == (String("0") || String("1") || String("2") || String("3") || String("4")
 					|| String("5") || String("6") || String("7") || String("8") || String("9")))).PartialAssert().Do();
@@ -165,7 +166,7 @@ namespace test_sn
 				(Define(IsInteger)(i) == (Digit(i.SelectLeftChar()) && (!Digit(i.SubtractLeftChar().LookaheadLeft())).If(i == i.SelectLeftChar(), IsInteger(i.SubtractLeftChar())))).PartialAssert().Do();
 
 				SN_DECLARE(ConvertInteger);
-				(Define(ConvertInteger)(i) == Let(IsInteger(i), i.StringToInt())).PartialAssert().Do();
+				(Define(ConvertInteger)(j) == Let(IsInteger(j), j.StringToInt())).PartialAssert().Do();
 
 				(IsInteger(String("1")).Assert().Do());
 				(IsInteger(String("12")).Assert().Do());

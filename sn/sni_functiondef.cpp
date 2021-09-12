@@ -372,6 +372,19 @@ namespace SNI
 		return PartialUnify(NULL, SN::SN_Bool(true));
 	}
 
+	SN::SN_Expression SNI_FunctionDef::Unify(SN::SN_ExpressionList* p_ParameterList)
+	{
+		if (SNI_Thread::TopManager()->TailCallOptimization())
+		{
+			return this; // Let the AssertValue lower down the stack unify it.
+		}
+		SN::SN_Expression* param_List = LoadParametersUnify(p_ParameterList);
+		SN::SN_Expression function = UnifyArray(param_List, this).GetSNI_Expression();
+		delete[] param_List;
+		return function;
+	}
+
+
 	SN::SN_Expression SNI_FunctionDef::UnifyArray(SN::SN_Expression * p_ParamList, const SNI_Expression *p_Source)
 	{
 		SN::SN_Error e = skynet::OK;
@@ -387,7 +400,15 @@ namespace SNI
 		LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": Start " + DisplayUnify(depth, p_ParamList, p_Source)));
 		for (long j = 0; j < depth; j++)
 		{
-			topFrame->CreateParameter(j, p_ParamList[j]);
+			if (j == 0)
+			{
+				SNI_Variable *v =topFrame->GetResult();
+				v->SetValue(p_ParamList[j]);
+			}
+			else
+			{
+				topFrame->CreateParameter(j, p_ParamList[j]);
+			}
 			p_ParamList[j].Simplify();
 			if (IsKnownValue(p_ParamList[j], j))
 			{

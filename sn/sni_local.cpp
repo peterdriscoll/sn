@@ -142,11 +142,23 @@ namespace SNI
 
 	SN::SN_Expression SNI_Local::DoEvaluate(long p_MetaLevel /* = 0 */) const
 	{
+		if (0 < p_MetaLevel)
+		{
+			SN::SN_Expression expression = m_Expression;
+			return SN::SN_Local(m_LocalVariable, expression.DoEvaluate(p_MetaLevel));
+		}
+
 		return m_Expression->DoEvaluate(p_MetaLevel);
 	}
 
 	SN::SN_Expression SNI_Local::DoPartialEvaluate(long p_MetaLevel /* = 0 */) const
 	{
+		if (0 < p_MetaLevel)
+		{
+			SN::SN_Expression expression = m_Expression;
+			return SN::SN_Local(m_LocalVariable, expression.DoEvaluate(p_MetaLevel));
+		}
+
 		SN::SN_Expression value = m_Expression->DoPartialEvaluate(p_MetaLevel);
 		if (SN::Is<SNI_Value *>(value))
 		{

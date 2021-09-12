@@ -73,7 +73,10 @@ namespace SNI
 		string result;
 		if (m_ChildList.empty())
 		{
-			result = "(" + m_WorldSet->DisplayCondition(p_DisplayOptions, m_Value) + ")";
+			if (m_WorldSet)
+			{
+				result = "(" + m_WorldSet->DisplayCondition(p_DisplayOptions, m_Value) + ")";
+			}
 		}
 		else
 		{

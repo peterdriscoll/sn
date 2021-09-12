@@ -786,7 +786,7 @@ namespace SNI
 		{
 			if (IsInline())
 			{
-				SNI_Expression * l_clone = m_Value->Clone(this, (*p_ParameterList)[0].GetSNI_Expression());
+				SNI_Expression * l_clone = m_Value->PartialClone(this, (*p_ParameterList)[0].GetSNI_Expression());
 
 				return LOG_RETURN(context, l_clone->PartialCall(p_ParameterList, p_MetaLevel));
 			}
