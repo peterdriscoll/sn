@@ -196,6 +196,13 @@ namespace SNI
 	{
 		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Function::DoEvaluate (" + to_string(p_MetaLevel) + ")"));
 
+		if (0 < p_MetaLevel)
+		{
+			SN::SN_Expression function = m_Function;
+			SN::SN_Expression parameter = m_Parameter;
+			return SN::SN_Function(function.DoEvaluate(p_MetaLevel), parameter.DoEvaluate(p_MetaLevel));
+		}
+
 		SN::SN_ExpressionList* l_ParameterList = new SN::SN_ExpressionList();
 		l_ParameterList->push_back(m_Parameter);
 

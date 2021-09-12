@@ -739,6 +739,10 @@ namespace SNI
 	SN::SN_Expression SNI_Variable::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
 		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Variable::Call ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
+		if (0 < p_MetaLevel)
+		{
+			return this;
+		}
 
 		if (m_Value)
 		{
