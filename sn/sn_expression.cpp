@@ -20,6 +20,7 @@
 #include "sni_bool.h"
 #include "sni_number.h"
 #include "sni_function.h"
+#include "sni_incompletefunction.h"
 #include "sni_mapping.h"
 #include "sni_vector.h"
 #include "sni_derived.h"
@@ -164,6 +165,11 @@ namespace SN
 
 	SN_Expression::SN_Expression(const SN_Domain & p_Domain)
 		: SN_Base(dynamic_cast<SNI::SNI_Expression *>(p_Domain.GetSNI_Domain()))
+	{
+	}
+
+	SN_Expression::SN_Expression(const SN_StateValue& p_StateValue)
+		: SN_Base(dynamic_cast<SNI::SNI_Expression*>(p_StateValue.GetSNI_StateValue()))
 	{
 	}
 

@@ -247,7 +247,11 @@ namespace SNI
 	{
 		size_t numParams = p_ParameterList->size();
 		SNI_DisplayOptions displayOptions(doTextOnly);
-		string result = (*p_ParameterList)[0].DisplaySN() + " = " + DisplayValueSN(0, displayOptions);
+		string result = " = " + DisplayValueSN(0, displayOptions);
+		if (!p_ParameterList->empty())
+		{
+			result = p_ParameterList->front().DisplaySN() + result;
+		}
 		for (size_t j = 1; j < numParams; j++)
 		{
 			result += " " + (*p_ParameterList)[numParams - j].DisplaySN();
@@ -1144,5 +1148,17 @@ namespace SNI
 	{
 		ASSERTM(false, GetTypeName() + " IsEmpty not implemented.");
 		return false;
+	}
+
+	SN::SN_Expression SNI_Expression::DoGetState() const
+	{
+		ASSERTM(false, GetTypeName() + " GetState not implemented.");
+		return skynet::Null;
+	}
+
+	SN::SN_Expression SNI_Expression::DoGetValue() const
+	{
+		ASSERTM(false, GetTypeName() + " GetValue not implemented.");
+		return skynet::Null;
 	}
 }

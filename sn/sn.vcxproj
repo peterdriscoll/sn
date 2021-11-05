@@ -212,6 +212,7 @@
     <ClInclude Include="..\inc\sn_parameter.h" />
     <ClInclude Include="..\inc\sn_real.h" />
     <ClInclude Include="..\inc\sn_set.h" />
+    <ClInclude Include="..\inc\sn_statevalue.h" />
     <ClInclude Include="..\inc\sn_string.h" />
     <ClInclude Include="..\inc\sn_stringref.h" />
     <ClInclude Include="..\inc\sn_thread.h" />
@@ -224,6 +225,7 @@
     <ClInclude Include="sni_add.h" />
     <ClInclude Include="sni_and.h" />
     <ClInclude Include="sni_assert.h" />
+    <ClInclude Include="sni_attribute.h" />
     <ClInclude Include="sni_attributedef.h" />
     <ClInclude Include="sni_binary.h" />
     <ClInclude Include="sni_bool.h" />
@@ -260,6 +262,8 @@
     <ClInclude Include="sni_function.h" />
     <ClInclude Include="sni_functioncall.h" />
     <ClInclude Include="sni_functiondef.h" />
+    <ClInclude Include="sni_getstate.h" />
+    <ClInclude Include="sni_getvalue.h" />
     <ClInclude Include="sni_greaterequals.h" />
     <ClInclude Include="sni_greaterthan.h" />
     <ClInclude Include="sni_hasa.h" />
@@ -267,6 +271,7 @@
     <ClInclude Include="sni_http_handler.h" />
     <ClInclude Include="sni_if.h" />
     <ClInclude Include="sni_implies.h" />
+    <ClInclude Include="sni_incompletefunction.h" />
     <ClInclude Include="sni_instance.h" />
     <ClInclude Include="sni_isa.h" />
     <ClInclude Include="sni_log.h" />
@@ -311,6 +316,7 @@
     <ClInclude Include="sni_splitter.h" />
     <ClInclude Include="sni_square.h" />
     <ClInclude Include="sni_squareroot.h" />
+    <ClInclude Include="sni_statevalue.h" />
     <ClInclude Include="sni_string.h" />
     <ClInclude Include="sni_stringref.h" />
     <ClInclude Include="sni_stringtodouble.h" />
@@ -347,6 +353,7 @@
     <ClCompile Include="sni_add.cpp" />
     <ClCompile Include="sni_and.cpp" />
     <ClCompile Include="sni_assert.cpp" />
+    <ClCompile Include="sni_attribute.cpp" />
     <ClCompile Include="sni_attributedef.cpp" />
     <ClCompile Include="sni_binary.cpp" />
     <ClCompile Include="sni_bool.cpp" />
@@ -382,6 +389,8 @@
     <ClCompile Include="sni_function.cpp" />
     <ClCompile Include="sni_functioncall.cpp" />
     <ClCompile Include="sni_functiondef.cpp" />
+    <ClCompile Include="sni_getstate.cpp" />
+    <ClCompile Include="sni_getvalue.cpp" />
     <ClCompile Include="sni_greaterequals.cpp" />
     <ClCompile Include="sni_greaterthan.cpp" />
     <ClCompile Include="sni_hasa.cpp" />
@@ -389,6 +398,7 @@
     <ClCompile Include="sni_http_handler.cpp" />
     <ClCompile Include="sni_if.cpp" />
     <ClCompile Include="sni_implies.cpp" />
+    <ClCompile Include="sni_incompletefunction.cpp" />
     <ClCompile Include="sni_instance.cpp" />
     <ClCompile Include="sni_isa.cpp" />
     <ClCompile Include="sni_log.cpp" />
@@ -431,6 +441,7 @@
     <ClCompile Include="sni_splitter.cpp" />
     <ClCompile Include="sni_square.cpp" />
     <ClCompile Include="sni_squareroot.cpp" />
+    <ClCompile Include="sni_statevalue.cpp" />
     <ClCompile Include="sni_string.cpp" />
     <ClCompile Include="sni_stringref.cpp" />
     <ClCompile Include="sni_stringtodouble.cpp" />
@@ -490,6 +501,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="sn_set.cpp" />
+    <ClCompile Include="sn_statevalue.cpp" />
     <ClCompile Include="sn_string.cpp" />
     <ClCompile Include="sn_stringref.cpp" />
     <ClCompile Include="sn_thread.cpp" />

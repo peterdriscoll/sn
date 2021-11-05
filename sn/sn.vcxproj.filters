@@ -537,6 +537,24 @@
     <ClInclude Include="..\inc\sn_operatorvariables.h">
       <Filter>Interface Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\inc\sn_statevalue.h">
+      <Filter>Interface Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_attribute.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_getstate.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_getvalue.h">
+      <Filter>Function Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_incompletefunction.h">
+      <Filter>Expression Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_statevalue.h">
+      <Filter>Type Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -1000,6 +1018,24 @@
     </ClCompile>
     <ClCompile Include="sn_operatorvariables.cpp">
       <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_statevalue.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_incompletefunction.cpp">
+      <Filter>Expression Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_attribute.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_getvalue.cpp">
+      <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_statevalue.cpp">
+      <Filter>Type Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_getstate.cpp">
+      <Filter>Function Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

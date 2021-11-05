@@ -58,6 +58,7 @@ namespace SN
 	class SN_Derived;
 	class SN_Virtual;
 	class SN_Domain;
+	class SN_StateValue;
 
 	class SN_Context
 	{
@@ -103,7 +104,8 @@ namespace SN
 		SN_Expression(const SN_Vector &p_Vector);
 		SN_Expression(const SN_Derived &p_Derived);
 		SN_Expression(const SN_Virtual &p_Virtual);
-		SN_Expression(const SN_Domain &p_Domain);
+		SN_Expression(const SN_Domain& p_Domain);
+		SN_Expression(const SN_StateValue& p_StateValue);
 
 		SN_APPLY_TYPES(SN_Expression, DUMMY, SN_CONSTRUCTOR)
 

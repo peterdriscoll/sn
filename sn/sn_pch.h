@@ -24,6 +24,7 @@
 #include "sni_meta.h"
 #include "sni_lambda.h"
 #include "sni_function.h"
+#include "sni_incompletefunction.h"
 #include "sni_define.h"
 #include "sni_local.h"
 #include "sni_let.h"
@@ -159,6 +160,13 @@
 // Sets
 #include "sni_buildset.h"
 #include "sni_hasmember.h"
+
+// State
+#include "sni_statevalue.h"
+
+// Attributes
+#include "sni_getstate.h"
+#include "sni_getvalue.h"
 
 #include <time.h> // time_t, tm, time, localtime, strftime
 #include <direct.h>

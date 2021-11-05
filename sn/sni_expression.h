@@ -276,6 +276,9 @@ namespace SNI
 		virtual SN::SN_Value DoCountAll() const;
 		virtual SN::SN_Value DoSum() const;
 
+		// Attributes
+		virtual SN::SN_Expression DoGetState() const;
+		virtual SN::SN_Expression DoGetValue() const;
 	protected:
 		static SN::SN_Expression AddLambdasPartial(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
 		static SN::SN_Expression AddLambdas(SN::SN_ExpressionList * p_ParameterList);
@@ -291,7 +294,6 @@ namespace SNI
 
 	private:
 		unsigned long m_Id;
-
 	};
 }
 

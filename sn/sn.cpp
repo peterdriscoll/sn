@@ -82,6 +82,13 @@
 #include "sni_buildset.h"
 #include "sni_hasmember.h"
 
+// Attributes
+#include "sni_getstate.h"
+#include "sni_getvalue.h"
+
+// State
+#include "sni_statevalue.h"
+
 #include "sn_pch.h"
 
 namespace skynet
@@ -163,6 +170,10 @@ namespace skynet
 	// Sets
 	SN::SN_FunctionDef BuildSet(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_BuildSet()));
 	SN::SN_FunctionDef HasMember(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_HasMember()));
+
+	// Attributes
+	SN::SN_FunctionDef GetState(dynamic_cast<SNI::SNI_FunctionDef*>(new SNI::SNI_GetState()));
+	SN::SN_FunctionDef GetValue(dynamic_cast<SNI::SNI_FunctionDef*>(new SNI::SNI_GetValue()));
 
 	// Function Call
 	SN::SN_Expression FunctionCall(dynamic_cast<SNI::SNI_Expression *>(new SNI::SNI_FunctionCall()));

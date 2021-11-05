@@ -107,6 +107,7 @@ namespace skynet
 #include "sn_virtual.h"
 #include "sn_domain.h"
 #include "sn_operatorvariables.h"
+#include "sn_statevalue.h"
 
 // Declare a variable, and tell the variable its variable name.
 // When the program and the program model generated the variable will know its human readable name.
@@ -167,6 +168,7 @@ namespace skynet
 	typedef SN::SN_Derived Derived;
 	typedef SN::SN_Virtual Virtual;
 	typedef SN::SN_Domain Domain;
+	typedef SN::SN_StateValue StateValue;
 
 	// Expressions
 	typedef SN::SN_Expression Expression;
@@ -258,6 +260,10 @@ namespace skynet
 	// * Sets
 	extern SN_EXPORT SN::SN_FunctionDef BuildSet;
 	extern SN_EXPORT SN::SN_FunctionDef HasMember;
+
+	// * Attributes
+	extern SN_EXPORT SN::SN_FunctionDef GetState;
+	extern SN_EXPORT SN::SN_FunctionDef GetValue;
 
 	// * Function call
 	extern SN_EXPORT SN::SN_Expression FunctionCall;

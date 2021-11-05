@@ -17,7 +17,7 @@ namespace SN
 
 		SN_StateValue();
 		SN_StateValue(const SN_StateValue &p_Other);
-		SN_StateValue(const SN_Expression &p_State, const SN_Expression &p_Value);
+		SN_StateValue(const SN_Expression& p_Value, const SN_Expression &p_State);
 		virtual ~SN_StateValue();
 
 		SN_Expression operator ==(const SN_Expression &p_Other) const;
