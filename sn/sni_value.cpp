@@ -167,7 +167,7 @@ namespace SNI
 			return SN::SN_Error(p_Value.Equivalent(this->GetVariableValue()), false);
 		}
 		SN::SN_Expression value = p_Value;
-		return value.AssertValue(this);
+		return value.AssertValue(DoEvaluate());
 	}
 
 	SN::SN_Expression SNI_Value::DoEvaluate(long /* p_MetaLevel = 0 */) const
