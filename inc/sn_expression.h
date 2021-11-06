@@ -213,6 +213,10 @@ namespace SN
 		SN_Expression DoubleToString() const;
 		SN_Expression StringToDouble() const;
 
+		// Attributes
+		SN_Expression State() const;
+		SN_Expression Value() const;
+
 		/////////////////////////////////////////////////////////////////////
 		// Actions
 		/////////////////////////////////////////////////////////////////////

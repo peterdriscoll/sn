@@ -328,6 +328,17 @@ namespace SN
 			return FunctionCall(skynet::Sum, p_Mapping);
 		}
 
+		// Attributes
+		SN::SN_Expression GetState(const SN::SN_Expression& p_Left)
+		{
+			return FunctionCall(skynet::GetState, p_Left);
+		}
+
+		SN::SN_Expression GetValue(const SN::SN_Expression& p_Left)
+		{
+			return FunctionCall(skynet::GetValue, p_Left);
+		}
+
 		// Function calls
 		SN::SN_Function FunctionCall(const SN::SN_Expression &p_Function, const SN::SN_Expression &p_Parameter)
 		{

@@ -91,6 +91,10 @@ namespace SN
 
 		// Function calls
 		SN::SN_Function FunctionCall(const SN::SN_Expression &p_Function, const SN::SN_Expression &p_Parameter);
+
+		// Attributes
+		SN::SN_Expression GetState(const SN::SN_Expression& p_Left);
+		SN::SN_Expression GetValue(const SN::SN_Expression& p_Left);
 	}
 }
 

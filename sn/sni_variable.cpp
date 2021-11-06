@@ -45,7 +45,7 @@ namespace SNI
 		SetName(p_Name);
 	}
 
-	SNI_Variable::SNI_Variable(const string &p_Name, const string &p_DomainName, enum skynet::DefineType p_DefineType)
+	SNI_Variable::SNI_Variable(const string& p_Name, const string& p_DomainName, skynet::DefineType p_DefineType)
 		: m_Frame(NULL)
 		, m_Value(NULL)
 		, m_Requested(false)

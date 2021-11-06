@@ -117,9 +117,15 @@ namespace skynet
 #define SN_DECLARE(n) \
     SN::SN_Variable n(string(#n))
 
+#define SN_DECLARE_INLINE(n) \
+	SN::SN_Variable n(string(#n), skynet::Null, skynet::Inline)
+
 #define SN_LOCAL(n) \
     SN::SN_Variable n; \
 	n.SetName(#n);
+
+#define SN_LOCAL_INLINE(n) \
+	SN::SN_Variable n(string(#n), skynet::Null, skynet::Inline, true)
 
 #define SN_LINK(n) \
 	(*this)[#n] = n; \
