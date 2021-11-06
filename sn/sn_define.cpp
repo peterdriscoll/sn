@@ -8,6 +8,11 @@
 
 namespace SN
 {
+	/*static*/ SN_Class SN_Define::Class()
+	{
+		return SNI_Define::Class();
+	}
+
 	SN_Define::SN_Define()
 	{
 	}

@@ -29,6 +29,9 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Local);
 	public:
+		static SNI_Class* Class();
+		virtual SNI_Class* VClass();
+
 		SNI_Local();
 		SNI_Local(SNI_Variable *p_LocalVariable, SNI_Expression *p_Expression);
 		virtual ~SNI_Local();
@@ -69,6 +72,8 @@ namespace SNI
 		SNI_Expression * m_Expression;
 
 	private:
+		static SNI_Class* m_Class;
+
 		static long m_Id;
 	};
 

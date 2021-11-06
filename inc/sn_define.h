@@ -19,6 +19,8 @@ namespace SN
 	class SN_EXPORT SN_Define : public SN_Expression
 	{
 	public:
+		static SN_Class Class();
+
 		SN_Define();
 		SN_Define(const SN_Variable &p_Variable, enum skynet::DefineType p_DefineType = skynet::Inname);
 		virtual ~SN_Define();

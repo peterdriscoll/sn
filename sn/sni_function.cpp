@@ -15,6 +15,21 @@
 
 namespace SNI
 {
+	/*static*/ SNI_Class* SNI_Function::m_Class = NULL;
+	/*static*/ SNI_Class* SNI_Function::Class()
+	{
+		if (!m_Class)
+		{
+			m_Class = new SNI_Class("Function");
+		}
+		return m_Class;
+	}
+
+	SNI_Class* SNI_Function::VClass()
+	{
+		return Class();
+	}
+
 	SNI_Function::SNI_Function()
 		: m_Function(NULL)
 		, m_Parameter(NULL)

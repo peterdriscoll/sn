@@ -38,6 +38,11 @@
 
 namespace SN
 {
+	/*static*/ SN_Class SN_Expression::Class()
+	{
+		return SNI_Expression::Class();
+	}
+
 	SN_Expression::SN_Expression()
 		: SN_Base()
 	{

@@ -27,6 +27,21 @@ namespace SNI
 {
 	map<string, unsigned long> SNI_Expression::m_IdMap;
 
+	/*static*/ SNI_Class* SNI_Expression::m_Class = NULL;
+	/*static*/ SNI_Class* SNI_Expression::Class()
+	{
+		if (!m_Class)
+		{
+			m_Class = new SNI_Class("Expression");
+		}
+		return m_Class;
+	}
+
+	SNI_Class* SNI_Expression::VClass()
+	{
+		return Class();
+	}
+
 	SNI_Expression::SNI_Expression()
 		: m_Id(0)
 	{
@@ -1082,11 +1097,6 @@ namespace SNI
 	}
 
 	// Inheritance
-	SNI_Class *SNI_Expression::VClass()
-	{
-		return NULL;
-	}
-
 	SN::SN_Value SNI_Expression::DoIsA(const SNI_Value * p_Parent) const
 	{
 		return SN::SN_Error(false, false, GetTypeName() + " IsA function not implemented.");

@@ -13,6 +13,9 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Lambda);
 	public:
+		static SNI_Class* Class();
+		virtual SNI_Class* VClass();
+
 		SNI_Lambda();
 		SNI_Lambda(SNI_Expression *p_FormalParameter, SNI_Expression *p_Expresion, SNI_Expression *p_ConstraintValue, unsigned long p_Id);
 		virtual ~SNI_Lambda();
@@ -48,6 +51,8 @@ namespace SNI
 		virtual void PromoteMembers();
 
 	private:
+		static SNI_Class* m_Class;
+
 		SNI_Expression * m_FormalParameter;
 		SNI_Expression * m_Expression;
 		SNI_Expression * m_ConstraintValue;

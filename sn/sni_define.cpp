@@ -13,6 +13,21 @@
 
 namespace SNI
 {
+	/*static*/ SNI_Class* SNI_Define::m_Class = NULL;
+	/*static*/ SNI_Class* SNI_Define::Class()
+	{
+		if (!m_Class)
+		{
+			m_Class = new SNI_Class("Define");
+		}
+		return m_Class;
+	}
+
+	SNI_Class* SNI_Define::VClass()
+	{
+		return Class();
+	}
+
 	SNI_Define::SNI_Define()
 		: m_Variable(NULL)
 		, m_DefineType(skynet::Inname)

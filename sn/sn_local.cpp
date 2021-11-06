@@ -8,6 +8,11 @@
 
 namespace SN
 {
+	/*static*/ SN_Class SN_Local::Class()
+	{
+		return SNI_Local::Class();
+	}
+
 	SN_Local::SN_Local(SNI::SNI_Local * p_Local)
 		: SN_Expression(p_Local)
 	{

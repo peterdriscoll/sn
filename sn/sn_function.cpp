@@ -6,6 +6,11 @@
 
 namespace SN
 {
+	/*static*/ SN_Class SN_Function::Class()
+	{
+		return SNI_Value::Class();
+	}
+
 	SN_Function::SN_Function(const SN_Function &p_Function)
 		: SN_Expression(p_Function.m_Expression)
 	{

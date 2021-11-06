@@ -14,6 +14,9 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Function);
 	public:
+		static SNI_Class* Class();
+		SNI_Class* VClass();
+
 		SNI_Function();
 		SNI_Function(SNI_Expression *p_Function);
 		SNI_Function(SNI_Expression *p_Function, SNI_Expression *p_Parameter);
@@ -54,6 +57,8 @@ namespace SNI
 		virtual void PromoteMembers();
 
 	private:
+		static SNI_Class* m_Class;
+
 		SNI_Expression * m_Function;
 		SNI_Expression * m_Parameter;
 		SNI_Expression * m_Condition;

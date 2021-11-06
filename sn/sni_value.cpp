@@ -14,6 +14,21 @@
 
 namespace SNI
 {
+	/*static*/ SNI_Class* SNI_Value::m_Class = NULL;
+	/*static*/ SNI_Class* SNI_Value::Class()
+	{
+		if (!m_Class)
+		{
+			m_Class = new SNI_Class("Value");
+		}
+		return m_Class;
+	}
+
+	SNI_Class* SNI_Value::VClass()
+	{
+		return Class();
+	}
+
 	SNI_Value::SNI_Value()
 	{
 	}

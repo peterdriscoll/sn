@@ -75,6 +75,8 @@ namespace SN
 	class SN_EXPORT SN_Expression : public SN_Base<SNI::SNI_Expression, SN_Expression, SN_Error>
 	{
 	public:
+		static SN_Class Class();
+
 		// Constructors
 		SN_Expression();
 		SN_Expression(const SN_Expression &p_Expression);

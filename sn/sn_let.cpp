@@ -6,6 +6,11 @@
 
 namespace SN
 {
+	/*static*/ SN_Class SN_Let::Class()
+	{
+		return SNI_Let::Class();
+	}
+
 	SN_Let::SN_Let(SNI::SNI_Let *p_Let)
 		: SN_Expression(p_Let)
 	{

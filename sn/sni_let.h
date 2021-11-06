@@ -26,6 +26,9 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Let);
 	public:
+		static SNI_Class* Class();
+		virtual SNI_Class* VClass();
+
 		SNI_Let();
 		SNI_Let(SNI_Expression *p_Condition, SNI_Expression *p_Expresion);
 		virtual ~SNI_Let();
@@ -66,6 +69,8 @@ namespace SNI
 		SNI_Expression * m_Expression;
 
 	private:
+		static SNI_Class* m_Class;
+
 		static long m_Id;
 	};
 }

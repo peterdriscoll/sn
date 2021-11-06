@@ -37,6 +37,8 @@ namespace SN
 	class SN_EXPORT SN_Value : public SN_Expression
 	{
 	public:
+		static SN_Class Class();
+
 		SN_Value();
 		SN_Value(const SN_Expression &p_other);
 		SN_Value(const SN_Value &p_other);

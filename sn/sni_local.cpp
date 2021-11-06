@@ -18,6 +18,21 @@ namespace SNI
 {
 	/*static*/ long SNI_Local::m_Id = 0;
 
+	/*static*/ SNI_Class* SNI_Local::m_Class = NULL;
+	/*static*/ SNI_Class* SNI_Local::Class()
+	{
+		if (!m_Class)
+		{
+			m_Class = new SNI_Class("Local");
+		}
+		return m_Class;
+	}
+
+	SNI_Class* SNI_Local::VClass()
+	{
+		return Class();
+	}
+
 	SNI_Local::SNI_Local()
 		: m_LocalVariable(NULL)
 		, m_Expression(NULL)

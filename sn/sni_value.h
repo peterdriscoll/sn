@@ -14,6 +14,9 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Value);
 	public:
+		static SNI_Class* Class();
+		SNI_Class* VClass();
+
 		SNI_Value();
 		SNI_Value(unsigned long p_Id);
 		SNI_Value(const SNI_Value &p_other);
@@ -49,6 +52,9 @@ namespace SNI
 		
 		virtual SN::SN_Error AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result);
 		virtual SN::SN_Value DoIsA(const SNI_Value * p_Parent) const;
+
+	private:
+		static SNI_Class* m_Class;
 	};
 
 	typedef vector<SNI_Value> SNI_ValueList;

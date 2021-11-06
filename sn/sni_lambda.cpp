@@ -16,6 +16,21 @@
 
 namespace SNI
 {
+	/*static*/ SNI_Class* SNI_Lambda::m_Class = NULL;
+	/*static*/ SNI_Class* SNI_Lambda::Class()
+	{
+		if (!m_Class)
+		{
+			m_Class = new SNI_Class("Lambda");
+		}
+		return m_Class;
+	}
+
+	SNI_Class* SNI_Lambda::VClass()
+	{
+		return Class();
+	}
+
 	SNI_Lambda::SNI_Lambda()
 	{
 	}

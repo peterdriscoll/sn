@@ -33,6 +33,11 @@
 
 namespace SN
 {
+	/*static*/ SN_Class SN_Value::Class()
+	{
+		return SNI_Value::Class();
+	}
+
 	SN_Value::SN_Value()
 		: SN_Expression()
 	{

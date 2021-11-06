@@ -65,6 +65,9 @@ namespace SNI
 		PGC_CLASS(SNI_Expression);
 
 	public:
+		static SNI_Class* Class();
+		virtual SNI_Class* VClass();
+
 		SNI_Expression();
 		SNI_Expression(unsigned long p_Id);
 		SNI_Expression(const SNI_Expression &p_Expression);
@@ -254,7 +257,6 @@ namespace SNI
 		virtual	SN::SN_Value DoStringToDouble() const;
 
 		// Inheritance
-		virtual SNI_Class *VClass();
 		virtual SN::SN_Error AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result);
 		virtual SN::SN_Value DoIsA(const SNI_Value * p_Parent) const;
 		virtual SN::SN_Value DoHasA(SNI_Value * p_Member, SNI_Value * p_Name) const;
@@ -293,6 +295,8 @@ namespace SNI
 		static map<string, unsigned long> m_IdMap;
 
 	private:
+		static SNI_Class* m_Class;
+
 		unsigned long m_Id;
 	};
 }

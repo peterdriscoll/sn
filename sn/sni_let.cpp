@@ -21,6 +21,21 @@ namespace SNI
 {
 	/*static*/ long SNI_Let::m_Id = 0;
 
+	/*static*/ SNI_Class* SNI_Let::m_Class = NULL;
+	/*static*/ SNI_Class* SNI_Let::Class()
+	{
+		if (!m_Class)
+		{
+			m_Class = new SNI_Class("Let");
+		}
+		return m_Class;
+	}
+
+	SNI_Class* SNI_Let::VClass()
+	{
+		return Class();
+	}
+
 	SNI_Let::SNI_Let()
 	{
 	}

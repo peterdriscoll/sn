@@ -10,6 +10,11 @@
 
 namespace SN
 {
+	/*static*/ SN_Class SN_Lambda::Class()
+	{
+		return SNI_Lambda::Class();
+	}
+
 	SN_Lambda::SN_Lambda()
 		: SN_Expression()
 	{
