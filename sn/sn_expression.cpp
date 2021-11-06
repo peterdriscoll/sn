@@ -666,6 +666,16 @@ namespace SN
 		return SN_Operators::StringToDouble(*this);
 	}
 
+	SN_Expression SN_Expression::State() const
+	{
+		return SN_Operators::GetState(*this);
+	}
+
+	SN_Expression SN_Expression::Value() const
+	{
+		return SN_Operators::GetValue(*this);
+	}
+
 	/////////////////////////////////////////////////////////////////////
 	// Actions
 	/////////////////////////////////////////////////////////////////////

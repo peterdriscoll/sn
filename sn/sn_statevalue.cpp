@@ -25,8 +25,8 @@ namespace SN
 	{
 	}
 
-	SN_StateValue::SN_StateValue(const SN_Expression & p_State, const SN_Expression & p_Value)
-		: SN_Base(new SNI::SNI_StateValue(p_State.GetSNI_Expression(), p_Value.GetSNI_Expression()))
+	SN_StateValue::SN_StateValue(const SN_Expression & p_Value, const SN_Expression& p_State)
+		: SN_Base(new SNI::SNI_StateValue(p_Value.GetSNI_Expression(), p_State.GetSNI_Expression()))
 	{
 	}
 
