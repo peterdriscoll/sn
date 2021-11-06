@@ -35,6 +35,18 @@ namespace SN
 	{
 	}
 
+	SN_Variable::SN_Variable(const string& p_Name, enum skynet::DefineType p_DefineType, bool p_Local)
+	{
+		if (p_Local)
+		{
+			m_Expression = new SNI_Variable(p_Name, "", p_DefineType);;
+		}
+		else
+		{
+			m_Expression = SNI_Frame::Top()->CreateVariable(p_Name, "", p_DefineType);
+		}
+	}
+
 	SN_Variable::SN_Variable(const string &p_Name, const SN_Expression &p_Value, enum skynet::DefineType p_DefineType, bool p_Local)
 	{
 		if (p_Local)

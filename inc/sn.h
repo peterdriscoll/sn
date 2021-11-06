@@ -115,17 +115,28 @@ namespace skynet
 //   SNI_Variable
 //   SNI_Function
 #define SN_DECLARE(n) \
-    SN::SN_Variable n(string(#n))
+    SN::SN_Variable n(string(#n), skynet::Inname, false)
 
 #define SN_DECLARE_INLINE(n) \
-	SN::SN_Variable n(string(#n), skynet::Null, skynet::Inline)
+	SN::SN_Variable n(string(#n), skynet::Inline, false)
 
 #define SN_LOCAL(n) \
-    SN::SN_Variable n; \
-	n.SetName(#n);
+	SN::SN_Variable n(string(#n), skynet::Inname, true)
 
 #define SN_LOCAL_INLINE(n) \
-	SN::SN_Variable n(string(#n), skynet::Null, skynet::Inline, true)
+	SN::SN_Variable n(string(#n), skynet::Inline, true)
+
+#define SN_DECLARE_VALUE(n, v) \
+    SN::SN_Variable n(string(#n), v, skynet::Inname, false)
+
+#define SN_DECLARE_VALUE_INLINE(n, v) \
+	SN::SN_Variable n(string(#n), v, skynet::Inline, false)
+
+#define SN_LOCAL_VALUE(n, v) \
+	SN::SN_Variable n(string(#n), v, skynet::Inname, true)
+
+#define SN_LOCAL_VALUE_INLINE(n, v) \
+	SN::SN_Variable n(string(#n), v, skynet::Inline, true)
 
 #define SN_LINK(n) \
 	(*this)[#n] = n; \
@@ -135,9 +146,6 @@ namespace skynet
 	(*this)[#n] = n; \
 	n.SetName(#n); \
 	n.SetValue(r, i)
-
-#define SN_DECLARE_VALUE(n, r) \
-    SN::SN_Variable n(string(#n), r)
 
 #define SN_DOMAIN(n) \
     SN::SN_Domain n(string(#n))

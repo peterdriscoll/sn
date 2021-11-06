@@ -30,7 +30,8 @@ namespace SN
 		SN_Variable(const SN_Expression &p_other, bool);
 		SN_Variable(const SN_Expression &p_other);
 		SN_Variable(const string &p_Name, const string &p_DomainName = "");
-		SN_Variable(const string &p_Name, const SN_Expression &p_other, enum skynet::DefineType p_DefineType = skynet::Inname, bool p_Local = false);
+		SN_Variable(const string &p_Name, enum skynet::DefineType p_DefineType, bool p_Local);
+		SN_Variable(const string &p_Name, const SN_Expression& p_other, enum skynet::DefineType p_DefineType, bool p_Local);
 
 		SN_APPLY_TYPES(SN_Variable, DUMMY, SN_CONSTRUCTOR)
 
