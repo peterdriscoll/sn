@@ -76,6 +76,17 @@ namespace SNI
 		return 100;
 	}
 
+	bool SNI_Class::Equivalent(SNI_Object* p_Other) const
+	{
+		if (dynamic_cast<SNI_Class*>(p_Other))
+		{
+			SNI_Class* l_class = dynamic_cast<SNI_Class*>(p_Other);
+			return m_ClassName == l_class->m_ClassName;
+		}
+		return false;
+	}
+
+
 	bool SNI_Class::IsKnownTypeValue() const
 	{
 		return true;

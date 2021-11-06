@@ -196,17 +196,12 @@ namespace SNI
 	}
 
 	// Inheritance
-	SN::SN_Error SNI_Value::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)
+	SN::SN_Value SNI_Value::DoIsA(const SNI_Value* p_Parent) const
 	{
-		return p_Result.AssertValue(DoIsA(p_Parent));
-	}
-
-	SN::SN_Value SNI_Value::DoIsA(const SNI_Value * p_Parent) const
-	{
-		if (Equivalent(const_cast<SNI_Value *>(p_Parent)))
+		if (p_Parent->Equivalent(SNI_Value::Class()))
 		{
 			return skynet::True;
 		}
-		return const_cast<SNI_Value *>(this)->VClass()->DoIsA(p_Parent);
+		return SNI_Expression::DoIsA(p_Parent);
 	}
 }

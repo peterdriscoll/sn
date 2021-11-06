@@ -1093,13 +1093,21 @@ namespace SNI
 
 	SN::SN_Error  SNI_Expression::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)
 	{
-		return SN::SN_Error(false, false, GetTypeName() + " IsA function not implemented.");
+		return p_Result.AssertValue(DoIsA(p_Parent));
 	}
 
 	// Inheritance
 	SN::SN_Value SNI_Expression::DoIsA(const SNI_Value * p_Parent) const
 	{
-		return SN::SN_Error(false, false, GetTypeName() + " IsA function not implemented.");
+		if (Equivalent(const_cast<SNI_Value*>(p_Parent)))
+		{
+			return skynet::True;
+		}
+		if (p_Parent->Equivalent(SNI_Expression::Class()))
+		{
+			return skynet::True;
+		}
+		return const_cast<SNI_Expression*>(this)->VClass()->DoIsA(p_Parent);
 	}
 
 	SN::SN_Value SNI_Expression::DoHasA(SNI_Value * p_Member, SNI_Value * p_Name) const

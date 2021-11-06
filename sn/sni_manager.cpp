@@ -80,6 +80,8 @@ namespace SNI
 		m_LogicSetupDone = true;
 		skynet::RerunRequest.GetSNI_Error()->MakeRerunRequest();
 
+		Value::Class().GetSNI_Class()->AssertIsAValue(Expression::Class().GetSNI_Class(), skynet::True);
+
 		Char::Class().GetSNI_Class()->AssertIsAValue(String::Class().GetSNI_Class(), skynet::True);
 		StringRef::Class().GetSNI_Class()->AssertIsAValue(String::Class().GetSNI_Class(), skynet::True);
 
