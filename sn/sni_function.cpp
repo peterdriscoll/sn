@@ -233,6 +233,13 @@ namespace SNI
 
 	SN::SN_Expression SNI_Function::DoPartialEvaluate(long p_MetaLevel /* = 0 */) const
 	{
+		if (0 < p_MetaLevel)
+		{
+			SN::SN_Expression function = m_Function;
+			SN::SN_Expression parameter = m_Parameter;
+			return SN::SN_Function(function.DoPartialEvaluate(p_MetaLevel), parameter.DoPartialEvaluate(p_MetaLevel));
+		}
+
 		SN::SN_ExpressionList * l_ParameterList = new SN::SN_ExpressionList();
 		l_ParameterList->push_back(m_Parameter);
 		SNI_World *world(new SNI_World(NULL)); // Only create a world so that errors are not fatal.

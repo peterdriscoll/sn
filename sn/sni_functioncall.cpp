@@ -105,7 +105,20 @@ namespace SNI
 
 	SN::SN_Expression SNI_FunctionCall::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		ASSERTM(p_ParameterList->size() > 1, "FunctionCall must have a parameter");
+		if (p_ParameterList->size() < 2)
+		{
+			return SN::SN_Error(false, false, "FunctionCall operator must have two parameters.");
+		}
+
+		if (0 < p_MetaLevel)
+		{
+			SN::SN_Expression function = p_ParameterList->back();
+			p_ParameterList->pop_back();
+			SN::SN_Expression param = p_ParameterList->back();
+			p_ParameterList->pop_back();
+
+			return SN::SN_Function(SN::SN_Function(this, function.DoPartialEvaluate(p_MetaLevel)), param.DoPartialEvaluate(p_MetaLevel));
+		}
 
 		SN::SN_Expression function = p_ParameterList->back();
 		p_ParameterList->pop_back();
