@@ -168,7 +168,8 @@ namespace SNI
 		else
 		{
 			result = m_Expression->DoEvaluate(p_MetaLevel);
-			condition_param->SetValue(result);
+			expression_param->SetValue(result);
+			topFrame->GetResult()->SetValue(result);
 		}
 		Breakpoint(SN::DebugStop, SN::RightId, GetTypeName(), "Assert value after call", this, SN::CallPoint);
 		SNI_Frame::Pop();
@@ -177,9 +178,9 @@ namespace SNI
 
 	SN::SN_Expression SNI_Let::DoPartialEvaluate(long p_MetaLevel /* = 0 */) const
 	{
-		SN::SN_Expression condition = m_Condition;
-		SN::SN_Expression expression = m_Expression;
-		return SN::SN_Let(condition.DoPartialEvaluate(p_MetaLevel), expression.DoPartialEvaluate(p_MetaLevel));
+		SN::SN_Expression condition = m_Condition->DoPartialEvaluate(p_MetaLevel);
+		SN::SN_Expression expression = m_Expression->DoPartialEvaluate(p_MetaLevel);
+		return SN::SN_Let(condition, expression);
 	}
 
 	SN::SN_Error SNI_Let::DoPartialAssert()
@@ -244,7 +245,7 @@ namespace SNI
 		else
 		{
 			e = m_Expression->AssertValue(p_Value);
-			expression_param->SetValue(e);
+			expression_param->SetValue(p_Value);
 		}
 		LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": End " + DisplaySN(0, displayOptions)));
 		Breakpoint(SN::DebugStop, SN::RightId, GetTypeName(), "Assert value after call", this, SN::CallPoint);
