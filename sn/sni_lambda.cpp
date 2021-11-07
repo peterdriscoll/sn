@@ -200,8 +200,30 @@ namespace SNI
 		LOGGING(SN::LogContext context(DisplaySN0() + "SNI_Lambda::Call ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
 
 		Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Call", this, SN::CallPoint);
+		if (0 < p_MetaLevel)
+		{
+			SN::SN_Expression formalParameter;
+			if (m_FormalParameter)
+			{
+				formalParameter = m_FormalParameter->DoEvaluate(p_MetaLevel);
+			}
+			SN::SN_Expression expression;
+			if (m_Expression)
+			{
+				expression = m_Expression->DoEvaluate(p_MetaLevel);
+			}
+			SN::SN_Expression constraintValue;
+			if (m_ConstraintValue)
+			{
+				constraintValue = m_ConstraintValue->DoEvaluate(p_MetaLevel);
+			}
+			return SN::SN_Lambda(formalParameter, expression, constraintValue);
+		}
 
-		ASSERTM(p_ParameterList->size() >0, "Cannot call a lambda without a parameter");
+		if (p_ParameterList->empty())
+		{
+			return SN::SN_Error(false, false, "Cannot call a lambda expression without a parameter");
+		}
 		SN::SN_Expression param = p_ParameterList->back().GetSNI_Expression();
 		p_ParameterList->pop_back();
 		SN::SN_Error e = skynet::OK;
@@ -246,7 +268,30 @@ namespace SNI
 	{
 		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Lambda::PartialCall ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
 
-		ASSERTM(p_ParameterList->size() >0, "Cannot call a lambda without a parameter");
+		if (0 < p_MetaLevel)
+		{
+			SN::SN_Expression formalParameter;
+			if (m_FormalParameter)
+			{
+				formalParameter = m_FormalParameter->DoPartialEvaluate(p_MetaLevel);
+			}
+			SN::SN_Expression expression;
+			if (m_Expression)
+			{
+				expression = m_Expression->DoPartialEvaluate(p_MetaLevel);
+			}
+			SN::SN_Expression constraintValue;
+			if (m_ConstraintValue)
+			{
+				constraintValue = m_ConstraintValue->DoPartialEvaluate(p_MetaLevel);
+			}
+			return SN::SN_Lambda(formalParameter, expression, constraintValue);
+		}
+
+		if (p_ParameterList->empty())
+		{
+			return SN::SN_Error(false, false, "Cannot partial call a lambda expression without a parameter");
+		}
 
 		SN::SN_Expression param = p_ParameterList->back().DoPartialEvaluate(p_MetaLevel);
 		p_ParameterList->pop_back();
@@ -276,8 +321,11 @@ namespace SNI
 	{
 		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Lambda::Unify ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
 
-		ASSERTM(p_ParameterList->size() > 1, "Cannot unify to a lambda without a parameter");
 		Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Unify", this, SN::CallPoint);
+		if (p_ParameterList->empty())
+		{
+			return SN::SN_Error(false, false, "Cannot unify to a lambda expression without a parameter");
+		}
 		SN::SN_Expression param = p_ParameterList->back();
 		p_ParameterList->pop_back();
 		SN::SN_Expression result = skynet::OK;

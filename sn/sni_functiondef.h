@@ -78,6 +78,7 @@ namespace SNI
 		virtual bool GetBoolResult() const;
 
 		virtual SN::SN_Expression MakeCallExpression(SN::SN_ExpressionList* p_ParameterList, long p_MetaLevel = 0) const;
+		virtual SN::SN_Expression MakePartialCallExpression(SN::SN_ExpressionList* p_ParameterList, long p_MetaLevel = 0) const;
 
 		virtual size_t Cardinality(SN::SN_Expression * p_ParameterList) const;
 

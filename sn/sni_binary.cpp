@@ -64,7 +64,17 @@ namespace SNI
 		{
 			return SNI_FunctionDef::DisplayCall(priority, p_DisplayOptions, p_NumParams, p_ParamList, p_DebugSource);
 		}
-		return Bracket(priority, p_ParamList[PC2_First].DisplaySN(GetPriority(), p_DisplayOptions) + SetBreakPoint(GetOperator(), p_DisplayOptions, p_DebugSource, SN::ParameterTwoId) + p_ParamList[PC2_Second].DisplaySN(GetPriority(), p_DisplayOptions) + SetBreakPoint(";", p_DisplayOptions, p_DebugSource, SN::ParameterThreeId), p_DisplayOptions, p_DebugSource);
+		string first = "_";
+		if (PC2_First < p_NumParams)
+		{
+			first = p_ParamList[PC2_First].DisplaySN(GetPriority(), p_DisplayOptions);
+		}
+		string second = "_";
+		if (PC2_Second < p_NumParams)
+		{
+			second = p_ParamList[PC2_Second].DisplaySN(GetPriority(), p_DisplayOptions);
+		}
+		return Bracket(priority, first + SetBreakPoint(GetOperator(), p_DisplayOptions, p_DebugSource, SN::ParameterTwoId) + second + SetBreakPoint(";", p_DisplayOptions, p_DebugSource, SN::ParameterThreeId), p_DisplayOptions, p_DebugSource);
 	}
 
 	SN::SN_Expression SNI_Binary::PrimaryFunctionExpressionOp(const SN::SN_Expression &p_Left, const SN::SN_Expression &p_Right) const
@@ -104,6 +114,11 @@ namespace SNI
 	SN::SN_Expression SNI_Binary::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
 		LOGGING(SN::LogContext context("SNI_Binary::PartialCall ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
+
+		if (p_ParameterList->size() < 2)
+		{
+			return MakePartialCallExpression(p_ParameterList, p_MetaLevel);
+		}
 
 		SN::SN_Expression left_value = (*p_ParameterList)[1].DoPartialEvaluate(p_MetaLevel);
 		SN::SN_Expression right_value = (*p_ParameterList)[0].DoPartialEvaluate(p_MetaLevel);

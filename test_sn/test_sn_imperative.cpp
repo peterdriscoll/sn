@@ -71,9 +71,9 @@ namespace test_sn
 					SN_LOCAL(p);
 					(testCall(f)(p) == f(p + Long(3))).PartialAssert().Do();
 				}
-				
+
 				SN_DECLARE(x);
-				
+
 				(x == Local(Operators.FunctionCall, Let(Function(Function(Equals, Operators.FunctionCall), testCall), Long(4) + Long(5)))).Assert().Do();
 
 				(x == Long(15)).Evaluate().Do();
@@ -81,7 +81,45 @@ namespace test_sn
 				(Long(15) == Local(Operators.FunctionCall, Let(Function(Function(Equals, Operators.FunctionCall), testCall), Long(4) + Long(5)))).Evaluate().Do();
 			}
 		}
-		
+
+		TEST_METHOD(TestSimpleStateThreading)
+		{
+			return;
+			Initialize();
+			{
+				Manager manager("Test Simple State Threading", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.SetTailCallOptimization(true);
+
+				string nv1;
+				string nw1;
+
+				SN_DECLARE(testSimpleImperative);
+				{
+					SN_LOCAL_INLINE(f);
+					SN_LOCAL_INLINE(p);
+					SN_LOCAL_INLINE(s);
+					SN_LOCAL_INLINE(v);
+					SN_LOCAL_INLINE(w);
+					nv1 = v.DisplaySN();
+					nw1 = w.DisplaySN();
+					(testSimpleImperative(f)(p)(s) == Local(v, Local(w, Let(
+						v == f.BuildMeta(Short(1)).IsA(Value::Class()).If(StateValue(f, s), f(s))
+					&&	w == p.BuildMeta(Short(1)).IsA(Value::Class()).If(StateValue(p, v.State()), p(v.State()))
+					,	StateValue(v.Value()(w.Value()), w.State()))))).PartialAssert().Do();
+				}
+				string s2 = testSimpleImperative.DisplayValueSN();
+
+				SN_DECLARE(x);
+				SN_DECLARE(t);
+				(x == Local(Operators.FunctionCall, Let(Function(Function(Equals, Operators.FunctionCall), testSimpleImperative), Function(Long(4) + Long(5), t))).Value()).Assert().Do();
+
+				(x == Long(9)).Evaluate().Do();
+
+				(Long(9) == Local(Operators.FunctionCall, Let(Function(Function(Equals, Operators.FunctionCall), testSimpleImperative), Function(Long(4) + Long(5), t))).Value()).Evaluate().Do();
+			}
+		}
+
 		TEST_METHOD(TestAssignment)
 		{
 			Initialize();

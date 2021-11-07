@@ -26,7 +26,7 @@ namespace SNI
 
 	string SNI_MetaLevel::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
-		return "Assert";
+		return "Meta";
 	}
 
 	long SNI_MetaLevel::GetPriority() const
@@ -94,6 +94,11 @@ namespace SNI
 
 	SN::SN_Expression SNI_MetaLevel::UnifyArray(SN::SN_Expression * p_ParamList, const SNI_Expression *p_Source)
 	{
+		SNI_Frame::Push(this, p_ParamList[PU2_Result].GetSNI_Expression());
+		SNI_Frame* topFrame = SNI_Frame::Top();
+		topFrame->CreateParameter(PU2_First, p_ParamList[PU2_First]);
+		topFrame->CreateParameter(PU2_Second, p_ParamList[PU2_Second]);
+
 		Breakpoint(SN::DebugStop, SN::CallId, GetTypeName(), "Unify start", p_Source, SN::CallPoint);
 
 		long metaLevel = 0;
@@ -118,10 +123,17 @@ namespace SNI
 				}
 			}
 		}
-		SN::SN_Error result = p_ParamList[PU2_First].DoEvaluate().DoBuildMeta(metaLevel).GetError();
+		topFrame->GetVariable(PU2_Second)->SetValue(SN::SN_Long(metaLevel));
+
+		SN::SN_Expression result = p_ParamList[PU2_First].GetVariableValue().DoBuildMeta(metaLevel);
+
+		SN::SN_Error err = p_ParamList[PU2_Result].AssertValue(result);
+
+		topFrame->GetResult()->SetValue(p_ParamList[PU2_Result]);
 
 		Breakpoint(SN::DebugStop, SN::ReturnId, GetTypeName(), "Unify end", p_Source, SN::CallPoint);
 
-		return p_ParamList[PU2_Result].AssertValue(result);
+		SNI_Frame::Pop();
+		return err;
 	}
 }

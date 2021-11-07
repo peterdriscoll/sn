@@ -80,6 +80,7 @@ namespace SNI
 		m_LogicSetupDone = true;
 		skynet::RerunRequest.GetSNI_Error()->MakeRerunRequest();
 
+		// Expression
 		Value::Class().GetSNI_Class()->AssertIsAValue(Expression::Class().GetSNI_Class(), skynet::True);
 		Define::Class().GetSNI_Class()->AssertIsAValue(Expression::Class().GetSNI_Class(), skynet::True);
 		Function::Class().GetSNI_Class()->AssertIsAValue(Expression::Class().GetSNI_Class(), skynet::True);
@@ -87,6 +88,7 @@ namespace SNI
 		Local::Class().GetSNI_Class()->AssertIsAValue(Expression::Class().GetSNI_Class(), skynet::True);
 		Variable::Class().GetSNI_Class()->AssertIsAValue(Expression::Class().GetSNI_Class(), skynet::True);
 
+		// Value
 		Bool::Class().GetSNI_Class()->AssertIsAValue(Value::Class().GetSNI_Class(), skynet::True);
 		Char::Class().GetSNI_Class()->AssertIsAValue(Value::Class().GetSNI_Class(), skynet::True);
 		String::Class().GetSNI_Class()->AssertIsAValue(Value::Class().GetSNI_Class(), skynet::True);

@@ -124,6 +124,17 @@ namespace SNI
 		return new SNI_IncompleteFunction(result);
 	}
 
+	SN::SN_Expression SNI_FunctionDef::MakePartialCallExpression(SN::SN_ExpressionList* p_ParameterList, long p_MetaLevel /* = 0 */) const
+	{
+		SN::SN_Expression result = this;
+		for (SN::SN_ExpressionList::reverse_iterator paramIt = p_ParameterList->rbegin(); paramIt != p_ParameterList->rend(); paramIt++)
+		{
+			result = SN::SN_Function(result, paramIt->DoPartialEvaluate(p_MetaLevel));
+		}
+		p_ParameterList->clear();
+		return new SNI_IncompleteFunction(result);
+	}
+
 	size_t SNI_FunctionDef::Cardinality(SN::SN_Expression * p_ParamList) const
 	{
 		long depth = GetNumParameters();
