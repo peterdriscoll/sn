@@ -365,7 +365,7 @@ namespace SNI
 			SNI_FunctionDef* functionDef = dynamic_cast<SNI_FunctionDef*>(p_Function);
 			if (functionDef)
 			{
-				if (functionDef->GetNumParameters() - 1 == p_ParameterList->size())
+				if (functionDef->GetNumParameters() - 1 <= p_ParameterList->size())
 				{
 					SN::SN_Expression* param_List = functionDef->LoadParametersCall(p_ParameterList);
 					if (p_ParameterList->empty())
@@ -373,6 +373,7 @@ namespace SNI
 						delete p_ParameterList;
 						p_ParameterList = NULL;
 					}
+					
 					p_Function = functionDef->CallArray(param_List, p_MetaLevel, this).GetSNI_Expression();
 					delete[] param_List;
 				}

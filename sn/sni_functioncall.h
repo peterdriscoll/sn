@@ -14,6 +14,9 @@ namespace SNI
 		SNI_FunctionCall();
 		virtual ~SNI_FunctionCall();
 
+		static SNI_Class* Class();
+		SNI_Class* VClass();
+
 		virtual string GetTypeName() const;
 		virtual string DisplayCpp() const;
 		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
@@ -29,6 +32,9 @@ namespace SNI
 
 		virtual SN::SN_Expression Unify(SN::SN_ExpressionList * p_ParameterList);
 		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define = false);
+
+	private:
+		static SNI_Class* m_Class;
 	};
 }
 

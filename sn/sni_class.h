@@ -12,10 +12,10 @@ namespace SNI
 	class SNI_Inherits
 	{
 	public:
-		SNI_Inherits(const SNI_Value *p_Parent, SNI_Value *p_Result);
+		SNI_Inherits(const SNI_Expression *p_Parent, SNI_Value *p_Result);
 		virtual ~SNI_Inherits();
 
-		const SNI_Value *GetParent() const;
+		const SNI_Expression *GetParent() const;
 		const SNI_Value *GetResult() const;
 
 		virtual SN::SN_Error AssertValue(SN::SN_Expression p_Result);
@@ -23,7 +23,7 @@ namespace SNI
 		void PromoteMembersExternal(PGC::PGC_Base * p_Base);
 
 	private:
-		const SNI_Value *m_Parent;
+		const SNI_Expression *m_Parent;
 		SNI_Value *m_Result;
 	};
 
@@ -43,9 +43,9 @@ namespace SNI
 		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual long GetPriority() const;
 
-		virtual bool Equivalent(SNI_Object* p_Other) const;
-
 		virtual bool IsKnownTypeValue() const;
+
+		virtual bool Equivalent(SNI_Object* p_Other) const;
 
 		// Inheritance
 		virtual SN::SN_Error AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result);

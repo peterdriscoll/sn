@@ -4,7 +4,7 @@
 
 namespace SNI
 {
-	SNI_Inherits::SNI_Inherits(const SNI_Value * p_Parent, SNI_Value *p_Result)
+	SNI_Inherits::SNI_Inherits(const SNI_Expression * p_Parent, SNI_Value *p_Result)
 		: m_Parent(p_Parent)
 		, m_Result(p_Result)
 	{
@@ -14,7 +14,7 @@ namespace SNI
 	{
 	}
 
-	const SNI_Value * SNI_Inherits::GetParent() const
+	const SNI_Expression * SNI_Inherits::GetParent() const
 	{
 		return m_Parent;
 	}
@@ -76,20 +76,19 @@ namespace SNI
 		return 100;
 	}
 
-	bool SNI_Class::Equivalent(SNI_Object* p_Other) const
-	{
-		if (dynamic_cast<SNI_Class*>(p_Other))
-		{
-			SNI_Class* l_class = dynamic_cast<SNI_Class*>(p_Other);
-			return m_ClassName == l_class->m_ClassName;
-		}
-		return false;
-	}
-
-
 	bool SNI_Class::IsKnownTypeValue() const
 	{
 		return true;
+	}
+
+	bool SNI_Class::Equivalent(SNI_Object* p_Other) const
+	{
+		SNI_Class* other = dynamic_cast<SNI_Class*>(p_Other);
+		if (other)
+		{
+			return m_ClassName == other->m_ClassName;
+		}
+		return false;
 	}
 
 	SN::SN_Error SNI_Class::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)

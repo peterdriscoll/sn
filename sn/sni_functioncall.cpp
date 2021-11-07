@@ -17,6 +17,21 @@
 
 namespace SNI
 {
+	/*static*/ SNI_Class* SNI_FunctionCall::m_Class = NULL;
+	/*static*/ SNI_Class* SNI_FunctionCall::Class()
+	{
+		if (!m_Class)
+		{
+			m_Class = new SNI_Class("FunctionCall");
+		}
+		return m_Class;
+	}
+
+	SNI_Class* SNI_FunctionCall::VClass()
+	{
+		return Class();
+	}
+
 	SNI_FunctionCall::SNI_FunctionCall()
 	{
 	}
