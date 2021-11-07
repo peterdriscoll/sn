@@ -11,6 +11,7 @@
 #include "sn_null.h"
 #include "sn_meta.h"
 #include "sn_valueset.h"
+#include "sn_statevalue.h"
 #include "sn_error.h"
 
 #include "sni_bool.h"

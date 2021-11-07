@@ -108,6 +108,22 @@ namespace SNI
 		return false;
 	}
 
+	SN::SN_Expression SNI_FunctionDef::MakeCallExpression(SN::SN_ExpressionList* p_ParameterList, long p_MetaLevel /* = 0 */) const
+	{
+		SN::SN_Expression result = this;
+		for (SN::SN_ExpressionList::reverse_iterator paramIt = p_ParameterList->rbegin(); paramIt != p_ParameterList->rend(); paramIt++)
+		{
+			SN::SN_Expression param = paramIt->DoEvaluate(p_MetaLevel);
+			if (!param.IsKnownValue())
+			{
+				param = paramIt->DoPartialEvaluate(p_MetaLevel);
+			}
+			result = SN::SN_Function(result, param);
+		}
+		p_ParameterList->clear();
+		return new SNI_IncompleteFunction(result);
+	}
+
 	size_t SNI_FunctionDef::Cardinality(SN::SN_Expression * p_ParamList) const
 	{
 		long depth = GetNumParameters();
@@ -280,6 +296,24 @@ namespace SNI
 		return paramList;
 	}
 
+	SN::SN_Expression* SNI_FunctionDef::LoadParametersUnify(SN::SN_ExpressionList* p_ParameterList) const
+	{
+		size_t numParams = GetNumParameters();
+		size_t numStackParams = p_ParameterList->size();
+		if (numStackParams >= numParams)
+		{
+			SN::SN_Expression* paramList = new SN::SN_Expression[numParams];
+			paramList[PU2_Result] = (*p_ParameterList)[numStackParams - numParams];
+			for (size_t j = 1; j < numParams; j++)
+			{
+				paramList[j] = (*p_ParameterList)[numStackParams - j];
+			}
+			p_ParameterList->resize(numStackParams - numParams);
+			return paramList;
+		}
+		return NULL;
+	}
+
 	SN::SN_Expression SNI_FunctionDef::DoEvaluate(long  /* = 0 */) const
 	{
 		return this;
@@ -357,7 +391,11 @@ namespace SNI
 		Breakpoint(SN::DebugStop, SN::RightId, GetTypeName(), "Result calculated", p_Source, SN::CallPoint);
 
 		delete[] inputList;
-		result.GetSNI_Expression()->Validate();
+		SNI_Expression* r = result.GetSNI_Expression();
+		if (r)
+		{
+			r->Validate();
+		}
 		SNI_Frame::Pop();
 		return result;
 	}

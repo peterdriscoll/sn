@@ -77,6 +77,8 @@ namespace SNI
 
 		virtual bool GetBoolResult() const;
 
+		virtual SN::SN_Expression MakeCallExpression(SN::SN_ExpressionList* p_ParameterList, long p_MetaLevel = 0) const;
+
 		virtual size_t Cardinality(SN::SN_Expression * p_ParameterList) const;
 
 		virtual void ExpandedBooleanResult(SN::SN_Expression* p_ParamList) const;
@@ -93,7 +95,8 @@ namespace SNI
 		virtual SN::SN_Expression PrimaryFunctionExpressionOp(const SN::SN_Expression & p_Cond, const SN::SN_Expression & p_PositiveCase, const SN::SN_Expression & p_NegativeCase) const;
 		virtual SN::SN_Expression PrimaryFunctionExpression(const SN::SN_Expression & p_Cond, const SN::SN_Expression & p_PositiveCase, const SN::SN_Expression & p_NegativeCase) const;
 
-		virtual SN::SN_Expression * LoadParametersCall(SN::SN_ExpressionList * p_ParameterList) const;
+		virtual SN::SN_Expression* LoadParametersCall(SN::SN_ExpressionList * p_ParameterList) const;
+		virtual SN::SN_Expression* LoadParametersUnify(SN::SN_ExpressionList* p_ParameterList) const;
 
 		virtual SN::SN_Expression DoEvaluate(long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression DoPartialEvaluate(long p_MetaLevel = 0) const;

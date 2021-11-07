@@ -227,6 +227,7 @@ namespace SNI
 		{
 			paramList[j] = (*p_ParameterList)[numParams - j - 1];
 		}
+		p_ParameterList->clear();
 		return paramList;
 	}
 
@@ -367,14 +368,17 @@ namespace SNI
 				if (functionDef->GetNumParameters() - 1 == p_ParameterList->size())
 				{
 					SN::SN_Expression* param_List = functionDef->LoadParametersCall(p_ParameterList);
-					delete p_ParameterList;
-					p_ParameterList = NULL;
+					if (p_ParameterList->empty())
+					{
+						delete p_ParameterList;
+						p_ParameterList = NULL;
+					}
 					p_Function = functionDef->CallArray(param_List, p_MetaLevel, this).GetSNI_Expression();
 					delete[] param_List;
 				}
 				else
 				{
-					p_Function = functionDef->Call(p_ParameterList, p_MetaLevel).GetSNI_Expression();
+					return LOG_RETURN(context, functionDef->MakeCallExpression(p_ParameterList, p_MetaLevel).GetSNI_Expression());
 				}
 			}
 			else

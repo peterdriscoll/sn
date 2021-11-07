@@ -134,11 +134,18 @@ namespace SNI
 		}
 		if (function)
 		{
+			size_t numParams = l_ParameterList.size();
 			SN::SN_Expression *param_List = function->LoadParametersCall(&l_ParameterList);
-			string result = function->DisplayCall(GetPriority(), p_DisplayOptions, l_ParameterList.size(), param_List, this);
+			string result = function->DisplayCall(GetPriority(), p_DisplayOptions, numParams, param_List, this);
 			delete[] param_List;
+			if (!l_ParameterList.empty())
+			{
+				for (SN::SN_ExpressionList::reverse_iterator paramIt = l_ParameterList.rbegin(); paramIt != l_ParameterList.rend(); paramIt++)
+				{
+					result += " " + paramIt->DisplaySN();
+				}
+			}
 			return result;
-		//			return function->DisplayParameters(GetPriority(), p_DisplayOptions, l_ParameterList, this);
 		}
 		return "";
 	}
