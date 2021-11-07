@@ -280,8 +280,15 @@ namespace SNI
 				if (functionDef->GetNumParameters() == l_ParameterList->size())
 				{
 					SN::SN_Expression *param_List = functionDef->LoadParametersUnify(l_ParameterList);
-					delete l_ParameterList;
-					l_ParameterList = NULL;
+					if (l_ParameterList->empty())
+					{
+						delete l_ParameterList;
+						l_ParameterList = NULL;
+					}
+					else
+					{
+						long dog = 10;
+					}
 					function = functionDef->UnifyArray(param_List, this).GetSNI_Expression();
 					delete[] param_List;
 				}

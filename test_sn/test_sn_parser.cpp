@@ -938,7 +938,7 @@ namespace test_sn
 		}
 
 		TEST_METHOD(TestParse_SimpleExpression1)
-		{ // dog dog dog.
+		{
 			Initialize();
 			{
 				Manager manager("Test Parse Simple Expression1", AssertErrorHandler);
