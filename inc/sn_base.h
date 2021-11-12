@@ -210,6 +210,11 @@ namespace SN
 			return GetSNI_Base() && GetSNI_Base()->IsComplete();
 		}
 
+		bool IsMeta() const
+		{
+			return GetSNI_Base() && GetSNI_Base()->IsMeta();
+		}
+
 		bool IsError() const
 		{
 			return GetSNI_Base() && GetSNI_Base()->IsError();
@@ -318,6 +323,26 @@ namespace SN
 		Err DoPartialAssert()
 		{
 			return GetSNI_Base()->DoPartialAssert();
+		}
+
+		Exp DoQuery(long p_MetaLevel = 0) const
+		{
+			if (p_MetaLevel)
+			{
+				SN_Expression l(dynamic_cast<SNI_Expression*>(GetSNI_Base()));
+				return SN_Meta(p_MetaLevel, l).DoEvaluate();
+			}
+			return GetSNI_Base()->DoEvaluate();
+		}
+
+		Exp DoReduce(long p_MetaLevel = 0) const
+		{
+			if (p_MetaLevel)
+			{
+				SN_Expression l(dynamic_cast<SNI_Expression*>(GetSNI_Base()));
+				return SN_Meta(p_MetaLevel, l).DoPartialEvaluate();
+			}
+			return GetSNI_Base()->DoPartialEvaluate();
 		}
 
 		Exp DoBuildMeta(long p_MetaLevel = 0)

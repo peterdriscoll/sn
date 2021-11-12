@@ -93,6 +93,11 @@ namespace SNI
 		return 0;
 	}
 
+	bool SNI_Meta::IsMeta() const
+	{
+		return true;
+	}
+
 	bool SNI_Meta::IsKnownValue() const
 	{
 		return 0 < m_DeltaMetaLevel;
@@ -144,26 +149,22 @@ namespace SNI
 
 	SN::SN_Expression SNI_Meta::DoEvaluate(long p_MetaLevel /* = 0 */) const
 	{
-		long l_DeltaMetaLevel = m_DeltaMetaLevel;
-		long this_level = p_MetaLevel + l_DeltaMetaLevel;
-		SN::SN_Expression result = m_Expression->DoEvaluate(this_level);
-		if (l_DeltaMetaLevel != 0)
+		long thisLevel = p_MetaLevel + m_DeltaMetaLevel;
+		SN::SN_Expression result = m_Expression->DoEvaluate(thisLevel);
+		if (m_DeltaMetaLevel)
 		{
-			if ((p_MetaLevel < 0) && (l_DeltaMetaLevel > 0))
-			{
-				l_DeltaMetaLevel += p_MetaLevel;
-				if (l_DeltaMetaLevel < 0)
-				{
-					l_DeltaMetaLevel = 0;
-				}
+			if (result.IsMeta())
+			{ // If the result is a meta, then combine this meta with it, simplifying one Meta within a Meta to a single one. 
+				SNI_Meta* meta_result = result.GetSNI_Meta();
+				return meta_result->CombineMetaValues(m_DeltaMetaLevel);
 			}
-			if ((this_level <= 0) && (l_DeltaMetaLevel < 0))
-			{
-				l_DeltaMetaLevel = 0;
+			if (!result.IsVariable() && result.IsKnownValue())
+			{ // Meta wraps an expression so that it can be treated as a value. But if the result is already a value, no need for the Meta.
+				return result;
 			}
-			if (l_DeltaMetaLevel != 0)
+			if (0 < p_MetaLevel || 0 < thisLevel)
 			{
-				return SN::SN_Meta(l_DeltaMetaLevel, result);
+				return SN::SN_Meta(m_DeltaMetaLevel, result);
 			}
 		}
 		return result;
@@ -171,26 +172,22 @@ namespace SNI
 
 	SN::SN_Expression SNI_Meta::DoPartialEvaluate(long p_MetaLevel /* = 0 */) const
 	{
-		long l_DeltaMetaLevel = m_DeltaMetaLevel;
-		long this_level = p_MetaLevel + l_DeltaMetaLevel;
-		SN::SN_Expression result = m_Expression->DoPartialEvaluate(this_level);
-		if (l_DeltaMetaLevel != 0)
+		long thisLevel = p_MetaLevel + m_DeltaMetaLevel;
+		SN::SN_Expression result = m_Expression->DoPartialEvaluate(thisLevel);
+		if (m_DeltaMetaLevel)
 		{
-			if ((p_MetaLevel < 0) && (l_DeltaMetaLevel > 0))
-			{
-				l_DeltaMetaLevel += p_MetaLevel;
-				if (l_DeltaMetaLevel < 0)
-				{
-					l_DeltaMetaLevel = 0;
-				}
+			if (result.IsMeta())
+			{ // If the result is a meta, then combine this meta with it, simplifying one Meta within a Meta to a single one. 
+				SNI_Meta *meta_result = result.GetSNI_Meta();
+				return meta_result->CombineMetaValues(m_DeltaMetaLevel);
 			}
-			if ((this_level <= 0) && (l_DeltaMetaLevel < 0))
-			{
-				l_DeltaMetaLevel = 0;
+			if (!result.IsVariable() && result.IsKnownValue())
+			{ // Meta wraps an expression so that it can be treated as a value. But if the result is already a value, no need for the Meta.
+				return result;
 			}
-			if (l_DeltaMetaLevel != 0)
+			if (0 < p_MetaLevel || 0 < thisLevel)
 			{
-				return SN::SN_Meta(l_DeltaMetaLevel, result);
+				return SN::SN_Meta(m_DeltaMetaLevel, result);
 			}
 		}
 		return result;
@@ -223,5 +220,15 @@ namespace SNI
 	SN::SN_Error SNI_Meta::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
 		return m_Expression->PartialUnify(p_ParameterList, p_Result);
+	}
+
+	SN::SN_Expression SNI_Meta::CombineMetaValues(long p_DeltaMetaLevel)
+	{
+		m_DeltaMetaLevel += p_DeltaMetaLevel;
+		if (m_DeltaMetaLevel)
+		{
+			return this;
+		}
+		return m_Expression;
 	}
 }

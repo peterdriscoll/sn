@@ -29,6 +29,8 @@ namespace SNI
 		virtual void AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map);
 		virtual long GetPriority() const;
 
+		virtual bool IsMeta() const;
+
 		virtual bool IsKnownValue() const;
 		virtual size_t Cardinality(size_t p_MaxCardinality) const;
 
@@ -43,6 +45,8 @@ namespace SNI
 		virtual SN::SN_Error PartialAssertValue(const SN::SN_Expression &p_Expression, bool p_Define = false);
 		virtual SN::SN_Expression Unify(SN::SN_ExpressionList * p_ParameterList);
 		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Expression, bool p_Define = false);
+
+		SN::SN_Expression CombineMetaValues(long p_DeltaMetaLevel);
 
 	private:
 		static SNI_Class *m_Class;

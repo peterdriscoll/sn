@@ -171,15 +171,16 @@ namespace SNI
 		if (0 < p_MetaLevel)
 		{
 			SN::SN_Expression expression = m_Expression;
-			return SN::SN_Local(m_LocalVariable, expression.DoEvaluate(p_MetaLevel));
+			return SN::SN_Local(m_LocalVariable, expression.DoPartialEvaluate(p_MetaLevel));
 		}
 
-		SN::SN_Expression value = m_Expression->DoPartialEvaluate(p_MetaLevel);
-		if (SN::Is<SNI_Value *>(value))
+		SN::SN_Expression exp = m_Expression->DoPartialEvaluate(p_MetaLevel);
+
+		if (SN::Is<SNI_Value *>(exp))
 		{
-			return value;
+			return exp;
 		}
-		return this;
+		return SN::SN_Local(m_LocalVariable, exp);
 	}
 
 	SN::SN_Error SNI_Local::DoAssert()

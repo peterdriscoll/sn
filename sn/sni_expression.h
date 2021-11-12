@@ -145,6 +145,7 @@ namespace SNI
 		virtual bool IsValueSet() const;
 		virtual bool IsString() const;
 		virtual bool IsStringValue() const;
+		virtual bool IsMeta() const;
 		virtual bool IsNullValue() const;
 		virtual bool IsReferableValue() const;
 		virtual SN::SN_Expression GetVariableValue(bool p_IfComplete);

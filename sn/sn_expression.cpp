@@ -278,9 +278,14 @@ namespace SN
 		return dynamic_cast<SNI::SNI_Variable *>(m_Expression);
 	}
 
-	SNI::SNI_FunctionDef * SN_Expression::GetSNI_FunctionDef() const
+	SNI::SNI_FunctionDef* SN_Expression::GetSNI_FunctionDef() const
 	{
-		return dynamic_cast<SNI::SNI_FunctionDef *>(m_Expression);
+		return dynamic_cast<SNI::SNI_FunctionDef*>(m_Expression);
+	}
+
+	SNI::SNI_Meta* SN_Expression::GetSNI_Meta() const
+	{
+		return dynamic_cast<SNI::SNI_Meta*>(m_Expression);
 	}
 
 	SN_Expression SN_Expression::GetVariableValue(bool p_IfComplete)

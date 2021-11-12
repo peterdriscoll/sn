@@ -535,6 +535,11 @@ namespace SNI
 		return IsString();
 	}
 
+	bool SNI_Expression::IsMeta() const
+	{
+		return false;
+	}
+
 	bool SNI_Expression::IsError() const
 	{
 		return false;

@@ -81,7 +81,7 @@ namespace test_sn
 
 				string s3 = Meta(1, Meta(-1, dog)).DoEvaluate().DisplaySN();
 
-				Assert::IsTrue(Meta(1, Meta(-1, dog)).DoEvaluate().Equivalent(Meta(1, dog.DoEvaluate())));
+				Assert::IsTrue(Meta(1, Meta(-1, dog)).DoEvaluate().Equivalent(String("Vincent ")));
 
 				SN_DECLARE_VALUE(e, Meta(2, Meta(-1, dog) + Meta(-1, cat)));
 
@@ -93,14 +93,14 @@ namespace test_sn
 
 
 				Assert::IsTrue(Meta(-1, e).DoEvaluate().Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
-				Assert::IsTrue(e.DoEvaluate(-1).Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
+				Assert::IsTrue(e.DoQuery(-1).Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
 
 				string s6 = Meta(-1, Meta(-1, e).DoEvaluate()).DoEvaluate().DisplaySN();
 
 				Assert::IsTrue(Meta(-1, Meta(-1, e).DoEvaluate()).DoEvaluate().Equivalent(String("Vincent Emma ")));
-				Assert::IsTrue(e.DoEvaluate(-1).DoEvaluate(-1).Equivalent(String("Vincent Emma ")));
+				Assert::IsTrue(e.DoQuery(-2).Equivalent(String("Vincent Emma ")));
 
-				Assert::IsTrue(Meta(1, Meta(-1, dog)).DoEvaluate().Equivalent(Meta(1, dog.DoEvaluate())));
+				Assert::IsTrue(Meta(1, Meta(-1, dog)).DoEvaluate().Equivalent(String("Vincent ")));
 			}
 			Cleanup();
 		}
@@ -117,37 +117,37 @@ namespace test_sn
 
 				Assert::IsTrue(Meta(1, String("Vincent ") + String("Emma ")).DoPartialEvaluate().Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
 
-				std::cout << std::endl << Meta(1, dog + cat).DoPartialEvaluate().DisplaySN() << std::endl;
+				string s1 = Meta(1, dog + cat).DoPartialEvaluate().DisplaySN();
 
 				Assert::IsTrue(Meta(1, dog + cat).DoPartialEvaluate().Equivalent(Meta(1, dog + cat)));
 
-				std::cout << std::endl << Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoPartialEvaluate().DisplaySN() << std::endl;
+				string s2 = Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoPartialEvaluate().DisplaySN();
 
 				Assert::IsTrue(Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoPartialEvaluate().Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
 
-				std::cout << std::endl << Meta(-1, Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoPartialEvaluate()).DoPartialEvaluate().DisplaySN() << std::endl;
+				string s3 = Meta(-1, Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoPartialEvaluate()).DoPartialEvaluate().DisplaySN();
 
 				Assert::IsTrue(Meta(-1, Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoPartialEvaluate()).DoPartialEvaluate().Equivalent(String("Vincent Emma ")));
 
-				std::cout << std::endl << Meta(1, Meta(-1, dog)).DoPartialEvaluate().DisplaySN() << std::endl;
+				string s4 = Meta(1, Meta(-1, dog)).DoPartialEvaluate().DisplaySN();
 
-				Assert::IsTrue(Meta(1, Meta(-1, dog)).DoPartialEvaluate().Equivalent(Meta(1, dog.DoPartialEvaluate())));
+				Assert::IsTrue(Meta(1, Meta(-1, dog)).DoPartialEvaluate().Equivalent(String("Vincent ")));
 
 				SN_DECLARE_VALUE(e, Meta(2, Meta(-1, dog) + Meta(-1, cat)));
 
-				std::cout << std::endl << e.DoPartialEvaluate().DisplaySN() << std::endl;
+				string s5 = e.DoPartialEvaluate().DisplaySN();
 
 				Assert::IsTrue(e.DoPartialEvaluate().Equivalent(Meta(2, Meta(-1, dog) + Meta(-1, cat))));
 
-				std::cout << std::endl << Meta(-1, e).DoPartialEvaluate().DisplaySN() << std::endl;
+				string s6 = Meta(-1, e).DoPartialEvaluate().DisplaySN();
 
 				Assert::IsTrue(Meta(-1, e).DoPartialEvaluate().Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
-				Assert::IsTrue(e.DoPartialEvaluate(-1).Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
+				Assert::IsTrue(e.DoReduce(-1).Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
 
-				std::cout << std::endl << Meta(-1, Meta(-1, e).DoPartialEvaluate()).DoPartialEvaluate().DisplaySN() << std::endl;
+				string s7 = Meta(-1, Meta(-1, e).DoPartialEvaluate()).DoPartialEvaluate().DisplaySN();
 
 				Assert::IsTrue(Meta(-1, Meta(-1, e).DoPartialEvaluate()).DoPartialEvaluate().Equivalent(String("Vincent Emma ")));
-				Assert::IsTrue(e.DoPartialEvaluate(-1).DoPartialEvaluate(-1).Equivalent(String("Vincent Emma ")));
+				Assert::IsTrue(e.DoReduce(-2).Equivalent(String("Vincent Emma ")));
 			}
 			Cleanup();
 		}
@@ -161,40 +161,58 @@ namespace test_sn
 
 				SN_DECLARE(dog);
 				SN_DECLARE(cat);
+				SN_DECLARE_VALUE_INLINE(maxDog, String("Max "));
+				SN_DECLARE_VALUE_INLINE(chiChiCat, String("Chi Chi"));
 
 				Assert::IsTrue(Meta(1, String("Vincent ") + String("Emma ")).DoPartialEvaluate().Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
 
-				std::cout << std::endl << Meta(1, dog + cat).DoPartialEvaluate().DisplaySN() << std::endl;
+				string s0 = Meta(1, maxDog + chiChiCat).DoPartialEvaluate().DisplaySN();
 
-				Assert::IsTrue(Meta(1, dog + cat).DoPartialEvaluate().Equivalent(Meta(1, dog + cat)));
+				Assert::IsTrue(Meta(1, maxDog + chiChiCat).DoPartialEvaluate().Equivalent(Meta(1, maxDog + chiChiCat)));
 
-				std::cout << std::endl << Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoPartialEvaluate().DisplaySN() << std::endl;
+				string s1 = Meta(1, Meta(-1, maxDog) + Meta(-1, chiChiCat)).DoPartialEvaluate().DisplaySN();
 
-				Assert::IsTrue(Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoPartialEvaluate().Equivalent(Meta(1, dog + cat)));
+				Assert::IsTrue(Meta(1, Meta(-1, maxDog) + Meta(-1, chiChiCat)).DoPartialEvaluate().Equivalent(Meta(1, String("Max ") + String("Chi Chi"))));
 
-				string s1 = Meta(-1, Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoPartialEvaluate()).DoPartialEvaluate().DisplaySN();
+				string s2 = Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoPartialEvaluate().DisplaySN();
+
+				Assert::IsTrue(Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoPartialEvaluate().Equivalent(Meta(1, Meta(-1, dog) + Meta(-1, cat))));
+
+				string s3 = Meta(-1, Meta(1, Meta(-1, maxDog) + Meta(-1, chiChiCat)).DoPartialEvaluate()).DoPartialEvaluate().DisplaySN();
+
+				Assert::IsTrue(Meta(-1, Meta(1, Meta(-1, maxDog) + Meta(-1, chiChiCat)).DoPartialEvaluate()).DoPartialEvaluate().Equivalent(String("Max Chi Chi")));
+
+				string s4 = Meta(-1, Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoPartialEvaluate()).DoPartialEvaluate().DisplaySN();
 
 				Assert::IsTrue(Meta(-1, Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoPartialEvaluate()).DoPartialEvaluate().Equivalent(Function(Function(Add, dog), cat)));
 
-				string s2 = Meta(1, Meta(-1, dog)).DoPartialEvaluate().DisplaySN();
+				string s5 = Meta(1, Meta(-1, dog)).DoPartialEvaluate().DisplaySN();
 
-				Assert::IsTrue(Meta(1, Meta(-1, dog)).DoPartialEvaluate().Equivalent(Meta(1, dog.DoPartialEvaluate())));
+				Assert::IsTrue(Meta(1, Meta(-1, dog)).DoPartialEvaluate().Equivalent(dog));
 
-				SN_DECLARE_VALUE(e, Meta(2, Meta(-1, dog) + Meta(-1, cat)));
+				SN_DECLARE_VALUE_INLINE(e, Meta(2, Meta(-1, maxDog) + Meta(-1, chiChiCat)));
 
-				std::cout << std::endl << e.DoPartialEvaluate().DisplaySN() << std::endl;
+				string s6 = e.DoPartialEvaluate().DisplaySN();
 
-				Assert::IsTrue(e.DoPartialEvaluate().Equivalent(Meta(2, Meta(-1, dog) + Meta(-1, cat))));
+				Assert::IsTrue(e.DoPartialEvaluate().Equivalent(Meta(2, Meta(-1, maxDog) + Meta(-1, chiChiCat))));
 
-				std::cout << std::endl << Meta(-1, e).DoPartialEvaluate().DisplaySN() << std::endl;
+				string s7 = e.DoReduce(-1).DisplaySN();
 
-				Assert::IsTrue(Meta(-1, e).DoPartialEvaluate().Equivalent(Meta(1, dog + cat)));
-				Assert::IsTrue(e.DoPartialEvaluate(-1).Equivalent(Meta(1, dog + cat)));
+				Assert::IsTrue(e.DoReduce(-1).Equivalent(Meta(1, String("Max ") + String("Chi Chi"))));
 
-				std::cout << std::endl << Meta(-1, Meta(-1, e).DoPartialEvaluate()).DoPartialEvaluate().DisplaySN() << std::endl;
+				string s8 = Meta(-1, Meta(-1, e).DoPartialEvaluate()).DoPartialEvaluate().DisplaySN();
+				string s9 = e.DoPartialEvaluate(-2).DoPartialEvaluate().DisplaySN();
 
-				Assert::IsTrue(Meta(-1, Meta(-1, e).DoPartialEvaluate()).DoPartialEvaluate().Equivalent(Function(Function(Add, dog), cat)));
-				Assert::IsTrue(e.DoPartialEvaluate(-1).DoPartialEvaluate(-1).Equivalent(Function(Function(Add, dog), cat)));
+				Assert::IsTrue(Meta(-1, Meta(-1, e).DoPartialEvaluate()).DoPartialEvaluate().Equivalent(String("Max Chi Chi")));
+				Assert::IsTrue(e.DoPartialEvaluate(-2).Equivalent(String("Max Chi Chi")));
+
+				SN_DECLARE_VALUE_INLINE(f, Meta(2, Meta(-1, dog) + Meta(-1, cat)));
+
+				string s10 = f.DoPartialEvaluate().DisplaySN();
+				string s11 = f.DoReduce(-2).DoPartialEvaluate().DisplaySN();
+
+				Assert::IsTrue(Meta(-1, Meta(-1, f).DoPartialEvaluate()).DoPartialEvaluate().Equivalent(Function(Function(Add, dog), cat)));
+				Assert::IsTrue(f.DoReduce(-2).Equivalent(Function(Function(Add, dog), cat)));
 			}
 			Cleanup();
 		}
