@@ -94,18 +94,18 @@ namespace SNI
 	SN::SN_Expression SNI_Unary::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
 		LOGGING(SN::LogContext context("SNI_Unary::PartialCall ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
-
-		SN::SN_Expression value = (*p_ParameterList)[0].DoPartialEvaluate(p_MetaLevel);
-
+		SN::SN_Expression value = p_ParameterList->back().DoPartialEvaluate(p_MetaLevel);
+		p_ParameterList->pop_back();
+		string s1 = value.DisplaySN();
 		if (0 == p_MetaLevel)
 		{
 			if (SN::Is<SNI_Value *>(value))
 			{
-				return LOG_RETURN(context, PrimaryFunctionValue(value));
+				return LOG_RETURN(context, PrimaryFunctionValue(value).GetSNI_Expression()->PartialCall(p_ParameterList, p_MetaLevel));
 			}
-			return LOG_RETURN(context, PrimaryFunctionExpression(value));
+			return LOG_RETURN(context, AddParameters(PrimaryFunctionExpression(value), p_ParameterList));
 		}
-		return LOG_RETURN(context, PrimaryFunctionExpressionOp(value));
+		return LOG_RETURN(context, AddParametersOp(PrimaryFunctionExpressionOp(value), p_ParameterList));
 	}
 
 	SN::SN_Error SNI_Unary::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)

@@ -108,6 +108,27 @@ namespace SNI
 		return false;
 	}
 
+	SN::SN_Expression SNI_FunctionDef::AddParameters(SN::SN_Expression p_Expression, SN::SN_ExpressionList* p_ParameterList) const
+	{
+		SN::SN_Expression result = p_Expression;
+		for (SN::SN_ExpressionList::reverse_iterator paramIt = p_ParameterList->rbegin(); paramIt != p_ParameterList->rend(); paramIt++)
+		{
+			SN::SN_Expression x = SN::SN_Function(result, paramIt->DoPartialEvaluate());
+			result = x;
+		}
+		return result;
+	}
+
+	SN::SN_Expression SNI_FunctionDef::AddParametersOp(SN::SN_Expression p_Expression, SN::SN_ExpressionList* p_ParameterList) const
+	{
+		SN::SN_Expression result = p_Expression;
+		for (SN::SN_ExpressionList::reverse_iterator paramIt = p_ParameterList->rbegin(); paramIt != p_ParameterList->rend(); )
+		{
+			result = SN::SN_Operators::FunctionCall(result, *paramIt);
+		}
+		return result;
+	}
+
 	SN::SN_Expression SNI_FunctionDef::MakeCallExpression(SN::SN_ExpressionList* p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
 		SN::SN_Expression result = this;

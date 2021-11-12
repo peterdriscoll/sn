@@ -84,7 +84,6 @@ namespace test_sn
 
 		TEST_METHOD(TestSimpleStateThreading)
 		{
-			return;
 			Initialize();
 			{
 				Manager manager("Test Simple State Threading", AssertErrorHandler);

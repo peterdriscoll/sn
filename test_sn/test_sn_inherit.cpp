@@ -70,7 +70,7 @@ namespace test_sn
 				Char('X').IsA(Char::Class()).Assert().Do();
 				(String("DogFood") || String("CatFood")).BuildSet().IsA(Set::Class()).Assert().Do();
 
-				Meta(1, String("Vincent ") + String("Emma ")).IsA(Meta::Class()).Assert().Do();
+				Meta(1, String("Vincent ") + String("Emma ")).IsA(Function::Class()).Assert().Do();
 
 				Short(5).IsA(Short::Class()).Assert().Do();
 				Int(5).IsA(Int::Class()).Assert().Do();

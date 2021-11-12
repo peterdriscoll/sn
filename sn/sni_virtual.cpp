@@ -64,7 +64,7 @@ namespace SNI
 		}
 		size_t base = p_Base + 1;
 		string paramName = "_param_" + to_string(base);
-		SN::SN_Expression l_ImplentationCall = p_ImplementationCall(m_ParameterVariable);
+		SN::SN_Expression l_ImplentationCall = SN::SN_Function(p_ImplementationCall, m_ParameterVariable);
 		if (p_Base == p_FormalParameterList.size() - 1)
 		{
 			m_List.insert(it, ConstructionTree(paramName, l_Expression, l_ImplentationCall));

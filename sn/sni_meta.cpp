@@ -103,6 +103,19 @@ namespace SNI
 		return 0 < m_DeltaMetaLevel;
 	}
 
+	SN::SN_Value SNI_Meta::DoIsA(const SNI_Value* p_Parent) const
+	{
+		if (m_Expression->DoIsA(p_Parent).GetBool())
+		{
+			return skynet::True;
+		}
+		if (const_cast<SNI_Meta *>(this)->VClass()->Equivalent(const_cast<SNI_Value*>(p_Parent)))
+		{
+			return skynet::True;
+		}
+		return skynet::False;
+	}
+
 	size_t SNI_Meta::Cardinality(size_t p_MaxCardinality) const
 	{
 		if (0 < m_DeltaMetaLevel)

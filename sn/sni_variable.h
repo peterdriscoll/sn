@@ -24,6 +24,9 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Variable);
 	public:
+		static SNI_Class* Class();
+		virtual SNI_Class* VClass();
+
 		SNI_Variable();
 		SNI_Variable(const string &p_Name);
 		SNI_Variable(const string & p_Name, const string & p_DomainName, skynet::DefineType p_DefineType = skynet::DefineType::Inname);
@@ -110,6 +113,8 @@ namespace SNI
 		virtual void PromoteMembers();
 
 	private:
+		static SNI_Class* m_Class;
+
 		SNI_Expression * m_Value;
 		SNI_Frame      * m_Frame;
 		bool           m_Requested;

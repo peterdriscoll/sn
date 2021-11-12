@@ -27,6 +27,21 @@
 namespace SNI
 {
 	long m_MaxTempNum = 0;
+	/*static*/ SNI_Class* SNI_Variable::m_Class = NULL;
+	/*static*/ SNI_Class* SNI_Variable::Class()
+	{
+		if (!m_Class)
+		{
+			m_Class = new SNI_Class("Variable");
+		}
+		return m_Class;
+	}
+
+	SNI_Class* SNI_Variable::VClass()
+	{
+		return Class();
+	}
+
 	SNI_Variable::SNI_Variable()
 		: SNI_Namable("_t" + to_string(++m_MaxTempNum))
 		, m_Value(NULL)
@@ -780,10 +795,6 @@ namespace SNI
 	SN::SN_Expression SNI_Variable::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
 		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Variable::PartialCall ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
-		if (0 < p_MetaLevel)
-		{
-			return this;
-		}
 
 		SN::SN_Expression result(this);
 		if (m_Value)

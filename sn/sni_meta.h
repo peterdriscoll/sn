@@ -32,6 +32,7 @@ namespace SNI
 		virtual bool IsMeta() const;
 
 		virtual bool IsKnownValue() const;
+		virtual SN::SN_Value DoIsA(const SNI_Value* p_Parent) const;
 		virtual size_t Cardinality(size_t p_MaxCardinality) const;
 
 		virtual bool Equivalent(SNI_Object * p_Other) const;

@@ -77,6 +77,8 @@ namespace SNI
 
 		virtual bool GetBoolResult() const;
 
+		virtual SN::SN_Expression AddParameters(SN::SN_Expression p_Expression, SN::SN_ExpressionList* p_ParameterList) const;
+		virtual SN::SN_Expression AddParametersOp(SN::SN_Expression p_Expression, SN::SN_ExpressionList* p_ParameterList) const;
 		virtual SN::SN_Expression MakeCallExpression(SN::SN_ExpressionList* p_ParameterList, long p_MetaLevel = 0) const;
 		virtual SN::SN_Expression MakePartialCallExpression(SN::SN_ExpressionList* p_ParameterList, long p_MetaLevel = 0) const;
 
