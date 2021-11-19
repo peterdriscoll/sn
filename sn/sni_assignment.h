@@ -37,10 +37,6 @@ namespace SNI
 		virtual SN::SN_Expression Unify(SN::SN_ExpressionList * p_ParameterList);
 		virtual SN::SN_Error PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Expression, bool p_Define = false);
 
-		virtual SNI_Expression *DoImperativeTransform(bool &p_Changed, bool &p_Imperative, SNI_Expression *p_StateInput,  SNI_Expression *&p_StateOutput, long p_MetaLevel);
-
-		SN::SN_Expression DoImperativeTransform2(bool & p_InputChanged, bool & p_OutputChanged, long p_MetaLevel);
-
 		SNI_Expression * LeftHandSide();
 		SNI_Expression * RightHandSide();
 

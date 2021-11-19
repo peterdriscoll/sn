@@ -108,6 +108,7 @@ namespace SNI
 
 		void AttachDelayedCall(SNI_DelayedCall *p_Call);
 		void SetValue(const SN::SN_Expression & p_Value);
+		bool GetInline();
 		void SetInline(bool p_Inline);
 	protected:
 		virtual void PromoteMembers();

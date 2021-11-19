@@ -555,6 +555,21 @@
     <ClInclude Include="sni_statevalue.h">
       <Filter>Type Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sni_state.h">
+      <Filter>Type Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_assignment.h">
+      <Filter>Type Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sni_statebuffer.h">
+      <Filter>Type Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\sn_assignment.h">
+      <Filter>Interface Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\sn_state.h">
+      <Filter>Interface Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -1036,6 +1051,21 @@
     </ClCompile>
     <ClCompile Include="sni_getstate.cpp">
       <Filter>Function Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_state.cpp">
+      <Filter>Type Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_assignment.cpp">
+      <Filter>Type Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_statebuffer.cpp">
+      <Filter>Type Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_assignment.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_state.cpp">
+      <Filter>Interface Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

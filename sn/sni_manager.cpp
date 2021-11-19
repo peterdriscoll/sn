@@ -77,6 +77,7 @@ namespace SNI
 		{
 			return;
 		}
+		
 		m_LogicSetupDone = true;
 		skynet::RerunRequest.GetSNI_Error()->MakeRerunRequest();
 
@@ -221,6 +222,11 @@ namespace SNI
 		if (thread)
 		{
 			thread->Breakpoint(SN::DebugStop, SN::ExitId, "", "Exit", NULL, SN::EndPoint);
+
+			if (!m_LastManager)
+			{
+				Operators.Cleanup();
+			}
 			thread->SetTopManager(m_LastManager);
 			thread->ClearDependencyChecks();
 		}
@@ -262,11 +268,12 @@ namespace SNI
 			m_ErrorHandler = ThrowErrorHandler;
 		}
 		m_LastManager = SNI_Thread::GetThread()->GetTopManager(false);
+		SNI_Thread::GetThread()->SetTopManager(this);
 		if (!m_LastManager)
 		{
 			m_Transaction.Init();
+			Operators.Setup();
 		}
-		SNI_Thread::GetThread()->SetTopManager(this);
 		LOG(WriteHeading(SN::DebugLevel, "Start - " + m_Description));
 	}
 

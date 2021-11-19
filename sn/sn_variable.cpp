@@ -122,6 +122,16 @@ namespace SN
 		return GetSNI_Variable()->FrameName();
 	}
 
+	skynet::DefineType SN_Variable::GetInline()
+	{
+		return GetSNI_Variable()->GetInline()? skynet::Inline : skynet::Inname;
+	}
+
+	void SN_Variable::SetInline(skynet::DefineType p_DefineType)
+	{
+		GetSNI_Variable()->SetInline(p_DefineType == skynet::Inline);
+	}
+
 	SN_Expression SN_Variable::GetValue() const
 	{
 		return GetSNI_Variable()->GetValue();

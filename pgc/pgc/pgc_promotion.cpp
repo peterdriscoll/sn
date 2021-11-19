@@ -147,6 +147,10 @@ namespace PGC
 				Promote();
 				return true;
 			}
+			if (source == m_Destination)
+			{
+				return true;
+			}
 		}
 		else
 		{

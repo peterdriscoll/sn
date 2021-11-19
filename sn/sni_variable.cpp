@@ -866,7 +866,7 @@ namespace SNI
 
 	SN::SN_Error SNI_Variable::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
-		if (m_Value)
+		if (m_Value && !m_Value->IsNull())
 		{
 			SN::SN_Error e = m_Value->PartialUnify(p_ParameterList, p_Result, p_Define);
 			return e;
@@ -906,6 +906,11 @@ namespace SNI
 		}
 	}
 
+	bool SNI_Variable::GetInline()
+	{
+		return m_Inline;
+	}
+	
 	void SNI_Variable::SetInline(bool p_Inline)
 	{
 		m_Inline = p_Inline;

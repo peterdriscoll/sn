@@ -36,6 +36,11 @@ namespace SNI
 	{
 	}
 
+	void SNI_Domain::Clear()
+	{
+		m_Map.clear();
+	}
+
 	void SNI_Domain::PromoteMembers()
 	{
 		for (auto &pair : m_Map)

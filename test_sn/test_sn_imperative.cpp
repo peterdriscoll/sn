@@ -80,6 +80,7 @@ namespace test_sn
 
 				(Long(15) == Local(Operators.FunctionCall, Let(Function(Function(Equals, Operators.FunctionCall), testCall), Long(4) + Long(5)))).Evaluate().Do();
 			}
+			Cleanup();
 		}
 
 		TEST_METHOD(TestSimpleStateThreading)
@@ -117,8 +118,28 @@ namespace test_sn
 
 				(Long(9) == Local(Operators.FunctionCall, Let(Function(Function(Equals, Operators.FunctionCall), testSimpleImperative), Function(Long(4) + Long(5), t))).Value()).Evaluate().Do();
 			}
+			Cleanup();
 		}
 
+		TEST_METHOD(TestSimpleStateThreading2)
+		{
+			Initialize();
+			{
+				Manager manager("Test Simple State Threading 2", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				string s2 = Operators.ImperativeCall.DisplayValueSN();
+				SN_DECLARE(y);
+				SN_DECLARE(t);
+				(y == Local(Operators.FunctionCall, Let(Function(Function(Equals, Operators.FunctionCall), Operators.ImperativeCall), Function(Long(4) + Long(5), t))).Value()).Assert().Do();
+				string y1 = y.DisplayValueSN();
+
+				(y == Long(9)).Evaluate().Do();
+
+				(Long(9) == Local(Operators.FunctionCall, Let(Function(Function(Equals, Operators.FunctionCall), Operators.ImperativeCall), Function(Long(4) + Long(5), t))).Value()).Evaluate().Do();
+			}
+			Cleanup();
+		}
 		TEST_METHOD(TestAssignment)
 		{
 			Initialize();

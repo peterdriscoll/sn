@@ -95,6 +95,9 @@ namespace SN
 		// Attributes
 		SN::SN_Expression GetState(const SN::SN_Expression& p_Left);
 		SN::SN_Expression GetValue(const SN::SN_Expression& p_Left);
+
+		// State
+		SN::SN_Expression AssignValue(const SN::SN_Expression& p_State, const SN::SN_Expression& p_Left, const SN::SN_Expression& p_Right);
 	}
 }
 

@@ -43,10 +43,12 @@ namespace SN
 		size_t Length() const;
 
 		string GetName();
-		void SetName(const string &p_Name);
+		void SetName(const string& p_Name);
 		string GetDomainName();
 		void SetDomainName(const string &p_Name);
 		string FrameName();
+		skynet::DefineType GetInline();
+		void SetInline(skynet::DefineType p_DefineType);
 
 		SN_Expression GetValue() const;
 		void SetValue(SN_Expression p_Value, enum skynet::DefineType p_DefineType = skynet::Inname);

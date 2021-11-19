@@ -107,6 +107,8 @@ namespace skynet
 #include "sn_virtual.h"
 #include "sn_domain.h"
 #include "sn_operatorvariables.h"
+#include "sn_assignment.h"
+#include "sn_state.h"
 #include "sn_statevalue.h"
 
 // Declare a variable, and tell the variable its variable name.
@@ -141,6 +143,11 @@ namespace skynet
 #define SN_LINK(n) \
 	(*this)[#n] = n; \
 	n.SetName(#n);
+
+#define SN_LINK_INLINE(n) \
+	(*this)[#n] = n; \
+	n.SetName(#n); \
+	n.SetInline(skynet::Inline)
 
 #define SN_LINK_VALUE(n, r, i) \
 	(*this)[#n] = n; \
@@ -182,6 +189,8 @@ namespace skynet
 	typedef SN::SN_Derived Derived;
 	typedef SN::SN_Virtual Virtual;
 	typedef SN::SN_Domain Domain;
+	typedef SN::SN_StateValue Assignment;
+	typedef SN::SN_StateValue State;
 	typedef SN::SN_StateValue StateValue;
 
 	// Expressions

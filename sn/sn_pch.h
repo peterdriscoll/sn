@@ -162,6 +162,9 @@
 #include "sni_hasmember.h"
 
 // State
+#include "sni_assignment.h"
+#include "sni_state.h"
+#include "sni_statebuffer.h"
 #include "sni_statevalue.h"
 
 // Attributes

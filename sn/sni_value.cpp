@@ -100,6 +100,16 @@ namespace SNI
 		return 1;
 	}
 
+	bool SNI_Value::operator<(const SNI_Value& p_Right) const
+	{
+		return false;
+	}
+
+	bool SNI_Value::operator==(const SNI_Value& p_Right) const
+	{
+		return false;
+	}
+
 	SN::SN_Error SNI_Value::ForEach(std::function<SN::SN_Error(const SN::SN_Expression &p_Param, SNI_World *p_World)> p_Action)
 	{
 		return p_Action(SN::SN_Expression(this), NULL);

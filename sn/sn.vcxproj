@@ -182,6 +182,7 @@
     <ClInclude Include="..\inc\logcontext.h" />
     <ClInclude Include="..\inc\sn.h" />
     <ClInclude Include="..\inc\sni_base.h" />
+    <ClInclude Include="..\inc\sn_assignment.h" />
     <ClInclude Include="..\inc\sn_base.h" />
     <ClInclude Include="..\inc\sn_bool.h" />
     <ClInclude Include="..\inc\sn_cartesian.h" />
@@ -212,6 +213,7 @@
     <ClInclude Include="..\inc\sn_parameter.h" />
     <ClInclude Include="..\inc\sn_real.h" />
     <ClInclude Include="..\inc\sn_set.h" />
+    <ClInclude Include="..\inc\sn_state.h" />
     <ClInclude Include="..\inc\sn_statevalue.h" />
     <ClInclude Include="..\inc\sn_string.h" />
     <ClInclude Include="..\inc\sn_stringref.h" />
@@ -225,6 +227,7 @@
     <ClInclude Include="sni_add.h" />
     <ClInclude Include="sni_and.h" />
     <ClInclude Include="sni_assert.h" />
+    <ClInclude Include="sni_assignment.h" />
     <ClInclude Include="sni_attribute.h" />
     <ClInclude Include="sni_attributedef.h" />
     <ClInclude Include="sni_binary.h" />
@@ -316,6 +319,8 @@
     <ClInclude Include="sni_splitter.h" />
     <ClInclude Include="sni_square.h" />
     <ClInclude Include="sni_squareroot.h" />
+    <ClInclude Include="sni_state.h" />
+    <ClInclude Include="sni_statebuffer.h" />
     <ClInclude Include="sni_statevalue.h" />
     <ClInclude Include="sni_string.h" />
     <ClInclude Include="sni_stringref.h" />
@@ -353,6 +358,7 @@
     <ClCompile Include="sni_add.cpp" />
     <ClCompile Include="sni_and.cpp" />
     <ClCompile Include="sni_assert.cpp" />
+    <ClCompile Include="sni_assignment.cpp" />
     <ClCompile Include="sni_attribute.cpp" />
     <ClCompile Include="sni_attributedef.cpp" />
     <ClCompile Include="sni_binary.cpp" />
@@ -441,6 +447,8 @@
     <ClCompile Include="sni_splitter.cpp" />
     <ClCompile Include="sni_square.cpp" />
     <ClCompile Include="sni_squareroot.cpp" />
+    <ClCompile Include="sni_state.cpp" />
+    <ClCompile Include="sni_statebuffer.cpp" />
     <ClCompile Include="sni_statevalue.cpp" />
     <ClCompile Include="sni_string.cpp" />
     <ClCompile Include="sni_stringref.cpp" />
@@ -468,6 +476,7 @@
     <ClCompile Include="sni_virtual.cpp" />
     <ClCompile Include="sni_world.cpp" />
     <ClCompile Include="sni_worldset.cpp" />
+    <ClCompile Include="sn_assignment.cpp" />
     <ClCompile Include="sn_bool.cpp" />
     <ClCompile Include="sn_cartesian.cpp" />
     <ClCompile Include="sn_char.cpp" />
@@ -501,6 +510,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="sn_set.cpp" />
+    <ClCompile Include="sn_state.cpp" />
     <ClCompile Include="sn_statevalue.cpp" />
     <ClCompile Include="sn_string.cpp" />
     <ClCompile Include="sn_stringref.cpp" />

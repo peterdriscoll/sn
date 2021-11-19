@@ -15,9 +15,11 @@ namespace SN
 		SN_OperatorVariables();
 
 		SN_Variable FunctionCall;
+		SN_Variable ImperativeCall;
 
-	private:
 		void Setup();
+		void Cleanup();
+	private:
 		void Link();
 	};
 }

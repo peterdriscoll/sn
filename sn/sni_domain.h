@@ -29,6 +29,8 @@ namespace SNI
 		SNI_Domain(const string &p_Name);
 		virtual ~SNI_Domain();
 
+		void Clear();
+
 		virtual string GetTypeName() const;
 		virtual string DisplayCpp() const;
 		virtual long GetPriority() const;
