@@ -173,11 +173,6 @@ namespace SN
 	{
 	}
 
-	SN_Expression::SN_Expression(const SN_Assignment& p_Assignment)
-		: SN_Base(dynamic_cast<SNI::SNI_Expression*>(p_Assignment.GetSNI_Assignment()))
-	{
-	}
-
 	SN_Expression::SN_Expression(const SN_State& p_State)
 		: SN_Base(dynamic_cast<SNI::SNI_Expression*>(p_State.GetSNI_State()))
 	{
@@ -689,6 +684,11 @@ namespace SN
 	SN_Expression SN_Expression::Value() const
 	{
 		return SN_Operators::GetValue(*this);
+	}
+
+	SN_Expression SN_Expression::Assign(const SN_Expression& p_Right) const
+	{
+		return SN_Operators::Assign(*this, p_Right);
 	}
 
 	/////////////////////////////////////////////////////////////////////

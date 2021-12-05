@@ -216,4 +216,10 @@ namespace SN
 	{
 		return SN_Operators::IsA(*this, p_Parent);
 	}
+
+	SN_Expression SN_String::Assign(const SN_Expression& p_Right) const
+	{
+		return SN_Operators::Assign(*this, p_Right);
+	}
+
 }

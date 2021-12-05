@@ -87,7 +87,7 @@
 #include "sni_getvalue.h"
 
 // State
-#include "sni_assignment.h"
+#include "sni_assign.h"
 #include "sni_state.h"
 #include "sni_statebuffer.h"
 #include "sni_statevalue.h"
@@ -177,6 +177,9 @@ namespace skynet
 	// Attributes
 	SN::SN_FunctionDef GetState(dynamic_cast<SNI::SNI_FunctionDef*>(new SNI::SNI_GetState()));
 	SN::SN_FunctionDef GetValue(dynamic_cast<SNI::SNI_FunctionDef*>(new SNI::SNI_GetValue()));
+
+	// Imperative
+	SN::SN_FunctionDef Assign(dynamic_cast<SNI::SNI_FunctionDef*>(new SNI::SNI_Assign()));
 
 	// Function Call
 	SN::SN_Expression FunctionCall(dynamic_cast<SNI::SNI_Expression *>(new SNI::SNI_FunctionCall()));

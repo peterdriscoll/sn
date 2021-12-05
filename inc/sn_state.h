@@ -22,10 +22,8 @@ namespace SN
 
 		SN_Expression IsA(const SN_Expression &p_Parent) const;
 
-		SN_State AssignValue(const SN_Expression &p_Left, const SN_Expression &p_Right);
-
 		SNI::SNI_State *GetSNI_State() const;
-		SNI::SNI_Expression *GetSNI_Expression() const;
+		SNI::SNI_Expression* GetSNI_Expression() const;
 	};
 }
 

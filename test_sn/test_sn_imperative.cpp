@@ -140,6 +140,30 @@ namespace test_sn
 			}
 			Cleanup();
 		}
+
+		TEST_METHOD(TestSimpleAssignment)
+		{
+			Initialize();
+			{
+				Manager manager("Test Simple Assignment", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				string s2 = Operators.ImperativeCall.DisplayValueSN();
+				SN_DECLARE(y);
+				SN_DECLARE(t);
+				SN_DECLARE(l);
+				manager.Breakpoint();
+				(y == Local(Operators.FunctionCall, Local(Operators.Assign, Let(Function(Function(Equals, Operators.FunctionCall), Operators.ImperativeCall), Let(Function(Function(Equals, Operators.Assign), Operators.ImperativeAssign), Function(String("m").Assign(Long(4)) + Long(5), State()))))).Value()).Assert().Do();
+				string y1 = y.DisplayValueSN();
+
+				(y == Long(9)).Evaluate().Do();
+
+				SN_DECLARE(m);
+				(Long(9) == Local(Operators.FunctionCall, Local(Operators.Assign, Let(Function(Function(Equals, Operators.FunctionCall), Operators.ImperativeCall), Let(Function(Function(Equals, Operators.Assign), Operators.ImperativeAssign), Function(String("m").Assign(Long(4)) + Long(5), State()))))).Value()).Evaluate().Do();
+			}
+			Cleanup();
+		}
+
 		TEST_METHOD(TestAssignment)
 		{
 			Initialize();

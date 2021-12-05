@@ -55,6 +55,8 @@ namespace SNI
 
 		virtual SN::SN_Value DoIsA(const SNI_Value* p_Parent) const;
 
+		virtual SN::SN_Value DoAssign(SNI_Value* p_Right, SNI_Value* p_State);
+
 	private:
 		static SNI_Class* m_Class;
 	};

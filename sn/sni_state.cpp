@@ -87,8 +87,8 @@ namespace SNI
 		return false;
 	}
 
-	SNI_State *SNI_State::Compose(SNI_Assignment *p_Assignment)
+	SN::SN_Value SNI_State::DoUpdateState(SNI_Value *p_Left, SNI_Expression *p_Right)
 	{
-		return new SNI_State(m_StateBuffer->Compose(p_Assignment), m_StateBuffer);
+		return new SNI_State(m_StateBuffer->DoAssign(p_Left, p_Right), m_StateBuffer);
 	}
 }

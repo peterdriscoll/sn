@@ -59,7 +59,6 @@ namespace SN
 	class SN_Derived;
 	class SN_Virtual;
 	class SN_Domain;
-	class SN_Assignment;
 	class SN_State;
 	class SN_StateValue;
 
@@ -110,7 +109,6 @@ namespace SN
 		SN_Expression(const SN_Derived &p_Derived);
 		SN_Expression(const SN_Virtual &p_Virtual);
 		SN_Expression(const SN_Domain& p_Domain);
-		SN_Expression(const SN_Assignment& p_Assignment);
 		SN_Expression(const SN_State& p_State);
 		SN_Expression(const SN_StateValue& p_StateValue);
 
@@ -223,6 +221,8 @@ namespace SN
 		// Attributes
 		SN_Expression State() const;
 		SN_Expression Value() const;
+
+		SN_Expression Assign(const SN_Expression& p_Right) const;
 
 		/////////////////////////////////////////////////////////////////////
 		// Actions

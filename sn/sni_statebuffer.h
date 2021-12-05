@@ -48,7 +48,7 @@ namespace SNI
 
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 
-		unsigned long long Compose(SNI_Assignment *p_Assignment);
+		unsigned long long DoAssign(SNI_Value* p_Left, SNI_Expression* p_Right);
 
 	protected:
 		virtual void PromoteMembers();

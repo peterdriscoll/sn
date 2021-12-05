@@ -365,7 +365,7 @@ namespace SNI
 			SNI_FunctionDef* functionDef = dynamic_cast<SNI_FunctionDef*>(p_Function);
 			if (functionDef)
 			{
-				if (functionDef->GetNumParameters() - 1 <= p_ParameterList->size())
+				if ((size_t)functionDef->GetNumParameters() - 1 <= p_ParameterList->size())
 				{
 					SN::SN_Expression* param_List = functionDef->LoadParametersCall(p_ParameterList);
 					if (p_ParameterList->empty())
@@ -1101,13 +1101,24 @@ namespace SNI
 		return SN::SN_Error(false, false, GetTypeName() + " StringToDouble method not implemented.");
 	}
 
-	SN::SN_Error  SNI_Expression::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)
+	// Imperative
+	SN::SN_Value SNI_Expression::DoAssign(SNI_Expression* p_Right, SNI_Value* p_State)
+	{
+		return SN::SN_Error(false, false, GetTypeName() + " assign equal method not implemented on L value.");
+	}
+
+	SN::SN_Value SNI_Expression::DoUpdateState(SNI_Value* p_Left, SNI_Expression* p_Right)
+	{
+		return SN::SN_Error(false, false, GetTypeName() + " State expected.");
+	}
+
+	// Inheritance
+	SN::SN_Error  SNI_Expression::AssertIsAValue(const SNI_Value* p_Parent, SN::SN_Expression p_Result)
 	{
 		return p_Result.AssertValue(DoIsA(p_Parent));
 	}
 
-	// Inheritance
-	SN::SN_Value SNI_Expression::DoIsA(const SNI_Value * p_Parent) const
+	SN::SN_Value SNI_Expression::DoIsA(const SNI_Value* p_Parent) const
 	{
 		if (Equivalent(const_cast<SNI_Value*>(p_Parent)))
 		{

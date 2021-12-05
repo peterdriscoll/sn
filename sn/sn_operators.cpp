@@ -339,13 +339,14 @@ namespace SN
 			return FunctionCall(skynet::GetValue, p_Left);
 		}
 
-		SN::SN_Expression AssignValue(const SN::SN_Expression& p_State, const SN::SN_Expression& p_Left, const SN::SN_Expression& p_Right)
+		// Imperative
+		SN::SN_Expression Assign(const SN::SN_Expression& p_Left, const SN::SN_Expression& p_Right)
 		{
-			return SN::SN_Expression();
+			return SN::SN_Function(SN::SN_Function(skynet::Operators.Assign, p_Left), p_Right);
 		}
 
 		// Function calls
-		SN::SN_Function FunctionCall(const SN::SN_Expression &p_Function, const SN::SN_Expression &p_Parameter)
+		SN::SN_Function FunctionCall(const SN::SN_Expression& p_Function, const SN::SN_Expression& p_Parameter)
 		{
 			return SN::SN_Function(SN::SN_Function(skynet::Operators.FunctionCall, p_Function), p_Parameter);
 		}

@@ -36,7 +36,7 @@ namespace SNI
 		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 
-		SNI_State * Compose(SNI_Assignment * p_Assignment);
+		SN::SN_Value DoUpdateState(SNI_Value* p_Left, SNI_Expression* p_Right);
 
 	protected:
 		virtual void PromoteMembers();

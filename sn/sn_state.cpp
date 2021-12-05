@@ -44,9 +44,4 @@ namespace SN
 	{
 		return SN_Operators::IsA(*this, p_Parent);
 	}
-
-	SN_State SN_State::AssignValue(const SN_Expression & p_Left, const SN_Expression & p_Right)
-	{
-		return SN_Operators::AssignValue(*this, p_Left, p_Right);
-	}
 }

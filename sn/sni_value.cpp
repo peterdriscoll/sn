@@ -214,4 +214,9 @@ namespace SNI
 		}
 		return SNI_Expression::DoIsA(p_Parent);
 	}
+
+	SN::SN_Value SNI_Value::DoAssign(SNI_Value* p_Right, SNI_Value* p_State)
+	{
+		return SN::SN_StateValue(p_Right, p_State->DoUpdateState(this, p_Right));
+	}
 }

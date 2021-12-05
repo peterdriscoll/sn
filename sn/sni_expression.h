@@ -257,6 +257,10 @@ namespace SNI
 		virtual	SN::SN_Value DoDoubleToString() const;
 		virtual	SN::SN_Value DoStringToDouble() const;
 
+		// Imperative.
+		virtual SN::SN_Value DoAssign(SNI_Expression* p_Right, SNI_Value* p_State);
+		virtual SN::SN_Value DoUpdateState(SNI_Value* p_Left, SNI_Expression* p_Right);
+
 		// Inheritance
 		virtual SN::SN_Error AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result);
 		virtual SN::SN_Value DoIsA(const SNI_Value * p_Parent) const;

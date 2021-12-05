@@ -53,6 +53,7 @@ namespace SNI
 				(p_InterruptPoint == SN::MirrorPoint) ||
 				(p_InterruptPoint == SN::ClonePoint) ||
 				(p_InterruptPoint == SN::DelayedPoint) ||
+				(p_InterruptPoint == SN::UserPoint) ||
 				(p_InterruptPoint == SN::StaticPoint);
 
 			switch (m_DebugAction)

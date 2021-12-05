@@ -182,7 +182,6 @@
     <ClInclude Include="..\inc\logcontext.h" />
     <ClInclude Include="..\inc\sn.h" />
     <ClInclude Include="..\inc\sni_base.h" />
-    <ClInclude Include="..\inc\sn_assignment.h" />
     <ClInclude Include="..\inc\sn_base.h" />
     <ClInclude Include="..\inc\sn_bool.h" />
     <ClInclude Include="..\inc\sn_cartesian.h" />
@@ -227,7 +226,7 @@
     <ClInclude Include="sni_add.h" />
     <ClInclude Include="sni_and.h" />
     <ClInclude Include="sni_assert.h" />
-    <ClInclude Include="sni_assignment.h" />
+    <ClInclude Include="sni_assign.h" />
     <ClInclude Include="sni_attribute.h" />
     <ClInclude Include="sni_attributedef.h" />
     <ClInclude Include="sni_binary.h" />
@@ -358,7 +357,7 @@
     <ClCompile Include="sni_add.cpp" />
     <ClCompile Include="sni_and.cpp" />
     <ClCompile Include="sni_assert.cpp" />
-    <ClCompile Include="sni_assignment.cpp" />
+    <ClCompile Include="sni_assign.cpp" />
     <ClCompile Include="sni_attribute.cpp" />
     <ClCompile Include="sni_attributedef.cpp" />
     <ClCompile Include="sni_binary.cpp" />
@@ -476,7 +475,6 @@
     <ClCompile Include="sni_virtual.cpp" />
     <ClCompile Include="sni_world.cpp" />
     <ClCompile Include="sni_worldset.cpp" />
-    <ClCompile Include="sn_assignment.cpp" />
     <ClCompile Include="sn_bool.cpp" />
     <ClCompile Include="sn_cartesian.cpp" />
     <ClCompile Include="sn_char.cpp" />

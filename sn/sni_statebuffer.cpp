@@ -34,11 +34,11 @@ namespace SNI
 		return false;
 	}
 
-	unsigned long long SNI_StateBuffer::Compose(SNI_Assignment * p_Assignment)
+	unsigned long long SNI_StateBuffer::DoAssign(SNI_Value* p_Left, SNI_Expression* p_Right)
 	{
 		++m_LastStateId;
-		StateBufferKey key(dynamic_cast<SNI_Value *>(p_Assignment->LeftHandSide()), m_LastStateId);
-		m_Map.insert(std::make_pair(key, p_Assignment->RightHandSide()));
+		StateBufferKey key(p_Left, m_LastStateId);
+		m_Map.insert(std::make_pair(key, p_Right));
 		return m_LastStateId;
 	}
 }

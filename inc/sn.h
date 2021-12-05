@@ -107,7 +107,6 @@ namespace skynet
 #include "sn_virtual.h"
 #include "sn_domain.h"
 #include "sn_operatorvariables.h"
-#include "sn_assignment.h"
 #include "sn_state.h"
 #include "sn_statevalue.h"
 
@@ -189,8 +188,7 @@ namespace skynet
 	typedef SN::SN_Derived Derived;
 	typedef SN::SN_Virtual Virtual;
 	typedef SN::SN_Domain Domain;
-	typedef SN::SN_StateValue Assignment;
-	typedef SN::SN_StateValue State;
+	typedef SN::SN_State State;
 	typedef SN::SN_StateValue StateValue;
 
 	// Expressions
@@ -268,6 +266,9 @@ namespace skynet
 	extern SN_EXPORT SN::SN_FunctionDef StringToInt;
 	extern SN_EXPORT SN::SN_FunctionDef DoubleToString;
 	extern SN_EXPORT SN::SN_FunctionDef StringToDouble;
+
+	// * Imperative
+	extern SN_EXPORT SN::SN_FunctionDef Assign;
 
 	// * Inheritance
 	extern SN_EXPORT SN::SN_FunctionDef IsA;

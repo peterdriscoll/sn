@@ -90,14 +90,15 @@ namespace SN
 		SN::SN_Expression StringToDouble(const SN::SN_Expression &p_Left);
 
 		// Function calls
-		SN::SN_Function FunctionCall(const SN::SN_Expression &p_Function, const SN::SN_Expression &p_Parameter);
+		SN::SN_Function FunctionCall(const SN::SN_Expression& p_Function, const SN::SN_Expression& p_Parameter);
+		SN::SN_Function AssignmentCall(const SN::SN_Expression& p_Left, const SN::SN_Expression& p_Right, const SN::SN_Expression& p_State);
 
 		// Attributes
 		SN::SN_Expression GetState(const SN::SN_Expression& p_Left);
 		SN::SN_Expression GetValue(const SN::SN_Expression& p_Left);
 
-		// State
-		SN::SN_Expression AssignValue(const SN::SN_Expression& p_State, const SN::SN_Expression& p_Left, const SN::SN_Expression& p_Right);
+		// Imperative
+		SN::SN_Expression Assign(const SN::SN_Expression& p_Left, const SN::SN_Expression& p_Right);
 	}
 }
 

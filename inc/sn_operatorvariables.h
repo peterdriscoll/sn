@@ -15,7 +15,10 @@ namespace SN
 		SN_OperatorVariables();
 
 		SN_Variable FunctionCall;
+		SN_Variable Assign;
+
 		SN_Variable ImperativeCall;
+		SN_Variable ImperativeAssign;
 
 		void Setup();
 		void Cleanup();

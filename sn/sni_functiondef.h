@@ -31,6 +31,13 @@ namespace SNI
 		PC3_Negative = 2
 	};
 
+	enum ParameterCallAssign
+	{
+		PCA3_Left = 0,
+		PCA3_Right = 1,
+		PCA3_State = 2
+	};
+
 	enum ParameterUnify1
 	{
 		PU1_Result = 0,
@@ -48,6 +55,13 @@ namespace SNI
 		PU3_Condition = 1,
 		PU3_Positive = 2,
 		PU3_Negative = 3
+	};
+	enum ParameterUnifyAssign
+	{
+		PUA3_Result = 0,
+		PUA3_Left = 1,
+		PUA3_Right = 2,
+		PUA3_State = 3
 	};
 	class SNI_FunctionDef : public SNI_Value
 	{
