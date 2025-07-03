@@ -1,0 +1,10 @@
+<div class="derivation">
+  <details open id="derivationsid" (click)="loadderivations(true)">
+    <summary>Derivation - {{ countlogentries }} records</summary>
+    <table class="log">
+      <tr>
+        <td class="log" [innerHTML]="trustAsHtml(derivationhtml)"></td>
+      </tr>
+    </table>
+  </details>
+</div>

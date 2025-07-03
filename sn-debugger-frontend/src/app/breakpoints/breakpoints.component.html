@@ -1,0 +1,45 @@
+<div class="breakpoints">
+    <button title="MIR"
+            (click)="breakpointService.setbreakpoint(['MIR', 3])"
+            [ngClass]="breakpointService.breakpointclass(['MIR', 3])">
+        Check MIR
+    </button>
+
+    <button title="Cloned"
+            (click)="breakpointService.setbreakpoint(['clone', 3])"
+            [ngClass]="breakpointService.breakpointdefaultclass(['clone', 3], 'NONE')">
+        Cloned (see log)
+    </button>
+
+    <button title="User"
+            (click)="breakpointService.setbreakpoint(['user', 22])"
+            [ngClass]="breakpointService.breakpointclass(['user', 22])">
+        User breakpoint
+    </button>
+
+    <button title="Error"
+            (click)="breakpointService.setbreakpoint(['Error', 16])"
+            [ngClass]="breakpointService.breakpointdefaultclass(['Error', 16], 'NONE')">
+        Error
+    </button>
+
+    <button title="Delay"
+            (click)="breakpointService.setbreakpoint(['Warning', 20])"
+            [ngClass]="breakpointService.breakpointdefaultclass(['Warning', 20], 'NONE')">
+        Delay
+    </button>
+
+    <button title="No constraint"
+            (click)="breakpointService.setbreakpoint(['Warning', 19])"
+            [ngClass]="breakpointService.breakpointdefaultclass(['Warning', 19], 'NONE')">
+        No constraint
+    </button>
+
+    <button title="Multiple out"
+            (click)="breakpointService.setbreakpoint(['Warning', 23])"
+            [ngClass]="breakpointService.breakpointdefaultclass(['Warning', 23], 'NONE')">
+        Multiple out
+    </button>
+
+    {{ breakpointService.currentBreakpoint }}
+</div>

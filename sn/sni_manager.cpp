@@ -545,6 +545,7 @@ namespace SNI
 			LOG(WriteHeading(SN::DebugLevel, "Start - " + m_Description));
 			m_WebServerThread = new thread(RunServer, p_Address, p_Port, p_DocRoot);
 			m_WebServerThreadUsed = true;
+			//OpenURLInBrowser("http://localhost:4200");
 			OpenURLInBrowser("http://127.0.0.1/skynetjs.html");
 			//OpenURLInBrowser("http://127.0.0.1/skynet");
 		}

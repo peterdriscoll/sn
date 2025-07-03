@@ -1,0 +1,20 @@
+<div class='worldsets'>
+  <details open id='worldsetsid' (click)="loadworldsets(true)">
+    <summary>World Sets - {{ countworldsets }} records</summary>
+    <table class='frame'>
+      <tr *ngFor="let ws of worldsets">
+        <td>{{ ws.expression }}</td>
+        <td>
+          <button *ngFor="let w of ws.worlds" [title]="w.breakpoint" (click)="setbreakpoint(w.breakpoint)" [ngClass]="breakpointdefaultclass(w.breakpoint, w.reason)">
+            {{ w.condition }}
+          </button>
+        </td>
+        <td *ngFor="let cws of ws.childsets">
+          <button *ngFor="let u of cws.worlds" [title]="u.breakpoint" (click)="setbreakpoint(u.breakpoint)" [ngClass]="breakpointdefaultclass(u.breakpoint, u.reason)">
+            {{ u.condition }}
+          </button>
+        </td>
+      </tr>
+    </table>
+  </details>
+</div>

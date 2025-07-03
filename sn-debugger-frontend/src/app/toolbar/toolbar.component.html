@@ -1,0 +1,43 @@
+﻿<ul class="nav nav-pills command">
+    <li><button title="Run to breakpoint" (click)="submit('debugjs')">Debug</button></li>
+    <li><button title="Step into call" (click)="submit('stepintojs')">Step into</button></li>
+    <li><button title="Step over call" (click)="submit('stepoverjs')">Step over</button></li>
+    <li><button title="Step out of call" (click)="submit('stepoutjs')">Step out</button></li>
+    <li><button title="Step out of func" (click)="submit('stepoutcalljs')">Step out call</button></li>
+    <li><button title="Rerun current command" (click)="submit('rerunjs')">Rerun</button></li>
+
+    <li class="dropdown">
+        <button title="Goto step count" (click)="gotostepcountsetfocus()" data-toggle="dropdown">Goto<b class="caret"></b></button>
+        <ul class="dropdown-menu">
+            <li class="command">
+                <form (ngSubmit)="gotostepcount()">
+                    <label>Step count :</label><br />
+                    <input id="stepcountid" type="number" [(ngModel)]="stepcount" name="stepcount"><br />
+                    <label>Rerun command</label>
+                    <input type="checkbox" disabled [(ngModel)]="reruncommand" name="reruncommand"><br />
+                    <input type="submit" value="Run" />
+                </form>
+            </li>
+        </ul>
+    </li>
+
+    <li class="dropdown">
+        <button title="Dashboard settings" (click)="settingssetfocus()" data-toggle="dropdown">Settings<b class="caret"></b></button>
+        <ul class="dropdown-menu">
+            <li class="command">
+                <form (ngSubmit)="settings()">
+                    <label for="debugstop">Debug level</label><br />
+                    <select id="debugstop" [(ngModel)]="debugstop" name="debugstop" [ngModelOptions]="{ standalone: true }">
+                        <option *ngFor="let option of debugstopoptions" [ngValue]="option">{{ option.name }}</option>
+                    </select><br />
+                    <!-- Add remaining settings fields here similarly -->
+                    <input type="submit" value="Enter" /><br />
+                </form>
+            </li>
+        </ul>
+    </li>
+
+    <li><button title="Run" (click)="submit('runjs')">Run</button></li>
+    <li><button title="Run to end" (click)="submit('runtoendjs')">End</button></li>
+    <li><button title="Code debug break C++" (click)="submit('codebreakjs')">Code break</button></li>
+</ul>

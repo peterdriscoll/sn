@@ -1,0 +1,10 @@
+<div class="codelog">
+  <details open id="codeid" (click)="loadcode(true)">
+    <summary>Code - {{countcodeentries}} records {{ displayedcode }} displayed</summary>
+    <table class="log">
+      <tr *ngFor="let l of code">
+        <td [innerHTML]="trustAsHtml(l.expression)"></td>
+      </tr>
+    </table>
+  </details>
+</div>

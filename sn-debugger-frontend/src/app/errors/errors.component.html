@@ -1,0 +1,12 @@
+<div class="errors">
+    <details open id="errorsid">
+        <summary>{{ error.description }}</summary>
+        <table class="frame">
+            <tr *ngFor="let ch of error.callhistory">
+                <td>{{ ch.purpose }}</td>
+                <td [innerHTML]="trustAsHtml(ch.expression)"></td>
+                <td>{{ ch.logcontext }}</td>
+            </tr>
+        </table>
+    </details>
+</div>

@@ -1,0 +1,10 @@
+<div class='breakpoints'>
+  <button title='MIR' (click)="setBreakpoint(['MIR', 3])" [ngClass]="getBreakpointClass(['MIR', 3])">Check MIR</button>
+  <button title='Cloned' (click)="setBreakpoint(['clone', 3])" [ngClass]="getBreakpointDefaultClass(['clone', 3], 'NONE')">Cloned(see log)</button>
+  <button title='User' (click)="setBreakpoint(['user', 22])" [ngClass]="getBreakpointClass(['user', 22])">User breakpoint</button>
+  <button title='Error' (click)="setBreakpoint(['Error', 16])" [ngClass]="getBreakpointDefaultClass(['Error', 16], 'NONE')">Error</button>
+  <button title='Delay' (click)="setBreakpoint(['Warning', 20])" [ngClass]="getBreakpointDefaultClass(['Warning', 20], 'NONE')">Delay</button>
+  <button title='No constraint' (click)="setBreakpoint(['Warning', 19])" [ngClass]="getBreakpointDefaultClass(['Warning', 19], 'NONE')">No constraint</button>
+  <button title='Multiple out' (click)="setBreakpoint(['Warning', 23])" [ngClass]="getBreakpointDefaultClass(['Warning', 23], 'NONE')">Multiple out</button>
+  {{ breakpoint }}
+</div>

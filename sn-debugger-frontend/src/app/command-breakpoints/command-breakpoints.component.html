@@ -1,0 +1,16 @@
+<table class='noborder'>
+  <tr>
+    <td>Call</td>
+    <td><button (click)="setbreakpoint(['Assert', 3])" [ngClass]="breakpointclass(['Assert', 3])">Assert</button></td>
+    <td><button (click)="setbreakpoint(['PartialAssert', 3])" [ngClass]="breakpointclass(['PartialAssert', 3])">Partial Assert</button></td>
+    <td><button (click)="setbreakpoint(['Evaluate', 3])" [ngClass]="breakpointclass(['Evaluate', 3])">Evaluate</button></td>
+    <td><button (click)="setbreakpoint(['PartialEvaluate', 3])" [ngClass]="breakpointclass(['PartialEvaluate', 3])">Partial Evaluate</button></td>
+  </tr>
+  <tr>
+    <td>Return</td>
+    <td><button (click)="setbreakpoint(['Assert', 15])" [ngClass]="breakpointclass(['Assert', 15])">Assert</button></td>
+    <td><button (click)="setbreakpoint(['PartialAssert', 15])" [ngClass]="breakpointclass(['PartialAssert', 15])">Partial Assert</button></td>
+    <td><button (click)="setbreakpoint(['Evaluate', 15])" [ngClass]="breakpointclass(['Evaluate', 15])">Evaluate</button></td>
+    <td><button (click)="setbreakpoint(['PartialEvaluate', 15])" [ngClass]="breakpointclass(['PartialEvaluate', 15])">Partial Evaluate</button></td>
+  </tr>
+</table>

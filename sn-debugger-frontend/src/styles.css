@@ -1,0 +1,448 @@
+
+/* Don't forget to set a foreground and background color 
+   on the 'html' or 'body' element! */
+html, body, span,
+applet, object, iframe,
+blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dd, dl, dt, ol,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+  margin: 0;
+  padding: 0;
+  border: 2px;
+  font-weight: inherit;
+  font-style: inherit;
+  font-size: 100%;
+  line-height: 1;
+  font-family: inherit;
+  text-align: left;
+  vertical-align: baseline;
+  color: black;
+}
+
+h1 {
+  font-size: 20px;
+  line-height: 20px;
+  font-family: verdana;
+  color: darkolivegreen
+}
+
+h2 {
+  font-size: 12px;
+  line-height: 12px;
+  font-family: verdana;
+  color: darkblue
+}
+
+h3 {
+  font-size: 24px;
+  line-height: 40px;
+}
+
+h4 {
+  font-size: 18px;
+  line-height: 20px;
+}
+
+h5 {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+h6 {
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.command {
+  border-spacing: 2px;
+  background-color: silver;
+  border: 2px solid darkolivegreen;
+  vertical-align: top;
+}
+
+  .command td {
+    vertical-align: top;
+  }
+
+.thread {
+  border-spacing: 2px;
+  background-color: seashell;
+  border: 1px solid darkolivegreen;
+}
+
+table, tr, td {
+  border: none;
+}
+
+.noborder {
+  border: none;
+  border-collapse: collapse;
+}
+
+  .noborder tr {
+    border: none;
+    border-collapse: collapse;
+  }
+
+  .noborder td {
+    border: none;
+    border-collapse: collapse;
+  }
+
+.group {
+  border-spacing: 2px;
+  background-color: white;
+  border: 2px solid darkolivegreen;
+  vertical-align: top;
+  width: 100%;
+}
+
+  .group td {
+    vertical-align: top;
+  }
+
+  .group div {
+    resize: both;
+    overflow: auto;
+    border: none;
+  }
+
+.stack {
+  border-spacing: 2px;
+  background-color: seashell;
+  border: 1px solid darkolivegreen;
+}
+
+  .stack td {
+    text-align: center;
+  }
+
+.frame {
+  border-spacing: 2px;
+  background-color: beige;
+  border: 2px solid darkolivegreen;
+}
+
+  .frame th {
+    text-align: center;
+  }
+
+  .frame td {
+    text-align: center;
+  }
+
+  .frame div {
+    resize: both;
+    overflow: auto;
+    border: none;
+  }
+
+.frameheading {
+  border-style: none;
+  border-spacing: 0px;
+  background-color: seashell;
+}
+
+  .frameheading th {
+    text-align: center;
+  }
+
+  .frameheading td {
+    text-align: center;
+  }
+
+.code {
+  resize: both;
+  max-width: 100%;
+  color: black;
+  background-color: beige;
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+.name {
+  background-color: white;
+}
+
+.noborder {
+  border-style: none;
+  border-spacing: 0px;
+}
+
+.log {
+  border-spacing: 2px;
+  background-color: beige;
+  border: 2px solid darkolivegreen;
+}
+
+.breakpointset {
+  background-color: lightgreen;
+}
+
+.breakpointgroupset {
+  background-color: lightblue;
+}
+
+.breakpointat {
+  background-color: lightcoral;
+}
+
+.breakpointsetat {
+  background-color: orange;
+}
+
+.breakpointatstack {
+  background-color: pink;
+}
+
+.breakpointsetatstack {
+  background-color: mediumaquamarine;
+}
+
+.breakpointclear {
+  background-color: #e6ffe6;
+}
+
+.watchset {
+  background-color: papayawhip;
+}
+
+.watchclear {
+  background-color: white;
+}
+
+.error {
+  background-color: red;
+}
+
+.CONFLICT {
+  border-color: hotpink;
+  border-width: thick
+}
+
+.EC {
+  border-color: blue;
+  border-width: thick
+}
+
+.MIR {
+  border-color: mediumpurple;
+  border-width: thick
+}
+
+.NIAV {
+  border-color: red;
+  border-width: thick
+}
+
+.NONE {
+  border-color: black;
+  border-width: thin
+}
+
+NONE
+a img, :link img, :visited img {
+  border: 0;
+}
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+ol {
+  list-style: none;
+}
+
+q:before, q:after,
+blockquote:before, blockquote:after {
+  content: "";
+}
+
+.help-link {
+  border-width: thin;
+  border-color: gold;
+}
+
+.help-normal {
+  color: black;
+  margin-left: 40px;
+}
+
+.help-code {
+  color: darkblue;
+  margin-left: 90px;
+}
+
+.help-heading1 {
+  color: darkgreen
+}
+
+.help-heading2 {
+  color: darkblue
+}
+
+.help-heading3 {
+  color: blue
+}
+
+/* Tree view styles*/
+/* Remove default bullets */
+ul, #help-index {
+  list-style-type: none;
+}
+
+/* Remove margins and padding from the parent ul */
+#help-index {
+  margin: 0;
+  padding: 0;
+}
+
+/* Style the caret/arrow */
+.caret {
+  cursor: pointer;
+  user-select: none; /* Prevent text selection */
+}
+
+  /* Create the caret/arrow with a unicode, and style it */
+  .caret::before {
+    content: "\25B6";
+    color: black;
+    display: inline-block;
+    margin-right: 6px;
+  }
+
+/* Rotate the caret/arrow icon when clicked on (using JavaScript) */
+.caret-down::before {
+  transform: rotate(90deg);
+}
+
+/* Hide the nested list */
+.nested {
+  display: none;
+}
+
+/* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+.active {
+  display: block;
+}
+
+/* CSS Grid*/
+.title {
+  grid-area: title;
+  font-size: 20px;
+  line-height: 20px;
+  font-family: verdana;
+  font-weight: bold;
+  color: darkolivegreen
+}
+
+.links {
+  grid-area: links;
+  display: flex;
+  justify-content: flex-end
+}
+
+
+.threadtabs {
+  grid-area: threadtabs;
+}
+
+.toolbar {
+  grid-area: toolbar;
+  display: flex;
+  justify-content: flex-end
+}
+
+.header_wrapper {
+  height: 12%;
+  display: grid;
+  grid-gap: 2px;
+  grid-template-areas: "title links" "threadtabs toolbar";
+  background-color: #fff;
+  color: #444;
+}
+
+.breakpoints {
+  grid-area: breakpoints;
+  color: darkolivegreen
+}
+
+.status {
+  grid-area: status;
+}
+
+.errors {
+  grid-area: errors;
+}
+
+.worldsets {
+  grid-area: worldsets;
+}
+
+.delayedcalls {
+  grid-area: delayedcalls;
+}
+
+.callstack {
+  grid-area: callstack;
+  resize: vertical;
+  overflow: auto;
+}
+
+.stack {
+  grid-area: stack;
+}
+
+.commandbreakpoints {
+  grid-area: commandbreakpoints;
+}
+
+.codelog {
+  grid-area: codelog;
+}
+
+.derivation {
+  grid-area: derivation;
+}
+
+.simplelog {
+  grid-area: simplelog;
+}
+
+.css_valid {
+  grid-area: css_valid;
+}
+
+body {
+  height: 100vh;
+}
+
+.main {
+  height: 100vh;
+}
+
+.main_frame {
+  height: 88%;
+  overflow-y: scroll;
+}
+
+.main_wrapper {
+  display: grid;
+  grid-gap: 5px;
+  min-height: 100%;
+  grid-template-columns: 2fr 1.3fr;
+  grid-template-areas: "breakpoints status" "errors errors" "worldsets delayedcalls" "watchlist watchlist" "callstack callstack" "stack commandbreakpoints" "stack codelog" "stack derivation" "stack simplelog" "css_valid css_valid";
+  background-color: #fff;
+  color: #444;
+}

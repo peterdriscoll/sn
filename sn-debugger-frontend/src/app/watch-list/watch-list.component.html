@@ -1,0 +1,26 @@
+<div class="watchlist" id="watchlistdivid">
+  <details id="watchlistid" (click)="loadwatchlist(true)" open>
+    <summary>
+      Watch list - All
+      <input type="checkbox" [checked]="watchListDisplayAll" (change)="toggleWatchListDisplayAll()" />
+    </summary>
+    <table class="frame">
+      <tr *ngFor="let w of watchlist" [hidden]="!getWatchDisplay(w.id)">
+        <td>{{ w.name }}</td>
+        <td>{{ w.typetext }}</td>
+        <td>
+          <div *ngFor="let d of w.value">
+            <details *ngIf="d.abbreviation">
+              <summary>{{ d.abbreviation }}...</summary>
+              <p [innerHTML]="trustAsHtml(d.text)"></p>
+            </details>
+            <div *ngIf="!d.abbreviation" [innerHTML]="trustAsHtml(d.text)"><br /></div>
+          </div>
+        </td>
+        <td>
+          <input type="checkbox" [checked]="getWatch(w.id)" (change)="setWatch(w.id)" />
+        </td>
+      </tr>
+    </table>
+  </details>
+</div>

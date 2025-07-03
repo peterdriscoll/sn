@@ -1,0 +1,8 @@
+﻿.threadtabs {
+  display: flex;
+  align-items: center;
+  /* Optionally add spacing */
+  gap: 8px;
+  /* Optionally add padding or margin */
+  padding: 4px 0;
+}

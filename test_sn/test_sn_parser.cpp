@@ -329,7 +329,13 @@ namespace test_sn
 				validate.IsExponential(String("45.9")).Assert().Do();
 				validate.IsExponential(String("543.995e19")).Assert().Do();
 				validate.IsExponential(String("6.626e-34")).Assert().Do();
+				validate.IsExponential(String("6e+12")).Assert().Do();      // Simple integer base
+				validate.IsExponential(String("-0.5e2")).Assert().Do();     // Negative base, valid exponent
+				validate.IsExponential(String("+12e+3")).Assert().Do();     // Signed integer base and exponent
+				validate.IsExponential(String("0e0")).Assert().Do();        // Zero base and exponent
+				validate.IsExponential(String("0.0e-0")).Assert().Do();     // Edge case, all zeros
 
+				(!validate.IsExponential(String("dog"))).Assert().Do();		// Not an integer.
 				(!validate.IsExponential(String("8."))).Assert().Do();
 				(!validate.IsExponential(String("543."))).Assert().Do();
 				(!validate.IsExponential(String("543.843E"))).Assert().Do();

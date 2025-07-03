@@ -1,0 +1,66 @@
+<div class='stack'>
+    <details id='stackid' (click)="loadstack(true)" open>
+        <summary>Detailed stack - {{ countframes }} records {{ displayedstackframes }} displayed</summary>
+        <table class='stack'>
+            <caption>Detailed stack</caption>
+            <tr *ngFor="let f of frames">
+                <td>
+                    <div style='overflow-x:auto;white-space:nowrap;width:900px'>
+                        <details *ngIf="f.hascode">
+                            <summary>
+                                <table class="frameheading">
+                                    <tr>
+                                        <td>{{f.framepos}}</td>
+                                        <td>{{f.function}}</td>
+                                        <td><button (click)='reruntostackpoint(f.stepcount)'>Step:{{f.stepcount}}</button></td>
+                                        <td>SMEM:{{f.stackusage}}</td>
+                                        <td [innerHTML]="trustAsHtml(f.contextworld)"></td>
+                                        <td [innerHTML]="trustAsHtml(f.functioncardinality)"></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </table>
+                            </summary>
+                            <div *ngFor="let d of f.value">
+                                <p class="code" [innerHTML]="trustAsHtml(d.text)"><br /></p>
+                            </div>
+                        </details>
+                        <table class="frameheading" *ngIf="!f.hascode">
+                            <tr>
+                                <td>{{f.framepos}}</td>
+                                <td>{{f.function}}</td>
+                                <td><button (click)='reruntostackpoint(f.stepcount)'>Step:{{f.stepcount}}</button></td>
+                                <td>SMEM:{{f.stackusage}}</td>
+                                <td [innerHTML]="trustAsHtml(f.contextworld)"></td>
+                                <td [innerHTML]="trustAsHtml(f.functioncardinality)"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                        <table class='frame'>
+                            <tr>
+                                <th *ngFor="let v of f.variables">{{ v.name }}</th>
+                            </tr>
+                            <tr>
+                                <td *ngFor="let v of f.variables">{{ v.typetext }} : <span [innerHTML]="trustAsHtml(v.cardinality)"></span></td>
+                            </tr>
+                            <tr>
+                                <td *ngFor="let v of f.variables">
+                                    <div class='frame'>
+                                        <div *ngFor="let d of v.value">
+                                            <details *ngIf="d.abbreviation">
+                                                <summary>{{d.abbreviation}}...</summary>
+                                                <p [innerHTML]="trustAsHtml(d.text)"></p>
+                                            </details>
+                                            <div *ngIf="!d.abbreviation" [innerHTML]="trustAsHtml(d.text)"><br /></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </details>
+</div>

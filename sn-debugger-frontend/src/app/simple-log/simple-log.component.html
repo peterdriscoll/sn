@@ -1,0 +1,8 @@
+<details open id="logid" #logid (click)="loadlog(true)">
+    <summary>Log - {{ logs.length }} records</summary>
+    <table class="logtable">
+        <tr *ngFor="let log of logs">
+            <td [innerHTML]="trustAsHtml(log.text)"></td>
+        </tr>
+    </table>
+</details>

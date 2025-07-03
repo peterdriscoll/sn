@@ -1,0 +1,21 @@
+<details #callstackid (click)="loadCallStack(true)" open>
+    <summary>
+        Call stack - {{ countcalls }} records {{ displayedcallstackframes }} displayed (see settings)
+    </summary>
+    <table class="frame">
+        <tr *ngFor="let f of callstack">
+            <td>{{ f.name }}</td>
+            <td>
+                <div *ngFor="let d of f.function.value">
+                    <div class="code" [innerHTML]="trustAsHtml(d.text)"><br /></div>
+                </div>
+            </td>
+            <td>
+                <div *ngFor="let d of f.result.value">
+                    <div class="code" [innerHTML]="trustAsHtml(d.text)"><br /></div>
+                </div>
+            </td>
+            <td>{{ f.breakpoint }}</td>
+        </tr>
+    </table>
+</details>

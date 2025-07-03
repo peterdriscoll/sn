@@ -1,0 +1,18 @@
+<details id='delayedcallsid' (click)='loaddelayedcalls(true)' open>
+  <summary>Delayed Calls - {{ countdelayedcalls }} records</summary>
+  <table class='frame'>
+    <tr *ngFor="let d of delayedcalls">
+      <td [innerHTML]="trustAsHtml(d.expression)"></td>
+      <td [innerHTML]="trustAsHtml(d.result)"></td>
+      <td>
+        <button
+          [title]="['delayed', d.id]"
+          (click)="setbreakpoint(['delayed', d.id])"
+          [ngClass]="breakpointclass(['delayed', d.id])"
+          [innerHTML]="trustAsHtml(d.cardinality)">
+        </button>
+      </td>
+      <td>{{ d.world }}</td>
+    </tr>
+  </table>
+</details>

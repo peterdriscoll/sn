@@ -1,0 +1,11 @@
+<div class="threadtabs">
+    <table class="thread">
+        <tr>
+            <td *ngFor="let sc of stepcounts">
+                <form (ngSubmit)="setThread(sc.threadnum)">
+                    <input type="submit" [value]="sc.threadnum + ' : ' + sc.stepcount" />
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
