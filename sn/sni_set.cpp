@@ -55,6 +55,13 @@ namespace SNI
 		});
 	}
 
+	SNI_Set::SNI_Set(const std::initializer_list<SN::SN_Value> &values)
+	{
+		for (const auto& value : values) {
+			m_SetList.push_back(value);
+		}
+	}
+
 	SNI_Set::~SNI_Set()
 	{
 

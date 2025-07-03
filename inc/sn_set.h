@@ -22,6 +22,7 @@ namespace SN
 		SN_Set();
 		SN_Set(const SN_Set &p_other);
 		SN_Set(const SN_Value &p_other);
+		SN_Set(const std::initializer_list<SN_Value> &values); // Initializer list.
 		SN_Set(const SN_ValueSet &p_other);
 
 		virtual ~SN_Set();

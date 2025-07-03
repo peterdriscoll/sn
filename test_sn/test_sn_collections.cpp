@@ -274,5 +274,36 @@ namespace test_sn
 			}
 			Cleanup();
 		}
+
+		TEST_METHOD(TestSet)
+		{
+			Initialize();
+			{
+				Manager manager("Test Set", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE(X);
+				SN_DECLARE(Y);
+				(X == Set({ Long(3), Long(4), Long(5) })).Assert().Do();
+				(Y == (Long(3) || Long(4) || Long(5)).BuildSet()).Assert().Do();
+				(X == Y).Assert().Do();
+
+				string X_text = X.DisplayValueSN();
+				Assert::IsTrue(X_text == "Set({Long(3), Long(4), Long(5)})");
+
+				string Y_text = Y.DisplayValueSN();
+				Assert::IsTrue(Y_text == "Set({Long(3), Long(4), Long(5)})");
+				
+				((X.HasMember(Long(3)))).Assert();
+				((X.HasMember(Long(4)))).Assert();
+				((X.HasMember(Long(5)))).Assert();
+
+				((Y.HasMember(Long(3)))).Assert();
+				((Y.HasMember(Long(4)))).Assert();
+				((Y.HasMember(Long(5)))).Assert();
+			}
+
+			Cleanup();
+		}
 	};
 }

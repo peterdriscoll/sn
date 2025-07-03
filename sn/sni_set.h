@@ -24,6 +24,7 @@ namespace SNI
 		SNI_Set();
 		SNI_Set(const SNI_Set &p_other);
 		SNI_Set(const SN::SN_Value &p_other);
+		SNI_Set(const std::initializer_list<SN::SN_Value>& values);
 
 		virtual ~SNI_Set();
 

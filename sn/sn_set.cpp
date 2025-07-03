@@ -28,6 +28,11 @@ namespace SN
 	{
 	}
 
+	SN_Set::SN_Set(const std::initializer_list<SN_Value> &values)
+		: SN_Base(new SNI::SNI_Set(values))
+	{
+	}
+	
 	SN_Set::SN_Set(const SN_ValueSet &p_Value)
 		: SN_Base(new SNI::SNI_Set(p_Value))
 	{
