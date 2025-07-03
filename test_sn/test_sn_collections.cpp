@@ -294,13 +294,15 @@ namespace test_sn
 				string Y_text = Y.DisplayValueSN();
 				Assert::IsTrue(Y_text == "Set({Long(3), Long(4), Long(5)})");
 				
-				((X.HasMember(Long(3)))).Assert();
-				((X.HasMember(Long(4)))).Assert();
-				((X.HasMember(Long(5)))).Assert();
+				(X.HasMember(Long(3))).Assert().Do();
+				(X.HasMember(Long(4))).Assert().Do();
+				(X.HasMember(Long(5))).Assert().Do();
+				(!X.HasMember(Long(6))).Assert().Do();
 
-				((Y.HasMember(Long(3)))).Assert();
-				((Y.HasMember(Long(4)))).Assert();
-				((Y.HasMember(Long(5)))).Assert();
+				(Y.HasMember(Long(3))).Assert().Do();
+				(Y.HasMember(Long(4))).Assert().Do();
+				(Y.HasMember(Long(5))).Assert().Do();
+				(!Y.HasMember(Long(6))).Assert().Do();
 			}
 
 			Cleanup();
