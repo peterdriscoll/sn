@@ -11,6 +11,8 @@ using namespace std;
 using namespace skynet;
 using namespace PGCX;
 
+static bool g_MissingDoDetected = false;
+
 namespace test_sn
 {
 	TEST_CLASS(test_sn_collections)
@@ -18,9 +20,14 @@ namespace test_sn
 	private:
 		bool runWebServer = false;
 
-		static void AssertErrorHandler(bool p_Err, const string& p_Description)
+		static void AssertErrorHandler(bool p_Err, const string& p_Description) noexcept(false)
 		{
 			Assert::IsTrue(!p_Err, wstring(p_Description.begin(), p_Description.end()).c_str());
+		}
+
+		static void MarkMissingErrorHandler(bool p_Err, const string& p_Description)
+		{
+			g_MissingDoDetected = true;
 		}
 
 		void Initialize()
@@ -307,5 +314,23 @@ namespace test_sn
 
 			Cleanup();
 		}
+
+		TEST_METHOD(TestDeferredCommand)
+		{
+			Initialize();
+			{
+				Manager manager("Test Deferred command(missing Do detection)", MarkMissingErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				g_MissingDoDetected = false;
+
+				(Long(3) == Long(3)).Assert();
+				
+				Assert::IsTrue(g_MissingDoDetected);
+			}
+
+			Cleanup();
+		}
+
 	};
 }
