@@ -48,7 +48,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_PartialAssert::PrimaryFunctionExpression(const SN::SN_Expression &p_Param) const
 	{
-		return p_Param.Assert();
+		return p_Param.Assert().GetSNI_Expression();
 	}
 
 	SN::SN_Error SNI_PartialAssert::PartialUnifyInternal(SN::SN_Expression &p_value, SN::SN_Expression &p_Result)

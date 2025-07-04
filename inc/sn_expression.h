@@ -61,6 +61,7 @@ namespace SN
 	class SN_Domain;
 	class SN_State;
 	class SN_StateValue;
+	class SN_DeferredCommand;
 
 	class SN_Context
 	{
@@ -150,10 +151,10 @@ namespace SN
 		SN_Expression SquareRoot() const;
 
 		//Commands
-		SN_Expression Assert() const;
-		SN_Expression PartialAssert() const;
-		SN_Expression Evaluate() const;
-		SN_Expression PartialEvaluate() const;
+		SN_DeferredCommand Assert() const;
+		SN_DeferredCommand PartialAssert() const;
+		SN_DeferredCommand Evaluate() const;
+		SN_DeferredCommand PartialEvaluate() const;
 
 		// Logic
 		SN_Expression operator!() const;

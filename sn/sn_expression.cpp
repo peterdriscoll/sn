@@ -420,24 +420,24 @@ namespace SN
 	}
 
 	// Command
-	SN_Expression SN_Expression::Assert() const
+	SN_DeferredCommand SN_Expression::Assert() const
 	{
-		return SN_Operators::Assert(*this);
+		return SN_DeferredCommand(SN_Operators::Assert(*this));
 	}
 
-	SN_Expression SN_Expression::PartialAssert() const
+	SN_DeferredCommand SN_Expression::PartialAssert() const
 	{
-		return SN_Operators::PartialAssert(*this);
+		return SN_DeferredCommand(SN_Operators::PartialAssert(*this));
 	}
 
-	SN_Expression SN_Expression::Evaluate() const
+	SN_DeferredCommand SN_Expression::Evaluate() const
 	{
-		return SN_Operators::Evaluate(*this);
+		return SN_DeferredCommand(SN_Operators::Evaluate(*this));
 	}
 
-	SN_Expression SN_Expression::PartialEvaluate() const
+	SN_DeferredCommand SN_Expression::PartialEvaluate() const
 	{
-		return SN_Operators::PartialEvaluate(*this);
+		return SN_DeferredCommand(SN_Operators::PartialEvaluate(*this));
 	}
 
 	// Logic

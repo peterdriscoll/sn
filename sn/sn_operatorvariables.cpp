@@ -17,6 +17,22 @@ namespace SN
 	{
 		Link();
 
+/*
+		{
+			(Long(3) == Long(3)).Assert().Do();
+			(Long(3) == Long(3)).PartialAssert();
+		}
+
+		{
+			SN_DeferredCommand command = (Long(3) == Long(4)).PartialAssert();
+			command.Do();
+			(Long(3) == Long(4)).PartialAssert().Do();
+			(Long(3) == Long(3)).Assert().Do();
+			Bool(true).PartialAssert();
+			Bool(true).Assert();
+		}
+*/
+
 		{
 			SN_LOCAL_INLINE(f);
 			SN_LOCAL_INLINE(p);

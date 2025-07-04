@@ -109,6 +109,7 @@ namespace skynet
 #include "sn_operatorvariables.h"
 #include "sn_state.h"
 #include "sn_statevalue.h"
+#include "sn_deferredcommand.h"
 
 // Declare a variable, and tell the variable its variable name.
 // When the program and the program model generated the variable will know its human readable name.
