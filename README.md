@@ -1,82 +1,85 @@
-# Introduction
-This project is a set of classes that act as a logic, learning, and meta programming system, in C++.
+# SN (Symbolic Notation)
 
-## Logic
-But SN is based on narrowing, instead of resolution. This gives it greater flexibility.
-Narrowing is based on considering multiple values for a variabl at one time, stored in value sets, with each recorded value tagged against "worlds" in world sets. A world coresponds to a logical condition.
-Narrowing is the process of elimintaing conflicts being worlds, as the code runs.
-SN is based on relational model. Every operation is a relationship between the resul and the input parameters. Evaluation proceeds using the known values to calculate the unknown.
-If the calculation cannot proceed because of unknown values or cardinality (large value sets), calls are put on a heap for delayed processing.
+SN is an experimental logic programming system built around **symbolic expressions**, **conditional value sets (CVSs)**, and **reversible computation**. It is designed for symbolic reasoning, constraint solving, and introspective metaprogramming. SN has its own execution model, debugger, and memory management system, including a custom **Promotional Garbage Collection (PGC)** engine.
 
-## Meta programming
-SN is designed for meta programming. Code is regarded as data, and the Meta class allows sections of code to be wrapped so that they may acted on by other code.
-SN is designed for the implementation of compilers that take existing programs and convert them into code.
+---
 
-## Transactional garbage collector.
+## Why SN?
+Traditional programming languages evaluate expressions to single values. SN allows expressions to resolve to multiple **symbolic values** under different **conditions**, enabling advanced symbolic reasoning. It is especially suited for:
 
-This garbage collector divides up work into transactions. When a transaction ends, all the memory for that transaction is released, unless it is linked to outside the transaction.
-Linked objects are promoted by copying them to the outer transactions memory space.
+- Symbolic parsing (e.g., splitting strings based on grammar rules)
+- Symbolic computation (e.g., Church numerals and combinators)
+- Meta-level evaluation (reasoning about code itself)
+- Deferred/delayed execution
 
-# Setup
-It is a visual studio solution.
+---
 
-## Requirements
+## Key Concepts
 
-A computer with a reasonable amount of grunt and about 20 GB of space.
+### Conditional Value Sets (CVSs)
+A CVS is a set of values each paired with a **conjunction of conditions**. SN tracks these possibilities through evaluation, maintaining logical structure.
 
-You'll need Visual Studio which you can get from here,
-* https://visualstudio.microsoft.com/downloads/
+### Meta Expressions
+Expressions in SN can describe and manipulate other expressions. `meta(x)` and `unmeta(x)` let you move between levels of interpretation.
 
-Also the bitbucket extension,
-* https://marketplace.visualstudio.com/items?itemName=MistyK.VisualStudioBitbucketExtension
+### Stringrefs
+Strings are represented as **references to substrings**, allowing symbolic decomposition, lookahead, and constraint propagation.
 
-Also boost which you can find here. I am currently using 1.72.
-* https://www.boost.org/    
+### Promotional Garbage Collection (PGC)
+PGC enables transactional memory with promotion logic that ensures memory is safely reused and updated when symbolic paths diverge. It supports both raw pointers ("backstabbing") and transaction-aware `Ref<T>` ("double dipping").
 
-Unzip to
-* C:\boost\boost_1_72_0
+---
 
-## Cloning the project
+## Features
+- **Symbolic execution engine** written in C++
+- **Debugger UI** using Angular frontend
+- Support for delayed evaluation and symbolic recursion (Y combinator)
+- Modular validators like `IsInteger`, `ParseInteger`, `IsFloatingPoint`
+- Support for `Define`, `PartialAssert`, and `Evaluate()` logic
 
-Create a free bitbucket account.
+---
 
-To download the project go into Team Explorer, and login to bitbucket.
-Then under local GIT repositories click Clone. Enter
-* https://bitbucket.org/peterdriscoll59/skynet2
-in the top box and click clone.
+## Current Status
+SN is under active development. Core logic works and is tested. The system has a web-based debugger, but needs more documentation and testing. The goal is to make SN a robust engine for symbolic and logical experimentation.
 
-# Usage
+---
 
-At the moment it is run by the regression tests. After compiling the solution you should see the tests in Test Explorer.
+## Getting Started
+### Build Requirements
+- Visual Studio 2022
+- CMake (optional)
+- Angular CLI (for the frontend)
 
-The projects are,
-* sn - The main library.
-* sn_lib - Parser stuff.
-* pgc - Garbage collector library.
-* test_sn - Tests for skynet.
-* test_pgc - Tests for the garbage collector.
-* http_server_lib - Http server library for the debugger interface.
+### To Run:
+1. Build SN backend (C++)
+2. Start web debugger
+3. Load debugger frontend (Angular)
 
-## Debugger
+---
 
-Update the constant,
-  const string doc_root = "C:/Users/peter_driscoll/Documents/Source/Repos/skynet2/html";
-To the HTML directory in your skynet2 repository.
+## Contributing
+We welcome contributors! Areas needing help:
+- Writing unit tests
+- Improving documentation
+- Transitioning to `Ref<T>` model
+- Debugger UI fixes
 
-To run the debugger, update,
-  bool runWebServer = false;
-to
-  bool runWebServer = true;  
+See [TODO.md] or GitHub issues for tasks.
 
-Then, when you run a unit test it will open a browser page, which
-allows you to step through the execution at an abstract level.
+---
 
-# Planned Development.
+## License
+TBD. (Likely open-source)
 
-## Parser for C++ ...
+---
 
-Parser written in SN under development.
+## Author
+Peter Driscoll, with help from ChatGPT and a pair of very clever dogs.
 
-## Exanple standalone project.
+---
 
-See the Ex1StringRef project.
+## Acknowledgements
+Inspired by the beauty of functional programming, logic, and the joy of symbolic thinking.
+
+> "In a world full of values, SN dares to think in sets."
+
