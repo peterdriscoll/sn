@@ -1,240 +1,81 @@
-#if !defined(REF_INCLUDED)
-#define REF_INCLUDED
-
 #pragma once
 
 #include "pgc_base.h"
+#include "pgc_transaction.h"
+#include "memberref.h"
 
 #include <iostream>
 
 namespace PGC
 {
-	class RefBase
-	{
-	protected:
-		void *m_Object;
-	public:
-		RefBase()
-			: m_Object(0)
-		{
-		}
-		RefBase(void *p_Object)
-			: m_Object(p_Object)
-		{
-		}
-
-		void * Ptr() const
-		{
-			return m_Object;
-		}
-	};
-
 	template <class T>
-	class SRef : public RefBase
-	{
-	private:
-		bool *m_LiveTransaction;
-	public:
-		SRef()
-			: m_LiveTransaction(0)
-		{
-		}
-		SRef(const RefBase &p_Other)
-			: RefBase(p_Other.Ptr())
-			, m_LiveTransaction(false)
-		{
-			SetLiveTransaction();
-		}
-		SRef(T *p_Object)
-			: RefBase(p_Object)
-			, m_LiveTransaction(false)
-		{
-			SetLiveTransaction();
-		}
-		SRef<T> operator ==(const RefBase &p_Other)
-		{
-			return m_Object == p_Other.m_Object;
-		}
-		SRef<T> operator =(T *p_Object)
-		{
-			m_Object = p_Object;
-			SetLiveTransaction();
-			return *this;
-		}
-		SRef<T> operator =(const RefBase &p_Object)
-		{
-			m_Object = dynamic_cast<T>(p_Other.Ptr());
-			SetLiveTransaction();
-			return *this;
-		}
-		T * operator->() const
-		{
-			ASSERTM(m_Object, "Ref::operator-> - pointer is NULL");
-			ASSERTM(*m_LiveTransaction, "SRef::operator-> - Transaction is ended.");
-			return static_cast<T *>(m_Object);
-		}
-
-		operator T*()
-		{
-			ASSERTM(m_Object, "Ref::operator-> - pointer is NULL");
-			ASSERTM(*m_LiveTransaction, "SRef::operator-> - Transaction is ended.");
-			return (T *)m_Object;
-		}
-
-		T * Ptr() const
-		{
-			ASSERTM(*m_LiveTransaction, "SRef::operator-> - Transaction is ended.");
-			return (T *)m_Object;
-		}
-	private:
-		void SetLiveTransaction()
-		{
-			m_LiveTransaction = 0;
-			if (m_Object)
-			{
-				PGC_Transaction *transaction = static_cast<T *>(m_Object)->GetTransaction();
-				if (transaction)
-				{
-					m_LiveTransaction = transaction->GetLiveTransactionPointer();
-				}
-			}
-		}
-	};
-
-	enum VariableClass
-	{
-		Unknown,
-		Member,
-		Stack,
-		Static
-	};
-
-	template <class T, enum VariableClass V = Unknown>
 	class Ref
 	{
 	private:
-		T                 *m_Pointer;
-		PGC_Transaction   *m_Transaction;
-
-		void RequestPromotion()
-		{
-			if (m_Pointer)
-			{
-				PGC_Base *owner = m_Pointer->GetTransaction()->FindOwner((void *)&m_Pointer);
-				if (owner)
-				{
-					owner->REQUESTPROMOTION(m_Pointer);
-				}
-			}
-		}
-
-		void CaptureTransaction()
-		{
-			if ((V == Unknown) || (V == Member))
-			{
-				m_Transaction = PGC_Des::FindTransaction((void *) this);
-				if (m_Transaction == NULL)
-				{
-					return;
-				}
-			}
-			if ((V == Unknown) || (V == Stack))
-			{
-				m_Transaction = TopTransaction();
-				char * transaction = (char *)m_Transaction;
-				//            if (((char *)m_Transaction < 
-
-			}
-			if ((V == Unknown) || (V == Static))
-			{
-				m_Transaction = BaseTransaction();
-			}
-		}
+		PGC_Transaction* m_Transaction = nullptr;
+		MemberRef<T> m_Member;
 
 	public:
 		Ref()
+			: m_Transaction(PGC_Transaction::TopTransaction())
 		{
 		}
-		Ref(T *p_Pointer)
-			: m_Pointer(p_Pointer)
-			, m_Transaction(NULL)
+		Ref(T* p_Pointer)
+			: m_Transaction(PGC_Transaction::TopTransaction())
+			, m_Member(p_Pointer, m_Transaction)
 		{
-			//PGC_Base::CaptureMember((PGC_Base **)&m_Pointer);
-			RequestPromotion();
 		}
-		Ref<T> operator =(T *p_Pointer)
+		Ref(T* p_Pointer, PGC_Transaction* p_Transaction)
+			: m_Transaction(p_Transaction)
+			, m_Member(p_Pointer, p_Transaction)
 		{
-			m_Pointer = p_Pointer;
-			RequestPromotion();
-			return *this;
 		}
-		void Set(T *p_Pointer)
+		Ref(const Ref<T>& other)
+			: m_Transaction(other.m_Transaction)
+			, m_Member(other.m_Member)
 		{
-			m_Pointer = p_Pointer;
+			// Re-request promotion in case this copy is used in a different context
+			m_Member.RequestPromotion(m_Transaction);
 		}
-		T * operator->() const
+		Ref(Ref<T>&& other) noexcept
+			: m_Transaction(other.m_Transaction)
+			, m_Member(std::move(other.m_Member))
 		{
-			ASSERTM(m_Pointer, "Ref::operator-> - pointer is NULL");
-			return m_Pointer;
+			other.m_Transaction = nullptr;
 		}
-
-		operator T*() const
+		Ref<T>& operator=(const Ref<T>& other)
 		{
-			ASSERTM(m_Pointer, "Ref::operator T* - pointer is NULL");
-			return m_Pointer;
-		}
-	};
-
-	template <class T>
-	class MRef
-	{
-	private:
-		T *m_Pointer;
-
-		void RequestPromotion()
-		{
-			if (m_Pointer)
+			if (this != &other)
 			{
-				PGC_Base *owner = m_Pointer->GetTransaction()->FindOwner((void *)&m_Pointer);
-				if (owner)
-				{
-					owner->REQUESTPROMOTION(m_Pointer);
-				}
+				m_Transaction = other.m_Transaction;
+				m_Member = other.m_Member;
+				m_Member.RequestPromotion(m_Transaction);
 			}
-		}
-
-	public:
-		MRef()
-		{
-		}
-		MRef(T *p_Pointer)
-			: m_Pointer(p_Pointer)
-		{
-			PGC_Base::CaptureMember((PGC_Base **)&m_Pointer);
-			RequestPromotion();
-		}
-		Ref<T> operator =(T *p_Pointer)
-		{
-			m_Pointer = p_Pointer;
-			RequestPromotion();
 			return *this;
 		}
-		void Set(T *p_Pointer)
+		Ref<T>& operator=(Ref<T>&& other) noexcept
 		{
-			m_Pointer = p_Pointer;
+			if (this != &other)
+			{
+				m_Transaction = other.m_Transaction;
+				m_Member = std::move(other.m_Member);
+				other.m_Transaction = nullptr;
+			}
+			return *this;
+		}
+		T* Get() const
+		{
+			return m_Member.Get();
+		}
+		void Set(T* p_Pointer)
+		{
+			m_Member.Set(p_Pointer, m_Transaction);
 		}
 		T * operator->() const
 		{
-			ASSERTM(m_Pointer, "Ref::operator-> - pointer is NULL");
-			return m_Pointer;
-		}
-
-		operator T*() const
-		{
-			ASSERTM(m_Pointer, "Ref::operator T* - pointer is NULL");
-			return m_Pointer;
+			T* result = Get();
+			ASSERTM(result, "Ref::operator-> - result is null");
+			return result;
 		}
 	};
 }
-
-#endif // !defined(REF_INCLUDED)

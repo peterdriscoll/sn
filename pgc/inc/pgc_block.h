@@ -1,6 +1,3 @@
-#if !defined(PGC_BLOCK_H_INCLUDED)
-#define PGC_BLOCK_H_INCLUDED
-
 #pragma once
 
 namespace PGC
@@ -35,5 +32,3 @@ namespace PGC
 		PGC_Base *m_DestuctionListLast;
 	};
 }
-
-#endif // !defined(PGC_BLOCK_H_INCLUDED)

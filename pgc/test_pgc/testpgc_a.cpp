@@ -4,56 +4,68 @@
 
 #include "test_pgc_pch.h"
 
-/*static*/ long TestPgc_A::m_ActiveCount = 0;
+/*static*/ long TestPGC_A::m_ActiveCount = 0;
 
-TestPgc_A::TestPgc_A()
-: m_next(0)
+TestPGC_A::TestPGC_A()
+	: Base()
+	, m_next(nullptr)
 {
 	++m_ActiveCount;
 }
 
-TestPgc_A::~TestPgc_A()
+TestPGC_A::TestPGC_A(const TestPGC_A& other)
+	: Base(other)
+	, m_next(other.m_next)
+	, m_Description(other.m_Description)
+{
+	++m_ActiveCount;
+}
+
+TestPGC_A::~TestPGC_A()
 {
 	--m_ActiveCount;
 }
 
-string TestPgc_A::GetDescription()
+string TestPGC_A::GetDescription()
 {
 	return m_Description;
 }
 
-void TestPgc_A::SetDescription(const string &p_Description)
+void TestPGC_A::SetDescription(const string &p_Description)
 {
 	m_Description = p_Description;
 }
 
-TestPgc_A *TestPgc_A::GetNext()
+TestPGC_A *TestPGC_A::GetNext()
 {
 	return m_next;
 }
 
-void TestPgc_A::SetNext(TestPgc_A *p_next)
+void TestPGC_A::SetNext(TestPGC_A *p_next)
 {
 	m_next = p_next;
 	REQUESTPROMOTION(m_next);
 }
 
-void TestPgc_A::PromoteMembers()
+TestPGC_A* TestPGC_A::CloneTo(void* memory) const
+{
+	if (g_ForceMemcpyFallback)
+		return nullptr;
+	return new (memory) TestPGC_A(*this);
+}
+
+
+void TestPGC_A::PromoteMembers()
 {
 	REQUESTPROMOTION(m_next);
 }
 
-long TestPgc_A::CountList()
+long TestPGC_A::CountList()
 {
     if (m_next)
     {
         return m_next->CountList() + 1;
     }
     return 0;
-}
-
-Base *TestPgc_A::Clone(PGC::PGC_Transaction & /*p_Transaction*/)
-{
-	return NULL;
 }
 

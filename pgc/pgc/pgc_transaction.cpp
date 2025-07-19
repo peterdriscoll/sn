@@ -1,6 +1,7 @@
 #include "pgc_base.h"
 #include "pgc_transaction.h"
 #include "pgc_task.h"
+#include "pgc_engine.h"
 
 #include "pgc_pch.h"
 
@@ -32,20 +33,20 @@ namespace PGC
 		return m_InWebServer;
 	}
 
-	PGC_Transaction::PGC_Transaction(bool p_IsStatic)
+	PGC_Transaction::PGC_Transaction(bool p_IsStatic, PromotionStrategy p_PromotionStrategy)
 		: m_FirstBlock(0)
 		, m_CurrentBlock(0)
 		, m_Dieing(false)
 		, m_NetMemoryUsed(0)
 		, m_ProcessThread(NULL)
 		, m_IsStatic(p_IsStatic)
+		, m_PromotionStrategy(p_PromotionStrategy)
+		, m_LiveTransaction(std::make_shared<bool>(true))
 	{
 		if (m_InWebServer)
 		{
 			long dog = 10;
 		}
-		m_LiveTransaction = new bool;
-		*m_LiveTransaction = true;
 		PGC_Transaction::AddTotalGrossMemorySize(sizeof(PGC_Transaction));
 
 		m_LastTopTransaction = m_TopTransaction;
@@ -65,6 +66,11 @@ namespace PGC
 			EndTransaction();
 		}
 		PGC_Transaction::AddTotalGrossMemorySize(-((long) sizeof(PGC_Transaction)));
+	}
+
+	PromotionStrategy PGC_Transaction::GetPromotionStrategy() const
+	{
+		return m_PromotionStrategy;
 	}
 
 	void PGC_Transaction::EndTransaction()
@@ -92,10 +98,11 @@ namespace PGC
 		*m_LiveTransaction = false;
 	}
 
-	bool *PGC_Transaction::GetLiveTransactionPointer()
+	std::shared_ptr<bool> PGC_Transaction::GetLiveTransactionPointer()
 	{
 		return m_LiveTransaction;
 	}
+
 
 	bool PGC_Transaction::Dieing()
 	{
@@ -117,7 +124,7 @@ namespace PGC
 			mem = m_CurrentBlock->Allocate(p_size);
 		}
 		m_AllocatingTransaction = this;
-		m_NetMemoryUsed += p_size - OVERHEAD;
+		m_NetMemoryUsed += p_size - PGC_OVERHEAD;
 		ASSERTM(mem, "Memory allocation failure.");
 		return mem;
 	}
@@ -338,29 +345,6 @@ namespace PGC
 		--m_TransactionDepth;
 	}
 
-	bool PGC_Transaction::PromoteOrReject(PGC_Base **p_BaseRef)
-	{
-		if (Dieing())
-		{
-			return true;
-		}
-		PGC_Base *base = *p_BaseRef;
-		if (base)
-		{
-			PGC_Transaction *source = base->GetTransaction();
-			if (!source || source->Dieing())
-			{
-				Promote(p_BaseRef);
-				return true;
-			}
-		}
-		else
-		{
-			return true;
-		}
-		return false;
-	}
-
 	void PGC_Transaction::PromoteExternals(PGC_Transaction *p_Direction)
 	{
 	}
@@ -368,36 +352,5 @@ namespace PGC
 	bool PGC_Transaction::IsStatic()
 	{
 		return m_IsStatic;
-	}
-
-	void PGC_Transaction::Promote(PGC_Base **p_BaseRef)
-	{
-		PGC_Base *newBase = (*p_BaseRef)->GetNewCopyBase();
-		if (newBase)
-		{
-			*p_BaseRef = newBase;
-		}
-		else
-		{
-			PGC_Base *copy = CopyMemory(*p_BaseRef);
-			RegisterForDestruction(copy);
-			(*p_BaseRef)->SetNewCopyBase(copy);
-			copy->SetTransaction(this);
-			copy->PromoteMembers();
-			*p_BaseRef = copy;
-		}
-	}
-
-	/*static*/PGC_Base *PGC_Transaction::CopyMemory(PGC_Base *p_Base)
-	{
-		char *l_pointer;
-		long l_size;
-		p_Base->RetrieveDescriptor(l_pointer, l_size);
-		long offset = l_pointer - (char *)p_Base;
-		char *l_new_pointer = (char *)Allocate(l_size);
-		PGC_Transaction::AddTotalNetMemorySize(-((long)(l_size - OVERHEAD))); // Allocating adds the net size, but this is a copy, so there should be no increase.
-		memcpy(l_new_pointer, l_pointer, l_size);
-		p_Base->SetTransaction(NULL);
-		return (PGC_Base *)(l_new_pointer + offset);
 	}
 }

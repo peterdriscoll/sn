@@ -1,13 +1,13 @@
-#ifndef PGC_H_INCLUDED
-#define PGC_H_INCLUDED
-
 #pragma once
 
+#include "pgc_promotemacros.h"
 #include "pgc_base.h"
 #include "pgc_transaction.h"
 #include "pgc_stacktransaction.h"
 #include "pgc_task.h"
-//#include "ref.h"
+#include "ref.h"
+#include "memberref.h"
+#include "sref.h"
 
 namespace PGCX
 {
@@ -17,13 +17,13 @@ namespace PGCX
 	typedef PGC::PGC_Task Task;
 	typedef PGC::PGC_Promotion Promotion;
 
-	/*
-	template<typename T>
+	// Smart pointer-style wrappers
+	template <class T>
+	using Ref = PGC::Ref<T>;
+
+	template <class T>
 	using SRef = PGC::SRef<T>;
 
-	template<typename T>
-	using Ref = PGC::Ref<T>;
-	*/
+	template <class T>
+	using MemberRef = PGC::MemberRef<T>;
 }
-
-#endif // PGC_H_INCLUDED

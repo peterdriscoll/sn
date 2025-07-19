@@ -30,6 +30,9 @@
     <ClCompile Include="pgc_pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="pgc_typecheck.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\inc\exp_ctrl_pgc.h">
@@ -60,6 +63,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\inc\pgc_promotion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\pgc_promotemacros.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\pgc_typecheck.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\pgc_promotionstrategy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\memberref.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\sref.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -27,6 +27,9 @@
     <ClInclude Include="test_pgc_pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="testpgc_c.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test_pgc.cpp">
@@ -39,6 +42,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="test_pgc_pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="testpgc_c.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

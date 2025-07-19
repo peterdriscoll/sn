@@ -678,6 +678,16 @@ namespace SNI
 		m_TailCallOptimization = p_TailCallOptimization;
 	}
 
+	PGC::PromotionStrategy SNI_Manager::MemoryPromotionStrategy() const
+	{
+		return m_MemoryPromotionStrategy;
+	}
+
+	void SNI_Manager::SetMemoryPromotionStrategy(PGC::PromotionStrategy p_MemoryPromotionStrategy)
+	{
+		m_MemoryPromotionStrategy = p_MemoryPromotionStrategy;
+	}
+
 	bool SNI_Manager::AutoExpandNull() const
 	{
 		return m_AutoExpandNull;

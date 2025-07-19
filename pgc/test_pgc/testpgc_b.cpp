@@ -1,39 +1,29 @@
 #include "testpgc_b.h"
-#include "testpgc_a.h"
-
 #include "test_pgc_pch.h"
 
-/*static*/ long TestPgc_B::m_ActiveCount = 0;
+/*static*/ long TestPGC_B::m_ActiveCount = 0;
 
-TestPgc_B::TestPgc_B()
-: m_TestA(0)
+TestPGC_B::TestPGC_B()
 {
 	++m_ActiveCount;
 }
 
-TestPgc_B::~TestPgc_B()
+TestPGC_B::TestPGC_B(const TestPGC_B& other)
+	: Base(other)
+	, m_TestA(other.m_TestA)
+{
+	++m_ActiveCount;
+	m_TestA.RequestPromotion(GetTransaction());
+}
+
+TestPGC_B::~TestPGC_B()
 {
 	--m_ActiveCount;
 }
 
-Ref<TestPgc_A> TestPgc_B::GetTestA()
+TestPGC_B* TestPGC_B::CloneTo(void* mem) const
 {
-	return m_TestA;
+//	if (g_ForceMemcpyFallback)
+//		return nullptr;
+	return new (mem) TestPGC_B(*this);
 }
-
-void TestPgc_B::SetTestA(Ref<TestPgc_A> newVal)
-{
-	m_TestA = newVal;
-	REQUESTPROMOTION(m_TestA);
-}
-
-void TestPgc_B::PromoteMembers()
-{
-	REQUESTPROMOTION(m_TestA);
-}
-
-Base *TestPgc_B::Clone(PGC::PGC_Transaction & /*p_Transaction*/)
-{
-	return NULL;
-}
-

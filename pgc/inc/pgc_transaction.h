@@ -21,20 +21,17 @@
 //      }
 // 
 //////////////////////////////////////////////////////////////////////
-
-#if !defined(PGC_TRANSACTION_H_INCLUDED)
-#define PGC_TRANSACTION_H_INCLUDED
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
 
 #include "exp_ctrl_pgc.h"
 #include "pgc_block.h"
 #include "pgc_promotion.h"
+#include "pgc_promotionstrategy.h"
 
 #include <vector>
 #include <mutex>
+#include <memory>
+
 using namespace std;
 
 #pragma warning(disable: 4251)
@@ -52,11 +49,15 @@ namespace PGC
 	class PGC_EXPORT PGC_Transaction
 	{
 	public:
-		PGC_Transaction(bool p_IsStatic = false);
+		PGC_Transaction(bool p_IsStatic = false, PromotionStrategy p_PromotionStrategy = g_DefaultPromotionStrategy);
 		virtual ~PGC_Transaction();
 
+		mutex m_Mutex;
+
+		PromotionStrategy GetPromotionStrategy() const;
+
 		void *Allocate(size_t p_size);
-		bool *GetLiveTransactionPointer();
+		std::shared_ptr<bool> GetLiveTransactionPointer();
 		virtual void EndTransaction();
 
 		void RegisterForDestruction(PGC_Base *p_Base);
@@ -95,19 +96,19 @@ namespace PGC
 		void Process();
 		void Finish();
 
+		bool PromoteOrReject2(PGC_TypeCheck** p_BaseRef);
+			
 		static void RegisterInWebServer();
 		static bool InWebServer();
-
-		bool PromoteOrReject(PGC_Base ** p_BaseRef);
 
 		virtual void PromoteExternals(PGC_Transaction *p_Direction);
 
 		bool IsStatic();
 	private:
-		void Promote(PGC_Base ** p_BaseRef);
-		PGC_Base * CopyMemory(PGC_Base * p_Base);
 
 		void ReleaseBlocks();
+
+		PromotionStrategy m_PromotionStrategy;
 
 		static long m_NextThreadNum;
 
@@ -121,7 +122,7 @@ namespace PGC
 
 		PGC_Block *m_FirstBlock;
 		PGC_Block *m_CurrentBlock;
-		bool *m_LiveTransaction;
+		std::shared_ptr<bool> m_LiveTransaction;
 		bool m_Dieing;
 		PGC_Transaction *m_LastTopTransaction;
 		bool m_IsStatic;
@@ -129,9 +130,6 @@ namespace PGC
 		// Multi threading
 		static bool m_MultiThreaded;
 		TaskList m_TaskList;
-		mutex m_Mutex;
 		thread *m_ProcessThread;
 	};
 }
-
-#endif // !defined(PGC_TRANSACTION_H_INCLUDED)

@@ -102,6 +102,9 @@ namespace SNI
 		bool TailCallOptimization() const;
 		void SetTailCallOptimization(bool p_TailCallOptimization);
 
+		PGC::PromotionStrategy MemoryPromotionStrategy() const;
+		void SetMemoryPromotionStrategy(PGC::PromotionStrategy p_MemoryPromotionStrategy);
+
 		bool AutoExpandNull() const;
 		void SetAutoExpandNull(bool p_AutoExpandNull);
 
@@ -139,6 +142,7 @@ namespace SNI
 		skynet::EvaluationType m_EvaluationType;
 		skynet::LogicType m_LogicType;
 		bool m_TailCallOptimization;
+		PGC::PromotionStrategy m_MemoryPromotionStrategy;
 
 		bool m_AutoExpandNull;
 		

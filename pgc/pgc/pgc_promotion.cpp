@@ -16,9 +16,10 @@ namespace PGC
 	/*static*/ PGC_Promotion **PGC_Promotion::m_PromoteListLast = &m_PromoteList;
 
 	PGC_Promotion::PGC_Promotion()
-		: m_Base(NULL)
-		, m_Next(NULL)
-		, m_Destination(NULL)
+		: m_Base(nullptr)
+		, m_Next(nullptr)
+		, m_Destination(nullptr)
+		, m_FinalCopy(nullptr)
 	{
 	}
 
@@ -26,13 +27,121 @@ namespace PGC
 	{
 	}
 
-	/*static*/ void PGC_Promotion::RequestPromotion(PGC_Base **p_Base, PGC_Transaction *p_Destination)
+	/*static*/ PGC_TypeCheck* PGC_Promotion::CheckRequestPromotion(PGC_TypeCheck** p_Base, PGC_Transaction* p_Source, PGC_Transaction* p_Destination, PromotionStrategy p_CheckType)
 	{
-		PGC_Promotion *promotion = Allocate();
-		promotion->Create(p_Base, p_Destination);
-		promotion->AppendRequest();
+		PGC_TypeCheck* return_value = *p_Base;
+		if (p_Base && p_Source && p_Source != p_Destination && !p_Source->IsStatic())
+		{
+			return_value = RequestPromotion(p_Base, p_Destination, p_CheckType);
+		}
+		return return_value;
 	}
 
+	/*static*/ PGC_TypeCheck* PGC_Promotion::RequestPromotion(PGC_TypeCheck** p_Base, PGC_Transaction* p_Destination, PromotionStrategy p_Strategy)
+	{
+		PGC_Promotion* promotion = PGC_Promotion::Allocate();
+		promotion->Create(p_Base, p_Destination, p_Strategy);
+		promotion->AppendRequest();
+		return static_cast<PGC_TypeCheck*>(promotion);
+	}
+
+	bool PGC_Promotion::PromoteOrReject()
+	{
+		if (!m_Destination || m_Destination->Dieing())
+		{
+			// Invalid destination, drop promotion
+			// ASSERTM(false, "Promotion from an outer to an inner transaction is not allowed.");
+			return true;
+		}
+
+		PGC_Transaction* source = GetSource();
+
+		if (!source)
+		{
+			// Invalid source, drop promotion
+			return true;
+		}
+
+		if (source == m_Destination)
+		{
+			return true;
+		}
+
+		if (source->Dieing())
+		{
+			// Valid promotion condition
+			Promote();
+			return true;
+		}
+
+		// Still valid but source is alive — keep for later
+		return false;
+	}
+
+	void PGC_Promotion::Promote()
+	{
+		PGC_Base* newBase = static_cast<PGC_Base*>((*m_Base)->GetPromotedCopy());
+		PGC_TypeCheck* copy;
+		if (newBase)
+		{
+			copy = newBase;
+		}
+		else
+		{
+			copy = CopyMemory(*m_Base, m_Destination);
+			(*m_Base)->SetPromotedCopy(copy);
+			newBase = static_cast<PGC_Base*>(copy);
+			newBase->SetTransaction(m_Destination);
+			newBase->PromoteMembers();
+		}
+		switch (m_Strategy)
+		{
+		case PromotionStrategy::Backstabbing:
+			*m_Base = copy;
+			break;
+		case  PromotionStrategy::DoubleDipping:
+			m_FinalCopy = copy;
+		}
+	}
+	/*static*/PGC_TypeCheck* PGC_Promotion::CopyMemory(PGC_TypeCheck* p_Base, PGC_Transaction* p_Destination)
+	{
+		PGC_Base* base = static_cast<PGC_Base*>(p_Base);
+		long size;
+		char* dataStart;
+		base->RetrieveDescriptor(dataStart, size);
+
+		void* newMemory = p_Destination->CreateNew(size);
+
+		// Clone the original object into the new memory block via placement new
+		PGC_Base* newBase = base->CloneTo(newMemory); // TO DO: Constructor not being called on PGC_Base.
+
+		if (!newBase)
+		{
+			p_Destination->AddTotalNetMemorySize(-static_cast<long>(size - PGC_OVERHEAD));
+			// Fallback to memcpy if CloneTo isn't implemented
+			memcpy(newMemory, dataStart, size);
+			// Note: no constructor, no destuctor.
+			// Recalculate newBase using original offset
+			char* oldPointer = reinterpret_cast<char*>(p_Base);
+			long offset = dataStart - oldPointer;
+			newBase = reinterpret_cast<PGC_Base*>(
+				static_cast<char*>(newMemory) + offset);
+			base->SetTransaction(nullptr); // This will stop the destructor being called.
+			p_Destination->RegisterLastForDestruction(newBase);
+		}
+		ASSERTM(newBase != nullptr, "Did not expect CloneTo to return a nullptr");
+
+		return newBase;
+	}
+
+	bool PGC_Promotion::IsPromotion()
+	{
+		return true;
+	}
+	PGC_TypeCheck* PGC_Promotion::GetFinalCopy() const
+	{
+		return m_FinalCopy;
+	}
 	//  Process the list
 	//  * Promote items whos source is dieing transaction, and remove from the list.
 	//  * Remove items from the list if the destination is a dieing transaction.
@@ -49,7 +158,7 @@ namespace PGC
 
 														  // Remove promotion from this point in the list;
 				*last = next;			                  // Change the next pointer on the previous promotion to point ot the next promotion.
-
+				// I think here is where the promotion is freed where it maybe shouldnt be.
 				promotion->Free();                        // Returm  promotion to the free list for re-use.
 				promotion = next;		                  // Set the promotion for the next loop
 			}
@@ -62,10 +171,11 @@ namespace PGC
 		m_PromoteListLast = last;
 	}
 
-	void PGC_Promotion::Create(PGC_Base **p_Base, PGC_Transaction *p_Destination)
+	void PGC_Promotion::Create(PGC_TypeCheck **p_Base, PGC_Transaction *p_Destination, PromotionStrategy p_Strategy)
 	{
 		m_Base = p_Base;
 		m_Destination = p_Destination;
+		m_Strategy = p_Strategy;
 	}
 
 	void PGC_Promotion::AppendRequest()
@@ -117,10 +227,25 @@ namespace PGC
 		return false;
 	}
 
-	PGC_Base *PGC_Promotion::GetBase()
+	PGC_TypeCheck* PGC_Promotion::GetBase()
 	{
 		return *m_Base;
 	}
+
+	PGC_TypeCheck** PGC_Promotion::GetBaseRef()
+	{
+		return m_Base;
+	}
+
+	PGC_Transaction* PGC_Promotion::GetSource()
+	{
+		return (*m_Base)->GetTransaction();
+	};
+
+	PGC_Transaction* PGC_Promotion::GetDestination()
+	{
+		return m_Destination;
+	};
 
 	PGC_Promotion *PGC_Promotion::GetNext()
 	{
@@ -130,64 +255,6 @@ namespace PGC
 	void PGC_Promotion::SetNext(PGC_Promotion *p_Promotion)
 	{
 		m_Next = p_Promotion;
-	}
-
-	bool PGC_Promotion::PromoteOrReject()
-	{
-		if (m_Destination->Dieing())
-		{
-			return true;
-		}
-		PGC_Base *base = GetBase();
-		if (base)
-		{
-			PGC_Transaction *source = base->GetTransaction();
-			if (!source || source->Dieing())
-			{
-				Promote();
-				return true;
-			}
-			if (source == m_Destination)
-			{
-				return true;
-			}
-		}
-		else
-		{
-			return true;
-		}
-		return false;
-	}
-
-	void PGC_Promotion::Promote()
-	{
-		PGC_Base *newBase = GetBase()->GetNewCopyBase();
-		if (newBase)
-		{
-			*m_Base = newBase;
-		}
-		else
-		{
-			PGC_Base *copy = CopyMemory();
-			m_Destination->RegisterForDestruction(copy);
-			GetBase()->SetNewCopyBase(copy);
-			copy->SetTransaction(m_Destination);
-			copy->PromoteMembers();
-			*m_Base = copy;
-		}
-	}
-
-	PGC_Base *PGC_Promotion::CopyMemory()
-	{
-		char *l_pointer;
-		long l_size;
-		GetBase()->RetrieveDescriptor(l_pointer, l_size);
-		long offset = l_pointer - (char *)GetBase();
-		char *l_new_pointer = (char *)m_Destination->Allocate(l_size);
-		PGC_Transaction::AddTotalNetMemorySize(-((long)(l_size - OVERHEAD))); // Allocating adds the net size, but this is a copy, so there should be no increase.
-		memcpy(l_new_pointer, l_pointer, l_size);
-		GetBase()->SetTransaction(NULL);
-		return (PGC_Base *)(l_new_pointer + offset);
 	}
 
 	/*static*/ size_t PGC_Promotion::PromotionFreeMemory()

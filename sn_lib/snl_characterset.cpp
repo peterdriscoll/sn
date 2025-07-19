@@ -42,13 +42,13 @@ namespace SNL
 		{
 			SN_LOCAL(c);
 
-			(Define(Sign)(c) == (c == (String("+") || String("-"))).Collapse()).PartialAssert().Do();
+			(Define(Sign)(c) == c.In(Set({ String("+"), String("-") }))).PartialAssert().Do();
 		}
 
 		{
 			SN_LOCAL(c);
 
-			(Define(TimesDivide)(c) == (c == (String("*") || String("/"))).Collapse()).PartialAssert().Do();
+			(Define(TimesDivide)(c) == c.In(Set({ String("*"), String("/") }))).PartialAssert().Do();
 		}
 
 		{

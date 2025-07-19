@@ -240,6 +240,16 @@ namespace SN
 		m_Manager->SetTailCallOptimization(p_TailCallOptimization);
 	}
 
+	PGC::PromotionStrategy SN_Manager::MemoryPromotionStrategy() const
+	{
+		return m_Manager->MemoryPromotionStrategy();
+	}
+
+	void SN_Manager::SetMemoryPromotionStrategy(PGC::PromotionStrategy p_MemoryPromotionStrategy)
+	{
+		return m_Manager->SetMemoryPromotionStrategy(p_MemoryPromotionStrategy);
+	}
+
 	bool SN_Manager::AutoExpandNull() const
 	{
 		return m_Manager->AutoExpandNull();

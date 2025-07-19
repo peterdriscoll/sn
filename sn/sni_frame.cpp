@@ -663,10 +663,9 @@ namespace SNI
 	{
 		for (SNI_Variable *(&v) : m_VariableList)
 		{
-			PGC::PGC_Base *base = static_cast<PGC::PGC_Base *>(v);
-			p_Transaction->PromoteOrReject(&base);
-			SNI_Variable *newAddress = dynamic_cast<SNI_Variable *>(base);
-			v = newAddress;
+			PGC::PGC_TypeCheck* base = static_cast<PGC::PGC_TypeCheck*>(v);
+			PGC::PGC_Promotion::CheckRequestPromotion(&base, base->GetTransaction(), p_Transaction, PGC::PromotionStrategy::Backstabbing);
+			v = dynamic_cast<SNI_Variable *>(base);
 		}
 	}
 }

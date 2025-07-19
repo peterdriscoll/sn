@@ -18,10 +18,6 @@
 //         TopTransaction()->SubmitTask(new MyTask);
 // 
 //////////////////////////////////////////////////////////////////////
-
-#if !defined(PGC_TASK_H_INCLUDED)
-#define PGC_TASK_H_INCLUDED
-
 #pragma once
 
 #include "exp_ctrl_pgc.h"
@@ -38,5 +34,3 @@ namespace PGC
 		virtual void Promote(PGC_Transaction *p_Transaction) = 0;
 	};
 }
-
-#endif // !defined(PGC_TASK_H_INCLUDED)

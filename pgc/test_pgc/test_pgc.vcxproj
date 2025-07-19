@@ -171,11 +171,13 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="testpgc_a.h" />
     <ClInclude Include="testpgc_b.h" />
+    <ClInclude Include="testpgc_c.h" />
     <ClInclude Include="test_pgc_pch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="testpgc_a.cpp" />
     <ClCompile Include="testpgc_b.cpp" />
+    <ClCompile Include="testpgc_c.cpp" />
     <ClCompile Include="test_pgc.cpp" />
     <ClCompile Include="test_pgc_pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

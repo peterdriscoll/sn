@@ -43,10 +43,6 @@ namespace test_sn
 			{
 				Assert::IsTrue(!thread.HasTopManager());
 			}
-			if (Transaction::TotalNetMemoryUsed() != 0)
-			{
-				Assert::IsTrue(Transaction::TotalNetMemoryUsed() == 0);
-			}
 			if (Promotion::PromotionUsedMemory() != 0)
 			{
 				Assert::IsTrue(Promotion::PromotionUsedMemory() == 0);
@@ -54,6 +50,10 @@ namespace test_sn
 			if (Promotion::PromotionFreeMemory() != Transaction::TotalGrossMemoryUsed())
 			{
 				Assert::IsTrue(Promotion::PromotionFreeMemory() == Transaction::TotalGrossMemoryUsed());
+			}
+			if (Transaction::TotalNetMemoryUsed() != 0)
+			{
+				Assert::IsTrue(Transaction::TotalNetMemoryUsed() == 0);
 			}
 		}
 

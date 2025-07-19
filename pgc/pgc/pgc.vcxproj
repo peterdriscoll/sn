@@ -166,17 +166,23 @@
     </ClCompile>
     <ClCompile Include="pgc_promotion.cpp" />
     <ClCompile Include="pgc_transaction.cpp" />
+    <ClCompile Include="pgc_typecheck.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\inc\exp_ctrl_pgc.h" />
+    <ClInclude Include="..\inc\memberref.h" />
     <ClInclude Include="..\inc\pgc.h" />
     <ClInclude Include="..\inc\pgc_base.h" />
     <ClInclude Include="..\inc\pgc_block.h" />
+    <ClInclude Include="..\inc\pgc_promotemacros.h" />
     <ClInclude Include="..\inc\pgc_promotion.h" />
+    <ClInclude Include="..\inc\pgc_promotionstrategy.h" />
     <ClInclude Include="..\inc\pgc_stacktransaction.h" />
     <ClInclude Include="..\inc\pgc_task.h" />
     <ClInclude Include="..\inc\pgc_transaction.h" />
+    <ClInclude Include="..\inc\pgc_typecheck.h" />
     <ClInclude Include="..\inc\ref.h" />
+    <ClInclude Include="..\inc\sref.h" />
     <ClInclude Include="pgc_pch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

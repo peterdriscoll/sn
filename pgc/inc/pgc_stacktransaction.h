@@ -29,9 +29,6 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined(PGC_STACKTRANSACTION_H_INCLUDED)
-#define PGC_STACKTRANSACTION_H_INCLUDED
-
 #pragma once
 
 #include "pgc_transaction.h"
@@ -51,5 +48,3 @@ namespace PGC
 		}
 	};
 }
-
-#endif // !defined(PGC_STACKTRANSACTION_H_INCLUDED)

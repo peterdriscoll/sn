@@ -11,6 +11,7 @@
 //  Usage:
 //      The requirments for using the PGC are,
 //      * Inherit from PGC_Base
+// to be completed
 //      * Call the macro at the start of the body of the class, giving the class name.
 //      * Implement PromoteMembers
 //      ** Call REQUESTPROMOTION on each member.
@@ -55,33 +56,54 @@
 // 
 //////////////////////////////////////////////////////////////////////
 
-#if !defined(PGC_BASE_H_INCLUDED)
-#define PGC_BASE_H_INCLUDED
-
 #pragma once
 
 #include "exp_ctrl_pgc.h"
 #include <string>
-using namespace std;
+#include "pgc_typecheck.h"
+
+#ifndef NDEBUG
+#define ASSERTM(Expr, Msg) \
+    PGC::assertm(#Expr, Expr, __FILE__, __LINE__, Msg)
+#else
+#define ASSERTM(Expr, Msg) \
+    do { if (!(Expr)) PGC::logwarning("ASSERTM ignored in release build: " Msg); } while (0)
+#endif
+
+
+#define FORCE_ASSERTM(msg) ASSERTM(false, msg)
 
 namespace PGC
 {
-	PGC_EXPORT void assertm(char* expr_str, bool expr, char* file, int line, string msg);
+	PGC_EXPORT void logwarning(const std::string& msg);
 
-	#ifndef NDEBUG
-	#define ASSERTM(Expr, Msg) \
-		PGC::assertm(#Expr, Expr, __FILE__, __LINE__, Msg)
-	#else
-	#define ASSERTM(Expr, Msg) ;
-	#endif
+	PGC_EXPORT void assertm(const char* expr_str, bool expr, const char* file, const int line, const std::string &msg);
 
-	#define FORCE_ASSERTM(msg) ASSERTM(false, msg)
+	typedef void OnErrorHandler(bool p_Err, const std::string& p_Description);
+
+	extern OnErrorHandler* g_OnErrorHandler;
+
+	PGC_EXPORT void SetOnErrorHandler(OnErrorHandler* handler);
+
+	void DefaultErrorHandler(bool p_Err, const std::string& p_Description);
+
+	class PGC_Exception : public std::exception {
+		std::string m_Message;
+	public:
+		PGC_Exception(const std::string& msg)
+			: m_Message(msg) {}
+
+		const char* what() const noexcept override
+		{ 
+			return m_Message.c_str();
+		}
+	};
 
 	class PGC_Transaction;
 
 	//  const long typeid = TYPEID
 
-#define PGC_CLASS(T)                                                     \
+#define PGC_CLASS(T)                                                   \
     public:                                                              \
 		virtual void RetrieveDescriptor(char *&p_Pointer, long &p_Size)  \
 		{                                                                \
@@ -89,17 +111,18 @@ namespace PGC
 			p_Size = sizeof(T);                                          \
 		}
 
-#define REQUESTPROMOTION(member) RequestPromotion((PGC::PGC_Base **) &member)
-
-#define OVERHEAD (sizeof(void *) + sizeof(short))
+#define REQUESTPROMOTION(member) RequestPromotion((PGC::PGC_TypeCheck **) &member)
 
 #define NULL 0
 
 	class PGC_EXPORT PGC_Base
+		: public PGC_TypeCheck
 	{
 	public:
 		PGC_Base();
 		PGC_Base(PGC_Transaction & p_Transaction);
+		PGC_Base(const PGC_Base& other);
+		PGC_Base(PGC_Base&& other) noexcept;
 		virtual ~PGC_Base();
 
 		//	Name:  PromoteMembers
@@ -114,16 +137,23 @@ namespace PGC
 		//		    ...
 		virtual void PromoteMembers();
 
+		virtual void RegisterMembers() {};
+		void RegisterMember(PGC_Base* p_Base);
+
 		//  Call this method after assigning a new pointer to a member.
 		//  Request prompotion for p_Base(copying to the same transaction as this object) when the transaction the p_Base object lives in is destroyed.
-		void RequestPromotion(PGC_Base **p_Base);
+
+		bool IsPromotedMarker() const;
 
 		virtual PGC_Base *Clone(PGC_Transaction &p_Transaction);
+		virtual PGC_Base* CloneTo(void* memory) const;
 
-		PGC_Transaction * GetTransaction();
+		void RequestPromotion(PGC_TypeCheck** p_Base);
+
+		PGC_Transaction * GetTransaction() override;
 		void SetTransaction(PGC_Transaction *);
-		PGC_Base *GetNewCopyBase();
-		void SetNewCopyBase(PGC_Base *p_Base);
+		PGC_TypeCheck*GetPromotedCopy() override;
+		void SetPromotedCopy(PGC_TypeCheck *p_Base) override;
 
 		PGC_Base *GetNext();
 		void SetNext(PGC_Base *p_Base);
@@ -131,26 +161,30 @@ namespace PGC
 		virtual void RetrieveDescriptor(char *&p_Pointer, long &p_Size) = 0;
 		size_t Size();
 
+		void* operator new(size_t, void* p) noexcept { return p; };
 		void *operator new(size_t p_size, PGC_Transaction &p_Transaction);
 		void *operator new(size_t p_size);
+		void operator delete(void*, void*) noexcept { /* nothing to do */ }
 		void operator delete(void *p_Object, PGC_Transaction &p_Transaction);
 		void operator delete(void *p_Object);
 	private:
-		// Warning:  These variables are used in a strange way.
-		// if m_Offset > 0 then m_Transaction stores the transaction for this object.
-		// if m_Offset < 0 then m_Transaction stores the new location for this object, during a promotion.
-		void *m_Transaction;
-
-		// The sign of m_Offset is used as above.
-		// The absolute value is the number of bytes to the next object allocated in a block.
-		// This linked list is used for calling destructors.
-		short m_Offset;
-
-		// Apology: The strange arrangement above saves 6 bytes.  There are actually 3 fields compressed into 6 bytes.
-		// * The Transaction
-		// * The new location that the object has been copied to during a promotion.
-		// * The next object in the list of objects to be destroyed when a block is destroyed.
+		PGC_Transaction* m_Transaction = nullptr;
+		PGC_TypeCheck* m_PromotedCopy = nullptr;
+		PGC_Base* m_Next = nullptr;
 	};
-}
 
-#endif // !defined(PGC_BASE_H_INCLUDED)
+	class WithoutPGC {
+		void* m_Data;
+		short m_Extra;
+		virtual ~WithoutPGC() {} // vtable included
+	};
+
+	class WithPGC : public PGC::PGC_Base {
+		void* m_Data;
+		short m_Extra;
+		virtual ~WithPGC() {} // vtable included
+	};
+
+#define PGC_OVERHEAD (sizeof(PGC::WithPGC) - sizeof(PGC::WithoutPGC))
+
+}

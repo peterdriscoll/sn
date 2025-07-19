@@ -1,5 +1,5 @@
-#if !defined(TESTPGC_A_H_INCLUDED)
-#define TESTPGC_A_H_INCLUDED
+#if !defined(TestPGC_A_H_INCLUDED)
+#define TestPGC_A_H_INCLUDED
 
 #pragma once
 
@@ -9,30 +9,33 @@
 using namespace std;
 using namespace PGCX;
 
-class TestPgc_A : public Base
+class TestPGC_A : public Base
 {
-    PGC_CLASS(TestPgc_A);
+    PGC_CLASS(TestPGC_A);
 public:
-	TestPgc_A();
-	virtual ~TestPgc_A();
+	TestPGC_A();
+	TestPGC_A(const TestPGC_A& other);
+	virtual ~TestPGC_A();
 
-	TestPgc_A *GetNext();
-	void SetNext(TestPgc_A *p_next);
+	TestPGC_A *GetNext();
+	void SetNext(TestPGC_A *p_next);
 
 	string GetDescription();
 	void SetDescription(const string &p_Description);
 
-    virtual void PromoteMembers();
+	virtual TestPGC_A* CloneTo(void* memory) const override;
+	virtual void PromoteMembers();
+	virtual void RegisterMembers() {};
 
     long CountList();
 
-	Base *Clone(PGC::PGC_Transaction & /*p_Transaction*/);
+	long MagicValue;
 private:
 	string m_Description;
-	TestPgc_A *m_next;
+	TestPGC_A *m_next;
 
 public:
 	static long m_ActiveCount;
 };
 
-#endif // !defined(TESTPGC_A_H_INCLUDED)
+#endif // !defined(TestPGC_A_H_INCLUDED)

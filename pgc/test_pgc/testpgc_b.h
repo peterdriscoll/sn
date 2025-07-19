@@ -4,34 +4,75 @@
 #pragma once
 
 #include "pgc.h"
-#include "ref.h"
-namespace PGCX
-{
-	template<typename T>
-	using SRef = PGC::SRef<T>;
-
-	template<typename T>
-	using Ref = PGC::Ref<T>;
-}
 
 using namespace PGCX;
 
-class TestPgc_A;
+class TestPGC_A;
 
-class TestPgc_B : public Base
+#undef PGC_ACTION_OVER_MEMBERS
+#undef PGC_ACTION_OVER_CONTAINERS
+
+#define PGC_ACTION_OVER_MEMBERS(ACTION) \
+    ACTION(TestA, TestPGC_A)
+
+#define PGC_ACTION_OVER_CONTAINERS(ACTION)
+
+class TestPGC_B : public Base
 {
-    PGC_CLASS(TestPgc_B);
-public:
-	TestPgc_B();
-	virtual ~TestPgc_B();
+    PGC_CLASS(TestPGC_B)
 
-	Ref<TestPgc_A> GetTestA();
-	void SetTestA(Ref<TestPgc_A> newVal);
-
-    virtual void PromoteMembers();
-	Base *Clone(PGC::PGC_Transaction & /*p_Transaction*/);
+//	PGC_MEMBER_DEFINITIONS(TestPGC_B)
 private:
-	TestPgc_A* m_TestA;
+    PGC_DEFINE_MEMBERS(TestPGC_B)
+public:
+    PGC_MEMBER_ACCESSORS(TestPGC_B)
+        PGC_PROMOTION_LOGIC(TestPGC_B)
+        PGC_REGISTRATION_LOGIC(TestPGC_B)
+        //PGC_CLONE_TO(TestPGC_B)
+        virtual TestPGC_B* CloneTo(void* mem) const override;
+
+/*
+private:
+    MemberRef<TestPGC_A> m_TestA;
+
+public:
+    TestPGC_A* GetTestA()
+    {
+        return m_TestA.Get();
+    }
+
+    void SetTestA(TestPGC_A* p_Pointer)
+    {
+        m_TestA.Set(p_Pointer, GetTransaction());
+    }
+
+    void PromoteMembers()
+    {
+        m_TestA.RequestPromotion(GetTransaction());
+    }
+
+    void RegisterMembers()
+    {
+        RegisterMember((PGC::PGC_Base*)m_TestA.Get());
+    }
+
+    TestPGC_B(const TestPGC_B& other)
+        : Base(other)
+        , m_TestA(other.m_TestA)
+    {
+        m_TestA.RequestPromotion(GetTransaction());
+    }
+
+    virtual PGC_Base* CloneTo(void* memory) const override
+    {
+        return new (memory) TestPGC_B(*this);
+    }
+*/
+
+public:
+	TestPGC_B();
+	TestPGC_B(const TestPGC_B& other);
+	virtual ~TestPGC_B();
 
 public:
 	static long m_ActiveCount;

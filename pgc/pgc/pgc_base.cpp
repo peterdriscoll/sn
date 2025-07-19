@@ -7,22 +7,57 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-using namespace std;
 
 #include "pgc_pch.h"
 
+#if defined(_WIN32)
+#include <Windows.h>
+#endif
+
 namespace PGC
 {
+	void logwarning(const std::string& msg)
+	{
+		std::string full = "PGC WARNING: " + msg + "\n";
+
+#if defined(_WIN32)
+		OutputDebugStringA(full.c_str());
+#endif
+
+		std::cerr << full;
+	}
+
 	// assert with message.
-	void assertm(char* expr_str, bool expr, char* file, int line, string msg)
+	void assertm(const char* expr_str, bool expr, const char* file, const int line, const string &msg)
 	{
 		if (!expr)
 		{
-			cerr << "Assert failed:\t" << msg << "\n"
-				<< "Expected:\t" << expr_str << "\n"
-				<< "Source:\t\t" << file << ", line " << line << "\n";
-			abort();
+			std::string full = "PGC ASSERTION FAILED\n";
+			full += "Expression: "; full += expr_str;
+			full += "\nMessage   : "; full += msg;
+			full += "\nFile      : "; full += file;
+			full += ":" + std::to_string(line) + "\n";
+
+			g_OnErrorHandler(!expr, full);
 		}
+	}
+
+	void DefaultErrorHandler(bool p_Err, const std::string& p_Description)
+	{
+#ifdef _WIN32
+		::OutputDebugStringA(p_Description.c_str());
+#endif
+		std::cerr << p_Description << std::flush;
+		if (p_Err)
+			std::abort();
+	};
+
+	OnErrorHandler* g_OnErrorHandler = DefaultErrorHandler;
+
+	void SetOnErrorHandler(OnErrorHandler* p_handler)
+	{
+		ASSERTM(p_handler != nullptr, "Null OnErrorHandler is not allowed");
+		g_OnErrorHandler = p_handler;
 	}
 
 	unsigned HashCode(const type_info &info)
@@ -36,18 +71,25 @@ namespace PGC
 	}
 
 	PGC_Base::PGC_Base()
-		: m_Offset(0)
 	{
 		m_Transaction = PGC_Transaction::RegisterLastForDestruction(this);
 	}
 
 	PGC_Base::PGC_Base(PGC_Transaction & p_Transaction)
 		: m_Transaction(&p_Transaction)
-		, m_Offset(0)
 	{
 		PGC_Transaction::RegisterLastForDestruction(this);
 	}
-
+	PGC_Base::PGC_Base(const PGC_Base& other)
+		: m_Transaction(other.m_Transaction)
+	{
+		PGC_Transaction::RegisterLastForDestruction(this);
+	}
+	PGC_Base::PGC_Base(PGC_Base&& other) noexcept
+		: m_Transaction(other.m_Transaction)
+	{
+		//PGC_Transaction::RegisterLastForDestruction(this); Maybe
+	}
 	PGC_Base::~PGC_Base()
 	{
 
@@ -58,80 +100,54 @@ namespace PGC
 		return NULL;
 	}
 
-	void PGC_Base::RequestPromotion(PGC_Base **p_Base)
+	PGC_Base* PGC_Base::CloneTo(void* memory) const
 	{
-		PGC_Base *base = *p_Base;
-		if (base)
+		return nullptr;
+	}
+
+	void PGC_Base::RequestPromotion(PGC_TypeCheck **p_Base)
+	{
+		PGC_TypeCheck* typeCheck = *p_Base;
+		if (typeCheck && !typeCheck->IsPromotion())
 		{
-			PGC_Transaction *transaction = base->GetTransaction();
-			if (base && transaction && m_Transaction != transaction && !transaction->IsStatic())
-			{
-				PGC_Promotion::RequestPromotion(p_Base, GetTransaction());
-			}
+			PGC_Promotion::CheckRequestPromotion(p_Base, typeCheck->GetTransaction(), GetTransaction(), PromotionStrategy::Backstabbing);
 		}
+		*p_Base = typeCheck;
+	}
+
+	bool PGC_Base::IsPromotedMarker() const
+	{
+		return m_PromotedCopy != nullptr;
 	}
 
 	PGC_Transaction * PGC_Base::GetTransaction()
 	{
-		if (0 <= m_Offset)
-		{
-			return (PGC_Transaction *)m_Transaction;
-		}
-		return 0;
+		return m_Transaction;
 	}
 
 	void PGC_Base::SetTransaction(PGC_Transaction *p_Transaction)
 	{
-		m_Transaction = (void *)p_Transaction;
-		if (m_Offset < 0)
-		{
-			m_Offset = (short)-m_Offset;
-		}
+		m_Transaction = p_Transaction;
 	}
 
-	PGC_Base *PGC_Base::GetNewCopyBase()
+	PGC_TypeCheck* PGC_Base::GetPromotedCopy()
 	{
-		if (m_Offset < 0)
-		{
-			return (PGC_Base *)m_Transaction;
-		}
-		return 0;
+		return m_PromotedCopy;
 	}
 
-	void PGC_Base::SetNewCopyBase(PGC_Base *p_Base)
+	void PGC_Base::SetPromotedCopy(PGC_TypeCheck*p_Base)
 	{
-		m_Transaction = (void *)p_Base;
-		if (0 < m_Offset)
-		{
-			m_Offset = (short)-m_Offset;
-		}
+		m_PromotedCopy = p_Base;
 	}
 
 	PGC_Base *PGC_Base::GetNext()
 	{
-		long offset = m_Offset;
-		if (offset < 0)
-		{
-			offset = -offset;
-		}
-		if (offset)
-		{
-			return (PGC_Base *)((char *) this + offset);
-		}
-		return NULL;
+		return m_Next;
 	}
 
 	void PGC_Base::SetNext(PGC_Base *p_Base)
 	{
-		if (p_Base)
-		{
-			m_Offset = (short)((char *)p_Base - (char *)this);
-			ASSERTM(m_Offset > 0, "Offset from previous instance location must be positive");
-		}
-		else
-		{
-			m_Offset = 0;
-		}
+		m_Next = p_Base;
 	}
 
 	size_t PGC_Base::Size()
@@ -145,6 +161,11 @@ namespace PGC
 	void PGC_Base::PromoteMembers()
 	{
 	}
+
+	void PGC_Base::RegisterMember(PGC_Base* p_Base)
+	{
+	}
+
 
 	void * PGC_Base::operator new(size_t p_size, PGC_Transaction &p_Transaction)
 	{

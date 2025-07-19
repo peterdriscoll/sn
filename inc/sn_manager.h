@@ -113,6 +113,9 @@ namespace SN
 		bool TailCallOptimization() const;
 		void SetTailCallOptimization(bool p_TailCallOptimization);
 
+		PGC::PromotionStrategy MemoryPromotionStrategy() const;
+		void SetMemoryPromotionStrategy(PGC::PromotionStrategy p_MemoryPromotionStrategy);
+
 		bool AutoExpandNull() const;
 		void SetAutoExpandNull(bool p_AutoExpandNull);
 
