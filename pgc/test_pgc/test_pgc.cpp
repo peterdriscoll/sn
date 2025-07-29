@@ -169,6 +169,8 @@ namespace test_pgc
 				Assert::IsTrue(parentTransaction.NetMemoryUsed() == PGC_Transaction::TotalNetMemoryUsed());
 				Assert::IsTrue(parentTransaction.GrossMemoryUsed() + Promotion::PromotionFreeMemory() + Promotion::PromotionUsedMemory() == PGC_Transaction::TotalGrossMemoryUsed());
 
+				size_t netMemoryUsed = 0;
+				size_t totalMemoryUsed = 0;
 				{
 					PGC_Transaction transaction;
 					SRef<TestPGC_A> a;
@@ -222,12 +224,14 @@ namespace test_pgc
 					b->SetTestA(a3->GetNext());
 					a3->SetNext(0);
 					b->SetTestA((TestPGC_A *)a);
-
+					netMemoryUsed = parentTransaction.NetMemoryUsed();
+					totalMemoryUsed = PGC_Transaction::TotalNetMemoryUsed();
 					Assert::IsTrue(parentTransaction.NetMemoryUsed() + transaction.NetMemoryUsed() == PGC_Transaction::TotalNetMemoryUsed(), L"Sum of net memory used == total");
 					Assert::IsTrue(parentTransaction.GrossMemoryUsed() + transaction.GrossMemoryUsed() + Promotion::PromotionUsedMemory() == PGC_Transaction::TotalGrossMemoryUsed(), L"Sum of gross and promotional memory used == total gross");
 					// Promotion occurs in the destructor of the transaction here.
 				}
-
+				size_t newNetMemoryUsed = parentTransaction.NetMemoryUsed();
+				size_t newTotalMemoryUsed = PGC_Transaction::TotalNetMemoryUsed();
 				Assert::IsTrue(parentTransaction.NetMemoryUsed() == PGC_Transaction::TotalNetMemoryUsed(), L"Parent net == Total net");
 				Assert::IsTrue(parentTransaction.GrossMemoryUsed() + Promotion::PromotionFreeMemory() + Promotion::PromotionUsedMemory() == PGC_Transaction::TotalGrossMemoryUsed(), L"Gross + promotional = total gross");
 

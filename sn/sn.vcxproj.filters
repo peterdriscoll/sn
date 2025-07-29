@@ -570,6 +570,9 @@
     <ClInclude Include="..\inc\sn_deferredcommand.h">
       <Filter>Interface Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sni_user.h">
+      <Filter>General Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -1066,6 +1069,9 @@
     </ClCompile>
     <ClCompile Include="sn_deferredcommand.cpp">
       <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_user.cpp">
+      <Filter>General Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

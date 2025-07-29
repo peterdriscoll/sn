@@ -203,4 +203,20 @@ namespace SNI
 			p_Stream << "\t\t\"world\" : \"" << (m_World?m_World->DisplaySN(displayOptions):"") << "\"\n";
 		}
 	}
+
+	void SNI_DelayedCall::PromoteMembers()
+	{
+
+		// m_Function;
+		for (size_t j = 0; j < m_NumParams; j++)
+		{
+			RequestPromotion((PGC::PGC_TypeCheck **)&(m_ParamList[j].GetSNI_ExpressionRef()));
+		}
+		/*
+		RequestPromotion((PGC::PGC_TypeCheck**)&m_Source);
+		RequestPromotion((PGC::PGC_TypeCheck**)&m_Frame);
+		//SNI_World             *m_World;
+		//SN::SN_Error          m_Error;
+*/
+	}
 }

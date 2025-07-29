@@ -156,7 +156,23 @@ namespace SNI
 		{
 			return 1; // Slightly dubious. Needed for TestStringRefDefinition.
 		}
-		return SNI_FunctionDef::MultiplyCardinality(GetStart().Cardinality(p_MaxCardinality), GetEnd().Cardinality(p_MaxCardinality));
+		if (m_Start.IsValueSet() || m_End.IsValueSet())
+		{
+			return SNI_FunctionDef::MultiplyCardinality(m_Start.Cardinality(), m_End.Cardinality());
+		}
+
+		size_t left = GetLeftMostPos();
+		size_t right = GetRightMostPos();
+		size_t count = right - left + 1;
+		if (!m_Start.IsKnownValue()&&!m_End.IsKnownValue())
+		{
+			return SNI_FunctionDef::MultiplyCardinality(count, (count - 1) / 2);
+		}
+		else if (!m_Start.IsKnownValue() || !m_End.IsKnownValue())
+		{
+			return count;
+		}
+		return 1;
 	}
 
 	size_t SNI_StringRef::LeftCardinality(size_t p_MaxCardinality) const
@@ -187,7 +203,6 @@ namespace SNI
 		}
 		else
 		{
-			ASSERTM(false, "Shouldn't be here. Value should be already simplified. See SimplifyValue.");
 			const string &source_text = GetSourceString();
 			SN::SN_String source = m_Source;
 			SNI_WorldSet *worldSet = new SNI_WorldSet();
@@ -1214,9 +1229,10 @@ namespace SNI
 		{
 			long end_pos = SN::SN_Long(end).GetNumber();
 			string source = GetSourceString().substr(end_pos - p_Other->GetString().length());
-			if (source != p_Other->GetString())
+			string other = p_Other->GetString();
+			if (source != other)
 			{
-				return SN::SN_Error(!result.GetBool(), false);
+				return SN::SN_Error(!result.GetBool(), false, "Contradiction: Strings do not match "+source+"!="+other);
 			}
 			else
 			{

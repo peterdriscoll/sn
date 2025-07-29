@@ -406,16 +406,25 @@ namespace SNI
 			}
 			Breakpoint(SN::DetailStop, (SN::BreakId)(SN::ParameterOneId + j), GetTypeName(), "Call parameter:" + to_string(j), p_Source, SN::ParameterPoint);
 		}
-
-		card = CardinalityOfCall(depth, inputList);
 		SN::SN_Value result;
-		if (maxCard < card)
+		for (long j = 0; j < depth; j++)
 		{
-			result = SN::SN_Error(false, true, "Cardinality " + to_string(card) + " exceeds max cardinality " + to_string(maxCard));
+			if (inputList[j].IsError())
+			{
+				result = inputList[j];
+			}
 		}
-		else
+		if (!result.IsError())
 		{
-			result = ForEachCall(card, depth, inputList);
+			card = CardinalityOfCall(depth, inputList);
+			if (maxCard < card)
+			{
+				result = SN::SN_Error(false, true, "Cardinality " + to_string(card) + " exceeds max cardinality " + to_string(maxCard));
+			}
+			else
+			{
+				result = ForEachCall(card, depth, inputList);
+			}
 		}
 
 		SNI_Variable* resultVar = topFrame->GetResult();
@@ -506,7 +515,7 @@ namespace SNI
 			if (!IsKnownValue(p_ParamList[j], j))
 			{
 				card = CardinalityOfUnify(depth, inputList, (long)j, totalCalc);
-				LOG(WriteLine(SN::DebugLevel, "Parameter " + to_string(j) + " " + "Card: " + to_string(card) + ": " + inputList[j].DisplaySN() + " / " + inputList[j].GetSafeValue().DisplaySN()));
+//				LOG(WriteLine(SN::DebugLevel, "Parameter " + to_string(j) + " " + "Card: " + to_string(card) + ": " + inputList[j].DisplaySN() + " / " + inputList[j].GetSafeValue().DisplaySN()));
 				topFrame->RegisterCardinality(card);
 				if (p_ParamList[j].IsVariable())
 				{

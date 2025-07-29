@@ -201,6 +201,10 @@ namespace test_sn
 				SN_DECLARE(y);
 				(y*y == Long(4)).Assert().Do();   // recognise that y*y = y.Square() in the * operator in SNI_Expression.
 				((y.BuildSet()) == (Long(2) || Long(-2)).BuildSet()).Evaluate().Do();
+
+				//CHATGPT
+				//(x == Long(2) || Long(2)).BuildSet().Evaluate().Do();
+				//Assert::IsTrue(x.BuildSet().DoEvaluate().DisplaySN() == "{Long(2)}");
 			}
 			Cleanup();
 		}

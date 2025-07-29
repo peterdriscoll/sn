@@ -195,6 +195,7 @@ namespace SNI
 		virtual SN::SN_Error PartialAssertValue(const SN::SN_Expression &p_Expression, bool p_Define = false);
 
 		virtual void Do();
+		SN::SN_Error DoReturnError();
 		virtual void Throw();
 		virtual void DoWithHandler(OnErrorHandler * p_ErrorHandler);
 

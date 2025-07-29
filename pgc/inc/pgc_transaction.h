@@ -31,6 +31,7 @@
 #include <vector>
 #include <mutex>
 #include <memory>
+#include <atomic>
 
 using namespace std;
 
@@ -53,6 +54,8 @@ namespace PGC
 		virtual ~PGC_Transaction();
 
 		mutex m_Mutex;
+
+		uint32_t GetID() const { return m_ID; }
 
 		PromotionStrategy GetPromotionStrategy() const;
 
@@ -110,6 +113,7 @@ namespace PGC
 
 		PromotionStrategy m_PromotionStrategy;
 
+		static std::atomic<uint32_t> s_NextID;
 		static long m_NextThreadNum;
 
 		size_t m_NetMemoryUsed;
@@ -131,5 +135,7 @@ namespace PGC
 		static bool m_MultiThreaded;
 		TaskList m_TaskList;
 		thread *m_ProcessThread;
+
+		uint32_t m_ID;
 	};
 }

@@ -14,6 +14,7 @@ namespace SN {
         SNI::SNI_Expression* GetSNI_Expression();
 
         void Do();
+        SN_Error DoReturnError();
         void Throw();
 
     private:

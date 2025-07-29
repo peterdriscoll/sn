@@ -21,6 +21,8 @@ namespace PGC
 
 	/*static*/ long PGC_Transaction::m_NextThreadNum = 0;
 
+	/*static*/ std::atomic<uint32_t> PGC_Transaction::s_NextID{ 1 };
+	
 	thread_local bool m_InWebServer = false;
 
 	/*static*/ void PGC_Transaction::RegisterInWebServer()
@@ -48,6 +50,7 @@ namespace PGC
 			long dog = 10;
 		}
 		PGC_Transaction::AddTotalGrossMemorySize(sizeof(PGC_Transaction));
+		m_ID = s_NextID.fetch_add(1, std::memory_order_relaxed);
 
 		m_LastTopTransaction = m_TopTransaction;
 		m_TopTransaction = this;

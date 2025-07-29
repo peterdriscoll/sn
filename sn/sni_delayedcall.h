@@ -43,6 +43,8 @@ namespace SNI
 		bool EmptyWorld();
 		void WriteJSON(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions);
 
+		virtual void PromoteMembers() override;
+
 	private:
 		SN::SN_FunctionDef    m_Function;
 		size_t                m_NumParams;

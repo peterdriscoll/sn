@@ -10,7 +10,7 @@ using namespace std;
 
 #include "pgc.h"
 
-#include "sn_expression.h"
+#include "sni_expression.h"
 #include "sn_functiondef.h"
 #include "sn_parameter.h"
 
@@ -25,7 +25,8 @@ namespace SNI
 	public:
 		static SNI_DelayedProcessor *GetProcessor();
 
-		SNI_DelayedProcessor(SNI_Manager *p_Manager);
+		SNI_DelayedProcessor();
+		SNI_DelayedProcessor(SNI_Manager* p_Manager);
 		~SNI_DelayedProcessor();
 
 		virtual void AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map);

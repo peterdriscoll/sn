@@ -20,7 +20,8 @@ namespace test_sn
 
 		static void AssertErrorHandler(bool p_Err, const string& p_Description)
 		{
-			Assert::IsTrue(!p_Err, wstring(p_Description.begin(), p_Description.end()).c_str());
+			wstring errDesciption(p_Description.begin(), p_Description.end());
+			Assert::IsTrue(!p_Err, errDesciption.c_str());
 		}
 
 		void Initialize()
@@ -203,6 +204,52 @@ namespace test_sn
 			}
 			Cleanup();
 		}
+
+		TEST_METHOD(TestStringRefDefinitionErrors)
+		{
+			Initialize();
+			{
+				Manager manager("Test String Ref Definition Errors", AssertErrorHandler);
+				{
+					Transaction transaction;
+
+					SN_DECLARE(a);
+					SN_DECLARE(b);
+
+					// Impossible: trying to force b to something inconsistent
+					(String("ratdogcat") == a + b).Assert().Do();
+
+					// Now force b to a value that's not compatible
+					Error err = (b == String("xyz")).Assert().DoReturnError();
+
+					string err_description = err.GetDescription();
+					Assert::IsTrue(err.IsError());
+					Assert::IsTrue(err_description.find("Contradiction") != std::string::npos);
+				}
+
+/*
+				{
+					Transaction transaction;
+
+					SN_DECLARE(a);
+					SN_DECLARE(b);
+					SN_DECLARE(c);
+
+					// Impossible: trying to force b to something inconsistent
+					(String("ratdogcat") == a + b + c).Assert().Do();
+
+					// Now force b to a value that's not compatible
+					Error err = (b == String("xyz")).Assert().DoReturnError();
+
+					string err_description = err.GetDescription();
+					Assert::IsTrue(err.IsError());
+					Assert::IsTrue(err_description.find("contradiction") != std::string::npos);
+				}
+*/
+			}
+			Cleanup();
+		}
+
 
 		TEST_METHOD(TestSubStrings)
 		{
@@ -426,5 +473,49 @@ namespace test_sn
 			}
 			Cleanup();
 		}		
+
+		TEST_METHOD(TestStringBreakup)
+		{
+			Initialize();
+			{
+				Manager manager("Test String Breakup", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				{
+					Transaction transaction;
+
+					SN_DECLARE(a);
+					SN_DECLARE(b);
+					(a + String("aa") + b == String("aaaa")).Assert().Do();
+					(a == String("a")).Assert().Do();
+					string b_string = b.GetSafeValue().GetString();
+					Assert::IsTrue(b_string == "a", L"Incorrect value for b");
+					(b == String("a")).Assert().Do();
+
+					SN_DECLARE(c);
+					(String("") + c == String("dog")).Assert().Do();
+					(c == String("dog")).Evaluate().Do();
+
+					Error e1 = (String("").SubtractLeftChar() == String("")).Evaluate().DoReturnError();
+					string d1 = e1.GetDescription();
+					Assert::IsTrue(d1.find("String too short") != std::string::npos);
+
+					Error e2 = (String("").SubtractRightChar() == String("")).Evaluate().DoReturnError();
+					string d2 = e2.GetDescription();
+					Assert::IsTrue(d2.find("String too short") != std::string::npos);
+
+					Error e3 = (String("").SubtractLeftChar() == String("")).Assert().DoReturnError();
+					string d3 = e3.GetDescription();
+					Assert::IsTrue(d3.find("String too short") != std::string::npos);
+
+					Error e4 = (String("").SubtractRightChar() == String("")).Assert().DoReturnError();
+					string d4 = e4.GetDescription();
+					Assert::IsTrue(d4.find("String too short") != std::string::npos);
+
+					(String("Dog") != String("dog")).Evaluate().Do();
+					(String("Dog") != String("dog")).Assert().Do();
+				}
+			}
+		}
 	};
 }

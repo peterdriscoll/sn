@@ -17,6 +17,12 @@ namespace SN {
         return m_Expression->Do();
     }
 
+    __declspec(noinline) SN_Error SN_DeferredCommand::DoReturnError()
+    {
+        m_Done = true;
+        return m_Expression->DoReturnError();
+    }
+
     void SN_DeferredCommand::Throw() noexcept(false)
     {
         m_Done = true;

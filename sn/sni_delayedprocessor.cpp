@@ -29,6 +29,12 @@ namespace SNI
 		return task;
 	}
 
+	SNI_DelayedProcessor::SNI_DelayedProcessor()
+		: m_Processing(false)
+		, m_Manager(SNI_Thread::GetThread()->GetTopManager())
+	{
+	}
+
 	SNI_DelayedProcessor::SNI_DelayedProcessor(SNI_Manager *p_Manager)
 		: m_Processing(false)
 		, m_Manager(p_Manager)
@@ -57,6 +63,7 @@ namespace SNI
 		call->LinkToVariables();
 		m_SearchLock.lock();
 		m_DelayedCallList.push_back(call);
+		REQUESTPROMOTION(m_DelayedCallList.back());
 		m_SearchLock.unlock();
 		if (call->IsCallRequested())
 		{

@@ -82,6 +82,10 @@ namespace SN
 
 		T GetNumber() const
 		{
+			if (!m_Real)
+			{
+				return 0;
+			}
 			return m_Real->GetNumber();
 		}
 

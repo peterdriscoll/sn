@@ -785,6 +785,17 @@ namespace SNI
 		DoWithHandler(SNI_Thread::TopManager()->ErrorHandler());
 	}
 
+	SN::SN_Error SNI_Expression::DoReturnError()
+	{
+		SN::SN_Variable resultVariable;
+		SN::SN_Error e = AssertValue(resultVariable);
+		if (e.IsError())
+		{
+			return e;
+		}
+		return resultVariable.GetVariableValue().GetError();
+	}
+
 	void SNI_Expression::DoWithHandler(OnErrorHandler * p_ErrorHandler)
 	{
 		LOG(WriteExp(this));
@@ -965,6 +976,10 @@ namespace SNI
 	//Comparison
 	SN::SN_Value SNI_Expression::DoEquals(SNI_Value *p_Other) const
 	{
+		if (SN::Is<SNI_Error*>(p_Other))
+		{
+			return p_Other;
+		}
 		if (SN::Is<SNI_StringRef *>(p_Other))
 		{
 			return p_Other->DoEquals(dynamic_cast<SNI_Value *>(const_cast<SNI_Expression *>(this)));

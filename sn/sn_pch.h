@@ -144,6 +144,7 @@
 #include "sni_debugcommand.h"
 #include "sni_thread.h"
 #include "sni_displayoptions.h"
+#include "sni_user.h"
 
 // Inheritance
 #include "sni_attributedef.h"

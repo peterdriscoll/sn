@@ -643,6 +643,7 @@ namespace SNI
 
 	void SNI_Frame::PromoteMembers()
 	{
+/*
 		REQUESTPROMOTION(m_Function);
 		for (SNI_Replacement &r : m_ReplacementList)
 		{
@@ -652,6 +653,7 @@ namespace SNI
 		{
 			REQUESTPROMOTION(v);
 		}
+*/
 	}
 
 	void SNI_Frame::RegisterCardinality(size_t p_Cardinality)

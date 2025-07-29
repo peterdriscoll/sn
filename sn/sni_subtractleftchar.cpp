@@ -77,9 +77,9 @@ namespace SNI
 
 	size_t SNI_SubtractLeftChar::CardinalityOfCall(long p_Depth, SN::SN_Expression * p_ParamList) const
 	{
-		if (p_ParamList[PU1_First].IsLeftKnownValue())
+		if (p_ParamList[PC1_First].IsLeftKnownValue())
 		{
-			return p_ParamList[PU1_First].LeftCardinality();
+			return p_ParamList[PC1_First].LeftCardinality();
 		}
 		return CARDINALITY_MAX;
 	}
