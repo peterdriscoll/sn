@@ -1,28 +1,26 @@
 #include "sn_factory.h"
 
 #include <windows.h>
+#include <string>
+#include <mutex>
+#include <cassert>
 
 extern "C"
 {
-	__declspec(dllexport) long entrypoint(long id)
+	__declspec(dllexport) void* entrypoint(long id)
 	{
-		#define CREATE_OBJECT(I, C, L, D) \
-			case SN::I##_##D##_entry: return (int) new C();
-
 		switch (id)
 		{
 			SN_APPLY_CURRENT_LIBRARY(APPLY_ENTRY, CREATE_OBJECT)
 		case -1:
 		default:
-			return 0;
+			return nullptr;
 		}
 	}
 }
 
 namespace SN
 {
-	bool loaded = false;
-
 	char * libraryPathArray[SN::LastLibrary];
 #define DEFINE_LIBRARY_PATH(A, N, L) \
 	libraryPathArray[N##_library] = L;
@@ -33,7 +31,7 @@ namespace SN
 		SN_APPLY_LIBRARIES(DEFINE_LIBRARY_PATH, "")
 	}
 
-	typedef long(*f_entrypoint)(long id);
+	typedef void * (*f_entrypoint)(long id);
 
 	f_entrypoint libraryFunctionArray[LastLibrary];
 	void InitlibraryFunctionArray()
@@ -46,7 +44,7 @@ namespace SN
 		#define DEFAULT_LIBRARY_ENTRY(A, N, L) \
 			libraryFunctionArray[N##_library] = &entrypoint;
 
-		SN_APPLY_CURRENT_LIBRARY(DEFAULT_LIBRARY_ENTRY, "")
+		SN_APPLY_CURRENT_LIBRARY(DEFAULT_LIBRARY_ENTRY, "");
 	}
 
 	enum SN::LibraryValues libraryForEntryPointArray[SN::LastEntry];
@@ -58,31 +56,35 @@ namespace SN
 	}
 
 	enum SN::EntryValues defaultEntryArray[SN::LastEntry];
-		#define DEFINE_ENTRY_DEFAULT(I, C, L, D) \
-			defaultEntryArray[I##_##D##_entry] = I##_def_entry;
 
 	void LoadDefaultEntries()
 	{
 		SN_APPLY_LIBRARIES(APPLY_ENTRY, DEFINE_ENTRY_DEFAULT)
 	}
 
+	std::once_flag initFlag;
+
 	void Initialize()
 	{
-		if (!loaded)
-		{
-			loaded = true;
+		std::call_once(initFlag, []() {
 			LoadLibraryPaths();
 			InitlibraryFunctionArray();
 			LoadLibraryForEntryPointArray();
 			LoadDefaultEntries();
-		}
+		});
 	}
 
-	long CallEntryPoint(long id, long interfaceId)
+	void * CallEntryPoint(long id, long interfaceId)
 	{
 		Initialize();
 
-		// assert(defaultEntryArray[id] == interfaceId, "Request to create an object for the wrong interface.")
+		if (id < 0 || id >= LastEntry) {
+			OutputDebugStringA("Invalid entrypoint ID\n");
+			return nullptr;
+		}
+
+		assert(defaultEntryArray[id] == interfaceId &&
+			"Request to create an object for the wrong interface.");
 		enum SN::LibraryValues l = libraryForEntryPointArray[id];
 
 		f_entrypoint f = libraryFunctionArray[l];
@@ -91,13 +93,19 @@ namespace SN
 			HINSTANCE hGetProcIDDLL = LoadLibraryA(libraryPathArray[l]);
 
 			if (!hGetProcIDDLL) {
-				return NULL;
+				std::string msg = "Failed to load library: " + std::string(libraryPathArray[l]) + "\n";
+				OutputDebugStringA(msg.c_str());
+				return nullptr;
 			}
 
 			// resolve function address here
-			f = (f_entrypoint)GetProcAddress(hGetProcIDDLL, "entrypoint");
+			f = reinterpret_cast<f_entrypoint>(GetProcAddress(hGetProcIDDLL, "entrypoint"));
+			
 			if (!f) {
-				return NULL;
+				std::string msg = "Failed to find entrypoint [" + std::to_string(id) +
+					"] in library: " + std::string(libraryPathArray[l]) + "\n";
+				OutputDebugStringA(msg.c_str());
+				return nullptr;
 			}
 			libraryFunctionArray[l] = f;
 		}
