@@ -17,7 +17,7 @@ namespace SNI
 {
 	class SNI_LogLine {
 	public:
-		long m_Depth;
+		size_t m_Depth;
 		size_t m_StepCount;
 		string m_String;
 		bool m_Heading;
@@ -55,7 +55,7 @@ namespace SNI
 		void WriteLine(const string &p_Line, bool p_Heading);
 		void WriteExpression(const SN::SN_Expression & p_Expression);
 		void ClearLogExpressions();
-		void LogTableToStream(ostream & p_Stream, long p_MaxLogEntries);
+		void LogTableToStream(ostream & p_Stream, size_t p_MaxLogEntries);
 		void LogExpressionTableToStream(ostream & p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_DisplayOptions);
 		void LogTableJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartLog);
 		void DerivationJS(ostream & p_Stream, long p_MaxLogEntries);

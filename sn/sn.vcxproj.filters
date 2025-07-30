@@ -573,6 +573,9 @@
     <ClInclude Include="sni_user.h">
       <Filter>General Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\inc\sn_user.h">
+      <Filter>Interface Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -1072,6 +1075,9 @@
     </ClCompile>
     <ClCompile Include="sni_user.cpp">
       <Filter>General Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_user.cpp">
+      <Filter>Interface Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

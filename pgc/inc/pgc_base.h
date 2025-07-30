@@ -70,8 +70,20 @@
     do { if (!(Expr)) PGC::logwarning("ASSERTM ignored in release build: " Msg); } while (0)
 #endif
 
-
 #define FORCE_ASSERTM(msg) ASSERTM(false, msg)
+
+#define PGC_CLASS(T)                                                   \
+    public:                                                              \
+		virtual void RetrieveDescriptor(char *&p_Pointer, long &p_Size)  \
+		{                                                                \
+			p_Pointer = (char *) this;                                   \
+			p_Size = sizeof(T);                                          \
+		}
+
+#define REQUESTPROMOTION(member) RequestPromotion((PGC::PGC_TypeCheck **) &member)
+
+#define NULL 0
+
 
 namespace PGC
 {
@@ -102,18 +114,6 @@ namespace PGC
 	class PGC_Transaction;
 
 	//  const long typeid = TYPEID
-
-#define PGC_CLASS(T)                                                   \
-    public:                                                              \
-		virtual void RetrieveDescriptor(char *&p_Pointer, long &p_Size)  \
-		{                                                                \
-			p_Pointer = (char *) this;                                   \
-			p_Size = sizeof(T);                                          \
-		}
-
-#define REQUESTPROMOTION(member) RequestPromotion((PGC::PGC_TypeCheck **) &member)
-
-#define NULL 0
 
 	class PGC_EXPORT PGC_Base
 		: public PGC_TypeCheck

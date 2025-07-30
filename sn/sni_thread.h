@@ -9,6 +9,7 @@
 using namespace std;
 
 #include "sni_debugcommand.h"
+#include "sni_user.h"
 
 namespace SN
 {
@@ -30,7 +31,6 @@ namespace SNI
 		static SNI_Thread *GetThread();
 		static SNI_Thread *GetThreadByNumber(size_t p_ThreadNum);
 		static size_t GetNumThreads();
-		static SNI_Thread *BuildThread();
 		static SNI_Manager *TopManager();
 
 		static string ThreadEnded(long p_ThreadNum);
@@ -127,7 +127,7 @@ namespace SNI
 		void WriteShuttingDown(ostream & p_Stream);
 
 		SNI_Variable * LookupVariable(const string & p_Name);
-		void DisplayFrameStack(long p_Depth);
+		void DisplayFrameStack(size_t p_Depth);
 		void DisplayStepCounts();
 		void WriteStepCounts(ostream & p_Stream);
 		void WriteStepCount(ostream & p_Stream);
@@ -149,11 +149,12 @@ namespace SNI
 		void ScheduleCodeBreak();
 
 		void RegisterChange(SNI_Variable *p_NewValue);
-		string ChangeHistoryJS(DisplayOptionType p_OptionType, size_t p_ColumnWidth, size_t p_FromStep, size_t p_ToStep);
+		string ChangeHistoryJS(enum DisplayOptionType p_OptionType, size_t p_ColumnWidth, size_t p_FromStep, size_t p_ToStep);
 		void WriteChangeHistoryJS(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions, size_t p_ColumnWidth, size_t p_FromStep, size_t p_ToStep);
 
+		void SetUser(SNI_User* p_User);
 	private:
-		string StartCommand(skynet::DebugAction p_DebugAction, const string & p_Description, enum DisplayOptionType p_OptionType);
+		string StartCommand(enum skynet::DebugAction p_DebugAction, const string & p_Description, enum DisplayOptionType p_OptionType);
 
 		static void WriteW3Credentials(ostream & p_Stream);
 		void WriteCommands(ostream & p_Stream);
@@ -183,6 +184,7 @@ namespace SNI
 		size_t CountLogEntries();
 		size_t CountCodeEntries();
 
+		SNI_User* m_User;
 		size_t m_ThreadNum;
 		mutex m_Mutex;
 		mutex m_ChangeMutex;
@@ -204,7 +206,7 @@ namespace SNI
 		string m_BreakPoint;
 		string m_BreakPointJS;
 
-		long m_MaxStackFrames;
+		size_t m_MaxStackFrames;
 
 		SNI_WorldSetList *m_WorldSetChangedList;
 		SNI_WorldSetMap *m_WorldSetProcessMap;

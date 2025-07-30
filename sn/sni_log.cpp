@@ -144,17 +144,17 @@ namespace SNI
 
 	}
 
-	void SNI_Log::WriteFrameStack(SN::LoggingLevel p_DebugLevel, long p_Depth)
+	void SNI_Log::WriteFrameStack(SN::LoggingLevel p_DebugLevel, size_t p_Depth)
 	{
 		SNI_Frame::DisplayFrameStack(p_Depth);
 	}
 
-	void SNI_Log::WriteFrameStack(SN::LoggingLevel p_DebugLevel, long p_ThreadNum, long p_Depth)
+	void SNI_Log::WriteFrameStack(SN::LoggingLevel p_DebugLevel, size_t p_ThreadNum, size_t p_Depth)
 	{
 		SNI_Frame::DisplayFrameStack(p_Depth);
 	}
 
-	void SNI_Log::LogTableToStream(ostream & p_Stream, long p_MaxLogEntries)
+	void SNI::SNI_Log::LogTableToStream(ostream& p_Stream, size_t p_MaxLogEntries)
 	{
 		if (m_LogBuffer)
 		{

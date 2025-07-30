@@ -22,17 +22,17 @@ namespace SNI
 		SNI_DebugCommand();
 		virtual ~SNI_DebugCommand();
 
-		long GetThreadNum();
+		size_t size_tGetThreadNum();
 
-		bool IsBreakPoint(SN::InterruptPoint p_InterruptPoint, long p_ThreadNum, long p_FrameStackDepth, long p_StepCount, const string &p_BreakPoint, SN::DebuggingStop p_DebuggingStop);
+		bool IsBreakPoint(SN::InterruptPoint p_InterruptPoint, size_t p_ThreadNum, size_t p_FrameStackDepth, size_t p_StepCount, const string &p_BreakPoint, SN::DebuggingStop p_DebuggingStop);
 		void LoadBreakPoints(const string &p_BreakPointString);
 
 		bool IsRunning();
 		bool IsQuitting();
 		bool IsExiting();
 
-		void SetDebugAction(skynet::DebugAction p_DebugAction);
-		void ScheduleCommand(skynet::DebugAction p_DebugAction);
+		void SetDebugAction(enum skynet::DebugAction p_DebugAction);
+		void ScheduleCommand(enum skynet::DebugAction p_DebugAction);
 
 		// Debug break actions.
 		void Run();
@@ -40,11 +40,11 @@ namespace SNI
 		void Debug();
 		void CodeBreak();
 		void Rerun();
-		void StepOver(long p_StackDepth);
+		void StepOver(size_t p_StackDepth);
 		void StepInto(SN::DebuggingStop p_DebugStop);
-		void StepOut(long p_StackDepth);
+		void StepOut(size_t p_StackDepth);
 		void StepParam();
-		void GotoStepCount(skynet::DebugAction p_DebugAction, long p_StepCount, long p_ThreadNum);
+		void GotoStepCount(skynet::DebugAction p_DebugAction, size_t  p_StepCount, size_t p_ThreadNum);
 		void Quit();
 		void Abort();
 
@@ -58,9 +58,9 @@ namespace SNI
 	private:
 		bool m_IsExiting;
 		skynet::DebugAction m_DebugAction;
-		long m_FrameStackDepth;
-		long m_ThreadNum;
-		long m_StepCount;
+		size_t m_FrameStackDepth;
+		size_t m_ThreadNum;
+		size_t m_StepCount;
 		bool m_Running;
 		string m_Description;
 		SN::DebuggingStop m_DebugStop;

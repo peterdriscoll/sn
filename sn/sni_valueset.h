@@ -57,7 +57,7 @@ namespace SNI
 		virtual bool AllValues() const;
 		virtual bool AllValuesBoolean() const;
 		virtual size_t Length() const;
-		SNI_TaggedValue &operator[](long p_index);
+		SNI_TaggedValue &operator[](size_t p_index);
 		SNI_TaggedValue At(const long &p_Value);
 		virtual bool GetBool() const;
 		void Append(const SN::SN_Value &p_Value);

@@ -1,6 +1,7 @@
 #include "sni_instance.h"
 
 #include "sn_pch.h"
+#include <cstdint>
 
 namespace SNI
 {
@@ -43,12 +44,12 @@ namespace SNI
 
 	string SNI_Instance::DisplayCpp() const
 	{
-		return to_string((unsigned long)this);
+		return to_string(reinterpret_cast<std::uintptr_t>(this));
 	}
 
 	string SNI_Instance::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
-		return to_string((unsigned long)this);
+		return to_string(reinterpret_cast<std::uintptr_t>(this));
 	}
 
 	long SNI_Instance::GetPriority() const

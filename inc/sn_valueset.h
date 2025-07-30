@@ -52,7 +52,7 @@ namespace SN
 		SN_ValueSet DoRemove(const SN_Value &p_Other);
 
 		size_t Length() const;
-		SNI::SNI_TaggedValue &operator[](long p_index);
+		SNI::SNI_TaggedValue &operator[](size_t p_index);
 
 		
 		void Simplify();

@@ -3,7 +3,8 @@
 
 #pragma once
 
-#include "../sn/sni_object.h"
+#include "sni_object.h"
+#include "sni_expression.h"
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 
@@ -20,8 +21,8 @@ namespace SNI
 		static void PushFrame(SNI_Frame * p_Frame);
 		static void Pop();
 		static SNI_Frame *Top();
-		static long GetFrameStackDepth();
-		static void DisplayFrameStack(long p_Depth);
+		static size_t GetFrameStackDepth();
+		static void DisplayFrameStack(size_t p_Depth);
 		static void DisplayFrameStack(long p_ThreadNum, long p_Depth);
 		static void DisplayName(long p_ThreadNum, const string &p_Name);
 		static SNI_Variable *LookupVariable(long p_ThreadNum, const string & p_Name);
@@ -70,9 +71,9 @@ namespace SNI
 		virtual void PromoteMembers();
 
 		SN::SN_Expression              m_Function;
-		long                           m_ThreadNum;
+		size_t                         m_ThreadNum;
 		long                           m_FrameNum;
-		long                           m_StepCount;
+		size_t                         m_StepCount;
 		SNI_ReplacementList            m_ReplacementList;
 		SNI_VariablePointerList        m_VariableList;
 		SN::SN_Expression              m_CloneFunction;

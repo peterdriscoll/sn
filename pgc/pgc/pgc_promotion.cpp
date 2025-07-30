@@ -123,7 +123,7 @@ namespace PGC
 			// Note: no constructor, no destuctor.
 			// Recalculate newBase using original offset
 			char* oldPointer = reinterpret_cast<char*>(p_Base);
-			long offset = dataStart - oldPointer;
+			ptrdiff_t offset = dataStart - oldPointer;
 			newBase = reinterpret_cast<PGC_Base*>(
 				static_cast<char*>(newMemory) + offset);
 			base->SetTransaction(nullptr); // This will stop the destructor being called.

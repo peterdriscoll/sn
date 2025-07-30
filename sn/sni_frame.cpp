@@ -39,12 +39,12 @@ namespace SNI
 		return SNI_Thread::GetThread()->Top();
 	}
 
-	/*static*/ long SNI_Frame::GetFrameStackDepth()
+	/*static*/ size_t SNI_Frame::GetFrameStackDepth()
 	{
 		return SNI_Thread::GetThread()->GetFrameStackDepth();
 	}
 
-	/*static*/ void SNI_Frame::DisplayFrameStack(long p_Depth)
+	/*static*/ void SNI::SNI_Frame::DisplayFrameStack(size_t p_Depth)
 	{
 		return SNI_Thread::GetThread()->DisplayFrameStack(p_Depth);
 	}
@@ -82,10 +82,10 @@ namespace SNI
 		, m_FrameNum(++t_MaxFrameNum)
 		, m_StepCount(SNI_Thread::GetThread()->GetStepCount()+1)
 		, m_BreakPointJS(MakeBreakPointJS("", 0))
-		, m_Cardinality(0)
+		, m_Cardinality(std::size_t{ 0 })
 		, m_StackUsage(StackMemory())
 		, m_ContextWorld(SNI_Thread::GetThread()->ContextWorld())
-		, m_ResultIndex(0)
+		, m_ResultIndex(std::size_t{ 0 })
 	{
 	}
 

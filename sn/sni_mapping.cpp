@@ -190,7 +190,7 @@ namespace SNI
 		{
 			return SN::SN_Error(false, false, GetTypeName() + " CountAll - Number of values in map may change. Fix the map before counting.");
 		}
-		return SN::SN_Long(m_Map.size());
+		return SN::SN_Long(static_cast<long>(m_Map.size()));
 	}
 
 	SN::SN_Value SNI_Mapping::DoSum() const

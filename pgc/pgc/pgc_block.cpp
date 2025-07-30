@@ -77,7 +77,7 @@ namespace PGC
 		void *mem = (void *)m_current;
 		m_current = newCurrent;
 
-		PGC_Transaction::AddTotalNetMemorySize(p_size - PGC_OVERHEAD);
+		PGC_Transaction::AddTotalNetMemorySize(static_cast<long>(p_size - PGC_OVERHEAD));
 		return mem;
 	}
 

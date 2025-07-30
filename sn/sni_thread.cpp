@@ -393,7 +393,7 @@ namespace SNI
 		return ss.str();
 	}
 
-	string SNI_Thread::ErrorJS(DisplayOptionType p_OptionType)
+	string SNI_Thread::ErrorJS(enum DisplayOptionType p_OptionType)
 	{
 		if (m_Error)
 		{
@@ -614,6 +614,11 @@ namespace SNI
 		p_Stream << "\n]}\n";
 	}
 
+	void SNI_Thread::SetUser(SNI_User* p_User)
+	{
+		m_User = p_User;
+	}
+
 	string SNI_Thread::StartCommand(enum skynet::DebugAction p_DebugAction, const string &p_Description, enum DisplayOptionType p_OptionType)
 	{
 		stringstream ss;
@@ -829,7 +834,7 @@ namespace SNI
 		m_Mutex.unlock();
 	}
 
-	void SNI_Thread::WriteWebPage(ostream & p_Stream, bool p_Refresh, enum DisplayOptionType p_OptionType)
+	void SNI_Thread::WriteWebPage(ostream& p_Stream, bool p_Refresh, DisplayOptionType p_OptionType)
 	{
 		m_DebugCommand.SetRunning(p_Refresh);
 		p_Stream << "<!doctype html>\n";
@@ -884,7 +889,7 @@ namespace SNI
 			}
 			p_Stream << "</div></td>\n";
 			p_Stream << "<td><div class='group'>\n";
-			SNI_Log::GetLog()->LogTableToStream(p_Stream, m_MaxStackFrames*4);
+			SNI_Log::GetLog()->LogTableToStream(p_Stream, m_MaxStackFrames * 4);
 			p_Stream << "</div></td>\n";
 			p_Stream << "</tr></table>\n";
 		}
@@ -1133,7 +1138,7 @@ namespace SNI
 		size_t base = 0;
 		string delimeter;
 		Lock();
-		long start = m_FrameList.size() - p_Start;
+		long start = static_cast<long>(m_FrameList.size() - p_Start);
 		if (start < 0)
 		{
 			start = 0;
@@ -1161,7 +1166,7 @@ namespace SNI
 		pt::ptree records_node;
 		size_t base = 0;
 		string delimeter;
-		long start = p_Start + p_Depth;
+		size_t start = p_Start + p_Depth;
 		if (start <= 0)
 		{
 			start = m_FrameList.size();
@@ -1303,7 +1308,7 @@ namespace SNI
 		return count;
 	}
 
-	void SNI_Thread::DisplayFrameStack(long p_Depth)
+	void SNI::SNI_Thread::DisplayFrameStack(size_t p_Depth)
 	{
 		size_t base = 0;
 		if (0 < p_Depth)

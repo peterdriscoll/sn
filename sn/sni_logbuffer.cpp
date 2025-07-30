@@ -42,7 +42,7 @@ namespace SNI
 		m_ExpressionBuffer.clear();
 	}
 
-	void SNI_LogBuffer::LogTableToStream(ostream & p_Stream, long p_MaxLogEntries)
+	void SNI::SNI_LogBuffer::LogTableToStream(ostream & p_Stream, size_t p_MaxLogEntries)
 	{
 		p_Stream << "<table class='log'>\n";
 		p_Stream << "<caption>Logging</caption>";
@@ -102,8 +102,8 @@ namespace SNI
 	void SNI_LogBuffer::DerivationJS(ostream & p_Stream, long p_MaxLogEntries)
 	{
 		p_Stream << "{\"derivationhtml\": \"";
-		long actualDepth = SNI_Thread::GetThread()->GetFrameStackDepth();
-		long minDepth = LONG_MAX;
+		size_t actualDepth = SNI_Thread::GetThread()->GetFrameStackDepth();
+		size_t minDepth = LONG_MAX;
 		long entries = 0;
 		m_Mutex.lock();
 		for (auto it = m_Buffer.rbegin(); it != m_Buffer.rend() && (p_MaxLogEntries <= 0 || entries < p_MaxLogEntries); it++, entries++)
@@ -114,11 +114,11 @@ namespace SNI
 			}
 		}
 		entries = 0;
-		long currentDepth = minDepth-1;
+		size_t currentDepth = minDepth-1;
 		vector<SNI_LogLine *> stackLastLines;
 		for (auto it = m_Buffer.rbegin(); it != m_Buffer.rend() && ((p_MaxLogEntries <= 0 || entries < p_MaxLogEntries) || currentDepth > minDepth); it++, entries++)
 		{
-			for (long j = currentDepth; j < it->m_Depth; j++)
+			for (size_t j = currentDepth; j < it->m_Depth; j++)
 			{
 				ASSERTM(j - minDepth + 1 == stackLastLines.size(), "Internal error 1");
 				stackLastLines.push_back(NULL);
@@ -132,7 +132,7 @@ namespace SNI
 				}
 			}
 			ASSERTM(it->m_Depth - minDepth + 1 <= (long) stackLastLines.size(), "Internal error 2");
-			for (long j = currentDepth; it->m_Depth < j; j--)
+			for (size_t j = currentDepth; it->m_Depth < j; j--)
 			{
 				ASSERTM(j - minDepth + 1 == stackLastLines.size(), "Internal error 3");
 				SNI_LogLine *line = stackLastLines.back();
@@ -164,7 +164,7 @@ namespace SNI
 				p_Stream << "<p>" << it->m_StepCount << ": " << EscapeStringToJSON(html) << "</p>\\n";
 			}
 		}
-		for (long j = currentDepth; minDepth <= j; j--)
+		for (size_t j = currentDepth; minDepth <= j; j--)
 		{
 			ASSERTM(j - minDepth + 1 == stackLastLines.size(), "Internal error 5");
 			SNI_LogLine *line = stackLastLines.back();

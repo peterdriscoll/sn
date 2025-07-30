@@ -60,9 +60,9 @@ namespace PGC
 		g_OnErrorHandler = p_handler;
 	}
 
-	unsigned HashCode(const type_info &info)
+	size_t HashCode(const type_info& info)
 	{
-		return (unsigned)&info;
+		return info.hash_code();
 	}
 
 	unsigned Hasher(const unsigned &key)

@@ -132,8 +132,8 @@ namespace SNI
 
 		bool m_DelayOnEvaluate;
 
-		long m_DebugFieldWidth;
-		long m_DebugTitleWidth;
+		size_t m_DebugFieldWidth;
+		size_t m_DebugTitleWidth;
 
 		bool m_AutoDefine;
 

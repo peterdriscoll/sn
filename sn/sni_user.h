@@ -11,9 +11,14 @@ namespace SNI
 	class SNI_DelayedProcessor;
 	class SNI_Thread;
 
-	class SNI_User : SNI_Object
+	class SNI_User : public SNI_Object
 	{
-		class SNI_User();
+		PGC_CLASS(SNI_User)
+
+	private:
+		static void UserThreadFunc(SNI_User* p_User);
+	public:
+		SNI_User();
 
 	private:
 		SNI_DelayedProcessor* m_Processor;

@@ -47,10 +47,10 @@ namespace SNI
 		void WriteVariable(SN::LoggingLevel p_DebugLevel, SN::SN_Variable p_Variable);
 		void WriteVariableByName(SN::LoggingLevel p_DebugLevel, const string & p_Name);
 		void WriteContext(SN::LoggingLevel p_DebugLevel, const string &p_Text);
-		void WriteFrameStack(SN::LoggingLevel p_DebugLevel, long p_Depth);
-		void WriteFrameStack(SN::LoggingLevel p_DebugLevel, long p_ThreadNum, long p_Depth);
+		void WriteFrameStack(SN::LoggingLevel p_DebugLevel, size_t p_Depth);
+		void WriteFrameStack(SN::LoggingLevel p_DebugLevel, size_t p_ThreadNum, size_t p_Depth);
 
-		void LogTableToStream(ostream & p_Stream, long p_MaxLogEntries);
+		void LogTableToStream(ostream & p_Stream, size_t p_MaxLogEntries);
 		void LogTableJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartLog);
 		void DerivationJS(ostream & p_Stream, long p_MaxLogEntries);
 		void CodeTableJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartCode, SNI_DisplayOptions &p_DisplayOptions);

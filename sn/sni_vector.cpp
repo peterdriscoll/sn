@@ -183,7 +183,7 @@ namespace SNI
 		{
 			if (p_Result.Equivalent(m_Vector[j]))
 			{
-				SN::SN_Error err = vs.AddValue(skynet::Long(j), 0, NULL, worldSet);
+				SN::SN_Error err = vs.AddValue(skynet::Long(static_cast<long>(j)), 0, NULL, worldSet);
 				if (err.IsError())
 				{
 					return err;
@@ -222,7 +222,7 @@ namespace SNI
 			return SN::SN_Error(false, false, GetTypeName() + " CountAll - Number of values in vector may change. Fix the vector before counting.");
 		}
 		size_t size = m_Vector.size();
-		return SN::SN_Long(size);
+		return SN::SN_Long(static_cast<long>(size));
 	}
 
 	SN::SN_Value SNI_Vector::DoSum() const

@@ -21,12 +21,12 @@ namespace SNI
 	{
 	}
 
-	long SNI_DebugCommand::GetThreadNum()
+	size_t SNI::SNI_DebugCommand::size_tGetThreadNum()
 	{
 		return m_ThreadNum;
 	}
 
-	bool SNI_DebugCommand::IsBreakPoint(SN::InterruptPoint p_InterruptPoint, long p_ThreadNum, long p_FrameStackDepth, long p_StepCount, const string &p_BreakPoint, SN::DebuggingStop p_DebuggingStop)
+	bool SNI_DebugCommand::IsBreakPoint(SN::InterruptPoint p_InterruptPoint, size_t p_ThreadNum, size_t p_FrameStackDepth, size_t p_StepCount, const string &p_BreakPoint, SN::DebuggingStop p_DebuggingStop)
 	{
 		bool breakPoint = false;
 		unique_lock<mutex> mutex_lock(m_Mutex);
@@ -151,7 +151,7 @@ namespace SNI
 		m_DebugAction = p_DebugAction;
 	}
 
-	void SNI_DebugCommand::ScheduleCommand(skynet::DebugAction p_DebugAction)
+	void SNI_DebugCommand::ScheduleCommand(enum skynet::DebugAction p_DebugAction)
 	{
 		unique_lock<mutex> mutex_lock(m_Mutex);
 		while (!m_ReadyForCommand)
@@ -189,7 +189,7 @@ namespace SNI
 		ScheduleCommand(skynet::Rerun);
 	}
 
-	void SNI_DebugCommand::StepOver(long p_StackDepth)
+	void SNI_DebugCommand::StepOver(size_t p_StackDepth)
 	{
 		m_FrameStackDepth = p_StackDepth;
 		ScheduleCommand(skynet::StepOver);
@@ -201,7 +201,7 @@ namespace SNI
 		ScheduleCommand(skynet::StepInto);
 	}
 
-	void SNI_DebugCommand::StepOut(long p_StackDepth)
+	void SNI_DebugCommand::StepOut(size_t p_StackDepth)
 	{
 		m_FrameStackDepth = p_StackDepth;
 		ScheduleCommand(skynet::StepOut);
@@ -212,7 +212,7 @@ namespace SNI
 		ScheduleCommand(skynet::StepParameter);
 	}
 
-	void SNI_DebugCommand::GotoStepCount(skynet::DebugAction p_DebugAction, long p_StepCount, long p_ThreadNum)
+	void SNI::SNI_DebugCommand::GotoStepCount(skynet::DebugAction p_DebugAction, size_t  p_StepCount, size_t p_ThreadNum)
 	{
 		unique_lock<mutex> mutex_lock(m_Mutex);
 		while (!m_ReadyForCommand)

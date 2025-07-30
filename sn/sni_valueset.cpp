@@ -1118,7 +1118,7 @@ namespace SNI
 		return m_ValueList.size();
 	}
 
-	SNI_TaggedValue &SNI_ValueSet::operator[](long p_index)
+	SNI_TaggedValue &SNI_ValueSet::operator[](size_t p_index)
 	{
 		return m_ValueList[p_index];
 	}

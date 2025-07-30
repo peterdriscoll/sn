@@ -108,7 +108,7 @@ namespace SN
 		return GetSNI_ValueSet()->GenerateTempVariableName();
 	}
 
-	SNI::SNI_TaggedValue &SN_ValueSet::operator[](long p_index)
+	SNI::SNI_TaggedValue &SN_ValueSet::operator[](size_t p_index)
 	{
 		return (*GetSNI_ValueSet())[p_index];
 	}
