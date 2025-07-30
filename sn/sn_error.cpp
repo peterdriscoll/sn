@@ -18,6 +18,10 @@ namespace SN
 	SN_Error::SN_Error(bool p_Success, bool p_Delay, const string & p_Description)
 		: m_Error(new SNI::SNI_Error(p_Success, p_Delay, p_Description))
 	{
+		if (!p_Success)
+		{
+			long dog = 10;
+		}
 	}
 
 	SN_Error::SN_Error(const SN_Error &p_Error)

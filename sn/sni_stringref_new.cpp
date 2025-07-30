@@ -706,166 +706,41 @@ namespace SNI
 
 	SN::SN_Value SNI_StringRef::DoSubtractLeft(SNI_Value * p_Part) const
 	{
-		SN::SN_Value part = p_Part->DoEvaluate();
-		if (part.IsNull())
-		{
-			return skynet::Null;
-		}
-		if (!part.IsString())
-		{
-			return SN::SN_Error(false, false, "StringRef.SubtractLeft: Expected a string to subtract: " + DisplaySnExpression(part));
-		}
-		string part_text = part.GetString();
-		long part_len = (long) part_text.length();
-		if (part_len == 0)
-		{
-			return SN::SN_Error(false, false, "StringRef.SubtractLeft: Expected a string to subtract: " + DisplaySnExpression(part));
-		}
-		SN::SN_Value start = m_Start.DoEvaluate();
-		if (!start.IsNull())
-		{
-			if (!SN::Is<SNI_Long *>(start))
-			{
-				return SN::SN_Error(false, false, "StringRef.SubtractLeft: Start of string ref must be long in: " + DisplaySN0());
-			}
-			long start_pos = SN::SN_Long(start).GetNumber();
+		long start_pos = GetLeftMostPos();
+		long end_pos = GetRightMostPos();
+		size_t part_len = part_text.length();
 
-			SN::SN_Expression end = m_End.DoPartialEvaluate();
-			if (SN::Is<SNI_Value *>(end))
-			{
-				if (!SN::Is<SNI_Long *>(end))
-				{
-					return SN::SN_Error(false, false, "StringRef.SubtractLeft: End of string ref must be long: " + DisplaySN0());
-				}
-				SN::SN_Long end = m_End.DoEvaluate();
-				if (end.IsNullValue())
-				{
-					return SN::SN_Error(false, false, "StringRef.SubtractLeft: End is not known: " + DisplaySN0() + " < " + DisplaySnExpression(part));
-				}
-				long end_pos = end.GetNumber();
-				if (start_pos + part_len > end_pos)
-				{
-					return SN::SN_Error(false, false, "StringRef.SubtractLeft: Not enough characters to subtract: " + DisplaySN0() + " < " + DisplaySnExpression(part));
-				}
-			}
+		if (start_pos + part_len > end_pos)
+		{
+			return SN::SN_Error(false, false,
+				"StringRef::FindString: Not enough characters to match: "
+				+ DisplaySN0() + " < " + part_text);
+		}
 
-			string match = GetSourceString().substr(start_pos, part_len);
-			if (match != part_text)
-			{
-				return SN::SN_Error(false, false, "StringRef.SubtractLeft: Subtract string does not match: " + match + " != " + part_text);
-			}
-			return SN::SN_StringRef(this, SN::SN_Long(start_pos + part_len), end);
-		}
-		else
-		{
-			long start_pos = GetLeftMostPos();
-			long end_pos = GetRightMostPos();
-			if (start_pos + part_len > end_pos)
-			{
-				return SN::SN_Error(false, false, "StringRef.SubtractLeft: Not enough characters to subtract: " + DisplaySN0() + " < " + DisplaySnExpression(part));
-			}
-			SN::SN_ValueSet vs_start;
-			SN::SN_ValueSet vs_end;
-			SNI_WorldSet *ws_start = vs_start.GetWorldSet();
-			SNI_WorldSet *ws_end = vs_end.GetWorldSet();
-			size_t pos = start_pos;
-			size_t find_pos = 0;
-			while ((find_pos = GetSourceString().find(part_text, pos)) != string::npos)
-			{
-				vs_start.AddTaggedValue(SN::SN_Long((long) find_pos), ws_start->CreateWorld());
-				vs_end.AddTaggedValue(SN::SN_Long((long) find_pos + part_len), ws_end->CreateWorld());
-				pos = find_pos + 1;
-			}
-			ws_start->Complete();
-			ws_end->Complete();
-			if (vs_start.Length())
-			{
-				const_cast<SNI_StringRef *>(this)->m_Start.AssertValue(vs_start.SimplifyValue());
-				return SN::SN_StringRef(this, vs_end.SimplifyValue(), m_End);
-			}
-		}
-		return SN::SN_Error(false, false, "StringRef.SubtractLeft: Left string not matched in search: " + DisplaySN0() + " < " + DisplaySnExpression(part));
-	}
+		SNI_WorldSet* ws_start = vs_start.GetWorldSet();
+		SNI_WorldSet* ws_end = vs_end.GetWorldSet();
 
-	SN::SN_Value SNI_StringRef::DoSubtractRight(SNI_Value * p_Part) const
-	{
-		SN::SN_Value part = p_Part->DoEvaluate();
-		if (part.IsNull())
+		bool found = false;
+		size_t pos = start_pos;
+		size_t find_pos = 0;
+		while ((find_pos = GetSourceString().find(part_text, pos)) != std::string::npos)
 		{
-			return skynet::Null;
+			found = true;
+			vs_start.AddTaggedValue(SN::SN_Long(static_cast<long>(find_pos)), ws_start->CreateWorld());
+			vs_end.AddTaggedValue(SN::SN_Long(static_cast<long>(find_pos + part_len)), ws_end->CreateWorld());
+			pos = find_pos + 1;
 		}
-		if (!SN::Is<SNI_String *>(part))
-		{
-			return SN::SN_Error(false, false, "SubtractLeft: Expected a string to subtract: " + DisplaySnExpression(part));
-		}
-		SN::SN_Value start = m_Start.DoPartialEvaluate();
-		if (SN::Is<SNI_Value *>(start))
-		{
-			if (start.IsNull())
-			{
-				return skynet::Null;
-			}
-			if (!SN::Is<SNI_Long *>(start))
-			{
-				return SN::SN_Error(false, false, "SubtractLeft: Start of string ref must be long in: " + DisplaySN0());
-			}
-		}
-		string part_text = part.GetString();
-		long part_len = (long) part_text.length();
-		if (part_len == 0)
-		{
-			return SN::SN_Error(false, false, "StringRef.SubtractLeft: Expected a string to subtract: " + DisplaySnExpression(part));
-		}
-		SN::SN_Value end = m_End.DoEvaluate();
-		if (!end.IsNull())
-		{
-			if (!SN::Is<SNI_Long *>(end))
-			{
-				return SN::SN_Error(false, false, "SubtractLeft: End of string ref must be long in: " + DisplaySN0());
-			}
 
-			long end_pos = GetRightMostPos();
+		ws_start->Complete();
+		ws_end->Complete();
 
-			string match = GetSourceString().substr(end_pos - part_len, part_len);
-			if (match != part_text)
-			{
-				return SN::SN_Error(false, false, "SubtractLeft: Subtract string does not match: " + match + " != " + part_text);
-			}
-			return SN::SN_StringRef(this, start, SN::SN_Long(end_pos - part_len));
-		}
-		else
+		if (!found)
 		{
-			size_t start_pos = GetLeftMostPos();
-			size_t end_pos = GetRightMostPos();
-			if (start_pos + part_len > end_pos)
-			{
-				return SN::SN_Error(false, false, "StringRef.SubtractLeft: Not enough characters to subtract: " + DisplaySN0() + " < " + DisplaySnExpression(part));
-			}
-			SN::SN_ValueSet vs_start;
-			SN::SN_ValueSet vs_end;
-			SNI_WorldSet *worldSet = new SNI_WorldSet();
-			vs_start.SetWorldSet(worldSet);
-			vs_end.SetWorldSet(worldSet);
-			size_t pos = start_pos;
-			size_t find_pos = 0;
-			while (pos < end_pos && (find_pos = GetSourceString().find(part_text, pos)) != string::npos)
-			{
-				if (find_pos < end_pos)
-				{
-					SNI_World *world = worldSet->CreateWorld();
-					vs_start.AddTaggedValue(SN::SN_Long((long) find_pos), world);
-					vs_end.AddTaggedValue(SN::SN_Long((long) find_pos + part_len), world);
-				}
-				pos = find_pos + 1;
-			}
-			worldSet->Complete();
-			if (vs_start.Length())
-			{
-				const_cast<SNI_StringRef *>(this)->m_End.AssertValue(vs_end.SimplifyValue());
-				return SN::SN_StringRef(this, m_Start, vs_start.SimplifyValue());
-			}
+			return SN::SN_Error(false, false,
+				"StringRef::FindString: No match for \"" + part_text + "\" in " + DisplaySN0());
 		}
-		return SN::SN_Error(false, false, "StringRef.SubtractRight: Right string not matched in search: " + DisplaySN0() + " < " + DisplaySnExpression(part));
+
+		return skynet::OK;
 	}
 
 	SN::SN_Value SNI_StringRef::DoSubtractLeftChar() const
@@ -1248,28 +1123,24 @@ namespace SNI
 				}
 			}
 		}
-		if (!start.IsKnownValue() && !end.IsKnownValue())
-		{
-			SN::SN_ValueSet vs_start;
-			SN::SN_ValueSet vs_end;
+		SN::SN_ValueSet vs_start;
+		SN::SN_ValueSet vs_end;
 
-			SN::SN_Error err = FindString(other, vs_start, vs_end);
-			if (!err.IsError())
+		SN::SN_Error err = FindString(other, vs_start, vs_end);
+		if (!err.IsError())
+		{
+			SN::SN_Error errStart = m_Start.AssertValue(vs_start.SimplifyValue());
+			if (errStart.IsError())
 			{
-				SN::SN_Error errStart = m_Start.AssertValue(vs_start.SimplifyValue());
-				if (errStart.IsError())
-				{
-					return errStart;
-				}
-				SN::SN_Error errEnd = m_End.AssertValue(vs_end.SimplifyValue());
-				if (errEnd.IsError())
-				{
-					return errEnd;
-				}
+				return errStart;
 			}
-			return err;
+			SN::SN_Error errEnd = m_End.AssertValue(vs_end.SimplifyValue());
+			if (errEnd.IsError())
+			{
+				return errEnd;
+			}
 		}
-		return skynet::OK;
+		return err;
 	}
 
 	void SNI_StringRef::SetStart(SN::SN_Expression p_Expression)
@@ -1355,8 +1226,7 @@ namespace SNI
 		bool found = false;
 		size_t pos = start_pos;
 		size_t find_pos = 0;
-		string source = GetSourceString();
-		while ((find_pos = source.find(part_text, pos)) != std::string::npos)
+		while ((find_pos = GetSourceString().find(part_text, pos)) != std::string::npos)
 		{
 			found = true;
 			vs_start.AddTaggedValue(SN::SN_Long(static_cast<long>(find_pos)), ws_start->CreateWorld());

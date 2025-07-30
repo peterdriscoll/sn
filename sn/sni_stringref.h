@@ -106,6 +106,8 @@ namespace SNI
 		virtual void PromoteMembers();
 
 	private:
+		SN::SN_Error FindString(const std::string& part_text, SN::SN_ValueSet& vs_start, SN::SN_ValueSet& vs_end) const;
+
 		SNI_WorldSet *m_WorldSet;
 		SN::SN_String m_Source;
 		SN::SN_Expression m_Start;

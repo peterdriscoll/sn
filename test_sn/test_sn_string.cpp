@@ -210,6 +210,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test String Ref Definition Errors", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 				{
 					Transaction transaction;
 
@@ -227,7 +228,6 @@ namespace test_sn
 					Assert::IsTrue(err_description.find("Contradiction") != std::string::npos);
 				}
 
-/*
 				{
 					Transaction transaction;
 
@@ -243,9 +243,8 @@ namespace test_sn
 
 					string err_description = err.GetDescription();
 					Assert::IsTrue(err.IsError());
-					Assert::IsTrue(err_description.find("contradiction") != std::string::npos);
+					Assert::IsTrue(err_description.find("No match") != std::string::npos);
 				}
-*/
 			}
 			Cleanup();
 		}

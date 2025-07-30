@@ -455,6 +455,9 @@ namespace test_sn
 				CharacterSet characterSet;
 				Validate validate(characterSet);
 
+				//manager.Breakpoint();
+				(!validate.IsString(String("\"\"D"))).Assert().Do();
+
 				(!validate.IsString(String("\"D"))).Assert().Do();
 				(!validate.IsString(String("\"X\\"))).Assert().Do();
 
