@@ -107,6 +107,7 @@ namespace SNI
 
 	private:
 		SN::SN_Error FindString(const std::string& part_text, SN::SN_ValueSet& vs_start, SN::SN_ValueSet& vs_end) const;
+		SNI::SNI_String* GetSNI_String() const;
 
 		SNI_WorldSet *m_WorldSet;
 		SN::SN_String m_Source;

@@ -1202,9 +1202,12 @@ namespace SNI
 
 		if (!p_Other->IsKnownValue())
 		{
-			if (start.IsKnownValue() && end.IsKnownValue())
+			if (start.IsInteger() && end.IsInteger())
 			{
-				return p_Other->DoAssertEqualsValue(this, p_Result);
+				SNI_String* thisString = GetSNI_String();
+				ASSERTM(thisString,
+					"SNI_StringRef::DoAssertEqualsValue: thisString shouldn't be nullptr.");
+				return p_Other->DoAssertEqualsValue(thisString, p_Result);
 			}
 			//	Maybe this could be implemented in the future. It is unclear.
 			return SN::SN_Error(false, false, "Not implemented. Trying to compare two string refs with unknown start or end.");
@@ -1390,5 +1393,26 @@ namespace SNI
 		}
 
 		return skynet::OK;
+	}
+
+	SNI_String *SNI_StringRef::GetSNI_String() const
+	{
+		if (m_Start.IsInteger() && m_End.IsInteger())
+		{
+			long start_pos = SN::SN_Long(m_Start).GetNumber();
+			long end_pos = SN::SN_Long(m_End).GetNumber();
+			
+			ASSERTM(0 <= start_pos && start_pos <= end_pos,
+				"StringRef::GetSNI_String: Start position must be less than end position: ");
+			
+			string source_string = GetSource().GetString();
+			long length = static_cast<long>(source_string.length());
+			ASSERTM(start_pos < length && end_pos < length,
+				"StringRef::GetSNI_String: Start and end position must be within the source string");
+			
+			// Substring: +1 because end is inclusive
+			return new SNI_String(source_string.substr(static_cast<size_t>(start_pos), static_cast<size_t>(end_pos - start_pos + 1)));
+		}
+		return nullptr;
 	}
 }
