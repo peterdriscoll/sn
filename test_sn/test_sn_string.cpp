@@ -459,19 +459,19 @@ namespace test_sn
 				(firstClause + String(" and ") + secondClause == String("I love dogs and cats and dogs love me.")).Assert().Do();
 				string firstClause_string_vs = firstClause.DisplaySN();
 				string secondClause_string_vs = secondClause.DisplaySN();
-				
+
 				string firstClause_string = firstClause.BuildSet().DoEvaluate().DisplaySN();
 				string secondClause_string = secondClause.BuildSet().DoEvaluate().DisplaySN();
 				Assert::IsTrue(firstClause_string == "{String(\"I love dogs\"), String(\"I love dogs and cats\")}");
 				Assert::IsTrue(secondClause_string == "{String(\"cats and dogs love me.\"), String(\"dogs love me.\")}");
-				
+
 				(sentence == firstClause + (String(" and ") + secondClause)).Assert().Do();
 				string sentence_string_vs = sentence.DisplaySN();
 				string sentence_string = sentence.GetString();
 				Assert::IsTrue(sentence_string == "I love dogs and cats and dogs love me.");
 			}
 			Cleanup();
-		}		
+		}
 
 		TEST_METHOD(TestStringBreakup)
 		{
@@ -515,6 +515,7 @@ namespace test_sn
 					(String("Dog") != String("dog")).Assert().Do();
 				}
 			}
+			Cleanup();
 		}
 
 		TEST_METHOD(TestLeftAnchoredStringRefNegation)
@@ -539,7 +540,66 @@ namespace test_sn
 					string errDescription = err.GetDescription();
 					Assert::IsTrue(err.IsError());
 				}
+				{
+					Transaction transaction;
+
+					SN_DECLARE(end);
+
+					// Compare a fixed string to a left-anchored stringref with unknown end
+					((String("ab") != StringRef(String("abcdef"), Long(0), end))).Assert().Do();
+
+					// Asserting end == 2 forces:
+					//   String("ab") == StringRef(String("abcdef"), Long(0), end)
+					// This must fail because the delayed inequality will be violated.
+					Error err = (end == Long(2)).Assert().DoReturnError();
+
+					string errDescription = err.GetDescription();
+					Assert::IsTrue(err.IsError());
+				}
+				{
+					Transaction transaction;
+
+					SN_DECLARE(end);
+
+					// Compare a fixed string to a left-anchored stringref with unknown end
+					(StringRef(String("abcdef"), Long(0), end) != String("ab")).Assert().Do();
+
+					// Asserting end == 2 forces:
+					//   String("ab") == StringRef(String("abcdef"), Long(0), end)
+					// This must fail because the delayed inequality will be violated.
+					Error err = (end == Long(2)).Assert().DoReturnError();
+
+					string errDescription = err.GetDescription();
+					Assert::IsTrue(err.IsError());
+				}
 			}
+			Cleanup();
+		}
+
+		TEST_METHOD(TestRightAnchoredStringRefNegation)
+		{
+			Initialize();
+			{
+				Manager manager("Test Right-Anchored Negation", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				{
+					Transaction transaction;
+
+					SN_DECLARE(start);
+
+					// Compare a fixed string to a left-anchored stringref with unknown end
+					((String("ef") != StringRef(String("abcdef"), start, Long(6)))).Assert().Do();
+
+					// Asserting start == 4 forces:
+					//   String("ef") == StringRef(String("abcdef"), start, Long(6))
+					// This must fail because the delayed inequality will be violated.
+					Error err = (start == Long(4)).Assert().DoReturnError();
+
+					string errDescription = err.GetDescription();
+					Assert::IsTrue(err.IsError());
+				}
+			}
+			Cleanup();
 		}
 	};
 }

@@ -1205,29 +1205,40 @@ namespace SNI
 			if (start.IsInteger() && end.IsInteger())
 			{
 				SNI_String* thisString = GetSNI_String();
+
 				ASSERTM(thisString,
 					"SNI_StringRef::DoAssertEqualsValue: thisString shouldn't be nullptr.");
+
 				return p_Other->DoAssertEqualsValue(thisString, p_Result);
 			}
+
 			//	Maybe this could be implemented in the future. It is unclear.
 			return SN::SN_Error(false, false, "Not implemented. Trying to compare two string refs with unknown start or end.");
 		}
+
 		string other = p_Other->GetString();
 		if (start.IsKnownValue() && !end.IsKnownValue())
 		{
 			// Start is known but end free. So this is a left anchored string ref.
+
+			ASSERTM(m_End.IsVariable(),
+				"m_End must be a variable as its value is unknown");
+
 			long start_pos = SN::SN_Long(start).GetNumber();
 			string source = GetSourceString();
 			string sourcePart = source.substr(start_pos, other.length());
+
 			if (sourcePart != other)
 			{
 				return SN::SN_Error(!result.GetBool(), false);
 			}
+
 			if (result.GetBool())
 			{
 				m_End.GetSNI_Variable()->SetValue(SN::SN_Long((long)(start_pos + other.length())));
 				return skynet::OK;
 			}
+
 			SN::SN_Expression *l_ParameterList = new SN::SN_Expression[3];
 			l_ParameterList[0] = skynet::False;
 			l_ParameterList[1] = m_End;
@@ -1235,35 +1246,38 @@ namespace SNI
 			SNI_Thread::GetThread()->GetProcessor()->Delay(skynet::Equals, 3, l_ParameterList, this);
 			return skynet::OK;
 		}
-		if (start.IsNullValue() && !end.IsNullValue())
+		if (!start.IsKnownValue() && end.IsKnownValue())
 		{
+			// Start is free but end is known. So this is a right anchored string ref.
+			ASSERTM(m_Start.IsVariable(),
+				"m_Start must be a variable as its value is unknown");
+
 			long end_pos = SN::SN_Long(end).GetNumber();
-			string source = GetSourceString().substr(end_pos - p_Other->GetString().length());
-			string other = p_Other->GetString();
-			if (source != other)
+			long other_length = other.length();
+			string sourcePart = GetSourceString().substr(end_pos - other_length, other_length);
+
+			if (sourcePart != other)
 			{
-				return SN::SN_Error(!result.GetBool(), false, "Contradiction: Strings do not match "+source+"!="+other);
+				return SN::SN_Error(!result.GetBool(), false,
+					"Contradiction: Strings do not match " + sourcePart + "!=" + other);
 			}
-			else
+			if (result.GetBool())
 			{
-				if (result.GetBool())
-				{
-					m_Start.GetSNI_Variable()->SetValue(SN::SN_Long((long)(end_pos - p_Other->GetString().length())));
-					return skynet::OK;
-				}
-				else
-				{
-					SN::SN_Expression *l_ParameterList = new SN::SN_Expression[3];
-					l_ParameterList[0] = skynet::False;
-					l_ParameterList[1] = start;
-					l_ParameterList[2] = SN::SN_Long((long)(end_pos - p_Other->GetString().length()));
-					SNI_Thread::GetThread()->GetProcessor()->Delay(skynet::Equals, 3, l_ParameterList, this);
-					return skynet::OK;
-				}
+				m_Start.GetSNI_Variable()->SetValue(SN::SN_Long((long)(end_pos - other_length)));
+				return skynet::OK;
 			}
+
+			SN::SN_Expression *l_ParameterList = new SN::SN_Expression[3];
+			l_ParameterList[0] = skynet::False;
+			l_ParameterList[1] = m_Start;
+			l_ParameterList[2] = SN::SN_Long((long)(end_pos - other_length));
+			SNI_Thread::GetThread()->GetProcessor()->Delay(skynet::Equals, 3, l_ParameterList, this);
+			return skynet::OK;
 		}
 		if (!start.IsKnownValue() && !end.IsKnownValue())
 		{
+			// Start and end are free but end is known. String is not anchored.
+			// Search for matches and create vaue sets.
 			SN::SN_ValueSet vs_start;
 			SN::SN_ValueSet vs_end;
 
