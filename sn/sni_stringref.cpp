@@ -1213,8 +1213,9 @@ namespace SNI
 			return SN::SN_Error(false, false, "Not implemented. Trying to compare two string refs with unknown start or end.");
 		}
 		string other = p_Other->GetString();
-		if (!start.IsNullValue() && end.IsNullValue())
+		if (start.IsKnownValue() && !end.IsKnownValue())
 		{
+			// Start is known but end free. So this is a left anchored string ref.
 			long start_pos = SN::SN_Long(start).GetNumber();
 			string source = GetSourceString();
 			string sourcePart = source.substr(start_pos, other.length());
