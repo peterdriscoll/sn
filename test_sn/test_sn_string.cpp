@@ -575,6 +575,36 @@ namespace test_sn
 			Cleanup();
 		}
 
+		TEST_METHOD(TestLeftAnchoredStringRefMismatch)
+		{
+			Initialize();
+			{
+				Manager manager("Test Left-Anchored Mismatch", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				{
+					Transaction transaction;
+
+					SN_DECLARE(end);
+
+					// Known start, unknown end: left-anchored StringRef
+					StringRef ref(String("abcdef"), Long(0), end);
+
+					// Attempt to match "zz" (which doesn't match the source "abcdef")
+					Error err = (String("zz") == ref).Assert().DoReturnError();
+
+					string errDescription = err.GetDescription();
+					std::wstring msg = std::wstring(L"Expected mismatch error. Found: ") + ToString(errDescription.c_str());
+					Assert::IsTrue(err.IsError(), msg.c_str());
+
+					// Optionally check that the error string contains the mismatch detail
+					std::string errDesc = err.GetDescription();
+					Assert::IsTrue(errDesc.find("Contradiction: Strings do not match") != std::string::npos,
+						L"Error should describe the mismatch");
+				}
+			}
+			Cleanup();
+		}
+
 		TEST_METHOD(TestLeftAnchoredStringRefNegation)
 		{
 			Initialize();

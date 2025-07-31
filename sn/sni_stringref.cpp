@@ -1230,7 +1230,8 @@ namespace SNI
 
 			if (sourcePart != other)
 			{
-				return SN::SN_Error(!result.GetBool(), false);
+				return SN::SN_Error(!result.GetBool(), false,
+					"Contradiction: Strings do not match " + sourcePart + "!=" + other);
 			}
 
 			if (result.GetBool())
