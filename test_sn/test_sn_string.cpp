@@ -518,6 +518,33 @@ namespace test_sn
 			Cleanup();
 		}
 
+		TEST_METHOD(TestStringRefCollapseOnKnownBounds)
+		{
+			Initialize();
+			{
+				Manager manager("Test StringRef Collapse on Known Bounds", AssertErrorHandler);
+
+				// Known start and end, so we can collapse the StringRef
+				SN_DECLARE(x);
+				SN_DECLARE(y);
+
+				(x + y == String("abcd")).Assert().Do();
+
+				// str is a variable (not a known value yet)
+				// This triggers: !p_Other->IsKnownValue()
+				// It exercises the stringref collapse to a string branch in SNI_StringRef::DoAssertEqualsValue
+				(StringRef(String("abcdef"), Long(2), Long(4)) == y).Assert().Do();
+
+				//Assert::IsTrue(y.IsString(), L"y should be a String after the Assert");
+				string y_display = y.DisplayValueSN();
+				string y_string = y.GetString();
+				Assert::IsTrue(y_string == "cd", L"y == \"cd\"");
+
+				// Now bind str to the expected value (should pass)
+				(y == String("cd")).Assert().Do();
+			}
+			Cleanup();
+		}
 		TEST_METHOD(TestLeftAnchoredStringRefNegation)
 		{
 			Initialize();

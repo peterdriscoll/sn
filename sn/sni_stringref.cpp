@@ -1406,10 +1406,12 @@ namespace SNI
 
 	SNI_String *SNI_StringRef::GetSNI_String() const
 	{
-		if (m_Start.IsInteger() && m_End.IsInteger())
+		SN::SN_Value start = m_Start.DoEvaluate();
+		SN::SN_Value end = m_End.DoEvaluate();
+		if (start.IsInteger() && end.IsInteger())
 		{
-			long start_pos = SN::SN_Long(m_Start).GetNumber();
-			long end_pos = SN::SN_Long(m_End).GetNumber();
+			long start_pos = SN::SN_Long(start).GetNumber();
+			long end_pos = SN::SN_Long(end).GetNumber();
 			
 			ASSERTM(0 <= start_pos && start_pos <= end_pos,
 				"StringRef::GetSNI_String: Start position must be less than end position: ");
@@ -1420,7 +1422,7 @@ namespace SNI
 				"StringRef::GetSNI_String: Start and end position must be within the source string");
 			
 			// Substring: +1 because end is inclusive
-			return new SNI_String(source_string.substr(static_cast<size_t>(start_pos), static_cast<size_t>(end_pos - start_pos + 1)));
+			return new SNI_String(source_string.substr(static_cast<size_t>(start_pos), static_cast<size_t>(end_pos - start_pos)));
 		}
 		return nullptr;
 	}
