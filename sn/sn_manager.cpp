@@ -53,7 +53,7 @@ namespace SN
 		bool err;
 		string err_description;
 		OnErrorHandler* handler;
-		{
+		/*
 			SN_Error e = DelayedCalls().DoEvaluate().GetError();
 			err = e.IsError();
 			if (err)
@@ -61,17 +61,19 @@ namespace SN
 				handler = ErrorHandler();
 				err_description = e.GetDescription();
 			}
-		}
+		*/
 
 		if (m_MyManager && m_Manager)
 		{
 			delete m_Manager;
 		}
 
+		/*
 		if (err)
 		{
 			handler(err, err_description);
 		}
+		*/
 	}
 
 	SN_Expression SN_Manager::DelayedCalls()

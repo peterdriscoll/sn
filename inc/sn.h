@@ -181,6 +181,7 @@ namespace skynet
 	typedef SN::SN_Number Number;
 	typedef SN::SN_Char Char;
 	typedef SN::SN_String String;
+	typedef SN::SN_StringRef StringRef;
 	typedef SN::SN_Mapping Mapping;
 	typedef SN::SN_Vector Vector;
 	typedef SN::SN_StringRef StringRef;

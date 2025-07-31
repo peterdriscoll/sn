@@ -875,7 +875,7 @@ namespace SNI
 		{
 			m_Value = AddLambdasPartial(p_ParameterList, p_Result).GetSNI_Expression();
 			SNI_Thread::GetThread()->RegisterChange(dynamic_cast<SNI_Variable *>(this));
-			REQUESTPROMOTION(m_Value);
+			//REQUESTPROMOTION(m_Value);
 			return skynet::OK;
 		}
 		return skynet::Fail;

@@ -1223,23 +1223,17 @@ namespace SNI
 			{
 				return SN::SN_Error(!result.GetBool(), false);
 			}
-			else
+			if (result.GetBool())
 			{
-				if (result.GetBool())
-				{
-					m_End.GetSNI_Variable()->SetValue(SN::SN_Long((long)(start_pos + other.length())));
-					return skynet::OK;
-				}
-				else
-				{
-					SN::SN_Expression *l_ParameterList = new SN::SN_Expression[3];
-					l_ParameterList[0] = skynet::False;
-					l_ParameterList[1] = m_End;
-					l_ParameterList[2] = SN::SN_Long((long)(start_pos + other.length()));
-					SNI_Thread::GetThread()->GetProcessor()->Delay(skynet::Equals, 3, l_ParameterList, this);
-					return skynet::OK;
-				}
+				m_End.GetSNI_Variable()->SetValue(SN::SN_Long((long)(start_pos + other.length())));
+				return skynet::OK;
 			}
+			SN::SN_Expression *l_ParameterList = new SN::SN_Expression[3];
+			l_ParameterList[0] = skynet::False;
+			l_ParameterList[1] = m_End;
+			l_ParameterList[2] = SN::SN_Long((long)(start_pos + other.length()));
+			SNI_Thread::GetThread()->GetProcessor()->Delay(skynet::Equals, 3, l_ParameterList, this);
+			return skynet::OK;
 		}
 		if (start.IsNullValue() && !end.IsNullValue())
 		{

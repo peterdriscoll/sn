@@ -516,5 +516,30 @@ namespace test_sn
 				}
 			}
 		}
+
+		TEST_METHOD(TestLeftAnchoredStringRefNegation)
+		{
+			Initialize();
+			{
+				Manager manager("Test Left-Anchored Negation", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				{
+					Transaction transaction;
+
+					SN_DECLARE(end);
+
+					// Compare a fixed string to a left-anchored stringref with unknown end
+					(!(String("ab") == StringRef(String("abcdef"), Long(0), end))).Assert().Do();
+
+					// Asserting end == 2 forces:
+					//   String("ab") == StringRef(String("abcdef"), Long(0), end)
+					// This must fail because the delayed inequality will be violated.
+					Error err = (end == Long(2)).Assert().DoReturnError();
+
+					string errDescription = err.GetDescription();
+					Assert::IsTrue(err.IsError());
+				}
+			}
+		}
 	};
 }

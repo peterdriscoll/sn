@@ -798,6 +798,18 @@ namespace SNI
 		{
 			return e;
 		}
+		else
+		{
+			SNI_DelayedProcessor* processor = SNI_Thread::GetThread()->GetProcessor();
+			if (processor)
+			{
+				e = processor->DoAssert();
+				if (e.IsError())
+				{
+					return e;
+				}
+			}
+		}
 		return resultVariable.GetVariableValue().GetError();
 	}
 
@@ -1000,13 +1012,16 @@ namespace SNI
 	{
 		if (SN::Is<SNI_StringRef *>(p_Other))
 		{
-			return p_Other->DoEquals(dynamic_cast<SNI_Value *>(const_cast<SNI_Expression *>(this))).GetError();
+			// Flip parameters so the StringRef instance drives unification.
+			// Its DoAssertEqualsValue() is overridden with special anchored/deferred logic.
+			return p_Other->DoAssertEqualsValue(dynamic_cast<SNI_Value*>(this), p_Result);
 		}
 		if (SN::Is<SNI_ValueSet *>(p_Other))
 		{
 			return p_Other->DoEquals(dynamic_cast<SNI_Value *>(const_cast<SNI_Expression *>(this))).GetError();
 		}
-		return SN::SN_Error(p_Result->GetBool() == Equivalent(dynamic_cast<SNI_Object *>(p_Other)), false);
+		return SN::SN_Error(p_Result->GetBool() == Equivalent(dynamic_cast<SNI_Object *>(p_Other)), false,
+			"Assertion failure: Expected " + p_Result->DisplaySN0() + " for " + DisplaySN0() + "==" + p_Other->DisplaySN0());
 	}
 
 	SN::SN_Value SNI_Expression::DoLessThan(SNI_Value * /*p_Other*/) const

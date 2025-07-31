@@ -63,7 +63,7 @@ namespace SNI
 		call->LinkToVariables();
 		m_SearchLock.lock();
 		m_DelayedCallList.push_back(call);
-		REQUESTPROMOTION(m_DelayedCallList.back());
+		// REQUESTPROMOTION(m_DelayedCallList.back());
 		m_SearchLock.unlock();
 		if (call->IsCallRequested())
 		{
