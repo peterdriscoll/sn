@@ -137,6 +137,7 @@ namespace SNI
 		virtual bool IsRightKnownValue() const;
 		virtual bool IsKnownTypeValue() const;
 		virtual bool IsLambdaValue() const;
+		virtual bool IsInteger() const;
 		virtual bool IsInline() const;
 		virtual bool IsComplete() const;
 		virtual void Complete();

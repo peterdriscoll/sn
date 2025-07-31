@@ -50,6 +50,10 @@ namespace SNI
 		, m_Start(p_Other.m_Start.GetSNI_Expression()->Copy())
 		, m_End(p_Other.m_End.GetSNI_Expression()->Copy())
 	{
+		ASSERTM(m_Start.IsVariable() || m_Start.IsInteger() || m_Start.IsValueSet(),
+			"m_Start must be a variable, integer, or valueset");
+		ASSERTM(m_End.IsVariable() || m_End.IsInteger() || m_End.IsValueSet(),
+			"m_End must be a variable, integer, or valueset");
 	}
 
 	SNI_StringRef::SNI_StringRef(const SN::SN_Value & p_Source, const SN::SN_Expression & p_Start, const SN::SN_Expression & p_End)
@@ -62,6 +66,11 @@ namespace SNI
 		REQUESTPROMOTION(m_Source.GetSNI_ExpressionRef());
 		REQUESTPROMOTION(m_Start.GetSNI_ExpressionRef());
 		REQUESTPROMOTION(m_End.GetSNI_ExpressionRef());
+
+		ASSERTM(m_Start.IsVariable() || m_Start.IsInteger() || m_Start.IsValueSet(),
+			"m_Start must be a variable, integer, or valueset");
+		ASSERTM(m_End.IsVariable() || m_End.IsInteger() || m_End.IsValueSet(),
+			"m_End must be a variable, integer, or valueset");
 	}
 
 	SNI_StringRef::~SNI_StringRef()
@@ -1177,12 +1186,19 @@ namespace SNI
 
 	SN::SN_Error SNI_StringRef::DoAssertEqualsValue(SNI_Value * p_Other, SNI_Value * p_Result)
 	{
+		ASSERTM(m_Start.IsVariable() || m_Start.IsInteger() || m_Start.IsValueSet(),
+			"m_Start must be a variable, integer, or valueset");
+		ASSERTM(m_End.IsVariable() || m_End.IsInteger() || m_End.IsValueSet(),
+			"m_End must be a variable, integer, or valueset");
+
 		SN::SN_Value start = m_Start.DoEvaluate();
 		SN::SN_Value end = m_End.DoEvaluate();
 		SN::SN_Value result = p_Result;
 
-		ASSERTM(!start.GetSafeValue().GetSNI_ValueSet(), "If start point is valueset, string ref should have been simplified.");
-		ASSERTM(!end.GetSafeValue().GetSNI_ValueSet(), "If end point is valueset, string ref should have been simplified.");
+		ASSERTM(!start.GetSafeValue().GetSNI_ValueSet(),
+			"Unexpected: start is a ValueSet. SNI_FunctionDef::UnifyArray should have already iterated values in stringref.");
+		ASSERTM(!end.GetSafeValue().GetSNI_ValueSet(),
+			"Unexpected: end is a ValueSet. SNI_FunctionDef::UnifyArray should have already iterated values in stringref.");
 
 		if (!p_Other->IsKnownValue())
 		{
@@ -1194,7 +1210,7 @@ namespace SNI
 			return SN::SN_Error(false, false, "Not implemented. Trying to compare two string refs with unknown start or end.");
 		}
 		string other = p_Other->GetString();
-		if (!start.IsNullValue() && m_End.IsVariable() && end.IsNullValue())
+		if (!start.IsNullValue() && end.IsNullValue())
 		{
 			long start_pos = SN::SN_Long(start).GetNumber();
 			string source = GetSourceString();
@@ -1221,7 +1237,7 @@ namespace SNI
 				}
 			}
 		}
-		if (m_Start.IsVariable() && start.IsNullValue() && !end.IsNullValue())
+		if (start.IsNullValue() && !end.IsNullValue())
 		{
 			long end_pos = SN::SN_Long(end).GetNumber();
 			string source = GetSourceString().substr(end_pos - p_Other->GetString().length());

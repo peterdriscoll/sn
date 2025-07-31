@@ -152,7 +152,15 @@ namespace SNI
             return 100;
         }
 
-        string GetString()
+		// True if this expression is a known integer type (short, int, long, long long)
+		// Similar to std::is_integral<T> but using "integer" for clarity
+		bool IsInteger() const override
+		{
+			// true if T is a built-in integral type (short, int, long, long long)
+			return std::is_integral<T>::value;
+		}
+
+		string GetString()
         {
 			return to_string(m_Number);
         }
