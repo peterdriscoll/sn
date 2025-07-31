@@ -545,6 +545,36 @@ namespace test_sn
 			}
 			Cleanup();
 		}
+
+		TEST_METHOD(TestLeftAnchoredStringRefPositive)
+		{
+			Initialize();
+			{
+				Manager manager("Test Left-Anchored Positive", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				{
+					Transaction transaction;
+
+					SN_DECLARE(end);
+
+					// Known start, unknown end: left-anchored StringRef
+					StringRef ref(String("abcdef"), Long(0), end);
+
+					// Assert that the anchored slice equals "ab"
+					(String("ab") == ref).Assert().Do();
+					
+					Long end_Long = end.GetSafeValue();
+					long end_number = end_Long.GetNumber();
+					std::wstring msg = std::wstring(L"End should be 2. Found ") + ToString(end_number);
+					Assert::IsTrue(end_number == 2, msg.c_str());
+
+					// Now end should have been resolved to 2
+					(end == Long(2)).Assert().Do();
+				}
+			}
+			Cleanup();
+		}
+
 		TEST_METHOD(TestLeftAnchoredStringRefNegation)
 		{
 			Initialize();
