@@ -193,6 +193,8 @@
     </ClCompile>
     <ClCompile Include="test_sn_promotion.cpp" />
     <ClCompile Include="test_sn_string.cpp" />
+    <ClCompile Include="test_sn_stringanchorleft.cpp" />
+    <ClCompile Include="test_sn_stringanchorright.cpp" />
     <ClCompile Include="test_sn_valueset.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
