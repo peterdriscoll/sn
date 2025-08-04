@@ -16,14 +16,9 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class *SNI_Vector::m_Class = NULL;
-	/*static*/ SNI_Class *SNI_Vector::Class()
+	/*static*/ SNI_Class* SNI_Vector::Class()
 	{
-		if (!m_Class)
-		{
-			m_Class = new SNI_Class("Vector");
-		}
-		return m_Class;
+		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Vector, SNI_Class>("Vector");
 	}
 
 	SNI_Vector::SNI_Vector()

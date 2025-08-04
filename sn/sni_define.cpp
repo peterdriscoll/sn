@@ -7,20 +7,17 @@
 #include "sn_error.h"
 
 #include "sni_variable.h"
+#include "sni_User.h"
+#include "sni_Thread.h"
 #include "utility.h"
 
 #include "sn_pch.h"
 
 namespace SNI
 {
-	/*static*/ SNI_Class* SNI_Define::m_Class = NULL;
 	/*static*/ SNI_Class* SNI_Define::Class()
 	{
-		if (!m_Class)
-		{
-			m_Class = new SNI_Class("Define");
-		}
-		return m_Class;
+		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Define, SNI_Class>("Define");
 	}
 
 	SNI_Class* SNI_Define::VClass()

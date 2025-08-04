@@ -15,14 +15,9 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class *SNI_State::m_Class = NULL;
-	/*static*/ SNI_Class *SNI_State::Class()
+	/*static*/ SNI_Class* SNI_State::Class()
 	{
-		if (!m_Class)
-		{
-			m_Class = new SNI_Class("State");
-		}
-		return m_Class;
+		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_State, SNI_Class>("State");
 	}
 
 	SNI_Class *SNI_State::VClass()

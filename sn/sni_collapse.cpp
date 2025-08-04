@@ -76,7 +76,7 @@ namespace SNI
 		SN::SN_Error e = UnifyInternal(p_ParamList[1], p_ParamList[0], p_Source);
 		if (e.GetDelay())
 		{
-			SNI_Thread::GetThread()->GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), GetNumParameters(), p_ParamList, p_Source);
+			SNI_User::GetCurrentUser()->GetDelayedProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), GetNumParameters(), p_ParamList, p_Source);
 		}
 		return e;
 	}
@@ -148,7 +148,7 @@ namespace SNI
 		l_ParameterList.push_back(p_value);
 		l_ParameterList.push_back(p_Result);
 		SN::SN_Expression *param_List = LoadParametersUnify(&l_ParameterList);
-		SNI_Thread::GetThread()->GetProcessor()->Delay(this, GetNumParameters(), param_List, p_Source, SNI_Thread::GetThread()->ContextWorld());
+		SNI_User::GetCurrentUser()->GetDelayedProcessor()->Delay(this, GetNumParameters(), param_List, p_Source, SNI_Thread::GetThread()->ContextWorld());
 		delete[] param_List;
 	}
 }

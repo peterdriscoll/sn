@@ -15,14 +15,9 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class *SNI_Mapping::m_Class = NULL;
-	/*static*/ SNI_Class *SNI_Mapping::Class()
+	/*static*/ SNI_Class* SNI_Mapping::Class()
 	{
-		if (!m_Class)
-		{
-			m_Class = new SNI_Class("Mapping");
-		}
-		return m_Class;
+		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Mapping, SNI_Class>("Mapping");
 	}
 
 	SNI_Class *SNI_Mapping::VClass()

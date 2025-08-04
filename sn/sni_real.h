@@ -12,6 +12,7 @@ using namespace std;
 
 #include "sni_number.h"
 #include "sni_class.h"
+#include "sni_user.h"
 
 #define MIN_ERROR 0.000000000001
 
@@ -76,7 +77,7 @@ namespace SNI
         PGC_CLASS(SNI_Real);
 		typedef T ThisType;
 
-		static SNI_Class *m_Class;
+		
 	public:
         T m_Number;
 
@@ -123,13 +124,9 @@ namespace SNI
 			return NameFromType(m_Number);
 		}
 
-		static SNI_Class * Class()
+		static SNI_Class* Class()
 		{
-			if (!m_Class)
-			{
-				m_Class = new SNI_Class(GetTypeNameStatic());
-			}
-			return m_Class;
+			return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Real<T>, SNI_Class>(GetTypeNameStatic());
 		}
 
 		virtual SNI_Class *VClass()
@@ -288,8 +285,6 @@ namespace SNI
     };
 
 	SN_APPLY_TYPES(DUMMY, DUMMY, SNI_FORWARD)
-	
-	template <typename T> SNI_Class *SNI_Real<T>::m_Class = NULL;
 }
 
 #endif // !defined(SNI_REAL_H_INCLUDED)

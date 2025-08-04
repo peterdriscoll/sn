@@ -67,7 +67,7 @@ namespace PGC
 		{
 			EndTransaction();
 		}
-		PGC_Transaction::AddTotalGrossMemorySize(-((long) sizeof(PGC_Transaction)));
+		PGC_Transaction::AddTotalGrossMemorySize(-static_cast<long>(sizeof(PGC_Transaction)));
 	}
 
 	PromotionStrategy PGC_Transaction::GetPromotionStrategy() const

@@ -57,7 +57,7 @@ namespace SNI
 		{
 			ASSERTM(p_World, "World must exist.");
 			p_World->AddToSetList();
-			SNI_Thread::GetThread()->GetProcessor()->DelayCall(GetCall(), p_World);
+			SNI_User::GetCurrentUser()->GetDelayedProcessor()->DelayCall(GetCall(), p_World);
 		}
 	}
 }

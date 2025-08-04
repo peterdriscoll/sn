@@ -166,6 +166,7 @@ namespace skynet
 {
 	// Manager
 	typedef SN::SN_Manager Manager;
+	typedef SN::SN_User User;
 	typedef SN::SN_Transaction Transaction;
 	typedef SN::SN_Thread Thread;
 
@@ -306,10 +307,6 @@ namespace skynet
 	extern SN_EXPORT SN::SN_Error RerunRequest;
 
 	extern SN_EXPORT SN::SN_Expression Null;
-
-	// * Operator Variables
-
-	extern SN_EXPORT SN::SN_OperatorVariables Operators;
 };
 
 #endif // SN_H_INCLUDED

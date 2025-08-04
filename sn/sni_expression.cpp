@@ -27,14 +27,9 @@ namespace SNI
 {
 	map<string, unsigned long> SNI_Expression::m_IdMap;
 
-	/*static*/ SNI_Class* SNI_Expression::m_Class = NULL;
 	/*static*/ SNI_Class* SNI_Expression::Class()
 	{
-		if (!m_Class)
-		{
-			m_Class = new SNI_Class("Expression");
-		}
-		return m_Class;
+		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Expression, SNI_Class>("Expression");
 	}
 
 	SNI_Class* SNI_Expression::VClass()
@@ -800,7 +795,7 @@ namespace SNI
 		}
 		else
 		{
-			SNI_DelayedProcessor* processor = SNI_Thread::GetThread()->GetProcessor();
+			SNI_DelayedProcessor* processor = SNI_User::GetCurrentUser()->GetDelayedProcessor();
 			if (processor)
 			{
 				e = processor->DoAssert();
@@ -858,7 +853,7 @@ namespace SNI
 		SN::SN_Error e = p_Result.GetError();
 		if (!e.IsError())
 		{
-			SNI_DelayedProcessor* processor = SNI_Thread::GetThread()->GetProcessor();
+			SNI_DelayedProcessor* processor = SNI_User::GetCurrentUser()->GetDelayedProcessor();
 			if (processor)
 			{
 				e = processor->DoAssert();

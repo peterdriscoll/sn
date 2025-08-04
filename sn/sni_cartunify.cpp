@@ -188,7 +188,7 @@ namespace SNI
 					l_ParamList[j] = m_ValueList[j];
 				}
 			}
-			SNI_Thread::GetThread()->GetProcessor()->Run(m_FunctionDef, m_Depth, l_ParamList, m_Source, world);
+			SNI_User::GetCurrentUser()->GetDelayedProcessor()->Run(m_FunctionDef, m_Depth, l_ParamList, m_Source, world);
 		}
 		return skynet::OK;
 	}

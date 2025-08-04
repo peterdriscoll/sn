@@ -29,6 +29,8 @@ namespace SNI
 	{
 	public:
 		static SNI_Thread *GetThread();
+		static void ResetThread();
+		static void ClearThread();
 		static SNI_Thread *GetThreadByNumber(size_t p_ThreadNum);
 		static size_t GetNumThreads();
 		static SNI_Manager *TopManager();
@@ -53,8 +55,6 @@ namespace SNI
 		size_t GetStepCount();
 		void SaveStepCount();
 		void ResetStepCount();
-
-		SNI_DelayedProcessor *GetProcessor();
 
 		void Breakpoint(SN::DebuggingStop p_DebuggingStop, SN::BreakId p_BreakId, const string &p_TypeName, const string &p_Description, const SNI_Expression *p_Source = NULL, SN::InterruptPoint p_InterruptPoint = SN::CallPoint, const string &p_DebugId = "");
 		void ScheduleCommand(skynet::DebugAction p_DebugAction);
@@ -152,6 +152,7 @@ namespace SNI
 		string ChangeHistoryJS(enum DisplayOptionType p_OptionType, size_t p_ColumnWidth, size_t p_FromStep, size_t p_ToStep);
 		void WriteChangeHistoryJS(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions, size_t p_ColumnWidth, size_t p_FromStep, size_t p_ToStep);
 
+		SNI_User* GetUser();
 		void SetUser(SNI_User* p_User);
 	private:
 		string StartCommand(enum skynet::DebugAction p_DebugAction, const string & p_Description, enum DisplayOptionType p_OptionType);

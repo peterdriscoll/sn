@@ -23,8 +23,6 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_DelayedProcessor);
 	public:
-		static SNI_DelayedProcessor *GetProcessor();
-
 		SNI_DelayedProcessor();
 		SNI_DelayedProcessor(SNI_Manager* p_Manager);
 		~SNI_DelayedProcessor();

@@ -19,14 +19,9 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class *SNI_String::m_Class = NULL;
-	/*static*/ SNI_Class *SNI_String::Class()
+	/*static*/ SNI_Class* SNI_String::Class()
 	{
-		if (!m_Class)
-		{
-			m_Class = new SNI_Class("String");
-		}
-		return m_Class;
+		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_String, SNI_Class>("String");
 	}
 
 	SNI_Class *SNI_String::VClass()
@@ -456,7 +451,7 @@ namespace SNI
 		// same value must be returned.
 		// The solution to this to include the time, but I don't yet have a time class
 		// or a branching time object to allow me to safely retrieve it. Later.
-		auto &preventReread = SNI_Thread::GetThread()->GetProcessor()->GetPreventReread();
+		auto &preventReread = SNI_User::GetCurrentUser()->GetDelayedProcessor()->GetPreventReread();
 		auto it  = preventReread.find(GetString());
 		if (it == preventReread.end())
 		{
@@ -482,7 +477,7 @@ namespace SNI
 		std::ofstream out(GetString());
 		out << p_Contents.GetString();
 		out.close();
-		auto &preventReread = SNI_Thread::GetThread()->GetProcessor()->GetPreventReread();
+		auto &preventReread = SNI_User::GetCurrentUser()->GetDelayedProcessor()->GetPreventReread();
 		preventReread[GetString()] = p_Contents;
 	}
 

@@ -48,7 +48,7 @@ namespace SNI
 		virtual void PromoteMembers();
 
 	private:
-		static SNI_Class *m_Class;
+		
 
 		unordered_map<string, SN::SN_Variable> m_Map;
 		string m_Name;

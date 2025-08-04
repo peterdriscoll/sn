@@ -18,7 +18,7 @@
 
 namespace SNI
 {
-	thread_local SNI_Thread t_Thread;
+	thread_local SNI_Thread *t_Thread = nullptr;
 
 	/*static*/ vector<SNI_Thread *> SNI_Thread::m_ThreadList;
 	/*static*/ mutex SNI_Thread::m_ThreadListMutex;
@@ -29,11 +29,19 @@ namespace SNI
 	/*static*/ thread *SNI_Thread::m_WebServerThread = NULL;
 	/*static*/ long SNI_Thread::m_WebServerThreadUsageCount = 0;
 
-	/*static*/ SNI_Thread *SNI_Thread::GetThread()
-	{
-		return &t_Thread;
+	/*static*/ SNI_Thread* SNI_Thread::GetThread() {
+		if (!t_Thread) {
+			t_Thread = new SNI_Thread();
+		}
+		return t_Thread;
 	}
-
+	/*static*/ void SNI_Thread::ResetThread() {
+		delete t_Thread;
+		t_Thread = nullptr;
+	}
+	/*static*/ void SNI_Thread::ClearThread() {
+		t_Thread = nullptr;
+	}
 	/*static*/ SNI_Thread *SNI_Thread::GetThreadByNumber(size_t p_ThreadNum)
 	{
 		if (p_ThreadNum < m_ThreadList.size())
@@ -113,17 +121,12 @@ namespace SNI
 		, m_CodeBreakScheduled(false)
 		, m_Error(NULL)
 		, m_Processor(NULL)
+		, m_User(nullptr)
 	{
-		ThreadListLock();
-		m_ThreadList.push_back(this);
-		ThreadListUnlock();
 	}
 
 	SNI_Thread::~SNI_Thread()
 	{
-		ThreadListLock();
-		m_ThreadList[m_ThreadNum] = NULL;
-		ThreadListUnlock();
 	}
 
 	void SNI_Thread::Init()
@@ -415,15 +418,6 @@ namespace SNI
 		return ss.str();
 	}
 
-	SNI_DelayedProcessor *SNI_Thread::GetProcessor()
-	{
-		if (!m_Processor)
-		{
-			m_Processor = SNI_DelayedProcessor::GetProcessor();
-		}
-		return m_Processor;
-	}
-
 	string SNI_Thread::DelayedJS(DisplayOptionType p_OptionType)
 	{
 		stringstream ss;
@@ -612,6 +606,11 @@ namespace SNI
 		}
 		m_ChangeMutex.unlock();
 		p_Stream << "\n]}\n";
+	}
+
+	SNI_User * SNI_Thread::GetUser()
+	{
+		return m_User;
 	}
 
 	void SNI_Thread::SetUser(SNI_User* p_User)

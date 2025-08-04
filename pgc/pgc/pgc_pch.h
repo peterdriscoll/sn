@@ -1,5 +1,6 @@
 #pragma once
 
+#include "pgc_user.h"
 #include "pgc_promotionstrategy.h"
 #include "pgc_base.h"
 #include "pgc_transaction.h"

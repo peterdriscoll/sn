@@ -38,7 +38,7 @@ namespace PGC
 			full += "\nFile      : "; full += file;
 			full += ":" + std::to_string(line) + "\n";
 
-			g_OnErrorHandler(!expr, full);
+			PGC_User::GetCurrentPGC_User()->GetErrorHandler()(!expr, full);
 		}
 	}
 
@@ -51,14 +51,6 @@ namespace PGC
 		if (p_Err)
 			std::abort();
 	};
-
-	OnErrorHandler* g_OnErrorHandler = DefaultErrorHandler;
-
-	void SetOnErrorHandler(OnErrorHandler* p_handler)
-	{
-		ASSERTM(p_handler != nullptr, "Null OnErrorHandler is not allowed");
-		g_OnErrorHandler = p_handler;
-	}
 
 	size_t HashCode(const type_info& info)
 	{

@@ -601,7 +601,7 @@ namespace SNI
 					if (AllowDelay())
 					{
 						LOG(WriteLine(SN::DebugLevel, "Delayed Call " + GetLogDescription(inputList)));
-						SNI_Thread::GetThread()->GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), GetNumParameters(), inputList, p_Source);
+						SNI_User::GetCurrentUser()->GetDelayedProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), GetNumParameters(), inputList, p_Source);
 					}
 					else
 					{

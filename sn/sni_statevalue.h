@@ -19,7 +19,7 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_StateValue);
 	public:
-		static SNI_Class *m_Class;
+		
 		static SNI_Class *Class();
 		virtual SNI_Class *VClass();
 

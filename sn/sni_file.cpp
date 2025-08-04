@@ -71,7 +71,7 @@ namespace SNI
 				return p_ParamList[0].AssertValue(file);
 			}
 		}
-		SNI_Thread::GetThread()->GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), GetNumParameters(), p_ParamList, p_Source);
+		SNI_User::GetCurrentUser()->GetDelayedProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), GetNumParameters(), p_ParamList, p_Source);
 		return skynet::OK;
 	}
 }

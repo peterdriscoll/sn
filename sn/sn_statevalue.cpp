@@ -12,7 +12,7 @@ namespace SN
 {
 	/*static*/ SN_Class SN_StateValue::Class()
 	{
-		return SNI_Bool::Class();
+		return SNI_StateValue::Class();
 	}
 
 	SN_StateValue::SN_StateValue()

@@ -16,14 +16,9 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class* SNI_Lambda::m_Class = NULL;
 	/*static*/ SNI_Class* SNI_Lambda::Class()
 	{
-		if (!m_Class)
-		{
-			m_Class = new SNI_Class("Lambda");
-		}
-		return m_Class;
+		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Lambda, SNI_Class>("Lambda");
 	}
 
 	SNI_Class* SNI_Lambda::VClass()

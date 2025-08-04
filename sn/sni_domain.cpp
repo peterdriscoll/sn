@@ -12,14 +12,9 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class *SNI_Domain::m_Class = NULL;
-	/*static*/ SNI_Class *SNI_Domain::Class()
+	/*static*/ SNI_Class* SNI_Domain::Class()
 	{
-		if (!m_Class)
-		{
-			m_Class = new SNI_Class("Domain");
-		}
-		return m_Class;
+		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Domain, SNI_Class>("Domain");
 	}
 
 	SNI_Class *SNI_Domain::VClass()

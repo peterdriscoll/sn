@@ -25,11 +25,6 @@ namespace SN
 		}
 	}
 
-	/*static*/ void SN_Manager::LogicSetup()
-	{
-		SNI_Manager::LogicSetup();
-	}
-
 	SN_Manager::SN_Manager()
 		: m_Manager(new SNI::SNI_Manager())
 		, m_MyManager(true)
@@ -50,30 +45,10 @@ namespace SN
 
 	SN_Manager::~SN_Manager()
 	{
-		bool err;
-		string err_description;
-		OnErrorHandler* handler;
-		/*
-			SN_Error e = DelayedCalls().DoEvaluate().GetError();
-			err = e.IsError();
-			if (err)
-			{
-				handler = ErrorHandler();
-				err_description = e.GetDescription();
-			}
-		*/
-
 		if (m_MyManager && m_Manager)
 		{
 			delete m_Manager;
 		}
-
-		/*
-		if (err)
-		{
-			handler(err, err_description);
-		}
-		*/
 	}
 
 	SN_Expression SN_Manager::DelayedCalls()

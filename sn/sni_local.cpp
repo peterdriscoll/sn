@@ -18,14 +18,9 @@ namespace SNI
 {
 	/*static*/ long SNI_Local::m_Id = 0;
 
-	/*static*/ SNI_Class* SNI_Local::m_Class = NULL;
 	/*static*/ SNI_Class* SNI_Local::Class()
 	{
-		if (!m_Class)
-		{
-			m_Class = new SNI_Class("Local");
-		}
-		return m_Class;
+		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Local, SNI_Class>("Local");
 	}
 
 	SNI_Class* SNI_Local::VClass()

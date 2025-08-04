@@ -99,8 +99,6 @@ namespace PGC
 		void Process();
 		void Finish();
 
-		bool PromoteOrReject2(PGC_TypeCheck** p_BaseRef);
-			
 		static void RegisterInWebServer();
 		static bool InWebServer();
 

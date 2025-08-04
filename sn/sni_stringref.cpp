@@ -23,15 +23,9 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class *SNI_StringRef::m_Class = NULL;
-
-	/*static*/ SNI_Class *SNI_StringRef::Class()
+	/*static*/ SNI_Class* SNI_StringRef::Class()
 	{
-		if (!m_Class)
-		{
-			m_Class = new SNI_Class("StringRef");
-		}
-		return m_Class;
+		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_StringRef, SNI_Class>("StringRef");
 	}
 
 	SNI_Class *SNI_StringRef::VClass()
@@ -1121,7 +1115,7 @@ namespace SNI
 						l_ParameterList[0] = skynet::False;
 						l_ParameterList[1] = endVar;
 						l_ParameterList[2] = SN::SN_Long((long)(start_pos + other.length()));
-						SNI_Thread::GetThread()->GetProcessor()->Delay(skynet::Equals, 3, l_ParameterList, this);
+						SNI_User::GetCurrentUser()->GetDelayedProcessor()->Delay(skynet::Equals, 3, l_ParameterList, this);
 						return result;
 					}
 					else
@@ -1169,7 +1163,7 @@ namespace SNI
 						l_ParamList[0] = skynet::False;
 						l_ParamList[1] = startVar;
 						l_ParamList[2] = SN::SN_Long((long)(end_pos - p_Other->GetString().length()));
-						SNI_Thread::GetThread()->GetProcessor()->Delay(skynet::Equals, 3, l_ParamList, this);
+						SNI_User::GetCurrentUser()->GetDelayedProcessor()->Delay(skynet::Equals, 3, l_ParamList, this);
 						return result;
 					}
 					else
@@ -1244,7 +1238,7 @@ namespace SNI
 			l_ParameterList[0] = skynet::False;
 			l_ParameterList[1] = m_End;
 			l_ParameterList[2] = SN::SN_Long((long)(start_pos + other.length()));
-			SNI_Thread::GetThread()->GetProcessor()->Delay(skynet::Equals, 3, l_ParameterList, this);
+			SNI_User::GetCurrentUser()->GetDelayedProcessor()->Delay(skynet::Equals, 3, l_ParameterList, this);
 			return skynet::OK;
 		}
 		if (!start.IsKnownValue() && end.IsKnownValue())
@@ -1254,7 +1248,7 @@ namespace SNI
 				"m_Start must be a variable as its value is unknown");
 
 			long end_pos = SN::SN_Long(end).GetNumber();
-			long other_length = other.length();
+			long other_length = static_cast<long>(other.length());
 			string sourcePart = GetSourceString().substr(end_pos - other_length, other_length);
 
 			if (sourcePart != other)
@@ -1272,7 +1266,7 @@ namespace SNI
 			l_ParameterList[0] = skynet::False;
 			l_ParameterList[1] = m_Start;
 			l_ParameterList[2] = SN::SN_Long((long)(end_pos - other_length));
-			SNI_Thread::GetThread()->GetProcessor()->Delay(skynet::Equals, 3, l_ParameterList, this);
+			SNI_User::GetCurrentUser()->GetDelayedProcessor()->Delay(skynet::Equals, 3, l_ParameterList, this);
 			return skynet::OK;
 		}
 		if (!start.IsKnownValue() && !end.IsKnownValue())

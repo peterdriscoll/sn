@@ -318,7 +318,7 @@ namespace SNI
 					l_ParamList[0] = p_ParamList[PU2_Result];
 					l_ParamList[1] = varLeft;
 					l_ParamList[2] = p_ParamList[PU2_Second];
-					SNI_Thread::GetThread()->GetProcessor()->Delay(this, 3, l_ParamList, p_Source);
+					SNI_User::GetCurrentUser()->GetDelayedProcessor()->Delay(this, 3, l_ParamList, p_Source);
 				}
 				return LOG_RETURN(context, e);
 			}
@@ -339,7 +339,7 @@ namespace SNI
 					l_ParamList[0] = varRight;
 					l_ParamList[1] = p_ParamList[PU2_Result];
 					l_ParamList[2] = p_ParamList[PU2_First];
-					SNI_Thread::GetThread()->GetProcessor()->Delay(this, 3, l_ParamList, p_Source);
+					SNI_User::GetCurrentUser()->GetDelayedProcessor()->Delay(this, 3, l_ParamList, p_Source);
 				}
 				return LOG_RETURN(context, e);
 			}

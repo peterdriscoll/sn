@@ -55,7 +55,7 @@ namespace SNI
 		virtual void PromoteMembers();
 
 	private:
-		static SNI_Class *m_Class;
+		
 
 		vector<SN::SN_Expression> m_Vector;
 		bool m_Fixed;

@@ -47,19 +47,6 @@ namespace test_pgc
 	TEST_CLASS(test_pgc)
 	{
 	private:
-		void Initialize()
-		{
-			PGC_Transaction::ResetNetMemoryUsed();
-			PGC_Transaction::ResetGrossMemoryUsed();
-		}
-
-		void Cleanup()
-		{
-			Assert::IsTrue(PGC_Transaction::TotalNetMemoryUsed() == 0, L"No memory used");
-			Assert::IsTrue(Promotion::PromotionUsedMemory() == 0, L"No promotional memory used.");
-			Assert::IsTrue(Promotion::PromotionFreeMemory() == PGC_Transaction::TotalGrossMemoryUsed(), L"PromotionFreeMemory == TotalGrossMemoryUsed");
-		}
-
 		// UTILITY
 
 		void RecursivelyDoThis(long p_Depth)
@@ -125,8 +112,7 @@ namespace test_pgc
 
 		TEST_METHOD(TestSimplePromotionOnMemberRef)
 		{
-			Initialize();
-			PGC::SetOnErrorHandler(AssertErrorHandler);
+			PGC_User user(AssertErrorHandler);
 
 			{
 				PGC_Transaction outerTransaction;
@@ -151,15 +137,13 @@ namespace test_pgc
 
 				Assert::IsTrue(42 == outerRef->GetCMember()->GetLength(), L"Promoted instance should retain data");
 			}
-			Cleanup();
 		}
 
 		//  General test of the Promotional Garbage Collector memory management.
 		//  Test multi level promotion.
 		TEST_METHOD(TestBasicPGC)
 		{
-			Initialize();
-			PGC::SetOnErrorHandler(AssertErrorHandler);
+			PGC_User user(AssertErrorHandler);
 
 			{
 				PGC_Transaction parentTransaction;
@@ -257,8 +241,6 @@ namespace test_pgc
 			Assert::IsTrue(PGC_Transaction::TotalNetMemoryUsed() == 0, L"Net mwmory cleared");
 			Assert::IsTrue(Promotion::PromotionUsedMemory() == 0, L"Promotional memory cleared");
 			Assert::IsTrue(Promotion::PromotionFreeMemory() == PGC_Transaction::TotalGrossMemoryUsed(), L"Promotional free memory == total gross");
-
-			Cleanup();
 		}
 
 		//  Test automatic transaction creation.  No promotion.
@@ -266,8 +248,7 @@ namespace test_pgc
 		//  * EndStackTransaction
 		TEST_METHOD(TestRecursivePGC)
 		{
-			Initialize();
-			PGC::SetOnErrorHandler(AssertErrorHandler);
+			PGC_User user(AssertErrorHandler);
 
 			{
 				PGC_Transaction transaction;
@@ -286,18 +267,16 @@ namespace test_pgc
 
 			Assert::IsTrue(TestPGC_A::m_ActiveCount == 0, L"All TestPGC_A destructors called.");
 			Assert::IsTrue(TestPGC_B::m_ActiveCount == 0, L"All TestPGC_B destructors called.");
-
-			Cleanup();
 		}
 
 		//  Test automatic transaction creation with promotion.
 		TEST_METHOD(TestRecursiveKeepPGC)
 		{
+			PGC_User user(AssertErrorHandler);
+
 			// This test depends on the size of objects and how many fit of TestPGC_A fit in a block.
 			// This varies for 64 bit and debug mode. So ony run this test in 32 bit debug.
 			long NumberOf_A_B_InBlock = PGC::BlockSize / (sizeof(TestPGC_A) + sizeof(TestPGC_B));
-			Initialize();
-			PGC::SetOnErrorHandler(AssertErrorHandler);
 
 			Assert::IsTrue(Promotion::PromotionUsedMemory() == 0, L"Promotional memory cleared");
 			Assert::IsTrue(Promotion::PromotionFreeMemory() == PGC_Transaction::TotalGrossMemoryUsed(), L"Promotional free memeory == gross");
@@ -338,8 +317,7 @@ namespace test_pgc
 
 		TEST_METHOD(TestReferenceCyclePGC)
 		{
-			Initialize();
-			PGC::SetOnErrorHandler(AssertErrorHandler);
+			PGC_User user(AssertErrorHandler);
 
 			size_t stackTramsactionSize = sizeof(StackTransaction);
 			Assert::IsTrue(stackTramsactionSize == 1, L"Stack transaction size is one byte");
@@ -383,14 +361,11 @@ namespace test_pgc
 
 			// Close the transaction setup by the static variables.
 			delete PGC_Transaction::TopTransaction();
-
-			Cleanup();
 		}
 
 		TEST_METHOD(TestDoublePromotion)
 		{
-			Initialize();
-			PGC::SetOnErrorHandler(AssertErrorHandler);
+			PGC_User user(AssertErrorHandler);
 
 			{
 				PGC_Transaction outerTransaction;
@@ -416,13 +391,11 @@ namespace test_pgc
 			Assert::IsTrue(TestPGC_B::m_ActiveCount == 0, L"All TestPGC_B instances destroyed.");
 
 			// Ensure memory is fully cleaned up and destructors called
-			Cleanup();
 		}
 
 		TEST_METHOD(TestPromotionToDieingTransaction)
 		{
-			Initialize();
-			PGC::SetOnErrorHandler(AssertErrorHandler);
+			PGC_User user(AssertErrorHandler);
 
 			{
 				PGC_Transaction outerTransaction;
@@ -440,8 +413,6 @@ namespace test_pgc
 			//	L"Expected specific error message not found.");
 			Assert::IsTrue(TestPGC_A::m_ActiveCount == 0, L"All TestPGC_A destructors called.");
 			Assert::IsTrue(TestPGC_B::m_ActiveCount == 0, L"All TestPGC_B destructors called.");
-
-			Cleanup();
 		}
 
 		class Misaligner : public PGC::PGC_Base
@@ -459,7 +430,8 @@ namespace test_pgc
 		// misalignment could be exposed. Keep this test as a cross-platform safeguard.
 		TEST_METHOD(TestAlignmentAfterPromotion)
 		{
-			Initialize();
+			PGC_User user(AssertErrorHandler);
+
 			{
 				PGC_Transaction parent;
 				SRef<Misaligner> m = new Misaligner();
@@ -482,12 +454,12 @@ namespace test_pgc
 				void* addr = b->GetTestA();
 				Assert::IsTrue(reinterpret_cast<uintptr_t>(addr) % alignof(TestPGC_A) == 0, L"a alignment incorrect after promotion.");
 			}
-			Cleanup();
 		}
 
 		TEST_METHOD(TestStalePointerAfterPromotion)
 		{
-			Initialize();
+			PGC_User user(AssertErrorHandler);
+
 			{
 				PGC_Transaction transaction;
 
@@ -511,12 +483,13 @@ namespace test_pgc
 				Assert::IsTrue(moved, L"Object was moved");
 			}
 
-			Cleanup();
 		}
 
 		/*
 		TEST_METHOD(TestConcurrentPromotionStress)
 		{
+			PGC_User user(AssertErrorHandler);
+
 			Initialize();
 			const int NumThreads = 8;
 			const int NumIterations = 1000;
@@ -572,7 +545,8 @@ namespace test_pgc
 
 		TEST_METHOD(TestConcurrentPromotionControlled)
 		{
-			Initialize();
+			PGC_User user(AssertErrorHandler);
+
 			std::atomic<bool> failed{ false };
 
 			// Shared object to promote
@@ -613,8 +587,6 @@ namespace test_pgc
 			t2.join();
 
 			Assert::IsFalse(failed, L"Controlled concurrent promotion caused corruption or crash");
-
-			Cleanup();
 		}
 		*/
 	};

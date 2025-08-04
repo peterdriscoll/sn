@@ -50,8 +50,6 @@ namespace SNI
 		SN::SN_Expression CombineMetaValues(long p_DeltaMetaLevel);
 
 	private:
-		static SNI_Class *m_Class;
-
 		long m_DeltaMetaLevel;
 		SNI_Expression * m_Expression;
 	};

@@ -13,10 +13,13 @@ namespace SN
 {
 	class SN_EXPORT SN_User
 	{
+	public:
 		SN_User();
 		virtual ~SN_User();
 
 		void Init();
+
+		static SN::SN_OperatorVariables& GetOperators();
 
 	private:
 		SNI::SNI_Transaction* m_Transaction;

@@ -106,14 +106,9 @@ namespace SNI
 		return p_ParameterVariable.IsA(m_Parameter).If(BuildExpression(p_Depth - 1), p_ElseCondition);
 	}
 
-	/*static*/ SNI_Class *SNI_Virtual::m_Class = NULL;
-	/*static*/ SNI_Class *SNI_Virtual::Class()
+	/*static*/ SNI_Class* SNI_Virtual::Class()
 	{
-		if (!m_Class)
-		{
-			m_Class = new SNI_Class("Virtual");
-		}
-		return m_Class;
+		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Virtual, SNI_Class>("Virtual");
 	}
 
 	SNI_Class *SNI_Virtual::VClass()

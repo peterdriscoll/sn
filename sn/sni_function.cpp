@@ -15,14 +15,9 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class* SNI_Function::m_Class = NULL;
 	/*static*/ SNI_Class* SNI_Function::Class()
 	{
-		if (!m_Class)
-		{
-			m_Class = new SNI_Class("Function");
-		}
-		return m_Class;
+		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Function, SNI_Class>("Function");
 	}
 
 	SNI_Class* SNI_Function::VClass()

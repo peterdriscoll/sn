@@ -93,12 +93,6 @@ namespace PGC
 
 	typedef void OnErrorHandler(bool p_Err, const std::string& p_Description);
 
-	extern OnErrorHandler* g_OnErrorHandler;
-
-	PGC_EXPORT void SetOnErrorHandler(OnErrorHandler* handler);
-
-	void DefaultErrorHandler(bool p_Err, const std::string& p_Description);
-
 	class PGC_Exception : public std::exception {
 		std::string m_Message;
 	public:

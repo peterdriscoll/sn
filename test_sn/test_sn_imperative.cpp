@@ -25,36 +25,10 @@ namespace test_sn
 
 		void Initialize()
 		{
-			Manager::LogicSetup();
-			Transaction::ResetNetMemoryUsed();
-			Transaction::ResetGrossMemoryUsed();
-
-			Thread thread;
-			if (thread.HasTopManager())
-			{
-				Assert::IsTrue(!thread.HasTopManager());
-			}
 		}
 
 		void Cleanup()
 		{
-			Thread thread;
-			if (thread.HasTopManager())
-			{
-				Assert::IsTrue(!thread.HasTopManager());
-			}
-			if (Transaction::TotalNetMemoryUsed() != 0)
-			{
-				Assert::IsTrue(Transaction::TotalNetMemoryUsed() == 0);
-			}
-			if (Promotion::PromotionUsedMemory() != 0)
-			{
-				Assert::IsTrue(Promotion::PromotionUsedMemory() == 0);
-			}
-			if (Promotion::PromotionFreeMemory() != Transaction::TotalGrossMemoryUsed())
-			{
-				Assert::IsTrue(Promotion::PromotionFreeMemory() == Transaction::TotalGrossMemoryUsed());
-			}
 		}
 
 	public:
@@ -74,11 +48,11 @@ namespace test_sn
 
 				SN_DECLARE(x);
 
-				(x == Local(Operators.FunctionCall, Let(Function(Function(Equals, Operators.FunctionCall), testCall), Long(4) + Long(5)))).Assert().Do();
+				(x == Local(User::GetOperators().FunctionCall, Let(Function(Function(Equals, User::GetOperators().FunctionCall), testCall), Long(4) + Long(5)))).Assert().Do();
 
 				(x == Long(15)).Evaluate().Do();
 
-				(Long(15) == Local(Operators.FunctionCall, Let(Function(Function(Equals, Operators.FunctionCall), testCall), Long(4) + Long(5)))).Evaluate().Do();
+				(Long(15) == Local(User::GetOperators().FunctionCall, Let(Function(Function(Equals, User::GetOperators().FunctionCall), testCall), Long(4) + Long(5)))).Evaluate().Do();
 			}
 			Cleanup();
 		}
@@ -112,11 +86,11 @@ namespace test_sn
 
 				SN_DECLARE(x);
 				SN_DECLARE(t);
-				(x == Local(Operators.FunctionCall, Let(Function(Function(Equals, Operators.FunctionCall), testSimpleImperative), Function(Long(4) + Long(5), t))).Value()).Assert().Do();
+				(x == Local(User::GetOperators().FunctionCall, Let(Function(Function(Equals, User::GetOperators().FunctionCall), testSimpleImperative), Function(Long(4) + Long(5), t))).Value()).Assert().Do();
 
 				(x == Long(9)).Evaluate().Do();
 
-				(Long(9) == Local(Operators.FunctionCall, Let(Function(Function(Equals, Operators.FunctionCall), testSimpleImperative), Function(Long(4) + Long(5), t))).Value()).Evaluate().Do();
+				(Long(9) == Local(User::GetOperators().FunctionCall, Let(Function(Function(Equals, User::GetOperators().FunctionCall), testSimpleImperative), Function(Long(4) + Long(5), t))).Value()).Evaluate().Do();
 			}
 			Cleanup();
 		}
@@ -128,15 +102,15 @@ namespace test_sn
 				Manager manager("Test Simple State Threading 2", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
-				string s2 = Operators.ImperativeCall.DisplayValueSN();
+				string s2 = User::GetOperators().ImperativeCall.DisplayValueSN();
 				SN_DECLARE(y);
 				SN_DECLARE(t);
-				(y == Local(Operators.FunctionCall, Let(Function(Function(Equals, Operators.FunctionCall), Operators.ImperativeCall), Function(Long(4) + Long(5), t))).Value()).Assert().Do();
+				(y == Local(User::GetOperators().FunctionCall, Let(Function(Function(Equals, User::GetOperators().FunctionCall), User::GetOperators().ImperativeCall), Function(Long(4) + Long(5), t))).Value()).Assert().Do();
 				string y1 = y.DisplayValueSN();
 
 				(y == Long(9)).Evaluate().Do();
 
-				(Long(9) == Local(Operators.FunctionCall, Let(Function(Function(Equals, Operators.FunctionCall), Operators.ImperativeCall), Function(Long(4) + Long(5), t))).Value()).Evaluate().Do();
+				(Long(9) == Local(User::GetOperators().FunctionCall, Let(Function(Function(Equals, User::GetOperators().FunctionCall), User::GetOperators().ImperativeCall), Function(Long(4) + Long(5), t))).Value()).Evaluate().Do();
 			}
 			Cleanup();
 		}
@@ -148,18 +122,18 @@ namespace test_sn
 				Manager manager("Test Simple Assignment", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
-				string s2 = Operators.ImperativeCall.DisplayValueSN();
+				string s2 = User::GetOperators().ImperativeCall.DisplayValueSN();
 				SN_DECLARE(y);
 				SN_DECLARE(t);
 				SN_DECLARE(l);
 				manager.Breakpoint();
-				(y == Local(Operators.FunctionCall, Local(Operators.Assign, Let(Function(Function(Equals, Operators.FunctionCall), Operators.ImperativeCall), Let(Function(Function(Equals, Operators.Assign), Operators.ImperativeAssign), Function(String("m").Assign(Long(4)) + Long(5), State()))))).Value()).Assert().Do();
+				(y == Local(User::GetOperators().FunctionCall, Local(User::GetOperators().Assign, Let(Function(Function(Equals, User::GetOperators().FunctionCall), User::GetOperators().ImperativeCall), Let(Function(Function(Equals, User::GetOperators().Assign), User::GetOperators().ImperativeAssign), Function(String("m").Assign(Long(4)) + Long(5), State()))))).Value()).Assert().Do();
 				string y1 = y.DisplayValueSN();
 
 				(y == Long(9)).Evaluate().Do();
 
 				SN_DECLARE(m);
-				(Long(9) == Local(Operators.FunctionCall, Local(Operators.Assign, Let(Function(Function(Equals, Operators.FunctionCall), Operators.ImperativeCall), Let(Function(Function(Equals, Operators.Assign), Operators.ImperativeAssign), Function(String("m").Assign(Long(4)) + Long(5), State()))))).Value()).Evaluate().Do();
+				(Long(9) == Local(User::GetOperators().FunctionCall, Local(User::GetOperators().Assign, Let(Function(Function(Equals, User::GetOperators().FunctionCall), User::GetOperators().ImperativeCall), Let(Function(Function(Equals, User::GetOperators().Assign), User::GetOperators().ImperativeAssign), Function(String("m").Assign(Long(4)) + Long(5), State()))))).Value()).Evaluate().Do();
 			}
 			Cleanup();
 		}

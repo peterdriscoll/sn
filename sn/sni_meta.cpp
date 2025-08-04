@@ -15,14 +15,9 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class *SNI_Meta::m_Class = NULL;
-	/*static*/ SNI_Class *SNI_Meta::Class()
+	/*static*/ SNI_Class* SNI_Meta::Class()
 	{
-		if (!m_Class)
-		{
-			m_Class = new SNI_Class("Meta");
-		}
-		return m_Class;
+		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Meta, SNI_Class>("Meta");
 	}
 
 	SNI_Class *SNI_Meta::VClass()

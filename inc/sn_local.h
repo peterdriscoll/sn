@@ -6,7 +6,10 @@
 #include "exp_ctrl_sn.h"
 #include "sn_expression.h"
 
-class SNI::SNI_Local;
+namespace SNI
+{
+	class SNI_Local;
+}
 
 namespace SN
 {

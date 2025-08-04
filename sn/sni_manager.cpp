@@ -71,66 +71,9 @@ namespace SNI
 		throw SN::SN_Error(!p_Err, false, p_Description);
 	}
 	
-	/*static*/ void SNI_Manager::LogicSetup()
-	{
-		if (m_LogicSetupDone)
-		{
-			return;
-		}
-		
-		m_LogicSetupDone = true;
-		skynet::RerunRequest.GetSNI_Error()->MakeRerunRequest();
-
-		// Expression
-		Value::Class().GetSNI_Class()->AssertIsAValue(Expression::Class().GetSNI_Class(), skynet::True);
-		Define::Class().GetSNI_Class()->AssertIsAValue(Expression::Class().GetSNI_Class(), skynet::True);
-		Function::Class().GetSNI_Class()->AssertIsAValue(Expression::Class().GetSNI_Class(), skynet::True);
-		Let::Class().GetSNI_Class()->AssertIsAValue(Expression::Class().GetSNI_Class(), skynet::True);
-		Local::Class().GetSNI_Class()->AssertIsAValue(Expression::Class().GetSNI_Class(), skynet::True);
-		Variable::Class().GetSNI_Class()->AssertIsAValue(Expression::Class().GetSNI_Class(), skynet::True);
-
-		// Value
-		Bool::Class().GetSNI_Class()->AssertIsAValue(Value::Class().GetSNI_Class(), skynet::True);
-		Char::Class().GetSNI_Class()->AssertIsAValue(Value::Class().GetSNI_Class(), skynet::True);
-		String::Class().GetSNI_Class()->AssertIsAValue(Value::Class().GetSNI_Class(), skynet::True);
-		StringRef::Class().GetSNI_Class()->AssertIsAValue(Value::Class().GetSNI_Class(), skynet::True);
-		Short::Class().GetSNI_Class()->AssertIsAValue(Value::Class().GetSNI_Class(), skynet::True);
-		Long::Class().GetSNI_Class()->AssertIsAValue(Value::Class().GetSNI_Class(), skynet::True);
-		LongLong::Class().GetSNI_Class()->AssertIsAValue(Value::Class().GetSNI_Class(), skynet::True);
-		Float::Class().GetSNI_Class()->AssertIsAValue(Value::Class().GetSNI_Class(), skynet::True);
-		Double::Class().GetSNI_Class()->AssertIsAValue(Value::Class().GetSNI_Class(), skynet::True);
-		LongDouble::Class().GetSNI_Class()->AssertIsAValue(Value::Class().GetSNI_Class(), skynet::True);
-		StateValue::Class().GetSNI_Class()->AssertIsAValue(Value::Class().GetSNI_Class(), skynet::True);
-		Vector::Class().GetSNI_Class()->AssertIsAValue(Value::Class().GetSNI_Class(), skynet::True);
-		Mapping::Class().GetSNI_Class()->AssertIsAValue(Value::Class().GetSNI_Class(), skynet::True);
-		Domain::Class().GetSNI_Class()->AssertIsAValue(Value::Class().GetSNI_Class(), skynet::True);
-		Lambda::Class().GetSNI_Class()->AssertIsAValue(Value::Class().GetSNI_Class(), skynet::True);
-		Meta::Class().GetSNI_Class()->AssertIsAValue(Value::Class().GetSNI_Class(), skynet::True);
-		//FunctionCall::Class().GetSNI_Class()->AssertIsAValue(Value::Class().GetSNI_Class(), skynet::True);
-
-		Char::Class().GetSNI_Class()->AssertIsAValue(String::Class().GetSNI_Class(), skynet::True);
-		StringRef::Class().GetSNI_Class()->AssertIsAValue(String::Class().GetSNI_Class(), skynet::True);
-
-		Short::Class().GetSNI_Class()->AssertIsAValue(Long::Class().GetSNI_Class(), skynet::True);
-		Long::Class().GetSNI_Class()->AssertIsAValue(LongLong::Class().GetSNI_Class(), skynet::True);
-
-		Float::Class().GetSNI_Class()->AssertIsAValue(Double::Class().GetSNI_Class(), skynet::True);
-		Double::Class().GetSNI_Class()->AssertIsAValue(LongDouble::Class().GetSNI_Class(), skynet::True);
-
-		Short::Class().GetSNI_Class()->AssertIsAValue(Float::Class().GetSNI_Class(), skynet::True);
-		Long::Class().GetSNI_Class()->AssertIsAValue(Double::Class().GetSNI_Class(), skynet::True);
-		LongLong::Class().GetSNI_Class()->AssertIsAValue(LongDouble::Class().GetSNI_Class(), skynet::True);
-
-		Short::Class().GetSNI_Class()->Fix();
-		Long::Class().GetSNI_Class()->Fix();
-		LongLong::Class().GetSNI_Class()->Fix();
-		Float::Class().GetSNI_Class()->Fix();
-		Double::Class().GetSNI_Class()->Fix();
-		LongDouble::Class().GetSNI_Class()->Fix();
-	}
-
 	SNI_Manager::SNI_Manager()
 		: m_ErrorHandler(ThrowErrorHandler)
+		, m_User(nullptr)
 		, m_DelayOnEvaluate(false)
 		, m_MaxCardinalityCall(10)
 		, m_MaxCardinalityUnify(10)
@@ -147,7 +90,6 @@ namespace SNI
 		, m_LogBufferCapacity(50)
 		, m_LogExpressionBufferCapacity(50)
 		, m_MaxStackFrames(10)
-		, m_Transaction(false)
 		, m_DirectPassType(DIRECT_PASS_TYPE)
 		, m_EvaluationType(EVALUATION_TYPE)
 		, m_LogicType(LOGIC_TYPE)
@@ -158,7 +100,8 @@ namespace SNI
 	}
 
 	SNI_Manager::SNI_Manager(SNI_Manager *p_Manager)
-		: m_Description(p_Manager->m_Description)
+		: m_User(nullptr)
+		, m_Description(p_Manager->m_Description)
 		, m_ErrorHandler(p_Manager->m_ErrorHandler)
 		, m_DelayOnEvaluate(p_Manager->m_DelayOnEvaluate)
 		, m_MaxCardinalityCall(p_Manager->m_MaxCardinalityCall)
@@ -176,7 +119,6 @@ namespace SNI
 		, m_LogBufferCapacity(50)
 		, m_LogExpressionBufferCapacity(50)
 		, m_MaxStackFrames(10)
-		, m_Transaction(false)
 		, m_DirectPassType(DIRECT_PASS_TYPE)
 		, m_EvaluationType(EVALUATION_TYPE)
 		, m_LogicType(LOGIC_TYPE)
@@ -187,7 +129,8 @@ namespace SNI
 	}
 
 	SNI_Manager::SNI_Manager(string p_Description, OnErrorHandler *p_ErrorHandler, bool p_DelayOnEvaluate, size_t p_MaxCardinalityCall, size_t p_MaxCardinalityUnify)
-		: m_Description(p_Description)
+		: m_User(nullptr)
+		, m_Description(p_Description)
 		, m_ErrorHandler(p_ErrorHandler)
 		, m_DelayOnEvaluate(p_DelayOnEvaluate)
 		, m_MaxCardinalityCall(p_MaxCardinalityCall)
@@ -205,7 +148,6 @@ namespace SNI
 		, m_LogBufferCapacity(50)
 		, m_LogExpressionBufferCapacity(50)
 		, m_MaxStackFrames(10)
-		, m_Transaction(false)
 		, m_DirectPassType(DIRECT_PASS_TYPE)
 		, m_EvaluationType(EVALUATION_TYPE)
 		, m_LogicType(LOGIC_TYPE)
@@ -223,10 +165,6 @@ namespace SNI
 		{
 			thread->Breakpoint(SN::DebugStop, SN::ExitId, "", "Exit", NULL, SN::EndPoint);
 
-			if (!m_LastManager)
-			{
-				Operators.Cleanup();
-			}
 			thread->SetTopManager(m_LastManager);
 			thread->ClearDependencyChecks();
 		}
@@ -253,27 +191,27 @@ namespace SNI
 				// m_WebServerThread = NULL;
 			}
 		}
+		delete m_User;
 	}
 
 	SN::SN_Expression SNI_Manager::DelayedCalls()
 	{
-		return SNI_Thread::GetThread()->GetProcessor();
+		return SNI_User::GetCurrentUser()->GetDelayedProcessor();
 	}
 
 	void SNI_Manager::Initialize()
 	{
-		LogicSetup();
+		m_LastManager = SNI_Thread::GetThread()->GetTopManager(false);
+		SNI_Thread::GetThread()->SetTopManager(this);
 		if (!m_ErrorHandler)
 		{
 			m_ErrorHandler = ThrowErrorHandler;
 		}
-		m_LastManager = SNI_Thread::GetThread()->GetTopManager(false);
-		SNI_Thread::GetThread()->SetTopManager(this);
-		if (!m_LastManager)
+		if (!SNI_User::GetCurrentUser())
 		{
-			m_Transaction.Init();
-			Operators.Setup();
+			m_User = new SNI_User(m_ErrorHandler);
 		}
+
 		LOG(WriteHeading(SN::DebugLevel, "Start - " + m_Description));
 	}
 

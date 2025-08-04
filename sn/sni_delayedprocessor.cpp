@@ -13,22 +13,6 @@
 
 namespace SNI
 {
-	/*static*/ SNI_DelayedProcessor *SNI_DelayedProcessor::GetProcessor()
-	{
-		PGC::PGC_Transaction *transaction = SNI::SNI_Transaction::TopTransaction();
-		SNI_DelayedProcessor* task = NULL;
-		if (transaction)
-		{
-			task = dynamic_cast<SNI_DelayedProcessor *>(transaction->TopTask());
-			if (!task)
-			{
-				task = new SNI_DelayedProcessor(SNI_Thread::TopManager());
-				SNI::SNI_Transaction::TopTransaction()->SubmitTask(task);
-			}
-		}
-		return task;
-	}
-
 	SNI_DelayedProcessor::SNI_DelayedProcessor()
 		: m_Processing(false)
 		, m_Manager(SNI_Thread::GetThread()->GetTopManager())

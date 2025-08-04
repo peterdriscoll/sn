@@ -227,6 +227,21 @@ namespace PGC
 		return false;
 	}
 
+	/*static*/ void PGC_Promotion::ClearAllPromotions()
+	{
+		// Walk through the free list and delete everything
+		while (m_FreeList)
+		{
+			PGC_Promotion* next = m_FreeList->GetNext();
+
+			PGC_Transaction::AddTotalGrossMemorySize(-static_cast<long>(sizeof(PGC_Promotion)));
+
+			delete m_FreeList;
+
+			m_FreeList = next;
+		}
+	}
+
 	PGC_TypeCheck* PGC_Promotion::GetBase()
 	{
 		return *m_Base;

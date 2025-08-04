@@ -71,7 +71,7 @@ namespace SNI
 			SNI_Frame::Pop();
 			return e2;
 		}
-		SNI_Thread::GetThread()->GetProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), GetNumParameters(), p_ParameterList, p_Source);
+		SNI_User::GetCurrentUser()->GetDelayedProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), GetNumParameters(), p_ParameterList, p_Source);
 		SNI_Frame::Pop();
 		return skynet::OK;
 	}

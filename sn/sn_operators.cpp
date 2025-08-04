@@ -1,4 +1,4 @@
-#include "sn_operators.h"
+#include "sn_SNI_User::GetCurrentUser()->GetOperators().h"
 #include "sn.h"
 
 #include "sni_valueset.h"
@@ -342,13 +342,16 @@ namespace SN
 		// Imperative
 		SN::SN_Expression Assign(const SN::SN_Expression& p_Left, const SN::SN_Expression& p_Right)
 		{
-			return SN::SN_Function(SN::SN_Function(skynet::Operators.Assign, p_Left), p_Right);
+			return SN::SN_Function(SN::SN_Function(SNI_User::GetCurrentUser()->GetOperators().Assign, p_Left), p_Right);
 		}
 
 		// Function calls
 		SN::SN_Function FunctionCall(const SN::SN_Expression& p_Function, const SN::SN_Expression& p_Parameter)
 		{
-			return SN::SN_Function(SN::SN_Function(skynet::Operators.FunctionCall, p_Function), p_Parameter);
+			SN::SN_OperatorVariables& temp = SNI_User::GetCurrentUser()->GetOperators();
+			SN_Variable tempFunctionCall = temp.FunctionCall;
+			SNI_Expression* tempExpression = tempFunctionCall.GetSNI_Expression();
+			return SN::SN_Function(SN::SN_Function(SNI_User::GetCurrentUser()->GetOperators().FunctionCall, p_Function), p_Parameter);
 		}
 	}
 }

@@ -184,7 +184,7 @@ namespace SNI
 		SNI_DelayedCall *call = dynamic_cast<SNI_DelayedCall *>(m_Value);
 		if (call)
 		{
-			SNI_Thread::GetThread()->GetProcessor()->Request(call);
+			SNI_User::GetCurrentUser()->GetDelayedProcessor()->Request(call);
 		}
 	}
 
@@ -617,7 +617,7 @@ namespace SNI
 		SNI_DelayedCall *call = dynamic_cast<SNI_DelayedCall *>(m_Value);
 		if (call)
 		{
-			SNI_Thread::GetThread()->GetProcessor()->Request(call);
+			SNI_User::GetCurrentUser()->GetDelayedProcessor()->Request(call);
 		}
 		return GetValue()->DoEvaluate(p_MetaLevel);
 	}
@@ -689,7 +689,7 @@ namespace SNI
 				REQUESTPROMOTION(m_Value);
 				if (call)
 				{
-					SNI_Thread::GetThread()->GetProcessor()->Request(call);
+					SNI_User::GetCurrentUser()->GetDelayedProcessor()->Request(call);
 				}
 				return skynet::OK;
 			}

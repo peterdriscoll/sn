@@ -4,14 +4,9 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class *SNI_Null::m_Class = NULL;
-	/*static*/ SNI_Class *SNI_Null::Class()
+	/*static*/ SNI_Class* SNI_Null::Class()
 	{
-		if (!m_Class)
-		{
-			m_Class = new SNI_Class("Null");
-		}
-		return m_Class;
+		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Null, SNI_Class>("Null");
 	}
 
 	SNI_Class *SNI_Null::VClass()

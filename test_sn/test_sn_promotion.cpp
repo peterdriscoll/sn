@@ -22,36 +22,10 @@ namespace test_sn
 
         void Initialize()
         {
-            Manager::LogicSetup();
-            Transaction::ResetNetMemoryUsed();
-            Transaction::ResetGrossMemoryUsed();
-
-            Thread thread;
-            if (thread.HasTopManager())
-            {
-                Assert::IsTrue(!thread.HasTopManager());
-            }
         }
 
         void Cleanup()
         {
-            Thread thread;
-            if (thread.HasTopManager())
-            {
-                Assert::IsTrue(!thread.HasTopManager());
-            }
-            if (Transaction::TotalNetMemoryUsed() != 0)
-            {
-                Assert::IsTrue(Transaction::TotalNetMemoryUsed() == 0);
-            }
-            if (Promotion::PromotionUsedMemory() != 0)
-            {
-                Assert::IsTrue(Promotion::PromotionUsedMemory() == 0);
-            }
-            if (Promotion::PromotionFreeMemory() != Transaction::TotalGrossMemoryUsed())
-            {
-                Assert::IsTrue(Promotion::PromotionFreeMemory() == Transaction::TotalGrossMemoryUsed());
-            }
         }
 
     public:

@@ -13,14 +13,15 @@ namespace PGC
 		: public PGC_TypeCheck
 	{
 	public:
+		static void ClearAllPromotions();
 		static void PromoteRequests();
-
-		PGC_Promotion();
-		virtual ~PGC_Promotion();
 
 		static PGC_TypeCheck* CheckRequestPromotion(PGC_TypeCheck** p_Base, PGC_Transaction* p_Source, PGC_Transaction* p_Destination, PromotionStrategy p_CheckType);
 		static PGC_TypeCheck* RequestPromotion(PGC_TypeCheck** p_Base, PGC_Transaction* p_Destination, PromotionStrategy p_Strategy);
 		static PGC_TypeCheck* CopyMemory(PGC_TypeCheck* p_Base, PGC_Transaction* p_Destination);
+
+		PGC_Promotion();
+		virtual ~PGC_Promotion();
 
 		bool PromoteOrReject();
 		void Promote();

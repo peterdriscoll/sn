@@ -1,0 +1,123 @@
+#pragma once
+
+// Master list of constants
+#define SN_CONSTANT_LIST(APPLY) \
+    /* Numbers */ \
+    APPLY(Negative, SNI::SNI_Negative) \
+    APPLY(Add, SNI::SNI_Add) \
+    APPLY(Subtract, SNI::SNI_Subtract) \
+    APPLY(Multiply, SNI::SNI_Multiply) \
+    APPLY(Divide, SNI::SNI_Divide) \
+    APPLY(Square, SNI::SNI_Square) \
+    APPLY(SquareRoot, SNI::SNI_SquareRoot) \
+    \
+    /* Commands */ \
+    APPLY(Assert, SNI::SNI_Assert) \
+    APPLY(PartialAssert, SNI::SNI_PartialAssert) \
+    APPLY(Evaluate, SNI::SNI_Evaluate) \
+    APPLY(PartialEvaluate, SNI::SNI_PartialEvaluate) \
+    APPLY(MetaLevel, SNI::SNI_MetaLevel) \
+    \
+    /* Logic */ \
+    APPLY(Not, SNI::SNI_Not) \
+    APPLY(Or, SNI::SNI_Or) \
+    APPLY(OrNonPartial, SNI::SNI_Or_FalseParam) \
+    APPLY(And, SNI::SNI_And) \
+    APPLY(If, SNI::SNI_If) \
+    APPLY(Implies, SNI::SNI_Implies) \
+    APPLY(RevAnd, SNI::SNI_RevAnd) \
+    APPLY(RevOr, SNI::SNI_RevOr) \
+    APPLY(UnaryAnd, SNI::SNI_UnaryAnd) \
+    APPLY(UnaryOr, SNI::SNI_UnaryOr) \
+    APPLY(Collapse, SNI::SNI_Collapse) \
+    APPLY(Same, SNI::SNI_Same) \
+    \
+    /* Comparisons */ \
+    APPLY(Equals, SNI::SNI_Equals) \
+    APPLY(NotEquals, SNI::SNI_NotEquals) \
+    APPLY(LessThan, SNI::SNI_LessThan) \
+    APPLY(GreaterThan, SNI::SNI_GreaterThan) \
+    APPLY(LessEqual, SNI::SNI_LessEquals) \
+    APPLY(GreaterEqual, SNI::SNI_GreaterEquals) \
+    \
+    /* Strings */ \
+    APPLY(Concat, SNI::SNI_Concat) \
+    APPLY(SubtractLeft, SNI::SNI_SubtractLeft) \
+    APPLY(SubtractRight, SNI::SNI_SubtractRight) \
+    APPLY(SubtractLeftChar, SNI::SNI_SubtractLeftChar) \
+    APPLY(SubtractRightChar, SNI::SNI_SubtractRightChar) \
+    APPLY(SelectLeftChar, SNI::SNI_SelectLeftChar) \
+    APPLY(SelectRightChar, SNI::SNI_SelectRightChar) \
+    APPLY(LookaheadLeft, SNI::SNI_LookaheadLeft) \
+    APPLY(LookaheadRight, SNI::SNI_LookaheadRight) \
+    APPLY(LookStringLeft, SNI::SNI_LookStringLeft) \
+    APPLY(LookStringRight, SNI::SNI_LookStringRight) \
+    APPLY(File, SNI::SNI_File) \
+    \
+    /* Conversions */ \
+    APPLY(EscapeCPP, SNI::SNI_EscapeCPP) \
+    APPLY(UnescapeCPP, SNI::SNI_UnescapeCPP) \
+    APPLY(EscapeJSON, SNI::SNI_EscapeJSON) \
+    APPLY(UnescapeJSON, SNI::SNI_UnescapeJSON) \
+    APPLY(IntToString, SNI::SNI_IntToString) \
+    APPLY(StringToInt, SNI::SNI_StringToInt) \
+    APPLY(DoubleToString, SNI::SNI_DoubleToString) \
+    APPLY(StringToDouble, SNI::SNI_StringToDouble) \
+    \
+    /* Inheritance */ \
+    APPLY(IsA, SNI::SNI_IsA) \
+    APPLY(HasA, SNI::SNI_HasA) \
+    \
+    /* Mapping / Vector */ \
+    APPLY(Subscript, SNI::SNI_Subscript) \
+    APPLY(ReverseSubscript, SNI::SNI_ReverseSubscript) \
+    APPLY(CountIf, SNI::SNI_CountIf) \
+    APPLY(CountAll, SNI::SNI_CountAll) \
+    APPLY(Sum, SNI::SNI_Sum) \
+    \
+    /* Sets */ \
+    APPLY(BuildSet, SNI::SNI_BuildSet) \
+    APPLY(HasMember, SNI::SNI_HasMember) \
+    \
+    /* Attributes */ \
+    APPLY(GetState, SNI::SNI_GetState) \
+    APPLY(GetValue, SNI::SNI_GetValue) \
+    \
+    /* Imperative */ \
+    APPLY(Assign, SNI::SNI_Assign)
+
+
+sn.h
+
+#include "sn_constants_list.h"
+
+#define DECLARE_CONSTANT(name, impl) \
+    extern SN_EXPORT SN::SN_FunctionDef name;
+
+SN_CONSTANT_LIST(DECLARE_CONSTANT)
+
+#undef DECLARE_CONSTANT
+
+
+sn.cpp
+#include "sn_constants_list.h"
+
+#define DEFINE_CONSTANT(name, impl) \
+    SN::SN_FunctionDef name(dynamic_cast<SNI::SNI_FunctionDef*>(new impl()));
+
+SN_CONSTANT_LIST(DEFINE_CONSTANT)
+
+#undef DEFINE_CONSTANT
+
+
+#define CLEAR_CONSTANT(name, impl) name.Reset();
+void ClearAllConstants() {
+    SN_CONSTANT_LIST(CLEAR_CONSTANT)
+}
+#undef CLEAR_CONSTANT
+
+#define POPULATE_CONSTANT(name, impl) name = SN::SN_FunctionDef(new impl());
+void PopulateAllConstants() {
+    SN_CONSTANT_LIST(POPULATE_CONSTANT)
+}
+#undef POPULATE_CONSTANT

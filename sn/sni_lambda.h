@@ -51,8 +51,6 @@ namespace SNI
 		virtual void PromoteMembers();
 
 	private:
-		static SNI_Class* m_Class;
-
 		SNI_Expression * m_FormalParameter;
 		SNI_Expression * m_Expression;
 		SNI_Expression * m_ConstraintValue;

@@ -1,27 +1,58 @@
 #pragma once
 
-#include "sni_object.h"
+#include "pgc_user.h"
+#include "sn_operatorvariables.h"
 #include <vector>
+#include <unordered_map>
 
 // SNI_User is a class that represents an individual users attachment via the debugger interface to SN, possibly implemented as a session id.
 // It holds a main thread and 0..many worker threads.
 // The class also holds the SNI_DelayedProcessor.
 namespace SNI
 {
+	class SNI_Transaction;
 	class SNI_DelayedProcessor;
 	class SNI_Thread;
 
-	class SNI_User : public SNI_Object
+	class SNI_User : public PGC::PGC_User
 	{
-		PGC_CLASS(SNI_User)
-
 	private:
 		static void UserThreadFunc(SNI_User* p_User);
 	public:
-		SNI_User();
+		template <typename T, typename R, typename... Args>
+		R* GetOrCreatePointer(Args&&... args) {
+			size_t key = typeid(T).hash_code();
+			auto it = m_Pointers.find(key);
+			if (it != m_Pointers.end()) {
+				return static_cast<R*>(it->second);
+			}
+			// Create, store, and return
+			R* instance = new R(std::forward<Args>(args)...);
+			m_Pointers[key] = instance;
+			return instance;
+		}
 
 	private:
-		SNI_DelayedProcessor* m_Processor;
+		std::unordered_map<size_t, void*> m_Pointers;
+	public:
+		static SNI_User* GetCurrentUser();
+
+		explicit SNI_User(OnErrorHandler *p_ErrorHandler = &PGC_User::DefaultErrorHandler);
+		virtual ~SNI_User();
+
+		SNI_DelayedProcessor* GetDelayedProcessor();
+
+		SN::SN_OperatorVariables& GetOperators();
+		void LogicSetup();
+
+	private:
+		SNI_Transaction* m_Transaction;
+		SNI_DelayedProcessor* m_DelayedProcessor;
+
+		// * Operator Variables
+
+		SN::SN_OperatorVariables *m_Operators;
+
 		SNI_Thread* m_MainThread;
 		std::vector<SNI_Thread*> m_WorkerList;
 	};

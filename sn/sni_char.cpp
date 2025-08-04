@@ -10,14 +10,9 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class *SNI_Char::m_Class = NULL;
-	/*static*/ SNI_Class *SNI_Char::Class()
+	/*static*/ SNI_Class* SNI_Char::Class()
 	{
-		if (!m_Class)
-		{
-			m_Class = new SNI_Class("Char");
-		}
-		return m_Class;
+		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Char, SNI_Class>("Char");
 	}
 
 	SNI_Class *SNI_Char::VClass()
