@@ -49,6 +49,7 @@ namespace PGC
 				ASSERTM(promotion, "IsPromotion returned true but cast to PGC_Promotion failed");
 				m_Pointer = promotion->GetFinalCopy();
 				promotion->Free();  // Put the promotion object back on the free list for reuse.
+				promotion->GetUser()->AddProcessedDoubleDippingMemory(-static_cast<long>(sizeof(PGC_Promotion)));
 			}
 			return dynamic_cast<T*>(m_Pointer);
 		}

@@ -30,8 +30,40 @@ namespace PGC
             return m_ErrorHandler;
 		}
 
+        void ClearAllPromotions();
+        void PromoteRequests();
+
+        PGC_Promotion* Allocate();
+        void AppendRequest(PGC_Promotion*);
+
+        bool FindInFreeList(PGC_Promotion* p_Promotion);
+        void FreePromotion(PGC_Promotion* p_Promotion);
+
+        size_t TotalNetMemoryUsed() const;
+        size_t TotalGrossMemoryUsed() const;
+        size_t TotalProcessedDoubleDippingMemory() const;
+
+        void AddTotalNetMemorySize(long memory);
+        void AddTotalGrossMemorySize(long memory);
+        void AddProcessedDoubleDippingMemory(long memory);
+
+        void ResetNetMemoryUsed();
+        void ResetGrossMemoryUsed();
+        void ResetProcessedDoubleDippingMemory();
+
+        size_t PromotionFreeMemory();
+        size_t PromotionUsedMemory();
+        size_t TotalPromotionMemory();
+
     private:
         OnErrorHandler *m_ErrorHandler;
-        static PGC_User* g_PGC_User;
+    
+        PGC_Promotion* m_FreeList;
+        PGC_Promotion* m_PromoteList;
+        PGC_Promotion** m_PromoteListLast;
+
+        size_t m_TotalNetMemoryUsed;
+        size_t m_TotalGrossMemoryUsed;
+        size_t m_ProcessedDoubleDippingMemory;
     };
 }

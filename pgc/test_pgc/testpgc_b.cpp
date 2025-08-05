@@ -27,3 +27,13 @@ TestPGC_B* TestPGC_B::CloneTo(void* mem) const
 //		return nullptr;
 	return new (mem) TestPGC_B(*this);
 }
+
+void TestPGC_B::SimulateLegacyPromotionOnA()
+{
+	// Simulate double promotion
+	m_TestA.RequestPromotion(GetTransaction());
+
+	// Simulate legacy-style call on double promotion
+	// RequestPromotion((PGC::PGC_TypeCheck**)&m_TestA);
+
+}

@@ -27,11 +27,15 @@ namespace PGC
 		std::cerr << full;
 	}
 
+	static thread_local bool s_PGC_InAssert = false;
+
 	// assert with message.
-	void assertm(const char* expr_str, bool expr, const char* file, const int line, const string &msg)
+	void assertm(const char* expr_str, bool expr, const char* file, const int line, const string& msg)
 	{
-		if (!expr)
+		if (!expr && !s_PGC_InAssert)
 		{
+			s_PGC_InAssert = true;
+
 			std::string full = "PGC ASSERTION FAILED\n";
 			full += "Expression: "; full += expr_str;
 			full += "\nMessage   : "; full += msg;
@@ -57,7 +61,7 @@ namespace PGC
 		return info.hash_code();
 	}
 
-	unsigned Hasher(const unsigned &key)
+	unsigned Hasher(const unsigned& key)
 	{
 		return key;
 	}
@@ -67,7 +71,7 @@ namespace PGC
 		m_Transaction = PGC_Transaction::RegisterLastForDestruction(this);
 	}
 
-	PGC_Base::PGC_Base(PGC_Transaction & p_Transaction)
+	PGC_Base::PGC_Base(PGC_Transaction& p_Transaction)
 		: m_Transaction(&p_Transaction)
 	{
 		PGC_Transaction::RegisterLastForDestruction(this);
@@ -87,7 +91,7 @@ namespace PGC
 
 	}
 
-	PGC_Base *PGC_Base::Clone(PGC_Transaction & /*p_Transaction*/)
+	PGC_Base* PGC_Base::Clone(PGC_Transaction& /*p_Transaction*/)
 	{
 		return NULL;
 	}
@@ -97,9 +101,15 @@ namespace PGC
 		return nullptr;
 	}
 
-	void PGC_Base::RequestPromotion(PGC_TypeCheck **p_Base)
+	void PGC_Base::RequestPromotion(PGC_TypeCheck** p_Base)
 	{
 		PGC_TypeCheck* typeCheck = *p_Base;
+		if (!typeCheck)
+		{
+			return;
+		}
+		ASSERTM(!typeCheck->IsPromotion(), "Backstabbing promotion attempted on a DoubleDipping object");
+
 		if (typeCheck && !typeCheck->IsPromotion())
 		{
 			PGC_Promotion::CheckRequestPromotion(p_Base, typeCheck->GetTransaction(), GetTransaction(), PromotionStrategy::Backstabbing);

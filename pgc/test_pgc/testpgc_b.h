@@ -74,6 +74,8 @@ public:
 	TestPGC_B(const TestPGC_B& other);
 	virtual ~TestPGC_B();
 
+    void SimulateLegacyPromotionOnA();
+
 public:
 	static long m_ActiveCount;
 };

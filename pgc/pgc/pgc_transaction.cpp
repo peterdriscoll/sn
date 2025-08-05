@@ -10,9 +10,6 @@ namespace PGC
 	thread_local PGC_Transaction *m_AllocatingTransaction = 0;
 	thread_local long m_AllocatingDepth = 0;
 
-	/*static*/ size_t PGC_Transaction::m_TotalNetMemoryUsed = 0;
-	/*static*/ size_t PGC_Transaction::m_TotalGrossMemoryUsed = 0;
-
 	/*static*/ size_t PGC_Transaction::m_TransactionDepth = 0;
 	/*static*/ size_t PGC_Transaction::m_NewTransactionThreshold = NEW_TRANSACTION_THRESHOLD;
 
@@ -34,12 +31,13 @@ namespace PGC
 		return m_InWebServer;
 	}
 
-	PGC_Transaction::PGC_Transaction(bool p_IsStatic, PromotionStrategy p_PromotionStrategy)
-		: m_FirstBlock(0)
-		, m_CurrentBlock(0)
+	PGC_Transaction::PGC_Transaction(PGC_User& p_User, bool p_IsStatic, PromotionStrategy p_PromotionStrategy)
+		: m_User(&p_User)
+		, m_FirstBlock(nullptr)
+		, m_CurrentBlock(nullptr)
 		, m_Dieing(false)
 		, m_NetMemoryUsed(0)
-		, m_ProcessThread(NULL)
+		, m_ProcessThread(nullptr)
 		, m_IsStatic(p_IsStatic)
 		, m_PromotionStrategy(p_PromotionStrategy)
 		, m_LiveTransaction(std::make_shared<bool>(true))
@@ -48,7 +46,7 @@ namespace PGC
 		{
 			long dog = 10;
 		}
-		PGC_Transaction::AddTotalGrossMemorySize(sizeof(PGC_Transaction));
+		GetUser()->AddTotalGrossMemorySize(sizeof(PGC_Transaction));
 		m_ID = s_NextID.fetch_add(1, std::memory_order_relaxed);
 
 		m_LastTopTransaction = m_TopTransaction;
@@ -67,7 +65,7 @@ namespace PGC
 		{
 			EndTransaction();
 		}
-		PGC_Transaction::AddTotalGrossMemorySize(-static_cast<long>(sizeof(PGC_Transaction)));
+		GetUser()->AddTotalGrossMemorySize(-static_cast<long>(sizeof(PGC_Transaction)));
 	}
 
 	PromotionStrategy PGC_Transaction::GetPromotionStrategy() const
@@ -80,7 +78,7 @@ namespace PGC
 		m_Dieing = true;
 		Finish();
 		PromoteExternals(m_LastTopTransaction);
-		PGC_Promotion::PromoteRequests();  // Promote requests away from this transaction.
+		GetUser()->PromoteRequests();  // Promote requests away from this transaction.
 		ReleaseBlocks();
 
 		m_TopTransaction = m_LastTopTransaction;
@@ -93,7 +91,7 @@ namespace PGC
 		while (theBlock)
 		{
 			PGC_Block *nextBlock = theBlock->GetNextBlock();
-			theBlock->DestroyUncopied(this);
+			theBlock->DestroyUncopied();
 			delete theBlock;
 			theBlock = nextBlock;
 		}
@@ -110,19 +108,23 @@ namespace PGC
 	{
 		return m_Dieing;
 	}
+	PGC_User* PGC_Transaction::GetUser() const
+	{ 
+		return m_User;
+	}
 
 	void *PGC_Transaction::Allocate(size_t p_size)
 	{
 		ASSERTM(p_size < BlockSize, "Allocation " + to_string(p_size) + " bigger than block size "s + to_string(BlockSize));
-		if (m_CurrentBlock == NULL)
+		if (m_CurrentBlock == nullptr)
 		{
-			m_FirstBlock = new PGC_Block(NULL);
+			m_FirstBlock = new PGC_Block(this, nullptr);
 			m_CurrentBlock = m_FirstBlock;
 		}
 		void *mem = m_CurrentBlock->Allocate(p_size);
 		if (mem == NULL)
 		{
-			m_CurrentBlock = new PGC_Block(m_CurrentBlock);
+			m_CurrentBlock = new PGC_Block(this, m_CurrentBlock);
 			mem = m_CurrentBlock->Allocate(p_size);
 		}
 		m_AllocatingTransaction = this;
@@ -189,9 +191,9 @@ namespace PGC
 
 	/*static*/ PGC_Transaction *PGC_Transaction::TopTransaction()
 	{
-		if ((m_TopTransaction == 0) && !m_InWebServer)
+		if ((m_TopTransaction == nullptr) && !m_InWebServer)
 		{
-			new PGC_Transaction(true);
+			new PGC_Transaction(*PGC_User::GetCurrentPGC_User(), true);
 		}
 		return m_TopTransaction;
 	}
@@ -219,16 +221,6 @@ namespace PGC
 			theBlock = theBlock->GetNextBlock();
 		}
 		return memory;
-	}
-
-	/*static*/ void PGC_Transaction::ResetNetMemoryUsed()
-	{
-		m_TotalNetMemoryUsed = 0;
-	}
-
-	/*static*/ void PGC_Transaction::ResetGrossMemoryUsed()
-	{
-		m_TotalGrossMemoryUsed = PGC_Promotion::PromotionFreeMemory();
 	}
 
 	void PGC_Transaction::CollectGarbage()
@@ -285,26 +277,6 @@ namespace PGC
 		m_TaskList.clear();
 	}
 
-	/*static*/ size_t PGC_Transaction::TotalNetMemoryUsed()
-	{
-		return m_TotalNetMemoryUsed;
-	}
-
-	/*static*/ size_t PGC_Transaction::TotalGrossMemoryUsed()
-	{
-		return m_TotalGrossMemoryUsed;
-	}
-
-	/*static*/ void PGC_Transaction::AddTotalNetMemorySize(long memory)
-	{
-		m_TotalNetMemoryUsed += memory;
-	}
-
-	/*static*/ void PGC_Transaction::AddTotalGrossMemorySize(long memory)
-	{
-		m_TotalGrossMemoryUsed += memory;
-	}
-
 	//  Usage:
 	//     StartStackTransaction and EndStackTransaction should be used in pairs, at the start and
 	//     end of a function, or block within a function.  
@@ -313,19 +285,19 @@ namespace PGC
 	//  Description:
 	//      Start a transaction,if it is needed.  The method will start a transaction if there is none,
 	//      Or if the net memory usage of the current top transaction passes a threshold.
-	/*static*/ void PGC_Transaction::StartStackTransaction()
+	/*static*/ void PGC_Transaction::StartStackTransaction(PGC_User &p_User)
 	{
 		++m_TransactionDepth;
 		if (m_TopTransaction)
 		{
 			if (m_TopTransaction->NetMemoryUsed() > m_NewTransactionThreshold)
 			{
-				new PGC_Transaction();
+				new PGC_Transaction(p_User);
 			}
 		}
 		else
 		{
-			new PGC_Transaction();
+			new PGC_Transaction(p_User);
 		}
 	}
 

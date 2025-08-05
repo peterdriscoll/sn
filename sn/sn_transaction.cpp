@@ -15,36 +15,6 @@ namespace SN
 		return m_Transaction->GrossMemoryUsed();
 	}
 
-	/*static*/ size_t SN_Transaction::TotalNetMemoryUsed()
-	{
-		return PGC::PGC_Transaction::TotalNetMemoryUsed();
-	}
-
-	/*static*/ size_t SN_Transaction::TotalGrossMemoryUsed()
-	{
-		return PGC::PGC_Transaction::TotalGrossMemoryUsed();
-	}
-
-	/*static*/ void SN_Transaction::ResetNetMemoryUsed()
-	{
-		PGC::PGC_Transaction::ResetNetMemoryUsed();
-	}
-
-	/*static*/ void SN_Transaction::ResetGrossMemoryUsed()
-	{
-		PGC::PGC_Transaction::ResetGrossMemoryUsed();
-	}
-
-	/*static*/ size_t SN_Transaction::PromotionFreeMemory()
-	{
-		return PGC::PGC_Promotion::PromotionFreeMemory();
-	}
-
-	/*static*/ size_t SN_Transaction::PromotionUsedMemory()
-	{
-		return PGC::PGC_Promotion::PromotionUsedMemory();
-	}
-
 	/*static*/ void SN_Transaction::RegisterInWebServer()
 	{
 		PGC::PGC_Transaction::RegisterInWebServer();

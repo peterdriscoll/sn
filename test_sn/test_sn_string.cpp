@@ -44,7 +44,6 @@ namespace test_sn
 		{
 			return;
 			Initialize();
-			Assert::IsTrue(Transaction::TotalNetMemoryUsed() == 0);
 			{
 				Manager manager("Test String Equivalent", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);

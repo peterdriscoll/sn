@@ -8,14 +8,12 @@ namespace PGC
 {
 	class PGC_Base;
 	class PGC_Transaction;
+	class PGC_User;
 
 	class PGC_EXPORT PGC_Promotion
 		: public PGC_TypeCheck
 	{
 	public:
-		static void ClearAllPromotions();
-		static void PromoteRequests();
-
 		static PGC_TypeCheck* CheckRequestPromotion(PGC_TypeCheck** p_Base, PGC_Transaction* p_Source, PGC_Transaction* p_Destination, PromotionStrategy p_CheckType);
 		static PGC_TypeCheck* RequestPromotion(PGC_TypeCheck** p_Base, PGC_Transaction* p_Destination, PromotionStrategy p_Strategy);
 		static PGC_TypeCheck* CopyMemory(PGC_TypeCheck* p_Base, PGC_Transaction* p_Destination);
@@ -31,30 +29,23 @@ namespace PGC
 
 		PGC_TypeCheck* GetBase();
 		PGC_TypeCheck** GetBaseRef();
-		PGC_Promotion *GetNext();
-		void SetNext(PGC_Promotion *p_Promotion);
 		void Free();
 
 		PGC_Transaction* GetSource();
 		PGC_Transaction* GetDestination();
+		PromotionStrategy GetStrategy();
 
-		static size_t PromotionFreeMemory();
-		static size_t PromotionUsedMemory();
 		void Create(PGC_TypeCheck** p_Base, PGC_Transaction* p_Destination, PromotionStrategy p_Strategy);
-		static PGC_Promotion* Allocate();
-		void AppendRequest();
+
+		PGC_User* GetUser() const;
+
+		PGC_Promotion *m_Next;
+
 	private:
-
-		bool FindInFreeList();
-
-		static PGC_Promotion *m_FreeList;
-		static PGC_Promotion *m_PromoteList;
-		static PGC_Promotion **m_PromoteListLast;
-
 		PGC_TypeCheck **m_Base;
 		PGC_Transaction *m_Destination;
-		PGC_Promotion *m_Next;
 		PGC_TypeCheck* m_FinalCopy;
+		bool m_Active = true;
 		PromotionStrategy m_Strategy;
 	};
 }

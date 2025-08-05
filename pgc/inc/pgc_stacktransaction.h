@@ -38,9 +38,9 @@ namespace PGC
 	class PGC_StackTransaction
 	{
 	public:
-		inline PGC_StackTransaction()
+		inline PGC_StackTransaction(PGC_User &p_User)
 		{
-			PGC_Transaction::StartStackTransaction();
+			PGC_Transaction::StartStackTransaction(p_User);
 		}
 		inline ~PGC_StackTransaction()
 		{

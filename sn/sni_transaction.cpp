@@ -5,7 +5,7 @@
 namespace SNI
 {
 	SNI_Transaction::SNI_Transaction()
-		: PGC_Transaction(false, SNI_Thread::TopManager()->MemoryPromotionStrategy())
+		: PGC_Transaction(*SNI_User::GetCurrentPGC_User(),  false, SNI_Thread::TopManager()->MemoryPromotionStrategy())
 	{
 		SNI_Thread::GetThread()->PushFrame(new SNI_Frame());
 	}

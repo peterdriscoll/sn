@@ -20,12 +20,6 @@ namespace SN
 	public:
 		size_t NetMemoryUsed();
 		size_t GrossMemoryUsed();
-		static size_t TotalNetMemoryUsed();
-		static size_t TotalGrossMemoryUsed();
-		static void ResetNetMemoryUsed();
-		static void ResetGrossMemoryUsed();
-		static size_t PromotionFreeMemory();
-		static size_t PromotionUsedMemory();
 		static void RegisterInWebServer();
 		static bool InWebServer();
 

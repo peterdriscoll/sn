@@ -9,5 +9,5 @@ namespace PGC
 	};
 
 	// Default strategy for new transactions
-	constexpr PromotionStrategy g_DefaultPromotionStrategy = PromotionStrategy::Backstabbing;
+	constexpr PromotionStrategy g_DefaultPromotionStrategy = PromotionStrategy::DoubleDipping;
 }

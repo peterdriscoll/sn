@@ -10,14 +10,14 @@ namespace PGC
 	class PGC_Block
 	{
 	public:
-		PGC_Block(PGC_Block *p_LastBlock);
+		PGC_Block(PGC_Transaction *p_Transaction, PGC_Block *p_LastBlock);
 		virtual ~PGC_Block();
 
 		PGC_Block *GetNextBlock();
 		void *Allocate(size_t p_size);
 
 		void RegisterForDestruction(PGC_Base *p_Base);
-		void DestroyUncopied(PGC_Transaction *p_Transaction);
+		void DestroyUncopied();
 
 		PGC_Base *FindOwner(void *p_member);
 
@@ -30,5 +30,7 @@ namespace PGC
 
 		PGC_Base *m_DestuctionList;
 		PGC_Base *m_DestuctionListLast;
+
+		PGC_Transaction* m_Transaction;
 	};
 }

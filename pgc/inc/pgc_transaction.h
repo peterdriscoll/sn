@@ -50,7 +50,7 @@ namespace PGC
 	class PGC_EXPORT PGC_Transaction
 	{
 	public:
-		PGC_Transaction(bool p_IsStatic = false, PromotionStrategy p_PromotionStrategy = g_DefaultPromotionStrategy);
+		PGC_Transaction(PGC_User &p_User, bool p_IsStatic = false, PromotionStrategy p_PromotionStrategy = g_DefaultPromotionStrategy);
 		virtual ~PGC_Transaction();
 
 		mutex m_Mutex;
@@ -58,6 +58,8 @@ namespace PGC
 		uint32_t GetID() const { return m_ID; }
 
 		PromotionStrategy GetPromotionStrategy() const;
+
+		PGC_User* GetUser() const;
 
 		void *Allocate(size_t p_size);
 		std::shared_ptr<bool> GetLiveTransactionPointer();
@@ -76,19 +78,11 @@ namespace PGC
 
 		static PGC_Transaction *TopTransaction();
 
-		static void StartStackTransaction();
+		static void StartStackTransaction(PGC_User &p_User);
 		static void EndStackTransaction();
 
 		size_t NetMemoryUsed();
 		size_t GrossMemoryUsed();
-		static size_t TotalNetMemoryUsed();
-		static size_t TotalGrossMemoryUsed();
-
-		static void AddTotalNetMemorySize(long memory);
-		static void AddTotalGrossMemorySize(long memory);
-
-		static void ResetNetMemoryUsed();
-		static void ResetGrossMemoryUsed();
 
 		void CollectGarbage();
 
@@ -112,11 +106,11 @@ namespace PGC
 		PromotionStrategy m_PromotionStrategy;
 
 		static std::atomic<uint32_t> s_NextID;
+
+		PGC_User* m_User;
 		static long m_NextThreadNum;
 
 		size_t m_NetMemoryUsed;
-		static size_t m_TotalNetMemoryUsed;
-		static size_t m_TotalGrossMemoryUsed;
 
 		static size_t m_TransactionDepth;
 		static size_t m_NewTransactionThreshold;

@@ -6,8 +6,9 @@
 
 namespace PGC
 {
-	PGC_Block::PGC_Block(PGC_Block *p_LastBlock)
-		: m_NextBlock(NULL)
+	PGC_Block::PGC_Block(PGC_Transaction *p_Transaction, PGC_Block *p_LastBlock)
+		: m_Transaction(p_Transaction)
+		, m_NextBlock(NULL)
 		, m_end(NULL)
 		, m_current(NULL)
 	{
@@ -20,18 +21,18 @@ namespace PGC
 		m_DestuctionList = 0;
 		m_DestuctionListLast = 0;
 
-		PGC_Transaction::AddTotalGrossMemorySize(sizeof(PGC_Block));
+		m_Transaction->GetUser()->AddTotalGrossMemorySize(sizeof(PGC_Block));
 	}
 
-	void PGC_Block::DestroyUncopied(PGC_Transaction *p_Transaction)
+	void PGC_Block::DestroyUncopied()
 	{
 		PGC_Base *next = m_DestuctionList;
 		while (next)
 		{
 			PGC_Base *temp = next->GetNext();
-			if (next->GetTransaction() == p_Transaction)
+			if (next->GetTransaction() == m_Transaction)
 			{
-				PGC_Transaction::AddTotalNetMemorySize(-((long)(next->Size() - PGC_OVERHEAD)));
+				m_Transaction->GetUser()->AddTotalNetMemorySize(-((long)(next->Size() - PGC_OVERHEAD)));
 				next->~PGC_Base();
 			}
 			next = temp;
@@ -59,7 +60,7 @@ namespace PGC
 
 	PGC_Block::~PGC_Block()
 	{
-		PGC_Transaction::AddTotalGrossMemorySize(-((long) sizeof(PGC_Block)));
+		m_Transaction->GetUser()->AddTotalGrossMemorySize(-((long) sizeof(PGC_Block)));
 	}
 
 	PGC_Block *PGC_Block::GetNextBlock()
@@ -77,7 +78,7 @@ namespace PGC
 		void *mem = (void *)m_current;
 		m_current = newCurrent;
 
-		PGC_Transaction::AddTotalNetMemorySize(static_cast<long>(p_size - PGC_OVERHEAD));
+		m_Transaction->GetUser()->AddTotalNetMemorySize(static_cast<long>(p_size - PGC_OVERHEAD));
 		return mem;
 	}
 
