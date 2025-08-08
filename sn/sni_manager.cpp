@@ -95,6 +95,7 @@ namespace SNI
 		, m_LogicType(LOGIC_TYPE)
 		, m_TailCallOptimization(TAIL_CALL_OPTIMIZATION)
 		, m_AutoExpandNull(AUTO_EXPAND_NULL)
+		, m_MemoryPromotionStrategy(PGC::g_DefaultPromotionStrategy)
 	{
 		Initialize();
 	}
@@ -124,6 +125,7 @@ namespace SNI
 		, m_LogicType(LOGIC_TYPE)
 		, m_TailCallOptimization(TAIL_CALL_OPTIMIZATION)
 		, m_AutoExpandNull(AUTO_EXPAND_NULL)
+		, m_MemoryPromotionStrategy(PGC::g_DefaultPromotionStrategy)
 	{
 		Initialize();
 	}
@@ -153,6 +155,7 @@ namespace SNI
 		, m_LogicType(LOGIC_TYPE)
 		, m_TailCallOptimization(TAIL_CALL_OPTIMIZATION)
 		, m_AutoExpandNull(AUTO_EXPAND_NULL)
+		, m_MemoryPromotionStrategy(PGC::g_DefaultPromotionStrategy)
 	{
 		Initialize();
 	}

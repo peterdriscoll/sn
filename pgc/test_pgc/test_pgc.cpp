@@ -480,6 +480,304 @@ namespace test_pgc
 
 		}
 
+		TEST_METHOD(TestPromotionResult_Dropped_DyingDestination)
+		{
+			PGC_User user;
+			{
+				PGC_Transaction source(user, false, PGC::PromotionStrategy::DoubleDipping);
+
+				TestPGC_B* dyingDestination= new TestPGC_B();
+
+				Assert::IsTrue(user.TotalNetMemoryUsed() == sizeof(TestPGC_B)- PGC_OVERHEAD);
+				Assert::IsTrue(user.TotalGrossMemoryUsed() ==
+					source.GrossMemoryUsed() + 
+					user.TotalPromotionMemory(),
+					L"Gross memory error");
+
+				{
+					PGC_Transaction destination(user, false, PGC::PromotionStrategy::DoubleDipping);
+					MemberRef<TestPGC_B> ref(dyingDestination, &destination);
+
+					Assert::IsTrue(user.TotalNetMemoryUsed() ==
+						sizeof(TestPGC_B) - PGC_OVERHEAD, L"Net memory error");
+					Assert::IsTrue(user.TotalGrossMemoryUsed() ==
+						source.GrossMemoryUsed() +
+						destination.GrossMemoryUsed() +
+						user.TotalPromotionMemory(),
+						L"Gross memory error");
+				}
+				Assert::IsTrue(user.TotalNetMemoryUsed() ==
+					sizeof(TestPGC_B) - PGC_OVERHEAD, L"Net memory error");
+				Assert::IsTrue(user.TotalGrossMemoryUsed() ==
+					source.GrossMemoryUsed() +
+					user.TotalPromotionMemory(),
+					L"Gross memory error");
+			}
+			Assert::IsTrue(user.TotalNetMemoryUsed() ==
+				0, L"Net memory error");
+			Assert::IsTrue(user.TotalGrossMemoryUsed() ==
+				user.TotalPromotionMemory(),
+				L"Gross memory error");
+		}
+
+		TEST_METHOD(TestPromotionResult_Nested_Dropped_DyingDestination)
+		{
+			PGC_User user;
+
+			{
+				// SOURCE transaction (outer)
+				PGC_Transaction source(user, false, PGC::PromotionStrategy::Backstabbing);
+
+				// Allocate TestPGC_A in source
+				TestPGC_A* a = new TestPGC_A();
+
+				Assert::IsTrue(user.TotalNetMemoryUsed() == sizeof(TestPGC_A) - PGC_OVERHEAD, L"Net after allocating A");
+				Assert::IsTrue(user.TotalGrossMemoryUsed() ==
+					source.GrossMemoryUsed() + user.TotalPromotionMemory(),
+					L"Gross after allocating A");
+
+				{
+					// DESTINATION transaction (inner)
+					PGC_Transaction destination(user, false, PGC::PromotionStrategy::Backstabbing);
+
+					// Create TestPGC_B in destination
+					SRef<TestPGC_B> sref(new TestPGC_B());
+
+					Assert::IsTrue(user.TotalNetMemoryUsed() == (sizeof(TestPGC_A) - PGC_OVERHEAD) + (sizeof(TestPGC_B) - PGC_OVERHEAD), L"Net after allocating B");
+					Assert::IsTrue(user.TotalGrossMemoryUsed() ==
+						source.GrossMemoryUsed() +
+						destination.GrossMemoryUsed() +
+						user.TotalPromotionMemory(),
+						L"Gross after allocating B");
+
+					// Assign TestPGC_A pointer to TestA member on TestPGC_B
+					sref->SetTestA(a);
+
+					// Promotion should now be pending (destination -> source)
+				}
+
+				// Source is still alive
+				// No promotion should have occurred.
+				Assert::IsTrue(user.TotalNetMemoryUsed() == sizeof(TestPGC_A) - PGC_OVERHEAD, L"Net before source ends");
+
+				Assert::IsTrue(user.TotalGrossMemoryUsed() ==
+					source.GrossMemoryUsed() +
+					user.TotalPromotionMemory(),
+					L"Gross after destination dies");
+
+				// Now, when source ends, promotion will occur
+			}
+
+			// Source is now gone — promotion should have completed (PromotedDone)
+			Assert::IsTrue(user.TotalNetMemoryUsed() == 0, L"Net after promotion");
+
+			Assert::IsTrue(user.TotalGrossMemoryUsed() ==
+				user.TotalPromotionMemory(),
+				L"Gross after promotion");
+
+			Assert::IsTrue(user.TotalProcessedDoubleDippingMemory() == 0, L"No processed memory for Backstabbing");
+
+			// Final cleanup
+			Assert::IsTrue(user.TotalNetMemoryUsed() == 0, L"Final net memory");
+			Assert::IsTrue(user.TotalGrossMemoryUsed() == user.TotalPromotionMemory(), L"Final gross memory");
+		}
+
+		TEST_METHOD(TestPromotionResult_PromotedDone_Backstabbing)
+		{
+			PGC_User user;
+
+			{
+				// DESTINATION transaction (must outlive source)
+				PGC_Transaction destination(user, false, PGC::PromotionStrategy::Backstabbing);
+
+				MemberRef<TestPGC_B> ref;
+
+				Assert::IsTrue(user.TotalNetMemoryUsed() == 0, L"Net memory after allocation");
+
+				Assert::IsTrue(user.TotalGrossMemoryUsed() ==
+					destination.GrossMemoryUsed() +
+					user.TotalPromotionMemory(),
+					L"Gross memory after allocation");
+
+				{
+					// SOURCE transaction
+					PGC_Transaction source(user, false, PGC::PromotionStrategy::Backstabbing);
+
+					Assert::IsTrue(user.TotalNetMemoryUsed() == 0, L"Net memory after allocation");
+
+					Assert::IsTrue(user.TotalGrossMemoryUsed() ==
+						source.GrossMemoryUsed() +
+						destination.GrossMemoryUsed() +
+						user.TotalPromotionMemory(),
+						L"Gross memory after allocation");
+
+					// --- After allocation ---
+					ref.Set(new TestPGC_B(), &destination);
+
+					Assert::IsTrue(user.TotalNetMemoryUsed() == sizeof(TestPGC_B) - PGC_OVERHEAD, L"Net memory after allocation");
+
+					Assert::IsTrue(user.TotalGrossMemoryUsed() ==
+						source.GrossMemoryUsed() +
+						destination.GrossMemoryUsed() +
+						user.TotalPromotionMemory(),
+						L"Gross memory after allocation");
+				}
+
+				// --- After source dies, before PromoteRequests ---
+				Assert::IsTrue(user.TotalNetMemoryUsed() == sizeof(TestPGC_B) - PGC_OVERHEAD, L"Net before promotion");
+
+				Assert::IsTrue(user.TotalGrossMemoryUsed() ==
+					destination.GrossMemoryUsed() + user.TotalPromotionMemory(),
+					L"Gross before promotion (source gone)");
+
+				Assert::IsTrue(destination.NetMemoryUsed() == sizeof(TestPGC_B) - PGC_OVERHEAD, L"Destination owns object");
+
+				Assert::IsTrue(user.TotalNetMemoryUsed() == sizeof(TestPGC_B) - PGC_OVERHEAD, L"Net memory after promotion");
+
+				Assert::IsTrue(user.TotalGrossMemoryUsed() ==
+					destination.GrossMemoryUsed() + user.TotalPromotionMemory(),
+					L"Gross memory after promotion");
+
+				Assert::IsTrue(user.TotalProcessedDoubleDippingMemory() == 0, L"No processed memory (Backstabbing)");
+			}
+
+			// --- After destination dies ---
+			Assert::IsTrue(user.TotalNetMemoryUsed() == 0, L"Net memory after cleanup");
+
+			Assert::IsTrue(user.TotalGrossMemoryUsed() == user.TotalPromotionMemory(), L"Gross memory after cleanup");
+		}
+
+		TEST_METHOD(TestPromotionResult_PromotedKeep_DoubleDipping)
+		{
+			PGC_User user;
+
+			{
+				// DESTINATION transaction (ref lives here)
+				PGC_Transaction destination(user, false, PGC::PromotionStrategy::DoubleDipping);
+
+				MemberRef<TestPGC_B> ref;
+
+				Assert::IsTrue(user.TotalNetMemoryUsed() == 0, L"Initial net memory");
+				Assert::IsTrue(user.TotalGrossMemoryUsed() ==
+					destination.GrossMemoryUsed() + user.TotalPromotionMemory(),
+					L"Initial gross memory");
+
+				{
+					// SOURCE transaction (allocates object)
+					PGC_Transaction source(user, false, PGC::PromotionStrategy::DoubleDipping);
+
+					Assert::IsTrue(user.TotalNetMemoryUsed() == 0, L"Net memory after source start");
+
+					Assert::IsTrue(user.TotalGrossMemoryUsed() ==
+						source.GrossMemoryUsed() +
+						destination.GrossMemoryUsed() +
+						user.TotalPromotionMemory(),
+						L"Gross memory after source start");
+
+					// Allocate in source, ref is owned by destination
+					ref.Set(new TestPGC_B(), &destination);
+
+					Assert::IsTrue(user.TotalNetMemoryUsed() == sizeof(TestPGC_B) - PGC_OVERHEAD, L"Net memory after allocation");
+
+					Assert::IsTrue(user.TotalGrossMemoryUsed() ==
+						source.GrossMemoryUsed() +
+						destination.GrossMemoryUsed() +
+						user.TotalPromotionMemory(),
+						L"Gross memory after allocation");
+
+					// Simulate use of value in destination. Value accessed via the promotion.
+					TestPGC_B* value = ref.Get(); 
+
+					Assert::IsNotNull(value, L"ref.Get() returned null");
+
+					Assert::IsTrue(user.TotalProcessedDoubleDippingMemory() == 0,
+						L"Processed double dipping memory should be zero");
+				}
+				// This should have triggered PromotedKeep behavior
+				Assert::IsTrue(user.TotalProcessedDoubleDippingMemory() == sizeof(PGC::PGC_Promotion),
+					L"Processed double dipping memory should be updated");
+
+				// ref.Get() called -> triggers freeing of the double dipped promotion (the second dip).
+				TestPGC_B* value2 = ref.Get();
+
+				Assert::IsTrue(user.TotalProcessedDoubleDippingMemory() == 0,
+					L"Processed double dipping memory should be zero after free");
+
+				Assert::IsTrue(destination.NetMemoryUsed() == sizeof(TestPGC_B) - PGC_OVERHEAD, L"Destination owns value");
+				Assert::IsTrue(user.TotalNetMemoryUsed() == sizeof(TestPGC_B) - PGC_OVERHEAD, L"Net memory after promotion");
+
+				Assert::IsTrue(user.TotalGrossMemoryUsed() ==
+					destination.GrossMemoryUsed() +
+					user.TotalPromotionMemory(),
+					L"Gross memory after promotion");
+			}
+
+			// After destination dies TestPGC_B is deleted
+			Assert::IsTrue(user.TotalNetMemoryUsed() == 0, L"Net memory after cleanup");
+
+			Assert::IsTrue(user.TotalGrossMemoryUsed() == user.TotalPromotionMemory(),
+				L"Gross memory after cleanup");
+		}
+
+		TEST_METHOD(TestPromotionResult_Keep_ThenPromotedKeep)
+		{
+			PGC_User user;
+
+			{
+				// DESTINATION transaction
+				PGC_Transaction destination(user, false, PGC::PromotionStrategy::DoubleDipping);
+
+				MemberRef<TestPGC_B> ref;
+
+				{
+					// SOURCE transaction
+					PGC_Transaction source(user, false, PGC::PromotionStrategy::DoubleDipping);
+
+					// Create promotion
+					ref.Set(new TestPGC_B(), &destination);
+
+					// --- Step 1: Trigger PromoteRequests() early via unrelated inner transaction ---
+					{
+						PGC_Transaction inner(user, false, PGC::PromotionStrategy::DoubleDipping);
+						// Does nothing; just exits to trigger PromoteRequests()
+					}
+
+					// --- Step 2: Promotion should not have occurred yet ---
+					Assert::IsTrue(destination.NetMemoryUsed() == 0, L"Destination should not own object yet");
+					Assert::IsTrue(user.TotalProcessedDoubleDippingMemory() == 0, L"No processed double dipping memory");
+					Assert::IsTrue(user.TotalNetMemoryUsed() == sizeof(TestPGC_B) - PGC_OVERHEAD, L"Net memory still in source");
+
+					Assert::IsTrue(user.TotalGrossMemoryUsed() ==
+						source.GrossMemoryUsed() +
+						destination.GrossMemoryUsed() +
+						user.TotalPromotionMemory(),
+						L"Gross memory with pending promotion");
+				}
+
+				// --- Step 3: Source transaction ended — should now trigger promotion ---
+				// Promotion now proceeds with PromotedKeep
+
+				Assert::IsTrue(destination.NetMemoryUsed() == sizeof(TestPGC_B) - PGC_OVERHEAD, L"Destination owns object after promotion");
+
+				Assert::IsTrue(user.TotalProcessedDoubleDippingMemory() == sizeof(PGC::PGC_Promotion),
+					L"Processed memory should now include promotion entry");
+
+				Assert::IsTrue(user.TotalNetMemoryUsed() == sizeof(TestPGC_B) - PGC_OVERHEAD,
+					L"Net memory reflects destination ownership");
+
+				Assert::IsTrue(user.TotalGrossMemoryUsed() ==
+					destination.GrossMemoryUsed() +
+					user.TotalPromotionMemory(),
+					L"Gross memory after source cleanup and promotion");
+			}
+
+			// --- Final cleanup ---
+			Assert::IsTrue(user.TotalNetMemoryUsed() == 0, L"Final net memory after all cleanup");
+
+			Assert::IsTrue(user.TotalGrossMemoryUsed() == user.TotalPromotionMemory(),
+				L"Final gross memory should match promotion memory only");
+		}
+
 		/*
 		TEST_METHOD(TestConcurrentPromotionStress)
 		{

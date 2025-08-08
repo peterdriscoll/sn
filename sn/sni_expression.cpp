@@ -850,10 +850,11 @@ namespace SNI
 
 	void SNI_Expression::HandleAction(SN::SN_Expression p_Result, OnErrorHandler *p_ErrorHandler)
 	{
+		SNI_User* user = SNI_User::GetCurrentUser();
 		SN::SN_Error e = p_Result.GetError();
 		if (!e.IsError())
 		{
-			SNI_DelayedProcessor* processor = SNI_User::GetCurrentUser()->GetDelayedProcessor();
+			SNI_DelayedProcessor* processor = user->GetDelayedProcessor();
 			if (processor)
 			{
 				e = processor->DoAssert();
@@ -862,7 +863,10 @@ namespace SNI
 		if (e.IsError())
 		{
 			e.Log();
-			p_ErrorHandler(e.IsError(), e.GetDescription());
+			if (user->ShouldRaiseError())
+			{
+				p_ErrorHandler(e.IsError(), e.GetDescription());
+			}
 		}
 	}
 

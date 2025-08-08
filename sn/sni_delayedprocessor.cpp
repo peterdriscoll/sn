@@ -15,13 +15,19 @@ namespace SNI
 {
 	SNI_DelayedProcessor::SNI_DelayedProcessor()
 		: m_Processing(false)
-		, m_Manager(SNI_Thread::GetThread()->GetTopManager())
+		, m_Manager(SNI_Thread::GetThread()->GetTopManager(), GetTransaction())
+		, m_DelayedCallList(GetTransaction())
+		, m_FailedList(GetTransaction())
+		, m_PreventReread(GetTransaction())
 	{
 	}
 
 	SNI_DelayedProcessor::SNI_DelayedProcessor(SNI_Manager *p_Manager)
 		: m_Processing(false)
-		, m_Manager(p_Manager)
+		, m_Manager(p_Manager, GetTransaction())
+		, m_DelayedCallList(GetTransaction())
+		, m_FailedList(GetTransaction())
+		, m_PreventReread(GetTransaction())
 	{
 	}
 
@@ -115,20 +121,9 @@ namespace SNI
 
 	void SNI_DelayedProcessor::Promote(PGC::PGC_Transaction * p_Transaction)
 	{
-		/*
-		for (SNI_DelayedCall* &delayedCall : m_DelayedCallList)
-		{
-			RequestPromotion((PGC::PGC_Base **) &delayedCall)
-			REQUESTPROMOTION(delayedCall);
-		}
-		for (SNI_DelayedCall* &delayedCall : m_FailedList)
-		{
-			REQUESTPROMOTION(&delayedCall);
-		}
-		*/
 	}
 
-	unordered_map<string, SN::SN_String>& SNI_DelayedProcessor::GetPreventReread()
+	PreventRereadList& SNI_DelayedProcessor::GetPreventReread()
 	{
 		return m_PreventReread;
 	}
@@ -136,15 +131,15 @@ namespace SNI
 	void SNI_DelayedProcessor::Display()
 	{
 		LOG(WriteLine(SN::DebugLevel, "Delayed Call List"));
-		for (SNI_DelayedCall *d : m_DelayedCallList)
+		for (SNI_DelayedCall *call : m_DelayedCallList)
 		{
-			d->Display();
+			call->Display();
 		}
 	}
 
 	void SNI_DelayedProcessor::RemoveEmptyCalls()
 	{
-		for (SNI_DelayedCallList::iterator callIt = m_DelayedCallList.begin(); callIt != m_DelayedCallList.end(); )
+		for (DelayedCallList::iterator callIt = m_DelayedCallList.begin(); callIt != m_DelayedCallList.end(); )
 		{
 			SNI_DelayedCall* call = *callIt;
 			if (call->EmptyWorld())
@@ -163,6 +158,10 @@ namespace SNI
 	// Here, cardinality refers to the number of values. Nothing to do with multi threading.
 	SN::SN_Error SNI_DelayedProcessor::Process()
 	{
+		if (m_Processing)
+		{
+			return skynet::OK;
+		}
 		m_Processing = true;
 		bool found = true;
 		bool success = false;
@@ -171,11 +170,11 @@ namespace SNI
 		{
 			SNI_DelayedCall *call = NULL;
 			size_t card = CARDINALITY_MAX;
-			SNI_DelayedCallList::iterator it;
+			DelayedCallList::iterator it = m_DelayedCallList.end();
 			long id = 0;
 			m_SearchLock.lock();
 			RemoveEmptyCalls();
-			for (SNI_DelayedCallList::iterator loopIt = m_DelayedCallList.begin(); loopIt != m_DelayedCallList.end(); loopIt++)
+			for (DelayedCallList::iterator loopIt = m_DelayedCallList.begin(); loopIt != m_DelayedCallList.end(); loopIt++)
 			{
 				SNI_DelayedCall *loopCall = *loopIt;
 				if (!loopCall->IsLocked())
@@ -205,14 +204,18 @@ namespace SNI
 
 			if (card < CARDINALITY_MAX)
 			{
+				if (it != m_DelayedCallList.end())
+				{
+					m_SearchLock.lock();
+					// Erase before calling Run(), as call->Run() may modify m_DelayedCallList
+					it = m_DelayedCallList.erase(it);
+					m_SearchLock.unlock();
+				}
 				e = call->Run();
 				if (e.IsError())
 				{
 					m_FailedList.push_back(call);
 				}
-				m_SearchLock.lock();
-				it = m_DelayedCallList.erase(it);
-				m_SearchLock.unlock();
 				call->Unlock();
 				success = true;
 			}

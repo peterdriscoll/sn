@@ -5,9 +5,9 @@
 // ------------------------------
 
 #define PGC_DEFINE_MEMBER(MEMBER, TYPE) \
-    MemberRef<TYPE> m_##MEMBER;
-#define PGC_DEFINE_CONTAINER_MEMBER(CONTAINER, LISTTYPE, TYPE) \
-    LISTTYPE<MemberRef<TYPE>> m_##CONTAINER;
+    PGCX::MemberRef<TYPE> m_##MEMBER;
+#define PGC_DEFINE_CONTAINER_MEMBER(CONTAINER, FULLTYPE) \
+    FULLTYPE m_##CONTAINER;
 
 #define PGC_GETSET_MEMBER(MEMBER, TYPE) \
     TYPE *Get##MEMBER() \
@@ -19,13 +19,6 @@
         m_##MEMBER.Set(p_Pointer, GetTransaction()); \
     }
 
-#define PGC_REQUEST_PROMOTION_CONTAINER_MEMBER(CONTAINER, LISTTYPE, TYPE) \
-    void RequestPromotion##CONTAINER() \
-    { \
-        for (auto& _ref : m_##CONTAINER) \
-            _ref.RequestPromotion(GetTransaction()); \
-    }
-
 
 // ------------------------------
 // Promotion macros
@@ -33,10 +26,8 @@
 
 #define PGC_PROMOTE_MEMBER(MEMBER, TYPE) \
     m_##MEMBER.RequestPromotion(GetTransaction());
-
 #define PGC_PROMOTE_CONTAINER(CONTAINER, LISTTYPE, TYPE) \
-    for (auto& _ref : m_##CONTAINER) \
-        _ref.RequestPromotion(GetTransaction());
+    m_##CONTAINER.PromoteAll();
 
 // ------------------------------
 // registration
@@ -73,8 +64,7 @@
     m_##MEMBER.RequestPromotion(GetTransaction());
 
 #define PGC_REQUEST_PROMOTION_CONTAINER_COPY(CONTAINER, LISTTYPE, TYPE) \
-    for (auto& _ref : m_##CONTAINER) \
-        _ref.RequestPromotion(GetTransaction());
+    m_##CONTAINER.PromoteAll();
 
 #define PGC_CLONE_TO(T) \
 	virtual PGC_Base* CloneTo(void* memory) const override { \
@@ -86,8 +76,7 @@
     PGC_ACTION_OVER_CONTAINERS(PGC_DEFINE_CONTAINER_MEMBER)
 
 #define PGC_MEMBER_ACCESSORS(T) \
-    PGC_ACTION_OVER_MEMBERS(PGC_GETSET_MEMBER) \
-    PGC_ACTION_OVER_CONTAINERS(PGC_REQUEST_PROMOTION_CONTAINER_MEMBER)
+    PGC_ACTION_OVER_MEMBERS(PGC_GETSET_MEMBER)
 
 #define PGC_PROMOTION_LOGIC(T) \
     void PromoteMembers() \
@@ -108,6 +97,5 @@ private: \
 public: \
     PGC_MEMBER_ACCESSORS(T) \
     PGC_PROMOTION_LOGIC(T) \
-    PGC_REGISTRATION_LOGIC(T) \
     PGC_COPY_CONSTRUCTOR(T) \
     PGC_CLONE_TO(T)

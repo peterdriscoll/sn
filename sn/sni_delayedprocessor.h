@@ -3,10 +3,7 @@
 
 #pragma once
 
-#include <list>
 #include <mutex>
-#include <unordered_map>
-using namespace std;
 
 #include "pgc.h"
 
@@ -17,11 +14,69 @@ using namespace std;
 namespace SNI
 {
 	class SNI_DelayedCall;
-	typedef list<SNI_DelayedCall*> SNI_DelayedCallList;
+	class SNI_String;
+
+	using DelayedCallList = PGCX::vector_ref<SNI_DelayedCall>;
+	using PreventRereadList = PGCX::unordered_map_ref<std::string, SNI_String>;
+
+	#undef PGC_ACTION_OVER_MEMBERS
+	#undef PGC_ACTION_OVER_CONTAINERS
+
+	#define PGC_ACTION_OVER_MEMBERS(ACTION) \
+		ACTION(Manager SNI_Manager)
+
+	#define PGC_ACTION_OVER_CONTAINERS(ACTION) \
+		ACTION(DelayedCallList, DelayedCallList, SNI_DelayedCall) \
+		ACTION(FailedList, DelayedCallList, SNI_DelayedCall) \
+		ACTION(PreventReread, PreventRereadList, SNI_String)
 
 	class SNI_DelayedProcessor : public SNI_Expression, public PGCX::Task
 	{
 		PGC_CLASS(SNI_DelayedProcessor);
+
+		//PGC_MEMBER_DEFINITIONS(SNI_DelayedProcessor);
+	private:
+		PGCX::MemberRef<SNI_Manager> m_Manager;
+		DelayedCallList m_DelayedCallList;
+		DelayedCallList m_FailedList;
+		PreventRereadList m_PreventReread;
+
+	public:
+		SNI_Manager* GetManager()
+		{
+			return m_Manager.Get();
+		}
+		void SetManager(SNI_Manager* p_Pointer)
+		{
+			m_Manager.Set(p_Pointer, GetTransaction());
+		}
+
+		void PromoteMembers()
+		{
+			m_Manager.RequestPromotion(GetTransaction());
+			m_DelayedCallList.PromoteAll();
+			m_FailedList.PromoteAll();
+			m_PreventReread.PromoteAll();
+		}
+
+		SNI_DelayedProcessor(const SNI_DelayedProcessor& other)
+			: SNI_Expression(other)
+			, m_Manager(other.m_Manager)
+			, m_DelayedCallList(other.m_DelayedCallList)
+			, m_FailedList(other.m_FailedList)
+			, m_PreventReread(other.m_PreventReread)
+		{
+			m_Manager.RequestPromotion(GetTransaction());
+			m_DelayedCallList.PromoteAll();
+			m_FailedList.PromoteAll();
+			m_PreventReread.PromoteAll();
+		}
+
+		virtual PGC::PGC_Base* CloneTo(void* memory) const override
+		{
+			return new (memory) SNI_DelayedProcessor(*this);
+		}
+
 	public:
 		SNI_DelayedProcessor();
 		SNI_DelayedProcessor(SNI_Manager* p_Manager);
@@ -40,20 +95,21 @@ namespace SNI
 		virtual void Run();
 		virtual bool Finish();
 		virtual void Promote(PGC::PGC_Transaction *p_Transaction);
-		unordered_map<string, SN::SN_String> &GetPreventReread();
+		PreventRereadList &GetPreventReread();
 		virtual void Display();
 
 		void RemoveEmptyCalls();
 
 		void WriteJSON(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions);
 		size_t CountDelayedCalls();
+
 	private:
-		SNI_DelayedCallList  m_DelayedCallList;
-		SNI_DelayedCallList  m_FailedList;
+		//SNI_DelayedCallList  m_DelayedCallList;
+		//SNI_DelayedCallList  m_FailedList;
 		bool                 m_Processing;
 		mutex                m_SearchLock;
-		unordered_map<string, SN::SN_String> m_PreventReread;
-		SNI_Manager         *m_Manager;
+		//unordered_map<string, SN::SN_String> m_PreventReread;
+		//PGCX::MemberRef<SNI_Manager> m_Manager;
 	};
 }
 

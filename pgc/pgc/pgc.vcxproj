@@ -185,6 +185,8 @@
     <ClInclude Include="..\inc\pgc_user.h" />
     <ClInclude Include="..\inc\ref.h" />
     <ClInclude Include="..\inc\sref.h" />
+    <ClInclude Include="..\inc\pgc_unordered_map_ref.h" />
+    <ClInclude Include="..\inc\pgc_vector_ref.h" />
     <ClInclude Include="pgc_pch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

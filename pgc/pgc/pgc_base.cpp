@@ -27,22 +27,19 @@ namespace PGC
 		std::cerr << full;
 	}
 
-	static thread_local bool s_PGC_InAssert = false;
-
 	// assert with message.
 	void assertm(const char* expr_str, bool expr, const char* file, const int line, const string& msg)
 	{
-		if (!expr && !s_PGC_InAssert)
+		PGC_User* user = PGC_User::GetCurrentPGC_User();
+		if (!expr && !user->ShouldRaiseError())
 		{
-			s_PGC_InAssert = true;
-
 			std::string full = "PGC ASSERTION FAILED\n";
 			full += "Expression: "; full += expr_str;
 			full += "\nMessage   : "; full += msg;
 			full += "\nFile      : "; full += file;
 			full += ":" + std::to_string(line) + "\n";
 
-			PGC_User::GetCurrentPGC_User()->GetErrorHandler()(!expr, full);
+			user->GetErrorHandler()(!expr, full);
 		}
 	}
 

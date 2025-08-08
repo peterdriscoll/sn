@@ -53,10 +53,12 @@ namespace PGC
 
         size_t PromotionFreeMemory();
         size_t PromotionUsedMemory();
+        bool ShouldRaiseError();
         size_t TotalPromotionMemory();
 
     private:
         OnErrorHandler *m_ErrorHandler;
+		bool m_ErrorRaised = false;
     
         PGC_Promotion* m_FreeList;
         PGC_Promotion* m_PromoteList;

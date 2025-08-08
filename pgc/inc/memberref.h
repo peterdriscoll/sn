@@ -24,21 +24,25 @@ namespace PGC
 			: m_Pointer(nullptr)
 		{
 		}
+
 		MemberRef(T* p_Pointer, PGC_Transaction* p_Transaction)
 			: m_Pointer(dynamic_cast<PGC_TypeCheck*>(p_Pointer))
 		{
 			RequestPromotion(p_Transaction);
 		}
+
 		MemberRef(const MemberRef<T>& other)
 			: m_Pointer(other.m_Pointer)
 		{
 			// No promotion here; context-dependent
 		}
+
 		MemberRef(MemberRef<T>&& other) noexcept
 			: m_Pointer(other.m_Pointer)
 		{
 			other.m_Pointer = nullptr;
 		}
+		
 		T* Get() const
 		{
 			if (!m_Pointer) return nullptr;
@@ -47,12 +51,19 @@ namespace PGC
 			{
 				auto* promotion = static_cast<PGC_Promotion*>(m_Pointer);
 				ASSERTM(promotion, "IsPromotion returned true but cast to PGC_Promotion failed");
-				m_Pointer = promotion->GetFinalCopy();
-				promotion->Free();  // Put the promotion object back on the free list for reuse.
-				promotion->GetUser()->AddProcessedDoubleDippingMemory(-static_cast<long>(sizeof(PGC_Promotion)));
+				if (promotion->IsPromoted())
+				{
+					m_Pointer = promotion->GetFinalCopy();
+					promotion->Free();  // Put the promotion object back on the free list for reuse.
+				}
+				else
+				{
+					return dynamic_cast<T*>(promotion->GetFinalCopy());
+				}
 			}
 			return dynamic_cast<T*>(m_Pointer);
 		}
+		
 		void Set(T* p_Pointer, PGC_Transaction* p_Destination)
 		{
 			ASSERTM(p_Destination, "Always need a destination.");
@@ -78,6 +89,21 @@ namespace PGC
 
 			RequestPromotion(p_Destination);
 		}
+		
+		// Implicit conversion to T*. Use with care: does not trigger promotion, does not check validity.
+		// Only safe if you're confident in the lifetime and transaction context of the pointed object.
+		operator T* () const
+		{
+			return Get();
+		}
+		
+		MemberRef<T>& operator=(T* ptr)
+		{
+			Set(ptr, GetTransaction());
+			RequestPromotion(GetTransaction());
+			return *this;
+		}
+		
 		void RequestPromotion(PGC_Transaction* p_Destination)
 		{
 			if (!m_Pointer || m_Pointer->IsPromotion())
@@ -95,14 +121,20 @@ namespace PGC
 				break;
 
 			case PromotionStrategy::DoubleDipping:
-				PGC_TypeCheck* typeCheck = PGC_Promotion::CheckRequestPromotion(&m_Pointer, source, p_Destination, strategy);
-				if (typeCheck != m_Pointer)
 				{
-					m_Pointer = typeCheck;
+					PGC_TypeCheck* typeCheck = PGC_Promotion::CheckRequestPromotion(&m_Pointer, source, p_Destination, strategy);
+					if (typeCheck != m_Pointer)
+					{
+						m_Pointer = typeCheck;
+					}
 				}
+				break;
+			default:
+				ASSERTM(false, "Invalid promotion strategy");
 				break;
 			}
 		}
+		
 		MemberRef<T>& operator=(const MemberRef<T>& other)
 		{
 			if (this != &other)
@@ -112,6 +144,7 @@ namespace PGC
 			}
 			return *this;
 		}
+		
 		MemberRef<T>& operator=(MemberRef<T>&& other) noexcept
 		{
 			if (this != &other)
@@ -121,12 +154,14 @@ namespace PGC
 			}
 			return *this;
 		}
+		
 		T& operator*() const
 		{
 			T* ptr = Get();
 			ASSERTM(ptr, "MemberRef::operator* - dereferenced null pointer");
 			return *ptr;
 		}
+		
 		T* operator->() const
 		{
 			T* result = Get();

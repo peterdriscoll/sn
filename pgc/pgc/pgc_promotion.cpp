@@ -11,6 +11,7 @@ namespace PGC
 		, m_Next(nullptr)
 		, m_Destination(nullptr)
 		, m_FinalCopy(nullptr)
+		, m_Promoted(false)
 	{
 	}
 
@@ -37,37 +38,34 @@ namespace PGC
 		return static_cast<PGC_TypeCheck*>(promotion);
 	}
 
-	bool PGC_Promotion::PromoteOrReject()
+	PromotionResult  PGC_Promotion::PromoteOrReject()
 	{
 		if (!m_Destination || m_Destination->Dieing())
 		{
-			// Invalid destination, drop promotion
-			// ASSERTM(false, "Promotion from an outer to an inner transaction is not allowed.");
-			return true;
+			return PromotionResult::Dropped;
 		}
 
 		PGC_Transaction* source = GetSource();
-
 		if (!source)
 		{
-			// Invalid source, drop promotion
-			return true;
+			return PromotionResult::Dropped;
 		}
 
 		if (source == m_Destination)
 		{
-			return true;
+			return PromotionResult::Dropped;
 		}
 
 		if (source->Dieing())
 		{
-			// Valid promotion condition
+			// Perform promotion
 			Promote();
-			return true;
+			return (m_Strategy == PromotionStrategy::DoubleDipping)
+				? PromotionResult::PromotedKeep
+				: PromotionResult::PromotedDone;
 		}
 
-		// Still valid but source is alive — keep for later
-		return false;
+		return PromotionResult::Keep;
 	}
 
 	void PGC_Promotion::Promote()
@@ -93,6 +91,10 @@ namespace PGC
 			break;
 		case  PromotionStrategy::DoubleDipping:
 			m_FinalCopy = copy;
+			break;
+		default:
+			ASSERTM(false, "Invalid promotion strategy");
+			break;
 		}
 	}
 	/*static*/PGC_TypeCheck* PGC_Promotion::CopyMemory(PGC_TypeCheck* p_Base, PGC_Transaction* p_Destination)
@@ -145,12 +147,24 @@ namespace PGC
 		m_Base = p_Base;
 		m_Destination = p_Destination;
 		m_Strategy = p_Strategy;
+		m_Promoted = false;
 		m_FinalCopy = *p_Base;  // <- capture the original before any overwrite happens
 	}
 
 	PGC_User* PGC_Promotion::GetUser() const
 	{
 		return m_Destination->GetUser();
+	}
+
+	bool PGC_Promotion::IsPromoted() const
+	{
+		return m_Promoted;
+	}
+
+	void PGC_Promotion::MarkPromoted()
+	{
+		m_Promoted = true;
+		GetUser()->AddProcessedDoubleDippingMemory(sizeof(PGC_Promotion));
 	}
 
 	void PGC_Promotion::Free()

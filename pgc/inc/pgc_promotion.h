@@ -6,6 +6,14 @@
 
 namespace PGC
 {
+	enum class PromotionResult
+	{
+		Keep,            // Still valid, not promoted
+		Dropped,         // Invalid source/destination (free immediately)
+		PromotedDone,    // Promoted and can be freed
+		PromotedKeep     // Promoted but must remain alive (DoubleDipping)
+	};
+
 	class PGC_Base;
 	class PGC_Transaction;
 	class PGC_User;
@@ -21,7 +29,7 @@ namespace PGC
 		PGC_Promotion();
 		virtual ~PGC_Promotion();
 
-		bool PromoteOrReject();
+		PromotionResult PromoteOrReject();
 		void Promote();
 
 		bool IsPromotion() override;
@@ -39,13 +47,16 @@ namespace PGC
 
 		PGC_User* GetUser() const;
 
+		bool IsPromoted() const;
+		void MarkPromoted();
+
 		PGC_Promotion *m_Next;
 
 	private:
 		PGC_TypeCheck **m_Base;
 		PGC_Transaction *m_Destination;
 		PGC_TypeCheck* m_FinalCopy;
-		bool m_Active = true;
+		bool m_Promoted = false;
 		PromotionStrategy m_Strategy;
 	};
 }

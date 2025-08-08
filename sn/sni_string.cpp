@@ -466,10 +466,10 @@ namespace SNI
 			strStream << inFile.rdbuf(); // read the file
 			SN::SN_String contents(strStream.str());
 
-			preventReread[GetString()] = contents;
+			preventReread.Insert(GetString(), contents.GetSNI_String());
 			return contents;
 		}
-		return it->second;
+		return SN::SN_Value(it->second);
 	}
 
 	void SNI_String::DoWriteFile(const SN::SN_Value &p_Contents) const
@@ -478,7 +478,7 @@ namespace SNI
 		out << p_Contents.GetString();
 		out.close();
 		auto &preventReread = SNI_User::GetCurrentUser()->GetDelayedProcessor()->GetPreventReread();
-		preventReread[GetString()] = p_Contents;
+		preventReread.Insert(GetString(), p_Contents.GetSNI_String());
 	}
 
 	SN::SN_Value SNI_String::DoEscape(enum skynet::EscapeType p_EscapeType) const

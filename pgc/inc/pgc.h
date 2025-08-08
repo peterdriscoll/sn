@@ -6,6 +6,8 @@
 #include "pgc_stacktransaction.h"
 #include "pgc_task.h"
 #include "pgc_user.h"
+#include "pgc_vector_ref.h"
+#include "pgc_unordered_map_ref.h"
 #include "ref.h"
 #include "memberref.h"
 #include "sref.h"
@@ -28,4 +30,10 @@ namespace PGCX
 
 	template <class T>
 	using MemberRef = PGC::MemberRef<T>;
+
+	template <class T>
+	using vector_ref = PGC::vector_ref<T>;
+
+	template <class Key, class T>
+	using unordered_map_ref = PGC::unordered_map_ref<Key, T>;
 }

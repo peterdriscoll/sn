@@ -50,6 +50,8 @@ namespace PGC
 	class PGC_EXPORT PGC_Transaction
 	{
 	public:
+		PGC_Transaction() = delete; // Disable default constructor
+
 		PGC_Transaction(PGC_User &p_User, bool p_IsStatic = false, PromotionStrategy p_PromotionStrategy = g_DefaultPromotionStrategy);
 		virtual ~PGC_Transaction();
 

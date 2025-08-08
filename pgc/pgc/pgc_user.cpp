@@ -93,33 +93,40 @@ namespace PGC
     //  * Promote items whos source is dieing transaction, and remove from the list.
     //  * Remove items from the list if the destination is a dieing transaction.
     //  Leave other items in the list for future promotion.
-        void PGC_User::PromoteRequests()
+    void PGC_User::PromoteRequests()
     {
         PGC_Promotion* promotion = m_PromoteList;
         PGC_Promotion** last = &m_PromoteList;
         while (promotion)
         {
-            if (promotion->PromoteOrReject())
+            PromotionResult result = promotion->PromoteOrReject();
+            switch (result)
             {
-                PGC_Promotion* next = promotion->m_Next;  // Must get next promotion after PromoteOrReject because it might change in the promotion.
-                *last = next;			                  // Change the next pointer on the previous promotion to point ot the next promotion.
+            case PromotionResult::Dropped:
+                *last = promotion->m_Next;
+                promotion->Free();
+                promotion = promotion->m_Next;
+                break;
 
-                // I think here is where the promotion is freed where it maybe shouldnt be.
-                // Only free the promotion if the strategy was not DoubleDipping
-                if (promotion->GetStrategy() != PromotionStrategy::DoubleDipping)
-                {
-                    promotion->Free();
-                }
-                else
-                {
-                    promotion->GetDestination()->GetUser()->AddProcessedDoubleDippingMemory(sizeof(PGC_Promotion));
-                }
-                promotion = next;		                  // Set the promotion for the next loop
-            }
-            else
-            {
-                last = &(promotion->m_Next);              // Record the last element (not removed from the list.
-                promotion = promotion->m_Next;            // Set the promotion for the next loop
+            case PromotionResult::PromotedDone:
+                *last = promotion->m_Next;
+                promotion->Free();
+                promotion = *last;
+                break;
+
+            case PromotionResult::PromotedKeep:
+                *last = promotion->m_Next;
+                promotion->MarkPromoted();
+                promotion = *last;
+                break;
+
+            case PromotionResult::Keep:
+                last = &promotion->m_Next;
+                promotion = promotion->m_Next;
+                break;
+            default:
+                ASSERTM(false, "Unknown promotion result");
+				break;  
             }
         }
         m_PromoteListLast = last;
@@ -174,7 +181,11 @@ namespace PGC
         // Add to the free list
         p_Promotion->m_Next = m_FreeList;
         m_FreeList = p_Promotion;
-	}
+        if (p_Promotion->IsPromoted())
+        {
+            AddProcessedDoubleDippingMemory(-static_cast<long>(sizeof(PGC_Promotion)));
+        }
+    }
 
     size_t PGC_User::TotalNetMemoryUsed() const
     {
@@ -263,6 +274,15 @@ namespace PGC
         return memory;
     }
 
+    bool PGC_User::ShouldRaiseError()
+    {
+        if (m_ErrorRaised)
+        {
+            return false;
+        }
+        m_ErrorRaised = true;
+        return true;
+    }
 
     void PGC_User::ClearAllPromotions()
     {

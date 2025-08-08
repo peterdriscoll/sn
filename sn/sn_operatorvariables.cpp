@@ -4,7 +4,6 @@
 
 using namespace std;
 using namespace skynet;
-using namespace PGCX;
 
 namespace SN
 {
