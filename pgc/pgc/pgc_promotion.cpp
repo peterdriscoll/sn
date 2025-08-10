@@ -131,6 +131,7 @@ namespace PGC
 		}
 		ASSERTM(newBase != nullptr, "Did not expect CloneTo to return a nullptr");
 
+		newBase->SetTransaction(p_Destination);
 		return newBase;
 	}
 

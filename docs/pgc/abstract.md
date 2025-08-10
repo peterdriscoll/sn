@@ -1,0 +1,8 @@
+# Promotional Garbage Collection (PGC): A Transaction-Bound, Programmer-Directed Memory Management Model for C++
+
+**Abstract**  
+Promotional Garbage Collection (PGC) is a novel memory management paradigm that combines region-based allocation with explicit, programmer-controlled object promotion. Unlike traditional generational garbage collectors, where promotion is automatic and policy-driven, PGC operates over *transaction-scoped* allocation arenas in which all newly created objects belong to the current transaction. At transaction termination, unpromoted objects are discarded wholesale, ensuring deterministic reclamation and eliminating conservative retention.  
+
+Surviving objects are promoted into the next transaction via explicit promotion requests, allowing fine-grained control over which allocations persist. Promotions update all aliases to the object across the program, using one of two strategies: **backstabbing**, which rewrites pointers in place, or **double-dipping**, which uses reference objects capable of dynamic redirection. This design allows precise alias maintenance without conservative root scanning, enabling predictable memory behavior and avoiding the pessimism common in conservative GC models.  
+
+PGC’s model supports safe inter-transaction object sharing, deterministic deallocation, and integration with complex data structures, while maintaining performance characteristics favorable for high-throughput, low-latency systems. This explicit promotion mechanism is particularly well-suited to systems where transactional semantics already exist, as it reuses transaction boundaries to bound object lifetime and eliminate global tracing costs.  

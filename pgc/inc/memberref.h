@@ -135,6 +135,27 @@ namespace PGC
 			}
 		}
 		
+		void MemberRef<T>::PromoteNow(PGC_Transaction* destination)
+		{
+			if (!m_Pointer)
+				return;
+			PGC_Transaction* source = m_Pointer->GetTransaction();
+			if (source && destination &&
+				source != destination &&
+				!destination->Dieing() &&
+				!source->IsStatic())
+			{
+				PGC_Promotion promotion;
+				promotion.Create(
+					reinterpret_cast<PGC_TypeCheck**>(&m_Pointer),
+					destination,
+					PGC::PromotionStrategy::Backstabbing
+				);
+
+				promotion.Promote();  // Directly promotes and updates pointer via backstabbing
+			}
+		}
+		
 		MemberRef<T>& operator=(const MemberRef<T>& other)
 		{
 			if (this != &other)

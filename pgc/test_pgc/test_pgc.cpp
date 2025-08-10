@@ -314,12 +314,43 @@ namespace test_pgc
 			Assert::IsTrue(TestPGC_B::m_ActiveCount == 0, L"All TestPGC_AB destructors called.");
 		}
 
+		TEST_METHOD(TestSimpleReferenceCyclePGC)
+		{
+			PGC_User user(AssertErrorHandler);
+
+			{
+				PGC_Transaction parentTransaction(user, false, PGC::PromotionStrategy::DoubleDipping);
+
+				Assert::IsTrue(TestPGC_B::m_ActiveCount == 0, L"TestPGC_B count should be 0");
+
+				SRef<TestPGC_B> a = new TestPGC_B();
+				a->SetDescription("TestPGC_B a");
+				{
+					PGC_Transaction transaction(user, false, PGC::PromotionStrategy::DoubleDipping);
+
+					TestPGC_B* b = new TestPGC_B();
+					b->SetDescription("TestPGC_B b");
+					a->SetNext(b);
+
+					TestPGC_B* c = new TestPGC_B();
+					c->SetDescription("TestPGC_B c");
+					b->SetNext(c);
+
+					c->SetNext(a);
+
+					Assert::IsTrue(TestPGC_B::m_ActiveCount == 3, L"TestPGC_B count should be 3");
+				}
+				Assert::IsTrue(TestPGC_B::m_ActiveCount == 3, L"TestPGC_B count should be 3");
+			}
+			Assert::IsTrue(TestPGC_B::m_ActiveCount == 0, L"TestPGC_B count should be 0");
+		}
+
 		TEST_METHOD(TestReferenceCyclePGC)
 		{
 			PGC_User user(AssertErrorHandler);
 
-			size_t stackTramsactionSize = sizeof(StackTransaction);
-			Assert::IsTrue(stackTramsactionSize == 1, L"Stack transaction size is one byte");
+			size_t stackTransactionSize = sizeof(StackTransaction);
+			Assert::IsTrue(stackTransactionSize == 1, L"Stack transaction size is one byte");
 
 			Assert::IsTrue(user.PromotionUsedMemory() == 0, L"Promotional memory cleared");
 			Assert::IsTrue(user.PromotionFreeMemory() == user.TotalGrossMemoryUsed(), L"Promotional free memory == gross");

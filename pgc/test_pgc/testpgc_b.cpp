@@ -11,9 +11,12 @@ TestPGC_B::TestPGC_B()
 TestPGC_B::TestPGC_B(const TestPGC_B& other)
 	: Base(other)
 	, m_TestA(other.m_TestA)
+	, m_Next(other.m_Next)
+	, m_Description(other.m_Description)	
 {
 	++m_ActiveCount;
-	m_TestA.RequestPromotion(GetTransaction());
+	//m_TestA.RequestPromotion(GetTransaction());
+	//m_Next.RequestPromotion(GetTransaction());
 }
 
 TestPGC_B::~TestPGC_B()
@@ -36,4 +39,14 @@ void TestPGC_B::SimulateLegacyPromotionOnA()
 	// Simulate legacy-style call on double promotion
 	// RequestPromotion((PGC::PGC_TypeCheck**)&m_TestA);
 
+}
+
+std::string TestPGC_B::GetDescription() const
+{
+	return m_Description;
+}	
+
+void TestPGC_B::SetDescription(const std::string& p_Description)
+{
+	m_Description = p_Description;
 }
