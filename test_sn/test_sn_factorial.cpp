@@ -7,7 +7,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-using namespace std;
+
 using namespace skynet;
 using namespace PGCX;
 
@@ -18,9 +18,9 @@ namespace test_sn
 	private:
 		bool runWebServer = false;
 
-		static void AssertErrorHandler(bool p_Err, const string& p_Description)
+		static void AssertErrorHandler(bool p_Err, const std::string& p_Description)
 		{
-			Assert::IsTrue(!p_Err, wstring(p_Description.begin(), p_Description.end()).c_str());
+			Assert::IsTrue(!p_Err, std::wstring(p_Description.begin(), p_Description.end()).c_str());
 		}
 
 		void Initialize()
@@ -46,9 +46,9 @@ namespace test_sn
 
 					(Define(RemovePrefix) == Lambda(p, Lambda(x, x.SubtractLeft(p)))).PartialAssert().Do();
 					std::cout << std::endl << "Variable " << RemovePrefix.DisplaySN() << std::endl;
-					string s_RemovePrefix = RemovePrefix.GetVariableValue().DisplaySN();
+					std::string s_RemovePrefix = RemovePrefix.GetVariableValue().DisplaySN();
 					Assert::IsTrue(s_RemovePrefix == "@p.@x.SubtractLeft x p");
-					string v_RemovePrefix = Lambda(p, Lambda(x, x.SubtractLeft(p))).DoPartialEvaluate().DisplaySN();
+					std::string v_RemovePrefix = Lambda(p, Lambda(x, x.SubtractLeft(p))).DoPartialEvaluate().DisplaySN();
 					Assert::IsTrue(v_RemovePrefix == "@p.@x.SubtractLeft x p");
 					Assert::IsTrue(RemovePrefix.DoPartialEvaluate().Equivalent(Lambda(p, Lambda(x, x.SubtractLeft(p))).DoPartialEvaluate()));
 					(RemovePrefix(String("Atl"))(String("AtlDog")) == String("Dog")).Evaluate().Do();

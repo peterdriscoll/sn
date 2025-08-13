@@ -479,6 +479,7 @@
     <ClCompile Include="sni_virtual.cpp" />
     <ClCompile Include="sni_world.cpp" />
     <ClCompile Include="sni_worldset.cpp" />
+    <ClCompile Include="sn_base.cpp" />
     <ClCompile Include="sn_bool.cpp" />
     <ClCompile Include="sn_cartesian.cpp" />
     <ClCompile Include="sn_char.cpp" />

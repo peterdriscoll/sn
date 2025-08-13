@@ -37,17 +37,17 @@ namespace SNI
 		return new SNI_Instance(*this);
 	}
 
-	string SNI_Instance::GetTypeName() const
+	std::string SNI_Instance::GetTypeName() const
 	{
 		return "Instance";
 	}
 
-	string SNI_Instance::DisplayCpp() const
+	std::string SNI_Instance::DisplayCpp() const
 	{
 		return to_string(reinterpret_cast<std::uintptr_t>(this));
 	}
 
-	string SNI_Instance::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_Instance::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return to_string(reinterpret_cast<std::uintptr_t>(this));
 	}

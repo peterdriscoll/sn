@@ -7,7 +7,7 @@
 #include "sn_base.h"
 
 #include <string>
-using namespace std;
+
 
 namespace SNI
 {
@@ -19,15 +19,16 @@ namespace SN
 	class SN_Expression;
 	class SN_Value;
 
-	class SN_EXPORT SN_Char : public SN_Base<SNI::SNI_Char, SN_Expression, SN_Error>
+	class SN_EXPORT SN_Char : public SN_Base
 	{
 	public:
 		static SN_Class Class();
 
 		SN_Char();
 		SN_Char(const SN_Char &p_Other);
-		SN_Char(const SN_Value &p_other);
-		SN_Char(string::value_type p_other);
+		SN_Char(const SN_Value& p_other);
+		SN_Char(const SN_Expression& p_Expression);
+		SN_Char(std::string::value_type p_other);
 
 		virtual ~SN_Char();
 
@@ -43,8 +44,8 @@ namespace SN
 
 		SN_Expression IsA(const SN_Expression &p_Parent) const;
 
-		string::value_type GetChar() const;
-		string GetString() const;
+		std::string::value_type GetChar() const;
+		std::string GetString() const;
 			
 		SNI::SNI_Char *GetSNI_Char() const;
 

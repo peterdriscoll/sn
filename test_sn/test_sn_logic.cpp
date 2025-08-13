@@ -7,7 +7,6 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-using namespace std;
 using namespace skynet;
 using namespace PGCX;
 
@@ -18,9 +17,9 @@ namespace test_sn
 	private:
 		bool runWebServer = false;
 
-		static void AssertErrorHandler(bool p_Err, const string& p_Description)
+		static void AssertErrorHandler(bool p_Err, const std::string& p_Description)
 		{
-			Assert::IsTrue(!p_Err, wstring(p_Description.begin(), p_Description.end()).c_str());
+			Assert::IsTrue(!p_Err, std::wstring(p_Description.begin(), p_Description.end()).c_str());
 		}
 
 		void Initialize()
@@ -268,7 +267,7 @@ namespace test_sn
 
 				SN_DECLARE(x);
 				(x == Long(3)).Assert().Do();
-				string x_string = x.GetVariableValue().DisplayValueSN();
+				std::string x_string = x.GetVariableValue().DisplayValueSN();
 
 				Assert::IsTrue(x_string == "Long(3)");
 				(x == Long(3)).Evaluate().Do();
@@ -285,21 +284,21 @@ namespace test_sn
 
 				SN_DECLARE(x);
 				(x == Long(3) || x == Long(4)).Assert().Do();
-				string x_string = x.DisplaySN();
-				string x_valueset = x.DoEvaluate().DisplaySN();
-				string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
-				string t_valueset = (Long(3) || Long(4)).DoEvaluate().DisplaySN();
-				string t_buildset = (Long(3) || Long(4)).BuildSet().DoEvaluate().DisplaySN();
+				std::string x_string = x.DisplaySN();
+				std::string x_valueset = x.DoEvaluate().DisplaySN();
+				std::string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
+				std::string t_valueset = (Long(3) || Long(4)).DoEvaluate().DisplaySN();
+				std::string t_buildset = (Long(3) || Long(4)).BuildSet().DoEvaluate().DisplaySN();
 
 				SN_DECLARE(y);
 				(y == (Long(3) || Long(4))).Assert().Do();
-				string y_string = y.DisplaySN();
-				string y_valueset = y.DoEvaluate().DisplaySN();
-				string y_buildset = y.BuildSet().DoEvaluate().DisplaySN();
+				std::string y_string = y.DisplaySN();
+				std::string y_valueset = y.DoEvaluate().DisplaySN();
+				std::string y_buildset = y.BuildSet().DoEvaluate().DisplaySN();
 
 				(x.BuildSet() == y.BuildSet()).Evaluate().Do();
 				(x.BuildSet() == (Long(3) || Long(4)).BuildSet()).Evaluate().Do();
-				cout << x.DisplaySN();
+				std::cout << x.DisplaySN();
 			}
 			Cleanup();
 		}
@@ -313,22 +312,22 @@ namespace test_sn
 
 				SN_DECLARE(x);
 				(x == Long(3) || x == Long(4) || x == Long(5)).Assert().Do();
-				string x_string = x.DisplaySN();
-				string x_valueset = x.DoEvaluate().DisplaySN();
-				string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
+				std::string x_string = x.DisplaySN();
+				std::string x_valueset = x.DoEvaluate().DisplaySN();
+				std::string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
 				x.LogDisplaySN();
 				x.DoEvaluate().LogDisplaySN();
 				x.BuildSet().DoEvaluate().LogDisplaySN();
 
 				SN_DECLARE(y);
 				(y == (Long(3) || Long(4) || Long(5))).Assert().Do();
-				string y_string = y.DisplaySN();
-				string y_valueset = y.DoEvaluate().DisplaySN();
-				string y_buildset = y.BuildSet().DoEvaluate().DisplaySN();
+				std::string y_string = y.DisplaySN();
+				std::string y_valueset = y.DoEvaluate().DisplaySN();
+				std::string y_buildset = y.BuildSet().DoEvaluate().DisplaySN();
 
 				(x.BuildSet() == y.BuildSet()).Evaluate().Do();
 				(x.BuildSet() == (Long(3) || (Long(4) || Long(5))).BuildSet()).Evaluate().Do();
-				cout << x.DisplaySN();
+				std::cout << x.DisplaySN();
 			}
 			Cleanup();
 		}
@@ -342,12 +341,12 @@ namespace test_sn
 
 				SN_DECLARE(x);
 				(x == Long(3) || x == Long(4) || x == Long(5) || x == Long(6)).Assert().Do();
-				string x_string = x.DisplaySN();
-				string x_valueset = x.DoEvaluate().DisplaySN();
-				string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
+				std::string x_string = x.DisplaySN();
+				std::string x_valueset = x.DoEvaluate().DisplaySN();
+				std::string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
 
 				(x.BuildSet() == (Long(3) || Long(4) || Long(5) || Long(6)).BuildSet()).Evaluate().Do();
-				cout << x.DisplaySN();
+				std::cout << x.DisplaySN();
 			}
 
 			Cleanup();
@@ -362,12 +361,12 @@ namespace test_sn
 
 				SN_DECLARE(x);
 				(x == Long(3) + Long(3) || x == Long(4) + Long(4) || x == Long(5) + Long(5) || x == Long(6) + Long(6)).Assert().Do();
-				string x_string = x.DisplaySN();
-				string x_valueset = x.DoEvaluate().DisplaySN();
-				string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
+				std::string x_string = x.DisplaySN();
+				std::string x_valueset = x.DoEvaluate().DisplaySN();
+				std::string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
 
 				(x.BuildSet() == (Long(3) + Long(3) || Long(4) + Long(4) || Long(5) + Long(5) || Long(6) + Long(6)).BuildSet()).Evaluate().Do();
-				cout << x.DisplaySN();
+				std::cout << x.DisplaySN();
 			}
 			Cleanup();
 		}
@@ -381,12 +380,12 @@ namespace test_sn
 
 				SN_DECLARE(x);
 				(Long(3) + Long(3) == x || Long(4) + Long(4) == x || Long(5) + Long(5) == x || Long(6) + Long(6) == x).Assert().Do();
-				string x_string = x.DisplaySN();
-				string x_valueset = x.DoEvaluate().DisplaySN();
-				string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
+				std::string x_string = x.DisplaySN();
+				std::string x_valueset = x.DoEvaluate().DisplaySN();
+				std::string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
 
 				(x.BuildSet() == (Long(3) + Long(3) || Long(4) + Long(4) || Long(5) + Long(5) || Long(6) + Long(6)).BuildSet()).Evaluate().Do();
-				cout << x.DisplaySN();
+				std::cout << x.DisplaySN();
 			}
 			Cleanup();
 		}
@@ -400,12 +399,12 @@ namespace test_sn
 
 				SN_DECLARE(x);
 				(Long(6) == x + Long(3) || Long(8) == x + Long(4) || Long(10) == x + Long(5) || Long(12) == x + Long(6)).Assert().Do();
-				string x_string = x.DisplaySN();
-				string x_valueset = x.DoEvaluate().DisplaySN();
-				string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
+				std::string x_string = x.DisplaySN();
+				std::string x_valueset = x.DoEvaluate().DisplaySN();
+				std::string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
 
 				(x.BuildSet() == (Long(3) || Long(4) || Long(5) || Long(6)).BuildSet()).Evaluate().Do();
-				cout << x.DisplaySN();
+				std::cout << x.DisplaySN();
 			}
 			Cleanup();
 		}

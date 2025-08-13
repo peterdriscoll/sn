@@ -14,17 +14,17 @@ namespace SNI
 	{
 	}
 
-	string SNI_MetaLevel::GetTypeName() const
+	std::string SNI_MetaLevel::GetTypeName() const
 	{
 		return "Meta";
 	}
 
-	string SNI_MetaLevel::DisplayCpp() const
+	std::string SNI_MetaLevel::DisplayCpp() const
 	{
 		return "Meta";
 	}
 
-	string SNI_MetaLevel::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_MetaLevel::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "Meta";
 	}
@@ -34,7 +34,7 @@ namespace SNI
 		return 1;
 	}
 
-	string SNI_MetaLevel::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression * p_DebugSource) const
+	std::string SNI_MetaLevel::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression * p_DebugSource) const
 	{
 		return p_ParamList[PC2_First].GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + ".Meta(" + p_ParamList[PC2_Second].GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + ")";
 	}

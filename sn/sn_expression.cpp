@@ -49,7 +49,7 @@ namespace SN
 	}
 
 	SN_Expression::SN_Expression(const SN_Expression &p_Expression)
-		: SN_Base(p_Expression.m_Expression)
+		: SN_Base(p_Expression.GetSNI_Expression())
 	{
 	}
 
@@ -195,13 +195,23 @@ namespace SN
 	{
 	}
 
-	SN_Expression::SN_Expression(const string &p_Value)
+	SN_Expression::SN_Expression(const SNI::SNI_Base* p_Base)
+		: SN_Base(const_cast<SNI::SNI_Base*>(p_Base))
+	{
+	}
+
+	SN_Expression::SN_Expression(const std::string &p_Value)
 		: SN_Base(dynamic_cast<SNI::SNI_Expression *>(new SNI::SNI_String(p_Value)))
 	{
 	}
 
-	SN_Expression::SN_Expression(char *p_Value)
-		: SN_Base(dynamic_cast<SNI::SNI_Expression *>(new SNI::SNI_String(string(p_Value))))
+	SN_Expression::SN_Expression(const char* p_Value)
+		: SN_Base(dynamic_cast<SNI::SNI_Expression*>(new SNI::SNI_String(std::string(p_Value))))
+	{
+	}
+
+	SN_Expression::SN_Expression(char* p_Value)
+		: SN_Base(dynamic_cast<SNI::SNI_Expression*>(new SNI::SNI_String(std::string(p_Value))))
 	{
 	}
 
@@ -233,14 +243,24 @@ namespace SN
 		return SN_Debug(*this);
 	}
 
-	SNI::SNI_Expression * SN_Expression::GetSNI_Expression() const
+	SNI::SNI_Expression* SN_Expression::GetSNI_Expression()
 	{
-		return m_Expression;
+		return static_cast<SNI::SNI_Expression *>(m_Expression);
+	}
+
+	SNI::SNI_Expression* SN_Expression::GetSNI_Expression() const
+	{
+		return static_cast<SNI::SNI_Expression*>(const_cast<SNI::SNI_Base*>(m_Expression));
+	}
+
+	SNI::SNI_Char* SN_Expression::GetSNI_Char() const
+	{
+		return static_cast<SNI::SNI_Char*>(m_Expression);
 	}
 
 	SNI::SNI_Value * SN_Expression::GetSNI_Value() const
 	{
-		SNI::SNI_Value *value = dynamic_cast<SNI::SNI_Value *>(m_Expression);
+		SNI::SNI_Value* value = GetSNI_Value();
 		if (value)
 		{
 			return value;
@@ -319,54 +339,54 @@ namespace SN
 
 	SN_ValueSet SN_Expression::DoRemove(const SN_Value &p_Other) const
 	{
-		return m_Expression->DoRemove(p_Other);
+		return GetSNI_Expression()->DoRemove(p_Other);
 	}
 
 	bool SN_Expression::DoIsEmpty() const
 	{
-		return m_Expression->DoIsEmpty();
+		return GetSNI_Expression()->DoIsEmpty();
 	}
 
 	//----------
 
 	bool SN_Expression::GetBool() const
 	{
-		return m_Expression->GetBool();
+		return GetSNI_Expression()->GetBool();
 	}
 
-	string SN_Expression::GetString() const
+	std::string SN_Expression::GetString() const
 	{
-		return m_Expression->GetString();
+		return GetSNI_Expression()->GetString();
 	}
 
 	size_t SN_Expression::Count() const
 	{
-		return m_Expression->Count();
+		return GetSNI_Expression()->Count();
 	}
 
 	size_t SN_Expression::Length() const
 	{
-		return m_Expression->Length();
+		return GetSNI_Expression()->Length();
 	}
 
 	void SN_Expression::Simplify()
 	{
-		m_Expression->Simplify();
+		GetSNI_Expression()->Simplify();
 	}
 
 	SN_Expression SN_Expression::SimplifyValue()
 	{
-		return m_Expression->SimplifyValue();
+		return GetSNI_Expression()->SimplifyValue();
 	}
 
 	bool SN_Expression::IsRequested() const
 	{
-		return m_Expression->IsRequested();
+		return GetSNI_Expression()->IsRequested();
 	}
 
 	bool SN_Expression::AllValuesEqual(const SN::SN_Expression & p_Value) const
 	{
-		return m_Expression && m_Expression->AllValuesEqual(p_Value);
+		return GetSNI_Expression() && GetSNI_Expression()->AllValuesEqual(p_Value);
 	}
 
 	SN_Error SN_Expression::AddValue(SN_Expression p_Value, long p_NumWorlds, SNI::SNI_World ** p_WorldList, SNI::SNI_WorldSet *p_WorldSet)
@@ -646,12 +666,12 @@ namespace SN
 	}
 
 	// Conversion
-	SN_Expression SN_Expression::Escape(enum skynet::EscapeType p_EscapeType) const
+	SN_Expression SN_Expression::Escape(enum SN::EscapeType p_EscapeType) const
 	{
 		return SN_Operators::Escape(p_EscapeType, *this);
 	}
 
-	SN_Expression SN_Expression::Unescape(enum skynet::EscapeType p_EscapeType) const
+	SN_Expression SN_Expression::Unescape(enum SN::EscapeType p_EscapeType) const
 	{
 		return SN_Operators::Unescape(p_EscapeType, *this);
 	}
@@ -698,41 +718,41 @@ namespace SN
 	// Logic
 	SN_Value SN_Expression::DoNot() const
 	{
-		return m_Expression->DoNot();
+		return GetSNI_Expression()->DoNot();
 	}
 
 	SN_Value SN_Expression::DoAnd(const SN_Expression &p_Other) const
 	{
-		return m_Expression->DoAnd(dynamic_cast<SNI::SNI_Expression *>(p_Other.m_Expression));
+		return GetSNI_Expression()->DoAnd(dynamic_cast<SNI::SNI_Expression *>(p_Other.GetSNI_Expression()));
 	}
 
 	SN_Value SN_Expression::DoOr(const SN_Expression &p_Other) const
 	{
-		return m_Expression->DoOr(p_Other.m_Expression);
+		return GetSNI_Expression()->DoOr(p_Other.GetSNI_Expression());
 	}
 
 	SN_Value SN_Expression::DoIf(const SN_Expression & p_Positive, const SN_Expression & p_Negative) const
 	{
-		return m_Expression->DoIf(p_Positive.m_Expression, p_Negative.m_Expression);
+		return GetSNI_Expression()->DoIf(p_Positive.GetSNI_Expression(), p_Negative.GetSNI_Expression());
 	}
 
 	SN_Value SN_Expression::DoImplies(const SN_Expression & p_Positive) const
 	{
-		return m_Expression->DoImplies(p_Positive.m_Expression);
+		return GetSNI_Expression()->DoImplies(p_Positive.GetSNI_Expression());
 	}
 
 	SN_Value SN_Expression::DoRevAnd(const SN_Expression & p_PositiveCase) const
 	{
-		return m_Expression->DoRevAnd(p_PositiveCase.m_Expression);
+		return GetSNI_Expression()->DoRevAnd(p_PositiveCase.GetSNI_Expression());
 	}
 
 	SN_Value SN_Expression::DoRevOr(const SN_Expression & p_Condition) const
 	{
-		return m_Expression->DoRevOr(p_Condition.m_Expression);
+		return GetSNI_Expression()->DoRevOr(p_Condition.GetSNI_Expression());
 	}
 
 	SN_Value SN_Expression::DoCollapse() const
 	{
-		return m_Expression->DoCollapse();
+		return GetSNI_Expression()->DoCollapse();
 	}
 }

@@ -20,13 +20,13 @@ namespace SNI
 		SNI_Lambda(SNI_Expression *p_FormalParameter, SNI_Expression *p_Expresion, SNI_Expression *p_ConstraintValue, unsigned long p_Id);
 		virtual ~SNI_Lambda();
 
-		virtual string GetTypeName() const;
-		virtual string GetReferredName() const;
-		virtual string DisplayCpp() const;
-		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
+		virtual std::string GetTypeName() const;
+		virtual std::string GetReferredName() const;
+		virtual std::string DisplayCpp() const;
+		virtual std::string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual void AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map);
 		virtual long GetPriority() const;
-		virtual string GetOperator() const;
+		virtual std::string GetOperator() const;
 
 		virtual bool IsValue() const;
 		virtual bool IsLambdaValue() const;
@@ -56,7 +56,7 @@ namespace SNI
 		SNI_Expression * m_ConstraintValue;
 	};
 
-	typedef vector<SNI_Lambda> SNI_LambdaList;
+	typedef std::vector<SNI_Lambda> SNI_LambdaList;
 }
 
 #endif // !defined(SNI_LAMBDA_H_INCLUDED)

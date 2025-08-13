@@ -25,17 +25,17 @@ namespace SNI
 	{
 	}
 
-	string SNI_CountIf::GetTypeName() const
+	std::string SNI_CountIf::GetTypeName() const
 	{
 		return "CountIf";
 	}
 
-	string SNI_CountIf::DisplayCpp() const
+	std::string SNI_CountIf::DisplayCpp() const
 	{
 		return "SN::CountIf";
 	}
 
-	string SNI_CountIf::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_CountIf::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "CountIf";
 	}

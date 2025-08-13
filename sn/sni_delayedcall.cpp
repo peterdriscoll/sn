@@ -50,12 +50,12 @@ namespace SNI
 		delete[] m_ParamList;
 	}
 
-	string SNI_DelayedCall::GetTypeName() const
+	std::string SNI_DelayedCall::GetTypeName() const
 	{
 		return "Delayed";
 	}
 
-	string SNI_DelayedCall::DisplaySN(long priority, SNI_DisplayOptions & p_DisplayOptions) const
+	std::string SNI_DelayedCall::DisplaySN(long priority, SNI_DisplayOptions & p_DisplayOptions) const
 	{
 		return "[["
 			+ m_Function.GetSNI_FunctionDef()->DisplayCall(0, p_DisplayOptions, m_NumParams, m_ParamList + 1, m_Source)
@@ -193,7 +193,7 @@ namespace SNI
 			p_Stream << "\t\t\"expression\" : \"" << EscapeStringToJSON(m_Function.GetSNI_FunctionDef()->DisplayCall(0, p_DisplayOptions, m_NumParams, m_ParamList + 1, m_Source)) << "\",\n";
 			p_Stream << "\t\t\"result\" : \"" << EscapeStringToJSON(m_ParamList[PU1_Result].DisplayValueSN(p_DisplayOptions)) << "\",\n";
 			size_t card = CallCardinality();
-			string card_string = "&infin;";
+			std::string card_string = "&infin;";
 			if (card < CARDINALITY_MAX)
 			{
 				card_string = to_string(card);

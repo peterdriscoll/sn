@@ -6,7 +6,7 @@
 using namespace PGCX;
 using namespace skynet; // Interface namespace for SN.
 
-string YourCppFunction()
+std::string YourCppFunction()
 {
 	SN_DECLARE(result);
 
@@ -31,7 +31,7 @@ string YourCppFunction()
 	return result.GetString(); // result stiil exists because created in outer transaction.
 }
 
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 	Manager manager; // Sets up any configuration parameters for SN
 
@@ -39,11 +39,11 @@ void main(int argc, char *argv[])
 	Transaction transaction;
 	try
 	{
-		cout << "The result is " << YourCppFunction() << endl;
+		std::cout << "The result is " << YourCppFunction() << std::endl;
 	}
 	catch (Error e)
 	{
-		string description = e.GetDescription();
-		cout << "Error: " + description;
+		std::string description = e.GetDescription();
+		std::cout << "Error: " + description;
 	}
 }

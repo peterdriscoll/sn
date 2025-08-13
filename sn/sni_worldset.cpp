@@ -23,14 +23,14 @@ namespace SNI
 		return p_Left->Equivalent(p_Right);
 	}
 
-	typedef unordered_map<SNI_WorldSet *, SN::SN_Value, WorldSetKeyHasher, WorldSetKeyEqual> ConflictMap;
+	typedef std::unordered_map<SNI_WorldSet *, SN::SN_Value, WorldSetKeyHasher, WorldSetKeyEqual> ConflictMap;
 	/*static*/ long SNI_WorldSet::m_NextWorldSetNo = 0;
 	/*static*/ SNI_WorldSetList SNI_WorldSet::m_ChangedList;
 
-	/*static*/ void SNI_WorldSet::WriteChangedJS(ostream &p_Stream, const string &tabs, SNI_DisplayOptions &p_DisplayOptions)
+	/*static*/ void SNI_WorldSet::WriteChangedJS(ostream &p_Stream, const std::string &tabs, SNI_DisplayOptions &p_DisplayOptions)
 	{
 		p_Stream << "\"worldsets\":[\n";
-		string delimeter = " ";
+		std::string delimeter = " ";
 		for (SNI_WorldSet *ws: m_ChangedList)
 		{
 			ws->WriteJSON(p_Stream, tabs+"\t", p_DisplayOptions);
@@ -67,25 +67,25 @@ namespace SNI
 		return m_WorldSetNo;
 	}
 
-	string SNI_WorldSet::DisplaySN() const
+	std::string SNI_WorldSet::DisplaySN() const
 	{
 		return "S" + to_string(m_WorldSetNo) + (IsEmpty() ? " empty" : "");
 	}
 
-	string SNI_WorldSet::DisplayShort() const
+	std::string SNI_WorldSet::DisplayShort() const
 	{
 		return "S" + to_string(m_WorldSetNo);
 	}
 
-	string SNI_WorldSet::DisplayLong() const
+	std::string SNI_WorldSet::DisplayLong() const
 	{
 		SNI_DisplayOptions displayOptions(doTextOnly);
 		return "S" + to_string(m_WorldSetNo) + " " + DisplayWorlds(displayOptions);
 	}
 
-	string SNI_WorldSet::DisplayWorlds(SNI_DisplayOptions & p_DisplayOptions) const
+	std::string SNI_WorldSet::DisplayWorlds(SNI_DisplayOptions & p_DisplayOptions) const
 	{
-		string result;
+		std::string result;
 		for (size_t j = 0; j < m_WorldList.size(); j++)
 		{
 			if (result.length())
@@ -97,9 +97,9 @@ namespace SNI
 		return "{" + result + "}";
 	}
 
-	string SNI_WorldSet::DisplayVariable(SNI_DisplayOptions & p_DisplayOptions) const
+	std::string SNI_WorldSet::DisplayVariable(SNI_DisplayOptions & p_DisplayOptions) const
 	{
-		string result;
+		std::string result;
 		if (m_ChildSetList.size())
 		{
 			for (SNI_WorldSet *ws: m_ChildSetList)
@@ -119,7 +119,7 @@ namespace SNI
 		return "";
 	}
 
-	string SNI_WorldSet::DisplayCondition(SNI_DisplayOptions & p_DisplayOptions, const SN::SN_Expression & p_Value) const
+	std::string SNI_WorldSet::DisplayCondition(SNI_DisplayOptions & p_DisplayOptions, const SN::SN_Expression & p_Value) const
 	{
 		if (m_Expression.IsVariable())
 		{
@@ -128,12 +128,12 @@ namespace SNI
 		return DisplayShort() + "=" + p_Value.DisplaySN(p_DisplayOptions);
 	}
 
-	void SNI_WorldSet::WriteJSON(ostream &p_Stream, const string &tabs, SNI_DisplayOptions & p_DisplayOptions) const
+	void SNI_WorldSet::WriteJSON(ostream &p_Stream, const std::string &tabs, SNI_DisplayOptions & p_DisplayOptions) const
 	{
 		p_Stream << tabs << "\"id\" : \"" << DisplayShort() << "\",\n";
 		p_Stream << tabs << "\"expression\" : \"" << EscapeStringToJSON(m_Expression.DisplaySN()) << "\",\n";
 		p_Stream << tabs << "\"worlds\" : [";
-		string delimeter;
+		std::string delimeter;
 		for (const SNI_World *w : m_WorldList)
 		{
 			SNI_World *contextWorld = SNI_Thread::GetThread()->ContextWorld();
@@ -158,12 +158,12 @@ namespace SNI
 		p_Stream <<"\n" << tabs << "]\n";
 	}
 	
-	void SNI_WorldSet::WriteUnmarkedJS(ostream &p_Stream, const string &tabs, SNI_DisplayOptions &p_DisplayOptions) const
+	void SNI_WorldSet::WriteUnmarkedJS(ostream &p_Stream, const std::string &tabs, SNI_DisplayOptions &p_DisplayOptions) const
 	{
 		p_Stream << tabs << "\"id\" : \"" << DisplayShort() << "\",\n";
 		p_Stream << tabs << "\"expression\" : \"" << EscapeStringToJSON(m_Expression.DisplaySN()) << "\",\n";
 		p_Stream << tabs << "\"worlds\" : [";
-		string delimeter;
+		std::string delimeter;
 		for (const SNI_World *w : m_WorldList)
 		{
 			SNI_World *contextWorld = SNI_Thread::GetThread()->ContextWorld();
@@ -178,9 +178,9 @@ namespace SNI
 		p_Stream << "\n" << tabs << "]\n";
 	}
 
-	string SNI_WorldSet::LogHeading(SN::LogContext &context, long p_Width) const
+	std::string SNI_WorldSet::LogHeading(SN::LogContext &context, long p_Width) const
 	{
-		string heading;
+		std::string heading;
 #ifdef USE_LOGGING
 		for (size_t j = 0; j < m_ChildSetList.size(); j++)
 		{
@@ -190,9 +190,9 @@ namespace SNI
 		return heading;
 	}
 
-	string SNI_WorldSet::LogUnderline(SN::LogContext &context, long p_Width) const
+	std::string SNI_WorldSet::LogUnderline(SN::LogContext &context, long p_Width) const
 	{
-		string underline;
+		std::string underline;
 #ifdef USE_LOGGING
 		for (size_t j = 0; j < m_ChildSetList.size(); j++)
 		{

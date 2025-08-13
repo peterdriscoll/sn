@@ -12,17 +12,17 @@ namespace SNI
 	{
 	}
 
-	string SNI_IntToString::GetTypeName() const
+	std::string SNI_IntToString::GetTypeName() const
 	{
 		return "IntToString";
 	}
 
-	string SNI_IntToString::DisplayCpp() const
+	std::string SNI_IntToString::DisplayCpp() const
 	{
 		return "SN::IntToString";
 	}
 
-	string SNI_IntToString::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_IntToString::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "IntToString";
 	}

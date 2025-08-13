@@ -50,8 +50,8 @@ public:
 
     // PGC_PROMOTION_LOGIC(TestPGC_B)
     void PromoteMembers() {
-        m_TestA.PromoteNow(GetTransaction());
-        m_Next.PromoteNow(GetTransaction());
+        m_TestA.RequestPromotion(GetTransaction());
+        m_Next.RequestPromotion(GetTransaction());
     }
 
 public:
@@ -68,7 +68,7 @@ public:
 	static long m_ActiveCount;
 
 private:
-	string m_Description;
+	std::string m_Description;
 };
 
 #endif // !defined(TESTPGC_B_H_INCLUDED)

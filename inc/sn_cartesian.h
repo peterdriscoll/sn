@@ -8,7 +8,7 @@
 #include "sn_valueset.h"
 
 #include <functional>
-using namespace std;
+
 
 namespace SNI
 {
@@ -27,7 +27,7 @@ namespace SN
 	{
 	public:
 		SN_Cartesian(const SN_Expression &p_Expression, long p_Index, SNI_FunctionDef *p_FunctionDef);
-		SN_Cartesian::SN_Cartesian(const SN_Cartesian &p_Cartesian);
+		SN_Cartesian(const SN_Cartesian &p_Cartesian);
 		virtual ~SN_Cartesian();
 
 		SN_Cartesian &operator *(const SN_Cartesian &p_Cartesian);

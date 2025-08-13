@@ -22,13 +22,13 @@ namespace SNI
 		SNI_IncompleteFunction(const SNI_IncompleteFunction &p_Function);
 		virtual ~SNI_IncompleteFunction();
 
-		virtual string GetTypeName() const;
-		virtual string GetReferredName() const;
-		virtual string DisplayCpp() const;
+		virtual std::string GetTypeName() const;
+		virtual std::string GetReferredName() const;
+		virtual std::string DisplayCpp() const;
 		virtual long GetPriority() const;
 
 		virtual SNI_Expression *LoadParameters(SN::SN_ExpressionList * p_ParameterList) const;
-		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
+		virtual std::string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual void AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map);
 		virtual SNI_Expression *Clone(long p_MetaLevel, SNI_Frame *p_Frame, bool &p_Changed);
 		virtual bool Equivalent(SNI_Object * p_Other) const;
@@ -58,7 +58,7 @@ namespace SNI
 		SNI_Expression * m_Function;
 	};
 
-	typedef vector<SNI_IncompleteFunction> SNI_IncompleteFunctionList;
+	typedef std::vector<SNI_IncompleteFunction> SNI_IncompleteFunctionList;
 }
 
 #endif // !defined(SNI_INCOMPLETEFUNCTION_H_INCLUDED)

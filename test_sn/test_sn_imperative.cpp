@@ -7,7 +7,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-using namespace std;
+
 using namespace skynet;
 using namespace PGCX;
 
@@ -18,9 +18,9 @@ namespace test_sn
 	private:
 		bool runWebServer = false;
 
-		static void AssertErrorHandler(bool p_Err, const string& p_Description)
+		static void AssertErrorHandler(bool p_Err, const std::string& p_Description)
 		{
-			Assert::IsTrue(!p_Err, wstring(p_Description.begin(), p_Description.end()).c_str());
+			Assert::IsTrue(!p_Err, std::wstring(p_Description.begin(), p_Description.end()).c_str());
 		}
 
 		void Initialize()
@@ -65,8 +65,8 @@ namespace test_sn
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 				manager.SetTailCallOptimization(true);
 
-				string nv1;
-				string nw1;
+				std::string nv1;
+				std::string nw1;
 
 				SN_DECLARE(testSimpleImperative);
 				{
@@ -82,7 +82,7 @@ namespace test_sn
 					&&	w == p.BuildMeta(Short(1)).IsA(Value::Class()).If(StateValue(p, v.State()), p(v.State()))
 					,	StateValue(v.Value()(w.Value()), w.State()))))).PartialAssert().Do();
 				}
-				string s2 = testSimpleImperative.DisplayValueSN();
+				std::string s2 = testSimpleImperative.DisplayValueSN();
 
 				SN_DECLARE(x);
 				SN_DECLARE(t);
@@ -102,11 +102,11 @@ namespace test_sn
 				Manager manager("Test Simple State Threading 2", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
-				string s2 = User::GetOperators().ImperativeCall.DisplayValueSN();
+				std::string s2 = User::GetOperators().ImperativeCall.DisplayValueSN();
 				SN_DECLARE(y);
 				SN_DECLARE(t);
 				(y == Local(User::GetOperators().FunctionCall, Let(Function(Function(Equals, User::GetOperators().FunctionCall), User::GetOperators().ImperativeCall), Function(Long(4) + Long(5), t))).Value()).Assert().Do();
-				string y1 = y.DisplayValueSN();
+				std::string y1 = y.DisplayValueSN();
 
 				(y == Long(9)).Evaluate().Do();
 
@@ -122,13 +122,13 @@ namespace test_sn
 				Manager manager("Test Simple Assignment", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 
-				string s2 = User::GetOperators().ImperativeCall.DisplayValueSN();
+				std::string s2 = User::GetOperators().ImperativeCall.DisplayValueSN();
 				SN_DECLARE(y);
 				SN_DECLARE(t);
 				SN_DECLARE(l);
 				manager.Breakpoint();
 				(y == Local(User::GetOperators().FunctionCall, Local(User::GetOperators().Assign, Let(Function(Function(Equals, User::GetOperators().FunctionCall), User::GetOperators().ImperativeCall), Let(Function(Function(Equals, User::GetOperators().Assign), User::GetOperators().ImperativeAssign), Function(String("m").Assign(Long(4)) + Long(5), State()))))).Value()).Assert().Do();
-				string y1 = y.DisplayValueSN();
+				std::string y1 = y.DisplayValueSN();
 
 				(y == Long(9)).Evaluate().Do();
 
@@ -154,21 +154,21 @@ namespace test_sn
 										Expression x;
 										x.Copy(l);
 
-										Variable y(string("sheep"));
+										Variable y(String("sheep"));
 										Expression b((x = r));
 										Expression c((y = r));
 										Expression a((l = r).ImperativeTransform());
 										(Define(Assignment)(l)(r) == ((l = r).ImperativeTransform())).PartialAssert().Do();
-										string sAssignment = Assignment.DisplayValueSN();
+										std::string sAssignment = Assignment.DisplayValueSN();
 									}
 									SN_DECLARE(While);
 									SN_DECLARE(c);
 									SN_DECLARE(a);
-									string s = (Define(While)(c)(a) == (Stateful(Mutable, c).If(Stateful(Mutable, a).Compose(Stateful(Mutable, While(c)(a))), False)).ImperativeTransform()).DisplaySN();
+									std::string s = (Define(While)(c)(a) == (Stateful(Mutable, c).If(Stateful(Mutable, a).Compose(Stateful(Mutable, While(c)(a))), False)).ImperativeTransform()).DisplaySN();
 
 									(Define(While)(c)(a) == (Stateful(Mutable, c).If(Stateful(Mutable, a).Compose(Stateful(Mutable, While(c)(a))), True)).ImperativeTransform()).PartialAssert().Do();
 
-									string sWhile = While.DisplayValueSN();
+									std::string sWhile = While.DisplayValueSN();
 
 									SN_DECLARE(Fact);
 									SN_DECLARE(m);

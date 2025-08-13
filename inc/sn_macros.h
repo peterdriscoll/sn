@@ -11,6 +11,7 @@
     M(C, B, float, Float)              \
     M(C, B, double, Double)            \
     M(C, B, long double, LongDouble)
+//    M(C, B, c64, Complex)
 
 #define SNI_FORWARD(C, B, T, N)        \
     typedef SNI_Real<T> SNI_##N;

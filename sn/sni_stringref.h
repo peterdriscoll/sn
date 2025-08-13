@@ -31,9 +31,9 @@ namespace SNI
 
 		virtual SNI_Expression *Copy() const;
 
-		virtual string GetTypeName() const;
-		virtual string DisplayCpp() const;
-		virtual string DisplaySN(long, SNI_DisplayOptions &) const;
+		virtual std::string GetTypeName() const;
+		virtual std::string DisplayCpp() const;
+		virtual std::string DisplaySN(long, SNI_DisplayOptions &) const;
 		virtual void AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map);
 		virtual long GetPriority() const;
 
@@ -60,11 +60,11 @@ namespace SNI
 		virtual	SN::SN_Expression GetStart() const;
 		virtual	SN::SN_Expression GetEnd() const;
 
-		virtual const string & GetSourceString() const;
+		virtual const std::string & GetSourceString() const;
 		virtual long GetLeftMostPos() const;
 		virtual long GetRightMostPos() const;
 
-		virtual	string GetString() const;
+		virtual	std::string GetString() const;
 		virtual	size_t Length() const;
 
 		virtual SN::SN_Expression SNI_StringRef::DoEvaluate(long p_MetaLevel /* = 0 */) const;
@@ -96,8 +96,8 @@ namespace SNI
 		virtual SN::SN_Error AddValue(SN::SN_Expression p_Value, long p_NumWorlds, SNI_World ** p_World, SNI_WorldSet * p_WorldSet);
 		virtual SN::SN_Error AssertValue(const SN::SN_Expression &p_Value);
 
-		virtual SN::SN_Value DoEscape(enum skynet::EscapeType p_EscapeType) const;
-		virtual SN::SN_Value DoUnescape(enum skynet::EscapeType p_EscapeType) const;
+		virtual SN::SN_Value DoEscape(enum SN::EscapeType p_EscapeType) const;
+		virtual SN::SN_Value DoUnescape(enum SN::EscapeType p_EscapeType) const;
 
 		virtual SN::SN_Value DoStringToInt() const;
 		virtual SN::SN_Value DoStringToDouble() const;
@@ -115,7 +115,7 @@ namespace SNI
 		SN::SN_Expression m_End;
 	};
 
-	typedef vector<SNI_StringRef> SNI_StringRefList;
+	typedef std::vector<SNI_StringRef> SNI_StringRefList;
 }
 
 #endif // !defined(SNI_STRINGREF_H_INCLUDED)

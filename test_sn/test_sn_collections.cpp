@@ -7,7 +7,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-using namespace std;
+
 using namespace skynet;
 using namespace PGCX;
 
@@ -20,12 +20,12 @@ namespace test_sn
 	private:
 		bool runWebServer = false;
 
-		static void AssertErrorHandler(bool p_Err, const string& p_Description) noexcept(false)
+		static void AssertErrorHandler(bool p_Err, const std::string& p_Description) noexcept(false)
 		{
-			Assert::IsTrue(!p_Err, wstring(p_Description.begin(), p_Description.end()).c_str());
+			Assert::IsTrue(!p_Err, std::wstring(p_Description.begin(), p_Description.end()).c_str());
 		}
 
-		static void MarkMissingErrorHandler(bool p_Err, const string& p_Description)
+		static void MarkMissingErrorHandler(bool p_Err, const std::string& p_Description)
 		{
 			g_MissingDoDetected = true;
 		}
@@ -55,7 +55,7 @@ namespace test_sn
 				(M[String("Name")] == String("Max")).Assert().Do();
 				(M[String("Name")] == String("Max")).Evaluate().Do();
 				(M[String("Name")] == R).Assert().Do();
-				string R_text = R.GetString();
+				std::string R_text = R.GetString();
 				Assert::IsTrue(R_text == "Max");
 				(R == String("Max")).Evaluate().Do();
 			}
@@ -108,10 +108,10 @@ namespace test_sn
 				(I.BuildSet() == S).Assert().Do();
 				(K == (String("Max") || String("Roger"))).Assert().Do();
 				(E == K.BuildSet()).Assert().Do();
-				string I_text = I.GetVariableValue().DisplaySN();
-				string S_text = S.GetVariableValue().DisplaySN();
-				string K_text = K.GetVariableValue().DisplaySN();
-				string E_text = E.GetVariableValue().DisplaySN();
+				std::string I_text = I.GetVariableValue().DisplaySN();
+				std::string S_text = S.GetVariableValue().DisplaySN();
+				std::string K_text = K.GetVariableValue().DisplaySN();
+				std::string E_text = E.GetVariableValue().DisplaySN();
 				Assert::IsTrue(S_text == "{String(\"Max\"), String(\"Roger\")}");
 				(S == E).Evaluate().Do();
 			}
@@ -152,10 +152,10 @@ namespace test_sn
 				(countBoth == count43 + count55).Evaluate().Do();
 				(sum == Long(239)).Evaluate().Do();
 
-				string count43_text = count43.GetVariableValue().DisplaySN();
-				string count55_text = count55.GetVariableValue().DisplaySN();
-				string countBoth_text = countBoth.GetVariableValue().DisplaySN();
-				string sum_text = sum.GetVariableValue().DisplaySN();
+				std::string count43_text = count43.GetVariableValue().DisplaySN();
+				std::string count55_text = count55.GetVariableValue().DisplaySN();
+				std::string countBoth_text = countBoth.GetVariableValue().DisplaySN();
+				std::string sum_text = sum.GetVariableValue().DisplaySN();
 
 				Assert::IsTrue(count43_text == "3");
 				Assert::IsTrue(count55_text == "2");
@@ -189,8 +189,8 @@ namespace test_sn
 					}
 					catch (Error e)
 					{
-						string description = e.GetDescription();
-						Assert::IsTrue(e.IsError(), wstring(description.begin(), description.end()).c_str());
+						std::string description = e.GetDescription();
+						Assert::IsTrue(e.IsError(), std::wstring(description.begin(), description.end()).c_str());
 					}
 				};
 			}
@@ -225,7 +225,7 @@ namespace test_sn
 				SN_DECLARE(Z);
 				(fib[Long(6)] == Z).Assert().Do();
 				(Z == Long(13)).Evaluate().Do();
-				string Z_text = Z.GetVariableValue().DisplayValueSN();
+				std::string Z_text = Z.GetVariableValue().DisplayValueSN();
 				Assert::IsTrue(Z_text == "Long(13)");
 
 				fib.Fix();
@@ -234,7 +234,7 @@ namespace test_sn
 				(fib[Y] == Long(1)).Assert().Do();
 				(Y.BuildSet() == (Long(0) || Long(1)).BuildSet()).Evaluate().Do();
 
-				string Y_text = Y.BuildSet().DoEvaluate().DisplaySN();
+				std::string Y_text = Y.BuildSet().DoEvaluate().DisplaySN();
 				Assert::IsTrue(Y_text == "{Long(0), Long(1)}");
 
 				SN_DECLARE(countAll);
@@ -269,10 +269,10 @@ namespace test_sn
 				(Y == (Long(3) || Long(4) || Long(5)).BuildSet()).Assert().Do();
 				(X == Y).Assert().Do();
 
-				string X_text = X.DisplayValueSN();
+				std::string X_text = X.DisplayValueSN();
 				Assert::IsTrue(X_text == "Set({Long(3), Long(4), Long(5)})");
 
-				string Y_text = Y.DisplayValueSN();
+				std::string Y_text = Y.DisplayValueSN();
 				Assert::IsTrue(Y_text == "Set({Long(3), Long(4), Long(5)})");
 				
 				(X.HasMember(Long(3))).Assert().Do();

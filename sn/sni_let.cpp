@@ -53,19 +53,19 @@ namespace SNI
 		REQUESTPROMOTION(m_Expression);
 	}
 
-	string SNI_Let::GetTypeName() const
+	std::string SNI_Let::GetTypeName() const
 	{
 		return "Let";
 	}
 
-	string SNI_Let::DisplayCpp() const
+	std::string SNI_Let::DisplayCpp() const
 	{
 		return "Let(" + m_Condition->DisplayCpp() + ", " + m_Expression->DisplayCpp() + ")";
 	}
 
-	string SNI_Let::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
+	std::string SNI_Let::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
-		string text = SetBreakPoint("let", p_DisplayOptions, this, SN::LeftId) + " " + m_Condition->DisplaySN(GetPriority(), p_DisplayOptions) + " " + SetBreakPoint("in", p_DisplayOptions, this, SN::CallId) + " " + m_Expression->DisplaySN(GetPriority(), p_DisplayOptions);
+		std::string text = SetBreakPoint("let", p_DisplayOptions, this, SN::LeftId) + " " + m_Condition->DisplaySN(GetPriority(), p_DisplayOptions) + " " + SetBreakPoint("in", p_DisplayOptions, this, SN::CallId) + " " + m_Expression->DisplaySN(GetPriority(), p_DisplayOptions);
 		return Bracket(priority, text, p_DisplayOptions, this);
 	}
 
@@ -88,7 +88,7 @@ namespace SNI
 		return 0;
 	}
 
-	string SNI_Let::GetOperator() const
+	std::string SNI_Let::GetOperator() const
 	{
 		return "let";
 	}

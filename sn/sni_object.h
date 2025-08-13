@@ -23,7 +23,7 @@ namespace SNI
 		virtual void PromoteMembers();
 	};
 
-	typedef vector<SNI_Object> SNI_ObjectList;
+	typedef std::vector<SNI_Object> SNI_ObjectList;
 }
 
 #endif // !defined(SNI_OBJECT_H_INCLUDED)

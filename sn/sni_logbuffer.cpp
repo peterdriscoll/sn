@@ -15,7 +15,7 @@ namespace SNI
 	{
 	}
 
-	void SNI_LogBuffer::WriteLine(const string & p_Line, bool p_Heading)
+	void SNI_LogBuffer::WriteLine(const std::string & p_Line, bool p_Heading)
 	{
 		m_Mutex.lock();
 		if (m_Buffer.full())
@@ -50,7 +50,7 @@ namespace SNI
 		long entries = 0;
 		for (auto it = m_Buffer.rbegin(); it != m_Buffer.rend() && (p_MaxLogEntries <= 0 || entries < p_MaxLogEntries); it++, entries++)
 		{
-			string html = EscapeStringToHTML(it->m_String);
+			std::string html = EscapeStringToHTML(it->m_String);
 			p_Stream << "<tr><td>" << html << "</td></tr>";
 		}
 		p_Stream << "</table>\n";
@@ -74,14 +74,14 @@ namespace SNI
 	void SNI_LogBuffer::LogTableJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartLog)
 	{
 		m_Mutex.lock();
-		string delimeter = " ";
+		std::string delimeter = " ";
 		long entries = 0;
 		for (auto it = m_Buffer.rbegin(); it != m_Buffer.rend() && (p_MaxLogEntries <= 0 || entries < p_StartLog + p_MaxLogEntries); it++, entries++)
 		{
 			if (p_StartLog <= entries)
 			{
-				string html = EscapeStringToHTML(it->m_String);
-				string quotedString = EscapeStringToJSON(html);
+				std::string html = EscapeStringToHTML(it->m_String);
+				std::string quotedString = EscapeStringToJSON(html);
 				p_Stream << delimeter << "{\"text\" : \"" << quotedString << "\"}\n";
 				delimeter = ",";
 			}
@@ -138,7 +138,7 @@ namespace SNI
 				SNI_LogLine *line = stackLastLines.back();
 				if (line)
 				{
-					string html = EscapeStringToHTML(line->m_String);
+					std::string html = EscapeStringToHTML(line->m_String);
 					p_Stream << "<summary><b>" << line->m_StepCount << ": " << line->m_Depth << ":</b> " << EscapeStringToJSON(html) << "</summary>\\n<hr>\\n</details>\\n";
 				}
 				else
@@ -150,7 +150,7 @@ namespace SNI
 			currentDepth = it->m_Depth;
 			ASSERTM(currentDepth - minDepth + 1 == stackLastLines.size(), "Internal error 4");
 
-			string html = EscapeStringToHTML(it->m_String);
+			std::string html = EscapeStringToHTML(it->m_String);
 			if (it->m_Heading)
 			{
 				if (stackLastLines.back() == NULL)
@@ -172,7 +172,7 @@ namespace SNI
 			if (line)
 			{
 				ASSERTM(j == line->m_Depth, "Internal error 6");
-				string html = EscapeStringToHTML(line->m_String);
+				std::string html = EscapeStringToHTML(line->m_String);
 				p_Stream << "<summary><b>" << line->m_StepCount << ": " << line->m_Depth << ":</b> " << EscapeStringToJSON(html) << "</summary>\\n<hr>\\n</details>\\n";
 			}
 			else
@@ -188,13 +188,13 @@ namespace SNI
 	void SNI_LogBuffer::LogExpressionTableJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartCode, SNI_DisplayOptions &p_DisplayOptions)
 	{
 		m_Mutex.lock();
-		string delimeter = " ";
+		std::string delimeter = " ";
 		long entries = 0;
 		for (auto it = m_ExpressionBuffer.rbegin(); it != m_ExpressionBuffer.rend() && (p_MaxLogEntries <= 0 || entries < p_StartCode + p_MaxLogEntries); it++, entries++)
 		{
 			if (p_StartCode <= entries)
 			{
-				string quotedString = EscapeStringToJSON(it->DisplaySN(p_DisplayOptions));
+				std::string quotedString = EscapeStringToJSON(it->DisplaySN(p_DisplayOptions));
 				p_Stream << delimeter << "{\"expression\" : \"" << quotedString << "\"}\n";
 				delimeter = ",";
 			}

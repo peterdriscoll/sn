@@ -18,17 +18,17 @@ namespace SNI
 
 	}
 
-	string SNI_Add::GetTypeName() const
+	std::string SNI_Add::GetTypeName() const
 	{
 		return "Add";
 	}
 
-	string SNI_Add::DisplayCpp() const
+	std::string SNI_Add::DisplayCpp() const
 	{
 		return "SN::Add";
 	}
 
-	string SNI_Add::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_Add::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "(+)";
 	}
@@ -38,7 +38,7 @@ namespace SNI
 		return 1;
 	}
 
-	string SNI_Add::GetOperator() const
+	std::string SNI_Add::GetOperator() const
 	{
 		return "+";
 	}

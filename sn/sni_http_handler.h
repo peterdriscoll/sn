@@ -9,7 +9,7 @@
 
 using namespace std;
 
-typedef unordered_map<string, string> string_umap;
+typedef std::unordered_map<std::string, std::string> string_umap;
 
 namespace SNI
 {
@@ -24,10 +24,10 @@ namespace SNI
 		virtual const char *extension();
 
 	private:
-		void extract_parameters(const string & p_ParamString, string_umap & p_Map);
+		void extract_parameters(const std::string & p_ParamString, string_umap & p_Map);
 
-		string m_response_data;
-		string m_extension;
+		std::string m_response_data;
+		std::string m_extension;
 	};
 }
 

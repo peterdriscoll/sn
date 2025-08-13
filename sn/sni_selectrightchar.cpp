@@ -14,17 +14,17 @@ namespace SNI
 	{
 	}
 
-	string SNI_SelectRightChar::GetTypeName() const
+	std::string SNI_SelectRightChar::GetTypeName() const
 	{
 		return "SelectRightChar";
 	}
 
-	string SNI_SelectRightChar::DisplayCpp() const
+	std::string SNI_SelectRightChar::DisplayCpp() const
 	{
 		return "SN::SelectRightChar";
 	}
 
-	string SNI_SelectRightChar::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_SelectRightChar::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "SelectRightChar";
 	}

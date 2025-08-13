@@ -7,7 +7,7 @@
 
 #include <string>
 #include <functional>
-using namespace std;
+
 
 #include "../sn/sni_object.h"
 #include "../sn/sni_displayoptions.h"
@@ -25,22 +25,23 @@ namespace SN
 	class LogContext;
 
 	class SN_Parameter;
-	typedef vector<SN_Parameter> SN_ParameterList;
+	typedef std::vector<SN_Parameter> SN_ParameterList;
 
 	class SN_Expression;
-	typedef vector<SN_Expression> SN_ExpressionList;
+	typedef std::vector<SN_Expression> SN_ExpressionList;
 
 	class SN_Value;
-	typedef vector<SN_Value> SN_ValueList;
+	typedef std::vector<SN_Value> SN_ValueList;
 }
 
 namespace SNI
 {
-	class SNI_World;
+	class SNI_Expression;
 	class SNI_FunctionDef;
-
 	class SNI_Variable;
-	typedef vector<const SNI_Variable *> SNI_VariableConstPointerList;
+	class SNI_World;
+
+	typedef std::vector<const SNI_Variable *> SNI_VariableConstPointerList;
 
 	class SNI_Base : public SNI_Object
 	{
@@ -55,13 +56,13 @@ namespace SNI
 		//---------------------------------------------------------------
 		// Logging
 		//---------------------------------------------------------------
-		virtual string GetTypeName() const = 0;
-		virtual string GetValueTypeName() const = 0;
-		virtual string DisplayCpp() const = 0;
-		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const = 0;
-		virtual string DisplayValueSN(long, SNI_DisplayOptions & p_DisplayOptions) const = 0;
+		virtual std::string GetTypeName() const = 0;
+		virtual std::string GetValueTypeName() const = 0;
+		virtual std::string DisplayCpp() const = 0;
+		virtual std::string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const = 0;
+		virtual std::string DisplayValueSN(long, SNI_DisplayOptions & p_DisplayOptions) const = 0;
 		virtual long GetPriority() const = 0;
-		virtual string GetOperator() const = 0;
+		virtual std::string GetOperator() const = 0;
 		virtual const SNI_Expression* GetSafeValue() const = 0;
 		virtual SNI_Expression* GetValue(bool p_Request = true) const = 0;
 

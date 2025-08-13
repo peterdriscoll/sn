@@ -80,16 +80,16 @@ namespace SNI
 	// Logging
 	//-----------------------------------------------------------------------
 
-	string SNI_StringRef::GetTypeName() const
+	std::string SNI_StringRef::GetTypeName() const
 	{
 		return "StringRef";
 	}
 
-	string SNI_StringRef::DisplayCpp() const
+	std::string SNI_StringRef::DisplayCpp() const
 	{
 		if (IsNull())
 		{
-			const string & source = GetSourceString();
+			const std::string & source = GetSourceString();
 			SN::SN_Expression end = GetEnd().GetVariableValue();
 			SN::SN_Long l_long = end.DoEvaluate();
 			if (l_long.IsNull())
@@ -105,7 +105,7 @@ namespace SNI
 		return "\"" + EscapeStringToCPP(GetString()) + "\"";
 	}
 
-	string SNI_StringRef::DisplaySN(long /*priority*/, SNI_DisplayOptions & p_DisplayOptions) const
+	std::string SNI_StringRef::DisplaySN(long /*priority*/, SNI_DisplayOptions & p_DisplayOptions) const
 	{
 		if (IsKnownValue() && Cardinality() == 1)
 		{
@@ -206,7 +206,7 @@ namespace SNI
 		}
 		else
 		{
-			const string &source_text = GetSourceString();
+			const std::string &source_text = GetSourceString();
 			SN::SN_String source = m_Source;
 			SNI_WorldSet *worldSet = new SNI_WorldSet();
 			return start.ForEach(
@@ -226,7 +226,7 @@ namespace SNI
 					{
 						size_t start_pos = start_long.GetNumber();
 						size_t end_pos = end_long.GetNumber();
-						string s = source_text.substr(start_pos, end_pos - start_pos);
+						std::string s = source_text.substr(start_pos, end_pos - start_pos);
 						value = SN::SN_String(s);
 					}
 					else
@@ -260,7 +260,7 @@ namespace SNI
 			ASSERTM(false, "Shouldn't be here. Value should be already simplified. See SimplifyValue.");
 
 			// If you resurrect this, fix error handling. See SNI_ValueSet::ForEach.
-			const string &source_text = GetSourceString();
+			const std::string &source_text = GetSourceString();
 			SN::SN_String source = m_Source;
 			SNI_WorldSet *worldSet = new SNI_WorldSet();
 			return start.ForEach(
@@ -280,7 +280,7 @@ namespace SNI
 					{
 						size_t start_pos = start_long.GetNumber();
 						size_t end_pos = end_long.GetNumber();
-						string s = source_text.substr(start_pos, end_pos - start_pos);
+						std::string s = source_text.substr(start_pos, end_pos - start_pos);
 						value = SN::SN_String(s);
 					}
 					else
@@ -314,7 +314,7 @@ namespace SNI
 			SNI_WorldSet *worldSet = valueSet.GetWorldSet();
 			SN::SN_Expression start = GetStart().DoEvaluate();
 			SN::SN_Expression end = GetEnd().DoEvaluate();
-			const string &source_text = GetSourceString();
+			const std::string &source_text = GetSourceString();
 			SN::SN_String source = m_Source;
 
 			start.ForEach(
@@ -334,7 +334,7 @@ namespace SNI
 					{
 						size_t start_pos = start_long.GetNumber();
 						size_t end_pos = end_long.GetNumber();
-						string s = source_text.substr(start_pos, end_pos - start_pos);
+						std::string s = source_text.substr(start_pos, end_pos - start_pos);
 						value = SN::SN_String(s);
 					}
 					else
@@ -438,7 +438,7 @@ namespace SNI
 		return m_Source.GetSNI_String()->GetSource();
 	}
 
-	const string &SNI_StringRef::GetSourceString() const
+	const std::string &SNI_StringRef::GetSourceString() const
 	{
 		SNI_StringRef *source = m_Source.GetSNI_StringRef();
 		SNI_String *s = m_Source.GetSNI_String();
@@ -480,7 +480,7 @@ namespace SNI
 		return m_End;
 	}
 
-	string SNI_StringRef::GetString() const
+	std::string SNI_StringRef::GetString() const
 	{
 		SN::SN_Value start = m_Start.DoEvaluate();
 		if (start.IsNullValue())
@@ -538,7 +538,7 @@ namespace SNI
 		{
 			return p_Value.GetError();
 		}
-		string part;
+		std::string part;
 		bool found = false;
 		if (SN::Is<SNI_String *>(p_Value))
 		{
@@ -649,7 +649,7 @@ namespace SNI
 
 	size_t SNI_StringRef::Hash() const
 	{
-		string data = GetString();
+		std::string data = GetString();
 		return _Hash_array_representation(data.c_str(), data.size());
 	}
 
@@ -716,20 +716,20 @@ namespace SNI
 		}
 		if (!part.IsString())
 		{
-			return SN::SN_Error(false, false, "StringRef.SubtractLeft: Expected a string to subtract: " + DisplaySnExpression(part));
+			return SN::SN_Error(false, false, "StringRef.SubtractLeft: Expected a std::string to subtract: " + DisplaySnExpression(part));
 		}
-		string part_text = part.GetString();
+		std::string part_text = part.GetString();
 		long part_len = (long) part_text.length();
 		if (part_len == 0)
 		{
-			return SN::SN_Error(false, false, "StringRef.SubtractLeft: Expected a string to subtract: " + DisplaySnExpression(part));
+			return SN::SN_Error(false, false, "StringRef.SubtractLeft: Expected a std::string to subtract: " + DisplaySnExpression(part));
 		}
 		SN::SN_Value start = m_Start.DoEvaluate();
 		if (!start.IsNull())
 		{
 			if (!SN::Is<SNI_Long *>(start))
 			{
-				return SN::SN_Error(false, false, "StringRef.SubtractLeft: Start of string ref must be long in: " + DisplaySN0());
+				return SN::SN_Error(false, false, "StringRef.SubtractLeft: Start of std::string ref must be long in: " + DisplaySN0());
 			}
 			long start_pos = SN::SN_Long(start).GetNumber();
 
@@ -738,7 +738,7 @@ namespace SNI
 			{
 				if (!SN::Is<SNI_Long *>(end))
 				{
-					return SN::SN_Error(false, false, "StringRef.SubtractLeft: End of string ref must be long: " + DisplaySN0());
+					return SN::SN_Error(false, false, "StringRef.SubtractLeft: End of std::string ref must be long: " + DisplaySN0());
 				}
 				SN::SN_Long end = m_End.DoEvaluate();
 				if (end.IsNullValue())
@@ -752,10 +752,10 @@ namespace SNI
 				}
 			}
 
-			string match = GetSourceString().substr(start_pos, part_len);
+			std::string match = GetSourceString().substr(start_pos, part_len);
 			if (match != part_text)
 			{
-				return SN::SN_Error(false, false, "StringRef.SubtractLeft: Subtract string does not match: " + match + " != " + part_text);
+				return SN::SN_Error(false, false, "StringRef.SubtractLeft: Subtract std::string does not match: " + match + " != " + part_text);
 			}
 			return SN::SN_StringRef(this, SN::SN_Long(start_pos + part_len), end);
 		}
@@ -773,7 +773,7 @@ namespace SNI
 			SNI_WorldSet *ws_end = vs_end.GetWorldSet();
 			size_t pos = start_pos;
 			size_t find_pos = 0;
-			while ((find_pos = GetSourceString().find(part_text, pos)) != string::npos)
+			while ((find_pos = GetSourceString().find(part_text, pos)) != std::string::npos)
 			{
 				vs_start.AddTaggedValue(SN::SN_Long((long) find_pos), ws_start->CreateWorld());
 				vs_end.AddTaggedValue(SN::SN_Long((long) find_pos + part_len), ws_end->CreateWorld());
@@ -787,7 +787,7 @@ namespace SNI
 				return SN::SN_StringRef(this, vs_end.SimplifyValue(), m_End);
 			}
 		}
-		return SN::SN_Error(false, false, "StringRef.SubtractLeft: Left string not matched in search: " + DisplaySN0() + " < " + DisplaySnExpression(part));
+		return SN::SN_Error(false, false, "StringRef.SubtractLeft: Left std::string not matched in search: " + DisplaySN0() + " < " + DisplaySnExpression(part));
 	}
 
 	SN::SN_Value SNI_StringRef::DoSubtractRight(SNI_Value * p_Part) const
@@ -799,7 +799,7 @@ namespace SNI
 		}
 		if (!SN::Is<SNI_String *>(part))
 		{
-			return SN::SN_Error(false, false, "SubtractLeft: Expected a string to subtract: " + DisplaySnExpression(part));
+			return SN::SN_Error(false, false, "SubtractLeft: Expected a std::string to subtract: " + DisplaySnExpression(part));
 		}
 		SN::SN_Value start = m_Start.DoPartialEvaluate();
 		if (SN::Is<SNI_Value *>(start))
@@ -810,29 +810,29 @@ namespace SNI
 			}
 			if (!SN::Is<SNI_Long *>(start))
 			{
-				return SN::SN_Error(false, false, "SubtractLeft: Start of string ref must be long in: " + DisplaySN0());
+				return SN::SN_Error(false, false, "SubtractLeft: Start of std::string ref must be long in: " + DisplaySN0());
 			}
 		}
-		string part_text = part.GetString();
+		std::string part_text = part.GetString();
 		long part_len = (long) part_text.length();
 		if (part_len == 0)
 		{
-			return SN::SN_Error(false, false, "StringRef.SubtractLeft: Expected a string to subtract: " + DisplaySnExpression(part));
+			return SN::SN_Error(false, false, "StringRef.SubtractLeft: Expected a std::string to subtract: " + DisplaySnExpression(part));
 		}
 		SN::SN_Value end = m_End.DoEvaluate();
 		if (!end.IsNull())
 		{
 			if (!SN::Is<SNI_Long *>(end))
 			{
-				return SN::SN_Error(false, false, "SubtractLeft: End of string ref must be long in: " + DisplaySN0());
+				return SN::SN_Error(false, false, "SubtractLeft: End of std::string ref must be long in: " + DisplaySN0());
 			}
 
 			long end_pos = GetRightMostPos();
 
-			string match = GetSourceString().substr(end_pos - part_len, part_len);
+			std::string match = GetSourceString().substr(end_pos - part_len, part_len);
 			if (match != part_text)
 			{
-				return SN::SN_Error(false, false, "SubtractLeft: Subtract string does not match: " + match + " != " + part_text);
+				return SN::SN_Error(false, false, "SubtractLeft: Subtract std::string does not match: " + match + " != " + part_text);
 			}
 			return SN::SN_StringRef(this, start, SN::SN_Long(end_pos - part_len));
 		}
@@ -851,7 +851,7 @@ namespace SNI
 			vs_end.SetWorldSet(worldSet);
 			size_t pos = start_pos;
 			size_t find_pos = 0;
-			while (pos < end_pos && (find_pos = GetSourceString().find(part_text, pos)) != string::npos)
+			while (pos < end_pos && (find_pos = GetSourceString().find(part_text, pos)) != std::string::npos)
 			{
 				if (find_pos < end_pos)
 				{
@@ -868,7 +868,7 @@ namespace SNI
 				return SN::SN_StringRef(this, m_Start, vs_start.SimplifyValue());
 			}
 		}
-		return SN::SN_Error(false, false, "StringRef.SubtractRight: Right string not matched in search: " + DisplaySN0() + " < " + DisplaySnExpression(part));
+		return SN::SN_Error(false, false, "StringRef.SubtractRight: Right std::string not matched in search: " + DisplaySN0() + " < " + DisplaySnExpression(part));
 	}
 
 	SN::SN_Value SNI_StringRef::DoSubtractLeftChar() const
@@ -880,7 +880,7 @@ namespace SNI
 		}
 		if (!SN::Is<SNI_Long *>(start))
 		{
-			return SN::SN_Error(false, false, "SubtractLeftChar: Start of string ref must be long in: " + DisplaySN0());
+			return SN::SN_Error(false, false, "SubtractLeftChar: Start of std::string ref must be long in: " + DisplaySN0());
 		}
 		long start_pos = SN::SN_Long(start).GetNumber();
 		SN::SN_Expression end = m_End.DoPartialEvaluate();
@@ -888,7 +888,7 @@ namespace SNI
 		{
 			if (!SN::Is<SNI_Long *>(end))
 			{
-				return SN::SN_Error(false, false, "DoSubtractLeftChar: End of string ref must be long: " + DisplaySN0());
+				return SN::SN_Error(false, false, "DoSubtractLeftChar: End of std::string ref must be long: " + DisplaySN0());
 			}
 			long end_pos = SN::SN_Long(end).GetNumber();
 			if (start_pos + 1 > end_pos)
@@ -904,7 +904,7 @@ namespace SNI
 		SN::SN_Expression end = m_End.DoPartialEvaluate();
 		if (!SN::Is<SNI_Long *>(end))
 		{
-			return SN::SN_Error(false, false, "SubtractRightChar: End of string ref must be long: " + DisplaySN0());
+			return SN::SN_Error(false, false, "SubtractRightChar: End of std::string ref must be long: " + DisplaySN0());
 		}
 		long end_pos = SN::SN_Long(end).GetNumber();
 		SN::SN_Value start = m_Start.DoEvaluate();
@@ -916,7 +916,7 @@ namespace SNI
 			}
 			if (!SN::Is<SNI_Long *>(start))
 			{
-				return SN::SN_Error(false, false, "SubtractRightChar: Start of string ref must be long in: " + DisplaySN0());
+				return SN::SN_Error(false, false, "SubtractRightChar: Start of std::string ref must be long in: " + DisplaySN0());
 			}
 			long start_pos = SN::SN_Long(start).GetNumber();
 			if (start_pos > end_pos - 1)
@@ -936,7 +936,7 @@ namespace SNI
 		}
 		if (!SN::Is<SNI_Long *>(start))
 		{
-			return SN::SN_Error(false, false, "SelectLeftChar: Start of string ref must be long in: " + DisplaySN0());
+			return SN::SN_Error(false, false, "SelectLeftChar: Start of std::string ref must be long in: " + DisplaySN0());
 		}
 
 		long start_pos = SN::SN_Long(start).GetNumber();
@@ -946,7 +946,7 @@ namespace SNI
 		{
 			if (!SN::Is<SNI_Long *>(end))
 			{
-				return SN::SN_Error(false, false, "SelectLeftChar: End of string ref must be long: " + DisplaySN0());
+				return SN::SN_Error(false, false, "SelectLeftChar: End of std::string ref must be long: " + DisplaySN0());
 			}
 			long end_pos = SN::SN_Long(end).GetNumber();
 			if (start_pos + 1 > end_pos)
@@ -962,7 +962,7 @@ namespace SNI
 		SN::SN_Expression end = m_End.DoPartialEvaluate();
 		if (!SN::Is<SNI_Long *>(end))
 		{
-			return SN::SN_Error(false, false, "SelectRightChar: End of string ref must be long: " + DisplaySN0());
+			return SN::SN_Error(false, false, "SelectRightChar: End of std::string ref must be long: " + DisplaySN0());
 		}
 		long end_pos = SN::SN_Long(end).GetNumber();
 		SN::SN_Value start = m_Start.DoEvaluate();
@@ -974,7 +974,7 @@ namespace SNI
 			}
 			if (!SN::Is<SNI_Long *>(start))
 			{
-				return SN::SN_Error(false, false, "SelectRightChar: Start of string ref must be long in: " + DisplaySN0());
+				return SN::SN_Error(false, false, "SelectRightChar: Start of std::string ref must be long in: " + DisplaySN0());
 			}
 			long start_pos = SN::SN_Long(start).GetNumber();
 			if (start_pos + 1 > end_pos)
@@ -1017,7 +1017,7 @@ namespace SNI
 
 	SN::SN_Value SNI_StringRef::DoLookStringLeft(SNI_Value * p_Other) const
 	{
-		string other = p_Other->GetString();
+		std::string other = p_Other->GetString();
 		size_t other_length = other.length();
 		SN::SN_Expression start = m_Start.DoPartialEvaluate();
 		if (!SN::Is<SNI_Long *>(start))
@@ -1034,7 +1034,7 @@ namespace SNI
 
 	SN::SN_Value SNI_StringRef::DoLookStringRight(SNI_Value * p_Other) const
 	{
-		string other = p_Other->GetString();
+		std::string other = p_Other->GetString();
 		size_t other_length = other.length();
 		SN::SN_Expression end = m_End.DoPartialEvaluate();
 		if (!SN::Is<SNI_Long *>(end))
@@ -1059,8 +1059,8 @@ namespace SNI
 		SN::SN_Value start = m_Start.DoEvaluate();
 		SN::SN_Value end = m_End.DoEvaluate();
 
-		ASSERTM(!start.GetSafeValue().GetSNI_ValueSet(), "If start point is valueset, string ref should have been simplified.");
-		ASSERTM(!end.GetSafeValue().GetSNI_ValueSet(), "If end point is valueset, string ref should have been simplified.");
+		ASSERTM(!start.GetSafeValue().GetSNI_ValueSet(), "If start point is valueset, std::string ref should have been simplified.");
+		ASSERTM(!end.GetSafeValue().GetSNI_ValueSet(), "If end point is valueset, std::string ref should have been simplified.");
 
 		if (dynamic_cast<SNI_StringRef *>(p_Other))
 		{
@@ -1086,9 +1086,9 @@ namespace SNI
 				else
 				{
 					long start_pos = SN::SN_Long(start).GetNumber();
-					string other = p_Other->GetString();
-					string source = GetSourceString();
-					string sourcePart = source.substr(start_pos, other.length());
+					std::string other = p_Other->GetString();
+					std::string source = GetSourceString();
+					std::string sourcePart = source.substr(start_pos, other.length());
 					if (sourcePart != other)
 					{
 						return skynet::False;
@@ -1135,7 +1135,7 @@ namespace SNI
 				else
 				{
 					long end_pos = SN::SN_Long(end).GetNumber();
-					string source = GetSourceString().substr(end_pos - p_Other->GetString().length());
+					std::string source = GetSourceString().substr(end_pos - p_Other->GetString().length());
 					if (source != p_Other->GetString())
 					{
 						return skynet::False;
@@ -1207,20 +1207,20 @@ namespace SNI
 			}
 
 			//	Maybe this could be implemented in the future. It is unclear.
-			return SN::SN_Error(false, false, "Not implemented. Trying to compare two string refs with unknown start or end.");
+			return SN::SN_Error(false, false, "Not implemented. Trying to compare two std::string refs with unknown start or end.");
 		}
 
-		string other = p_Other->GetString();
+		std::string other = p_Other->GetString();
 		if (start.IsKnownValue() && !end.IsKnownValue())
 		{
-			// Start is known but end free. So this is a left anchored string ref.
+			// Start is known but end free. So this is a left anchored std::string ref.
 
 			ASSERTM(m_End.IsVariable(),
 				"m_End must be a variable as its value is unknown");
 
 			long start_pos = SN::SN_Long(start).GetNumber();
-			string source = GetSourceString();
-			string sourcePart = source.substr(start_pos, other.length());
+			std::string source = GetSourceString();
+			std::string sourcePart = source.substr(start_pos, other.length());
 
 			if (sourcePart != other)
 			{
@@ -1243,13 +1243,13 @@ namespace SNI
 		}
 		if (!start.IsKnownValue() && end.IsKnownValue())
 		{
-			// Start is free but end is known. So this is a right anchored string ref.
+			// Start is free but end is known. So this is a right anchored std::string ref.
 			ASSERTM(m_Start.IsVariable(),
 				"m_Start must be a variable as its value is unknown");
 
 			long end_pos = SN::SN_Long(end).GetNumber();
 			long other_length = static_cast<long>(other.length());
-			string sourcePart = GetSourceString().substr(end_pos - other_length, other_length);
+			std::string sourcePart = GetSourceString().substr(end_pos - other_length, other_length);
 
 			if (sourcePart != other)
 			{
@@ -1307,27 +1307,27 @@ namespace SNI
 		REQUESTPROMOTION(m_End.GetSNI_ExpressionRef());
 	}
 
-	SN::SN_Value SNI_StringRef::DoEscape(enum skynet::EscapeType p_EscapeType) const
+	SN::SN_Value SNI_StringRef::DoEscape(enum SN::EscapeType p_EscapeType) const
 	{
 		// Simple version, does not cope with value sets.
 		switch (p_EscapeType)
 		{
-		case skynet::CPP:
+		case SN::CPP:
 			return SN::SN_String(EscapeStringToCPP(GetString()));
-		case skynet::JSON:
+		case SN::JSON:
 			return SN::SN_String(EscapeStringToJSON(GetString()));
 		}
 		return SN::SN_Error(false, false, "Bad escape type for escape conversion");
 	}
 
-	SN::SN_Value SNI_StringRef::DoUnescape(enum skynet::EscapeType p_EscapeType) const
+	SN::SN_Value SNI_StringRef::DoUnescape(enum SN::EscapeType p_EscapeType) const
 	{
 		// Simple version, does not cope with value sets.
 		switch (p_EscapeType)
 		{
-		case skynet::CPP:
+		case SN::CPP:
 			return SN::SN_String(UnescapeStringToCPPUsingQuoted(GetString()));
-		case skynet::JSON:
+		case SN::JSON:
 			return SN::SN_String(UnescapeStringToJSON(GetString()));
 		}
 		return SN::SN_Error(false, false, "Bad escape type for escape conversion");
@@ -1336,7 +1336,7 @@ namespace SNI
 	SN::SN_Value SNI_StringRef::DoStringToInt() const
 	{
 		// Simple version, does not cope with value sets.
-		string s = GetString();
+		std::string s = GetString();
 		size_t len = s.size();
 		if (len < 10)
 		{
@@ -1348,7 +1348,7 @@ namespace SNI
 	SN::SN_Value SNI_StringRef::DoStringToDouble() const
 	{
 		// Simple version, does not cope with value sets.
-		string s = GetString();
+		std::string s = GetString();
 		size_t len = s.size();
 		if (len < 18)
 		{
@@ -1378,7 +1378,7 @@ namespace SNI
 		bool found = false;
 		size_t pos = start_pos;
 		size_t find_pos = 0;
-		string source = GetSourceString();
+		std::string source = GetSourceString();
 		while ((find_pos = source.find(part_text, pos)) != std::string::npos)
 		{
 			found = true;
@@ -1411,10 +1411,10 @@ namespace SNI
 			ASSERTM(0 <= start_pos && start_pos <= end_pos,
 				"StringRef::GetSNI_String: Start position must be less than end position: ");
 			
-			string source_string = GetSource().GetString();
+			std::string source_string = GetSource().GetString();
 			long length = static_cast<long>(source_string.length());
 			ASSERTM(start_pos < length && end_pos < length,
-				"StringRef::GetSNI_String: Start and end position must be within the source string");
+				"StringRef::GetSNI_String: Start and end position must be within the source std::string");
 			
 			// Substring: +1 because end is inclusive
 			return new SNI_String(source_string.substr(static_cast<size_t>(start_pos), static_cast<size_t>(end_pos - start_pos)));

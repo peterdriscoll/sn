@@ -7,7 +7,7 @@
 
 #include <string>
 #include <vector>
-using namespace std;
+
 
 namespace SNI
 {
@@ -19,7 +19,7 @@ namespace SNI
 namespace SN
 {
 	class SN_Parameter;
-	typedef vector<SN_Parameter> SN_ParameterList;
+	typedef std::vector<SN_Parameter> SN_ParameterList;
 
 	class SN_Expression;
 	class SN_Value;

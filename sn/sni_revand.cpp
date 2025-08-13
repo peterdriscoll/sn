@@ -35,17 +35,17 @@ namespace SNI
 	}
 
 	/// @cond
-	string SNI_RevAnd::GetTypeName() const
+	std::string SNI_RevAnd::GetTypeName() const
 	{
 		return "RevAnd";
 	}
 
-	string SNI_RevAnd::DisplayCpp() const
+	std::string SNI_RevAnd::DisplayCpp() const
 	{
 		return "skynet::RevAnd";
 	}
 
-	string SNI_RevAnd::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_RevAnd::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "RevAnd";
 	}

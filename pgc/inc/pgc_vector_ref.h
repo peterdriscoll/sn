@@ -11,11 +11,13 @@
 
 namespace PGC
 {
-    template<typename T>
+	class PGC_TypeCheck; // Forward declaration
+
+    template <typename T>
     class vector_ref {
     public:
         using value_type = MemberRef<T>;
-        using container_type = std::vector<value_type>;
+        using container_type = std::vector<value_type>; // Now `value_type` is a valid type
         using iterator = typename container_type::iterator;
         using const_iterator = typename container_type::const_iterator;
         using Transaction = PGC_Transaction;
@@ -38,20 +40,19 @@ namespace PGC
 
         void push_back(T* value)
         {
-            MemberRef<T> ref;
+            m_Data.emplace_back();                 // construct the final slot
+            auto& ref = m_Data.back();             // reference to the element's MemberRef
             ref.Set(value, m_Transaction);
-            ref.RequestPromotion(m_Transaction);
-            m_Data.push_back(ref);
         }
 
-        void push_back_ref(const MemberRef<T>& ref)
+        void push_back_ref(const value_type& ref)
         {
-            MemberRef<T> promotedRef = ref;
-            promotedRef.RequestPromotion(m_Transaction);
-            m_Data.push_back(promotedRef);
+            m_Data.emplace_back();                 // construct the final slot
+            auto& newRef = m_Data.back();          // reference to the element's MemberRef
+            newRef.Set(ref.Get(), m_Transaction);
         }
 
-        void push_back_ref(MemberRef<T>&& ref)
+        void push_back_ref(value_type&& ref)
         {
             ref.RequestPromotion(m_Transaction);
             m_Data.push_back(std::move(ref));
@@ -69,7 +70,7 @@ namespace PGC
         const_iterator begin() const { return m_Data.begin(); }
         const_iterator end() const { return m_Data.end(); }
 
-        auto erase(typename std::vector<MemberRef<T>>::iterator pos)
+        auto erase(typename container_type::iterator pos)
         {
             return m_Data.erase(pos);
         }
@@ -94,7 +95,6 @@ namespace PGC
 
         void reserve(size_t n) { m_Data.reserve(n); }
         void resize(size_t n) { m_Data.resize(n); }
-
 
         template<typename Func>
         void ForEach(Func&& func)

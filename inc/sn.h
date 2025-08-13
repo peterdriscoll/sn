@@ -38,11 +38,6 @@ namespace skynet
 		None, Run, RunToEnd, Rerun, Debug, CodeBreak, StepOver, StepInto, StepParameter, StepOut, GotoStepCount, GoBackToStepCount, Quit, Abort
 	};
 
-	enum EscapeType
-	{
-		CPP, JSON
-	};
-
 	enum DirectPassType
 	{
 		ReturnValueToVariable, DirectPass
@@ -68,6 +63,8 @@ namespace skynet
 #include "log.h"
 #include "logcontext.h"
 #endif
+
+#include "sn_base.h"
 
 #include "sn_factory.h"
 #include "sn_error.h"
@@ -118,28 +115,28 @@ namespace skynet
 //   SNI_Variable
 //   SNI_Function
 #define SN_DECLARE(n) \
-    SN::SN_Variable n(string(#n), skynet::Inname, false)
+    SN::SN_Variable n(std::string(#n), skynet::Inname, false)
 
 #define SN_DECLARE_INLINE(n) \
-	SN::SN_Variable n(string(#n), skynet::Inline, false)
+	SN::SN_Variable n(std::string(#n), skynet::Inline, false)
 
 #define SN_LOCAL(n) \
-	SN::SN_Variable n(string(#n), skynet::Inname, true)
+	SN::SN_Variable n(std::string(#n), skynet::Inname, true)
 
 #define SN_LOCAL_INLINE(n) \
-	SN::SN_Variable n(string(#n), skynet::Inline, true)
+	SN::SN_Variable n(std::string(#n), skynet::Inline, true)
 
 #define SN_DECLARE_VALUE(n, v) \
-    SN::SN_Variable n(string(#n), v, skynet::Inname, false)
+    SN::SN_Variable n(std::string(#n), v, skynet::Inname, false)
 
 #define SN_DECLARE_VALUE_INLINE(n, v) \
-	SN::SN_Variable n(string(#n), v, skynet::Inline, false)
+	SN::SN_Variable n(std::string(#n), v, skynet::Inline, false)
 
 #define SN_LOCAL_VALUE(n, v) \
-	SN::SN_Variable n(string(#n), v, skynet::Inname, true)
+	SN::SN_Variable n(std::string(#n), v, skynet::Inname, true)
 
 #define SN_LOCAL_VALUE_INLINE(n, v) \
-	SN::SN_Variable n(string(#n), v, skynet::Inline, true)
+	SN::SN_Variable n(std::string(#n), v, skynet::Inline, true)
 
 #define SN_LINK(n) \
 	(*this)[#n] = n; \
@@ -156,7 +153,7 @@ namespace skynet
 	n.SetValue(r, i)
 
 #define SN_DOMAIN(n) \
-    SN::SN_Domain n(string(#n))
+    SN::SN_Domain n(std::string(#n))
 
 #define SN_DEFINE_REAL(C, B, TYPE, NAME)                       \
      SN_EXTERN template class SN_EXPORT SN::SN_Real<TYPE>;     \
@@ -164,6 +161,8 @@ namespace skynet
 
 namespace skynet
 {
+	typedef SN::EscapeType EscapeType;
+
 	// Manager
 	typedef SN::SN_Manager Manager;
 	typedef SN::SN_User User;

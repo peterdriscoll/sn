@@ -70,12 +70,12 @@ namespace SNI
 		SNI_FunctionDef();
 		virtual ~SNI_FunctionDef();
 
-		virtual string GetTypeName() const;
-		virtual string DisplayCpp() const;
-		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
+		virtual std::string GetTypeName() const;
+		virtual std::string DisplayCpp() const;
+		virtual std::string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual long GetPriority() const;
-		virtual string GetOperator() const;
-		virtual string GetDebugId() const;
+		virtual std::string GetOperator() const;
+		virtual std::string GetDebugId() const;
 
 		virtual bool AllowDelay() const;
 		virtual bool SupportsMultipleOutputs() const;
@@ -100,10 +100,10 @@ namespace SNI
 
 		virtual void ExpandedBooleanResult(SN::SN_Expression* p_ParamList) const;
 
-		virtual string DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression *p_DebugSource) const;
+		virtual std::string DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression *p_DebugSource) const;
 		virtual void AddVariablesForCall(long p_MetaLevel, SNI_VariablePointerMap& p_Map, size_t p_NumParams, SN::SN_Expression* p_ParamList) const;
 
-		string GetLogDescription(SN::SN_Expression * p_ParamList) const;
+		std::string GetLogDescription(SN::SN_Expression * p_ParamList) const;
 
 		virtual SN::SN_Expression PrimaryFunctionExpressionOp(const SN::SN_Expression & p_Result) const;
 		virtual SN::SN_Expression PrimaryFunctionExpression(const SN::SN_Expression & p_Result) const;
@@ -140,7 +140,7 @@ namespace SNI
 		virtual bool MergeValueSets(SN::SN_Expression* p_ParamList) const;
 	};
 
-	typedef vector<SNI_FunctionDef *> SNI_FunctionDefList;
+	typedef std::vector<SNI_FunctionDef *> SNI_FunctionDefList;
 }
 
 #endif // !defined(SNI_FUNCTIONDEF_H_INCLUDED)

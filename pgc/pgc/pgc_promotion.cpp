@@ -12,6 +12,7 @@ namespace PGC
 		, m_Destination(nullptr)
 		, m_FinalCopy(nullptr)
 		, m_Promoted(false)
+		, m_StillNeeded(true)
 	{
 	}
 
@@ -22,7 +23,7 @@ namespace PGC
 	/*static*/ PGC_TypeCheck* PGC_Promotion::CheckRequestPromotion(PGC_TypeCheck** p_Base, PGC_Transaction* p_Source, PGC_Transaction* p_Destination, PromotionStrategy p_CheckType)
 	{
 		PGC_TypeCheck* return_value = *p_Base;
-		if (p_Base && p_Source && p_Source != p_Destination && !p_Source->IsStatic())
+		if (p_Base && p_Source && p_Source != p_Destination && p_Source->IsDescendantOf(p_Destination) && !p_Source->IsStatic())
 		{
 			return_value = RequestPromotion(p_Base, p_Destination, p_CheckType);
 		}
@@ -40,6 +41,11 @@ namespace PGC
 
 	PromotionResult  PGC_Promotion::PromoteOrReject()
 	{
+		if (!m_StillNeeded)
+		{
+			return PromotionResult::Dropped;
+		}
+
 		if (!m_Destination || m_Destination->Dieing())
 		{
 			return PromotionResult::Dropped;
@@ -150,6 +156,7 @@ namespace PGC
 		m_Strategy = p_Strategy;
 		m_Promoted = false;
 		m_FinalCopy = *p_Base;  // <- capture the original before any overwrite happens
+		m_StillNeeded = true;
 	}
 
 	PGC_User* PGC_Promotion::GetUser() const
@@ -167,7 +174,10 @@ namespace PGC
 		m_Promoted = true;
 		GetUser()->AddProcessedDoubleDippingMemory(sizeof(PGC_Promotion));
 	}
-
+	void PGC_Promotion::MarkNoLongerNeeded()
+	{
+		m_StillNeeded = false;
+	}
 	void PGC_Promotion::Free()
 	{
 		GetUser()->FreePromotion(this);
@@ -178,9 +188,18 @@ namespace PGC
 		return *m_Base;
 	}
 
-	PGC_TypeCheck** PGC_Promotion::GetBaseRef()
+	PGC_TypeCheck** PGC_Promotion::GetBaseAddress()
 	{
+		#if defined(DEBUG) || defined(_DEBUG)
+		ASSERTM(m_Base != nullptr,
+			"No pointer to memory address.");
+		#endif
 		return m_Base;
+	}
+
+	void PGC_Promotion::SetBase(PGC_TypeCheck** p_Base)
+	{
+		m_Base = p_Base;
 	}
 
 	PGC_Transaction* PGC_Promotion::GetSource()

@@ -1,0 +1,5 @@
+{
+  "name": "your-project",
+  "version": "0.1.0",
+  "dependencies": ["boost", "boost-beast"]  // add "openssl" if you use TLS
+}

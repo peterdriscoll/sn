@@ -23,10 +23,10 @@ namespace test_pgc
 {
 	void AssertErrorHandler(bool p_Err, const std::string& p_Description)
 	{
-		Assert::IsTrue(!p_Err, wstring(p_Description.begin(), p_Description.end()).c_str());
+		Assert::IsTrue(!p_Err, std::wstring(p_Description.begin(), p_Description.end()).c_str());
 	};
 	
-	void ThrowErrorHandler(bool p_Err, const string& p_Description)
+	void ThrowErrorHandler(bool p_Err, const std::string& p_Description)
 	{
 		if (p_Err)
 		{
@@ -341,6 +341,95 @@ namespace test_pgc
 					Assert::IsTrue(TestPGC_B::m_ActiveCount == 3, L"TestPGC_B count should be 3");
 				}
 				Assert::IsTrue(TestPGC_B::m_ActiveCount == 3, L"TestPGC_B count should be 3");
+			}
+			Assert::IsTrue(TestPGC_B::m_ActiveCount == 0, L"TestPGC_B count should be 0");
+
+			{
+				PGC_Transaction parentTransaction(user, false, PGC::PromotionStrategy::DoubleDipping);
+
+				Assert::IsTrue(TestPGC_B::m_ActiveCount == 0, L"TestPGC_B count should be 0");
+
+				SRef<TestPGC_B> a = new TestPGC_B();
+				a->SetDescription("TestPGC_B a");
+				{
+					PGC_Transaction transaction(user, false, PGC::PromotionStrategy::DoubleDipping);
+
+					TestPGC_B* b = new TestPGC_B();
+					b->SetDescription("TestPGC_B b");
+					a->SetNext(b);
+
+					TestPGC_B* c = new TestPGC_B();
+					c->SetDescription("TestPGC_B c");
+					b->SetNext(c);
+
+					TestPGC_B* d = new TestPGC_B();
+					d->SetDescription("TestPGC_B d");
+					c->SetNext(d);
+
+					TestPGC_B* e = new TestPGC_B();
+					e->SetDescription("TestPGC_B e");
+					d->SetNext(e);
+
+					TestPGC_B* f = new TestPGC_B();
+					f->SetDescription("TestPGC_B f");
+					e->SetNext(f);
+
+					f->SetNext(a);
+
+					Assert::IsTrue(TestPGC_B::m_ActiveCount == 6, L"TestPGC_B count should be 6");
+				}
+				Assert::IsTrue(TestPGC_B::m_ActiveCount == 6, L"TestPGC_B count should be 6");
+			}
+			Assert::IsTrue(TestPGC_B::m_ActiveCount == 0, L"TestPGC_B count should be 0");
+		}
+
+		TEST_METHOD(TestSimpleInOutCyclePGC)
+		{
+			PGC_User user(AssertErrorHandler);
+
+			{
+				PGC_Transaction parentTransaction(user, false, PGC::PromotionStrategy::DoubleDipping);
+
+				Assert::IsTrue(TestPGC_B::m_ActiveCount == 0, L"TestPGC_B count should be 0");
+
+				SRef<TestPGC_B> a = new TestPGC_B();
+				a->SetDescription("TestPGC_B a");
+				SRef<TestPGC_B> e = new TestPGC_B();
+				e->SetDescription("TestPGC_B e");
+
+				auto e_raw = e.Ptr();
+				auto e_tx = e->GetTransaction();
+
+				Assert::IsTrue(e.Ptr() == e_raw, L"e identity changed (downward clone?)");
+				Assert::IsTrue(e->GetTransaction() == e_tx, L"e moved tx (downward clone?)");
+				{
+					PGC_Transaction transaction(user, false, PGC::PromotionStrategy::DoubleDipping);
+
+					TestPGC_B* b = new TestPGC_B();
+					b->SetDescription("TestPGC_B b");
+					a->SetNext(b);
+
+					TestPGC_B* c = new TestPGC_B();
+					c->SetDescription("TestPGC_B c");
+					b->SetNext(c);
+
+					TestPGC_B* d = new TestPGC_B();
+					d->SetDescription("TestPGC_B d");
+					c->SetNext(d);
+
+					d->SetNext(e);
+
+					TestPGC_B* f = new TestPGC_B();
+					f->SetDescription("TestPGC_B f");
+					e->SetNext(f);
+
+					f->SetNext(a);
+
+					Assert::IsTrue(TestPGC_B::m_ActiveCount == 6, L"TestPGC_B count should be 6");
+					Assert::IsTrue(e.Ptr() == e_raw, L"e identity changed (downward clone?)");
+					Assert::IsTrue(e->GetTransaction() == e_tx, L"e moved tx (downward clone?)");
+				}
+				Assert::IsTrue(TestPGC_B::m_ActiveCount == 6, L"TestPGC_B count should be 6");
 			}
 			Assert::IsTrue(TestPGC_B::m_ActiveCount == 0, L"TestPGC_B count should be 0");
 		}

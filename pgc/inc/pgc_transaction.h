@@ -33,8 +33,6 @@
 #include <memory>
 #include <atomic>
 
-using namespace std;
-
 #pragma warning(disable: 4251)
 
 #define MAX_TRANSACTION_STACK 10000
@@ -45,7 +43,7 @@ namespace PGC
 	class PGC_Base;
 	class PGC_Task;
 
-	typedef vector<PGC_Task *> TaskList;
+	typedef std::vector<PGC_Task *> TaskList;
 
 	class PGC_EXPORT PGC_Transaction
 	{
@@ -55,7 +53,7 @@ namespace PGC
 		PGC_Transaction(PGC_User &p_User, bool p_IsStatic = false, PromotionStrategy p_PromotionStrategy = g_DefaultPromotionStrategy);
 		virtual ~PGC_Transaction();
 
-		mutex m_Mutex;
+		std::mutex m_Mutex;
 
 		uint32_t GetID() const { return m_ID; }
 
@@ -65,6 +63,7 @@ namespace PGC
 
 		void *Allocate(size_t p_size);
 		std::shared_ptr<bool> GetLiveTransactionPointer();
+		bool IsDescendantOf(const PGC_Transaction* other) const noexcept;
 		virtual void EndTransaction();
 
 		void RegisterForDestruction(PGC_Base *p_Base);
@@ -128,7 +127,7 @@ namespace PGC
 		// Multi threading
 		static bool m_MultiThreaded;
 		TaskList m_TaskList;
-		thread *m_ProcessThread;
+		std::thread *m_ProcessThread;
 
 		uint32_t m_ID;
 	};

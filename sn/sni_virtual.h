@@ -21,9 +21,9 @@ namespace SNI
 	class ConstructionTree
 	{
 	public:
-		ConstructionTree(const string &p_ParameterName);
-		ConstructionTree(const string &p_ParameterName, SN::SN_Expression p_Parameter);
-		ConstructionTree(const string &p_ParameterName, SN::SN_Expression p_Parameter, SN::SN_Expression p_CallExpression);
+		ConstructionTree(const std::string &p_ParameterName);
+		ConstructionTree(const std::string &p_ParameterName, SN::SN_Expression p_Parameter);
+		ConstructionTree(const std::string &p_ParameterName, SN::SN_Expression p_Parameter, SN::SN_Expression p_CallExpression);
 		~ConstructionTree();
 
 		void AddImplementation(SN::SN_Expression p_Implementation);
@@ -62,10 +62,10 @@ namespace SNI
 
 		virtual SNI_Expression * Copy() const;
 
-		virtual string GetTypeName() const;
-		virtual string DisplayCpp() const;
+		virtual std::string GetTypeName() const;
+		virtual std::string DisplayCpp() const;
 		virtual long GetPriority() const;
-		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
+		virtual std::string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 		virtual size_t Hash() const;
 

@@ -16,17 +16,17 @@ namespace SNI
 
 	}
 
-	string SNI_File::GetTypeName() const
+	std::string SNI_File::GetTypeName() const
 	{
 		return "File";
 	}
 
-	string SNI_File::DisplayCpp() const
+	std::string SNI_File::DisplayCpp() const
 	{
 		return "SN::File";
 	}
 
-	string SNI_File::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_File::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "File";
 	}

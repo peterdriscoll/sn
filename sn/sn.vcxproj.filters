@@ -665,9 +665,6 @@
     <ClCompile Include="sn_cartesian.cpp">
       <Filter>Interface Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sn_char.cpp">
-      <Filter>Interface Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sn_class.cpp">
       <Filter>Interface Source Files</Filter>
     </ClCompile>
@@ -1077,6 +1074,12 @@
       <Filter>General Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sn_user.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_base.cpp">
+      <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_char.cpp">
       <Filter>Interface Source Files</Filter>
     </ClCompile>
   </ItemGroup>

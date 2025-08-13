@@ -7,7 +7,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-using namespace std;
+
 using namespace skynet;
 using namespace PGCX;
 
@@ -18,9 +18,9 @@ namespace test_sn
 	private:
 		bool runWebServer = false;
 
-		static void AssertErrorHandler(bool p_Err, const string& p_Description)
+		static void AssertErrorHandler(bool p_Err, const std::string& p_Description)
 		{
-			Assert::IsTrue(!p_Err, wstring(p_Description.begin(), p_Description.end()).c_str());
+			Assert::IsTrue(!p_Err, std::wstring(p_Description.begin(), p_Description.end()).c_str());
 		}
 
 		void Initialize()

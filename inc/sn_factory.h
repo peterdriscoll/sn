@@ -71,7 +71,7 @@ namespace SN {
     };
 
     // Shared arrays
-    extern char* libraryPathArray[LastLibrary];
+    extern const char* libraryPathArray[LastLibrary];
     extern void* (*libraryFunctionArray[LastLibrary])(long id);
     extern EntryValues defaultEntryArray[LastEntry];
     extern LibraryValues libraryForEntryPointArray[LastEntry];

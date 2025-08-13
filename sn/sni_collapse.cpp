@@ -31,22 +31,22 @@ namespace SNI
 
 	}
 
-	string SNI_Collapse::GetTypeName() const
+	std::string SNI_Collapse::GetTypeName() const
 	{
 		return "Collapse";
 	}
 
-	string SNI_Collapse::DisplayCpp() const
+	std::string SNI_Collapse::DisplayCpp() const
 	{
 		return "SN::Collapse";
 	}
 
-	string SNI_Collapse::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_Collapse::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return GetTypeName();
 	}
 
-	string SNI_Collapse::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression * p_DebugSource) const
+	std::string SNI_Collapse::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression * p_DebugSource) const
 	{
 		return Bracket(priority, SetBreakPoint(GetTypeName(), p_DisplayOptions, p_DebugSource, SN::ParameterOneId) + " " + p_ParamList[PC1_First].GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions), p_DisplayOptions, p_DebugSource);
 	}

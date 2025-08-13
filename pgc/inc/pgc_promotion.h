@@ -36,7 +36,9 @@ namespace PGC
 		PGC_TypeCheck* GetFinalCopy() const;
 
 		PGC_TypeCheck* GetBase();
-		PGC_TypeCheck** GetBaseRef();
+		PGC_TypeCheck** GetBaseAddress();
+		void SetBase(PGC_TypeCheck** p_Base);
+
 		void Free();
 
 		PGC_Transaction* GetSource();
@@ -50,6 +52,8 @@ namespace PGC
 		bool IsPromoted() const;
 		void MarkPromoted();
 
+		void MarkNoLongerNeeded();
+
 		PGC_Promotion *m_Next;
 
 	private:
@@ -57,6 +61,7 @@ namespace PGC
 		PGC_Transaction *m_Destination;
 		PGC_TypeCheck* m_FinalCopy;
 		bool m_Promoted = false;
+		bool m_StillNeeded = true;
 		PromotionStrategy m_Strategy;
 	};
 }

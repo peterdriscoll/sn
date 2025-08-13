@@ -31,17 +31,17 @@ namespace SNI
 		REQUESTPROMOTION(m_Expression);
 	}
 
-	string SNI_Debug::GetTypeName() const
+	std::string SNI_Debug::GetTypeName() const
 	{
 		return m_Expression->GetTypeName();
 	}
 
-	string SNI_Debug::DisplayCpp() const
+	std::string SNI_Debug::DisplayCpp() const
 	{
 		return m_Expression->DisplayCpp();
 	}
 
-	string SNI_Debug::DisplaySN(long p_priority, SNI_DisplayOptions & p_DisplayOptions) const
+	std::string SNI_Debug::DisplaySN(long p_priority, SNI_DisplayOptions & p_DisplayOptions) const
 	{
 		return m_Expression->DisplaySN(p_priority, p_DisplayOptions) + ".Debug()";
 	}
@@ -60,7 +60,7 @@ namespace SNI
 		return m_Expression->GetPriority();
 	}
 
-	string SNI_Debug::GetOperator() const
+	std::string SNI_Debug::GetOperator() const
 	{
 		return m_Expression->GetOperator();
 	}

@@ -13,15 +13,18 @@ namespace SNI
 
 namespace SN
 {
-	class SN_EXPORT SN_Class : public SN_Base<SNI::SNI_Class, SN_Expression, SN_Error>
+	class SN_EXPORT SN_Class : public SN_Base
 	{
 	public:
 		SN_Class();
 		SN_Class(const SN_Class &p_Other);
-		SN_Class(const SN_Value &p_Other);
+		SN_Class(const SN_Value& p_Other);
+		SN_Class(SNI::SNI_Class* p_Other);
 		virtual ~SN_Class();
 
 		SN_Expression IsA(const SN_Expression & p_Parent) const;
+
+		SNI::SNI_Class* GetSNI_Class();
 
 		SNI::SNI_Class *GetSNI_Class() const;
 	};

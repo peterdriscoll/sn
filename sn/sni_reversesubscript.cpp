@@ -25,17 +25,17 @@ namespace SNI
 	{
 	}
 
-	string SNI_ReverseSubscript::GetTypeName() const
+	std::string SNI_ReverseSubscript::GetTypeName() const
 	{
 		return "ReverseSubscript";
 	}
 
-	string SNI_ReverseSubscript::DisplayCpp() const
+	std::string SNI_ReverseSubscript::DisplayCpp() const
 	{
 		return "SN::ReverseSubscript";
 	}
 
-	string SNI_ReverseSubscript::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_ReverseSubscript::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "ReverseSubscript";
 	}

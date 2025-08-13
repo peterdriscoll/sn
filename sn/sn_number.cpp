@@ -129,7 +129,7 @@ namespace SN
 		return m_Number->Equivalent(dynamic_cast<SNI::SNI_Object *>(p_Other.GetSNI_Expression()));
 	}
 
-	string SN_Number::GetString() const
+	std::string SN_Number::GetString() const
 	{
 		return m_Number->GetString();
 	}

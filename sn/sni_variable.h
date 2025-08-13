@@ -28,32 +28,32 @@ namespace SNI
 		virtual SNI_Class* VClass();
 
 		SNI_Variable();
-		SNI_Variable(const string &p_Name);
-		SNI_Variable(const string & p_Name, const string & p_DomainName, skynet::DefineType p_DefineType = skynet::DefineType::Inname);
+		SNI_Variable(const std::string &p_Name);
+		SNI_Variable(const std::string & p_Name, const std::string & p_DomainName, skynet::DefineType p_DefineType = skynet::DefineType::Inname);
 		SNI_Variable(const SN::SN_Expression &p_other);
 		virtual ~SNI_Variable();
 
-		virtual string GetTypeName() const;
-		virtual string GetValueTypeName() const;
-		virtual string GetReferredName() const;
-		virtual string DisplayCpp() const;
-		virtual string DisplaySN(long p_Priority, SNI_DisplayOptions &p_DisplayOptions) const;
-		virtual string DisplayValueSN(long priority, SNI_DisplayOptions & p_DisplayOptions) const;
-		virtual string DisplayCall(long p_Priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const;
-		virtual string SetWatch(const string& p_Caption, SNI_DisplayOptions& p_DisplayOptions) const;
-		void WriteJSON(ostream& p_Stream, const string& p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions& p_DisplayOptions) const;
+		virtual std::string GetTypeName() const;
+		virtual std::string GetValueTypeName() const;
+		virtual std::string GetReferredName() const;
+		virtual std::string DisplayCpp() const;
+		virtual std::string DisplaySN(long p_Priority, SNI_DisplayOptions &p_DisplayOptions) const;
+		virtual std::string DisplayValueSN(long priority, SNI_DisplayOptions & p_DisplayOptions) const;
+		virtual std::string DisplayCall(long p_Priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const;
+		virtual std::string SetWatch(const std::string& p_Caption, SNI_DisplayOptions& p_DisplayOptions) const;
+		void WriteJSON(std::ostream& p_Stream, const std::string& p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions& p_DisplayOptions) const;
 		virtual void AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map);
 		virtual long GetPriority() const;
 
 		virtual bool GetBool() const;
-		virtual string GetString() const;
+		virtual std::string GetString() const;
 		virtual size_t Count() const;
 		virtual size_t Length() const;
 		SNI_Frame * GetFrame() const;
 		void SetFrame(SNI_Frame *p_Frame);
-		string FrameName() const;
+		std::string FrameName() const;
 
-		string FramePathName() const;
+		std::string FramePathName() const;
 
 		virtual bool IsComplete() const;
 		virtual void Complete();
@@ -122,15 +122,15 @@ namespace SNI
 		bool           m_Inline;
 	};
 
-	typedef vector<SNI_Variable> SNI_VariableList;
-	typedef vector<const SNI_Variable *> SNI_VariableConstPointerList;
+	typedef std::vector<SNI_Variable> SNI_VariableList;
+	typedef std::vector<const SNI_Variable *> SNI_VariableConstPointerList;
 
 	struct HashChangeKey;
 
 	class ChangeKey
 	{
 		size_t m_StepCount;
-		string m_Name;
+		std::string m_Name;
 
 	public:
 		ChangeKey(size_t p_StepCount)
@@ -138,7 +138,7 @@ namespace SNI
 		{
 		}
 
-		ChangeKey(size_t p_StepCount, const string &p_Name)
+		ChangeKey(size_t p_StepCount, const std::string &p_Name)
 			: m_StepCount(p_StepCount)
 			, m_Name(p_Name)
 		{
@@ -155,7 +155,7 @@ namespace SNI
 			return m_StepCount;
 		}
 
-		string GetName() const
+		std::string GetName() const
 		{
 			return m_Name;
 		}
@@ -169,7 +169,7 @@ namespace SNI
 
 	class ChangeValue
 	{
-		string m_FrameName;
+		std::string m_FrameName;
 		SNI_Expression *m_Value;
 
 	public:
@@ -193,12 +193,12 @@ namespace SNI
 		{
 		}
 
-		string GetFrameName() const
+		std::string GetFrameName() const
 		{
 			return m_FrameName;
 		}
 
-		string DisplaySN(SNI_DisplayOptions &p_DisplayOptions) const
+		std::string DisplaySN(SNI_DisplayOptions &p_DisplayOptions) const
 		{
 			if (m_Value)
 			{
@@ -208,7 +208,7 @@ namespace SNI
 		}
 	};
 
-	typedef map<ChangeKey, ChangeValue> SNI_ChangeMap;
+	typedef std::map<ChangeKey, ChangeValue> SNI_ChangeMap;
 }
 
 #endif // !defined(SNI_VARIABLE_H_INCLUDED)

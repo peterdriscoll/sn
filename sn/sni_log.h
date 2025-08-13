@@ -38,15 +38,15 @@ namespace SNI
 		void AddStream(SN::LoggingLevel p_LoggingLevel, ostream *p_Stream);
 		void SetLogBuffer(SN::LoggingLevel p_LoggingLevel, size_t p_Capacity, size_t p_ExpressionCapacity);
 
-		void WriteLine(SN::LoggingLevel p_DebugLevel, const string & p_line, bool p_Heading = false);
-		void WriteHeading(SN::LoggingLevel p_DebugLevel, const string & p_line);
+		void WriteLine(SN::LoggingLevel p_DebugLevel, const std::string & p_line, bool p_Heading = false);
+		void WriteHeading(SN::LoggingLevel p_DebugLevel, const std::string & p_line);
 
 		void WriteFrame(SNI_Thread *p_Thread, SN::LoggingLevel p_DebugLevel, SNI_Frame * p_Frame = NULL);
 		void WriteExpression(SN::LoggingLevel p_DebugLevel, SN::SN_Expression p_Result, SN::SN_Expression p_Expression);
-		void WriteClonedExpression(SN::LoggingLevel p_DebugLevel, const string &p_Text, SN::SN_Expression p_Expression);
+		void WriteClonedExpression(SN::LoggingLevel p_DebugLevel, const std::string &p_Text, SN::SN_Expression p_Expression);
 		void WriteVariable(SN::LoggingLevel p_DebugLevel, SN::SN_Variable p_Variable);
-		void WriteVariableByName(SN::LoggingLevel p_DebugLevel, const string & p_Name);
-		void WriteContext(SN::LoggingLevel p_DebugLevel, const string &p_Text);
+		void WriteVariableByName(SN::LoggingLevel p_DebugLevel, const std::string & p_Name);
+		void WriteContext(SN::LoggingLevel p_DebugLevel, const std::string &p_Text);
 		void WriteFrameStack(SN::LoggingLevel p_DebugLevel, size_t p_Depth);
 		void WriteFrameStack(SN::LoggingLevel p_DebugLevel, size_t p_ThreadNum, size_t p_Depth);
 

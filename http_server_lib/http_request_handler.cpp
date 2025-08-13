@@ -14,8 +14,6 @@
 
 #include "http_server_lib_pch.h"
 
-using namespace std;
-
 #pragma warning (disable: 4244)
 
 namespace HTTP

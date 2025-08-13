@@ -36,17 +36,17 @@ namespace SNI
 
 	/// @cond
 
-	string SNI_Implies::GetTypeName() const
+	std::string SNI_Implies::GetTypeName() const
 	{
 		return "Implies";
 	}
 
-	string SNI_Implies::DisplayCpp() const
+	std::string SNI_Implies::DisplayCpp() const
 	{
 		return "skynet::Implies";
 	}
 
-	string SNI_Implies::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_Implies::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "Implies";
 	}

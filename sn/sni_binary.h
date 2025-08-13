@@ -16,12 +16,12 @@ namespace SNI
 
 		virtual long GetNumParameters() const;
 
-		string DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const;
+		std::string DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const;
 
 		/// @cond
-		virtual string GetTypeName() const = 0;
-		virtual string DisplayCpp() const = 0;
-		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const = 0;
+		virtual std::string GetTypeName() const = 0;
+		virtual std::string DisplayCpp() const = 0;
+		virtual std::string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const = 0;
 		/// @endcond
 
 		virtual SN::SN_Expression PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel = 0) const;

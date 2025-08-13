@@ -14,10 +14,10 @@ namespace SNI
 		SNI_Collapse();
 		virtual ~SNI_Collapse();
 
-		virtual string GetTypeName() const;
-		virtual string DisplayCpp() const;
-		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
-		virtual string SNI_Collapse::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression * p_DebugSource) const;
+		virtual std::string GetTypeName() const;
+		virtual std::string DisplayCpp() const;
+		virtual std::string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
+		virtual std::string SNI_Collapse::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression * p_DebugSource) const;
 		virtual long GetPriority() const;
 
 		virtual SN::SN_Value PrimaryFunctionValue(const SN::SN_Value &p_Param) const;

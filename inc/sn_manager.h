@@ -6,7 +6,7 @@
 #include "exp_ctrl_sn.h"
 
 #include <string>
-using namespace std;
+#include <ostream> // Add this include to resolve the 'ostream' identifier
 
 namespace SNI
 {
@@ -17,7 +17,7 @@ namespace SN
 {
 	class SN_Error;
 
-	typedef void OnErrorHandler(bool p_Err, const string &p_Description);
+	typedef void OnErrorHandler(bool p_Err, const std::string &p_Description);
 
 	enum LoggingLevel
 	{
@@ -39,25 +39,23 @@ namespace SN
 		LeftId, RightId, PartialCallId, CallId, ParameterOneId, ParameterTwoId, ParameterThreeId, ParameterFourId, ParameterFiveId, ValueId, ConditionId,  PositiveId, NegativeId, InfixId, EvaluateId, ReturnId, ErrorId, ExitId, CloneId, NoConstraintId, DelayId, StringId, UserId, MultipleOutputsId, DerivedOneId
 	};
 
-	string GetLoggingLevelCode(LoggingLevel p_LoggingLevel);
+	std::string GetLoggingLevelCode(LoggingLevel p_LoggingLevel);
 
 	class SN_EXPORT SN_Manager
 	{
 	public:
-		static void ThrowErrorHandler(SN::SN_Error p_Result);
-
 		SN_Manager();
 		SN_Manager(SNI::SNI_Manager *p_Manager);
-		SN_Manager(string p_Description, OnErrorHandler p_Handler = NULL, bool p_DelayOnEvaluate = false, size_t p_MaxCardinalityCall = 100, size_t p_MaxCardinalityUnify = 100);
+		SN_Manager(std::string p_Description, OnErrorHandler p_Handler = NULL, bool p_DelayOnEvaluate = false, size_t p_MaxCardinalityCall = 100, size_t p_MaxCardinalityUnify = 100);
 
 		virtual ~SN_Manager();
 
 		SN_Expression DelayedCalls();
 
-		string Description();
+		std::string Description();
 
-		string LogFilePath();
-		void SetLogFilePath(string p_LogFilePath);
+		std::string LogFilePath();
+		void SetLogFilePath(std::string p_LogFilePath);
 
 		OnErrorHandler *ErrorHandler();
 		void SetErrorHandler(OnErrorHandler *p_ErrorHandler);
@@ -72,9 +70,9 @@ namespace SN
 		size_t MaxStackFrames();
 		void SetMaxStackFrames(size_t p_MaxStackFrame);
 
-		void StartLogging(SN::LoggingLevel p_LoggingLevel, ostream *p_Stream = NULL);
+		void StartLogging(SN::LoggingLevel p_LoggingLevel, std::ostream *p_Stream = NULL);
 		void StartDebugCommandLineServer(skynet::DebugAction p_DebugAction, int p_kbhit(), int p_GetCh());
-		void StartWebServer(skynet::DebugAction p_DebugAction, const string& p_Address, const string& p_Port, const string& p_DocRoot, bool p_DoIt = true);
+		void StartWebServer(skynet::DebugAction p_DebugAction, const std::string& p_Address, const std::string& p_Port, const std::string& p_DocRoot, bool p_DoIt = true);
 
 		bool HasConsole();
 		bool KbHit();
@@ -99,7 +97,7 @@ namespace SN
 		skynet::LogicType GetLogicType();
 		void SetLogicType(skynet::LogicType p_LogicType);
 		//	This flag allows
-		//		(right unbounded StringRef == string) == unknown boolean.
+		//		(right unbounded StringRef == std::string) == unknown boolean.
 		//	If enabled, SNI_StringRef::DoEquals will implement this, leading 
 		//	to allsorts of complications. It creates valuesets for the start/end 
 		//	positions, which turns the stringref into a multi value object, 

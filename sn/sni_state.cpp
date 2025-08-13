@@ -57,17 +57,17 @@ namespace SNI
 		REQUESTPROMOTION(m_StateBuffer);
 	}
 
-	string SNI_State::GetTypeName() const
+	std::string SNI_State::GetTypeName() const
 	{
 		return "State";
 	}
 
-	string SNI_State::DisplayCpp() const
+	std::string SNI_State::DisplayCpp() const
 	{
 		return GetTypeName() + "()";
 	}
 
-	string SNI_State::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
+	std::string SNI_State::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
 		return GetTypeName() + "_" + to_string(m_StateId);
 	}

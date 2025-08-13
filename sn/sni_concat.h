@@ -15,9 +15,9 @@ namespace SNI
 		virtual ~SNI_Concat();
 
 		/// @cond
-		virtual string GetTypeName() const;
-		virtual string DisplayCpp() const;
-		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
+		virtual std::string GetTypeName() const;
+		virtual std::string DisplayCpp() const;
+		virtual std::string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual long GetPriority() const;
 		/// @endcond
 

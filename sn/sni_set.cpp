@@ -75,17 +75,17 @@ namespace SNI
 		}
 	}
 
-	string SNI_Set::GetTypeName() const
+	std::string SNI_Set::GetTypeName() const
 	{
 		return "Set";
 	}
 
-	string SNI_Set::DisplayCpp() const
+	std::string SNI_Set::DisplayCpp() const
 	{
 		return "sn_Set( {" + DisplaySnValueList(m_SetList) + "} )";
 	}
 
-	string SNI_Set::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_Set::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "{" + DisplaySnValueList(m_SetList) + "}";
 	}

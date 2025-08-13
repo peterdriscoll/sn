@@ -4,7 +4,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-using namespace std;
+
 using namespace skynet;
 using namespace PGCX;
 
@@ -15,9 +15,9 @@ namespace test_sn
     private:
         bool runWebServer = false;
 
-        static void AssertErrorHandler(bool p_Err, const string& p_Description) noexcept(false)
+        static void AssertErrorHandler(bool p_Err, const std::string& p_Description) noexcept(false)
         {
-            Assert::IsTrue(!p_Err, wstring(p_Description.begin(), p_Description.end()).c_str());
+            Assert::IsTrue(!p_Err, std::wstring(p_Description.begin(), p_Description.end()).c_str());
         }
 
         void Initialize()
@@ -153,11 +153,11 @@ namespace test_sn
                         result = ((X + Y) == Long(9)); // SNI_Expression created within inner transaction
                         result.Assert().Do(); // Does nothing immediately as SN sees that is as having infinite cardinality. Call delayed.
                         before = result.GetSNI_Expression();
-                        string X_string1 = X.DisplayValueSN();
-                        string Y_string1 = Y.DisplayValueSN();
+                        std::string X_string1 = X.DisplayValueSN();
+                        std::string Y_string1 = Y.DisplayValueSN();
                     }
-                    string X_string = X.DisplayValueSN();
-                    string Y_string = Y.DisplayValueSN();
+                    std::string X_string = X.DisplayValueSN();
+                    std::string Y_string = Y.DisplayValueSN();
                     // Result will be pointing to stale data, because no promotion was created to update the pointer.
                     // Accessing it will crash.
                     const SNI_Expression* after = result.GetSNI_Expression();
@@ -165,8 +165,8 @@ namespace test_sn
 
                     (X == Long(4)).Assert().Do();
 
-                    string X_string2 = X.DisplayValueSN();
-                    string Y_string2 = Y.DisplayValueSN();
+                    std::string X_string2 = X.DisplayValueSN();
+                    std::string Y_string2 = Y.DisplayValueSN();
                     Assert::IsTrue(X_string2 == "Long(4)", L"Bad value of X.");
                     Assert::IsTrue(Y_string2 == "Long(5)", L"Bad value of Y.");
                 }

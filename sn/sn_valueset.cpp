@@ -82,15 +82,19 @@ namespace SN
 	SN_ValueSet::~SN_ValueSet()
 	{
 	}
+	SNI::SNI_ValueSet * SN_ValueSet::GetSNI_ValueSet()
+	{
+		return static_cast<SNI::SNI_ValueSet *>(m_Expression);
+	}
+
+	SNI::SNI_ValueSet* SN_ValueSet::GetSNI_ValueSet() const
+	{
+		return static_cast<SNI::SNI_ValueSet*>(m_Expression);
+	}
 
 	SN_ValueSet SN_ValueSet::DoRemove(const SN_Value & p_Other)
 	{
-		return m_Expression->DoRemove(p_Other);
-	}
-
-	SNI::SNI_ValueSet * SN_ValueSet::GetSNI_ValueSet() const
-	{
-		return dynamic_cast<SNI::SNI_ValueSet *>(m_Expression);
+		return GetSNI_ValueSet()->DoRemove(p_Other);
 	}
 
 	void SN_ValueSet::AddTaggedValue(const SN_Expression &p_Value, SNI::SNI_World *p_World)
@@ -103,7 +107,7 @@ namespace SN
 		return GetSNI_ValueSet()->AddValue(p_Value, p_NumWorlds, p_WorldList, p_WorldSet);
 	}
 
-	string SN_ValueSet::GenerateTempVariableName()
+	std::string SN_ValueSet::GenerateTempVariableName()
 	{
 		return GetSNI_ValueSet()->GenerateTempVariableName();
 	}

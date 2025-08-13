@@ -28,15 +28,15 @@ namespace SNI
 		SNI_String();
 		SNI_String(const SNI_String &p_Other);
 		SNI_String(const SNI_StringRef &p_Other);
-		SNI_String(const string &p_Other);
+		SNI_String(const std::string &p_Other);
 		virtual ~SNI_String();
 
 		virtual SNI_Expression * Copy() const;
 
 		// Logging
-		virtual string GetTypeName() const;
-		virtual string DisplayCpp() const;
-		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
+		virtual std::string GetTypeName() const;
+		virtual std::string DisplayCpp() const;
+		virtual std::string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual long GetPriority() const;
 
 		// Status
@@ -52,12 +52,12 @@ namespace SNI
 		SN::SN_Value DoGreaterEquals(SNI_Value * p_Other) const;
 
 		// Members
-		virtual string GetString() const;
+		virtual std::string GetString() const;
 		virtual size_t Length() const;
 		virtual SN::SN_String GetSource() const;
 		virtual	SN::SN_Expression GetStart() const;
 		virtual	SN::SN_Expression GetEnd() const;
-		virtual const string &GetSourceString() const;
+		virtual const std::string &GetSourceString() const;
 		virtual long GetLeftMostPos() const;
 		virtual long GetRightMostPos() const;
 
@@ -84,16 +84,16 @@ namespace SNI
 
 		virtual void DoWriteFile(const SN::SN_Value & p_Contents) const;
 
-		virtual SN::SN_Value DoEscape(enum skynet::EscapeType p_EscapeType) const;
-		virtual SN::SN_Value DoUnescape(enum skynet::EscapeType p_EscapeType) const;
+		virtual SN::SN_Value DoEscape(enum SN::EscapeType p_EscapeType) const;
+		virtual SN::SN_Value DoUnescape(enum SN::EscapeType p_EscapeType) const;
 		virtual SN::SN_Value DoStringToInt() const;
 		virtual SN::SN_Value DoStringToDouble() const;
 
 	private:
-		string m_String;
+		std::string m_String;
 	};
 
-	typedef vector<SNI_String *> SNI_StringList;
+	typedef std::vector<SNI_String *> SNI_StringList;
 }
 
 #endif // !defined(SNI_STRING_H_INCLUDED)

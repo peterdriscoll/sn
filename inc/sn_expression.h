@@ -1,6 +1,3 @@
-#if !defined(SN_EXPRESSION_H_INCLUDED)
-#define SN_EXPRESSION_H_INCLUDED
-
 #pragma once
 
 #include "exp_ctrl_sn.h"
@@ -10,8 +7,7 @@
 
 #include <vector>
 #include <functional>
-
-using namespace std;
+#include <complex>
 
 namespace SNI
 {
@@ -23,12 +19,14 @@ namespace SNI
 	class SNI_String;
 	class SNI_StringRef;
 	class SNI_Bool;
+	class SNI_Char;
 	class SNI_World;
 	class SNI_WorldSet;
 	class SNI_FunctionDef;
 	class SNI_Cartesian;
 	class SNI_Lambda;
 	class SNI_Meta;
+	class SNI_Null;
 }
 
 namespace SN
@@ -75,7 +73,7 @@ namespace SN
 
 	SN_APPLY_TYPES(DUMMY, DUMMY, SN_FORWARD)
 
-	class SN_EXPORT SN_Expression : public SN_Base<SNI::SNI_Expression, SN_Expression, SN_Error>
+	class SN_EXPORT SN_Expression : public SN_Base
 	{
 	public:
 		static SN_Class Class();
@@ -115,13 +113,15 @@ namespace SN
 
 		SN_APPLY_TYPES(SN_Expression, DUMMY, SN_CONSTRUCTOR)
 
-		SN_Expression(const SNI::SNI_Expression *p_other);
+		SN_Expression(const SNI::SNI_Expression* p_Expression);
+		SN_Expression(const SNI::SNI_Base* p_Base);
 
 		//SN_Expression(bool p_Bool);
 		SN_Expression(const long p_Value);
 		SN_Expression(const double p_Value);
-		SN_Expression(const string &p_Value);
+		SN_Expression(const std::string& p_Value);
 		SN_Expression(const char &p_Value);
+		SN_Expression(const char* p_Value);
 		SN_Expression(char *p_Value);
 
 		// Destructor
@@ -210,8 +210,8 @@ namespace SN
 		SN_Expression File() const;
 
 		// Escape conversions
-		SN_Expression Escape(enum skynet::EscapeType p_EscapeType) const;
-		SN_Expression Unescape(enum skynet::EscapeType p_EscapeType) const;
+		SN_Expression Escape(enum EscapeType p_EscapeType) const;
+		SN_Expression Unescape(enum EscapeType p_EscapeType) const;
 
 		// Conversions
 		SN_Expression IntToString() const;
@@ -240,12 +240,19 @@ namespace SN
 		SN_Value DoRevOr(const SN_Expression &p_Condition) const;
 
 		bool GetBool() const;
-		string GetString() const;
+		std::string GetString() const;
 		size_t Count() const;
 		size_t Length() const;
 		SN_Expression Debug() const;
-		SNI::SNI_Expression * GetSNI_Expression() const;
-		SNI::SNI_Value * GetSNI_Value() const;
+
+		SN_Expression GetVariableValue(bool p_IfComplete = true);
+		SN::SN_Error ForEach(std::function<SN::SN_Error(const SN_Expression& p_Param, SNI::SNI_World* p_World)> p_Action);
+		SN_Cartesian CartProd(long p_Index, SNI::SNI_FunctionDef* p_FunctionDef = NULL) const;
+
+		SNI::SNI_Expression* GetSNI_Expression();
+		SNI::SNI_Expression* GetSNI_Expression() const;
+		SNI::SNI_Char* GetSNI_Char() const;
+		SNI::SNI_Value* GetSNI_Value() const;
 		SNI::SNI_Error * GetSNI_Error() const;
 		SNI::SNI_ValueSet * GetSNI_ValueSet() const;
 		SNI::SNI_String * GetSNI_String() const;
@@ -255,12 +262,10 @@ namespace SN
 		SNI::SNI_Variable * GetSNI_Variable() const;
 		SNI::SNI_FunctionDef * GetSNI_FunctionDef() const;
 		SNI::SNI_Meta* GetSNI_Meta() const;
-		SN_Expression GetVariableValue(bool p_IfComplete = true);
-		SN::SN_Error ForEach(std::function<SN::SN_Error(const SN_Expression &p_Param, SNI::SNI_World *p_World)> p_Action);
-		SN_Cartesian CartProd(long p_Index, SNI::SNI_FunctionDef *p_FunctionDef = NULL) const;
+		
 	};
 
-	typedef vector<SN_Expression> SN_ExpressionList;
+	typedef std::vector<SN_Expression> SN_ExpressionList;
 
 	template <typename T>
 	T Is(const SN_Expression &p_Expression)
@@ -277,5 +282,3 @@ namespace SN
 	}
 
 }
-
-#endif // !defined(SN_EXPRESSION_H_INCLUDED)

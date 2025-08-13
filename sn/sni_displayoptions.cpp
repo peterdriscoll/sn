@@ -16,13 +16,13 @@ namespace SNI
 	{
 	}
 
-	void SNI_DisplayOptions::SetVarName(const string &p_VarName)
+	void SNI_DisplayOptions::SetVarName(const std::string &p_VarName)
 	{
 		m_VarName = p_VarName;
 		m_TypeMap.clear();
 	}
 
-	string SNI_DisplayOptions::CreateName(const string &p_TypeName)
+	std::string SNI_DisplayOptions::CreateName(const std::string &p_TypeName)
 	{
 		if (p_TypeName == "IsA")
 		{

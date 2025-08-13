@@ -8,7 +8,7 @@
 
 #include <string>
 #include <vector>
-using namespace std;
+
 
 namespace SNI
 {
@@ -43,11 +43,14 @@ namespace SN
 
 		SN_ValueSet(const SN_Meta &p_Meta);
 		SN_ValueSet(const SN_ValueSet &p_Value, const SN_Value &p_right);
-		SN_ValueSet(const vector<SNI::SNI_TaggedValue> &p_other);
+		SN_ValueSet(const std::vector<SNI::SNI_TaggedValue> &p_other);
 
 		SN_ValueSet(const SNI::SNI_ValueSet *p_other);
 
 		virtual ~SN_ValueSet();
+
+		SNI::SNI_ValueSet* GetSNI_ValueSet();
+		SNI::SNI_ValueSet* GetSNI_ValueSet() const;
 
 		SN_ValueSet DoRemove(const SN_Value &p_Other);
 
@@ -57,16 +60,15 @@ namespace SN
 		
 		void Simplify();
 
-		SNI::SNI_ValueSet * GetSNI_ValueSet() const;
 		SNI::SNI_WorldSet * GetWorldSet();
 		void SetWorldSet(SNI::SNI_WorldSet *p_WorldSet);
 
 		void AddTaggedValue(const SN_Expression &p_Value, SNI::SNI_World *p_World);
 		SN_Error AddValue(SN_Expression p_Value, long p_NumWorlds, SNI::SNI_World **p_WorldList, SNI::SNI_WorldSet *p_WorldSet);
-		string GenerateTempVariableName();
+		std::string GenerateTempVariableName();
 	};
 
-	typedef vector<SN_ValueSet> SN_ValueSetList;
+	typedef std::vector<SN_ValueSet> SN_ValueSetList;
 }
 
 #endif // !defined(SN_VALUESET_H_INCLUDED)

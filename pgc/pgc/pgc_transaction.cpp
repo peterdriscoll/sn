@@ -5,6 +5,9 @@
 
 
 #include "pgc_pch.h"
+#include <string> // Ensure <string> is included
+
+using namespace std::string_literals; // Enable the "s" literal for std::string
 
 namespace PGC
 {
@@ -57,7 +60,7 @@ namespace PGC
 
 		if (m_MultiThreaded)
 		{
-			m_ProcessThread = new thread(StartProcessing, this);
+			m_ProcessThread = new std::thread(StartProcessing, this);
 		}
 	}
 
@@ -73,6 +76,13 @@ namespace PGC
 	PromotionStrategy PGC_Transaction::GetPromotionStrategy() const
 	{
 		return m_PromotionStrategy;
+	}
+
+	bool PGC_Transaction::IsDescendantOf(const PGC_Transaction* other) const noexcept
+	{
+		return other && m_LastTopTransaction &&
+			(m_LastTopTransaction == other ||
+				m_LastTopTransaction->IsDescendantOf(other));
 	}
 
 	void PGC_Transaction::EndTransaction()
@@ -117,7 +127,7 @@ namespace PGC
 
 	void *PGC_Transaction::Allocate(size_t p_size)
 	{
-		ASSERTM(p_size < BlockSize, "Allocation " + to_string(p_size) + " bigger than block size "s + to_string(BlockSize));
+		ASSERTM(p_size < BlockSize, "Allocation " + std::to_string(p_size) + " bigger than block size "s + std::to_string(BlockSize));
 		if (m_CurrentBlock == nullptr)
 		{
 			m_FirstBlock = new PGC_Block(this, nullptr);
@@ -209,7 +219,7 @@ namespace PGC
 			memory += theBlock->NetMemoryUsed();
 			theBlock = theBlock->GetNextBlock();
 		}
-		ASSERTM(m_NetMemoryUsed == memory, "Memory calculation error " + to_string(m_NetMemoryUsed) + " != " + to_string(memory));
+		ASSERTM(m_NetMemoryUsed == memory, "Memory calculation error " + std::to_string(m_NetMemoryUsed) + " != " + std::to_string(memory));
 		return memory;
 	}
 
@@ -257,7 +267,7 @@ namespace PGC
 				}
 				(*it)->Run();
 			}
-			this_thread::yield();
+			std::this_thread::yield();
 		}
 	}
 

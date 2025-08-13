@@ -24,6 +24,9 @@ namespace SN
 		SN_Lambda(const SN_Expression &p_FormalParameter, const SN_Expression &p_Expression);
 		SN_Lambda(const SN_Expression &p_FormalParameter, const SN_Expression &p_Expression, const SN_Expression &p_ConstraintValue);
 		virtual ~SN_Lambda();
+
+		SNI::SNI_Lambda* GetSNI_Lambda();
+		SNI::SNI_Lambda* GetSNI_Lambda() const;
 	};
 }
 

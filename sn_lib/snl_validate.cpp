@@ -3,7 +3,7 @@
 
 #include "snl_pch.h"
 
-using namespace std;
+
 using namespace skynet;
 using namespace PGCX;
 
@@ -59,10 +59,10 @@ namespace SNL
 		{
 			SN_LOCAL(i);
 			(Define(IsWhiteSpaceOnly)(i) == (
-				i.LookaheadLeft() != "" && m_CharacterSet.White(i.SelectLeftChar()) && IsWhiteSpaceOnlyContinuation(i.SubtractLeftChar()))).PartialAssert().Do();
+				i.LookaheadLeft() != String("") && m_CharacterSet.White(i.SelectLeftChar()) && IsWhiteSpaceOnlyContinuation(i.SubtractLeftChar()))).PartialAssert().Do();
 			(Define(IsWhiteSpaceOnlyContinuation)(i) == (
-				(i.LookaheadLeft() != "" && m_CharacterSet.White(i.LookaheadLeft()))
-				.If(IsWhiteSpaceOnlyContinuation(i.SubtractLeftChar()), i == "")
+				(i.LookaheadLeft() != String("") && m_CharacterSet.White(i.LookaheadLeft()))
+				.If(IsWhiteSpaceOnlyContinuation(i.SubtractLeftChar()), i == String(""))
 				)).PartialAssert().Do();
 		}
 
@@ -78,7 +78,7 @@ namespace SNL
 				&& Local(t, Local(u, Let(
 					s.SubtractLeft(String("/*")) == t + u
 					, IsSimpleCommentContent(t)
-					&& u.LookaheadLeft() != ""
+					&& u.LookaheadLeft() != String("")
 					&& (u == String("*/"))
 				)))
 				).Collapse()).PartialAssert().Do();
@@ -103,7 +103,7 @@ namespace SNL
 					&& Local(t, Local(u, Let(
 						s.SubtractLeft(String("//")) == t + u
 						, IsLineCommentContent(t)
-						&& u.LookaheadLeft() != ""
+						&& u.LookaheadLeft() != String("")
 						&&	u == String("\n")
 					)))
 					).Collapse()
@@ -165,7 +165,7 @@ namespace SNL
 				&& Local(t, Local(u, Let(
 					s.SubtractLeftChar() == t + u
 					, IsStringContent(t)
-					&& u.LookaheadLeft() != ""
+					&& u.LookaheadLeft() != String("")
 					&& (u == String("\""))
 				)))
 				).Collapse()).PartialAssert().Do();
@@ -186,16 +186,16 @@ namespace SNL
 	{
 		{
 			SN_LOCAL(i);
-			(Define(IsInteger)(i) == (i.LookaheadLeft() != "" && (((m_CharacterSet.Sign(i.LookaheadLeft()) && IsUnsignedInteger(i.SubtractLeftChar())) || IsUnsignedInteger(i))))).PartialAssert().Do();
+			(Define(IsInteger)(i) == (i.LookaheadLeft() != String("") && (((m_CharacterSet.Sign(i.LookaheadLeft()) && IsUnsignedInteger(i.SubtractLeftChar())) || IsUnsignedInteger(i))))).PartialAssert().Do();
 		}
 
 		{
 			SN_LOCAL(IsIntegerContinuation);
 			SN_LOCAL(i);
-			(Define(IsUnsignedInteger)(i) == (i.LookaheadLeft() != "" && m_CharacterSet.Digit(i.SelectLeftChar()) && IsIntegerContinuation(i.SubtractLeftChar()))).PartialAssert().Do();
+			(Define(IsUnsignedInteger)(i) == (i.LookaheadLeft() != String("") && m_CharacterSet.Digit(i.SelectLeftChar()) && IsIntegerContinuation(i.SubtractLeftChar()))).PartialAssert().Do();
 			(Define(IsIntegerContinuation)(i) == (
-				(i.LookaheadLeft() != "" && m_CharacterSet.Digit(i.LookaheadLeft()))
-				.If(IsIntegerContinuation(i.SubtractLeftChar()), i == "")
+				(i.LookaheadLeft() != String("") && m_CharacterSet.Digit(i.LookaheadLeft()))
+				.If(IsIntegerContinuation(i.SubtractLeftChar()), i == String(""))
 				)).PartialAssert().Do();
 		}
 
@@ -242,10 +242,10 @@ namespace SNL
 			SN_LOCAL(IsNameContinuation);
 			SN_LOCAL(i);
 
-			(Define(IsName)(i) == (i.LookaheadLeft() != "" && m_CharacterSet.AlphaUnder(i.SelectLeftChar()) && IsNameContinuation(i.SubtractLeftChar()))).PartialAssert().Do();
+			(Define(IsName)(i) == (i.LookaheadLeft() != String("") && m_CharacterSet.AlphaUnder(i.SelectLeftChar()) && IsNameContinuation(i.SubtractLeftChar()))).PartialAssert().Do();
 			(Define(IsNameContinuation)(i) == (
-				(i.LookaheadLeft() != "" && m_CharacterSet.AlphaUnderNumeric(i.LookaheadLeft()))
-				.If(IsNameContinuation(i.SubtractLeftChar()), i == "")
+				(i.LookaheadLeft() != String("") && m_CharacterSet.AlphaUnderNumeric(i.LookaheadLeft()))
+				.If(IsNameContinuation(i.SubtractLeftChar()), i == String(""))
 			)).PartialAssert().Do();
 		}
 

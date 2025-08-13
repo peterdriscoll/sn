@@ -36,17 +36,17 @@ namespace SNI
 	{
 	}
 
-	string SNI_Or::GetTypeName() const
+	std::string SNI_Or::GetTypeName() const
 	{
 		return "Or";
 	}
 
-	string SNI_Or::DisplayCpp() const
+	std::string SNI_Or::DisplayCpp() const
 	{
 		return "SN::Or";
 	}
 
-	string SNI_Or::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_Or::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "(|)";
 	}
@@ -56,7 +56,7 @@ namespace SNI
 		return 1;
 	}
 
-	string SNI_Or::GetOperator() const
+	std::string SNI_Or::GetOperator() const
 	{
 		return "|";
 	}

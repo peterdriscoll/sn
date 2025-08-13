@@ -24,17 +24,17 @@ namespace SNI
 	{
 	}
 
-	string SNI_Square::GetTypeName() const
+	std::string SNI_Square::GetTypeName() const
 	{
 		return "Square";
 	}
 
-	string SNI_Square::DisplayCpp() const
+	std::string SNI_Square::DisplayCpp() const
 	{
 		return "SN::Square";
 	}
 
-	string SNI_Square::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_Square::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "^-^";
 	}

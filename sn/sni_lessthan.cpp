@@ -14,17 +14,17 @@ namespace SNI
 	{
 	}
 
-	string SNI_LessThan::GetTypeName() const
+	std::string SNI_LessThan::GetTypeName() const
 	{
 		return "LessThan";
 	}
 
-	string SNI_LessThan::DisplayCpp() const
+	std::string SNI_LessThan::DisplayCpp() const
 	{
 		return "SN::LessThan";
 	}
 
-	string SNI_LessThan::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_LessThan::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "<";
 	}
@@ -34,7 +34,7 @@ namespace SNI
 		return 0;
 	}
 
-	string SNI_LessThan::GetOperator() const
+	std::string SNI_LessThan::GetOperator() const
 	{
 		return "<";
 	}

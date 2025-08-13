@@ -81,6 +81,8 @@
 		}
 
 #define REQUESTPROMOTION(member) RequestPromotion((PGC::PGC_TypeCheck **) &member)
+//#define PROMOTENOW(member) RequestPromotion((PGC::PGC_TypeCheck **) &member)
+#define PROMOTENOW(member) PromoteNow((PGC::PGC_TypeCheck **) &member)
 
 #define NULL 0
 
@@ -143,6 +145,8 @@ namespace PGC
 		virtual PGC_Base* CloneTo(void* memory) const;
 
 		void RequestPromotion(PGC_TypeCheck** p_Base);
+
+		void PromoteNow(PGC_TypeCheck** p_Base);
 
 		PGC_Transaction * GetTransaction() override;
 		void SetTransaction(PGC_Transaction *);

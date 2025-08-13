@@ -11,12 +11,12 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Escape)
 	public:
-		SNI_Escape(enum skynet::EscapeType p_EscapeType);
+		SNI_Escape(enum SN::EscapeType p_EscapeType);
 		virtual ~SNI_Escape();
 
-		virtual string GetTypeName() const;
-		virtual string DisplayCpp() const;
-		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
+		virtual std::string GetTypeName() const;
+		virtual std::string DisplayCpp() const;
+		virtual std::string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual long GetPriority() const;
 
 		virtual SN::SN_Value PrimaryFunctionValue(const SN::SN_Value &p_Left) const;
@@ -24,7 +24,7 @@ namespace SNI
 		virtual SN::SN_Expression InverseFunctionExpression(const SN::SN_Expression &p_Param) const;
 
 	private:
-		enum skynet::EscapeType m_EscapeType;
+		enum SN::EscapeType m_EscapeType;
 	};
 }
 

@@ -13,7 +13,7 @@
 
 namespace PGC
 {
-	template <class T>
+	template <typename T>
 	class MemberRef
 	{
 	private:
@@ -32,17 +32,59 @@ namespace PGC
 		}
 
 		MemberRef(const MemberRef<T>& other)
-			: m_Pointer(other.m_Pointer)
+			: m_Pointer(dynamic_cast<PGC_TypeCheck*>(other.Get()))
 		{
-			// No promotion here; context-dependent
+			// Debug safety: if someone ever changes Get(), catch it.
+			#if defined(DEBUG) || defined(_DEBUG)
+			ASSERTM(!m_Pointer || !m_Pointer->IsPromotion(),
+				"Copy ctor must not copy a promotion pointer");
+			#endif
 		}
 
 		MemberRef(MemberRef<T>&& other) noexcept
 			: m_Pointer(other.m_Pointer)
 		{
 			other.m_Pointer = nullptr;
+			if (m_Pointer && m_Pointer->IsPromotion())
+			{
+				// The promotion is no longer used at the old location so repurpose it for here.
+				// Could also free it and do a RequestPromotion, as an alternate approach.
+				PGC_Promotion *promotion = static_cast<PGC_Promotion*>(m_Pointer);
+				if (promotion && promotion->IsPromoted())
+				{
+					m_Pointer = promotion->GetFinalCopy();
+					promotion->Free();  // Put the promotion object back on the free list for reuse.
+				}
+				else
+				{
+					promotion->SetBase(&m_Pointer); // Fix the promotion to refer to the location moved to.
+				}
+			}
 		}
-		
+		~MemberRef() noexcept
+		{
+			if (m_Pointer && m_Pointer->IsPromotion())
+			{
+				PGC_Promotion* promotion = static_cast<PGC_Promotion*>(m_Pointer);
+
+				// In debug, catch rebinding bugs early.
+				#if defined(DEBUG) || defined(_DEBUG)
+				ASSERTM(promotion->GetStrategy() == PromotionStrategy::DoubleDipping,
+					"~MemberRef: promotion pointer present under Backstabbing");
+				ASSERTM(promotion->GetBaseAddress() == &m_Pointer,
+					"~MemberRef: promotion base not bound to this address");
+				#endif
+
+				if (promotion->IsPromoted())
+				{
+					promotion->Free();
+				}
+				else
+				{
+					promotion->MarkNoLongerNeeded();
+				}
+			}
+		}
 		T* Get() const
 		{
 			if (!m_Pointer) return nullptr;
@@ -97,12 +139,7 @@ namespace PGC
 			return Get();
 		}
 		
-		MemberRef<T>& operator=(T* ptr)
-		{
-			Set(ptr, GetTransaction());
-			RequestPromotion(GetTransaction());
-			return *this;
-		}
+		MemberRef<T>& operator=(T*) = delete; 
 		
 		void RequestPromotion(PGC_Transaction* p_Destination)
 		{
@@ -135,7 +172,7 @@ namespace PGC
 			}
 		}
 		
-		void MemberRef<T>::PromoteNow(PGC_Transaction* destination)
+		void PromoteNow(PGC_Transaction* destination)
 		{
 			if (!m_Pointer)
 				return;

@@ -60,7 +60,7 @@ namespace SNI
 		return GetThread()->GetTopManager();
 	}
 
-	/*static*/ string SNI_Thread::ThreadEnded(long p_ThreadNum)
+	/*static*/ std::string SNI_Thread::ThreadEnded(long p_ThreadNum)
 	{
 		stringstream ss;
 		WriteThreadEnded(ss, p_ThreadNum);
@@ -174,14 +174,14 @@ namespace SNI
 		m_FrameList.resize(1);
 	}
 
-	void SNI_Thread::Breakpoint(SN::DebuggingStop p_DebuggingStop, SN::BreakId p_BreakId, const string &p_TypeName, const string &p_Description, const SNI_Expression *p_DebugSource, SN::InterruptPoint p_InterruptPoint, const string &p_DebugId)
+	void SNI_Thread::Breakpoint(SN::DebuggingStop p_DebuggingStop, SN::BreakId p_BreakId, const std::string &p_TypeName, const std::string &p_Description, const SNI_Expression *p_DebugSource, SN::InterruptPoint p_InterruptPoint, const std::string &p_DebugId)
 	{
 		m_ThreadStepCount++;
 		SNI_Manager *topManager = GetTopManager(false);
 		if (topManager && topManager->HasDebugServer())
 		{
 			m_DebugCommand.SetDescription(p_Description);
-			string debugId;
+			std::string debugId;
 			switch (p_InterruptPoint)
 			{
 			case SN::MirrorPoint:
@@ -209,8 +209,8 @@ namespace SNI
 				}
 				break;
 			}
-			string breakPoint = MakeBreakPoint(debugId, p_BreakId);
-			string breakPointJS = MakeBreakPointJS(debugId, p_BreakId);
+			std::string breakPoint = MakeBreakPoint(debugId, p_BreakId);
+			std::string breakPointJS = MakeBreakPointJS(debugId, p_BreakId);
 			SetThreadBreakPoint(breakPoint, breakPointJS);
 			while (m_DebugCommand.IsBreakPoint(p_InterruptPoint, m_ThreadNum, SNI_Frame::GetFrameStackDepth(), m_ThreadStepCount, breakPoint, p_DebuggingStop))
 			{
@@ -237,7 +237,7 @@ namespace SNI
 		p_Stream << "<div><table class='thread'>\n";
 		p_Stream << "<caption>Threads</caption>\n";
 		p_Stream << "<tr>\n";
-		string separator;
+		std::string separator;
 		for (size_t k = 0; k < m_ThreadList.size(); k++)
 		{
 			SNI_Thread *l_thread = m_ThreadList[k];
@@ -259,11 +259,11 @@ namespace SNI
 
 	ostream * SNI_Thread::CreateLogFile(SN::LoggingLevel p_LoggingLevel)
 	{
-		string currentDirectory = CurrentWorkingDirectory();
+		std::string currentDirectory = CurrentWorkingDirectory();
 
-		string timeId = GetFormattedTime();
-		string logIndex = SN::GetLoggingLevelCode(p_LoggingLevel);
-		string fileName = SNI_Thread::TopManager()->LogFilePath() + logIndex + /*"_" + timeId +*/ ".log"; //" + timeId + "
+		std::string timeId = GetFormattedTime();
+		std::string logIndex = SN::GetLoggingLevelCode(p_LoggingLevel);
+		std::string fileName = SNI_Thread::TopManager()->LogFilePath() + logIndex + /*"_" + timeId +*/ ".log"; //" + timeId + "
 		fstream *logFile = new fstream;
 		logFile->open(fileName.data(), ios::out | ios::trunc);
 		if (!logFile->is_open())
@@ -284,7 +284,7 @@ namespace SNI
 		return m_DebugCommand.IsExiting();
 	}
 
-	string SNI_Thread::DashboardJS(enum DisplayOptionType p_OptionType)
+	std::string SNI_Thread::DashboardJS(enum DisplayOptionType p_OptionType)
 	{
 		stringstream ss;
 		cout << "DashboardJS\n";
@@ -301,7 +301,7 @@ namespace SNI
 		return ss.str();
 	}
 
-	string SNI_Thread::StackJS(long p_MaxStackFrame, long p_StartStackFrame, long p_StartStepCount, enum DisplayOptionType p_OptionType)
+	std::string SNI_Thread::StackJS(long p_MaxStackFrame, long p_StartStackFrame, long p_StartStepCount, enum DisplayOptionType p_OptionType)
 	{
 		stringstream ss;
 		SNI_Manager *manager = GetTopManager(false);
@@ -318,7 +318,7 @@ namespace SNI
 		return ss.str();
 	}
 
-	string SNI_Thread::CallStackJS(long p_MaxCallStackFrame, long p_StartCallStackFrame, long p_StartStepCount, enum DisplayOptionType p_OptionType)
+	std::string SNI_Thread::CallStackJS(long p_MaxCallStackFrame, long p_StartCallStackFrame, long p_StartStepCount, enum DisplayOptionType p_OptionType)
 	{
 		stringstream ss;
 		cout << "CallStackJS\n";
@@ -334,7 +334,7 @@ namespace SNI
 		return ss.str();
 	}
 
-	string SNI_Thread::WatchListJS(long p_StartStepCount, enum DisplayOptionType p_OptionType)
+	std::string SNI_Thread::WatchListJS(long p_StartStepCount, enum DisplayOptionType p_OptionType)
 	{
 		stringstream ss;
 		SNI_Manager* manager = GetTopManager(false);
@@ -350,7 +350,7 @@ namespace SNI
 		return ss.str();
 	}
 
-	string SNI_Thread::StepCountJS()
+	std::string SNI_Thread::StepCountJS()
 	{
 		stringstream ss;
 		cout << "StepPointJS\n";
@@ -358,7 +358,7 @@ namespace SNI
 		return ss.str();
 	}
 
-	string SNI_Thread::LogJS(long p_MaxLogEntries, long p_StartLogEntries, long p_StartStepCount)
+	std::string SNI_Thread::LogJS(long p_MaxLogEntries, long p_StartLogEntries, long p_StartStepCount)
 	{
 		stringstream ss;
 		cout << "LogJS\n";
@@ -373,14 +373,14 @@ namespace SNI
 		return ss.str();
 	}
 
-	string SNI_Thread::DerivationJS(long p_MaxLogEntries)
+	std::string SNI_Thread::DerivationJS(long p_MaxLogEntries)
 	{
 		stringstream ss;
 		WriteDerivationJS(ss, p_MaxLogEntries);
 		return ss.str();
 	}
 
-	string SNI_Thread::CodeJS(long p_MaxLogEntries, long p_StartCode, long p_StepCount, enum DisplayOptionType p_OptionType)
+	std::string SNI_Thread::CodeJS(long p_MaxLogEntries, long p_StartCode, long p_StepCount, enum DisplayOptionType p_OptionType)
 	{
 		stringstream ss;
 		SNI_DisplayOptions displayOptions(p_OptionType);
@@ -396,7 +396,7 @@ namespace SNI
 		return ss.str();
 	}
 
-	string SNI_Thread::ErrorJS(enum DisplayOptionType p_OptionType)
+	std::string SNI_Thread::ErrorJS(enum DisplayOptionType p_OptionType)
 	{
 		if (m_Error)
 		{
@@ -410,7 +410,7 @@ namespace SNI
 		return "{\"description\":\"\",\"callhistory\":[]}";
 	}
 
-	string SNI_Thread::WorldSetsJS(DisplayOptionType p_OptionType)
+	std::string SNI_Thread::WorldSetsJS(DisplayOptionType p_OptionType)
 	{
 		stringstream ss;
 		SNI_DisplayOptions displayOptions(p_OptionType);
@@ -418,7 +418,7 @@ namespace SNI
 		return ss.str();
 	}
 
-	string SNI_Thread::DelayedJS(DisplayOptionType p_OptionType)
+	std::string SNI_Thread::DelayedJS(DisplayOptionType p_OptionType)
 	{
 		stringstream ss;
 		SNI_DisplayOptions displayOptions(p_OptionType);
@@ -433,7 +433,7 @@ namespace SNI
 		return ss.str();
 	}
 
-	string SNI_Thread::Skynet(enum DisplayOptionType p_OptionType)
+	std::string SNI_Thread::Skynet(enum DisplayOptionType p_OptionType)
 	{
 		stringstream ss;
 		cout << "Skynet\n";
@@ -514,7 +514,7 @@ namespace SNI
 */
 	}
 
-	string SNI_Thread::ChangeHistoryJS(enum DisplayOptionType p_OptionType, size_t p_ColumnWidth, size_t p_FromStep, size_t p_ToStep)
+	std::string SNI_Thread::ChangeHistoryJS(enum DisplayOptionType p_OptionType, size_t p_ColumnWidth, size_t p_FromStep, size_t p_ToStep)
 	{
 		stringstream ss;
 		SNI_Manager *manager = GetTopManager(false);
@@ -534,9 +534,9 @@ namespace SNI
 	void SNI_Thread::WriteChangeHistoryJS(ostream &p_Stream, SNI::SNI_DisplayOptions &p_DisplayOptions, size_t p_ColumnWidth, size_t p_FromStep, size_t p_ToStep)
 	{
 		p_Stream << "{\"records\":[";
-		set<string> rowChanges;
-		vector<string> rowVector;
-		string delimeter1 = "\n";
+		set<std::string> rowChanges;
+		vector<std::string> rowVector;
+		std::string delimeter1 = "\n";
 		m_ChangeMutex.lock();
 		SNI_DisplayOptions textDisplayOptions(doTextOnly);
 
@@ -547,7 +547,7 @@ namespace SNI
 				it != m_ChangeMap.end() && it->first.GetStepCount() == stepCount;
 				it++)
 			{
-				string name = it->first.GetName();
+				std::string name = it->first.GetName();
 				changes = true;
 				if (rowChanges.find(name) == rowChanges.end())
 				{
@@ -561,8 +561,8 @@ namespace SNI
 				delimeter1 = ",\n";
 				p_Stream << "\t\t\"stepcount\":" << to_string(stepCount) << ",\n";
 				p_Stream << "\t\t\"variables\":[";
-				string delimeter2 = "\n";
-				for (const string &name : rowVector)
+				std::string delimeter2 = "\n";
+				for (const std::string &name : rowVector)
 				{
 					auto itLoop = m_ChangeMap.find(ChangeKey(stepCount, name));
 					p_Stream << delimeter2 << "\t\t\t{\n";
@@ -577,16 +577,16 @@ namespace SNI
 					}
 					else
 					{
-						string frameName = itLoop->second.GetFrameName();
-						string nabbreviation = frameName.substr(0, p_ColumnWidth-3);
+						std::string frameName = itLoop->second.GetFrameName();
+						std::string nabbreviation = frameName.substr(0, p_ColumnWidth-3);
 						if (nabbreviation.length() == frameName.length())
 						{
 							nabbreviation = "";
 						}
 
-						string htmlDescription = itLoop->second.DisplaySN(p_DisplayOptions);
-						string textDescription = itLoop->second.DisplaySN(textDisplayOptions);
-						string vabbreviation = textDescription.substr(0, p_ColumnWidth-3);
+						std::string htmlDescription = itLoop->second.DisplaySN(p_DisplayOptions);
+						std::string textDescription = itLoop->second.DisplaySN(textDisplayOptions);
+						std::string vabbreviation = textDescription.substr(0, p_ColumnWidth-3);
 						if (vabbreviation.length() == textDescription.length())
 						{
 							vabbreviation = "";
@@ -618,7 +618,7 @@ namespace SNI
 		m_User = p_User;
 	}
 
-	string SNI_Thread::StartCommand(enum skynet::DebugAction p_DebugAction, const string &p_Description, enum DisplayOptionType p_OptionType)
+	std::string SNI_Thread::StartCommand(enum skynet::DebugAction p_DebugAction, const std::string &p_Description, enum DisplayOptionType p_OptionType)
 	{
 		stringstream ss;
 		m_DebugAction = p_DebugAction;
@@ -638,7 +638,7 @@ namespace SNI
 		m_DebugCommand.RunToEnd();
 	}
 
-	void SNI_Thread::LoadBreakPoints(const string &p_BreakPointString)
+	void SNI_Thread::LoadBreakPoints(const std::string &p_BreakPointString)
 	{
 		m_DebugCommand.LoadBreakPoints(p_BreakPointString);
 	}
@@ -726,7 +726,7 @@ namespace SNI
 		m_DebugAction = skynet::Abort;
 	}
 
-	string SNI_Thread::RunWeb(enum DisplayOptionType p_OptionType)
+	std::string SNI_Thread::RunWeb(enum DisplayOptionType p_OptionType)
 	{
 		m_DebugCommand.Run();
 		stringstream ss;
@@ -734,7 +734,7 @@ namespace SNI
 		return ss.str();
 	}
 
-	string SNI_Thread::RunToEndWeb(enum DisplayOptionType p_OptionType)
+	std::string SNI_Thread::RunToEndWeb(enum DisplayOptionType p_OptionType)
 	{
 		m_DebugCommand.RunToEnd();
 		stringstream ss;
@@ -742,7 +742,7 @@ namespace SNI
 		return ss.str();
 	}
 
-	string SNI_Thread::DebugWeb(enum DisplayOptionType p_OptionType)
+	std::string SNI_Thread::DebugWeb(enum DisplayOptionType p_OptionType)
 	{
 		m_DebugCommand.Debug();
 		stringstream ss;
@@ -750,7 +750,7 @@ namespace SNI
 		return ss.str();
 	}
 
-	string SNI_Thread::CodeBreakWeb(enum DisplayOptionType p_OptionType)
+	std::string SNI_Thread::CodeBreakWeb(enum DisplayOptionType p_OptionType)
 	{
 		m_DebugCommand.CodeBreak();
 		stringstream ss;
@@ -758,7 +758,7 @@ namespace SNI
 		return ss.str();
 	}
 
-	string SNI_Thread::StepOverWeb(enum DisplayOptionType p_OptionType)
+	std::string SNI_Thread::StepOverWeb(enum DisplayOptionType p_OptionType)
 	{
 		m_DebugCommand.StepOver(m_FrameList.size());
 		stringstream ss;
@@ -766,7 +766,7 @@ namespace SNI
 		return ss.str();
 	}
 
-	string SNI_Thread::StepIntoWeb(enum DisplayOptionType p_OptionType)
+	std::string SNI_Thread::StepIntoWeb(enum DisplayOptionType p_OptionType)
 	{
 		m_DebugCommand.StepInto(SN::DebugStop);
 		stringstream ss;
@@ -774,7 +774,7 @@ namespace SNI
 		return ss.str();
 	}
 
-	string SNI_Thread::StepOutWeb(enum DisplayOptionType p_OptionType)
+	std::string SNI_Thread::StepOutWeb(enum DisplayOptionType p_OptionType)
 	{
 		m_DebugCommand.StepOut(m_FrameList.size());
 		stringstream ss;
@@ -782,7 +782,7 @@ namespace SNI
 		return ss.str();
 	}
 
-	string SNI_Thread::StepParamWeb(enum DisplayOptionType p_OptionType)
+	std::string SNI_Thread::StepParamWeb(enum DisplayOptionType p_OptionType)
 	{
 		m_DebugCommand.StepParam();
 		stringstream ss;
@@ -790,7 +790,7 @@ namespace SNI
 		return ss.str();
 	}
 
-	string SNI_Thread::GotoStepCountWeb(long p_StepCount, enum DisplayOptionType p_OptionType)
+	std::string SNI_Thread::GotoStepCountWeb(long p_StepCount, enum DisplayOptionType p_OptionType)
 	{
 		m_DebugCommand.GotoStepCount(skynet::GotoStepCount, p_StepCount, m_ThreadNum);
 		stringstream ss;
@@ -798,7 +798,7 @@ namespace SNI
 		return ss.str();
 	}
 
-	string SNI_Thread::SetMaxStackFramesWeb(long p_MaxStackFrame, enum DisplayOptionType p_OptionType)
+	std::string SNI_Thread::SetMaxStackFramesWeb(long p_MaxStackFrame, enum DisplayOptionType p_OptionType)
 	{
 		stringstream ss;
 		m_MaxStackFrames = p_MaxStackFrame;
@@ -807,14 +807,14 @@ namespace SNI
 		return ss.str();
 	}
 
-	string SNI_Thread::SetThreadNumWeb(enum DisplayOptionType p_OptionType)
+	std::string SNI_Thread::SetThreadNumWeb(enum DisplayOptionType p_OptionType)
 	{
 		stringstream ss;
 		WriteWebPage(ss, true, p_OptionType);
 		return ss.str();
 	}
 
-	string SNI_Thread::QuitWeb(enum DisplayOptionType p_OptionType)
+	std::string SNI_Thread::QuitWeb(enum DisplayOptionType p_OptionType)
 	{
 		stringstream ss;
 		m_DebugCommand.Quit();
@@ -936,7 +936,7 @@ namespace SNI
 		// dog WriteGotoStepCountJS(p_Stream);
 		// dog WriteSetMaxStackFramesJS(p_Stream);
 
-	void SNI_Thread::WriteSubmit(ostream &p_Stream, const string &p_Action, const string &p_Name, const string &p_Description)
+	void SNI_Thread::WriteSubmit(ostream &p_Stream, const std::string &p_Action, const std::string &p_Name, const std::string &p_Description)
 	{
 		p_Stream << "<td>\n";
 		p_Stream << p_Description << "<br/>\n";
@@ -948,7 +948,7 @@ namespace SNI
 		p_Stream << "</td>\n";
 	}
 
-	/*static*/ void SNI_Thread::WriteSubmitJS(ostream &p_Stream, const string &p_Action, const string &p_Name, const string &p_Description)
+	/*static*/ void SNI_Thread::WriteSubmitJS(ostream &p_Stream, const std::string &p_Action, const std::string &p_Name, const std::string &p_Description)
 	{
 		p_Stream << "<td>\n";
 		p_Stream << "<form ng-submit = 'submit(\"" << p_Action << "\")'>\n";
@@ -1092,7 +1092,7 @@ namespace SNI
 			p_Stream << "\t\"taskdescription\" : \"" << manager->Description() << "\",\n";
 			p_Stream << "\t\"maxstackframes\" : \"" << manager->MaxStackFrames() << "\",\n";
 		}
-		string statusDescription;
+		std::string statusDescription;
 		int running = 0;
 		int closing = 0;
 		if (m_DebugCommand.IsQuitting())
@@ -1135,7 +1135,7 @@ namespace SNI
 		p_Stream << "\"stepcount\":" << m_ThreadStepCount << ",\n";
 		p_Stream << "\"records\":[\n";
 		size_t base = 0;
-		string delimeter;
+		std::string delimeter;
 		Lock();
 		long start = static_cast<long>(m_FrameList.size() - p_Start);
 		if (start < 0)
@@ -1164,7 +1164,7 @@ namespace SNI
 		oroot.put("stepcount", m_ThreadStepCount);
 		pt::ptree records_node;
 		size_t base = 0;
-		string delimeter;
+		std::string delimeter;
 		size_t start = p_Start + p_Depth;
 		if (start <= 0)
 		{
@@ -1205,8 +1205,8 @@ namespace SNI
 		Unlock();
 		p_Stream << "{\n";
 		p_Stream << "\"records\":[\n";
-		string delimeter;
-		string prefix = "\t";
+		std::string delimeter;
+		std::string prefix = "\t";
 		for (auto p : watchList)
 		{
 			SNI_Variable* v = p.second;
@@ -1217,7 +1217,7 @@ namespace SNI
 				v->WriteJSON(p_Stream, prefix+"\t", p_DebugFieldWidth, p_DisplayOptions);
 				if (value)
 				{
-					string card_string = "&infin;";
+					std::string card_string = "&infin;";
 					size_t card = value->Cardinality();
 					if (card < CARDINALITY_MAX)
 					{
@@ -1236,7 +1236,7 @@ namespace SNI
 	void SNI_Thread::WriteStepCountListJS(ostream &p_Stream)
 	{
 		p_Stream << "{\"records\":[\n";
-		string delimeter = " ";
+		std::string delimeter = " ";
 		for (size_t k = 0; k < m_ThreadList.size(); k++)
 		{
 			SNI_Thread *l_thread = m_ThreadList[k];
@@ -1251,7 +1251,7 @@ namespace SNI
 		p_Stream << "\n]}\n";
 	}
 
-	void SNI_Thread::WriteStepCountJS(ostream &p_Stream, const string &p_Delimeter)
+	void SNI_Thread::WriteStepCountJS(ostream &p_Stream, const std::string &p_Delimeter)
 	{
 		p_Stream << "{\"threadnum\" : \"" << m_ThreadNum << "\", \"stepcount\" : \"" << m_ThreadStepCount << "\"}";
 	}
@@ -1261,7 +1261,7 @@ namespace SNI
 		p_Stream << "{\"records\":[\n";
 		if (m_WorldSetProcessMap)
 		{
-			string delimeter = "";
+			std::string delimeter = "";
 			Lock();
 			for (const auto &pair : *m_WorldSetProcessMap)
 			{
@@ -1320,7 +1320,7 @@ namespace SNI
 		}
 	}
 
-	SNI_Variable *SNI_Thread::LookupVariable(const string &p_Name)
+	SNI_Variable *SNI_Thread::LookupVariable(const std::string &p_Name)
 	{
 		for (SNI_Frame *f : m_FrameList)
 		{
@@ -1363,7 +1363,7 @@ namespace SNI
 		return m_FrameList.size();
 	}
 
-	void SNI_Thread::SetDeepBreakPoint(const string & p_BreakPoint, const string & p_BreakPointJS)
+	void SNI_Thread::SetDeepBreakPoint(const std::string & p_BreakPoint, const std::string & p_BreakPointJS)
 	{
 		for (auto it = m_FrameList.rbegin(); it != m_FrameList.rend(); it++)
 		{
@@ -1375,7 +1375,7 @@ namespace SNI
 		}
 	}
 
-	void SNI_Thread::SetThreadBreakPoint(const string & p_BreakPoint, const string & p_BreakPointJS)
+	void SNI_Thread::SetThreadBreakPoint(const std::string & p_BreakPoint, const std::string & p_BreakPointJS)
 	{
 		m_BreakPoint = p_BreakPoint;
 		m_BreakPointJS = p_BreakPointJS;

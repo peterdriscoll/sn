@@ -14,17 +14,17 @@ namespace SNI
 	{
 	}
 
-	string SNI_LookStringRight::GetTypeName() const
+	std::string SNI_LookStringRight::GetTypeName() const
 	{
 		return "LookStringRight";
 	}
 
-	string SNI_LookStringRight::DisplayCpp() const
+	std::string SNI_LookStringRight::DisplayCpp() const
 	{
 		return "SN::LookStringRight";
 	}
 
-	string SNI_LookStringRight::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_LookStringRight::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "LookStringRight";
 	}

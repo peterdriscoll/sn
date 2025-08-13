@@ -21,9 +21,9 @@ namespace SNI
 
 		virtual ~SNI_DisplayOptions();
 
-		void SetVarName(const string & p_VarName);
+		void SetVarName(const std::string & p_VarName);
 
-		string CreateName(const string & p_TypeName);
+		std::string CreateName(const std::string & p_TypeName);
 
 		enum DisplayOptionType GetDebugHTML();
 
@@ -32,8 +32,8 @@ namespace SNI
 		long GetLevel();
 		bool CheckLevel();
 	private:
-		map<string, long> m_TypeMap;
-		string m_VarName;
+		std::map<std::string, long> m_TypeMap;
+		std::string m_VarName;
 		enum DisplayOptionType m_DebugHTML;
 		long m_Level;
 		long m_MaxLevel;

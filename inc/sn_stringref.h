@@ -7,7 +7,7 @@
 #include "sn_base.h"
 
 #include <vector>
-using namespace std;
+
 
 namespace SNI
 {
@@ -25,14 +25,16 @@ namespace SN
 	class SN_Value;
 	class SN_Error;
 
-	class SN_EXPORT SN_StringRef : public SN_Base<SNI::SNI_StringRef, SN_Expression, SN_Error>
+	class SN_EXPORT SN_StringRef : public SN_Base
 	{
 	public:
 		static SN_Class Class();
 
 		SN_StringRef();
 		SN_StringRef(const SN_Value &p_Source, const SN_Expression &p_Start, const SN_Expression &p_End);
-		SN_StringRef(const SN_Expression &p_other);
+		SN_StringRef(const SN_Expression& p_Other);
+		SN_StringRef(SNI::SNI_StringRef* p_StringRef);
+
 		virtual ~SN_StringRef();
 
 		// Construction
@@ -62,13 +64,13 @@ namespace SN
 		SN_Expression File() const;
 
 		// Conversions
-		SN_Expression Escape(enum skynet::EscapeType p_EscapeType) const;
-		SN_Expression Unescape(enum skynet::EscapeType p_EscapeType) const;
+		SN_Expression Escape(enum EscapeType p_EscapeType) const;
+		SN_Expression Unescape(enum EscapeType p_EscapeType) const;
 		SN_Expression StringToInt() const;
 		SN_Expression StringToDouble() const;
 
 		// Members
-		string GetString() const;
+		std::string GetString() const;
 		SN_String GetSource() const;
 		SN_Expression GetStart() const;
 		SN_Expression GetEnd() const;
@@ -79,7 +81,7 @@ namespace SN
 		SNI::SNI_StringRef * GetSNI_StringRef() const;
 	};
 
-	typedef vector<SN_StringRef> SN_StringRefList;
+	typedef std::vector<SN_StringRef> SN_StringRefList;
 }
 
 #endif // !defined(SN_STRING_H_INCLUDED)

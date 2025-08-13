@@ -14,18 +14,18 @@ namespace SNI
 	{
 	public:
 		SNI_Namable();
-		SNI_Namable(const string & p_Name);
+		SNI_Namable(const std::string & p_Name);
 		virtual ~SNI_Namable();
 
-		string GetName() const;
-		void SetName(const string &p_Name);
+		std::string GetName() const;
+		void SetName(const std::string &p_Name);
 
-		string GetDomainName() const;
-		void SetDomainName(const string &p_DomainName);
+		std::string GetDomainName() const;
+		void SetDomainName(const std::string &p_DomainName);
 
 	private:
-		string m_Name;
-		string m_DomainName;
+		std::string m_Name;
+		std::string m_DomainName;
 	};
 }
 

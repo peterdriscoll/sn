@@ -20,17 +20,17 @@ namespace SNI
 	{
 	}
 
-	string SNI_Sum::GetTypeName() const
+	std::string SNI_Sum::GetTypeName() const
 	{
 		return "Sum";
 	}
 
-	string SNI_Sum::DisplayCpp() const
+	std::string SNI_Sum::DisplayCpp() const
 	{
 		return "SN::Sum";
 	}
 
-	string SNI_Sum::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_Sum::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "Sum";
 	}

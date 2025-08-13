@@ -22,10 +22,10 @@ namespace SNI
 		SNI_Value(const SNI_Value &p_other);
 		virtual ~SNI_Value();
 
-		virtual string GetTypeName() const;
-		virtual string DisplayCpp() const;
-		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
-		virtual string DisplayValueSN(long priority, SNI_DisplayOptions & p_DisplayOptions) const;
+		virtual std::string GetTypeName() const;
+		virtual std::string DisplayCpp() const;
+		virtual std::string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
+		virtual std::string DisplayValueSN(long priority, SNI_DisplayOptions & p_DisplayOptions) const;
 		virtual long GetPriority() const;
 
 		virtual bool IsValue() const;
@@ -61,7 +61,7 @@ namespace SNI
 		static SNI_Class* m_Class;
 	};
 
-	typedef vector<SNI_Value> SNI_ValueList;
+	typedef std::vector<SNI_Value> SNI_ValueList;
 }
 
 #endif // !defined(SNI_VALUE_H_INCLUDED)

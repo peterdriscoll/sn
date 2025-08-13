@@ -74,16 +74,21 @@ namespace SN
 
 	size_t SN_Set::Count()
 	{
-		return m_Expression->Count();
+		return GetSNI_Set()->Count();
 	}
 
 	SN_Value SN_Set::operator[](long p_index)
 	{
-		return (*m_Expression)[p_index];
+		return (*GetSNI_Set())[p_index];
+	}
+
+	SNI::SNI_Set* SN_Set::GetSNI_Set()
+	{
+		return static_cast<SNI::SNI_Set*>(m_Expression);
 	}
 
 	SNI::SNI_Set * SN_Set::GetSNI_Set() const
 	{
-		return m_Expression;
+		return static_cast<SNI::SNI_Set *>(m_Expression);
 	}
 }

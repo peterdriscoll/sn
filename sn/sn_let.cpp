@@ -27,6 +27,6 @@ namespace SN
 
 	SNI::SNI_Let * SN_Let::GetSNI_Let() const
 	{
-		return dynamic_cast<SNI::SNI_Let *>(m_Expression);
+		return static_cast<SNI::SNI_Let *>(m_Expression);
 	}
 }

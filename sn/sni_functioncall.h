@@ -17,11 +17,11 @@ namespace SNI
 		static SNI_Class* Class();
 		SNI_Class* VClass();
 
-		virtual string GetTypeName() const;
-		virtual string DisplayCpp() const;
-		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
+		virtual std::string GetTypeName() const;
+		virtual std::string DisplayCpp() const;
+		virtual std::string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual long GetPriority() const;
-		virtual string GetOperator() const;
+		virtual std::string GetOperator() const;
 
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 

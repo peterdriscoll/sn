@@ -7,7 +7,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-using namespace std;
+
 using namespace skynet;
 using namespace PGCX;
 
@@ -18,9 +18,9 @@ namespace test_sn
 	private:
 		bool runWebServer = false;
 
-		static void AssertErrorHandler(bool p_Err, const string& p_Description)
+		static void AssertErrorHandler(bool p_Err, const std::string& p_Description)
 		{
-			Assert::IsTrue(!p_Err, wstring(p_Description.begin(), p_Description.end()).c_str());
+			Assert::IsTrue(!p_Err, std::wstring(p_Description.begin(), p_Description.end()).c_str());
 		}
 
 		void Initialize()
@@ -43,11 +43,11 @@ namespace test_sn
 				(((Long(2) || Long(-2))*(Long(3) || Long(-3))).BuildSet() == ((Long(6) || Long(-6)).BuildSet())).Evaluate().Do();
 
 				((Long(4).SquareRoot()).BuildSet() == (Long(2) || Long(-2)).BuildSet()).Evaluate().Do();
-				string my_exp4 = (Long(4)).BuildSet().DoEvaluate().DisplaySN();
+				std::string my_exp4 = (Long(4)).BuildSet().DoEvaluate().DisplaySN();
 				std::cout << std::endl << ((Long(4)).BuildSet()).DoEvaluate().DisplaySN() << std::endl;
 				Assert::IsTrue(((Long(4)).BuildSet()).DoEvaluate().DisplaySN() == "{Long(4)}");
 
-				string my_exp5 = ((Long(2) || Long(-2)) + (Long(2) || Long(-2))).DoEvaluate().DisplaySN();
+				std::string my_exp5 = ((Long(2) || Long(-2)) + (Long(2) || Long(-2))).DoEvaluate().DisplaySN();
 				Assert::IsTrue(((Long(2) || Long(-2)) + (Long(2) || Long(-2))).DoEvaluate().DoRemove(Long(4)).DoRemove(Long(0)).DoRemove(Long(-4)).DoIsEmpty());
 
 				SN_DECLARE_VALUE(x, Long(2) || Long(-2));
@@ -73,7 +73,7 @@ namespace test_sn
 				(Define(g) == f(Long(5))).PartialAssert().Do();
 
 				(g(Long(4)) == c).Assert().Do();
-				string c_string = c.GetVariableValue().DisplayValueSN();
+				std::string c_string = c.GetVariableValue().DisplayValueSN();
 				Assert::IsTrue(c_string == "Long(20)");
 
 				(c == Long(20)).Assert().Do();
@@ -93,7 +93,7 @@ namespace test_sn
 					Transaction transaction;
 					(X + Long(3) == Long(5)).Assert().Do();
 				}
-				string X_string = X.DoEvaluate().DisplayValueSN();
+				std::string X_string = X.DoEvaluate().DisplayValueSN();
 				Assert::IsTrue(X_string == "Long(2)");
 			}
 			Cleanup();
@@ -117,8 +117,8 @@ namespace test_sn
 				}
 				catch (Error e)
 				{
-					string description = e.GetDescription();
-					Assert::IsTrue(e.IsError(), wstring(description.begin(), description.end()).c_str());
+					std::string description = e.GetDescription();
+					Assert::IsTrue(e.IsError(), std::wstring(description.begin(), description.end()).c_str());
 				}
 				try
 				{
@@ -128,8 +128,8 @@ namespace test_sn
 				}
 				catch (Error e)
 				{
-					string description = e.GetDescription();
-					Assert::IsTrue(e.IsError(), wstring(description.begin(), description.end()).c_str());
+					std::string description = e.GetDescription();
+					Assert::IsTrue(e.IsError(), std::wstring(description.begin(), description.end()).c_str());
 				}
 			}
 		}
@@ -148,8 +148,8 @@ namespace test_sn
 					}
 					catch (Error e)
 					{
-						string description = e.GetDescription();
-						Assert::IsTrue(e.IsError(), wstring(description.begin(), description.end()).c_str());
+						std::string description = e.GetDescription();
+						Assert::IsTrue(e.IsError(), std::wstring(description.begin(), description.end()).c_str());
 					}
 				};
 			}
@@ -192,7 +192,7 @@ namespace test_sn
 
 				SN_DECLARE(X);
 				(Double(245.67).Square() + X.Square() == Double(357.56).Square()).Assert().Do();
-				string X_string = X.BuildSet().DoEvaluate().DisplaySN();
+				std::string X_string = X.BuildSet().DoEvaluate().DisplaySN();
 				Assert::IsTrue(X_string == "{Double(259.798777), Double(-259.798777)}");
 			}
 			Cleanup();

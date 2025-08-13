@@ -25,7 +25,7 @@
 // ------------------------------
 
 #define PGC_PROMOTE_MEMBER(MEMBER, TYPE) \
-    m_##MEMBER.RequestPromotion(GetTransaction());
+    m_##MEMBER.PromoteNow(GetTransaction());
 #define PGC_PROMOTE_CONTAINER(CONTAINER, LISTTYPE, TYPE) \
     m_##CONTAINER.PromoteAll();
 

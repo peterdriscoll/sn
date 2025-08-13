@@ -9,7 +9,7 @@
 
 #include <string>
 #include <vector>
-using namespace std;
+
 
 namespace SNI
 {
@@ -65,13 +65,13 @@ namespace SN
 		bool Equivalent(const SN_Expression &p_Other) const;
 
 		SNI::SNI_Number * GetSNI_Number() const;
-		string GetString() const;
+		std::string GetString() const;
 
 	private:
 		SNI::SNI_Number * m_Number;
 	};
 
-	typedef vector<SN_Number> SN_NumberList;
+	typedef std::vector<SN_Number> SN_NumberList;
 }
 
 #endif // !defined(SN_NUMBER_H_INCLUDED)

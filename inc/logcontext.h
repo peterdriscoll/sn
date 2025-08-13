@@ -10,7 +10,7 @@
 #include "sn_expression.h"
 
 #include <string>
-using namespace std;
+
 
 namespace SNI
 {
@@ -22,20 +22,20 @@ namespace SN
 	class LogContext
 	{
 	public:
-		static string GetContextDescription(long p_LogIndex);
+		static std::string GetContextDescription(long p_LogIndex);
 
 	public:
-		LogContext(const string &p_Description, long p_LogIndex = LOG_STANDARD_INDEX);
+		LogContext(const std::string &p_Description, long p_LogIndex = LOG_STANDARD_INDEX);
 		virtual ~LogContext();
 
-		string GetDescription() const;
-		string GetSimpleDescription() const;
+		std::string GetDescription() const;
+		std::string GetSimpleDescription() const;
 		long Depth();
-		string Space(long p_Spacer);
-		string Pad(const string &p_Text);
-		string PadWidth(const string & p_Text, size_t p_width, char p_Char);
-		void LogExpression(string name, SN::SN_Expression p_expression, SNI::SNI_World *p_world = NULL);
-		void LogText(string p_tag, string p_text);
+		std::string Space(long p_Spacer);
+		std::string Pad(const std::string &p_Text);
+		std::string PadWidth(const std::string & p_Text, size_t p_width, char p_Char);
+		void LogExpression(std::string name, SN::SN_Expression p_expression, SNI::SNI_World *p_world = NULL);
+		void LogText(std::string p_tag, std::string p_text);
 		template<typename T> T LogReturn(T result)
 		{
 			Log::GetLog(m_LogIndex)->WriteLine("\nreturn    " + Pad(SN::SN_Expression(result).DisplaySN()) + m_Description);
@@ -54,7 +54,7 @@ namespace SN
 
 	private:
 		LogContext *m_ParentContext;
-		string m_Description;
+		std::string m_Description;
 		long m_LogIndex;
 		long m_Depth;
 	};

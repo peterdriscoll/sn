@@ -58,18 +58,18 @@ namespace SNI
 		return 3;
 	}
 
-	string SNI_Binary::DisplayCall(long priority, SNI_DisplayOptions &p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const
+	std::string SNI_Binary::DisplayCall(long priority, SNI_DisplayOptions &p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const
 	{
 		if (GetOperator().empty())
 		{
 			return SNI_FunctionDef::DisplayCall(priority, p_DisplayOptions, p_NumParams, p_ParamList, p_DebugSource);
 		}
-		string first = "_";
+		std::string first = "_";
 		if (PC2_First < p_NumParams)
 		{
 			first = p_ParamList[PC2_First].DisplaySN(GetPriority(), p_DisplayOptions);
 		}
-		string second = "_";
+		std::string second = "_";
 		if (PC2_Second < p_NumParams)
 		{
 			second = p_ParamList[PC2_Second].DisplaySN(GetPriority(), p_DisplayOptions);
@@ -319,7 +319,7 @@ namespace SNI
 			if (result.IsStringValue())
 			{
 				if (result.IsReferableValue())
-					{   // A string ref can still be used in a split, even if it is null.
+					{   // A std::string ref can still be used in a split, even if it is null.
 					if (p_TotalCalc <= 3)
 					{
 						return 1;

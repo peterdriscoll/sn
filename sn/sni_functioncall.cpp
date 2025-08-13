@@ -40,17 +40,17 @@ namespace SNI
 	{
 	}
 
-	string SNI_FunctionCall::GetTypeName() const
+	std::string SNI_FunctionCall::GetTypeName() const
 	{
 		return "FunctionCall";
 	}
 
-	string SNI_FunctionCall::DisplayCpp() const
+	std::string SNI_FunctionCall::DisplayCpp() const
 	{
 		return "SN::FunctionCall";
 	}
 
-	string SNI_FunctionCall::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_FunctionCall::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "call";
 	}
@@ -60,7 +60,7 @@ namespace SNI
 		return 0;
 	}
 
-	string SNI_FunctionCall::GetOperator() const
+	std::string SNI_FunctionCall::GetOperator() const
 	{
 		return " ";
 	}
@@ -123,7 +123,7 @@ namespace SNI
 		SN::SN_Expression function = p_ParameterList->back();
 		p_ParameterList->pop_back();
 		SN::SN_Expression result = function.GetSNI_Expression()->PartialCall(p_ParameterList, p_MetaLevel);
-		string s1 = result.DisplaySN();
+		std::string s1 = result.DisplaySN();
 		return result;
 	}
 

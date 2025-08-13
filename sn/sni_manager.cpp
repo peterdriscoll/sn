@@ -56,7 +56,7 @@ using namespace skynet;
 
 namespace SNI
 {
-	string DefaultLogFilePath = "\\log\\SN_";
+	std::string DefaultLogFilePath = "\\log\\SN_";
 
 	/*static*/ thread *SNI_Manager::m_CommandServerThread = NULL;
 	/*static*/ long SNI_Manager::m_CommandServerThreadUsageCount = 0;
@@ -66,7 +66,7 @@ namespace SNI
 	/*static*/ long SNI_Manager::m_WebServerThreadUsageCount = 0;
 	/*static*/ bool SNI_Manager::m_LogicSetupDone = false;
 
-	/*static*/ void SNI_Manager::ThrowErrorHandler(bool p_Err, const string& p_Description)
+	/*static*/ void SNI_Manager::ThrowErrorHandler(bool p_Err, const std::string& p_Description)
 	{
 		throw SN::SN_Error(!p_Err, false, p_Description);
 	}
@@ -130,7 +130,7 @@ namespace SNI
 		Initialize();
 	}
 
-	SNI_Manager::SNI_Manager(string p_Description, OnErrorHandler *p_ErrorHandler, bool p_DelayOnEvaluate, size_t p_MaxCardinalityCall, size_t p_MaxCardinalityUnify)
+	SNI_Manager::SNI_Manager(std::string p_Description, OnErrorHandler *p_ErrorHandler, bool p_DelayOnEvaluate, size_t p_MaxCardinalityCall, size_t p_MaxCardinalityUnify)
 		: m_User(nullptr)
 		, m_Description(p_Description)
 		, m_ErrorHandler(p_ErrorHandler)
@@ -223,7 +223,7 @@ namespace SNI
 		return m_HasDebugServer;
 	}
 
-	string SNI_Manager::Description() const
+	std::string SNI_Manager::Description() const
 	{
 		return m_Description;
 	}
@@ -234,12 +234,12 @@ namespace SNI
 		m_MaxCardinalityUnify = p_MaxCardinalityUnify;
 	}
 
-	string SNI_Manager::LogFilePath() const
+	std::string SNI_Manager::LogFilePath() const
 	{
 		return m_LogFilePath;
 	}
 
-	void SNI_Manager::SetLogFilePath(string p_LogFilePath)
+	void SNI_Manager::SetLogFilePath(std::string p_LogFilePath)
 	{
 		m_LogFilePath = p_LogFilePath;
 	}
@@ -458,7 +458,7 @@ namespace SNI
 		}
 	}
 
-	void SNI_Manager::RunServer(const string& p_Address, const string& p_Port, const string& p_DocRoot)
+	void SNI_Manager::RunServer(const std::string& p_Address, const std::string& p_Port, const std::string& p_DocRoot)
 	{
 		try
 		{
@@ -475,7 +475,7 @@ namespace SNI
 		}
 	}
 
-	void SNI_Manager::StartWebServer(skynet::DebugAction p_DebugAction, const string& p_Address, const string& p_Port, const string& p_DocRoot)
+	void SNI_Manager::StartWebServer(skynet::DebugAction p_DebugAction, const std::string& p_Address, const std::string& p_Port, const std::string& p_DocRoot)
 	{
 		m_HasDebugServer = true;
 		PGC::PGC_Transaction *transaction = SNI::SNI_Transaction::TopTransaction();
@@ -530,11 +530,11 @@ namespace SNI
 
 	ostream * SNI_Manager::CreateLogFile(SN::LoggingLevel p_LoggingLevel)
 	{
-		string currentDirectory = CurrentWorkingDirectory();
+		std::string currentDirectory = CurrentWorkingDirectory();
 
-		string timeId = GetFormattedTime();
-		string logIndex = SN::GetLoggingLevelCode(p_LoggingLevel);
-		string fileName = SNI_Thread::TopManager()->LogFilePath() + logIndex + /*"_" + timeId +*/ ".log"; //" + timeId + "
+		std::string timeId = GetFormattedTime();
+		std::string logIndex = SN::GetLoggingLevelCode(p_LoggingLevel);
+		std::string fileName = SNI_Thread::TopManager()->LogFilePath() + logIndex + /*"_" + timeId +*/ ".log"; //" + timeId + "
 		fstream *logFile = new fstream;
 		logFile->open(fileName.data(), ios::out | ios::trunc);
 		if (!logFile->is_open())
@@ -639,7 +639,7 @@ namespace SNI
 		m_AutoExpandNull = p_AutoExpandNull;
 	}
 
-	void SNI_Manager::Breakpoint(string p_Description)
+	void SNI_Manager::Breakpoint(std::string p_Description)
 	{
 		SNI_Thread::GetThread()->Breakpoint(SN::DebugStop, SN::UserId, "", p_Description, NULL, SN::UserPoint);
 	}

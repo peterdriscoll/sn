@@ -6,7 +6,7 @@
 
 namespace SN
 {
-	/*static*/ string GetLoggingLevelCode(SN::LoggingLevel p_LoggingLevel)
+	/*static*/ std::string GetLoggingLevelCode(SN::LoggingLevel p_LoggingLevel)
 	{
 		switch (p_LoggingLevel)
 		{
@@ -37,7 +37,7 @@ namespace SN
 	{
 	}
 
-	SN_Manager::SN_Manager(string p_Description, OnErrorHandler p_Handler, bool p_DelayOnEvaluate, size_t p_MaxCardinalityCall, size_t p_MaxCardinalityUnify)
+	SN_Manager::SN_Manager(std::string p_Description, OnErrorHandler p_Handler, bool p_DelayOnEvaluate, size_t p_MaxCardinalityCall, size_t p_MaxCardinalityUnify)
 		: m_Manager(new SNI::SNI_Manager(p_Description, p_Handler, p_DelayOnEvaluate, p_MaxCardinalityCall, p_MaxCardinalityUnify))
 		, m_MyManager(true)
 	{
@@ -56,17 +56,17 @@ namespace SN
 		return m_Manager->DelayedCalls();
 	}
 
-	string SN_Manager::Description()
+	std::string SN_Manager::Description()
 	{
 		return m_Manager->Description();
 	}
 
-	string SN_Manager::LogFilePath()
+	std::string SN_Manager::LogFilePath()
 	{
 		return m_Manager->LogFilePath();
 	}
 
-	void SN_Manager::SetLogFilePath(string p_LogFilePath)
+	void SN_Manager::SetLogFilePath(std::string p_LogFilePath)
 	{
 		return m_Manager->SetLogFilePath(p_LogFilePath);
 	}
@@ -139,7 +139,7 @@ namespace SN
 		return m_Manager->GetCh();
 	}
 
-	void SN_Manager::StartWebServer(skynet::DebugAction p_DebugAction, const string & p_Address, const string & p_Port, const string & p_DocRoot, bool p_DoIt)
+	void SN_Manager::StartWebServer(skynet::DebugAction p_DebugAction, const std::string & p_Address, const std::string & p_Port, const std::string & p_DocRoot, bool p_DoIt)
 	{
 		if (p_DoIt)
 		{

@@ -14,11 +14,11 @@ namespace SNI
 		SNI_GetValue();
 		virtual ~SNI_GetValue();
 
-		virtual string GetTypeName() const;
-		virtual string DisplayCpp() const;
-		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
+		virtual std::string GetTypeName() const;
+		virtual std::string DisplayCpp() const;
+		virtual std::string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual long GetPriority() const;
-		virtual string DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression * p_DebugSource) const;
+		virtual std::string DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression * p_DebugSource) const;
 
 		SN::SN_Value PrimaryFunctionValue(const SN::SN_Value &p_Param) const;
 		SN::SN_Expression PrimaryFunctionExpression(const SN::SN_Expression &p_Param) const;

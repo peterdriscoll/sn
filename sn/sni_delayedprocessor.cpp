@@ -249,7 +249,7 @@ namespace SNI
 	void SNI_DelayedProcessor::WriteJSON(ostream &p_Stream, SNI::SNI_DisplayOptions &p_DisplayOptions)
 	{
 		p_Stream << "{\"records\":[\n";
-		string delimeter = "\n";
+		std::string delimeter = "\n";
 		m_SearchLock.lock();
 		long id = 0;
 		for (SNI_DelayedCall *call : m_DelayedCallList)

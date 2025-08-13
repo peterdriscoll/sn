@@ -17,8 +17,8 @@ namespace SNI
 
 		SN::SN_Transaction::RegisterInWebServer();
 
-		string path = p_Path;
-		string paramString = p_ParamString;
+		std::string path = p_Path;
+		std::string paramString = p_ParamString;
 		m_extension = p_Extension;
 
 		string_umap umap;
@@ -61,7 +61,7 @@ namespace SNI
 			}
 			else if (path == "/debugjs")
 			{
-				string breakpoints = umap["breakpoints"].c_str();
+				std::string breakpoints = umap["breakpoints"].c_str();
 				l_thread->LoadBreakPoints(breakpoints);
 				l_thread->Debug();
 			}
@@ -238,23 +238,23 @@ namespace SNI
 		return m_response_data.data();
 	}
 
-	void SNI_HTTP_Handler::extract_parameters(const string &p_ParamString, string_umap &p_Map)
+	void SNI_HTTP_Handler::extract_parameters(const std::string &p_ParamString, string_umap &p_Map)
 	{
-		string result;
-		vector<string> assignmentList;
+		std::string result;
+		vector<std::string> assignmentList;
 		if (!p_ParamString.empty())
 		{
 			Split(p_ParamString, "&", assignmentList);
-			for (const string &element : assignmentList)
+			for (const std::string &element : assignmentList)
 			{
-				vector<string> tokenList;
+				vector<std::string> tokenList;
 				Split(element, "=", tokenList);
 				if (tokenList.size() == 2)
 				{
-					string t0 = tokenList[0];
-					string t1 = tokenList[1];
+					std::string t0 = tokenList[0];
+					std::string t1 = tokenList[1];
 					p_Map[tokenList[0]] = tokenList[1];
-					string r1 = p_Map[tokenList[0]];
+					std::string r1 = p_Map[tokenList[0]];
 				}
 			}
 		}

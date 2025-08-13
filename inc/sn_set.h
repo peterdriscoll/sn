@@ -14,7 +14,7 @@ namespace SNI
 
 namespace SN
 {
-	class SN_EXPORT SN_Set : public SN_Base<SNI::SNI_Set, SN_Expression, SN_Error>
+	class SN_EXPORT SN_Set : public SN_Base
 	{
 	public:
 		static SN_Class Class();
@@ -41,10 +41,11 @@ namespace SN
 
 		SN_Expression IsA(const SN_Expression &p_Parent) const;
 
-		SNI::SNI_Set * GetSNI_Set() const;
+		SNI::SNI_Set* GetSNI_Set();
+		SNI::SNI_Set* GetSNI_Set() const;
 	};
 
-	typedef vector<SN_Set> SN_SetList;
+	typedef std::vector<SN_Set> SN_SetList;
 }
 
 #endif // !defined(SN_SET_H_INCLUDED)

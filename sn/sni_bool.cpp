@@ -49,7 +49,7 @@ namespace SNI
 		return new SNI_Bool(*this);
 	}
 
-	string SNI_Bool::GetTypeName() const
+	std::string SNI_Bool::GetTypeName() const
 	{
 		return "Bool";
 	}
@@ -59,7 +59,7 @@ namespace SNI
 		return true;
 	}
 
-	string SNI_Bool::DisplayCpp() const
+	std::string SNI_Bool::DisplayCpp() const
 	{
 		if (m_Expression)
 		{
@@ -68,7 +68,7 @@ namespace SNI
 		return "false";
 	}
 
-	string SNI_Bool::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_Bool::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		if (m_Expression)
 		{

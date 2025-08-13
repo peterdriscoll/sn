@@ -53,24 +53,24 @@ namespace SNI
 		}
 	}
 
-	string SNI_Derived::GetTypeName() const
+	std::string SNI_Derived::GetTypeName() const
 	{
 		return "Derived";
 	}
 
-	string SNI_Derived::DisplayCpp() const
+	std::string SNI_Derived::DisplayCpp() const
 	{
 		return GetTypeName() + "()";
 	}
 
-	string SNI_Derived::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
+	std::string SNI_Derived::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
 		if (p_DisplayOptions.GetLevel() == 0)
 		{
 			p_DisplayOptions.IncrementLevel();
 			long param = SN::DerivedOneId;
-			string result = SetBreakPoint(GetTypeName() + "(", p_DisplayOptions, this, param);
-			string delimeter;
+			std::string result = SetBreakPoint(GetTypeName() + "(", p_DisplayOptions, this, param);
+			std::string delimeter;
 			for (const SN::SN_Expression &call : m_Vector)
 			{
 				++param;

@@ -7,7 +7,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-using namespace std;
+
 using namespace skynet;
 using namespace PGCX;
 
@@ -18,9 +18,9 @@ namespace test_sn
 	private:
 		bool runWebServer = false;
 
-		static void AssertErrorHandler(bool p_Err, const string& p_Description)
+		static void AssertErrorHandler(bool p_Err, const std::string& p_Description)
 		{
-			Assert::IsTrue(!p_Err, wstring(p_Description.begin(), p_Description.end()).c_str());
+			Assert::IsTrue(!p_Err, std::wstring(p_Description.begin(), p_Description.end()).c_str());
 		}
 
 		void Initialize()
@@ -326,9 +326,9 @@ namespace test_sn
 
 				(typeChecker(shortType) == String("short")).PartialAssert().Do();
 
-				string sTypeChecker_before = typeChecker.DisplayValueSN();
+				std::string sTypeChecker_before = typeChecker.DisplayValueSN();
 				typeChecker.Fix();
-				string sTypeChecker_after = typeChecker.DisplayValueSN();
+				std::string sTypeChecker_after = typeChecker.DisplayValueSN();
 
 				// Polymorphic call.
 				(typeChecker(Short(1)) == String("short")).Evaluate().Do();
@@ -337,7 +337,7 @@ namespace test_sn
 
 				(typeChecker(Short(1)) == A).Assert().Do();
 
-				string A_text = A.GetString();
+				std::string A_text = A.GetString();
 
 				Assert::IsTrue(A_text == "short");
 			}
@@ -358,9 +358,9 @@ namespace test_sn
 				(typeChecker(shortType) == String("short")).PartialAssert().Do();
 				(typeChecker(longType) == String("long")).PartialAssert().Do();
 
-				string sTypeChecker_before = typeChecker.DisplayValueSN();
+				std::string sTypeChecker_before = typeChecker.DisplayValueSN();
 				typeChecker.Fix();
-				string sTypeChecker_after = typeChecker.DisplayValueSN();
+				std::string sTypeChecker_after = typeChecker.DisplayValueSN();
 
 				// Polymorphic call.
 				(typeChecker(Short(1)) == String("short")).Evaluate().Do();
@@ -375,8 +375,8 @@ namespace test_sn
 				(typeChecker(Short(1)) == A).Assert().Do();
 				(typeChecker(Long(1)) == B).Assert().Do();
 
-				string A_text = A.GetString();
-				string B_text = B.GetString();
+				std::string A_text = A.GetString();
+				std::string B_text = B.GetString();
 
 				Assert::IsTrue(A_text == "short");
 				Assert::IsTrue(B_text == "long");
@@ -400,9 +400,9 @@ namespace test_sn
 				(typeChecker(longType) == String("long")).PartialAssert().Do();
 				(typeChecker(longLongType) == String("long long")).PartialAssert().Do();
 
-				string sTypeChecker_before = typeChecker.DisplayValueSN();
+				std::string sTypeChecker_before = typeChecker.DisplayValueSN();
 				typeChecker.Fix();
-				string sTypeChecker_after = typeChecker.DisplayValueSN();
+				std::string sTypeChecker_after = typeChecker.DisplayValueSN();
 
 				// Polymorphic call.
 				(typeChecker(Short(1)) == String("short")).Evaluate().Do();
@@ -421,9 +421,9 @@ namespace test_sn
 				(typeChecker(Long(1)) == B).Assert().Do();
 				(typeChecker(LongLong(1)) == C).Assert().Do();
 
-				string A_text = A.GetString();
-				string B_text = B.GetString();
-				string C_text = C.GetString();
+				std::string A_text = A.GetString();
+				std::string B_text = B.GetString();
+				std::string C_text = C.GetString();
 
 				Assert::IsTrue(A_text == "short");
 				Assert::IsTrue(B_text == "long");
@@ -444,16 +444,16 @@ namespace test_sn
 
 				(typeChecker(shortType) == String("short")).PartialAssert().Do();
 
-				string sTypeChecker_before = typeChecker.DisplayValueSN();
+				std::string sTypeChecker_before = typeChecker.DisplayValueSN();
 				typeChecker.Fix();
-				string sTypeChecker_after = typeChecker.DisplayValueSN();
+				std::string sTypeChecker_after = typeChecker.DisplayValueSN();
 
 				// Reverse Polymorphic call.
 				SN_DECLARE_VALUE(numbers1, Short(1) || Long(2));
-				string n1_text_before = numbers1.DoEvaluate().DisplayValueSN();
+				std::string n1_text_before = numbers1.DoEvaluate().DisplayValueSN();
 
 				(typeChecker(numbers1) == String("short")).Assert().Do();
-				string n1_text = numbers1.DoEvaluate().DisplayValueSN();
+				std::string n1_text = numbers1.DoEvaluate().DisplayValueSN();
 				Assert::IsTrue(n1_text == "Short(1)");
 				(numbers1 == Short(1)).Evaluate().Do();
 			}
@@ -474,24 +474,24 @@ namespace test_sn
 				(typeChecker(shortType) == String("short")).PartialAssert().Do();
 				(typeChecker(longType) == String("long")).PartialAssert().Do();
 
-				string sTypeChecker_before = typeChecker.DisplayValueSN();
+				std::string sTypeChecker_before = typeChecker.DisplayValueSN();
 				typeChecker.Fix();
-				string sTypeChecker_after = typeChecker.DisplayValueSN();
+				std::string sTypeChecker_after = typeChecker.DisplayValueSN();
 
 				// Reverse Polymorphic call.
 				//SN_DECLARE_VALUE(numbers1, Short(1) || Long(2));
 				SN_DECLARE(numbers1);
 				(numbers1 == (Short(1) || Long(2))).PartialAssert().Do();
 
-				string n1_text_before = numbers1.DoEvaluate().DisplayValueSN();
+				std::string n1_text_before = numbers1.DoEvaluate().DisplayValueSN();
 				(typeChecker(numbers1) == String("short")).Assert().Do();
-				string n1_text = numbers1.DoEvaluate().DisplayValueSN();
+				std::string n1_text = numbers1.DoEvaluate().DisplayValueSN();
 				Assert::IsTrue(n1_text == "Short(1)");
 				(numbers1 == Short(1)).Evaluate().Do();
 
 				SN_DECLARE_VALUE(numbers2, Short(1) || Long(2));
 				(typeChecker(numbers2) == String("long")).Assert().Do();
-				string n2_text = numbers2.DoEvaluate().DisplayValueSN();
+				std::string n2_text = numbers2.DoEvaluate().DisplayValueSN();
 				Assert::IsTrue(n2_text == "Long(2)");
 				(numbers2 == Long(2)).Evaluate().Do();
 			}
@@ -514,30 +514,30 @@ namespace test_sn
 				(typeChecker(longType) == String("long")).PartialAssert().Do();
 				(typeChecker(longLongType) == String("long long")).PartialAssert().Do();
 
-				string sTypeChecker_before = typeChecker.DisplayValueSN();
+				std::string sTypeChecker_before = typeChecker.DisplayValueSN();
 				typeChecker.Fix();
-				string sTypeChecker_after = typeChecker.DisplayValueSN();
+				std::string sTypeChecker_after = typeChecker.DisplayValueSN();
 
 				// Reverse Polymorphic call.
 				SN_DECLARE(numbers1);
 				(numbers1 == (Short(1) || Long(2) || LongLong(3))).PartialAssert().Do();
-				string numbers1_text = numbers1.DisplayValueSN();
+				std::string numbers1_text = numbers1.DisplayValueSN();
 				(typeChecker(numbers1) == String("short")).Assert().Do();
-				string n1_text = numbers1.GetValue().DisplayValueSN();
+				std::string n1_text = numbers1.GetValue().DisplayValueSN();
 				Assert::IsTrue(n1_text == "Short(1)");
 				(numbers1 == Short(1)).Evaluate().Do();
 
 				SN_DECLARE(numbers2);
 				(numbers2 == (Short(1) || Long(2) || LongLong(3))).PartialAssert().Do();
 				(typeChecker(numbers2) == String("long")).Assert().Do();
-				string n2_text = numbers2.GetValue().DisplayValueSN();
+				std::string n2_text = numbers2.GetValue().DisplayValueSN();
 				Assert::IsTrue(n2_text == "Long(2)");
 				(numbers2 == Long(2)).Evaluate().Do();
 
 				SN_DECLARE(numbers3);
 				(numbers3 == (Short(1) || Long(2) || LongLong(3))).PartialAssert().Do();
 				(typeChecker(numbers3) == String("long long")).Assert().Do();
-				string n3_text = numbers3.GetValue().DisplayValueSN();
+				std::string n3_text = numbers3.GetValue().DisplayValueSN();
 				Assert::IsTrue(n3_text == "LongLong(3)");
 				(numbers3 == LongLong(3)).Evaluate().Do();
 			}

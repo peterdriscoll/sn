@@ -9,7 +9,6 @@
 
 #include <string>
 #include <unordered_map>
-using namespace std;
 
 #include "ihttp_handler.h"
 

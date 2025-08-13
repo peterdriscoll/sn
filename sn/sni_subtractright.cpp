@@ -12,17 +12,17 @@ namespace SNI
 	{
 	}
 
-	string SNI_SubtractRight::GetTypeName() const
+	std::string SNI_SubtractRight::GetTypeName() const
 	{
 		return "SubtractRight";
 	}
 
-	string SNI_SubtractRight::DisplayCpp() const
+	std::string SNI_SubtractRight::DisplayCpp() const
 	{
 		return "SN::SubtractRight";
 	}
 
-	string SNI_SubtractRight::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_SubtractRight::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "SubtractRight";
 	}

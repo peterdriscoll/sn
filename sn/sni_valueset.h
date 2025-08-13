@@ -34,9 +34,9 @@ namespace SNI
 		virtual SNI_Expression *Copy() const;
 
 		// Logging
-		string GetTypeName() const;
-		string DisplayCpp() const;
-		string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
+		std::string GetTypeName() const;
+		std::string DisplayCpp() const;
+		std::string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		long GetPriority() const;
 
 		// Queries
@@ -69,7 +69,7 @@ namespace SNI
 		void AssignToVariable(SNI_Variable * p_Variable);
 		virtual void Simplify();
 		virtual void Validate();
-		string GenerateTempVariableName();
+		std::string GenerateTempVariableName();
 		virtual SN::SN_Expression SimplifyValue();
 		virtual SN::SN_Error AssertValue(const SN::SN_Expression &p_Value);
 		virtual SNI_WorldSet *GetWorldSet();

@@ -52,17 +52,17 @@ namespace SNI
 		REQUESTPROMOTION(m_DefaultValue);
 	}
 
-	string SNI_Mapping::GetTypeName() const
+	std::string SNI_Mapping::GetTypeName() const
 	{
 		return "Mapping";
 	}
 
-	string SNI_Mapping::DisplayCpp() const
+	std::string SNI_Mapping::DisplayCpp() const
 	{
 		return GetTypeName() + "()";
 	}
 
-	string SNI_Mapping::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
+	std::string SNI_Mapping::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
 		return GetTypeName() + "()";
 	}

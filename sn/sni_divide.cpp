@@ -12,17 +12,17 @@ namespace SNI
 	{
 	}
 
-	string SNI_Divide::GetTypeName() const
+	std::string SNI_Divide::GetTypeName() const
 	{
 		return "Divide";
 	}
 
-	string SNI_Divide::DisplayCpp() const
+	std::string SNI_Divide::DisplayCpp() const
 	{
 		return "SN::Divide";
 	}
 
-	string SNI_Divide::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_Divide::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "(/)";
 	}
@@ -32,7 +32,7 @@ namespace SNI
 		return 2;
 	}
 
-	string SNI_Divide::GetOperator() const
+	std::string SNI_Divide::GetOperator() const
 	{
 		return "/";
 	}

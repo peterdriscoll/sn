@@ -10,7 +10,7 @@
 #include "../sn/sni_real.h"
 
 #include <string>
-using namespace std;
+
 
 namespace SNI
 {
@@ -31,7 +31,7 @@ namespace SN
 	public:
 		static SN_Class Class()
 		{
-			return SNI_Real<T>::Class();
+			return SNI::SNI_Real<T>::Class();
 		}
 
 		SN_Real()
@@ -75,7 +75,7 @@ namespace SN
 			return m_Real;
 		}
 
-		string GetString() const
+		std::string GetString() const
 		{
 			return m_Real->GetString();
 		}
@@ -89,11 +89,11 @@ namespace SN
 			return m_Real->GetNumber();
 		}
 
-		string DisplayValueSN() const
+		std::string DisplayValueSN() const
 		{
 			if (m_Real)
 			{
-				SNI::SNI_DisplayOptions l_DisplayOptions(doTextOnly);
+				SNI::SNI_DisplayOptions l_DisplayOptions(SNI::DisplayOptionType::doTextOnly);
 				return m_Real->DisplayValueSN(0, l_DisplayOptions);
 			}
 			return "NULL";

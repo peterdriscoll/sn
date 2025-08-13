@@ -12,7 +12,6 @@
 #include "exp_ctrl_sn.h"
 #include <string>
 #include <fstream>
-using namespace std;
 
 namespace SN
 {
@@ -24,13 +23,13 @@ namespace SN
 		Log(long p_LogIndex = LOG_STANDARD_INDEX);
 		virtual ~Log();
 
-		void WriteLine(const string &p_line);
-		void Verify(bool p_value, const string &p_description);
-		void VerifyForce(const string &p_description);
+		void WriteLine(const std::string &p_line);
+		void Verify(bool p_value, const std::string &p_description);
+		void VerifyForce(const std::string &p_description);
 
 	protected:
 		void CreateLogFile(long p_LogIndex);
-		void WriteLogFile(const string &p_Line);
+		void WriteLogFile(const std::string &p_Line);
 		void CloseLogFile();
 
 	private:
@@ -39,7 +38,7 @@ namespace SN
 
 		bool m_ShowMessageBox;
 
-		fstream m_LogFile;
+		std::fstream m_LogFile;
 	};
 }
 

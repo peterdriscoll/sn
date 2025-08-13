@@ -13,7 +13,7 @@ namespace SNI
 
 namespace SN
 {
-	class SN_EXPORT SN_Instance : public SN_Base<SNI::SNI_Instance, SN_Expression, SN_Error>
+	class SN_EXPORT SN_Instance : public SN_Base
 	{
 	public:
 		SN_Instance();

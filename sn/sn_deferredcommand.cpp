@@ -38,7 +38,7 @@ namespace SN {
     SN_DeferredCommand::~SN_DeferredCommand() {
         if (!m_Done) {
             OnErrorHandler* handler = SNI::SNI_Thread::TopManager()->ErrorHandler();
-            string err_msg = "ERROR: symbolic command created but not executed (missing .Do())";
+            std::string err_msg = "ERROR: symbolic command created but not executed (missing .Do())";
             if (handler) {
                 SNI::SNI_DisplayOptions l_DisplayOptions(doTextOnly);
                 SN_Error e(false, false, err_msg + m_Expression->DisplayValueSN(0, l_DisplayOptions));

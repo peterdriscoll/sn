@@ -15,7 +15,7 @@ namespace SN
 	{
 	}
 
-	SN_Error::SN_Error(bool p_Success, bool p_Delay, const string & p_Description)
+	SN_Error::SN_Error(bool p_Success, bool p_Delay, const std::string & p_Description)
 		: m_Error(new SNI::SNI_Error(p_Success, p_Delay, p_Description))
 	{
 		if (!p_Success)
@@ -80,12 +80,12 @@ namespace SN
 		return m_Error->RequestRerun();
 	}
 	
-	string SN_Error::GetDescription()
+	std::string SN_Error::GetDescription()
 	{
 		return m_Error->GetDescription();
 	}
 
-	void SN_Error::AddError(SN::SN_Error &p_Error)
+	void SN_Error::AddError(const SN::SN_Error &p_Error)
 	{
 		if (!SNI_Transaction::InWebServer())
 		{

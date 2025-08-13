@@ -4,7 +4,7 @@
 
 #include "snl_characterset.h"
 
-using namespace std;
+
 using namespace skynet;
 using namespace PGCX;
 
@@ -94,7 +94,7 @@ namespace SNL
 			||	AsBooleanExpression(d)(s)(i)
 			)).PartialAssert().Do();
 		}
-		string sAsExpression = AsExpression.DisplayValueSN();
+		std::string sAsExpression = AsExpression.DisplayValueSN();
 
 		// Lambda
 		{
@@ -126,7 +126,7 @@ namespace SNL
 				)))))))
 			)).PartialAssert().Do();
 		}
-		string sAsLambda = AsLambda.DisplayValueSN();
+		std::string sAsLambda = AsLambda.DisplayValueSN();
 
 		// Let
 		{
@@ -154,7 +154,7 @@ namespace SNL
 				))))))))
 			)).PartialAssert().Do();
 		}
-		string sAsLet = AsLet.DisplayValueSN();
+		std::string sAsLet = AsLet.DisplayValueSN();
 
 		// Local
 		{
@@ -188,9 +188,9 @@ namespace SNL
 				&& i == Meta(1, Local(Meta(-1, p), Meta(-1, q)))
 				)))))
 			)).PartialAssert().Do();
-			string sAsLocalInternal = AsLocalInternal.DisplayValueSN();
+			std::string sAsLocalInternal = AsLocalInternal.DisplayValueSN();
 		}
-		string sAsLocal = AsLocal.DisplayValueSN();
+		std::string sAsLocal = AsLocal.DisplayValueSN();
 
 		// If
 		{
@@ -222,7 +222,7 @@ namespace SNL
 				))))))))))
 			)).PartialAssert().Do();
 		}
-		string sAsIf = AsIf.DisplayValueSN();
+		std::string sAsIf = AsIf.DisplayValueSN();
 	}
 
 	void SNL_Parse::DefineBooleanExpression()
@@ -249,7 +249,7 @@ namespace SNL
 				)))))
 			).PartialAssert().Do();
 		}
-		string sAsBooleanExpression = AsBooleanExpression.DisplayValueSN();
+		std::string sAsBooleanExpression = AsBooleanExpression.DisplayValueSN();
 
 		// Boolean term &&
 		{
@@ -273,7 +273,7 @@ namespace SNL
 				)))))
 			).PartialAssert().Do();
 		}
-		string sAsBooleanTerm = AsBooleanTerm.DisplayValueSN();
+		std::string sAsBooleanTerm = AsBooleanTerm.DisplayValueSN();
 
 		// Boolean factor
 		// Some trickery here. A boolean factor could be
@@ -288,7 +288,7 @@ namespace SNL
 
 			(Define(AsBooleanFactor) == AsComparisonExpression).PartialAssert().Do();
 		}
-		string sAsBooleanFactor = AsBooleanFactor.DisplayValueSN();
+		std::string sAsBooleanFactor = AsBooleanFactor.DisplayValueSN();
 	}
 
 	void SNL_Parse::DefineComparisonExpression()
@@ -317,7 +317,7 @@ namespace SNL
 				)))))
 			).PartialAssert().Do();
 		}
-		string sAsComparisonExpression = AsComparisonExpression.DisplayValueSN();
+		std::string sAsComparisonExpression = AsComparisonExpression.DisplayValueSN();
 	}
 
 	void SNL_Parse::DefineArithmeticExpression()
@@ -346,7 +346,7 @@ namespace SNL
 				)))))
 			).PartialAssert().Do();
 		}
-		string sAsArithmeticExpression = AsArithmeticExpression.DisplayValueSN();
+		std::string sAsArithmeticExpression = AsArithmeticExpression.DisplayValueSN();
 
 		// Arithmetic term * /
 		{
@@ -372,13 +372,13 @@ namespace SNL
 				)))))
 			).PartialAssert().Do();
 		}
-		string sAsArithmeticTerm = AsArithmeticTerm.DisplayValueSN();
+		std::string sAsArithmeticTerm = AsArithmeticTerm.DisplayValueSN();
 
 		// Arithmetic factor
 		{
 			(Define(AsArithmeticFactor) == AsFunctionCall).PartialAssert().Do();
 		}
-		string sAsArithmeticFactor = AsArithmeticFactor.DisplayValueSN();
+		std::string sAsArithmeticFactor = AsArithmeticFactor.DisplayValueSN();
 	}
 
 	void SNL_Parse::DefineFunctionCall()
@@ -413,9 +413,9 @@ namespace SNL
 					)
 				)))))
 			)).PartialAssert().Do();
-			string sAsFunctionCallExt = AsFunctionCallExt.DisplayValueSN();
+			std::string sAsFunctionCallExt = AsFunctionCallExt.DisplayValueSN();
 		}
-		string sAsFunctionCall = AsFunctionCall.DisplayValueSN();
+		std::string sAsFunctionCall = AsFunctionCall.DisplayValueSN();
 	}
 
 	void SNL_Parse::DefineSubscript()
@@ -451,9 +451,9 @@ namespace SNL
 				,	s == String("") && i == p
 				)
 			)).PartialAssert().Do();
-			string sAsSubscriptExt = AsSubscriptExt.DisplayValueSN();
+			std::string sAsSubscriptExt = AsSubscriptExt.DisplayValueSN();
 		}
-		string sAsSubscript = AsSubscript.DisplayValueSN();
+		std::string sAsSubscript = AsSubscript.DisplayValueSN();
 	}
 
 	void SNL_Parse::DefinePath()
@@ -486,9 +486,9 @@ namespace SNL
 				, s == String("") && i == p
 				)
 				)).PartialAssert().Do();
-			string sAsPathExt = AsPathExt.DisplayValueSN();
+			std::string sAsPathExt = AsPathExt.DisplayValueSN();
 		}
-		string sAsPath = AsPath.DisplayValueSN();
+		std::string sAsPath = AsPath.DisplayValueSN();
 	}
 
 	void SNL_Parse::DefineFactor()
@@ -596,7 +596,7 @@ namespace SNL
 			SN_LOCAL(t);
 			SN_LOCAL(i);
 
-			(Define(AsString)(s)(i) == (m_Validate.IsString(s) && Local(t, Let(s == String("\"") + t + String("\""), t.Unescape(CPP) == i)))).PartialAssert().Do();
+			(Define(AsString)(s)(i) == (m_Validate.IsString(s) && Local(t, Let(s == String("\"") + t + String("\""), t.Unescape(skynet::EscapeType::CPP) == i)))).PartialAssert().Do();
 		}
 
 		{

@@ -28,10 +28,10 @@ namespace SNI
 	};
 
 	class SNI_WorldSet;
-	typedef vector<SNI_WorldSet*> SNI_WorldSetList;
+	typedef std::vector<SNI_WorldSet*> SNI_WorldSetList;
 
 	class SNI_World;
-	typedef vector<SNI_World*> SNI_WorldList;
+	typedef std::vector<SNI_World*> SNI_WorldList;
 
 	struct WorldKeyHasher
 	{
@@ -43,29 +43,29 @@ namespace SNI
 		bool operator()(SNI_World* p_Left, SNI_World* p_Right) const;
 	};
 
-	typedef unordered_map<SNI_World*, long, WorldKeyHasher, WorldKeyEqual> SNI_WorldCount;
+	typedef std::unordered_map<SNI_World*, long, WorldKeyHasher, WorldKeyEqual> SNI_WorldCount;
 
 	class SNI_World :public SNI_Object
 	{
 	private:
 		PGC_CLASS(SNI_World);
 	public:
-		static string ReasonString(enum FailReason p_Reason);
+		static std::string ReasonString(enum FailReason p_Reason);
 
 		SNI_World(SNI_WorldSet * p_WorldSet, SNI_World *p_CloneParent = NULL);
 		virtual ~SNI_World();
 
 		long long GetWorldNo() const;
 
-		string DisplayShort() const;
-		string DisplayShortJS() const;
-		string DisplaySN(SNI_DisplayOptions & p_DisplayOptions);
-		string DisplayCondition(SNI_DisplayOptions & p_DisplayOptions) const;
-		string DisplayConditionSN(SNI_DisplayOptions & p_DisplayOptions) const;
-		string DisplaySNChildWorlds(SNI_DisplayOptions & p_DisplayOptions) const;
-		string SetBreakPoint(const string & p_Caption, SNI_DisplayOptions & p_DisplayOptions) const;
-		string LogText(SN::LogContext & context, long p_Width) const;
-		void WriteJSON(ostream &p_Stream, const string &tabs, SNI_DisplayOptions & p_DisplayOptions) const;
+		std::string DisplayShort() const;
+		std::string DisplayShortJS() const;
+		std::string DisplaySN(SNI_DisplayOptions & p_DisplayOptions);
+		std::string DisplayCondition(SNI_DisplayOptions & p_DisplayOptions) const;
+		std::string DisplayConditionSN(SNI_DisplayOptions & p_DisplayOptions) const;
+		std::string DisplaySNChildWorlds(SNI_DisplayOptions & p_DisplayOptions) const;
+		std::string SetBreakPoint(const std::string & p_Caption, SNI_DisplayOptions & p_DisplayOptions) const;
+		std::string LogText(SN::LogContext & context, long p_Width) const;
+		void WriteJSON(ostream &p_Stream, const std::string &tabs, SNI_DisplayOptions & p_DisplayOptions) const;
 
 		bool IsEmpty() const;
 		bool HasEmptyChild() const;
@@ -98,7 +98,7 @@ namespace SNI
 		SNI_WorldSet *GetWorldSet();
 
 	private:
-		string Reason() const;
+		std::string Reason() const;
 		void Mark(bool p_Mark);
 		bool HasMutualExclusion();
 		void Negate(SNI_World * p_World);
@@ -122,7 +122,7 @@ namespace SNI
 
 		long m_WorldNo;
 		SN::SN_Expression m_Value;
-		string m_ValueString;
+		std::string m_ValueString;
 	};
 }
 

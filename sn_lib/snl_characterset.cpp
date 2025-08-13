@@ -2,7 +2,7 @@
 
 #include "snl_pch.h"
 
-using namespace std;
+
 using namespace skynet;
 using namespace PGCX;
 
@@ -92,7 +92,7 @@ namespace SNL
 
 		{
 			SN_LOCAL(a);
-			(Define(AlphaUnder)(a) == (AlphaLower(a) || AlphaUpper(a) || a == string("_")).Collapse()).PartialAssert().Do();
+			(Define(AlphaUnder)(a) == (AlphaLower(a) || AlphaUpper(a) || a == std::string("_")).Collapse()).PartialAssert().Do();
 		}
 
 		{

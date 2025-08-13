@@ -12,17 +12,17 @@ namespace SNI
 	{
 	}
 
-	string SNI_Multiply::GetTypeName() const
+	std::string SNI_Multiply::GetTypeName() const
 	{
 		return "Multiply";
 	}
 
-	string SNI_Multiply::DisplayCpp() const
+	std::string SNI_Multiply::DisplayCpp() const
 	{
 		return "SN::Multiply";
 	}
 
-	string SNI_Multiply::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_Multiply::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "(*)";
 	}
@@ -32,7 +32,7 @@ namespace SNI
 		return 2;
 	}
 
-	string SNI_Multiply::GetOperator() const
+	std::string SNI_Multiply::GetOperator() const
 	{
 		return "*";
 	}

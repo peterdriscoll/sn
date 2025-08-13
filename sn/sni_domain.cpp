@@ -22,7 +22,7 @@ namespace SNI
 		return Class();
 	}
 
-	SNI_Domain::SNI_Domain(const string &p_Name)
+	SNI_Domain::SNI_Domain(const std::string &p_Name)
 		: m_Name(p_Name)
 	{
 	}
@@ -45,17 +45,17 @@ namespace SNI
 		}
 	}
 
-	string SNI_Domain::GetTypeName() const
+	std::string SNI_Domain::GetTypeName() const
 	{
 		return "Domain";
 	}
 
-	string SNI_Domain::DisplayCpp() const
+	std::string SNI_Domain::DisplayCpp() const
 	{
 		return m_Name;
 	}
 
-	string SNI_Domain::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
+	std::string SNI_Domain::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
 		return m_Name;
 	}
@@ -80,7 +80,7 @@ namespace SNI
 		return skynet::OK;
 	}
 
-	SN::SN_Expression SNI_Domain::operator[](const string & p_Index)
+	SN::SN_Expression SNI_Domain::operator[](const std::string & p_Index)
 	{
 		auto it = m_Map.find(p_Index);
 		if (it == m_Map.end())

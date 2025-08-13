@@ -24,8 +24,8 @@ namespace SNI
 
 		size_t size_tGetThreadNum();
 
-		bool IsBreakPoint(SN::InterruptPoint p_InterruptPoint, size_t p_ThreadNum, size_t p_FrameStackDepth, size_t p_StepCount, const string &p_BreakPoint, SN::DebuggingStop p_DebuggingStop);
-		void LoadBreakPoints(const string &p_BreakPointString);
+		bool IsBreakPoint(SN::InterruptPoint p_InterruptPoint, size_t p_ThreadNum, size_t p_FrameStackDepth, size_t p_StepCount, const std::string &p_BreakPoint, SN::DebuggingStop p_DebuggingStop);
+		void LoadBreakPoints(const std::string &p_BreakPointString);
 
 		bool IsRunning();
 		bool IsQuitting();
@@ -51,8 +51,8 @@ namespace SNI
 		// Display actions
 		void SelectThread(long p_ThreadNum);
 
-		string Description();
-		void SetDescription(const string &p_Text);
+		std::string Description();
+		void SetDescription(const std::string &p_Text);
 
 		void SetRunning(bool p_Running);
 	private:
@@ -62,9 +62,9 @@ namespace SNI
 		size_t m_ThreadNum;
 		size_t m_StepCount;
 		bool m_Running;
-		string m_Description;
+		std::string m_Description;
 		SN::DebuggingStop m_DebugStop;
-		set<string> m_BreakPointSet;
+		set<std::string> m_BreakPointSet;
 		mutex m_Mutex;
 		condition_variable m_ReadyForCommandCond;
 		bool m_ReadyForCommand;

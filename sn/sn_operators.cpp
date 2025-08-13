@@ -1,4 +1,4 @@
-#include "sn_SNI_User::GetCurrentUser()->GetOperators().h"
+#include "sn_operators.h"
 #include "sn.h"
 
 #include "sni_valueset.h"
@@ -7,6 +7,11 @@
 
 namespace SN
 {
+	SN_FunctionDef EscapeCPP(dynamic_cast<SNI::SNI_FunctionDef*>(new SNI::SNI_Escape(SN::CPP)));
+	SN_FunctionDef UnescapeCPP(dynamic_cast<SNI::SNI_FunctionDef*>(new SNI::SNI_Unescape(SN::CPP)));
+	SN_FunctionDef EscapeJSON(dynamic_cast<SNI::SNI_FunctionDef*>(new SNI::SNI_Escape(SN::JSON)));
+	SN_FunctionDef UnescapeJSON(dynamic_cast<SNI::SNI_FunctionDef*>(new SNI::SNI_Unescape(SN::JSON)));
+
 	namespace SN_Operators
 	{
 		// Value sets
@@ -230,31 +235,31 @@ namespace SN
 		}
 
 		// Escape conversions
-		SN::SN_Expression Escape(enum skynet::EscapeType p_EscapeType, const SN::SN_Expression &p_Left)
+		SN::SN_Expression Escape(enum SN::EscapeType p_EscapeType, const SN::SN_Expression &p_Left)
 		{
-			SN_FunctionDef def(skynet::EscapeCPP);
+			SN_FunctionDef def(SN::EscapeCPP);
 			switch (p_EscapeType)
 			{
-			case skynet::CPP:
-				def = skynet::EscapeCPP;
+			case SN::CPP:
+				def = SN::EscapeCPP;
 				break;
-			case skynet::JSON:
-				def = skynet::EscapeJSON;
+			case SN::JSON:
+				def = SN::EscapeJSON;
 				break;
 			}
 			return FunctionCall(def, p_Left);
 		}
 
-		SN::SN_Expression Unescape(enum skynet::EscapeType p_EscapeType, const SN::SN_Expression &p_Left)
+		SN::SN_Expression Unescape(enum SN::EscapeType p_EscapeType, const SN::SN_Expression &p_Left)
 		{
 			SN_FunctionDef def(skynet::UnescapeCPP);
 			switch (p_EscapeType)
 			{
-			case skynet::CPP:
-				def = skynet::UnescapeCPP;
+			case SN::CPP:
+				def = SN::UnescapeCPP;
 				break;
-			case skynet::JSON:
-				def = skynet::UnescapeJSON;
+			case SN::JSON:
+				def = SN::UnescapeJSON;
 				break;
 			}
 			return FunctionCall(def, p_Left);

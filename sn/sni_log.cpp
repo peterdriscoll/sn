@@ -47,21 +47,21 @@ namespace SNI
 		m_LogBufferLoggingLevel = p_LoggingLevel;
 	}
 
-	void SNI_Log::WriteLine(SN::LoggingLevel p_DebugLevel, const string &p_line, bool p_Heading)
+	void SNI_Log::WriteLine(SN::LoggingLevel p_DebugLevel, const std::string &p_line, bool p_Heading)
 	{
-		vector<string> arrLines;
+		vector<std::string> arrLines;
 		SNI::Split(p_line, "\n", arrLines);
 		size_t num_lines = arrLines.size()-1;
-		string timestamp = GetFormattedTime();
+		std::string timestamp = GetFormattedTime();
 		size_t j = 0;
 		for (ostream *stream : m_StreamList)
 		{
 			if (p_DebugLevel <= m_LoggingLevelList[j++])
 			{
-				string delimeter;
-				string prefix = timestamp;
-				string blank(prefix.size(), ' ');
-				for (string & line : arrLines)
+				std::string delimeter;
+				std::string prefix = timestamp;
+				std::string blank(prefix.size(), ' ');
+				for (std::string & line : arrLines)
 				{
 					*stream << prefix << " | " << line << "\n";
 					delimeter = "\n";
@@ -74,7 +74,7 @@ namespace SNI
 		{
 			if (p_DebugLevel <= m_LogBufferLoggingLevel)
 			{
-				for (string & line : arrLines)
+				for (std::string & line : arrLines)
 				{
 					m_LogBuffer->WriteLine(line, p_Heading);
 				}
@@ -82,7 +82,7 @@ namespace SNI
 		}
 	}
 
-	void SNI_Log::WriteHeading(SN::LoggingLevel p_DebugLevel, const string & p_line)
+	void SNI_Log::WriteHeading(SN::LoggingLevel p_DebugLevel, const std::string & p_line)
 	{
 		WriteLine(p_DebugLevel, p_line, true);
 	}
@@ -105,7 +105,7 @@ namespace SNI
 		WriteLine(p_DebugLevel, p_Result.DisplayValueSN() + " == " + p_Expression.DisplayValueSN());
 	}
 
-	void SNI_Log::WriteClonedExpression(SN::LoggingLevel p_DebugLevel, const string &p_Text, SN::SN_Expression p_Expression)
+	void SNI_Log::WriteClonedExpression(SN::LoggingLevel p_DebugLevel, const std::string &p_Text, SN::SN_Expression p_Expression)
 	{
 		WriteLine(p_DebugLevel, p_Text + "Cloned " + p_Expression.DisplaySN());
 		SNI_Thread::GetThread()->Breakpoint(SN::DetailStop, SN::CallId, "", "Cloned", NULL, SN::ClonePoint);
@@ -116,7 +116,7 @@ namespace SNI
 		WriteLine(p_DebugLevel, p_Variable.GetName() + " == " + p_Variable.GetVariableValue().DisplaySN());
 	}
 
-	void SNI_Log::WriteVariableByName(SN::LoggingLevel p_DebugLevel, const string &p_Name)
+	void SNI_Log::WriteVariableByName(SN::LoggingLevel p_DebugLevel, const std::string &p_Name)
 	{
 		SNI_Variable * v = SNI_Thread::GetThread()->LookupVariable(p_Name);
 		if (v)
@@ -129,7 +129,7 @@ namespace SNI
 		}
 	}
 
-	void SNI_Log::WriteContext(SN::LoggingLevel p_DebugLevel, const string & p_Text)
+	void SNI_Log::WriteContext(SN::LoggingLevel p_DebugLevel, const std::string & p_Text)
 	{
 		SNI_World *world = SNI_Thread::GetThread()->ContextWorld();
 		if (world)

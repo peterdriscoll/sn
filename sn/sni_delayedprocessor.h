@@ -108,7 +108,7 @@ namespace SNI
 		//SNI_DelayedCallList  m_FailedList;
 		bool                 m_Processing;
 		mutex                m_SearchLock;
-		//unordered_map<string, SN::SN_String> m_PreventReread;
+		//unordered_map<std::string, SN::SN_String> m_PreventReread;
 		//PGCX::MemberRef<SNI_Manager> m_Manager;
 	};
 }

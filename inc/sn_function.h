@@ -24,6 +24,7 @@ namespace SN
 		SN_Function(const SN_Function &p_Function);
 		SN_Function(const SN_Expression  &p_Function);
 		SN_Function(const SN_Expression &p_Function, const SN_Expression &p_Parameter);
+		SN_Function(SNI::SNI_Function *p_Function);
 		virtual ~SN_Function();
 
 		SN_Function &Condition(const SN_Expression &p_Condition);
@@ -31,6 +32,7 @@ namespace SN
 		SN_Expression GetFunction() const;
 		SN_Expression GetParameter() const;
 
+		SNI::SNI_Function* GetSNI_Function();
 		SNI::SNI_Function * GetSNI_Function() const;
 	};
 }

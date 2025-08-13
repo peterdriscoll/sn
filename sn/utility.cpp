@@ -26,31 +26,31 @@
 
 namespace SNI
 {
-	string CurrentWorkingDirectory()
+	std::string CurrentWorkingDirectory()
 	{
 		char* cwd = _getcwd(0, 0); // **** microsoft specific ****
-		string working_directory(cwd);
+		std::string working_directory(cwd);
 		free(cwd);
 		return working_directory;
 	}
 
-	string ExtractDirPath(const string& str)
+	std::string ExtractDirPath(const std::string& str)
 	{
 		size_t found = str.find_last_of("/\\");
 		return str.substr(0, found);
 	}
 
-	void OpenURLInBrowser(const string& str)
+	void OpenURLInBrowser(const std::string& str)
 	{
 #ifdef _WIN32
 		ShellExecuteA(NULL, "open", str.c_str(), NULL, NULL, SW_SHOW);
 #else
-		system((string("open")+ str).c_str());
+		system((std::string("open")+ str).c_str());
 #endif
 	}
 
 	// Returns the local date/time formatted as 2014-03-19 11:11:52
-	string GetFormattedTime(void) {
+	std::string GetFormattedTime(void) {
 
 		time_t rawtime;
 		struct tm timeinfo;
@@ -65,12 +65,12 @@ namespace SNI
 		return _retval;
 	}
 
-	void Split(const string& a_buffer,
-		const string& a_delimeter,
-		vector<string>& a_result)
+	void Split(const std::string& a_buffer,
+		const std::string& a_delimeter,
+		vector<std::string>& a_result)
 	{
-		string tmp = a_buffer;
-		string substring;
+		std::string tmp = a_buffer;
+		std::string substring;
 
 		a_result.clear();
 
@@ -88,7 +88,7 @@ namespace SNI
 		while (isTrue)
 		{
 			size_t index = tmp.find(a_delimeter, 1);
-			if (index == string::npos)
+			if (index == std::string::npos)
 			{
 				a_result.push_back(tmp);
 				return;
@@ -98,12 +98,12 @@ namespace SNI
 		};
 	}
 
-	string ReplaceAll(const string &source, const string &target, const string &replace)
+	std::string ReplaceAll(const std::string &source, const std::string &target, const std::string &replace)
 	{
-		string::size_type pos;
-		string::size_type lastPos = 0;
-		string result;
-		while ((pos = source.find(target, lastPos)) != string::npos)
+		std::string::size_type pos;
+		std::string::size_type lastPos = 0;
+		std::string result;
+		while ((pos = source.find(target, lastPos)) != std::string::npos)
 		{
 			result += source.substr(lastPos, pos - lastPos) + replace;
 			lastPos = pos + target.length();
@@ -112,9 +112,9 @@ namespace SNI
 		return result;
 	}
 
-	string EscapeStringToCPP(const std::string &p_Unescaped)
+	std::string EscapeStringToCPP(const std::string &p_Unescaped)
 	{
-		string out;
+		std::string out;
 		for (std::string::const_iterator i = p_Unescaped.begin(), end = p_Unescaped.end(); i != end; ++i) {
 			unsigned char c = *i;
 			if (' ' <= c && c <= '~' && c != '\\' && c != '"') {
@@ -139,9 +139,9 @@ namespace SNI
 		return out;
 	}
 
-	string UnescapeStringToCPP(const std::string &p_Escaped)
+	std::string UnescapeStringToCPP(const std::string &p_Escaped)
 	{
-		string out;
+		std::string out;
 		for (std::string::const_iterator i = p_Escaped.begin(), end = p_Escaped.end(); i != end; ++i) {
 			unsigned char c = *i;
 			if (c == '\\')
@@ -177,14 +177,14 @@ namespace SNI
 		return out;
 	}
 	
-	string EscapeStringToCPPUsingQuoted(const std::string &p_Unescaped)
+	std::string EscapeStringToCPPUsingQuoted(const std::string &p_Unescaped)
 	{
 		std::stringstream ss;
 		ss << std::quoted(p_Unescaped);
 		return ss.str();
 	}
 
-	string UnescapeStringToCPPUsingQuoted(const std::string &p_Escaped)
+	std::string UnescapeStringToCPPUsingQuoted(const std::string &p_Escaped)
 	{
 		std::stringstream ss('\"' + p_Escaped + '\"');
 		std::string out;
@@ -192,26 +192,26 @@ namespace SNI
 		return out;
 	}
 
-	string EscapeStringToJSON(const string &p_Unescaped)
+	std::string EscapeStringToJSON(const std::string &p_Unescaped)
 	{
 		return boost::property_tree::json_parser::create_escapes<char>(p_Unescaped);
 	}
 
-	string UnescapeStringToJSON(const string &p_Escaped)
+	std::string UnescapeStringToJSON(const std::string &p_Escaped)
 	{
 		// How to do this?
 		return p_Escaped;
 	}
 
-	string EscapeStringToHTML(const string &p_Unescaped)
+	std::string EscapeStringToHTML(const std::string &p_Unescaped)
 	{ // Crude draft.
 		return ReplaceAll(p_Unescaped, "&", "&amp;");
 	}
 
-	string DisplaySnExpressionList(SN::SN_ExpressionList * p_ParameterList)
+	std::string DisplaySnExpressionList(SN::SN_ExpressionList * p_ParameterList)
 	{
-		string result;
-		string separator;
+		std::string result;
+		std::string separator;
 		for (unsigned long j = 0; j < p_ParameterList->size(); j++)
 		{
 			result += separator + (*p_ParameterList)[j].DisplayValueSN();
@@ -220,11 +220,11 @@ namespace SNI
 		return result;
 	}
 
-	string Pad(const string &p_Text, size_t p_Width)
+	std::string Pad(const std::string &p_Text, size_t p_Width)
 	{
 		size_t textWidth = p_Text.size();
 		size_t spacerWidth = 0;
-		string text = p_Text;
+		std::string text = p_Text;
 		if (p_Width > textWidth)
 		{
 			spacerWidth = p_Width - textWidth;
@@ -233,13 +233,13 @@ namespace SNI
 		{
 			text = p_Text.substr(0, p_Width - 3) + "...";
 		}
-		return text + string(spacerWidth, ' ');
+		return text + std::string(spacerWidth, ' ');
 	}
 
-	string Trim(const string &p_Text, size_t p_Width)
+	std::string Trim(const std::string &p_Text, size_t p_Width)
 	{
 		size_t textWidth = p_Text.size();
-		string text = p_Text;
+		std::string text = p_Text;
 		if (p_Width < textWidth)
 		{
 			text = p_Text.substr(0, p_Width - 3) + "...";
@@ -247,10 +247,10 @@ namespace SNI
 		return text;
 	}
 
-	string Details(const string &p_Text, size_t p_Width)
+	std::string Details(const std::string &p_Text, size_t p_Width)
 	{
 		size_t textWidth = p_Text.size();
-		string text = p_Text;
+		std::string text = p_Text;
 		if (p_Width < textWidth)
 		{
 			text =
@@ -262,10 +262,10 @@ namespace SNI
 		return text;
 	}
 
-	string DetailsFS(const string &p_Text, const string &p_TextHTML, size_t p_Width)
+	std::string DetailsFS(const std::string &p_Text, const std::string &p_TextHTML, size_t p_Width)
 	{
-		string abbreviation;
-		string textHTML = EscapeStringToJSON(p_TextHTML);
+		std::string abbreviation;
+		std::string textHTML = EscapeStringToJSON(p_TextHTML);
 		size_t textWidth = p_Text.size();
 		if (p_Width < textWidth)
 		{
@@ -274,10 +274,10 @@ namespace SNI
 		return "{\"abbreviation\" : \"" + abbreviation + "\",\"text\" : \"" + textHTML + "\"}";
 	}
 
-	string DisplaySnValueList(const SN::SN_ValueList &p_ParameterList)
+	std::string DisplaySnValueList(const SN::SN_ValueList &p_ParameterList)
 	{
-		string result;
-		string separator;
+		std::string result;
+		std::string separator;
 		for (unsigned long j = 0; j < p_ParameterList.size(); j++)
 		{
 			result += separator + p_ParameterList[j].DisplayValueSN();
@@ -286,10 +286,10 @@ namespace SNI
 		return result;
 	}
 
-	string DisplaySnParameterList(SN::SN_ParameterList * p_ParameterList)
+	std::string DisplaySnParameterList(SN::SN_ParameterList * p_ParameterList)
 	{
-		string result;
-		string separator;
+		std::string result;
+		std::string separator;
 		for (unsigned long j = 0; j < p_ParameterList->size(); j++)
 		{
 			result += separator + (*p_ParameterList)[j].GetValue().DisplaySN();
@@ -302,10 +302,10 @@ namespace SNI
 		return result;
 	}
 
-	string DisplaySnTaggedValueList(const SNI_TaggedValueList &p_TaggedValueList, SNI_DisplayOptions & p_DisplayOptions)
+	std::string DisplaySnTaggedValueList(const SNI_TaggedValueList &p_TaggedValueList, SNI_DisplayOptions & p_DisplayOptions)
 	{
-		string result;
-		string separator;
+		std::string result;
+		std::string separator;
 		for (unsigned long j = 0; j < p_TaggedValueList.size(); j++)
 		{
 			result += separator + p_TaggedValueList[j].GetValue().DisplaySN(p_DisplayOptions);
@@ -320,10 +320,10 @@ namespace SNI
 		return result;
 	}
 
-	string DisplaySnTaggedExpressionList(const SNI_TaggedValueList &p_TaggedValueList, SNI_DisplayOptions & p_DisplayOptions)
+	std::string DisplaySnTaggedExpressionList(const SNI_TaggedValueList &p_TaggedValueList, SNI_DisplayOptions & p_DisplayOptions)
 	{
-		string result;
-		string separator;
+		std::string result;
+		std::string separator;
 		for (unsigned long j = 0; j < p_TaggedValueList.size(); j++)
 		{
 			SNI_World *world = p_TaggedValueList[j].GetWorld();
@@ -340,7 +340,7 @@ namespace SNI
 		return result;
 	}
 
-	string DisplaySnExpression(SNI_Expression *p_Expression)
+	std::string DisplaySnExpression(SNI_Expression *p_Expression)
 	{
 		if (p_Expression)
 		{
@@ -349,7 +349,7 @@ namespace SNI
 		return "Null";
 	}
 
-	string DisplaySnExpression(const SN::SN_Expression &p_Expression)
+	std::string DisplaySnExpression(const SN::SN_Expression &p_Expression)
 	{
 		if (p_Expression.GetSNI_Expression())
 		{
@@ -358,19 +358,19 @@ namespace SNI
 		return "Null";
 	}
 
-	string DisplayWorlds(long p_NumWorlds, SNI_World ** p_World)
+	std::string DisplayWorlds(long p_NumWorlds, SNI_World ** p_World)
 	{
 		SNI_DisplayOptions displayOptions(doTextOnly);
 		return DisplayWorldsD(displayOptions, p_NumWorlds, p_World);
 	}
 
-	string DisplayWorldsD(SNI_DisplayOptions &p_DisplayOptions, long p_NumWorlds, SNI_World ** p_World)
+	std::string DisplayWorldsD(SNI_DisplayOptions &p_DisplayOptions, long p_NumWorlds, SNI_World ** p_World)
 	{
 		if (!p_World)
 		{
 			return "";
 		}
-		string result;
+		std::string result;
 		for (long j = 0; j < p_NumWorlds; j++)
 		{
 			if (result.length())
@@ -385,15 +385,15 @@ namespace SNI
 		return "worlds " + result;
 	}
 
-	string DisplayValues(long p_NumWorlds, SN::SN_Expression * p_ParamList, SNI_World ** p_World)
+	std::string DisplayValues(long p_NumWorlds, SN::SN_Expression * p_ParamList, SNI_World ** p_World)
 	{
 		SNI_DisplayOptions displayOptions(doTextOnly);
 		return DisplayValuesD(displayOptions, p_NumWorlds, p_ParamList, p_World);
 	}
 	
-	string DisplayValuesD(SNI_DisplayOptions & p_DisplayOptions, long p_NumWorlds, SN::SN_Expression * p_ParamList, SNI_World ** p_World)
+	std::string DisplayValuesD(SNI_DisplayOptions & p_DisplayOptions, long p_NumWorlds, SN::SN_Expression * p_ParamList, SNI_World ** p_World)
 	{
-		string result;
+		std::string result;
 		for (long j = 0; j < p_NumWorlds; j++)
 		{
 			if (result.length())
@@ -412,7 +412,7 @@ namespace SNI
 		return "values " + result;
 	}
 
-	string DisplayWorldSet(SNI_WorldSet *p_WorldSet)
+	std::string DisplayWorldSet(SNI_WorldSet *p_WorldSet)
 	{
 		if (p_WorldSet)
 		{
@@ -421,12 +421,12 @@ namespace SNI
 		return "";
 	}
 
-	string MakeBreakPoint(const string &p_DebugId, long p_Index)
+	std::string MakeBreakPoint(const std::string &p_DebugId, long p_Index)
 	{
 		return p_DebugId + "_" + to_string(p_Index);
 	}
 
-	string MakeBreakPointJS(const string &p_DebugId, long p_Index)
+	std::string MakeBreakPointJS(const std::string &p_DebugId, long p_Index)
 	{
 		return "[\"" + p_DebugId + "\"," + to_string(p_Index) + "]";
 	}

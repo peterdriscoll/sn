@@ -10,7 +10,7 @@
 
 namespace SN
 {
-	class SN_EXPORT SN_Bool : public SN_Base<SNI::SNI_Bool, SN_Expression, SN_Error>
+	class SN_EXPORT SN_Bool : public SN_Base
 	{
 	public:
 		static SN_Class Class();
@@ -18,8 +18,12 @@ namespace SN
 		SN_Bool();
 		SN_Bool(bool p_other);
 		SN_Bool(const SN_Bool &p_Other);
-		SN_Bool(const SN_Value &p_Other);
+		SN_Bool(const SN_Value& p_Other);
+		SN_Bool(const SN_Expression& p_Other);
 		virtual ~SN_Bool();
+
+		SNI::SNI_Bool* GetSNI_Bool();
+		SNI::SNI_Bool* GetSNI_Bool() const;
 
 		SN_Expression operator ==(const SN_Expression &p_Other) const;
 		SN_Expression operator !=(const SN_Expression &p_Other) const;
@@ -46,8 +50,6 @@ namespace SN
 		SN_Expression IsA(const SN_Expression &p_Parent) const;
 
 		bool GetBool() const;
-
-		SNI::SNI_Bool *GetSNI_Bool() const;
 	};
 }
 

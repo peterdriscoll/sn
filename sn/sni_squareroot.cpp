@@ -26,17 +26,17 @@ namespace SNI
 
 	}
 
-	string SNI_SquareRoot::GetTypeName() const
+	std::string SNI_SquareRoot::GetTypeName() const
 	{
 		return "SquareRoot";
 	}
 
-	string SNI_SquareRoot::DisplayCpp() const
+	std::string SNI_SquareRoot::DisplayCpp() const
 	{
 		return "SN::SquareRoot";
 	}
 
-	string SNI_SquareRoot::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_SquareRoot::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "SquareRoot";
 	}

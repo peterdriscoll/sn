@@ -17,17 +17,19 @@ namespace SN
 	class SN_Expression;
 	class SN_Value;
 
-	class SN_EXPORT SN_Domain : public SN_Base<SNI::SNI_Domain, SN_Expression, SN_Error>
+	class SN_EXPORT SN_Domain : public SN_Base
 	{
 	public:
 		static SN_Class Class();
 
-		SN_Domain(const string &p_Name);
+		SN_Domain(const std::string &p_Name);
 		virtual ~SN_Domain();
 
-		SN_Expression operator [](const string &p_Index);
+		SN_Expression operator [](const std::string &p_Index);
 		SN_Expression CreateMetaVariable(const SN_Expression &p_Index);
 		SN_Expression IsA(const SN_Expression &p_Parent) const;
+
+		SNI::SNI_Domain* GetSNI_Domain();
 
 		SNI::SNI_Domain * GetSNI_Domain() const;
 	};

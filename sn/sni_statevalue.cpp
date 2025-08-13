@@ -50,15 +50,15 @@ namespace SNI
 		REQUESTPROMOTION(m_State);
 	}
 
-	string SNI_StateValue::GetTypeName() const
+	std::string SNI_StateValue::GetTypeName() const
 	{
 		return "StateValue";
 	}
 
-	string SNI_StateValue::DisplayCpp() const
+	std::string SNI_StateValue::DisplayCpp() const
 	{
-		string value = "null";
-		string state = "null";
+		std::string value = "null";
+		std::string state = "null";
 		if (m_Value)
 		{
 			value = m_Value->DisplayCpp();
@@ -70,10 +70,10 @@ namespace SNI
 		return GetTypeName() + "(" + value + ", " + state + ")";
 	}
 
-	string SNI_StateValue::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
+	std::string SNI_StateValue::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
-		string value = "null";
-		string state = "null";
+		std::string value = "null";
+		std::string state = "null";
 		if (m_Value)
 		{
 			value = m_Value->DisplaySN(0, p_DisplayOptions);
@@ -126,7 +126,7 @@ namespace SNI
 		}
 
 		SN::SN_Expression value = m_Value;
-		string b1 = value.DisplaySN();
+		std::string b1 = value.DisplaySN();
 		value = m_Value->DoEvaluate(p_MetaLevel);
 		if (value.IsError())
 		{
@@ -138,10 +138,10 @@ namespace SNI
 			rvalue = m_Value->DoPartialEvaluate(p_MetaLevel).GetSNI_Expression();
 		}
 		const_cast<SNI_StateValue*>(this)->m_Value = rvalue.GetSNI_Expression();
-		string s1 = rvalue.DisplaySN();
+		std::string s1 = rvalue.DisplaySN();
 
 		SN::SN_Expression state = m_State;
-		string b2 = state.DisplaySN();
+		std::string b2 = state.DisplaySN();
 		state = m_State->DoEvaluate(p_MetaLevel);
 		if (state.IsError())
 		{
@@ -154,7 +154,7 @@ namespace SNI
 			rstate = m_State->DoPartialEvaluate(p_MetaLevel);
 		}
 		const_cast<SNI_StateValue*>(this)->m_State = rstate.GetSNI_Expression();
-		string s2 = rstate.DisplaySN();
+		std::string s2 = rstate.DisplaySN();
 		return this;
 	}
 

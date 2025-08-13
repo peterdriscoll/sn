@@ -12,17 +12,17 @@ namespace SNI
 	{
 	}
 
-	string SNI_Same::GetTypeName() const
+	std::string SNI_Same::GetTypeName() const
 	{
 		return "Same";
 	}
 
-	string SNI_Same::DisplayCpp() const
+	std::string SNI_Same::DisplayCpp() const
 	{
 		return "SN::Same";
 	}
 
-	string SNI_Same::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_Same::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "Assert equal";
 	}
@@ -32,12 +32,12 @@ namespace SNI
 		return 4;
 	}
 
-	string SNI_Same::GetOperator() const
+	std::string SNI_Same::GetOperator() const
 	{
 		return "==";
 	}
 
-	string SNI_Same::DisplayCall(long priority, SNI_DisplayOptions &p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const
+	std::string SNI_Same::DisplayCall(long priority, SNI_DisplayOptions &p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const
 	{
 		return p_ParamList[PC1_First].GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions);
 	}

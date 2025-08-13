@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-using namespace std;
+
 using namespace PGCX;
 
 class TestPGC_A;

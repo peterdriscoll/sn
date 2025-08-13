@@ -60,11 +60,11 @@ using namespace std;
 
 #define SN_OPERATOR_TYPE_EQUAL(OP)                                     \
 	SN_APPLY_TYPES(OP, DUMMY, SN_OPERATOR_TYPE_COMPARE)                \
-    return skynet::False;
+    return SN::SN_Error(false, false, "Unknown equal type");
 
 #define SN_NAME_FROM_TYPE(C, B, K, N)                                  \
 		template <>                                                    \
-		static string NameFromType<K>(K)                               \
+		static std::string NameFromType<K>(K)                               \
 		{                                                              \
 			return #N;                                                 \
 		};
@@ -107,19 +107,19 @@ namespace SNI
         }
 
 		template <typename S>
-		static string NameFromType(S p_Number)
+		static std::string NameFromType(S p_Number)
 		{
 			return "";
 		};
 		SN_APPLY_TYPES(DUMMY, DUMMY, SN_NAME_FROM_TYPE)
 
-		static string GetTypeNameStatic()
+		static std::string GetTypeNameStatic()
 		{
 			T var = 0;
 			return NameFromType(var);
 		}
 
-		virtual string GetTypeName() const
+		virtual std::string GetTypeName() const
 		{
 			return NameFromType(m_Number);
 		}
@@ -134,12 +134,12 @@ namespace SNI
 			return Class();
 		}
 
-		virtual string DisplayCpp() const
+		virtual std::string DisplayCpp() const
         {
             return to_string(m_Number);
         }
 
-        virtual string DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+        virtual std::string DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
         {
             return to_string(m_Number);
         }
@@ -157,7 +157,7 @@ namespace SNI
 			return std::is_integral<T>::value;
 		}
 
-		string GetString()
+		std::string GetString()
         {
 			return to_string(m_Number);
         }

@@ -10,4 +10,4 @@
 
 #include "snl.h"
 
-const string doc_root = SOLUTION_DIR "html";
+const std::string doc_root = SOLUTION_DIR "html";

@@ -37,7 +37,7 @@ namespace SNI
 
 	}
 
-	SNI_Char::SNI_Char(string::value_type p_Other)
+	SNI_Char::SNI_Char(std::string::value_type p_Other)
 		: m_Char(p_Other)
 	{
 
@@ -48,36 +48,36 @@ namespace SNI
 		return new SNI_Char(*this);
 	}
 
-	string::value_type SNI_Char::GetChar() const
+	std::string::value_type SNI_Char::GetChar() const
 	{
 		return m_Char;
 	}
 
-	string SNI_Char::GetString() const
+	std::string SNI_Char::GetString() const
 	{
-		return string(1, m_Char);
+		return std::string(1, m_Char);
 	}
 
-	string SNI_Char::GetTypeName() const
+	std::string SNI_Char::GetTypeName() const
 	{
 		return "Char";
 	}
 
-	string SNI_Char::DisplayCpp() const
+	std::string SNI_Char::DisplayCpp() const
 	{
 		if (m_Char)
 		{
-			string quotedString(1, m_Char);
+			std::string quotedString(1, m_Char);
 			return "\"" + EscapeStringToCPP(quotedString)+ "\"";
 		}
 		return "\"\\\0\"";
 	}
 
-	string SNI_Char::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_Char::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		if (m_Char)
 		{
-			string quotedString(1, m_Char);
+			std::string quotedString(1, m_Char);
 			return "\"" + EscapeStringToCPP(quotedString) + "\"";
 		}
 		return "\"\\\\0\"";
@@ -128,17 +128,17 @@ namespace SNI
 		if (dynamic_cast<SNI_String *>(p_Other))
 		{
 			SNI_String * l_String = dynamic_cast<SNI_String *>(p_Other);
-			return SN::SN_String(string(1, m_Char) + l_String->GetString());
+			return SN::SN_String(std::string(1, m_Char) + l_String->GetString());
 		}
 		if (dynamic_cast<SNI_Char *>(p_Other))
 		{
 			SNI_Char *l_Char = dynamic_cast<SNI_Char *>(p_Other);
-			return SN::SN_String(string(1, m_Char) + l_Char->m_Char);
+			return SN::SN_String(std::string(1, m_Char) + l_Char->m_Char);
 		}
 		if (dynamic_cast<SNI_StringRef *>(p_Other))
 		{
 			SNI_StringRef * l_string = dynamic_cast<SNI_StringRef *>(p_Other);
-			return SN::SN_String(string(1, m_Char) + l_string->GetString());
+			return SN::SN_String(std::string(1, m_Char) + l_string->GetString());
 		}
 		return SN::SN_Error(false, false, GetTypeName() + " Concat not implemented.");
 	}

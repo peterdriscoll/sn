@@ -18,7 +18,7 @@ namespace SNI
 		virtual ~SNI_Number();
 	};
 
-	typedef vector<SNI_Number> SNI_NumberList;
+	typedef std::vector<SNI_Number> SNI_NumberList;
 }
 
 #endif // !defined(SNI_NUMBER_H_INCLUDED)

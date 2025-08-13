@@ -26,21 +26,21 @@ namespace SNI
 		static SNI_Class * Class();
 		virtual SNI_Class * VClass();
 
-		SNI_Domain(const string &p_Name);
+		SNI_Domain(const std::string &p_Name);
 		virtual ~SNI_Domain();
 
 		void Clear();
 
-		virtual string GetTypeName() const;
-		virtual string DisplayCpp() const;
+		virtual std::string GetTypeName() const;
+		virtual std::string DisplayCpp() const;
 		virtual long GetPriority() const;
-		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
+		virtual std::string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 		virtual size_t Hash() const;
 
 
 		virtual SN::SN_Error AssertSubscriptValue(const SNI_Value *p_Index, SN::SN_Expression p_Result);
-		virtual SN::SN_Expression operator[](const string & p_Index);
+		virtual SN::SN_Expression operator[](const std::string & p_Index);
 		virtual SN::SN_Value DoSubscriptCall(const SN::SN_Value &p_Index) const;
 		virtual SN::SN_Value DoReverseSubscript(const SN::SN_Value & p_Result) const;
 
@@ -50,8 +50,8 @@ namespace SNI
 	private:
 		
 
-		unordered_map<string, SN::SN_Variable> m_Map;
-		string m_Name;
+		unordered_map<std::string, SN::SN_Variable> m_Map;
+		std::string m_Name;
 	};
 }
 

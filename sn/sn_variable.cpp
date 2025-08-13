@@ -30,12 +30,12 @@ namespace SN
 		GetSNI_Variable()->AssertValue(p_Value.DoEvaluate(0));
 	}
 
-	SN_Variable::SN_Variable(const string &p_Name, const string &p_DomainName)
+	SN_Variable::SN_Variable(const std::string &p_Name, const std::string &p_DomainName)
 		: SN_Expression(SNI_Frame::Top()->CreateVariable(p_Name, p_DomainName))
 	{
 	}
 
-	SN_Variable::SN_Variable(const string& p_Name, enum skynet::DefineType p_DefineType, bool p_Local)
+	SN_Variable::SN_Variable(const std::string& p_Name, enum skynet::DefineType p_DefineType, bool p_Local)
 	{
 		if (p_Local)
 		{
@@ -47,7 +47,7 @@ namespace SN
 		}
 	}
 
-	SN_Variable::SN_Variable(const string &p_Name, const SN_Expression &p_Value, enum skynet::DefineType p_DefineType, bool p_Local)
+	SN_Variable::SN_Variable(const std::string &p_Name, const SN_Expression &p_Value, enum skynet::DefineType p_DefineType, bool p_Local)
 	{
 		if (p_Local)
 		{
@@ -58,6 +58,12 @@ namespace SN
 			m_Expression = SNI_Frame::Top()->CreateVariable(p_Name, "", p_DefineType);
 		}
 		GetSNI_Variable()->AssertValue(p_Value.DoEvaluate());
+	}
+
+	SN_Variable::SN_Variable(SNI::SNI_Expression* p_Expression)
+		: SN_Expression(new SNI::SNI_Variable())
+	{
+		GetSNI_Variable()->AssertValue(p_Expression->DoEvaluate(0));
 	}
 
 	SN_Variable::SN_Variable(const SN_Expression &p_Value)
@@ -82,7 +88,7 @@ namespace SN
 		return GetSNI_Variable()->GetBool();
 	}
 
-	string SN_Variable::GetString() const
+	std::string SN_Variable::GetString() const
 	{
 		return GetSNI_Variable()->GetString();
 	}
@@ -97,27 +103,27 @@ namespace SN
 		return GetSNI_Variable()->Length();
 	}
 
-	string SN_Variable::GetName()
+	std::string SN_Variable::GetName()
 	{
 		return GetSNI_Variable()->GetName();
 	}
 
-	void SN_Variable::SetName(const string &p_Name)
+	void SN_Variable::SetName(const std::string &p_Name)
 	{
 		GetSNI_Variable()->SetName(p_Name);
 	}
 
-	string SN_Variable::GetDomainName()
+	std::string SN_Variable::GetDomainName()
 	{
 		return GetSNI_Variable()->GetDomainName();
 	}
 
-	void SN_Variable::SetDomainName(const string & p_Name)
+	void SN_Variable::SetDomainName(const std::string & p_Name)
 	{
 		GetSNI_Variable()->SetDomainName(p_Name);
 	}
 
-	string SN_Variable::FrameName()
+	std::string SN_Variable::FrameName()
 	{
 		return GetSNI_Variable()->FrameName();
 	}

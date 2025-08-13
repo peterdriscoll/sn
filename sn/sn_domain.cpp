@@ -11,7 +11,7 @@ namespace SN
 		return SNI_Domain::Class();
 	}
 
-	SN_Domain::SN_Domain(const string &p_Name)
+	SN_Domain::SN_Domain(const std::string &p_Name)
 		: SN_Base(new SNI::SNI_Domain(p_Name))
 	{
 	}
@@ -20,9 +20,9 @@ namespace SN
 	{
 	}
 
-	SN_Expression SN_Domain::operator[](const string & p_Index)
+	SN_Expression SN_Domain::operator[](const std::string & p_Index)
 	{
-		return (*m_Expression)[p_Index];
+		return (*GetSNI_Domain())[p_Index];
 	}
 
 	SN_Expression SN_Domain::CreateMetaVariable(const SN_Expression & p_Index)
@@ -35,8 +35,13 @@ namespace SN
 		return SN_Operators::IsA(*this, p_Parent);
 	}
 
-	SNI::SNI_Domain * SN_Domain::GetSNI_Domain() const
+	SNI::SNI_Domain* SN_Domain::GetSNI_Domain()
 	{
-		return dynamic_cast<SNI::SNI_Domain *>(m_Expression);
+		return dynamic_cast<SNI::SNI_Domain*>(m_Expression);
+	}
+
+	SNI::SNI_Domain* SN_Domain::GetSNI_Domain() const
+	{
+		return dynamic_cast<SNI::SNI_Domain*>(m_Expression);
 	}
 }

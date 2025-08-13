@@ -54,12 +54,12 @@ namespace SNI
 		REQUESTPROMOTION(m_Expression);
 	}
 
-	string SNI_Local::GetTypeName() const
+	std::string SNI_Local::GetTypeName() const
 	{
 		return "Local";
 	}
 
-	string SNI_Local::GetReferredName() const
+	std::string SNI_Local::GetReferredName() const
 	{
 		if (m_LocalVariable)
 		{
@@ -68,14 +68,14 @@ namespace SNI
 		return GetTypeName();
 	}
 
-	string SNI_Local::DisplayCpp() const
+	std::string SNI_Local::DisplayCpp() const
 	{
 		return "Local(" + m_LocalVariable->DisplayCpp() + ", " + m_Expression->DisplayCpp() + ")";
 	}
 
-	string SNI_Local::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
+	std::string SNI_Local::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
-		string sValue;
+		std::string sValue;
 		if (!m_LocalVariable)
 		{
 			return "Local null";
@@ -94,10 +94,10 @@ namespace SNI
 			}
 		}
 		p_DisplayOptions.IncrementLevel();
-		string sParam = m_LocalVariable->DisplaySN(GetPriority(), p_DisplayOptions) + sValue;
+		std::string sParam = m_LocalVariable->DisplaySN(GetPriority(), p_DisplayOptions) + sValue;
 		p_DisplayOptions.DecrementLevel();
 
-		string text = SetBreakPoint("#", p_DisplayOptions, this, SN::LeftId) + sParam + SetBreakPoint(".", p_DisplayOptions, this, SN::ParameterOneId) + m_Expression->DisplaySN(GetPriority(), p_DisplayOptions);
+		std::string text = SetBreakPoint("#", p_DisplayOptions, this, SN::LeftId) + sParam + SetBreakPoint(".", p_DisplayOptions, this, SN::ParameterOneId) + m_Expression->DisplaySN(GetPriority(), p_DisplayOptions);
 		return Bracket(priority, text, p_DisplayOptions, this);
 	}
 
@@ -120,7 +120,7 @@ namespace SNI
 		return 1000;
 	}
 
-	string SNI_Local::GetOperator() const
+	std::string SNI_Local::GetOperator() const
 	{
 		return "#";
 	}

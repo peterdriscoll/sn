@@ -12,17 +12,17 @@ namespace SNI
 	{
 	}
 
-	string SNI_Not::GetTypeName() const
+	std::string SNI_Not::GetTypeName() const
 	{
 		return "Not";
 	}
 
-	string SNI_Not::DisplayCpp() const
+	std::string SNI_Not::DisplayCpp() const
 	{
 		return "SN::Not";
 	}
 
-	string SNI_Not::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_Not::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "!";
 	}
@@ -32,7 +32,7 @@ namespace SNI
 		return 4;
 	}
 
-	string SNI_Not::GetOperator() const
+	std::string SNI_Not::GetOperator() const
 	{
 		return "!";
 	}

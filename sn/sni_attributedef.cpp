@@ -25,17 +25,17 @@ namespace SNI
 	{
 	}
 
-	string SNI_AttributeDef::GetTypeName() const
+	std::string SNI_AttributeDef::GetTypeName() const
 	{
 		return "IsA";
 	}
 
-	string SNI_AttributeDef::DisplayCpp() const
+	std::string SNI_AttributeDef::DisplayCpp() const
 	{
 		return "SN::IsA";
 	}
 
-	string SNI_AttributeDef::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_AttributeDef::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "IsA";
 	}

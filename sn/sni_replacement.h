@@ -26,7 +26,7 @@ namespace SNI
 		SNI_Variable *m_To;
 	};
 
-	typedef vector<SNI_Replacement> SNI_ReplacementList;
+	typedef std::vector<SNI_Replacement> SNI_ReplacementList;
 }
 
 #endif // !defined(SNI_REPLACEMENT_H_INCLUDED)

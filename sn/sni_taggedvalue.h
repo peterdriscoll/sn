@@ -38,7 +38,7 @@ namespace SNI
 		bool m_MarkedForDeletion;
 	};
 
-	typedef vector<SNI_TaggedValue> SNI_TaggedValueList;
+	typedef std::vector<SNI_TaggedValue> SNI_TaggedValueList;
 }
 
 #endif // !defined(SNI_TAGGEDVALUE_H_INCLUDED)

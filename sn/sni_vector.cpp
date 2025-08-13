@@ -43,17 +43,17 @@ namespace SNI
 		}
 	}
 
-	string SNI_Vector::GetTypeName() const
+	std::string SNI_Vector::GetTypeName() const
 	{
 		return "Vector";
 	}
 
-	string SNI_Vector::DisplayCpp() const
+	std::string SNI_Vector::DisplayCpp() const
 	{
 		return GetTypeName() + "()";
 	}
 
-	string SNI_Vector::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
+	std::string SNI_Vector::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
 		return GetTypeName() + "()";
 	}

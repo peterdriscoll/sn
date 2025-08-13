@@ -25,17 +25,17 @@ namespace SNI
 	{
 	}
 
-	string SNI_BuildSet::GetTypeName() const
+	std::string SNI_BuildSet::GetTypeName() const
 	{
 		return "BuildSet";
 	}
 
-	string SNI_BuildSet::DisplayCpp() const
+	std::string SNI_BuildSet::DisplayCpp() const
 	{
 		return "SN::BuildSet";
 	}
 
-	string SNI_BuildSet::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_BuildSet::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "Set";
 	}

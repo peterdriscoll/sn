@@ -14,12 +14,12 @@ namespace SNI
 		SNI_Debug(const SN::SN_Expression &p_other);
 		virtual ~SNI_Debug();
 
-		virtual string GetTypeName() const;
-		virtual string DisplayCpp() const;
-		virtual string DisplaySN(long p_Priority, SNI_DisplayOptions &p_DisplayOptions) const;
+		virtual std::string GetTypeName() const;
+		virtual std::string DisplayCpp() const;
+		virtual std::string DisplaySN(long p_Priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual void AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map);
 		virtual long GetPriority() const;
-		virtual string GetOperator() const;
+		virtual std::string GetOperator() const;
 
 		virtual SNI_Expression * Clone(long p_MetaLevel, SNI_Frame *p_Frame, bool &p_Changed);
 		virtual SN::SN_Error DoAssert();

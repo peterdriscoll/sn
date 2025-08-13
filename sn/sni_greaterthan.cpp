@@ -14,17 +14,17 @@ namespace SNI
 
 	}
 
-	string SNI_GreaterThan::GetTypeName() const
+	std::string SNI_GreaterThan::GetTypeName() const
 	{
 		return "GreaterThan";
 	}
 
-	string SNI_GreaterThan::DisplayCpp() const
+	std::string SNI_GreaterThan::DisplayCpp() const
 	{
 		return "SN::GreaterThan";
 	}
 
-	string SNI_GreaterThan::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_GreaterThan::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return ">";
 	}
@@ -34,7 +34,7 @@ namespace SNI
 		return 0;
 	}
 
-	string SNI_GreaterThan::GetOperator() const
+	std::string SNI_GreaterThan::GetOperator() const
 	{
 		return ">";
 	}

@@ -6,7 +6,7 @@
 #include "pgc.h"
 #include <string>
 
-using namespace std;
+
 using namespace PGCX;
 
 class TestPGC_A : public Base
@@ -20,8 +20,8 @@ public:
 	TestPGC_A *GetNext();
 	void SetNext(TestPGC_A *p_next);
 
-	string GetDescription();
-	void SetDescription(const string &p_Description);
+	std::string GetDescription();
+	void SetDescription(const std::string &p_Description);
 
 	virtual TestPGC_A* CloneTo(void* memory) const override;
 	virtual void PromoteMembers();
@@ -31,7 +31,7 @@ public:
 
 	long MagicValue;
 private:
-	string m_Description;
+	std::string m_Description;
 	TestPGC_A *m_next;
 
 public:

@@ -17,7 +17,7 @@ namespace SN
 	class SN_Expression;
 	class SN_Value;
 
-	class SN_EXPORT SN_Virtual : public SN_Base<SNI::SNI_Virtual, SN_Expression, SN_Error>
+	class SN_EXPORT SN_Virtual : public SN_Base
 	{
 	public:
 		static SN_Class Class();

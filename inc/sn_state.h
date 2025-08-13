@@ -10,7 +10,7 @@
 
 namespace SN
 {
-	class SN_EXPORT SN_State : public SN_Base<SNI::SNI_State, SN_Expression, SN_Error>
+	class SN_EXPORT SN_State : public SN_Base
 	{
 	public:
 		static SN_Class Class();

@@ -32,7 +32,7 @@ namespace SN
 
 	SNI::SNI_State *SN_State::GetSNI_State() const
 	{
-		return const_cast<SNI::SNI_State *>(m_Expression);
+		return static_cast<SNI::SNI_State *>(m_Expression);
 	}
 
 	SNI::SNI_Expression *SN_State::GetSNI_Expression() const

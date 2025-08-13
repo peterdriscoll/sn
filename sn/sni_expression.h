@@ -14,13 +14,13 @@ using namespace std;
 namespace SN
 {
 	class SN_Parameter;
-	typedef vector<SN_Parameter> SN_ParameterList;
+	typedef std::vector<SN_Parameter> SN_ParameterList;
 
 	class SN_Expression;
-	typedef vector<SN_Expression> SN_ExpressionList;
+	typedef std::vector<SN_Expression> SN_ExpressionList;
 
 	class SN_Value;
-	typedef vector<SN_Value> SN_ValueList;
+	typedef std::vector<SN_Value> SN_ValueList;
 
 	class SN_ValueSet;
 	class SN_Cartesian;
@@ -44,14 +44,14 @@ namespace SNI
 	class SNI_DelayedCall;
 
 	class SNI_Replacement;
-	typedef vector<SNI_Replacement> SNI_ReplacementList;
+	typedef std::vector<SNI_Replacement> SNI_ReplacementList;
 
 	class SNI_Variable;
-	typedef vector<const SNI_Variable *> SNI_VariableConstPointerList;
-	typedef vector<SNI_Variable *> SNI_VariablePointerList;
-	typedef map<string, SNI_Variable *> SNI_VariablePointerMap;
+	typedef std::vector<const SNI_Variable *> SNI_VariableConstPointerList;
+	typedef std::vector<SNI_Variable *> SNI_VariablePointerList;
+	typedef std::map<std::string, SNI_Variable *> SNI_VariablePointerMap;
 
-	typedef void OnErrorHandler(bool p_Err, const string& p_Description);
+	typedef void OnErrorHandler(bool p_Err, const std::string& p_Description);
 
 	class SNI_UnifyContext
 	{
@@ -77,30 +77,30 @@ namespace SNI
 		//---------------------------------------------------------------
 		// Logging
 		//---------------------------------------------------------------
-		virtual string GetTypeName() const;
-		virtual string GetValueTypeName() const;
-		virtual string GetReferredName() const;
-		virtual string DisplayCpp() const;
-		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
-		virtual string DisplayValueSN(long, SNI_DisplayOptions & p_DisplayOptions) const;
-		virtual void WriteJSON(ostream& p_Stream, const string& p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions& p_DisplayOptions) const;
+		virtual std::string GetTypeName() const;
+		virtual std::string GetValueTypeName() const;
+		virtual std::string GetReferredName() const;
+		virtual std::string DisplayCpp() const;
+		virtual std::string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
+		virtual std::string DisplayValueSN(long, SNI_DisplayOptions & p_DisplayOptions) const;
+		virtual void WriteJSON(ostream& p_Stream, const std::string& p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions& p_DisplayOptions) const;
 
 		//---------------------------------------------------------------
 		// Debugging
 		//---------------------------------------------------------------
 		void CreateId();
-		virtual string GetBreakPoint(long p_Index) const;
-		virtual string GetBreakPointJS(long p_Index) const;
+		virtual std::string GetBreakPoint(long p_Index) const;
+		virtual std::string GetBreakPointJS(long p_Index) const;
 		virtual unsigned long GetId() const;
-		virtual string GetDebugId() const;
+		virtual std::string GetDebugId() const;
 
-		string SetBreakPoint(const string &p_Caption, SNI_DisplayOptions & p_DisplayOptions, const SNI_Expression *p_DebugSource, long p_Index) const;
+		std::string SetBreakPoint(const std::string &p_Caption, SNI_DisplayOptions & p_DisplayOptions, const SNI_Expression *p_DebugSource, long p_Index) const;
 
-		void Breakpoint(SN::DebuggingStop p_DebuggingStop, SN::BreakId p_BreakId, const string &p_TypeName, const string &p_Description, const SNI_Expression *p_Source = NULL, SN::InterruptPoint p_InterruptPoint = SN::CallPoint) const;
+		void Breakpoint(SN::DebuggingStop p_DebuggingStop, SN::BreakId p_BreakId, const std::string &p_TypeName, const std::string &p_Description, const SNI_Expression *p_Source = NULL, SN::InterruptPoint p_InterruptPoint = SN::CallPoint) const;
 
 		virtual long GetPriority() const;
-		virtual string GetOperator() const;
-		virtual string DisplaySN0() const;
+		virtual std::string GetOperator() const;
+		virtual std::string DisplaySN0() const;
 
 		//---------------------------------------------------------------
 		// Members
@@ -109,16 +109,16 @@ namespace SNI
 		virtual SNI_Expression * LoadFormalParameters(SN::SN_ExpressionList & p_FormalParameterList);
 		virtual SN::SN_Expression * LoadParametersCall(SN::SN_ExpressionList * p_ParameterList) const;
 		virtual SN::SN_Expression * LoadParametersUnify(SN::SN_ExpressionList * p_ParameterList) const;
-		virtual string DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression *p_DebugSource) const;
-		virtual string DisplayUnify(size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression * p_DebugSource) const;
-		virtual string DisplayUnifyExp(SN::SN_ExpressionList * p_ParameterList) const;
-		virtual string DisplayCallExp(const SN::SN_Expression& result, SN::SN_ExpressionList* p_ParameterList) const;
+		virtual std::string DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression *p_DebugSource) const;
+		virtual std::string DisplayUnify(size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression * p_DebugSource) const;
+		virtual std::string DisplayUnifyExp(SN::SN_ExpressionList * p_ParameterList) const;
+		virtual std::string DisplayCallExp(const SN::SN_Expression& result, SN::SN_ExpressionList* p_ParameterList) const;
 		virtual SNI_Expression * Clone(long p_MetaLevel, SNI_Frame *p_Frame, bool &p_Changed);
 		virtual SNI_Expression * Clone(const SNI_Expression *p_Function, SNI_Expression *p_Result);
 		virtual SNI_Expression* PartialClone(const SNI_Expression* p_Function, SNI_Expression* p_Result);
 		virtual SNI_Expression * Copy() const;
 		virtual bool GetBool() const;
-		virtual string GetString() const;
+		virtual std::string GetString() const;
 		virtual size_t Count() const;
 		virtual size_t Length() const;
 		virtual void Simplify();
@@ -252,8 +252,8 @@ namespace SNI
 		virtual	SN::SN_Value DoFile() const;
 
 		// Conversions
-		virtual SN::SN_Value DoEscape(enum skynet::EscapeType p_EscapeType) const;
-		virtual SN::SN_Value DoUnescape(enum skynet::EscapeType p_EscapeType) const;
+		virtual SN::SN_Value DoEscape(enum SN::EscapeType p_EscapeType) const;
+		virtual SN::SN_Value DoUnescape(enum SN::EscapeType p_EscapeType) const;
 		virtual	SN::SN_Value DoIntToString() const;
 		virtual	SN::SN_Value DoStringToInt() const;
 		virtual	SN::SN_Value DoDoubleToString() const;
@@ -292,14 +292,14 @@ namespace SNI
 		static SN::SN_Expression AddLambdasPartial(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result);
 		static SN::SN_Expression AddLambdas(SN::SN_ExpressionList * p_ParameterList);
 
-		string Bracket(long p_Priority, const string &p_Expression, SNI_DisplayOptions & p_DisplayOptions, const SNI_Expression *p_DebugSource) const;
+		std::string Bracket(long p_Priority, const std::string &p_Expression, SNI_DisplayOptions & p_DisplayOptions, const SNI_Expression *p_DebugSource) const;
 
 		SNI_Expression* FlattenStackCall(long p_MetaLevel, SNI_Expression* function, SN::SN_ExpressionList* l_ParameterList) const;
 
 	private:
 		void HandleAction(SN::SN_Expression p_Result, OnErrorHandler * p_ErrorHandler);
 		virtual SN::SN_Error GetError();
-		static map<string, unsigned long> m_IdMap;
+		static map<std::string, unsigned long> m_IdMap;
 
 	private:
 		static SNI_Class* m_Class;

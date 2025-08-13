@@ -14,17 +14,17 @@ namespace SNI
 	{
 	}
 
-	string SNI_Concat::GetTypeName() const
+	std::string SNI_Concat::GetTypeName() const
 	{
 		return "Concat";
 	}
 
-	string SNI_Concat::DisplayCpp() const
+	std::string SNI_Concat::DisplayCpp() const
 	{
 		return "SN::Concat";
 	}
 
-	string SNI_Concat::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_Concat::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "(+)";
 	}

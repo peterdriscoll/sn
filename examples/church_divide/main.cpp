@@ -6,7 +6,7 @@
 using namespace PGCX;
 using namespace skynet; // Interface namespace for SN.
 
-string doc_root = SOLUTION_DIR "html";
+std::string doc_root = SOLUTION_DIR "html";
 
 void TestValidate_IsString()
 {
@@ -41,8 +41,8 @@ void TestValidate_IsString()
 		validate.IsString(s).Assert().Do();
 		(s == String("\"\"")).Evaluate().Do();
 		(t == String(" dog")).Evaluate().Do();
-		string s_string = s.GetString();
-		string t_string = t.GetString();
+		std::string s_string = s.GetString();
+		std::string t_string = t.GetString();
 		ASSERTM(s_string == "\"\"", "");
 		ASSERTM(t_string == " dog", "");
 	}
@@ -54,8 +54,8 @@ void TestValidate_IsString()
 		validate.IsString(s).Assert().Do();
 		(s == String("\"Contaning \\\"escaped\\\" quotes\"")).Evaluate().Do();
 		(t == String(" dog")).Evaluate().Do();
-		string s_string = s.GetString();
-		string t_string = t.GetString();
+		std::string s_string = s.GetString();
+		std::string t_string = t.GetString();
 		ASSERTM(s_string == "\"Contaning \\\"escaped\\\" quotes\"", "");
 		ASSERTM(t_string == " dog", "");
 	}
@@ -67,8 +67,8 @@ void TestValidate_IsString()
 		validate.IsString(s).Assert().Do();
 		(s == String("\"Escaped backslash \\ quotes\"")).Evaluate().Do();
 		(t == String(" dog")).Evaluate().Do();
-		string s_string = s.GetString();
-		string t_string = t.GetString();
+		std::string s_string = s.GetString();
+		std::string t_string = t.GetString();
 		ASSERTM(s_string == "\"Escaped backslash \\ quotes\"", "");
 		ASSERTM(t_string == " dog", "");
 	}
@@ -78,13 +78,13 @@ void TestValidate_IsString()
 		SN_LOCAL(t);
 		(s + t == String("Not a dog")).Assert().Do();
 		(!validate.IsString(s)).Assert().Do();
-		string s_string = s.DisplayValueSN();
-		string s_part = s_string.substr(0, 37 - 5);
-		string s_comp = "StringRef(\"Not a dog\"[0.._split_";
+		std::string s_string = s.DisplayValueSN();
+		std::string s_part = s_string.substr(0, 37 - 5);
+		std::string s_comp = "StringRef(\"Not a dog\"[0.._split_";
 		ASSERTM(s_part == s_comp, "");
-		string t_string = t.DisplayValueSN();
-		string t_part = t_string.substr(0, 37 - 8);
-		string t_comp = "StringRef(\"Not a dog\"[_split_";
+		std::string t_string = t.DisplayValueSN();
+		std::string t_part = t_string.substr(0, 37 - 8);
+		std::string t_comp = "StringRef(\"Not a dog\"[_split_";
 		ASSERTM(t_part == t_comp, "");
 	}
 }
@@ -112,22 +112,22 @@ void TestIsInteger()
 	SN_DECLARE(b);
 	(a + b == "1abc").Assert().Do();
 	IsInteger(a).Assert().Do();
-	string test_a = a.GetString();
-	string test_b = b.GetString();
+	std::string test_a = a.GetString();
+	std::string test_b = b.GetString();
 
 	SN_DECLARE(a1);
 	SN_DECLARE(b1);
 	(a1 + b1 == "12abc").Assert().Do();
 	IsInteger(a1).Assert().Do();
-	string test_a1 = a1.GetString();
-	string test_b1 = b1.GetString();
+	std::string test_a1 = a1.GetString();
+	std::string test_b1 = b1.GetString();
 
 	SN_DECLARE(a2);
 	SN_DECLARE(b2);
 	(a2 + b2 == "123456789abc").Assert().Do();
 	//IsInteger(a2).Assert().Do();
-	string test_a2 = a2.GetString();
-	string test_b2 = b2.GetString();
+	std::string test_a2 = a2.GetString();
+	std::string test_b2 = b2.GetString();
 
 	SN_DECLARE(PmGenInteger);
 	SN_DECLARE(s);
@@ -184,13 +184,13 @@ void TestValueSetOfStandardFunctions()
 
 	SN_DECLARE(f);
 	(f == (skynet::Add || skynet::Multiply)).Assert().Do();
-	string f_string = f.DisplaySN();
+	std::string f_string = f.DisplaySN();
 
 	SN_DECLARE(x);
 	(x == f(long(8))(long(13))).Assert().Do();
-	string x_string = x.BuildSet().DoEvaluate().DisplaySN();
+	std::string x_string = x.BuildSet().DoEvaluate().DisplaySN();
 	(x < long(30)).Assert().Do();
-	string x_string2 = x.DisplaySN();
+	std::string x_string2 = x.DisplaySN();
 	long x_num = Long(x).GetNumber();
 	(x == Long(21)).Assert().Do();
 }
@@ -214,18 +214,18 @@ void TestValueSetOfLambdaFunctions()
 
 		(Define(times)(c)(d) == c * d).PartialAssert().Do();
 	}
-	string s_plus = plus.DisplayValueSN();
-	string s_times = times.DisplayValueSN();
-	string s_plus_times = (plus || times).DoEvaluate().DisplaySN();
-	string s_plus_times2 = (plus || times).DoEvaluate().DisplaySN();
+	std::string s_plus = plus.DisplayValueSN();
+	std::string s_times = times.DisplayValueSN();
+	std::string s_plus_times = (plus || times).DoEvaluate().DisplaySN();
+	std::string s_plus_times2 = (plus || times).DoEvaluate().DisplaySN();
 
 	SN_DECLARE(f);
 	(f == (plus || times)).Assert().Do();
-	string f_string = f.DisplaySN();
+	std::string f_string = f.DisplaySN();
 
 	SN_DECLARE(x);
 	(x == f(long(5))(long(8))).Assert().Do();
-	string x_string = x.DisplaySN();
+	std::string x_string = x.DisplaySN();
 	(x < long(20)).Assert().Do();
 	(x == long(13)).Assert().Do();
 }
@@ -248,16 +248,16 @@ void TestValueSetOfStringFunctions()
 
 		(Define(map)(a) == a).PartialAssert().Do();
 	}
-	string f_before_string = f.DisplaySN();
+	std::string f_before_string = f.DisplaySN();
 
 	(Define(f) == (wrap || map)).PartialAssert().Do();
-	string f_string = f.DisplaySN();
+	std::string f_string = f.DisplaySN();
 
 	SN_DECLARE(x);
 	(String("{{expression}}") == f(x)).Assert().Do();
-	string x_display = x.DisplaySN();
-	string x_string = x.BuildSet().DoEvaluate().DisplaySN();
-	string x_compare_string = "{String(\"expression\"), String(\"{expression}\"), String(\"{{expression}}\")}";
+	std::string x_display = x.DisplaySN();
+	std::string x_string = x.BuildSet().DoEvaluate().DisplaySN();
+	std::string x_compare_string = "{String(\"expression\"), String(\"{expression}\"), String(\"{{expression}}\")}";
 
 	ASSERTM(x_string == x_compare_string, "compare strings");
 	// This is not quite right. Logically, 'x' should be a value set ["{{expression}}", "{expression}", "expression"]
@@ -275,7 +275,7 @@ void TestPythagoras()
 {
 	SN_DECLARE(X);
 	(Double(245.67).Square() + X.Square() == Double(357.56).Square()).Assert().Do();
-	string X_string = X.BuildSet().DoEvaluate().DisplaySN();
+	std::string X_string = X.BuildSet().DoEvaluate().DisplaySN();
 	ASSERTM(X_string == "{Double(259.798777), Double(-259.798777)}", "");
 }
 
@@ -362,7 +362,7 @@ void TestChurchDivide()
 
 }
 
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 	TestValidate_IsString();
 }
@@ -386,7 +386,7 @@ void main2(int argc, char *argv[])
 	}
 	catch (Error e)
 	{
-		string description = e.GetDescription();
-		cout << "Error: " + description;
+		std::string description = e.GetDescription();
+		std::cout << "Error: " + description;
 	}
 }

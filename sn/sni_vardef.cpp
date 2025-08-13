@@ -22,17 +22,17 @@ namespace SNI
 	{
 	}
 
-	string SNI_VarDef::GetTypeName() const
+	std::string SNI_VarDef::GetTypeName() const
 	{
 		return "VarDef";
 	}
 
-	string SNI_VarDef::DisplayCpp() const
+	std::string SNI_VarDef::DisplayCpp() const
 	{
 		return "VarDef";
 	}
 
-	string SNI_VarDef::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_VarDef::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "VarDef";
 	}

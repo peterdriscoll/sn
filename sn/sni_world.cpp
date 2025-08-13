@@ -49,7 +49,7 @@ namespace SNI
 		return m_WorldNo;
 	}
 
-	string SNI_World::DisplayShort() const
+	std::string SNI_World::DisplayShort() const
 	{
 		if (m_WorldSet)
 		{
@@ -58,19 +58,19 @@ namespace SNI
 		return "Empty_W" + to_string(m_WorldNo);
 	}
 
-	string SNI_World::DisplayShortJS() const
+	std::string SNI_World::DisplayShortJS() const
 	{
 		return MakeBreakPointJS(DisplayShort(), SN::ErrorId);
 	}
 
-	string SNI_World::DisplaySN(SNI_DisplayOptions & p_DisplayOptions)
+	std::string SNI_World::DisplaySN(SNI_DisplayOptions & p_DisplayOptions)
 	{
 		return DisplayConditionSN(p_DisplayOptions);
 	}
 
-	string SNI_World::DisplayCondition(SNI_DisplayOptions & p_DisplayOptions) const
+	std::string SNI_World::DisplayCondition(SNI_DisplayOptions & p_DisplayOptions) const
 	{
-		string result;
+		std::string result;
 		if (m_ChildList.empty())
 		{
 			if (m_WorldSet)
@@ -89,7 +89,7 @@ namespace SNI
 				result += w->DisplayShort();
 			}
 		}
-		string negated;
+		std::string negated;
 		for (SNI_World *w : m_NegatedList)
 		{
 			if (!negated.empty())
@@ -105,19 +105,19 @@ namespace SNI
 		return DisplayShort() + "=" + result + negated;
 	}
 
-	string SNI_World::DisplayConditionSN(SNI_DisplayOptions & p_DisplayOptions) const
+	std::string SNI_World::DisplayConditionSN(SNI_DisplayOptions & p_DisplayOptions) const
 	{
 		return 	SetBreakPoint(DisplayCondition(p_DisplayOptions), p_DisplayOptions);
 	}
 
-	string SNI_World::DisplaySNChildWorlds(SNI_DisplayOptions & p_DisplayOptions) const
+	std::string SNI_World::DisplaySNChildWorlds(SNI_DisplayOptions & p_DisplayOptions) const
 	{
 		if (m_ChildList.size() == 0)
 		{
 			return "";
 		}
-		string result = "{";
-		string separator;
+		std::string result = "{";
+		std::string separator;
 		for (SNI_WorldList::const_iterator it = m_ChildList.begin(); it < m_ChildList.end(); it++)
 		{
 			result += separator + (*it)->DisplaySN(p_DisplayOptions);
@@ -127,7 +127,7 @@ namespace SNI
 		return result;
 	}
 
-	string SNI_World::SetBreakPoint(const string &p_Caption, SNI_DisplayOptions & p_DisplayOptions) const
+	std::string SNI_World::SetBreakPoint(const std::string &p_Caption, SNI_DisplayOptions & p_DisplayOptions) const
 	{
 		switch (p_DisplayOptions.GetDebugHTML())
 		{
@@ -141,16 +141,16 @@ namespace SNI
 			return p_Caption;
 		case doDebugPointsJS:
 		{
-			string breakPoint = DisplayShortJS();
+			std::string breakPoint = DisplayShortJS();
 			return "<button title='" + breakPoint + "' ng-click='setbreakpoint(" + breakPoint + ")' ng-class='breakpointdefaultclass(" + breakPoint + ", \""+ Reason() + "\")'>" + p_Caption + "</button>";
 		}
 		}
 		return "";
 	}
 
-	string SNI_World::LogText(SN::LogContext &context, long p_Width) const
+	std::string SNI_World::LogText(SN::LogContext &context, long p_Width) const
 	{
-		string text;
+		std::string text;
 #ifdef USE_LOGGING
 		for (size_t j = 0; j < m_ChildList.size(); j++)
 		{
@@ -160,7 +160,7 @@ namespace SNI
 		return text;
 	}
 
-	void SNI_World::WriteJSON(ostream & p_Stream, const string & tabs, SNI_DisplayOptions &p_DisplayOptions) const
+	void SNI_World::WriteJSON(ostream & p_Stream, const std::string & tabs, SNI_DisplayOptions &p_DisplayOptions) const
 	{
 		p_Stream << tabs << "\t\"id\" : \"" << DisplayShort() << "\",\n";
 		p_Stream << tabs << "\t\"breakpoint\" : " << DisplayShortJS() << ",\n";
@@ -401,12 +401,12 @@ namespace SNI
 		return false;
 	}
 
-	string SNI_World::Reason() const
+	std::string SNI_World::Reason() const
 	{
 		return ReasonString(m_Reason);
 	}
 
-	/*static*/ string SNI_World::ReasonString(enum FailReason p_Reason)
+	/*static*/ std::string SNI_World::ReasonString(enum FailReason p_Reason)
 	{
 		switch (p_Reason)
 		{

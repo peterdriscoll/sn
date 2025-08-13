@@ -33,17 +33,17 @@ namespace SNI
 	}
 
 	/// @cond
-	string SNI_If::GetTypeName() const
+	std::string SNI_If::GetTypeName() const
 	{
 		return "If";
 	}
 
-	string SNI_If::DisplayCpp() const
+	std::string SNI_If::DisplayCpp() const
 	{
 		return "SN::If";
 	}
 
-	string SNI_If::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_If::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "if";
 	}
@@ -53,7 +53,7 @@ namespace SNI
 		return 0;
 	}
 
-	string SNI_If::GetOperator() const
+	std::string SNI_If::GetOperator() const
 	{
 		return "?";
 	}
@@ -63,7 +63,7 @@ namespace SNI
 		return 4;
 	}
 
-	string SNI_If::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression *p_DebugSource) const
+	std::string SNI_If::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression *p_DebugSource) const
 	{
 		return SetBreakPoint("if", p_DisplayOptions, p_DebugSource, SN::LeftId) + " " + p_ParamList[PC3_Condition].DisplaySN(GetPriority(), p_DisplayOptions) + " " +
 			   SetBreakPoint("then", p_DisplayOptions, p_DebugSource, SN::PositiveId)+ " " + p_ParamList[PC3_Positive].DisplaySN(GetPriority(), p_DisplayOptions) + " " +
@@ -239,7 +239,7 @@ namespace SNI
 
 			condition_param->SetValue(sCondition);
 
-			string typeName = GetTypeName();
+			std::string typeName = GetTypeName();
 			bool success = false;
 			bool useAllValuesEqual = true;
 

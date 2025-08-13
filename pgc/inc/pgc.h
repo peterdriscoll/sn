@@ -27,11 +27,15 @@ namespace PGCX
 
 	template <class T>
 	using SRef = PGC::SRef<T>;
-
-	template <class T>
+}
+namespace PGCX
+{
+	template <typename T>
 	using MemberRef = PGC::MemberRef<T>;
-
-	template <class T>
+}
+namespace PGCX
+{
+	template <typename T>
 	using vector_ref = PGC::vector_ref<T>;
 
 	template <class Key, class T>

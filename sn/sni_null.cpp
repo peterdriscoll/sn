@@ -31,17 +31,17 @@ namespace SNI
 		return const_cast<SNI_Null *>(this);
 	}
 
-	string SNI_Null::GetTypeName() const
+	std::string SNI_Null::GetTypeName() const
 	{
 		return "Null";
 	}
 
-	string SNI_Null::DisplayCpp() const
+	std::string SNI_Null::DisplayCpp() const
 	{
 		return "NULL";
 	}
 
-	string SNI_Null::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_Null::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "null";
 	}

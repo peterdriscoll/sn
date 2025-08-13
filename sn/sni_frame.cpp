@@ -54,18 +54,18 @@ namespace SNI
 		return SNI_Thread::GetThreadByNumber(p_ThreadNum)->DisplayFrameStack(p_Depth);
 	}
 
-	/*static*/ void SNI_Frame::DisplayName(long p_ThreadNum, const string &p_Name)
+	/*static*/ void SNI_Frame::DisplayName(long p_ThreadNum, const std::string &p_Name)
 	{
 		SNI_Variable *v = LookupVariable(p_ThreadNum, p_Name);
 		LOG(WriteVariable(SN::DebugLevel, v));
 	}
 
-	/*static*/ SNI_Variable *SNI_Frame::LookupVariable(long p_ThreadNum, const string &p_Name)
+	/*static*/ SNI_Variable *SNI_Frame::LookupVariable(long p_ThreadNum, const std::string &p_Name)
 	{
 		return SNI_Thread::GetThreadByNumber(p_ThreadNum)->LookupVariable(p_Name);
 	}
 
-	SNI_Variable *SNI_Frame::LookupVariableInFrame(const string & p_Name)
+	SNI_Variable *SNI_Frame::LookupVariableInFrame(const std::string & p_Name)
 	{
 		for (SNI_Variable *v : m_VariableList)
 		{
@@ -158,7 +158,7 @@ namespace SNI
 		return m_VariableList[0];
 	}
 
-	string SNI_Frame::NameSuffix()
+	std::string SNI_Frame::NameSuffix()
 	{
 		if (m_ThreadNum == 0)
 		{	// Main thread
@@ -167,21 +167,21 @@ namespace SNI
 		return "_"+to_string(m_ThreadNum) + "_" + to_string(m_FrameNum);
 	}
 
-    string SNI_Frame::GetLogDescription(SNI_Manager *p_Manager)
+    std::string SNI_Frame::GetLogDescription(SNI_Manager *p_Manager)
 	{
-		string heading;
-		string typeLine;
-		vector<string> data;
+		std::string heading;
+		std::string typeLine;
+		vector<std::string> data;
 		size_t minFixedWidth = 0;
 		size_t debugFieldWidth = p_Manager->DebugFieldWidth();
-		string delimeter = "";
+		std::string delimeter = "";
 		bool hasMoreRows = true;
-		string filler;
+		std::string filler;
 		for (const SNI_Variable *v : m_VariableList)
 		{
 			size_t fixedWidth = minFixedWidth;
-			string name = v->FrameName();
-			string typeText = v->GetValueTypeName();
+			std::string name = v->FrameName();
+			std::string typeText = v->GetValueTypeName();
 			if (fixedWidth < name.size())
 			{
 				fixedWidth = name.size();
@@ -196,11 +196,11 @@ namespace SNI
 				e.ForEach(
 					[&fixedWidth](const SN::SN_Expression &p_Expression, SNI_World *p_World) -> SN::SN_Error
 				{
-					string valueText;
+					std::string valueText;
 					if (!p_Expression.IsNull())
 					{
 						SNI_DisplayOptions displayOptions(doTextOnly);
-						valueText = p_Expression.DisplaySN() + string(p_World ? "::" + p_World->DisplaySN(displayOptions) : "");
+						valueText = p_Expression.DisplaySN() + std::string(p_World ? "::" + p_World->DisplaySN(displayOptions) : "");
 					}
 					if (fixedWidth < valueText.size())
 					{
@@ -218,11 +218,11 @@ namespace SNI
 				e.ForEach(
 					[&data, &row, &delimeter, &filler, fixedWidth](const SN::SN_Expression &p_Expression, SNI_World *p_World)->SN::SN_Error
 				{
-					string valueText;
+					std::string valueText;
 					if (!p_Expression.IsNull())
 					{
 						SNI_DisplayOptions displayOptions(doTextOnly);
-						valueText = p_Expression.DisplaySN() + string(p_World ? "::" + p_World->DisplaySN(displayOptions) : "");
+						valueText = p_Expression.DisplaySN() + std::string(p_World ? "::" + p_World->DisplaySN(displayOptions) : "");
 					}
 					row++;
 					if (data.size() < row)
@@ -233,7 +233,7 @@ namespace SNI
 					return skynet::OK;
 				}
 				);
-				string fillerField = delimeter + string(fixedWidth, ' ');
+				std::string fillerField = delimeter + std::string(fixedWidth, ' ');
 				for (size_t j = row; j < data.size(); j++)
 				{
 					data[j] += fillerField;
@@ -242,11 +242,11 @@ namespace SNI
 				delimeter = " | ";
 			}
 		}
-		string result = heading + " |";
+		std::string result = heading + " |";
 		if (!data.empty())
 		{
 			result += "\n" + typeLine + " |";
-			for (string &line : data)
+			for (std::string &line : data)
 			{
 				result += "\n" + line + " |";
 			}
@@ -254,17 +254,17 @@ namespace SNI
 		return GetLogShortDescription(p_Manager) +  "\n" + result;
 	}
 
-	string SNI_Frame::GetBreakPoint()
+	std::string SNI_Frame::GetBreakPoint()
 	{
 		return m_BreakPoint;
 	}
 
-	string SNI_Frame::GetBreakPointJS()
+	std::string SNI_Frame::GetBreakPointJS()
 	{
 		return m_BreakPointJS;
 	}
 
-	void SNI_Frame::SetBreakPoint(const string & p_BreakPoint, const string & p_BreakPointJS)
+	void SNI_Frame::SetBreakPoint(const std::string & p_BreakPoint, const std::string & p_BreakPointJS)
 	{
 		m_BreakPoint = p_BreakPoint;
 		m_BreakPointJS = p_BreakPointJS;
@@ -297,7 +297,7 @@ namespace SNI
 		p_Stream << "<tr>\n";
 		for (const SNI_Variable *v : m_VariableList)
 		{
-			string typeText = v->GetValueTypeName();
+			std::string typeText = v->GetValueTypeName();
 			p_Stream << "<td>" << typeText << "</td>\n";
 		}
 		p_Stream << "</tr>\n";
@@ -306,14 +306,14 @@ namespace SNI
 		{
 			p_Stream << "<td><div class='frame'>\n";
 			SN::SN_Expression e = v->GetSafeValue();
-			string delimeter;
+			std::string delimeter;
             e.ForEach(
 				[&p_Stream, &delimeter, p_DebugFieldWidth, &p_DisplayOptions](const SN::SN_Expression &p_Expression, SNI_World *p_World)->SN::SN_Error
 				{
-					string valueText;
+					std::string valueText;
 					if (!p_Expression.IsNull() || p_Expression.IsKnownTypeValue())
 					{
-						valueText = p_Expression.DisplaySN(p_DisplayOptions) + string(p_World ? "::" + p_World->DisplaySN(p_DisplayOptions) : "");
+						valueText = p_Expression.DisplaySN(p_DisplayOptions) + std::string(p_World ? "::" + p_World->DisplaySN(p_DisplayOptions) : "");
 					}
 					p_Stream << delimeter << Details(valueText, p_DebugFieldWidth);
 					delimeter = "<br/>";
@@ -327,7 +327,7 @@ namespace SNI
 
 	void SNI_Frame::WriteJSON(ostream &p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
 	{
-		string function;
+		std::string function;
 		if (HasCode())
 		{
 			if (m_Function.IsVariable())
@@ -344,7 +344,7 @@ namespace SNI
 			function = m_Function.DisplaySN();
 		}
 		p_Stream << "\t\t\"function\" : \"" << EscapeStringToJSON(function) << "\",\n";
-		string card_string = "&infin;";
+		std::string card_string = "&infin;";
 		if (m_Cardinality == 0)
 		{
 			card_string = "";
@@ -360,7 +360,7 @@ namespace SNI
 		p_Stream << "\t\t\"typename\" : \"" << m_Function.GetValueTypeName() << "\",\n";
 		p_Stream << "\t\t\"breakpoint\" : " << m_BreakPointJS << ",\n";
 		p_Stream << "\t\t\"stackusage\" : " << to_string(m_StackUsage) << ",\n";
-		string context;
+		std::string context;
 		if (m_ContextWorld)
 		{
 			context = m_ContextWorld->DisplaySN(p_DisplayOptions);
@@ -390,7 +390,7 @@ namespace SNI
 		}
 		p_Stream << ",\n";
 		p_Stream << "\t\t\"variables\" : [\n";
-		string delimeter;
+		std::string delimeter;
 		long index = 0;
 		for (const SNI_Variable *v : m_VariableList)
 		{
@@ -433,7 +433,7 @@ namespace SNI
 			{
 				if (p_Expression.GetSNI_Expression())
 				{
-					string valueTextHTML = p_Expression.DisplaySN(p_DisplayOptions) + string(p_World ? "::" + p_World->DisplaySN(p_DisplayOptions) : "");
+					std::string valueTextHTML = p_Expression.DisplaySN(p_DisplayOptions) + std::string(p_World ? "::" + p_World->DisplaySN(p_DisplayOptions) : "");
 						
 					boost::property_tree::ptree worldNode;
 					worldNode.put("text", valueTextHTML);
@@ -459,7 +459,7 @@ namespace SNI
 			{
 				if (p_Expression.GetSNI_Expression())
 				{
-					string valueTextHTML = p_Expression.DisplaySN(p_DisplayOptions) + string(p_World ? "::" + p_World->DisplaySN(p_DisplayOptions) : "");
+					std::string valueTextHTML = p_Expression.DisplaySN(p_DisplayOptions) + std::string(p_World ? "::" + p_World->DisplaySN(p_DisplayOptions) : "");
 
 					boost::property_tree::ptree worldNode;
 					worldNode.put("text", valueTextHTML);
@@ -475,7 +475,7 @@ namespace SNI
 		callStackNode.put("breakpoint", m_BreakPointJS);
 	}
 	
-	void SNI_Frame::WriteStackJS(ostream &p_Stream, string &p_Delimeter, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
+	void SNI_Frame::WriteStackJS(ostream &p_Stream, std::string &p_Delimeter, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
 	{
 		if (m_Function.IsVariable())
 		{
@@ -486,7 +486,7 @@ namespace SNI
 		}
 	}
 
-	void SNI_Frame::WriteVariable(ostream &p_Stream, SN::SN_Expression &p_Variable, SN::SN_Expression &p_Value, long j, const string &p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
+	void SNI_Frame::WriteVariable(ostream &p_Stream, SN::SN_Expression &p_Variable, SN::SN_Expression &p_Value, long j, const std::string &p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
 	{
 		SNI_Variable *v = p_Variable.GetSNI_Variable();
 		if (v)
@@ -505,11 +505,11 @@ namespace SNI
 		}
 	}
 
-	void SNI_Frame::WriteCardinalityJSON(ostream& p_Stream, SN::SN_Expression& p_Value, long p_ParamNum, const string& p_Prefix) const
+	void SNI_Frame::WriteCardinalityJSON(ostream& p_Stream, SN::SN_Expression& p_Value, long p_ParamNum, const std::string& p_Prefix) const
 	{
 		size_t card = p_Value.Cardinality();
 		SNI_FunctionDef* functionDef = m_Function.GetSNI_FunctionDef();
-		string context_card;
+		std::string context_card;
 		if (functionDef)
 		{
 			if (0 <= p_ParamNum && p_ParamNum < functionDef->GetNumParameters())
@@ -525,7 +525,7 @@ namespace SNI
 				}
 			}
 		}
-		string card_string = "&infin;";
+		std::string card_string = "&infin;";
 		if (card < CARDINALITY_MAX)
 		{
 			card_string = to_string(card);
@@ -533,7 +533,7 @@ namespace SNI
 		p_Stream << ",\n" << p_Prefix << "\"cardinality\" : \"" << card_string << context_card << "\",\n";
 	}
 
-	string SNI_Frame::GetLogShortDescription(SNI_Manager *p_Manager)
+	std::string SNI_Frame::GetLogShortDescription(SNI_Manager *p_Manager)
 	{
 		size_t debugTitleWidth = p_Manager->DebugTitleWidth();
 		if (m_ThreadNum == 1)
@@ -562,7 +562,7 @@ namespace SNI
 		return result;
 	}
 
-	SNI_Variable * SNI_Frame::CreateVariable(const string &p_Name, const string & p_DomainName, enum skynet::DefineType p_DefineType)
+	SNI_Variable * SNI_Frame::CreateVariable(const std::string &p_Name, const std::string & p_DomainName, enum skynet::DefineType p_DefineType)
 	{
 		SNI_Variable * result = new SNI_Variable(p_Name, p_DomainName, p_DefineType);
 		SNI_Thread::GetThread()->Lock();
@@ -573,7 +573,7 @@ namespace SNI
 
 	SNI_Variable * SNI_Frame::CreateParameter(size_t p_ParamNum, SN::SN_Expression p_Value)
 	{
-		string paramName = "result";
+		std::string paramName = "result";
 		if (p_ParamNum > 0)
 		{
 			paramName = "param" + to_string(p_ParamNum);
@@ -585,7 +585,7 @@ namespace SNI
 		return CreateParameterByName(paramName, p_Value);
 	}
 
-	SNI_Variable * SNI_Frame::CreateParameterByName(const string & p_ParamName, SN::SN_Expression p_Value)
+	SNI_Variable * SNI_Frame::CreateParameterByName(const std::string & p_ParamName, SN::SN_Expression p_Value)
 	{
 		SNI_Variable * result = new SNI_Variable();
 		result->SetName(p_ParamName + NameSuffix());

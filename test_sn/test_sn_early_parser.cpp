@@ -7,7 +7,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-using namespace std;
+
 using namespace skynet;
 using namespace PGCX;
 
@@ -18,9 +18,9 @@ namespace test_sn
 	private:
 		bool runWebServer = false;
 
-		static void AssertErrorHandler(bool p_Err, const string& p_Description)
+		static void AssertErrorHandler(bool p_Err, const std::string& p_Description)
 		{
-			Assert::IsTrue(!p_Err, wstring(p_Description.begin(), p_Description.end()).c_str());
+			Assert::IsTrue(!p_Err, std::wstring(p_Description.begin(), p_Description.end()).c_str());
 		}
 
 		void Initialize()
@@ -45,7 +45,7 @@ namespace test_sn
 				(Define(B_Digit)(d) == (d == (String("0") || String("1") || String("2") || String("3") || String("4")
 					|| String("5") || String("6") || String("7") || String("8") || String("9")))).PartialAssert().Do();
 
-				string B_Digit_text = B_Digit.DisplayValueSN();
+				std::string B_Digit_text = B_Digit.DisplayValueSN();
 
 				(B_Digit(String("0"))).Assert().Do();
 				(B_Digit(String("1"))).Assert().Do();
@@ -160,48 +160,48 @@ namespace test_sn
 
 				SN_DECLARE(a);
 				SN_DECLARE(b);
-				(a + b == "1abc").Assert().Do();
+				(a + b == String("1abc")).Assert().Do();
 				IsInteger(a).Assert().Do();
-				string test_a = a.GetString();
-				string test_b = b.GetString();
+				std::string test_a = a.GetString();
+				std::string test_b = b.GetString();
 				Assert::IsTrue(test_a == "1");
 				Assert::IsTrue(test_b == "abc");
 
 				SN_DECLARE(c4);
 				SN_DECLARE(d4);
-				(c4 + d4 == "1abc").Assert().Do();
+				(c4 + d4 == String("1abc")).Assert().Do();
 				SN_DECLARE(x4);
 				(ConvertInteger(c4) == x4).Assert().Do();
 				(x4 == Long(1)).Evaluate().Do();
 
 				SN_DECLARE(a1);
 				SN_DECLARE(b1);
-				(a1 + b1 == "12abc").Assert().Do();
+				(a1 + b1 == String("12abc")).Assert().Do();
 				IsInteger(a1).Assert().Do();
-				string test_a1 = a1.GetString();
-				string test_b1 = b1.GetString();
+				std::string test_a1 = a1.GetString();
+				std::string test_b1 = b1.GetString();
 				Assert::IsTrue(test_a1 == "12");
 				Assert::IsTrue(test_b1 == "abc");
 
 				SN_DECLARE(c5);
 				SN_DECLARE(d5);
-				(c5 + d5 == "12abc").Assert().Do();
+				(c5 + d5 == String("12abc")).Assert().Do();
 				SN_DECLARE(x5);
 				(ConvertInteger(c5) == x5).Assert().Do();
 				(x5 == Long(12)).Evaluate().Do();
 
 				SN_DECLARE(a2);
 				SN_DECLARE(b2);
-				(a2 + b2 == "123456789abc").Assert().Do();
+				(a2 + b2 == String("123456789abc")).Assert().Do();
 				IsInteger(a2).Assert().Do();
-				string test_a2 = a2.GetString();
-				string test_b2 = b2.GetString();
+				std::string test_a2 = a2.GetString();
+				std::string test_b2 = b2.GetString();
 				Assert::IsTrue(test_a2 == "123456789");
 				Assert::IsTrue(test_b2 == "abc");
 
 				SN_DECLARE(c6);
 				SN_DECLARE(d6);
-				(c6 + d6 == "123456789abc").Assert().Do();
+				(c6 + d6 == String("123456789abc")).Assert().Do();
 				SN_DECLARE(x6);
 				(ConvertInteger(c6) == x6).Assert().Do();
 				(x6 == Long(123456789)).Evaluate().Do();
@@ -331,8 +331,8 @@ namespace test_sn
 				(i4 == Meta(1, MyDomain["Peter1"])).Assert().Do();
 				(i3 == i4).Evaluate().Do();
 
-				string i3_string = i3.DisplayValueSN();
-				string i4_string = i4.DisplayValueSN();
+				std::string i3_string = i3.DisplayValueSN();
+				std::string i4_string = i4.DisplayValueSN();
 				Assert::IsTrue(i3_string == i4_string);
 			}
 		}
@@ -376,7 +376,7 @@ namespace test_sn
 
 				SN_DECLARE(ParseString);
 				SN_DECLARE(i);
-				(Define(ParseString)(s)(i) == (IsString(s) && Local(t, Let(s == String("\"") + t + String("\""), t.Unescape(CPP) == i)))).PartialAssert().Do();
+				(Define(ParseString)(s)(i) == (IsString(s) && Local(t, Let(s == String("\"") + t + String("\""), t.Unescape(skynet::EscapeType::CPP) == i)))).PartialAssert().Do();
 
 				SN_DECLARE(x2);
 				(ParseString("\"Line 1\\nLine2\"")(x2)).Assert().Do();
@@ -385,8 +385,8 @@ namespace test_sn
 				SN_DECLARE(y2);
 				(y2 == String("Line 1\nLine2")).Assert().Do();
 
-				string x2_string = x2.DisplayValueSN();
-				string y2_string = y2.DisplayValueSN();
+				std::string x2_string = x2.DisplayValueSN();
+				std::string y2_string = y2.DisplayValueSN();
 				Assert::IsTrue(x2_string == y2_string);
 
 				SN_DECLARE(k1);
@@ -428,7 +428,7 @@ namespace test_sn
 
 				SN_DECLARE(Alpha);
 				SN_DECLARE(a);
-				(Define(Alpha)(a) == (AlphaLower(a) || AlphaUpper(a) || a == string("_"))).PartialAssert().Do();
+				(Define(Alpha)(a) == (AlphaLower(a) || AlphaUpper(a) || a == String("_"))).PartialAssert().Do();
 
 				SN_DECLARE(AlphaNumeric);
 				SN_DECLARE(k);
@@ -463,8 +463,8 @@ namespace test_sn
 				(j1 == Meta(1, MyDomain["Peter_1"])).Assert().Do();
 				(i1 == j1).Evaluate().Do();
 
-				string i1_string = i1.DisplayValueSN();
-				string j1_string = j1.DisplayValueSN();
+				std::string i1_string = i1.DisplayValueSN();
+				std::string j1_string = j1.DisplayValueSN();
 				Assert::IsTrue(i1_string == j1_string);
 
 				SN_DECLARE(i2);
@@ -474,8 +474,8 @@ namespace test_sn
 				(j2 == Long(543)).Assert().Do();
 				(i2 == j2).Evaluate().Do();
 
-				string i2_string = i2.DisplayValueSN();
-				string j2_string = j2.DisplayValueSN();
+				std::string i2_string = i2.DisplayValueSN();
+				std::string j2_string = j2.DisplayValueSN();
 				Assert::IsTrue(i2_string == j2_string);
 			}
 		}
@@ -508,7 +508,7 @@ namespace test_sn
 
 				SN_DECLARE(Alpha);
 				SN_DECLARE(a);
-				(Define(Alpha)(a) == (AlphaLower(a) || AlphaUpper(a) || a == string("_"))).PartialAssert().Do();
+				(Define(Alpha)(a) == (AlphaLower(a) || AlphaUpper(a) || a == String("_"))).PartialAssert().Do();
 
 				SN_DECLARE(AlphaNumeric);
 				SN_DECLARE(k);
@@ -552,7 +552,7 @@ namespace test_sn
 				(Define(ParseName)(d)(s)(i) == (IsName(s) && (i == d.CreateMetaVariable(s)))).PartialAssert().Do();
 
 				SN_DECLARE(ParseString);
-				(Define(ParseString)(s)(i) == (IsString(s) && Local(t, Let(s == String("\"") + t + String("\""), t.Unescape(CPP) == i)))).PartialAssert().Do();
+				(Define(ParseString)(s)(i) == (IsString(s) && Local(t, Let(s == String("\"") + t + String("\""), t.Unescape(skynet::EscapeType::CPP) == i)))).PartialAssert().Do();
 
 				SN_DECLARE(ParsePart);
 				(Define(ParsePart)(d)(s)(i) == (ParseName(d)(s)(i) || ParseInteger(s)(i) || ParseString(s)(i))).PartialAssert().Do();
@@ -565,8 +565,8 @@ namespace test_sn
 				(j1 == Meta(1, MyDomain["Peter_1"])).Assert().Do();
 				(i1 == j1).Evaluate().Do();
 
-				string i1_string = i1.DisplayValueSN();
-				string j1_string = j1.DisplayValueSN();
+				std::string i1_string = i1.DisplayValueSN();
+				std::string j1_string = j1.DisplayValueSN();
 				Assert::IsTrue(i1_string == j1_string);
 
 				SN_DECLARE(i2);
@@ -576,8 +576,8 @@ namespace test_sn
 				(j2 == Long(543)).Assert().Do();
 				(i2 == j2).Evaluate().Do();
 
-				string i2_string = i2.DisplayValueSN();
-				string j2_string = j2.DisplayValueSN();
+				std::string i2_string = i2.DisplayValueSN();
+				std::string j2_string = j2.DisplayValueSN();
 				Assert::IsTrue(i2_string == j2_string);
 
 				SN_DECLARE(i3);
@@ -587,8 +587,8 @@ namespace test_sn
 				(j3 == String("My test string")).Assert().Do();
 				(i3 == j3).Evaluate().Do();
 
-				string i3_string = i3.DisplayValueSN();
-				string j3_string = j3.DisplayValueSN();
+				std::string i3_string = i3.DisplayValueSN();
+				std::string j3_string = j3.DisplayValueSN();
 				Assert::IsTrue(i3_string == j3_string);
 
 				SN_DECLARE(s1);
@@ -598,8 +598,8 @@ namespace test_sn
 				(s2 == String("My test \"string\"")).Assert().Do();
 				(s1 == s2).Evaluate().Do();
 
-				string s1_string = s1.DisplayValueSN();
-				string s2_string = s2.DisplayValueSN();
+				std::string s1_string = s1.DisplayValueSN();
+				std::string s2_string = s2.DisplayValueSN();
 				Assert::IsTrue(s1_string == s2_string);
 			}
 		}

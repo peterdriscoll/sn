@@ -33,6 +33,11 @@ namespace SN
 	{
 	}
 
+	SN_StringRef::SN_StringRef(SNI::SNI_StringRef* p_StringRef)
+		: SN_Base(p_StringRef)
+	{
+	}
+
 	SN_StringRef::~SN_StringRef()
 	{
 	}
@@ -45,27 +50,27 @@ namespace SN
 	// Members
 	SNI::SNI_StringRef * SN_StringRef::GetSNI_StringRef() const
 	{
-		return m_Expression;
+		return static_cast<SNI::SNI_StringRef *>(m_Expression);
 	}
 
-	string SN_StringRef::GetString() const
+	std::string SN_StringRef::GetString() const
 	{
-		return m_Expression->GetString();
+		return GetSNI_StringRef()->GetString();
 	}
 
 	SN_String SN_StringRef::GetSource() const
 	{
-		return m_Expression->GetSource();
+		return GetSNI_StringRef()->GetSource();
 	}
 
 	SN_Expression SN_StringRef::GetStart() const
 	{
-		return m_Expression->GetStart();
+		return GetSNI_StringRef()->GetStart();
 	}
 
 	SN_Expression SN_StringRef::GetEnd() const
 	{
-		return m_Expression->GetEnd();
+		return GetSNI_StringRef()->GetEnd();
 	}
 
 	// Construction
@@ -170,12 +175,12 @@ namespace SN
 	}
 
 	// Conversion
-	SN_Expression SN_StringRef::Escape(enum skynet::EscapeType p_EscapeType) const
+	SN_Expression SN_StringRef::Escape(enum SN::EscapeType p_EscapeType) const
 	{
 		return SN_Operators::Escape(p_EscapeType, *this);
 	}
 
-	SN_Expression SN_StringRef::Unescape(enum skynet::EscapeType p_EscapeType) const
+	SN_Expression SN_StringRef::Unescape(enum SN::EscapeType p_EscapeType) const
 	{
 		return SN_Operators::Unescape(p_EscapeType, *this);
 	}

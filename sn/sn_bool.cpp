@@ -31,13 +31,28 @@ namespace SN
 	{
 	}
 
+	SN_Bool::SN_Bool(const SN_Expression& p_Other)
+		: SN_Base(p_Other.GetSNI_Bool())
+	{
+	}
+
 	SN_Bool::SN_Bool(const SN_Bool &p_Bool)
-		: SN_Base(p_Bool.m_Expression)
+		: SN_Base(p_Bool.GetSNI_Bool())
 	{
 	}
 
 	SN_Bool::~SN_Bool()
 	{
+	}
+
+	SNI::SNI_Bool* SN_Bool::GetSNI_Bool()
+	{
+		return static_cast<SNI::SNI_Bool*>(GetSNI_Bool());
+	}
+
+	SNI::SNI_Bool* SN_Bool::GetSNI_Bool() const
+	{
+		return static_cast<SNI::SNI_Bool*>(GetSNI_Base());
 	}
 
 	SN_Expression SN_Bool::operator==(const SN_Expression &p_Other) const
@@ -52,12 +67,7 @@ namespace SN
 
 	bool SN_Bool::GetBool() const
 	{
-		return m_Expression->GetBool();
-	}
-
-	SNI::SNI_Bool *SN_Bool::GetSNI_Bool() const
-	{
-		return const_cast<SNI::SNI_Bool *>(m_Expression);
+		return GetSNI_Bool()->GetBool();
 	}
 
 	SN_Expression SN_Bool::Assert() const

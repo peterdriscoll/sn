@@ -21,7 +21,7 @@ extern "C"
 
 namespace SN
 {
-	char * libraryPathArray[SN::LastLibrary];
+	const char * libraryPathArray[SN::LastLibrary];
 #define DEFINE_LIBRARY_PATH(A, N, L) \
 	libraryPathArray[N##_library] = L;
 

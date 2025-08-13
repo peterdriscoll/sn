@@ -17,7 +17,7 @@ namespace SN
 	class SN_Expression;
 	class SN_Char;
 
-	class SN_EXPORT SN_String : public SN_Base<SNI::SNI_String, SN_Expression, SN_Error>
+	class SN_EXPORT SN_String : public SN_Base
 	{
 	public:
 		static SN_Class Class();
@@ -30,7 +30,7 @@ namespace SN
 
 		SN_String(const SNI::SNI_Value *p_Value);
 
-		SN_String(const string &p_other);
+		SN_String(const std::string &p_other);
 		SN_String(const char *p_String);
 		SN_String(const char p_Char);
 		virtual ~SN_String();
@@ -62,19 +62,21 @@ namespace SN
 		SN::SN_Expression File() const;
 
 		// Conversions
-		SN_Expression Escape(enum skynet::EscapeType p_EscapeType) const;
-		SN_Expression Unescape(enum skynet::EscapeType p_EscapeType) const;
+		SN_Expression Escape(enum EscapeType p_EscapeType) const;
+		SN_Expression Unescape(enum EscapeType p_EscapeType) const;
 		SN_Expression StringToInt() const;
 		SN_Expression StringToDouble() const;
 
-		string GetString() const;
+		std::string GetString() const;
 		size_t Length() const;
 
 		SN_Expression IsA(const SN_Expression &p_Parent) const;
 
 		SN_Expression Assign(const SN_Expression& p_Right) const;
 
+		SNI::SNI_String* GetSNI_String();
 		SNI::SNI_String * GetSNI_String() const;
+
 		SNI::SNI_StringRef * GetSNI_StringRef() const;
 	};
 }

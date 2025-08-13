@@ -8,7 +8,7 @@
 #include "exp_ctrl_sn.h"
 #include <string>
 #include <vector>
-using namespace std;
+
 
 namespace SN
 {
@@ -30,7 +30,7 @@ namespace SN
 		SN_Expression m_Condition;
 	};
 
-	typedef vector<SN_Parameter> SN_ParameterList;
+	typedef std::vector<SN_Parameter> SN_ParameterList;
 }
 
 #endif // !defined(SN_PARAMETER_H_INCLUDED)

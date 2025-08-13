@@ -6,7 +6,7 @@
 #include "exp_ctrl_sn.h"
 
 #include <string>
-using namespace std;
+
 
 namespace SNI
 {

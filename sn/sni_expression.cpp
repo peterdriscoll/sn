@@ -25,7 +25,7 @@
 
 namespace SNI
 {
-	map<string, unsigned long> SNI_Expression::m_IdMap;
+	map<std::string, unsigned long> SNI_Expression::m_IdMap;
 
 	/*static*/ SNI_Class* SNI_Expression::Class()
 	{
@@ -61,61 +61,61 @@ namespace SNI
 	// Logging
 	//-----------------------------------------------------------------------
 
-	string SNI_Expression::GetTypeName() const
+	std::string SNI_Expression::GetTypeName() const
 	{
 		return "Expression";
 	}
 
-	string SNI_Expression::GetValueTypeName() const
+	std::string SNI_Expression::GetValueTypeName() const
 	{
 		return GetTypeName();
 	}
 
-	string SNI_Expression::GetReferredName() const
+	std::string SNI_Expression::GetReferredName() const
 	{
 		return GetTypeName();
 	}
 
-	string SNI_Expression::DisplayCpp() const
+	std::string SNI_Expression::DisplayCpp() const
 	{
 		return GetTypeName();
 	}
 
-	string SNI_Expression::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_Expression::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return GetTypeName();
 	}
 
-	void SNI_Expression::WriteJSON(ostream& p_Stream, const string& p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions& p_DisplayOptions) const
+	void SNI_Expression::WriteJSON(ostream& p_Stream, const std::string& p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions& p_DisplayOptions) const
 	{
 		p_Stream << p_Prefix << "\"typetext\" : \"" << GetTypeName() << "\"";
 		p_Stream << ",\n" << p_Prefix << "\"value\" : [\n";
-		string prefix = p_Prefix;
+		std::string prefix = p_Prefix;
 		if (IsStringValue())
 		{
 			// Problem calling ForEach from HTTP server.
 			// It creates SNI objects. It is supposed to be watching only, not changing things.
 			SNI::SNI_DisplayOptions plainText(doTextOnly);
-			string valueText;
-			string valueTextHTML;
+			std::string valueText;
+			std::string valueTextHTML;
 			valueText = DisplayValueSN(0, plainText);
 			valueTextHTML = DisplayValueSN(0, p_DisplayOptions);
 			p_Stream << prefix << "\t" << DetailsFS(valueText, valueTextHTML, p_DebugFieldWidth);
 		}
 		else
 		{
-			string delimeter;
+			std::string delimeter;
 			SNI_Expression* value = const_cast<SNI_Expression*>(this);
 			value->ForEach(
 				[&p_Stream, &delimeter, p_DebugFieldWidth, &p_DisplayOptions, &prefix](const SN::SN_Expression& p_Expression, SNI_World* p_World)->SN::SN_Error
 				{
 					SNI::SNI_DisplayOptions plainText(doTextOnly);
-					string valueText;
-					string valueTextHTML;
+					std::string valueText;
+					std::string valueTextHTML;
 					if (p_Expression.GetSNI_Expression())
 					{
-						valueText = p_Expression.DisplaySN(plainText) + string(p_World ? "::" + p_World->DisplaySN(plainText) : "");
-						valueTextHTML = p_Expression.DisplaySN(p_DisplayOptions) + string(p_World ? "::" + p_World->DisplaySN(p_DisplayOptions) : "");
+						valueText = p_Expression.DisplaySN(plainText) + std::string(p_World ? "::" + p_World->DisplaySN(plainText) : "");
+						valueTextHTML = p_Expression.DisplaySN(p_DisplayOptions) + std::string(p_World ? "::" + p_World->DisplaySN(p_DisplayOptions) : "");
 					}
 					p_Stream << delimeter << prefix << "\t" << DetailsFS(valueText, valueTextHTML, p_DebugFieldWidth);
 					delimeter = ",\n";
@@ -125,7 +125,7 @@ namespace SNI
 		p_Stream << "\n" << p_Prefix << "]\n";
 	}
 
-	string SNI_Expression::DisplayValueSN(long priority, SNI_DisplayOptions & p_DisplayOptions) const
+	std::string SNI_Expression::DisplayValueSN(long priority, SNI_DisplayOptions & p_DisplayOptions) const
 	{
 		return DisplaySN(priority, p_DisplayOptions);
 	}
@@ -136,7 +136,7 @@ namespace SNI
 		return m_Id;
 	}
 	
-	string SNI_Expression::GetDebugId() const
+	std::string SNI_Expression::GetDebugId() const
 	{
 		return GetReferredName() + "_" + to_string(GetId());
 	}
@@ -145,7 +145,7 @@ namespace SNI
 	{
 		if (!m_Id)
 		{
-			string typeNameString = GetReferredName();
+			std::string typeNameString = GetReferredName();
 			if (m_IdMap.find(typeNameString) == m_IdMap.end())
 			{
 				m_Id = 1;
@@ -158,17 +158,17 @@ namespace SNI
 		}
 	}
 
-	string SNI_Expression::GetBreakPoint(long p_Index) const
+	std::string SNI_Expression::GetBreakPoint(long p_Index) const
 	{
 		return MakeBreakPoint(GetDebugId(), p_Index);
 	}
 
-	string SNI_Expression::GetBreakPointJS(long p_Index) const
+	std::string SNI_Expression::GetBreakPointJS(long p_Index) const
 	{
 		return MakeBreakPointJS(GetDebugId(), p_Index);
 	}
 
-	string SNI_Expression::SetBreakPoint(const string &p_Caption, SNI_DisplayOptions & p_DisplayOptions, const SNI_Expression *p_DebugSource, long p_Index) const
+	std::string SNI_Expression::SetBreakPoint(const std::string &p_Caption, SNI_DisplayOptions & p_DisplayOptions, const SNI_Expression *p_DebugSource, long p_Index) const
 	{
 		switch (p_DisplayOptions.GetDebugHTML())
 		{
@@ -182,14 +182,14 @@ namespace SNI
 			return p_Caption;
 		case doDebugPointsJS:
 			{
-				string breakPoint = p_DebugSource->GetBreakPointJS(p_Index);
+				std::string breakPoint = p_DebugSource->GetBreakPointJS(p_Index);
 				return "<button title='" + breakPoint + "' ng-click='setbreakpoint(" + breakPoint + ")' ng-class='breakpointclass(" + breakPoint + ")'>" + p_Caption + "</button>";
 			}
 		}
 		return "";
 	}
 
-	void SNI_Expression::Breakpoint(SN::DebuggingStop p_DebuggingStop, SN::BreakId p_BreakId, const string &p_TypeName, const string & p_Description, const SNI_Expression * p_Source, SN::InterruptPoint p_InterruptPoint) const
+	void SNI_Expression::Breakpoint(SN::DebuggingStop p_DebuggingStop, SN::BreakId p_BreakId, const std::string &p_TypeName, const std::string & p_Description, const SNI_Expression * p_Source, SN::InterruptPoint p_InterruptPoint) const
 	{
 		SNI_Thread::GetThread()->Breakpoint(p_DebuggingStop, p_BreakId, p_TypeName, p_Description, p_Source, p_InterruptPoint);
 	}
@@ -199,7 +199,7 @@ namespace SNI
 		return 1000;
 	}
 
-	string SNI_Expression::GetOperator() const
+	std::string SNI_Expression::GetOperator() const
 	{
 		return "";
 	}
@@ -238,9 +238,9 @@ namespace SNI
 		return paramList;
 	}
 	
-	string SNI_Expression::DisplayCall(long priority, SNI_DisplayOptions &p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const
+	std::string SNI_Expression::DisplayCall(long priority, SNI_DisplayOptions &p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const
 	{
-		string text;
+		std::string text;
 		for (size_t j = 0; j < p_NumParams; j++)
 		{
 			text += " " + p_ParamList[j].GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions);
@@ -248,17 +248,17 @@ namespace SNI
 		return Bracket(priority, DisplaySN(GetPriority(), p_DisplayOptions), p_DisplayOptions, p_DebugSource) + text;
 	}
 
-	string SNI_Expression::DisplayUnify(size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const
+	std::string SNI_Expression::DisplayUnify(size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const
 	{
 		SNI_DisplayOptions displayOptions(doTextOnly);
 		return "dummy"; // p_ParamList[0].DisplaySN() + " = " + DisplayCall(0, displayOptions, p_NumParams - 1, p_ParamList + 1, NULL);
 	}
 
-	string SNI_Expression::DisplayUnifyExp(SN::SN_ExpressionList* p_ParameterList) const
+	std::string SNI_Expression::DisplayUnifyExp(SN::SN_ExpressionList* p_ParameterList) const
 	{
 		size_t numParams = p_ParameterList->size();
 		SNI_DisplayOptions displayOptions(doTextOnly);
-		string result = " = " + DisplayValueSN(0, displayOptions);
+		std::string result = " = " + DisplayValueSN(0, displayOptions);
 		if (!p_ParameterList->empty())
 		{
 			result = p_ParameterList->front().DisplaySN() + result;
@@ -270,11 +270,11 @@ namespace SNI
 		return result;
 	}
 
-	string SNI_Expression::DisplayCallExp(const SN::SN_Expression & p_Result, SN::SN_ExpressionList* p_ParameterList) const
+	std::string SNI_Expression::DisplayCallExp(const SN::SN_Expression & p_Result, SN::SN_ExpressionList* p_ParameterList) const
 	{
 		size_t numParams = p_ParameterList->size();
 		SNI_DisplayOptions displayOptions(doTextOnly);
-		string result = p_Result.DisplaySN() + " = " + DisplayValueSN(0, displayOptions);
+		std::string result = p_Result.DisplaySN() + " = " + DisplayValueSN(0, displayOptions);
 		for (size_t j = 0; j < numParams; j++)
 		{
 			result += " " + (*p_ParameterList)[numParams - j - 1].DisplaySN();
@@ -331,10 +331,10 @@ namespace SNI
 		return (*p_ParameterList)[0];
 	}
 
-	string SNI_Expression::Bracket(long p_Priority, const string &p_Expression, SNI_DisplayOptions & p_DisplayOptions, const SNI_Expression *p_DebugSource) const
+	std::string SNI_Expression::Bracket(long p_Priority, const std::string &p_Expression, SNI_DisplayOptions & p_DisplayOptions, const SNI_Expression *p_DebugSource) const
 	{
-		string bracketLeft;
-		string bracketRight;
+		std::string bracketLeft;
+		std::string bracketRight;
 		if (p_DisplayOptions.GetDebugHTML())
 		{
 			bracketLeft = SetBreakPoint("(", p_DisplayOptions, p_DebugSource, SN::LeftId);
@@ -396,7 +396,7 @@ namespace SNI
 	{
 	}
 
-	string SNI_Expression::DisplaySN0() const
+	std::string SNI_Expression::DisplaySN0() const
 	{
 		SNI_DisplayOptions l_DisplayOptions(doTextOnly);
 		return DisplaySN(0, l_DisplayOptions);
@@ -410,7 +410,7 @@ namespace SNI
 		return false;
 	}
 
-	string SNI_Expression::GetString() const
+	std::string SNI_Expression::GetString() const
 	{
 		return "";
 	}
@@ -1105,12 +1105,12 @@ namespace SNI
 	}
 
 	// Conversion
-	SN::SN_Value SNI_Expression::DoEscape(enum skynet::EscapeType p_EscapeType) const
+	SN::SN_Value SNI_Expression::DoEscape(enum SN::EscapeType p_EscapeType) const
 	{
 		return SN::SN_Error(false, false, GetTypeName() + " Escape method not implemented.");
 	}
 
-	SN::SN_Value SNI_Expression::DoUnescape(enum skynet::EscapeType p_EscapeType) const
+	SN::SN_Value SNI_Expression::DoUnescape(enum SN::EscapeType p_EscapeType) const
 	{
 		return SN::SN_Error(false, false, GetTypeName() + " Unescape method not implemented.");
 	}

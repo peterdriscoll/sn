@@ -14,17 +14,17 @@ namespace SNI
 	{
 	}
 
-	string SNI_PartialEvaluate::GetTypeName() const
+	std::string SNI_PartialEvaluate::GetTypeName() const
 	{
 		return "Evaluate";
 	}
 
-	string SNI_PartialEvaluate::DisplayCpp() const
+	std::string SNI_PartialEvaluate::DisplayCpp() const
 	{
 		return "Evaluate";
 	}
 
-	string SNI_PartialEvaluate::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_PartialEvaluate::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "Evaluate";
 	}
@@ -34,7 +34,7 @@ namespace SNI
 		return 1;
 	}
 
-	string SNI_PartialEvaluate::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression * p_DebugSource) const
+	std::string SNI_PartialEvaluate::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression * p_DebugSource) const
 	{
 
 		return p_ParamList[PC1_First].GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + ".Evaluate()";

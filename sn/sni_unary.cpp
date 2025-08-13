@@ -31,24 +31,24 @@ namespace SNI
 	{
 	}
 
-	string SNI_Unary::GetTypeName() const
+	std::string SNI_Unary::GetTypeName() const
 	{
 		return "Unary";
 	}
 
-	string SNI_Unary::DisplayCpp() const
+	std::string SNI_Unary::DisplayCpp() const
 	{
 		return "SN::Unary";
 	}
 
-	string SNI_Unary::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_Unary::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "Unary Op";
 	}
 
-	string SNI_Unary::DisplayCall(long priority, SNI_DisplayOptions &p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const
+	std::string SNI_Unary::DisplayCall(long priority, SNI_DisplayOptions &p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const
 	{
-		string text;
+		std::string text;
 		if (GetOperator().empty())
 		{
 			text = SetBreakPoint(GetTypeName(), p_DisplayOptions, p_DebugSource, SN::LeftId) + " ";
@@ -96,7 +96,7 @@ namespace SNI
 		LOGGING(SN::LogContext context("SNI_Unary::PartialCall ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
 		SN::SN_Expression value = p_ParameterList->back().DoPartialEvaluate(p_MetaLevel);
 		p_ParameterList->pop_back();
-		string s1 = value.DisplaySN();
+		std::string s1 = value.DisplaySN();
 		if (0 == p_MetaLevel)
 		{
 			if (SN::Is<SNI_Value *>(value))

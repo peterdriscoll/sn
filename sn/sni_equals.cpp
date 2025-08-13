@@ -40,17 +40,17 @@ namespace SNI
 
 	}
 
-	string SNI_Equals::GetTypeName() const
+	std::string SNI_Equals::GetTypeName() const
 	{
 		return "Equals";
 	}
 
-	string SNI_Equals::DisplayCpp() const
+	std::string SNI_Equals::DisplayCpp() const
 	{
 		return "SN::Equals";
 	}
 
-	string SNI_Equals::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_Equals::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "=";
 	}
@@ -60,7 +60,7 @@ namespace SNI
 		return 0;
 	}
 
-	string SNI_Equals::GetOperator() const
+	std::string SNI_Equals::GetOperator() const
 	{
 		return "=";
 	}

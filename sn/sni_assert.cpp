@@ -14,17 +14,17 @@ namespace SNI
 	{
 	}
 
-	string SNI_Assert::GetTypeName() const
+	std::string SNI_Assert::GetTypeName() const
 	{
 		return "Assert";
 	}
 
-	string SNI_Assert::DisplayCpp() const
+	std::string SNI_Assert::DisplayCpp() const
 	{
 		return "Assert";
 	}
 
-	string SNI_Assert::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_Assert::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "Assert";
 	}
@@ -34,7 +34,7 @@ namespace SNI
 		return 1;
 	}
 
-	string SNI_Assert::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression * p_DebugSource) const
+	std::string SNI_Assert::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression * p_DebugSource) const
 	{
 		return p_ParamList[PC1_First].GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + ".Assert()";
 	}

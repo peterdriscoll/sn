@@ -12,17 +12,17 @@ namespace SNI
 	{
 	}
 
-	string SNI_GetState::GetTypeName() const
+	std::string SNI_GetState::GetTypeName() const
 	{
 		return "GetState";
 	}
 
-	string SNI_GetState::DisplayCpp() const
+	std::string SNI_GetState::DisplayCpp() const
 	{
 		return "SN::GetState";
 	}
 
-	string SNI_GetState::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_GetState::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "GetState";
 	}
@@ -32,7 +32,7 @@ namespace SNI
 		return 4;
 	}
 
-	string SNI_GetState::DisplayCall(long priority, SNI_DisplayOptions &p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const
+	std::string SNI_GetState::DisplayCall(long priority, SNI_DisplayOptions &p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const
 	{
 		return p_ParamList[PC1_First].GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions) + ".State()";
 	}

@@ -53,12 +53,12 @@ namespace SNI
 		REQUESTPROMOTION(m_ConstraintValue);
 	}
 
-	string SNI_Lambda::GetTypeName() const
+	std::string SNI_Lambda::GetTypeName() const
 	{
 		return "Lambda";
 	}
 
-	string SNI_Lambda::GetReferredName() const
+	std::string SNI_Lambda::GetReferredName() const
 	{
 		if (m_FormalParameter)
 		{
@@ -82,18 +82,18 @@ namespace SNI
 		return false;
 	}
 
-	string SNI_Lambda::DisplayCpp() const
+	std::string SNI_Lambda::DisplayCpp() const
 	{
 		return "Lambda(" + m_FormalParameter->DisplayCpp() + ", " + m_Expression->DisplayCpp() + ")";
 	}
 
-	string SNI_Lambda::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
+	std::string SNI_Lambda::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
 		p_DisplayOptions.IncrementLevel();
-		string sParam = m_FormalParameter->DisplaySN(GetPriority(), p_DisplayOptions);
+		std::string sParam = m_FormalParameter->DisplaySN(GetPriority(), p_DisplayOptions);
 		p_DisplayOptions.DecrementLevel();
 
-		string text = SetBreakPoint("@", p_DisplayOptions, this, SN::LeftId) + sParam + SetBreakPoint(".", p_DisplayOptions, this, SN::ParameterOneId) + m_Expression->DisplaySN(GetPriority(), p_DisplayOptions);
+		std::string text = SetBreakPoint("@", p_DisplayOptions, this, SN::LeftId) + sParam + SetBreakPoint(".", p_DisplayOptions, this, SN::ParameterOneId) + m_Expression->DisplaySN(GetPriority(), p_DisplayOptions);
 		return Bracket(priority, text, p_DisplayOptions, this);
 	}
 
@@ -121,7 +121,7 @@ namespace SNI
 		return 1000;
 	}
 
-	string SNI_Lambda::GetOperator() const
+	std::string SNI_Lambda::GetOperator() const
 	{
 		return "@";
 	}

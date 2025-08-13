@@ -47,17 +47,17 @@ namespace SNI
 		REQUESTPROMOTION(m_Variable);
 	}
 
-	string SNI_Define::GetTypeName() const
+	std::string SNI_Define::GetTypeName() const
 	{
 		return "Define";
 	}
 
-	string SNI_Define::DisplayCpp() const
+	std::string SNI_Define::DisplayCpp() const
 	{
 		return "sn_Define(" + m_Variable->DisplayCpp() + ")";
 	}
 
-	string SNI_Define::DisplaySN(long /*priority*/, SNI_DisplayOptions &p_DisplayOptions) const
+	std::string SNI_Define::DisplaySN(long /*priority*/, SNI_DisplayOptions &p_DisplayOptions) const
 	{
 		return "$" + m_Variable->DisplaySN(GetPriority(), p_DisplayOptions);
 	}

@@ -14,17 +14,17 @@ namespace SNI
 	{
 	}
 
-	string SNI_SubtractLeftChar::GetTypeName() const
+	std::string SNI_SubtractLeftChar::GetTypeName() const
 	{
 		return "SubtractLeftChar";
 	}
 
-	string SNI_SubtractLeftChar::DisplayCpp() const
+	std::string SNI_SubtractLeftChar::DisplayCpp() const
 	{
 		return "SN::SubtractLeftChar";
 	}
 
-	string SNI_SubtractLeftChar::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_SubtractLeftChar::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "SubtractLeftChar";
 	}

@@ -45,18 +45,18 @@ namespace SN
 	{
 	}
 
-	SN_String::SN_String(const string &p_String)
+	SN_String::SN_String(const std::string &p_String)
 		: SN_Base(new SNI::SNI_String(p_String))
 	{
 	}
 
 	SN_String::SN_String(const char *p_String)
-		: SN_Base(new SNI::SNI_String(string(p_String)))
+		: SN_Base(new SNI::SNI_String(std::string(p_String)))
 	{
 	}
 
 	SN_String::SN_String(const char p_Char)
-		: SN_Base(new SNI::SNI_String(string(p_Char, 1)))
+		: SN_Base(new SNI::SNI_String(std::string(p_Char, 1)))
 	{
 	}
 
@@ -64,20 +64,25 @@ namespace SN
 	{
 	}
 
+	SNI::SNI_String* SN_String::GetSNI_String()
+	{
+		return static_cast<SNI::SNI_String*>(m_Expression);
+	}
+
 	// Members
 	SNI::SNI_String * SN_String::GetSNI_String() const
 	{
-		return m_Expression;
+		return static_cast<SNI::SNI_String*>(m_Expression);
 	}
 
 	SNI::SNI_StringRef * SN_String::GetSNI_StringRef() const
 	{
-		return dynamic_cast<SNI::SNI_StringRef *>(const_cast<SNI::SNI_String *>(m_Expression));
+		return static_cast<SNI::SNI_StringRef*>(m_Expression);
 	}
 
-	string SN_String::GetString() const
+	std::string SN_String::GetString() const
 	{
-		return m_Expression->GetString();
+		return GetSNI_Expression()->GetString();
 	}
 
 	size_t SN_String::Length() const
@@ -192,12 +197,12 @@ namespace SN
 	}
 
 	// Conversion
-	SN_Expression SN_String::Escape(enum skynet::EscapeType p_EscapeType) const
+	SN_Expression SN_String::Escape(enum SN::EscapeType p_EscapeType) const
 	{
 		return SN_Operators::Escape(p_EscapeType, *this);
 	}
 
-	SN_Expression SN_String::Unescape(enum skynet::EscapeType p_EscapeType) const
+	SN_Expression SN_String::Unescape(enum SN::EscapeType p_EscapeType) const
 	{
 		return SN_Operators::Unescape(p_EscapeType, *this);
 	}

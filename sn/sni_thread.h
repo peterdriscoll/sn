@@ -18,12 +18,12 @@ namespace SN
 
 namespace SNI
 {
-	typedef void OnErrorHandler(bool p_Err, const string& p_Description);
+	typedef void OnErrorHandler(bool p_Err, const std::string& p_Description);
 
 	class SNI_Variable;
 	class SNI_Error;
 	class SNI_Frame;
-	typedef vector<SNI_Frame *> SNI_FrameList;
+	typedef std::vector<SNI_Frame *> SNI_FrameList;
 
 	class SNI_Thread
 	{
@@ -35,7 +35,7 @@ namespace SNI
 		static size_t GetNumThreads();
 		static SNI_Manager *TopManager();
 
-		static string ThreadEnded(long p_ThreadNum);
+		static std::string ThreadEnded(long p_ThreadNum);
 		static void WriteThreadEnded(ostream & p_Stream, long p_ThreadNum);
 
 		static void ThreadListLock();
@@ -56,10 +56,10 @@ namespace SNI
 		void SaveStepCount();
 		void ResetStepCount();
 
-		void Breakpoint(SN::DebuggingStop p_DebuggingStop, SN::BreakId p_BreakId, const string &p_TypeName, const string &p_Description, const SNI_Expression *p_Source = NULL, SN::InterruptPoint p_InterruptPoint = SN::CallPoint, const string &p_DebugId = "");
+		void Breakpoint(SN::DebuggingStop p_DebuggingStop, SN::BreakId p_BreakId, const std::string &p_TypeName, const std::string &p_Description, const SNI_Expression *p_Source = NULL, SN::InterruptPoint p_InterruptPoint = SN::CallPoint, const std::string &p_DebugId = "");
 		void ScheduleCommand(skynet::DebugAction p_DebugAction);
 		bool IsExiting();
-		void LoadBreakPoints(const string &p_BreakPointString);
+		void LoadBreakPoints(const std::string &p_BreakPointString);
 		void RegisterError(SNI_Error *p_Error);
 		void Run();
 		void RunToEnd();
@@ -76,31 +76,31 @@ namespace SNI
 		void Quit();
 		void Abort();
 
-		string Skynet(enum DisplayOptionType p_OptionType);
-		string RunWeb(enum DisplayOptionType p_OptionType);
-		string RunToEndWeb(enum DisplayOptionType p_OptionType);
-		string DebugWeb(enum DisplayOptionType p_OptionType);
-		string CodeBreakWeb(enum DisplayOptionType p_OptionType);
-		string StepOverWeb(enum DisplayOptionType p_OptionType);
-		string StepIntoWeb(enum DisplayOptionType p_OptionType);
-		string StepOutWeb(enum DisplayOptionType p_OptionType);
-		string StepParamWeb(enum DisplayOptionType p_OptionType);
-		string GotoStepCountWeb(long p_StepCount, enum DisplayOptionType p_OptionType);
-		string SetMaxStackFramesWeb(long p_MaxStackFrame, enum DisplayOptionType p_OptionType);
-		string SetThreadNumWeb(enum DisplayOptionType p_OptionType);
-		string QuitWeb(enum DisplayOptionType p_OptionType);
+		std::string Skynet(enum DisplayOptionType p_OptionType);
+		std::string RunWeb(enum DisplayOptionType p_OptionType);
+		std::string RunToEndWeb(enum DisplayOptionType p_OptionType);
+		std::string DebugWeb(enum DisplayOptionType p_OptionType);
+		std::string CodeBreakWeb(enum DisplayOptionType p_OptionType);
+		std::string StepOverWeb(enum DisplayOptionType p_OptionType);
+		std::string StepIntoWeb(enum DisplayOptionType p_OptionType);
+		std::string StepOutWeb(enum DisplayOptionType p_OptionType);
+		std::string StepParamWeb(enum DisplayOptionType p_OptionType);
+		std::string GotoStepCountWeb(long p_StepCount, enum DisplayOptionType p_OptionType);
+		std::string SetMaxStackFramesWeb(long p_MaxStackFrame, enum DisplayOptionType p_OptionType);
+		std::string SetThreadNumWeb(enum DisplayOptionType p_OptionType);
+		std::string QuitWeb(enum DisplayOptionType p_OptionType);
 
-		string DashboardJS(enum DisplayOptionType p_OptionType);
-		string StackJS(long p_MaxStackFrame, long p_StartStackFrame, long p_StartStepCount, enum DisplayOptionType p_OptionType);
-		string CallStackJS(long p_MaxCallStackFrame, long p_StartCallStackFrame, long p_StartStepCount, enum DisplayOptionType p_OptionType);
-		string WatchListJS(long p_StartStepCount, enum DisplayOptionType p_OptionType);
-		string StepCountJS();
-		string LogJS(long p_MaxLogEntries, long p_StartLogEntries, long p_StartStepCount);
-		string DerivationJS(long p_MaxLogEntries);
-		string CodeJS(long p_MaxLogEntries, long p_StartCode, long p_StepCount, enum DisplayOptionType p_OptionType);
-		string ErrorJS(enum DisplayOptionType p_OptionType);
-		string WorldSetsJS(DisplayOptionType p_OptionType);
-		string DelayedJS(DisplayOptionType p_OptionType);
+		std::string DashboardJS(enum DisplayOptionType p_OptionType);
+		std::string StackJS(long p_MaxStackFrame, long p_StartStackFrame, long p_StartStepCount, enum DisplayOptionType p_OptionType);
+		std::string CallStackJS(long p_MaxCallStackFrame, long p_StartCallStackFrame, long p_StartStepCount, enum DisplayOptionType p_OptionType);
+		std::string WatchListJS(long p_StartStepCount, enum DisplayOptionType p_OptionType);
+		std::string StepCountJS();
+		std::string LogJS(long p_MaxLogEntries, long p_StartLogEntries, long p_StartStepCount);
+		std::string DerivationJS(long p_MaxLogEntries);
+		std::string CodeJS(long p_MaxLogEntries, long p_StartCode, long p_StepCount, enum DisplayOptionType p_OptionType);
+		std::string ErrorJS(enum DisplayOptionType p_OptionType);
+		std::string WorldSetsJS(DisplayOptionType p_OptionType);
+		std::string DelayedJS(DisplayOptionType p_OptionType);
 
 		void Lock();
 		void Unlock();
@@ -111,8 +111,8 @@ namespace SNI
 		void PopFrame();
 		size_t GetFrameStackDepth();
 
-		void SetDeepBreakPoint(const string & p_BreakPoint, const string & p_BreakPointJS);
-		void SetThreadBreakPoint(const string & p_BreakPoint, const string & p_BreakPointJS);
+		void SetDeepBreakPoint(const std::string & p_BreakPoint, const std::string & p_BreakPointJS);
+		void SetThreadBreakPoint(const std::string & p_BreakPoint, const std::string & p_BreakPointJS);
 
 		SN::SN_Error CheckForFails();
 
@@ -126,7 +126,7 @@ namespace SNI
 		void WriteWebPage(ostream &p_Stream, bool p_Refresh, DisplayOptionType p_OptionType);
 		void WriteShuttingDown(ostream & p_Stream);
 
-		SNI_Variable * LookupVariable(const string & p_Name);
+		SNI_Variable * LookupVariable(const std::string & p_Name);
 		void DisplayFrameStack(size_t p_Depth);
 		void DisplayStepCounts();
 		void WriteStepCounts(ostream & p_Stream);
@@ -149,18 +149,18 @@ namespace SNI
 		void ScheduleCodeBreak();
 
 		void RegisterChange(SNI_Variable *p_NewValue);
-		string ChangeHistoryJS(enum DisplayOptionType p_OptionType, size_t p_ColumnWidth, size_t p_FromStep, size_t p_ToStep);
+		std::string ChangeHistoryJS(enum DisplayOptionType p_OptionType, size_t p_ColumnWidth, size_t p_FromStep, size_t p_ToStep);
 		void WriteChangeHistoryJS(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions, size_t p_ColumnWidth, size_t p_FromStep, size_t p_ToStep);
 
 		SNI_User* GetUser();
 		void SetUser(SNI_User* p_User);
 	private:
-		string StartCommand(enum skynet::DebugAction p_DebugAction, const string & p_Description, enum DisplayOptionType p_OptionType);
+		std::string StartCommand(enum skynet::DebugAction p_DebugAction, const std::string & p_Description, enum DisplayOptionType p_OptionType);
 
 		static void WriteW3Credentials(ostream & p_Stream);
 		void WriteCommands(ostream & p_Stream);
-		void WriteSubmit(ostream & p_Stream, const string & p_Action, const string & p_Name, const string & p_Description);
-		static void WriteSubmitJS(ostream & p_Stream, const string & p_Action, const string & p_Name, const string & p_Description);
+		void WriteSubmit(ostream & p_Stream, const std::string & p_Action, const std::string & p_Name, const std::string & p_Description);
+		static void WriteSubmitJS(ostream & p_Stream, const std::string & p_Action, const std::string & p_Name, const std::string & p_Description);
 		void WriteGotoStepCount(ostream &p_Stream);
 		static void WriteGotoStepCountJS(ostream & p_Stream);
 		void WriteSetMaxStackFrames(ostream & p_Stream);
@@ -176,7 +176,7 @@ namespace SNI
 		void WriteDerivationJS(ostream & p_Stream, long p_MaxLogEntries);
 		void WriteCodeJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartCode, SNI_DisplayOptions &p_DisplayOptions);
 		void WriteStepCountListJS(ostream & p_Stream);
-		void WriteStepCountJS(ostream & p_Stream, const string &p_Delimeter);
+		void WriteStepCountJS(ostream & p_Stream, const std::string &p_Delimeter);
 		void WriteWorldSetsJS(ostream & p_Stream, SNI_DisplayOptions &p_DisplayOptions);
 
 		size_t CountDelayedCalls();
@@ -204,8 +204,8 @@ namespace SNI
 		static vector<SNI_Thread *> m_ThreadList;
 		static mutex m_ThreadListMutex;
 		enum skynet::DebugAction m_DebugAction;
-		string m_BreakPoint;
-		string m_BreakPointJS;
+		std::string m_BreakPoint;
+		std::string m_BreakPointJS;
 
 		size_t m_MaxStackFrames;
 

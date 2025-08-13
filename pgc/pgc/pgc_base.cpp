@@ -28,7 +28,7 @@ namespace PGC
 	}
 
 	// assert with message.
-	void assertm(const char* expr_str, bool expr, const char* file, const int line, const string& msg)
+	void assertm(const char* expr_str, bool expr, const char* file, const int line, const std::string& msg)
 	{
 		PGC_User* user = PGC_User::GetCurrentPGC_User();
 		if (!expr && !user->ShouldRaiseError())
@@ -112,6 +112,41 @@ namespace PGC
 			PGC_Promotion::CheckRequestPromotion(p_Base, typeCheck->GetTransaction(), GetTransaction(), PromotionStrategy::Backstabbing);
 		}
 		*p_Base = typeCheck;
+	}
+
+	void PGC_Base::PromoteNow(PGC_TypeCheck** p_Base)
+	{
+		if (!p_Base)
+			return;
+
+		PGC_TypeCheck* typeCheck = *p_Base;
+		if (!typeCheck)
+			return;
+
+		// Backstabbing only; refuse DoubleDipping wrappers.
+		ASSERTM(!typeCheck->IsPromotion(), "PromoteNow: backstabbing attempted on a DoubleDipping object");
+
+		PGC_Transaction* source = typeCheck->GetTransaction();
+		PGC_Transaction* destination = GetTransaction(); // owning object's transaction
+
+		// Bail on no-op/unsafe cases.
+		if (!source || !destination)
+			return;
+		if (source == destination)
+			return;
+		if (destination->Dieing())
+			return;
+		if (source->IsStatic())
+			return;
+
+		// Perform immediate promotion; backstabbing updates *p_Base in place.
+		PGC_Promotion promotion;
+		promotion.Create(
+			p_Base,
+			destination,
+			PGC::PromotionStrategy::Backstabbing
+		);
+		promotion.Promote();
 	}
 
 	bool PGC_Base::IsPromotedMarker() const

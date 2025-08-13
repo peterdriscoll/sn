@@ -12,17 +12,17 @@ namespace SNI
 	{
 	}
 
-	string SNI_Subtract::GetTypeName() const
+	std::string SNI_Subtract::GetTypeName() const
 	{
 		return "Subtract";
 	}
 
-	string SNI_Subtract::DisplayCpp() const
+	std::string SNI_Subtract::DisplayCpp() const
 	{
 		return "SN::Subtract";
 	}
 
-	string SNI_Subtract::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_Subtract::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "(-)";
 	}
@@ -32,7 +32,7 @@ namespace SNI
 		return 1;
 	}
 
-	string SNI_Subtract::GetOperator() const
+	std::string SNI_Subtract::GetOperator() const
 	{
 		return "-";
 	}

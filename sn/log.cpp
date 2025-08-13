@@ -15,15 +15,15 @@ using namespace std;
 namespace SN
 {
 	#define BUFFER_SIZE 100
-	string current_working_directory()
+	std::string current_working_directory()
 	{
 		char buffer[BUFFER_SIZE];
 		char* cwd = _getcwd(buffer, BUFFER_SIZE); // **** microsoft specific ****
-		string working_directory(cwd);
+		std::string working_directory(cwd);
 		return working_directory;
 	}
 
-	string ExtractDirPath(const string& str)
+	std::string ExtractDirPath(const std::string& str)
 	{
 		size_t found = str.find_last_of("/\\");
 		return str.substr(0, found);
@@ -58,15 +58,15 @@ namespace SN
 		CloseLogFile();
 	}
 
-	void Log::WriteLine(const string &p_line)
+	void Log::WriteLine(const std::string &p_line)
 	{
-		vector<string> arrLines;
+		vector<std::string> arrLines;
 		SNI::Split(p_line, "\n", arrLines);
 		size_t num_lines = arrLines.size();
-		string delimeter;
+		std::string delimeter;
 		for (size_t i = 0; i<num_lines; i++)
 		{
-			string line = arrLines[i];
+			std::string line = arrLines[i];
 			WriteLogFile(delimeter + line);
 			delimeter = "\n";
 		}
@@ -81,7 +81,7 @@ namespace SN
 		return m_singleton[p_LogIndex];
 	}
 
-	void Log::Verify(bool p_value, const string &p_description)
+	void Log::Verify(bool p_value, const std::string &p_description)
 	{
 		if (!p_value)
 		{
@@ -89,10 +89,10 @@ namespace SN
 		}
 	}
 
-	void Log::VerifyForce(const string &p_description)
+	void Log::VerifyForce(const std::string &p_description)
 	{
-		string title = "DAGEN Error Found";
-		string description = p_description;
+		std::string title = "DAGEN Error Found";
+		std::string description = p_description;
 		LOGGING(description += SN::LogContext::GetContextDescription(LOG_STANDARD_INDEX));
 		WriteLine("---------- Error found ----------");
 		WriteLine(description);
@@ -101,11 +101,11 @@ namespace SN
 
 	void Log::CreateLogFile(long p_LogIndex)
 	{
-		string currentDirectory = current_working_directory();
+		std::string currentDirectory = current_working_directory();
 		SNI_Thread *l_thread = SNI_Thread::GetThread();
-		string timeId = getFormattedTime();
-		string logIndex = to_string(p_LogIndex);
-		string fileName = l_thread->GetTopManager()->LogFilePath() + to_string(l_thread->GetThreadNum()) + "_" + logIndex + /*"_" + timeId +*/ ".log"; //" + timeId + "
+		std::string timeId = getFormattedTime();
+		std::string logIndex = to_string(p_LogIndex);
+		std::string fileName = l_thread->GetTopManager()->LogFilePath() + to_string(l_thread->GetThreadNum()) + "_" + logIndex + /*"_" + timeId +*/ ".log"; //" + timeId + "
 		m_LogFile.open(fileName.data(), ios::out | ios::trunc);
 		if (!m_LogFile.is_open())
 		{
@@ -113,7 +113,7 @@ namespace SN
 		}
 	}
 
-	void Log::WriteLogFile(const string &p_Line)
+	void Log::WriteLogFile(const std::string &p_Line)
 	{
 		m_LogFile << p_Line;
 		m_LogFile.flush();

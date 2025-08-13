@@ -26,7 +26,7 @@ namespace SNI
 		return m_ThreadNum;
 	}
 
-	bool SNI_DebugCommand::IsBreakPoint(SN::InterruptPoint p_InterruptPoint, size_t p_ThreadNum, size_t p_FrameStackDepth, size_t p_StepCount, const string &p_BreakPoint, SN::DebuggingStop p_DebuggingStop)
+	bool SNI_DebugCommand::IsBreakPoint(SN::InterruptPoint p_InterruptPoint, size_t p_ThreadNum, size_t p_FrameStackDepth, size_t p_StepCount, const std::string &p_BreakPoint, SN::DebuggingStop p_DebuggingStop)
 	{
 		bool breakPoint = false;
 		unique_lock<mutex> mutex_lock(m_Mutex);
@@ -119,12 +119,12 @@ namespace SNI
 		return breakPoint && processCommand;
 	}
 
-	void SNI_DebugCommand::LoadBreakPoints(const string & p_BreakPointString)
+	void SNI_DebugCommand::LoadBreakPoints(const std::string & p_BreakPointString)
 	{
-		vector<string> breakPointList;
+		vector<std::string> breakPointList;
 		Split(p_BreakPointString, ",", breakPointList);
 		m_BreakPointSet.clear();
-		for (const string &s : breakPointList)
+		for (const std::string &s : breakPointList)
 		{
 			m_BreakPointSet.insert(s);
 		}
@@ -242,12 +242,12 @@ namespace SNI
 		m_ThreadNum = p_ThreadNum;
 	}
 
-	string SNI_DebugCommand::Description()
+	std::string SNI_DebugCommand::Description()
 	{
 		return m_Description;
 	}
 
-	void SNI_DebugCommand::SetDescription(const string & p_Description)
+	void SNI_DebugCommand::SetDescription(const std::string & p_Description)
 	{
 		m_Description = p_Description;
 	}

@@ -32,17 +32,17 @@ namespace SNI
 
 	}
 
-	string SNI_And::GetTypeName() const
+	std::string SNI_And::GetTypeName() const
 	{
 		return "And";
 	}
 
-	string SNI_And::DisplayCpp() const
+	std::string SNI_And::DisplayCpp() const
 	{
 		return "SN::And";
 	}
 
-	string SNI_And::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_And::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "(&)";
 	}
@@ -52,7 +52,7 @@ namespace SNI
 		return 2;
 	}
 
-	string SNI_And::GetOperator() const
+	std::string SNI_And::GetOperator() const
 	{
 		return "&";
 	}

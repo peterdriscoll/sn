@@ -63,12 +63,12 @@ namespace SNI
 		REQUESTPROMOTION(m_Function);
 	}
 
-	string SNI_IncompleteFunction::GetTypeName() const
+	std::string SNI_IncompleteFunction::GetTypeName() const
 	{
 		return "IncompleteFunction";
 	}
 
-	string SNI_IncompleteFunction::GetReferredName() const
+	std::string SNI_IncompleteFunction::GetReferredName() const
 	{
 		if (m_Function)
 		{
@@ -77,12 +77,12 @@ namespace SNI
 		return GetTypeName();
 	}
 
-	string SNI_IncompleteFunction::DisplayCpp() const
+	std::string SNI_IncompleteFunction::DisplayCpp() const
 	{
 		return m_Function->DisplayCpp();
 	}
 
-	string SNI_IncompleteFunction::DisplaySN(long priority, SNI_DisplayOptions& p_DisplayOptions) const
+	std::string SNI_IncompleteFunction::DisplaySN(long priority, SNI_DisplayOptions& p_DisplayOptions) const
 	{
 		return GetTypeName()+"("+m_Function->DisplaySN(priority, p_DisplayOptions)+")";
 	}

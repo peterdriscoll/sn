@@ -41,22 +41,22 @@ namespace SNI
 	{
 	}
 
-	string SNI_Value::GetTypeName() const
+	std::string SNI_Value::GetTypeName() const
 	{
 		return "Value";
 	}
 
-	string SNI_Value::DisplayCpp() const
+	std::string SNI_Value::DisplayCpp() const
 	{
 		return "Value";
 	}
 
-	string SNI_Value::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_Value::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "Value";
 	}
 
-	string SNI_Value::DisplayValueSN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
+	std::string SNI_Value::DisplayValueSN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
 		if (p_DisplayOptions.GetDebugHTML() == doDebugPointsJS)
 		{

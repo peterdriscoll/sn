@@ -41,26 +41,26 @@ namespace SNI
 	{
 	}
 
-	string SNI_Meta::GetTypeName() const
+	std::string SNI_Meta::GetTypeName() const
 	{
 		return "Meta";
 	}
 
-	string SNI_Meta::DisplayCpp() const
+	std::string SNI_Meta::DisplayCpp() const
 	{
 		return GetTypeName() + "(" + m_Expression->DisplayCpp() + ")";
 	}
 
-	string SNI_Meta::DisplaySN(long /*priority*/, SNI_DisplayOptions &p_DisplayOptions) const
+	std::string SNI_Meta::DisplaySN(long /*priority*/, SNI_DisplayOptions &p_DisplayOptions) const
 	{
 		if (!m_Expression)
 		{
 			return "{null}";
 		}
-		string value = m_Expression->DisplaySN(GetPriority(), p_DisplayOptions);
+		std::string value = m_Expression->DisplaySN(GetPriority(), p_DisplayOptions);
 		if (m_DeltaMetaLevel < 0)
 		{
-			return string(-m_DeltaMetaLevel, '}') + value + string(-m_DeltaMetaLevel, '{');
+			return std::string(-m_DeltaMetaLevel, '}') + value + std::string(-m_DeltaMetaLevel, '{');
 		}
 		else if (m_DeltaMetaLevel == 0)
 		{
@@ -68,7 +68,7 @@ namespace SNI
 		}
 		else if (m_DeltaMetaLevel > 0)
 		{
-			return string(m_DeltaMetaLevel, '{') + value + string(m_DeltaMetaLevel, '}');
+			return std::string(m_DeltaMetaLevel, '{') + value + std::string(m_DeltaMetaLevel, '}');
 		}
 		FORCE_ASSERTM("Internal error: This path is impossible");
 		return "";
@@ -138,7 +138,7 @@ namespace SNI
 
 	size_t SNI_Meta::Hash() const
 	{
-		string data = DisplaySN0();
+		std::string data = DisplaySN0();
 		return _Hash_array_representation(data.c_str(), data.size());
 	}
 

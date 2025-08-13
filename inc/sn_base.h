@@ -1,6 +1,3 @@
-#if !defined(SN_BASE_H_INCLUDED)
-#define SN_BASE_H_INCLUDED
-
 #pragma once
 
 #include "exp_ctrl_sn.h"
@@ -8,11 +5,13 @@
 #include "sni_base.h"
 
 #include <string>
-using namespace std;
 
 namespace SNI
 {
 	class SNI_Expression;
+	class SNI_Bool;
+	class SNI_Error;
+	class SNI_Base;
 }
 
 namespace SN
@@ -20,380 +19,129 @@ namespace SN
 	class SN_Expression;
 	class SN_Value;
 
-	template <class T, class Exp, class Err>
-	class SN_Base
+	class SN_EXPORT SN_Base
 	{
 	protected:
-		T *m_Expression;
+		SNI::SNI_Base *m_Expression;
 
-		SNI::SNI_Base *GetSNI_Base() const
-		{
-			return dynamic_cast<SNI::SNI_Base *>(const_cast<T *>(m_Expression));
-		}
+		SNI::SNI_Base* GetSNI_Base();
+		SNI::SNI_Base* GetSNI_Base() const;
 
 	public:
-		SN_Base()
-			: m_Expression(NULL)
-		{
-		}
+		SN_Base();
 
-		SN_Base(T * p_Expression)
-			: m_Expression(p_Expression)
-		{
-			if (m_Expression == NULL)
-			{
-				long dog = 10;
-			}
-		}
+		SN_Base(SNI::SNI_Base* p_Expression);
 
-		~SN_Base()
-		{
-		}
+		~SN_Base();
 
-		T *& GetSNI_ExpressionRef()
-		{
-			return m_Expression;
-		}
-		
-		string GetTypeName() const
-		{
-			if (GetSNI_Base())
-			{
-				return GetSNI_Base()->GetTypeName();
-			}
-			return "";
-		}
+		SNI::SNI_Expression* GetSNI_Expression();
+		SNI::SNI_Expression* GetSNI_Expression() const;
+		SNI::SNI_Base*& GetSNI_ExpressionRef();
 
-		string GetValueTypeName() const
-		{
-			if (GetSNI_Base())
-			{
-				return GetSNI_Base()->GetValueTypeName();
-			}
-			return "";
-		}
+		std::string GetTypeName() const;
 
-		string DisplayCpp() const
-		{
-			return GetSNI_Base()->DisplayCpp();
-		}
+		std::string GetValueTypeName() const;
 
-		string DisplaySN() const
-		{
-			if (GetSNI_Base())
-			{
-				SNI::SNI_DisplayOptions l_DisplayOptions(doTextOnly);
-				return GetSNI_Base()->DisplaySN(0, l_DisplayOptions);
-			}
-			return "";
-		}
+		std::string DisplayCpp() const;
 
-		string DisplaySN(long p_Priority, SNI::SNI_DisplayOptions &p_DisplayOptions) const
-		{
-			if (GetSNI_Base())
-			{
-				return GetSNI_Base()->DisplaySN(p_Priority, p_DisplayOptions);
-			}
-			return "";
-		}
+		std::string DisplaySN() const;
 
-		string DisplaySN(SNI::SNI_DisplayOptions &p_DisplayOptions) const
-		{
-			if (GetSNI_Base())
-			{
-				return GetSNI_Base()->DisplaySN(0, p_DisplayOptions);
-			}
-			return "";
-		}
+		std::string DisplaySN(long p_Priority, SNI::SNI_DisplayOptions& p_DisplayOptions) const;
 
-		string DisplayValueSN() const
-		{
-			if (GetSNI_Base())
-			{
-				SNI::SNI_DisplayOptions l_DisplayOptions(doTextOnly);
-				return GetSNI_Base()->DisplayValueSN(0, l_DisplayOptions);
-			}
-			return "";
-		}
+		std::string DisplaySN(SNI::SNI_DisplayOptions& p_DisplayOptions) const;
 
-		string DisplayValueSN(SNI::SNI_DisplayOptions &p_DisplayOptions) const
-		{
-			if (GetSNI_Base())
-			{
-				return GetSNI_Base()->DisplayValueSN(0, p_DisplayOptions);
-			}
-			return "";
-		}
+		std::string DisplayValueSN() const;
 
-		string LogDisplaySN() const
-		{
-			if (GetSNI_Base())
-			{
-				LOGGING(SNI::SNI_DisplayOptions l_DisplayOptions(doTextOnly));
-				LOGGING(SN::LogContext context(GetSNI_Base()->DisplaySN(0, l_DisplayOptions)));
-			}
-			return "";
-		}
+		std::string DisplayValueSN(SNI::SNI_DisplayOptions& p_DisplayOptions) const;
 
-		bool IsNull() const
-		{
-			return !GetSNI_Base() || GetSNI_Base()->IsNull();
-		}
+		std::string LogDisplaySN() const;
 
-		bool IsNullValue() const
-		{
-			return !GetSNI_Base() || GetSNI_Base()->IsNullValue();
-		}
+		bool IsNull() const;
 
-		bool IsKnownValue() const
-		{
-			return GetSNI_Base() && GetSNI_Base()->IsKnownValue();
-		}
+		bool IsNullValue() const;
 
-		bool IsLeftKnownValue() const
-		{
-			return GetSNI_Base() && GetSNI_Base()->IsLeftKnownValue();
-		}
+		bool IsKnownValue() const;
 
-		bool IsRightKnownValue() const
-		{
-			return GetSNI_Base() && GetSNI_Base()->IsRightKnownValue();
-		}
+		bool IsLeftKnownValue() const;
 
-		bool IsKnownTypeValue() const
-		{
-			return GetSNI_Base() && GetSNI_Base()->IsKnownTypeValue();
-		}
+		bool IsRightKnownValue() const;
 
-		bool IsReferableValue() const
-		{
-			return m_Expression && m_Expression->IsReferableValue();
-		}
+		bool IsKnownTypeValue() const;
 
-		bool IsLambdaValue() const
-		{
-			return GetSNI_Base() && GetSNI_Base()->IsLambdaValue();
-		}
+		bool IsReferableValue() const;
 
-		bool IsInteger() const
-		{
-			return GetSNI_Base() && GetSNI_Base()->IsInteger();
-		}
+		bool IsLambdaValue() const;
 
-		bool IsInline() const
-		{
-			return GetSNI_Base() && GetSNI_Base()->IsInline();
-		}
+		bool IsInteger() const;
 
-		bool IsVariable() const
-		{
-			return GetSNI_Base() && GetSNI_Base()->IsVariable();
-		}
+		bool IsInline() const;
 
-		bool IsValueHolder() const
-		{
-			return GetSNI_Base() && GetSNI_Base()->IsValueHolder();
-		}
+		bool IsVariable() const;
 
-		bool IsValueSet() const
-		{
-			return GetSNI_Base() && GetSNI_Base()->IsValueSet();
-		}
+		bool IsValueHolder() const;
 
-		bool IsString() const
-		{
-			return GetSNI_Base() && GetSNI_Base()->IsString();
-		}
+		bool IsValueSet() const;
 
-		bool IsStringValue() const
-		{
-			return GetSNI_Base() && GetSNI_Base()->IsStringValue();
-		}
+		bool IsString() const;
 
-		bool IsComplete() const
-		{
-			return GetSNI_Base() && GetSNI_Base()->IsComplete();
-		}
+		bool IsStringValue() const;
 
-		bool IsMeta() const
-		{
-			return GetSNI_Base() && GetSNI_Base()->IsMeta();
-		}
+		bool IsComplete() const;
 
-		bool IsError() const
-		{
-			return GetSNI_Base() && GetSNI_Base()->IsError();
-		}
+		bool IsMeta() const;
 
-		bool IsSignificantError()
-		{
-			return GetSNI_Base() && GetSNI_Base()->IsSignificantError();
-		}
+		bool IsError() const;
 
-		bool IsFixed() const
-		{
-			return !GetSNI_Base() || GetSNI_Base()->IsFixed();
-		}
+		bool IsSignificantError();
 
-		bool AllValuesBoolean() const
-		{
-			return GetSNI_Base() && GetSNI_Base()->AllValuesBoolean();
-		}
+		bool IsFixed() const;;
 
-		bool Equivalent(const Exp &p_Other) const
-		{
-			return GetSNI_Base()->Equivalent(dynamic_cast<SNI::SNI_Object *>(p_Other.GetSNI_Expression()));
-		}
+		bool AllValuesBoolean() const;
 
-		Exp In(const Exp &p_Set) const
-		{
-			return SN_Operators::HasMember(p_Set, m_Expression);
-		}
+		bool Equivalent(const SN_Expression& p_Other) const;
 
-		Exp BuildMeta(const Exp p_MetaLevel) const
-		{
-			return SN_Operators::BuildMeta(m_Expression, p_MetaLevel);
-		}
+		SN_Expression In(const SN_Expression& p_Set) const;
 
-		Exp Notes(const Exp p_Before, const Exp p_After) const
-		{
-			return SN_Operators::Notes(m_Expression, p_Before, p_After);
-		}
+		SN_Expression BuildMeta(const SN_Expression p_MetaLevel) const;
 
-		size_t Cardinality(size_t p_MaxCardinality = CARDINALITY_MAX) const
-		{
-			if (!GetSNI_Base())
-			{
-				return p_MaxCardinality;
-			}
-			return GetSNI_Base()->Cardinality(p_MaxCardinality);
-		}
+		SN_Expression Notes(const SN_Expression p_Before, const SN_Expression p_After) const;
 
-		size_t LeftCardinality(size_t p_MaxCardinality = CARDINALITY_MAX) const
-		{
-			if (!GetSNI_Base())
-			{
-				return p_MaxCardinality;
-			}
-			return GetSNI_Base()->LeftCardinality(p_MaxCardinality);
-		}
+		size_t Cardinality(size_t p_MaxCardinality = CARDINALITY_MAX) const;
 
-		size_t RightCardinality(size_t p_MaxCardinality = CARDINALITY_MAX) const
-		{
-			if (!GetSNI_Base())
-			{
-				return p_MaxCardinality;
-			}
-			return GetSNI_Base()->RightCardinality(p_MaxCardinality);
-		}
+		size_t LeftCardinality(size_t p_MaxCardinality = CARDINALITY_MAX) const;
 
-		Exp GetSafeValue() const
-		{
-			if (GetSNI_Base())
-			{
-				return GetSNI_Base()->GetSafeValue();
-			}
-			return skynet::Null;
-		}
+		size_t RightCardinality(size_t p_MaxCardinality = CARDINALITY_MAX) const;
 
-		Exp GetValue() const
-		{
-			if (GetSNI_Base())
-			{
-				return GetSNI_Base()->GetValue();
-			}
-			return skynet::Null;
-		}
+		SN_Expression GetSafeValue() const;
 
-		Exp DoEvaluate(long p_MetaLevel = 0) const
-		{
-			return GetSNI_Base()->DoEvaluate(p_MetaLevel);
-		}
+		SN_Expression GetValue() const;
 
-		Exp DoPartialEvaluate(long p_MetaLevel = 0) const
-		{
-			return GetSNI_Base()->DoPartialEvaluate(p_MetaLevel);
-		}
+		SN_Expression DoEvaluate(long p_MetaLevel = 0) const;
 
-		Err DoAssert()
-		{
-			return GetSNI_Base()->DoAssert();
-		}
+		SN_Expression DoPartialEvaluate(long p_MetaLevel = 0) const;
 
-		Err AssertValue(const SN_Expression &p_Expression)
-		{
-			return GetSNI_Base()->AssertValue(p_Expression);
-		}
+		SN_Error DoAssert();
 
-		Err DoPartialAssert()
-		{
-			return GetSNI_Base()->DoPartialAssert();
-		}
+		SN_Error AssertValue(const SN_Expression& p_Expression);
 
-		Exp DoQuery(long p_MetaLevel = 0) const
-		{
-			if (p_MetaLevel)
-			{
-				SN_Expression l(dynamic_cast<SNI_Expression*>(GetSNI_Base()));
-				return SN_Meta(p_MetaLevel, l).DoEvaluate();
-			}
-			return GetSNI_Base()->DoEvaluate();
-		}
+		SN_Error DoPartialAssert();
 
-		Exp DoReduce(long p_MetaLevel = 0) const
-		{
-			if (p_MetaLevel)
-			{
-				SN_Expression l(dynamic_cast<SNI_Expression*>(GetSNI_Base()));
-				return SN_Meta(p_MetaLevel, l).DoPartialEvaluate();
-			}
-			return GetSNI_Base()->DoPartialEvaluate();
-		}
+		SN_Expression DoQuery(long p_MetaLevel = 0) const;
 
-		Exp DoBuildMeta(long p_MetaLevel = 0)
-		{
-			return GetSNI_Base()->DoBuildMeta(p_MetaLevel);
-		}
+		SN_Expression DoReduce(long p_MetaLevel = 0) const;
 
-		Err PartialAssertValue(const Exp &p_Expression, bool p_Define = false)
-		{
-			return GetSNI_Base()->PartialAssertValue(p_Expression, p_Define);
-		}
+		SN_Expression DoBuildMeta(long p_MetaLevel = 0);
 
-		void Throw()
-		{
-			return GetSNI_Base()->Throw();
-		}
+		SN_Error PartialAssertValue(const SN_Expression& p_Expression, bool p_Define = false);
 
-		Err GetError() const
-		{
-			SNI_Error *err = dynamic_cast<SNI_Error *>(GetSNI_Base());
-			if (err)
-			{
-				return Err(err);
-			}
-			SNI_Bool *result = dynamic_cast<SNI_Bool *>(GetSNI_Base());
-			if (result)
-			{
-				return Err(result->GetBool(), false);
-			}
-			return Err(false, false, "Error object expected.");
-		}
+		void Throw();
 
-		void Do()
-		{
-			GetSNI_Base()->Do();
-		}
+		SN_Error GetError() const;
 
-		void Fix(Exp p_Value)
-		{
-			GetSNI_Base()->Fix(p_Value);
-		}
+		void Do();
 
-		void Fix()
-		{
-			GetSNI_Base()->Fix();
-		}
+		void Fix(const SN_Expression &p_Value);
+
+		void Fix();
 	};
 }
-#endif // !defined(SN_BASE_H_INCLUDED)

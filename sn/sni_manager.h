@@ -25,29 +25,29 @@ namespace HTTP
 
 namespace SNI
 {
-	typedef void OnErrorHandler(bool p_Err, const string& p_Description);
+	typedef void OnErrorHandler(bool p_Err, const std::string& p_Description);
 
 	class SNI_Frame;
-	typedef vector<SNI_Frame *> SNI_FrameList;
+	typedef std::vector<SNI_Frame *> SNI_FrameList;
 
 	class SNI_Manager
 	{
 	public:
-		static void ThrowErrorHandler(bool p_Err, const string& p_Description);
+		static void ThrowErrorHandler(bool p_Err, const std::string& p_Description);
 		static void LogicSetup();
 
 		SNI_Manager();
 		SNI_Manager(SNI_Manager * p_Manager);
-		SNI_Manager(string p_Description, OnErrorHandler *p_ErrorHandler, bool p_DelayOnEvaluate, size_t p_MaxCardinalityCall, size_t p_MaxCardinalityUnify);
+		SNI_Manager(std::string p_Description, OnErrorHandler *p_ErrorHandler, bool p_DelayOnEvaluate, size_t p_MaxCardinalityCall, size_t p_MaxCardinalityUnify);
 
 		virtual ~SNI_Manager();
 
 		SN::SN_Expression DelayedCalls();
 
-		string Description()  const;
+		std::string Description()  const;
 
-		string LogFilePath()  const;
-		void SetLogFilePath(string p_LogFilePath);
+		std::string LogFilePath()  const;
+		void SetLogFilePath(std::string p_LogFilePath);
 
 		OnErrorHandler *ErrorHandler();
 		void SetErrorHandler(OnErrorHandler * p_ErrorHandler);
@@ -62,7 +62,7 @@ namespace SNI
 		void StartLogging(SN::LoggingLevel p_LoggingLevel, ostream *p_Stream);
 
 		void StartDebugCommandLineServer(skynet::DebugAction p_DebugAction, int p_KbHit(), int p_GetCh());
-		void StartWebServer(skynet::DebugAction p_DebugAction, const string& p_Address, const string& p_Port, const string& p_DocRoot);
+		void StartWebServer(skynet::DebugAction p_DebugAction, const std::string& p_Address, const std::string& p_Port, const std::string& p_DocRoot);
 
 		bool HasConsole() const;
 		bool KbHit();
@@ -109,24 +109,24 @@ namespace SNI
 		void SetAutoExpandNull(bool p_AutoExpandNull);
 
 		// debugging
-		void Breakpoint(string p_Description = "User breakpoint");
+		void Breakpoint(std::string p_Description = "User breakpoint");
 		void SetDebugAction(enum skynet::DebugAction p_DebugLevel);
 
 	private:
 		void Initialize();
 
 		static void DebugCommandLineServer(SNI_Thread * p_Thread, int p_KbHit(), int p_GetCh());
-		static void RunServer(const string & p_Address, const string & p_Port, const string & p_DocRoot);
+		static void RunServer(const std::string & p_Address, const std::string & p_Port, const std::string & p_DocRoot);
 
 		void ScheduleWebServerShutdown();
 		static void WebServerShutdown();
 		
-		string m_Description;
+		std::string m_Description;
 
 		SNI_Manager *m_LastManager;
 
 		OnErrorHandler *m_ErrorHandler;
-		string m_LogFilePath;
+		std::string m_LogFilePath;
 		size_t m_MaxCardinalityCall;
 		size_t m_MaxCardinalityUnify;
 

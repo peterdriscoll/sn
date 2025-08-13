@@ -7,7 +7,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-using namespace std;
+
 using namespace skynet;
 using namespace PGCX;
 
@@ -18,9 +18,9 @@ namespace test_sn
 	private:
 		bool runWebServer = false;
 
-		static void AssertErrorHandler(bool p_Err, const string& p_Description)
+		static void AssertErrorHandler(bool p_Err, const std::string& p_Description)
 		{
-			wstring errDesciption(p_Description.begin(), p_Description.end());
+			std::wstring errDesciption(p_Description.begin(), p_Description.end());
 			Assert::IsTrue(!p_Err, errDesciption.c_str());
 		}
 
@@ -79,7 +79,7 @@ namespace test_sn
 					// Attempt to match "zz" (which doesn't match the source "abcdef")
 					Error err = (String("zz") == ref).Assert().DoReturnError();
 
-					string errDescription = err.GetDescription();
+					std::string errDescription = err.GetDescription();
 					std::wstring msg = std::wstring(L"Expected mismatch error. Found: ") + ToString(errDescription.c_str());
 					Assert::IsTrue(err.IsError(), msg.c_str());
 
@@ -111,7 +111,7 @@ namespace test_sn
 					// This must fail because the delayed inequality will be violated.
 					Error err = (start == Long(4)).Assert().DoReturnError();
 
-					string errDescription = err.GetDescription();
+					std::string errDescription = err.GetDescription();
 					Assert::IsTrue(err.IsError());
 				}
 			}

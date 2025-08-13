@@ -34,17 +34,17 @@ namespace SNI
 
 	}
 
-	string SNI_Assign::GetTypeName() const
+	std::string SNI_Assign::GetTypeName() const
 	{
 		return "Assign";
 	}
 
-	string SNI_Assign::DisplayCpp() const
+	std::string SNI_Assign::DisplayCpp() const
 	{
 		return "SN::Assign";
 	}
 
-	string SNI_Assign::DisplaySN(long /*priority*/, SNI_DisplayOptions& /*p_DisplayOptions*/) const
+	std::string SNI_Assign::DisplaySN(long /*priority*/, SNI_DisplayOptions& /*p_DisplayOptions*/) const
 	{
 		return "assign";
 	}
@@ -54,7 +54,7 @@ namespace SNI
 		return 0;
 	}
 
-	string SNI_Assign::GetOperator() const
+	std::string SNI_Assign::GetOperator() const
 	{
 		return ":=";
 	}
@@ -69,19 +69,19 @@ namespace SNI
 		return 4;
 	}
 
-	string SNI_Assign::DisplayCall(long priority, SNI_DisplayOptions &p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const
+	std::string SNI_Assign::DisplayCall(long priority, SNI_DisplayOptions &p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const
 	{
-		string left = "_";
+		std::string left = "_";
 		if (PCA3_Left < p_NumParams)
 		{
 			left = p_ParamList[PCA3_Left].DisplaySN(GetPriority(), p_DisplayOptions);
 		}
-		string right = "_";
+		std::string right = "_";
 		if (PCA3_Right < p_NumParams)
 		{
 			right = p_ParamList[PCA3_Right].DisplaySN(GetPriority(), p_DisplayOptions);
 		}
-		string state = "_";
+		std::string state = "_";
 		if (PCA3_State < p_NumParams)
 		{
 			state = p_ParamList[PCA3_State].DisplaySN(GetPriority(), p_DisplayOptions);

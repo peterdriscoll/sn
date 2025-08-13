@@ -14,9 +14,9 @@ namespace SNI
 		SNI_Comparison();
 		virtual ~SNI_Comparison();
 
-		virtual string GetTypeName() const = 0;
-		virtual string DisplayCpp() const = 0;
-		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const = 0;
+		virtual std::string GetTypeName() const = 0;
+		virtual std::string DisplayCpp() const = 0;
+		virtual std::string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const = 0;
 
 		virtual SN::SN_Value PrimaryFunctionValue(const SN::SN_Value &p_Left, const SN::SN_Value &p_Right) const = 0;
 		virtual SN::SN_Value LeftInverseFunctionValue(const SN::SN_Value &p_Left, const SN::SN_Value &p_Right) const;

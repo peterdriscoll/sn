@@ -53,7 +53,7 @@ namespace SNI
 	{
 	}
 
-	SNI_Error::SNI_Error(bool p_Success, bool p_Delay, const string & p_Description)
+	SNI_Error::SNI_Error(bool p_Success, bool p_Delay, const std::string & p_Description)
 		: m_Success(p_Success)
 		, m_Delay(p_Delay)
 		, m_RequestRerun(false)
@@ -82,7 +82,7 @@ namespace SNI
 		return new SNI_Error(*this);
 	}
 
-	string SNI_Error::GetTypeName() const
+	std::string SNI_Error::GetTypeName() const
 	{
 		if (m_Success)
 		{
@@ -94,12 +94,12 @@ namespace SNI
 		}
 	}
 
-	string SNI_Error::DisplayCpp() const
+	std::string SNI_Error::DisplayCpp() const
 	{
 		return "Error(" + m_Description + ")";
 	}
 
-	string SNI_Error::DisplaySN(long /*priority*/, SNI_DisplayOptions & p_DisplayOptions) const
+	std::string SNI_Error::DisplaySN(long /*priority*/, SNI_DisplayOptions & p_DisplayOptions) const
 	{
 		if (m_Success)
 		{
@@ -133,7 +133,7 @@ namespace SNI
 		return true;
 	}
 
-	void SNI_Error::AddError(SN::SN_Error &p_Error)
+	void SNI_Error::AddError(const SN::SN_Error &p_Error)
 	{
 		SNI_Error *e = p_Error.GetSNI_Error();
 		ASSERTM(e != this, "Recursive error inclusion.");
@@ -196,12 +196,12 @@ namespace SNI
 		m_RequestRerun =  true;
 	}
 
-	string SNI_Error::GetDescription()
+	std::string SNI_Error::GetDescription()
 	{
 		return m_Description;
 	}
 
-	string SNI_Error::GetLogDescription()
+	std::string SNI_Error::GetLogDescription()
 	{
 		return "Error: " + m_Description;
 	}
@@ -211,7 +211,7 @@ namespace SNI
 		p_Stream << "{\n";
 		p_Stream << "\t\"description\" : \"" << EscapeStringToJSON(m_Description) << "\",";
 		p_Stream << "\t\"callhistory\" : [";
-		string delimeter = "\n";
+		std::string delimeter = "\n";
 		for (SNI_CallRecord *callRecord : m_CallHistory)
 		{
 			p_Stream << delimeter << "\t{\n";
@@ -228,7 +228,7 @@ namespace SNI
 	void SNI_Error::Log()
 	{
 #ifdef USE_LOGGING
-		SN::LogContext context((GetDelay() ? string("Delayed ") : string("")) + (GetBool() ? string("Error") : string("Success")) + string(" Report"));
+		SN::LogContext context((GetDelay() ? std::string("Delayed ") : std::string("")) + (GetBool() ? std::string("Error") : std::string("Success")) + std::string(" Report"));
 		context.LogText("Description ", GetDescription());
 		for (SNI_CallRecord *callRecord : m_CallHistory)
 		{

@@ -15,10 +15,10 @@ namespace SN
 namespace SNI
 {
 	class SNI_World;
-	typedef vector<SNI_World*> SNI_WorldList;
+	typedef std::vector<SNI_World*> SNI_WorldList;
 
 	class SNI_WorldSet;
-	typedef vector<SNI_WorldSet*> SNI_WorldSetList;
+	typedef std::vector<SNI_WorldSet*> SNI_WorldSetList;
 	struct WorldSetKeyHasher
 	{
 		std::size_t operator()(SNI_WorldSet * k) const;
@@ -29,7 +29,7 @@ namespace SNI
 		bool operator()(SNI_WorldSet* p_Left, SNI_WorldSet* p_Right) const;
 	};
 	
-	typedef unordered_map<long, SNI_WorldSet*> SNI_WorldSetMap;
+	typedef std::unordered_map<long, SNI_WorldSet*> SNI_WorldSetMap;
 
 	enum EnumAddWorld
 	{
@@ -51,7 +51,7 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_WorldSet);
 	public:
-		static void WriteChangedJS(ostream &p_Stream, const string &tabs, SNI_DisplayOptions &p_DisplayOptions);
+		static void WriteChangedJS(ostream &p_Stream, const std::string &tabs, SNI_DisplayOptions &p_DisplayOptions);
 
 		SNI_WorldSet();
 		SNI_WorldSet(const SN::SN_Expression &p_Expression);
@@ -59,16 +59,16 @@ namespace SNI
 
 		long GetWorldSetNo();
 
-		string DisplaySN() const;
-		string DisplayShort() const;
-		string DisplayLong() const;
-		string DisplayWorlds(SNI_DisplayOptions & p_DisplayOptions) const;
-		string DisplayVariable(SNI_DisplayOptions & p_DisplayOptions) const;
-		string DisplayCondition(SNI_DisplayOptions & p_DisplayOptions, const SN::SN_Expression &p_Value) const;
-		void WriteJSON(ostream & p_Stream, const string &tabs, SNI_DisplayOptions & p_DisplayOptions) const;
-		void WriteUnmarkedJS(ostream & p_Stream, const string &tabs, SNI_DisplayOptions & p_DisplayOptions) const;
-		string LogHeading(SN::LogContext &context, long p_Width) const;
-		string LogUnderline(SN::LogContext &context, long p_Width) const;
+		std::string DisplaySN() const;
+		std::string DisplayShort() const;
+		std::string DisplayLong() const;
+		std::string DisplayWorlds(SNI_DisplayOptions & p_DisplayOptions) const;
+		std::string DisplayVariable(SNI_DisplayOptions & p_DisplayOptions) const;
+		std::string DisplayCondition(SNI_DisplayOptions & p_DisplayOptions, const SN::SN_Expression &p_Value) const;
+		void WriteJSON(ostream & p_Stream, const std::string &tabs, SNI_DisplayOptions & p_DisplayOptions) const;
+		void WriteUnmarkedJS(ostream & p_Stream, const std::string &tabs, SNI_DisplayOptions & p_DisplayOptions) const;
+		std::string LogHeading(SN::LogContext &context, long p_Width) const;
+		std::string LogUnderline(SN::LogContext &context, long p_Width) const;
 		void LogSN() const;
 		long NextWorldNo();
 		size_t CountWorlds();
@@ -128,7 +128,7 @@ namespace SNI
 		long m_WorldSetNo;
 		long m_NextWorldNo;
 		SN::SN_Expression m_Expression;
-		string m_ExpressionString;
+		std::string m_ExpressionString;
 	};
 }
 

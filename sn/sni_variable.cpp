@@ -51,7 +51,7 @@ namespace SNI
 	{
 	}
 
-	SNI_Variable::SNI_Variable(const string &p_Name)
+	SNI_Variable::SNI_Variable(const std::string &p_Name)
 		: m_Frame(NULL)
 		, m_Value(NULL)
 		, m_Requested(false)
@@ -60,7 +60,7 @@ namespace SNI
 		SetName(p_Name);
 	}
 
-	SNI_Variable::SNI_Variable(const string& p_Name, const string& p_DomainName, skynet::DefineType p_DefineType)
+	SNI_Variable::SNI_Variable(const std::string& p_Name, const std::string& p_DomainName, skynet::DefineType p_DefineType)
 		: m_Frame(NULL)
 		, m_Value(NULL)
 		, m_Requested(false)
@@ -188,7 +188,7 @@ namespace SNI
 		}
 	}
 
-	string SNI_Variable::FrameName() const
+	std::string SNI_Variable::FrameName() const
 	{
 		if (m_Frame)
 		{	// Main thread
@@ -197,7 +197,7 @@ namespace SNI
 		return GetName();
 	}
 
-	string SNI_Variable::FramePathName() const
+	std::string SNI_Variable::FramePathName() const
 	{
 		if (m_Value && m_Value->IsVariable())
 		{
@@ -356,12 +356,12 @@ namespace SNI
 		}
 	}
 
-	string SNI_Variable::GetTypeName() const
+	std::string SNI_Variable::GetTypeName() const
 	{
 		return "Variable";
 	}
 
-	string SNI_Variable::GetValueTypeName() const
+	std::string SNI_Variable::GetValueTypeName() const
 	{
 		if (m_Value)
 		{
@@ -370,17 +370,17 @@ namespace SNI
 		return GetTypeName();
 	}
 
-	string SNI_Variable::GetReferredName() const
+	std::string SNI_Variable::GetReferredName() const
 	{
 		return GetName();
 	}
 	
-	string SNI_Variable::DisplayCpp() const
+	std::string SNI_Variable::DisplayCpp() const
 	{
 		return "SN_Variable(" + GetName() + ")";
 	}
 
-	string SNI_Variable::DisplaySN(long p_Priority, SNI_DisplayOptions &p_DisplayOptions) const
+	std::string SNI_Variable::DisplaySN(long p_Priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
 		if (p_DisplayOptions.GetDebugHTML() == doDebugPointsJS)
 		{
@@ -389,7 +389,7 @@ namespace SNI
 		return FrameName();
 	}
 
-	string SNI_Variable::DisplayValueSN(long priority, SNI_DisplayOptions & p_DisplayOptions) const
+	std::string SNI_Variable::DisplayValueSN(long priority, SNI_DisplayOptions & p_DisplayOptions) const
 	{
 		if (m_Value)
 		{
@@ -402,21 +402,21 @@ namespace SNI
 		return FrameName();
 	}
 
-	string SNI_Variable::DisplayCall(long p_Priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const
+	std::string SNI_Variable::DisplayCall(long p_Priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const
 	{
-		string text;
-		string delimeter;
+		std::string text;
+		std::string delimeter;
 		for (size_t j = 0; j < p_NumParams; j++)
 		{
 			SN::SN_Expression &p = p_ParamList[j];
-			string del = delimeter;
+			std::string del = delimeter;
 			delimeter = " ";
 			text += del + p.GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions);
 		}
 		return Bracket(p_Priority, SetBreakPoint(FrameName(), p_DisplayOptions, this, SN::LeftId) + " " + text, p_DisplayOptions, this);
 	}
 
-	string SNI_Variable::SetWatch(const string& p_Caption, SNI_DisplayOptions& p_DisplayOptions) const
+	std::string SNI_Variable::SetWatch(const std::string& p_Caption, SNI_DisplayOptions& p_DisplayOptions) const
 	{
 		switch (p_DisplayOptions.GetDebugHTML())
 		{
@@ -426,14 +426,14 @@ namespace SNI
 				return p_Caption;
 			case doDebugPointsJS:
 			{
-				string debugId = GetDebugId();
+				std::string debugId = GetDebugId();
 				return "<button title='" + debugId + "' ng-click='setWatch(\"" + debugId + "\")' ng-class='watchClass(\"" + debugId + "\")'>" + p_Caption + "</button>";
 			}
 		}
 		return "";
 	}
 
-	void SNI_Variable::WriteJSON(ostream& p_Stream, const string& p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions& p_DisplayOptions) const
+	void SNI_Variable::WriteJSON(std::ostream& p_Stream, const std::string& p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions& p_DisplayOptions) const
 	{
 		p_Stream << p_Prefix << "\"id\" : \"" << GetDebugId() << "\",\n";
 		p_Stream << p_Prefix << "\"name\" : \"" << FramePathName() << "\",\n";
@@ -444,7 +444,7 @@ namespace SNI
 	{
 		if (p_MetaLevel <= 0)
 		{
-			string name = FrameName();
+			std::string name = FrameName();
 			auto it = p_Map.find(name);
 			if (it == p_Map.end())
 			{
@@ -471,7 +471,7 @@ namespace SNI
 		return false;
 	}
 
-	string SNI_Variable::GetString() const
+	std::string SNI_Variable::GetString() const
 	{
 		if (m_Value)
 		{

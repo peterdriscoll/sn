@@ -19,10 +19,10 @@ namespace SNI
 	public:
 		size_t m_Depth;
 		size_t m_StepCount;
-		string m_String;
+		std::string m_String;
 		bool m_Heading;
 
-		SNI_LogLine(size_t p_Depth, size_t p_StepCount, const string &p_String, bool p_Heading)
+		SNI_LogLine(size_t p_Depth, size_t p_StepCount, const std::string &p_String, bool p_Heading)
 			: m_Depth(p_Depth)
 			, m_StepCount(p_StepCount)
 			, m_String(p_String)
@@ -52,7 +52,7 @@ namespace SNI
 		SNI_LogBuffer(size_t p_Capacity, size_t p_ExpressionCapacity);
 		virtual ~SNI_LogBuffer();
 
-		void WriteLine(const string &p_Line, bool p_Heading);
+		void WriteLine(const std::string &p_Line, bool p_Heading);
 		void WriteExpression(const SN::SN_Expression & p_Expression);
 		void ClearLogExpressions();
 		void LogTableToStream(ostream & p_Stream, size_t p_MaxLogEntries);

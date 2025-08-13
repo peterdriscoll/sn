@@ -43,7 +43,7 @@ namespace SNI
 	{
 	}
 
-	SNI_String::SNI_String(const string &p_Other)
+	SNI_String::SNI_String(const std::string &p_Other)
 		: m_String(p_Other)
 	{
 	}
@@ -61,19 +61,19 @@ namespace SNI
 	// Logging
 	//-----------------------------------------------------------------------
 
-	string SNI_String::GetTypeName() const
+	std::string SNI_String::GetTypeName() const
 	{
 		return "String";
 	}
 
-	string SNI_String::DisplayCpp() const
+	std::string SNI_String::DisplayCpp() const
 	{
 		return "\"" + EscapeStringToCPP(m_String) + "\"";
 	}
 
-	string SNI_String::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_String::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
-		string quotedString = EscapeStringToJSON(m_String);
+		std::string quotedString = EscapeStringToJSON(m_String);
 		return "\"" + EscapeStringToCPP(m_String) + "\"";
 	}
 
@@ -212,12 +212,12 @@ namespace SNI
 	// Members
 	//-----------------------------------------------------------------------
 
-	string SNI_String::GetString() const
+	std::string SNI_String::GetString() const
 	{
 		return m_String;
 	}
 
-	const string &SNI_String::GetSourceString() const
+	const std::string &SNI_String::GetSourceString() const
 	{
 		return m_String;
 	}
@@ -337,7 +337,7 @@ namespace SNI
 	{
 		if (dynamic_cast<SNI_String *>(p_Other))
 		{
-			string part = dynamic_cast<SNI_String *>(p_Other)->m_String;
+			std::string part = dynamic_cast<SNI_String *>(p_Other)->m_String;
 			size_t part_length = part.length();
 			if (m_String.substr(0, part_length) == part)
 			{
@@ -352,11 +352,11 @@ namespace SNI
 	{
 		if (dynamic_cast<SNI_String *>(p_Other))
 		{
-			string part = dynamic_cast<SNI_String *>(p_Other)->m_String;
+			std::string part = dynamic_cast<SNI_String *>(p_Other)->m_String;
 			size_t part_length = part.length();
 			if (m_String.substr(m_String.length() - part_length) == part)
 			{
-				string result = m_String.substr(0, m_String.length() - part_length);
+				std::string result = m_String.substr(0, m_String.length() - part_length);
 				return SN::SN_String(result);
 			}
 			return SN::SN_Error(false, false, GetTypeName() + " Subtract right did not match.");
@@ -388,7 +388,7 @@ namespace SNI
 		{
 			return SN::SN_Char(m_String[0]);
 		}
-		return SN::SN_Error(false, false, GetTypeName() + " SelectLeftChar operator not implemented on a null string.");
+		return SN::SN_Error(false, false, GetTypeName() + " SelectLeftChar operator not implemented on a null std::string.");
 	}
 
 	SN::SN_Value SNI_String::DoSelectRightChar() const
@@ -398,7 +398,7 @@ namespace SNI
 		{
 			return SN::SN_Char(m_String[length - 1]);
 		}
-		return SN::SN_Error(false, false, GetTypeName() + " SelectRightChar operator not implemented on a null string.");
+		return SN::SN_Error(false, false, GetTypeName() + " SelectRightChar operator not implemented on a null std::string.");
 	}
 
 	SN::SN_Value SNI_String::DoLookaheadLeft() const
@@ -422,19 +422,19 @@ namespace SNI
 
 	SN::SN_Value SNI_String::DoLookStringLeft(SNI_Value * p_Other) const
 	{
-		string other = p_Other->GetString();
+		std::string other = p_Other->GetString();
 		size_t length = m_String.length();
 		size_t otherLength = other.length();
 		if (m_String.length())
 		{
 			return SN::SN_Bool(m_String.substr(0, otherLength) == other);
 		}
-		return skynet::False;
+		return SN::SN_Error(false, false, "DoLookStringLeft length error");
 	}
 
 	SN::SN_Value SNI_String::DoLookStringRight(SNI_Value * p_Other) const
 	{
-		string other = p_Other->GetString();
+		std::string other = p_Other->GetString();
 		size_t length = m_String.length();
 		size_t otherLength = other.length();
 		if (otherLength < length)
@@ -447,7 +447,7 @@ namespace SNI
 	SN::SN_Value SNI_String::DoFile() const
 	{
 		// In math, a single expression can only have a single value. Calling the File
-		// method on a string can only have one value. So if the file is reread the
+		// method on a std::string can only have one value. So if the file is reread the
 		// same value must be returned.
 		// The solution to this to include the time, but I don't yet have a time class
 		// or a branching time object to allow me to safely retrieve it. Later.
@@ -481,25 +481,25 @@ namespace SNI
 		preventReread.Insert(GetString(), p_Contents.GetSNI_String());
 	}
 
-	SN::SN_Value SNI_String::DoEscape(enum skynet::EscapeType p_EscapeType) const
+	SN::SN_Value SNI_String::DoEscape(enum SN::EscapeType p_EscapeType) const
 	{
 		switch (p_EscapeType)
 		{
-		case skynet::CPP:
+		case SN::CPP:
 			return SN::SN_String(EscapeStringToCPP(GetString()));
-		case skynet::JSON:
+		case SN::JSON:
 			return SN::SN_String(EscapeStringToJSON(GetString()));
 		}
 		return SN::SN_Error(false, false, "Bad escape type for escape conversion");
 	}
 
-	SN::SN_Value SNI_String::DoUnescape(enum skynet::EscapeType p_EscapeType) const
+	SN::SN_Value SNI_String::DoUnescape(enum SN::EscapeType p_EscapeType) const
 	{
 		switch (p_EscapeType)
 		{
-		case skynet::CPP:
+		case SN::CPP:
 			return SN::SN_String(UnescapeStringToCPP(GetString()));
-		case skynet::JSON:
+		case SN::JSON:
 			return SN::SN_String(UnescapeStringToJSON(GetString()));
 		}
 		return SN::SN_Error(false, false, "Bad escape type for escape conversion");

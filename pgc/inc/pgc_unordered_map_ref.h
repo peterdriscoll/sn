@@ -44,14 +44,13 @@ namespace PGC
             m_Data[key] = ref;
         }
 
-        void InsertRef(const Key& key, const MemberRef<T>& ref)
+        void InsertRef(const Key& key, const mapped_type& ref)
         {
-            MemberRef<T> promoted = ref;
-            promoted.RequestPromotion(m_Transaction);
-            m_Data[key] = promoted;
+            m_Data[key] = ref;
+			m_Data[key].RequestPromotion(m_Transaction);
         }
 
-        void InsertRef(const Key& key, MemberRef<T>&& ref)
+        void InsertRef(const Key& key, mapped_type&& ref)
         {
             ref.RequestPromotion(m_Transaction);
             m_Data[key] = std::move(ref);

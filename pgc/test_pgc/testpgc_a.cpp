@@ -26,12 +26,12 @@ TestPGC_A::~TestPGC_A()
 	--m_ActiveCount;
 }
 
-string TestPGC_A::GetDescription()
+std::string TestPGC_A::GetDescription()
 {
 	return m_Description;
 }
 
-void TestPGC_A::SetDescription(const string &p_Description)
+void TestPGC_A::SetDescription(const std::string &p_Description)
 {
 	m_Description = p_Description;
 }
@@ -57,7 +57,7 @@ TestPGC_A* TestPGC_A::CloneTo(void* memory) const
 
 void TestPGC_A::PromoteMembers()
 {
-	REQUESTPROMOTION(m_next);
+	PROMOTENOW(m_next);
 }
 
 long TestPGC_A::CountList()

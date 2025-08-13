@@ -5,7 +5,7 @@
 
 namespace SNI
 {
-	SNI_CallRecord::SNI_CallRecord(const string & p_Purpose, const SNI_Expression * p_Expression)
+	SNI_CallRecord::SNI_CallRecord(const std::string & p_Purpose, const SNI_Expression * p_Expression)
 		: m_Purpose(p_Purpose)
 		, m_Expression(p_Expression)
 	{
@@ -15,7 +15,7 @@ namespace SNI
 	{
 	}
 
-	string SNI_CallRecord::GetPurpose()
+	std::string SNI_CallRecord::GetPurpose()
 	{
 		return m_Purpose;
 	}
@@ -25,7 +25,7 @@ namespace SNI
 		return m_Expression;
 	}
 
-	string SNI_CallRecord::GetLogContext()
+	std::string SNI_CallRecord::GetLogContext()
 	{
 		return m_LogContext;
 	}

@@ -33,12 +33,12 @@ namespace SNI
 		SNI_Let(SNI_Expression *p_Condition, SNI_Expression *p_Expresion);
 		virtual ~SNI_Let();
 
-		virtual string GetTypeName() const;
-		virtual string DisplayCpp() const;
-		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
+		virtual std::string GetTypeName() const;
+		virtual std::string DisplayCpp() const;
+		virtual std::string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual void AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map);
 		virtual long GetPriority() const;
-		virtual string GetOperator() const;
+		virtual std::string GetOperator() const;
 
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 		SN::SN_Error AssertValue(const SN::SN_Expression & p_Value);

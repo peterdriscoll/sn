@@ -36,17 +36,17 @@ namespace SNI
 
 	/// @cond
 
-	string SNI_RevOr::GetTypeName() const
+	std::string SNI_RevOr::GetTypeName() const
 	{
 		return "RevOr";
 	}
 
-	string SNI_RevOr::DisplayCpp() const
+	std::string SNI_RevOr::DisplayCpp() const
 	{
 		return "skynet::RevOr";
 	}
 
-	string SNI_RevOr::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_RevOr::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "RevOr";
 	}

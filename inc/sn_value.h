@@ -8,7 +8,7 @@
 
 #include <string>
 #include <functional>
-using namespace std;
+
 
 namespace SNI
 {
@@ -51,7 +51,10 @@ namespace SN
 		SN_Value(const SN_Variable &p_Variable);
 		SN_Value(const SN_Meta &p_Meta);
 		SN_Value(const SN_ValueSet &p_ValueSet);
-		SN_Value(const SN_Number &p_Number);
+		SN_Value(const SN_Number& p_Number);
+		SN_Value(const SN_Set& p_Set);
+		SN_Value(const SN_Vector& p_Vector);
+		SN_Value(const SN_StateValue& p_StateValue);
 
 		SN_APPLY_TYPES(SN_Value, DUMMY, SN_CONSTRUCTOR)
 
@@ -62,7 +65,7 @@ namespace SN
 		SNI::SNI_Value * GetSNI_Value() const;
 	};
 
-	typedef vector<SN_Value> SN_ValueList;
+	typedef std::vector<SN_Value> SN_ValueList;
 }
 
 #endif // !defined(SN_VALUE_H_INCLUDED)

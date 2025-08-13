@@ -39,13 +39,11 @@ namespace PGC
 		}
 		SRef(const RefBase& p_Other)
 			: RefBase(p_Other.Ptr())
-			, m_LiveTransaction(nullptr)
 		{
 			SetLiveTransaction();
 		}
 		SRef(T* p_Object)
 			: RefBase(p_Object)
-			, m_LiveTransaction(false)
 		{
 			SetLiveTransaction();
 		}

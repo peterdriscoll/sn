@@ -25,17 +25,17 @@ namespace SNI
 	{
 	}
 
-	string SNI_HasMember::GetTypeName() const
+	std::string SNI_HasMember::GetTypeName() const
 	{
 		return "HasMember";
 	}
 
-	string SNI_HasMember::DisplayCpp() const
+	std::string SNI_HasMember::DisplayCpp() const
 	{
 		return "SN::HasMember";
 	}
 
-	string SNI_HasMember::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_HasMember::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "in";
 	}

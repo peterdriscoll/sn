@@ -15,18 +15,18 @@
 
 namespace SNI
 {
-	ConstructionTree::ConstructionTree(const string &p_ParameterName)
+	ConstructionTree::ConstructionTree(const std::string &p_ParameterName)
 		: m_ParameterVariable(p_ParameterName)
 	{
 	}
 
-	ConstructionTree::ConstructionTree(const string &p_ParameterName, SN::SN_Expression p_Parameter)
+	ConstructionTree::ConstructionTree(const std::string &p_ParameterName, SN::SN_Expression p_Parameter)
 		: m_ParameterVariable(p_ParameterName)
 		, m_Parameter(p_Parameter)
 	{
 	}
 
-	ConstructionTree::ConstructionTree(const string &p_ParameterName, SN::SN_Expression p_Parameter, SN::SN_Expression p_ImplementationCall)
+	ConstructionTree::ConstructionTree(const std::string &p_ParameterName, SN::SN_Expression p_Parameter, SN::SN_Expression p_ImplementationCall)
 		: m_ParameterVariable(p_ParameterName)
 		, m_Parameter(p_Parameter)
 		, m_ImplementationCall(p_ImplementationCall)
@@ -63,7 +63,7 @@ namespace SNI
 			++it;
 		}
 		size_t base = p_Base + 1;
-		string paramName = "_param_" + to_string(base);
+		std::string paramName = "_param_" + to_string(base);
 		SN::SN_Expression l_ImplentationCall = SN::SN_Function(p_ImplementationCall, m_ParameterVariable);
 		if (p_Base == p_FormalParameterList.size() - 1)
 		{
@@ -139,19 +139,19 @@ namespace SNI
 		}
 	}
 
-	string SNI_Virtual::GetTypeName() const
+	std::string SNI_Virtual::GetTypeName() const
 	{
 		return "Virtual";
 	}
 
-	string SNI_Virtual::DisplayCpp() const
+	std::string SNI_Virtual::DisplayCpp() const
 	{
 		if (m_Fixed)
 		{
 			return m_CallExpression.DisplayCpp();
 		}
-		string result = GetTypeName() + "(";
-		string delimeter;
+		std::string result = GetTypeName() + "(";
+		std::string delimeter;
 		for (const SN::SN_Expression &call : m_CallList)
 		{
 			result += delimeter + call.DisplayCpp();
@@ -161,7 +161,7 @@ namespace SNI
 		return result;
 	}
 
-	string SNI_Virtual::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
+	std::string SNI_Virtual::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
 		if (p_DisplayOptions.GetLevel() == 0)
 		{
@@ -170,8 +170,8 @@ namespace SNI
 			{
 				return m_CallExpression.GetSNI_Expression()->DisplaySN(priority, p_DisplayOptions);
 			}
-			string result = GetTypeName() + "(";
-			string delimeter;
+			std::string result = GetTypeName() + "(";
+			std::string delimeter;
 			for (const SN::SN_Expression &call : m_CallList)
 			{
 				result += delimeter + call.GetSNI_Expression()->DisplaySN(priority, p_DisplayOptions);

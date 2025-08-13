@@ -25,17 +25,17 @@ namespace SNI
 	{
 	}
 
-	string SNI_IsA::GetTypeName() const
+	std::string SNI_IsA::GetTypeName() const
 	{
 		return "IsA";
 	}
 
-	string SNI_IsA::DisplayCpp() const
+	std::string SNI_IsA::DisplayCpp() const
 	{
 		return "SN::IsA";
 	}
 
-	string SNI_IsA::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_IsA::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "IsA";
 	}
@@ -45,7 +45,7 @@ namespace SNI
 		return 0;
 	}
 
-	string SNI_IsA::GetOperator() const
+	std::string SNI_IsA::GetOperator() const
 	{
 		return " is a ";
 	}

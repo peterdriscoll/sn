@@ -29,7 +29,12 @@ namespace SN
 	{
 	}
 
-	SN_Char::SN_Char(string::value_type p_Char)
+	SN_Char::SN_Char(const SN_Expression& p_Expression)
+		: m_Char(p_Expression.GetSNI_Char())
+	{
+	}
+
+	SN_Char::SN_Char(std::string::value_type p_Char)
 		: m_Char(new SNI::SNI_Char(p_Char))
 	{
 	}
@@ -85,12 +90,12 @@ namespace SN
 
 	}
 
-	string::value_type SN_Char::GetChar() const
+	std::string::value_type SN_Char::GetChar() const
 	{
 		return m_Char->GetChar();
 	}
 
-	string SN_Char::GetString() const
+	std::string SN_Char::GetString() const
 	{
 		return m_Char->GetString();
 	}

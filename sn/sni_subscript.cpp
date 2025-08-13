@@ -26,22 +26,22 @@ namespace SNI
 	{
 	}
 
-	string SNI_Subscript::GetTypeName() const
+	std::string SNI_Subscript::GetTypeName() const
 	{
 		return "Subscript";
 	}
 
-	string SNI_Subscript::DisplayCpp() const
+	std::string SNI_Subscript::DisplayCpp() const
 	{
 		return "SN::Subscript";
 	}
 
-	string SNI_Subscript::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_Subscript::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "Subscript";
 	}
 
-	string SNI_Subscript::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const
+	std::string SNI_Subscript::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const
 	{
 		return Bracket(priority, p_ParamList[PC2_First].DisplaySN(GetPriority(), p_DisplayOptions) + SetBreakPoint("[", p_DisplayOptions, p_DebugSource, SN::LeftId) + p_ParamList[PC2_Second].DisplaySN(GetPriority(), p_DisplayOptions) + SetBreakPoint("]", p_DisplayOptions, p_DebugSource, SN::RightId), p_DisplayOptions, p_DebugSource);
 	}

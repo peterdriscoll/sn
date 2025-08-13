@@ -12,17 +12,17 @@ namespace SNI
 	{
 	}
 
-	string SNI_UnaryOr::GetTypeName() const
+	std::string SNI_UnaryOr::GetTypeName() const
 	{
 		return "UnaryOr";
 	}
 
-	string SNI_UnaryOr::DisplayCpp() const
+	std::string SNI_UnaryOr::DisplayCpp() const
 	{
 		return "SN::UnaryOr";
 	}
 
-	string SNI_UnaryOr::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_UnaryOr::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "UnaryOr";
 	}

@@ -28,17 +28,17 @@ namespace SNI
 
 	}
 
-	string SNI_FunctionDef::GetTypeName() const
+	std::string SNI_FunctionDef::GetTypeName() const
 	{
 		return "FunctionDef";
 	}
 
-	string SNI_FunctionDef::DisplayCpp() const
+	std::string SNI_FunctionDef::DisplayCpp() const
 	{
 		return GetTypeName();
 	}
 
-	string SNI_FunctionDef::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_FunctionDef::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return GetTypeName();
 	}
@@ -48,12 +48,12 @@ namespace SNI
 		return 100;
 	}
 
-	string SNI_FunctionDef::GetOperator() const
+	std::string SNI_FunctionDef::GetOperator() const
 	{
 		return "";
 	}
 
-	string SNI_FunctionDef::GetDebugId() const
+	std::string SNI_FunctionDef::GetDebugId() const
 	{
 		return GetTypeName();
 	}
@@ -199,16 +199,16 @@ namespace SNI
 		}
 	}
 
-	string SNI_FunctionDef::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression *p_DebugSource) const
+	std::string SNI_FunctionDef::DisplayCall(long priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression * p_ParamList, const SNI_Expression *p_DebugSource) const
 	{
 		long depth = GetNumParameters()-1;
-		string text;
-		string delimeter = "";
+		std::string text;
+		std::string delimeter = "";
 		long param = SN::ParameterOneId;
 		for (long j=0; j < depth; j++)
 		{
 			SN::SN_Expression &p = p_ParamList[j];
-			string del = delimeter;
+			std::string del = delimeter;
 			if (GetOperator().empty())
 			{
 				delimeter = SetBreakPoint(";", p_DisplayOptions, p_DebugSource, param++) + " ";
@@ -241,11 +241,11 @@ namespace SNI
 		}
 	}
 
-	string SNI_FunctionDef::GetLogDescription(SN::SN_Expression * p_ParamList) const
+	std::string SNI_FunctionDef::GetLogDescription(SN::SN_Expression * p_ParamList) const
 	{
 		long depth = GetNumParameters();
-		string text;
-		string delimeter = " == ";
+		std::string text;
+		std::string delimeter = " == ";
 		for (long j = 0; j < depth; j++)
 		{
 			if (j)

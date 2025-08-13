@@ -148,10 +148,10 @@ namespace skynet
 	SN::SN_FunctionDef File(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_File()));
 
 	// Escape Conversions
-	SN::SN_FunctionDef EscapeCPP(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Escape(skynet::CPP)));
-	SN::SN_FunctionDef UnescapeCPP(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Unescape(skynet::CPP)));
-	SN::SN_FunctionDef EscapeJSON(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Escape(skynet::JSON)));
-	SN::SN_FunctionDef UnescapeJSON(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Unescape(skynet::JSON)));
+	SN::SN_FunctionDef EscapeCPP(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Escape(SN::CPP)));
+	SN::SN_FunctionDef UnescapeCPP(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Unescape(SN::CPP)));
+	SN::SN_FunctionDef EscapeJSON(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Escape(SN::JSON)));
+	SN::SN_FunctionDef UnescapeJSON(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Unescape(SN::JSON)));
 
 	// Conversions
 	SN::SN_FunctionDef IntToString(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_IntToString()));

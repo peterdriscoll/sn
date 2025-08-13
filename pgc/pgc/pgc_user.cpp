@@ -14,7 +14,7 @@
 namespace PGC
 {
 
-    /*static*/ void PGC_User::DefaultErrorHandler(bool p_Err, const string& message)
+    /*static*/ void PGC_User::DefaultErrorHandler(bool p_Err, const std::string& message)
     {
         if (p_Err)
         {
@@ -61,19 +61,19 @@ namespace PGC
         // Pre-clear memory integrity checks
         ASSERTM(
             TotalNetMemoryUsed() == 0,
-            "Total net memory used " + to_string(TotalNetMemoryUsed()) + " not zero");
+            "Total net memory used " + std::to_string(TotalNetMemoryUsed()) + " not zero");
 
         ASSERTM(
             PromotionUsedMemory() == 0,
-            "Memory used by promotions " + to_string(PromotionUsedMemory()) + " not zero");
+            "Memory used by promotions " + std::to_string(PromotionUsedMemory()) + " not zero");
 
         ASSERTM(TotalPromotionMemory() ==
             TotalGrossMemoryUsed(),
             "Promotion memory accounting mismatch: "
-            + to_string(PromotionUsedMemory()) + " (used) + "
-            + to_string(PromotionFreeMemory()) + " (free) + "
-            + to_string(TotalProcessedDoubleDippingMemory()) + " (double dipped) != "
-            + to_string(TotalGrossMemoryUsed()) + " (gross)");
+            + std::to_string(PromotionUsedMemory()) + " (used) + "
+            + std::to_string(PromotionFreeMemory()) + " (free) + "
+            + std::to_string(TotalProcessedDoubleDippingMemory()) + " (double dipped) != "
+            + std::to_string(TotalGrossMemoryUsed()) + " (gross)");
 
         // Clear all promotions (reset the free list)
         ClearAllPromotions();
@@ -81,12 +81,12 @@ namespace PGC
         // Post-clear: verify that ClearAllPromotions did its job
         ASSERTM(
             PromotionFreeMemory() == 0,
-            "Promotional free memory " + to_string(PromotionFreeMemory()) + " should be zero after clear");
+            "Promotional free memory " + std::to_string(PromotionFreeMemory()) + " should be zero after clear");
 
         ASSERTM(
             TotalGrossMemoryUsed() == TotalProcessedDoubleDippingMemory(),
-            "Total gross memory used " + to_string(TotalGrossMemoryUsed()) +
-            " should equal processed memory " + to_string(TotalProcessedDoubleDippingMemory()) + " after clear");
+            "Total gross memory used " + std::to_string(TotalGrossMemoryUsed()) +
+            " should equal processed memory " + std::to_string(TotalProcessedDoubleDippingMemory()) + " after clear");
     }
 
     //  Process the list
@@ -105,7 +105,7 @@ namespace PGC
             case PromotionResult::Dropped:
                 *last = promotion->m_Next;
                 promotion->Free();
-                promotion = promotion->m_Next;
+                promotion = *last;
                 break;
 
             case PromotionResult::PromotedDone:
@@ -179,11 +179,14 @@ namespace PGC
 #endif
 
         // Add to the free list
-        p_Promotion->m_Next = m_FreeList;
-        m_FreeList = p_Promotion;
-        if (p_Promotion->IsPromoted())
+        if (p_Promotion) // Ensure p_Promotion is not null
         {
-            AddProcessedDoubleDippingMemory(-static_cast<long>(sizeof(PGC_Promotion)));
+            p_Promotion->m_Next = m_FreeList;
+            m_FreeList = p_Promotion;
+            if (p_Promotion->IsPromoted())
+            {
+                AddProcessedDoubleDippingMemory(-static_cast<long>(sizeof(PGC_Promotion)));
+            }
         }
     }
 

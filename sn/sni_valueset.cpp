@@ -102,20 +102,20 @@ namespace SNI
 	{
 	}
 
-	string SNI_ValueSet::GetTypeName() const
+	std::string SNI_ValueSet::GetTypeName() const
 	{
 		return "ValueSet";
 	}
 
-	string SNI_ValueSet::DisplayCpp() const
+	std::string SNI_ValueSet::DisplayCpp() const
 	{
 		SNI_DisplayOptions displayOptions(doTextOnly);
 		return "sn_ValueSet( [" + DisplaySnTaggedValueList(m_ValueList, displayOptions) + "] )";
 	}
 
-	string SNI_ValueSet::DisplaySN(long /*priority*/, SNI_DisplayOptions & p_DisplayOptions) const
+	std::string SNI_ValueSet::DisplaySN(long /*priority*/, SNI_DisplayOptions & p_DisplayOptions) const
 	{
-		string status;
+		std::string status;
 		if (!IsComplete())
 		{
 			status = "incomplete:";
@@ -504,7 +504,7 @@ namespace SNI
 		m_WorldSet->AttachExpression(m_Variable);
 	}
 
-	string SNI_ValueSet::GenerateTempVariableName()
+	std::string SNI_ValueSet::GenerateTempVariableName()
 	{
 		if (m_Variable)
 		{

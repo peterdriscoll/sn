@@ -107,6 +107,21 @@ namespace SN
 	{
 	}
 
+	SN_Value::SN_Value(const SN_Set& p_Set)
+		: SN_Expression(dynamic_cast<SNI::SNI_Value*>(p_Set.GetSNI_Set()))
+	{
+	}
+
+	SN_Value::SN_Value(const SN_Vector& p_Vector)
+		: SN_Expression(dynamic_cast<SNI::SNI_Value*>(p_Vector.GetSNI_Vector()))
+	{
+	}
+
+	SN_Value::SN_Value(const SN_StateValue& p_StateValue)
+		: SN_Expression(dynamic_cast<SNI::SNI_Value*>(p_StateValue.GetSNI_StateValue()))
+	{
+	}
+
 	SN_Value::SN_Value(const SNI::SNI_Expression *p_Expression)
 		: SN_Expression(dynamic_cast<SNI::SNI_Value *>(const_cast<SNI::SNI_Expression *>(p_Expression)))
 	{

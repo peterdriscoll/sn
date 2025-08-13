@@ -4,7 +4,7 @@
 
 namespace SNI
 {
-	SNI_Unescape::SNI_Unescape(enum skynet::EscapeType p_EscapeType)
+	SNI_Unescape::SNI_Unescape(enum SN::EscapeType p_EscapeType)
 		: m_EscapeType(p_EscapeType)
 	{
 	}
@@ -14,17 +14,17 @@ namespace SNI
 
 	}
 
-	string SNI_Unescape::GetTypeName() const
+	std::string SNI_Unescape::GetTypeName() const
 	{
 		return "Unescape";
 	}
 
-	string SNI_Unescape::DisplayCpp() const
+	std::string SNI_Unescape::DisplayCpp() const
 	{
 		return "SN::Unescape";
 	}
 
-	string SNI_Unescape::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_Unescape::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
 		return "Unescape";
 	}
@@ -49,10 +49,10 @@ namespace SNI
 		SN::SN_FunctionDef def(skynet::EscapeCPP);
 		switch (m_EscapeType)
 		{
-		case skynet::CPP:
+		case SN::CPP:
 			def = skynet::EscapeCPP;
 			break;
-		case skynet::JSON:
+		case SN::JSON:
 			def = skynet::EscapeJSON;
 			break;
 		}

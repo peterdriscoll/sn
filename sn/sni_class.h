@@ -27,20 +27,20 @@ namespace SNI
 		SNI_Value *m_Result;
 	};
 
-	typedef vector<SNI_Inherits> SNI_Inherits_List;
+	typedef std::vector<SNI_Inherits> SNI_Inherits_List;
 
 	class SNI_Class : public SNI_Null
 	{
 		PGC_CLASS(SNI_Class);
 	public:
-		SNI_Class(const string &p_ClassName);
+		SNI_Class(const std::string &p_ClassName);
 		SNI_Class(const SNI_Class &p_Other);
 		virtual ~SNI_Class();
 
 		virtual SNI_Expression * Copy() const;
-		virtual string GetTypeName() const;
-		virtual string DisplayCpp() const;
-		virtual string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
+		virtual std::string GetTypeName() const;
+		virtual std::string DisplayCpp() const;
+		virtual std::string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual long GetPriority() const;
 
 		virtual bool IsKnownTypeValue() const;
@@ -57,12 +57,12 @@ namespace SNI
 	private:
 		virtual void PromoteMembers();
 
-		string m_ClassName;
+		std::string m_ClassName;
 		bool m_Fixed;
 		SNI_Inherits_List m_InheritList;
 	};
 
-	typedef vector<SNI_Class *> SNI_ClassList;
+	typedef std::vector<SNI_Class *> SNI_ClassList;
 }
 
 #endif // !defined(SNI_CLASS_H_INCLUDED)

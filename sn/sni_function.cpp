@@ -92,12 +92,12 @@ namespace SNI
 		REQUESTPROMOTION(m_Condition);
 	}
 
-	string SNI_Function::GetTypeName() const
+	std::string SNI_Function::GetTypeName() const
 	{
 		return "Function";
 	}
 
-	string SNI_Function::GetReferredName() const
+	std::string SNI_Function::GetReferredName() const
 	{
 		if (m_Function)
 		{
@@ -106,7 +106,7 @@ namespace SNI
 		return GetTypeName();
 	}
 
-	string SNI_Function::DisplayCpp() const
+	std::string SNI_Function::DisplayCpp() const
 	{
 		return m_Function->DisplayCpp() + "(" + m_Parameter->DisplayCpp() + ")";
 	}
@@ -117,7 +117,7 @@ namespace SNI
 		return m_Function;
 	}
 
-	string SNI_Function::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
+	std::string SNI_Function::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
 		SN::SN_ExpressionList l_ParameterList;
 		SNI_Expression *nextFunction = LoadParameters(&l_ParameterList);
@@ -131,7 +131,7 @@ namespace SNI
 		{
 			size_t numParams = l_ParameterList.size();
 			SN::SN_Expression *param_List = function->LoadParametersCall(&l_ParameterList);
-			string result = function->DisplayCall(GetPriority(), p_DisplayOptions, numParams, param_List, this);
+			std::string result = function->DisplayCall(GetPriority(), p_DisplayOptions, numParams, param_List, this);
 			delete[] param_List;
 			if (!l_ParameterList.empty())
 			{

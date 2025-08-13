@@ -7,7 +7,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-using namespace std;
+
 using namespace skynet;
 using namespace PGCX;
 
@@ -18,9 +18,9 @@ namespace test_sn
 	private:
 		bool runWebServer = false;
 
-		static void AssertErrorHandler(bool p_Err, const string& p_Description)
+		static void AssertErrorHandler(bool p_Err, const std::string& p_Description)
 		{
-			Assert::IsTrue(!p_Err, wstring(p_Description.begin(), p_Description.end()).c_str());
+			Assert::IsTrue(!p_Err, std::wstring(p_Description.begin(), p_Description.end()).c_str());
 		}
 
 		void Initialize()
@@ -136,18 +136,18 @@ namespace test_sn
 
 					(Define(times)(c)(d) == c * d).PartialAssert().Do();
 				}
-				string s_plus = plus.DisplayValueSN();
-				string s_times = times.DisplayValueSN();
-				string s_plus_times = (plus || times).DoEvaluate().DisplaySN();
-				string s_plus_times2 = (plus || times).DoEvaluate().DisplaySN();
+				std::string s_plus = plus.DisplayValueSN();
+				std::string s_times = times.DisplayValueSN();
+				std::string s_plus_times = (plus || times).DoEvaluate().DisplaySN();
+				std::string s_plus_times2 = (plus || times).DoEvaluate().DisplaySN();
 
 				SN_DECLARE(f);
 				(f == (plus || times)).Assert().Do();
-				string f_string = f.DisplayValueSN();
+				std::string f_string = f.DisplayValueSN();
 
 				SN_DECLARE(x);
 				(x == f(long(5))(long(8))).Assert().Do();
-				string x_string = x.DisplayValueSN();
+				std::string x_string = x.DisplayValueSN();
 				(x < long(20)).Assert().Do();
 				(x == long(13)).Assert().Do();
 			}
@@ -163,14 +163,14 @@ namespace test_sn
 
 				SN_DECLARE(f);
 				(f == (skynet::Add || skynet::Multiply)).Assert().Do();
-				string f_string = f.DisplaySN();
+				std::string f_string = f.DisplaySN();
 
 				SN_DECLARE(x);
 				(x == f(long(8))(long(13))).Assert().Do();
-				string x_string = x.BuildSet().DoEvaluate().DisplaySN();
+				std::string x_string = x.BuildSet().DoEvaluate().DisplaySN();
 				Assert::IsTrue(x_string == "{Long(21), Long(104)}");
 				(x < long(30)).Assert().Do();
-				string x_string2 = x.DisplaySN();
+				std::string x_string2 = x.DisplaySN();
 				long x_num = Long(x).GetNumber();
 				Assert::IsTrue(x_num == 21);
 				(x == Long(21)).Assert().Do();
@@ -200,16 +200,16 @@ namespace test_sn
 
 					(Define(map)(a) == a).PartialAssert().Do();
 				}
-				string f_before_string = f.DisplaySN();
+				std::string f_before_string = f.DisplaySN();
 
 				(Define(f) == (wrap || map)).PartialAssert().Do();
-				string f_string = f.DisplayValueSN();
+				std::string f_string = f.DisplayValueSN();
 
 				SN_DECLARE(x);
 				(String("{{expression}}") == f(x)).Assert().Do();
-				string x_display = x.DisplayValueSN();
-				string x_string = x.BuildSet().DoEvaluate().DisplaySN();
-				string x_compare_string = "{String(\"expression\"), String(\"{expression}\"), String(\"{{expression}}\")}";
+				std::string x_display = x.DisplayValueSN();
+				std::string x_string = x.BuildSet().DoEvaluate().DisplaySN();
+				std::string x_compare_string = "{String(\"expression\"), String(\"{expression}\"), String(\"{{expression}}\")}";
 
 				Assert::IsTrue(x_string == x_compare_string);
 			}
