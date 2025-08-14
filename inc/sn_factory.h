@@ -25,6 +25,7 @@
 #define SN_APPLY_LIBRARIES(L, A) \
     L(A, sn, "sn.dll") \
     L(A, http_server_lib, "http_server_lib.dll") \
+    L(A, skynet_http_server_sync_lib, "skynet_http_server_sync_lib.dll") \
     L(A, http_server, "")
 
 // --- Entrypoints per library ---
@@ -32,7 +33,10 @@
     M(IHTTP_Handler, SNI::SNI_HTTP_Handler, sn, def)
 
 #define SN_APPLY_ENTRYPOINTS_http_server_lib(M) \
-    M(IHTTP_Server, HTTP::server::server, http_server_lib, def)
+    M(IHTTP_Server, HTTP::server::Server, http_server_lib, alt)
+
+#define SN_APPLY_ENTRYPOINTS_skynet_http_server_sync_lib(M) \
+    M(IHTTP_Server, skynet::http::server::sync::Server, skynet_http_server_sync_lib, def)
 
 #define SN_APPLY_ENTRYPOINTS_http_server(M)
 

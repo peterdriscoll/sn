@@ -863,7 +863,7 @@ namespace SNI
 		if (e.IsError())
 		{
 			e.Log();
-			if (user->ShouldRaiseError())
+			//if (user->ShouldRaiseError())
 			{
 				p_ErrorHandler(e.IsError(), e.GetDescription());
 			}

@@ -260,12 +260,7 @@ namespace SN
 
 	SNI::SNI_Value * SN_Expression::GetSNI_Value() const
 	{
-		SNI::SNI_Value* value = GetSNI_Value();
-		if (value)
-		{
-			return value;
-		}
-		return skynet::Null.GetSNI_Value();
+		return static_cast<SNI::SNI_Value*>(m_Expression);
 	}
 
 	SNI::SNI_Error * SN_Expression::GetSNI_Error() const

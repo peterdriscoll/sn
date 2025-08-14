@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="listener.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="errors.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="server_sync.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="skynet_http_server_sync_lib_pch.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="session.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="sn_factory.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="server.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\skynet\http\server\sync\detail\session.hpp">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\skynet\http\server\sync\detail\errors.hpp">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\skynet\http\server\sync\detail\listener.hpp">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="include\skynet\http\server\sync\detail\server_sync.hpp">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\inc\sn_factory.h">
+      <Filter>Interface Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\skynet\http\server\sync\server.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\inc\exp_ctrl_skynet_http_server_sync_lib.h" />
+    <ClInclude Include="include\skynet_http_server_sync_lib_pch.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header">
+      <UniqueIdentifier>{8a69da0d-071d-4697-8451-dfa6a77fc038}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{f6dd33f6-a742-42b3-895c-ef37dd862a7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface Header Files">
+      <UniqueIdentifier>{5083d102-58c5-4c7e-911d-5159ee2b3017}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
