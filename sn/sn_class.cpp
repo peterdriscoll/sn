@@ -37,11 +37,11 @@ namespace SN
 
 	SNI::SNI_Class* SN_Class::GetSNI_Class()
 	{
-		return static_cast<SNI::SNI_Class*>(m_Expression);
+		return dynamic_cast<SNI::SNI_Class*>(m_Expression);
 	}
 
 	SNI::SNI_Class* SN_Class::GetSNI_Class() const
 	{
-		return static_cast<SNI::SNI_Class*>(const_cast<SNI::SNI_Base*>(m_Expression));
+		return dynamic_cast<SNI::SNI_Class*>(m_Expression);
 	}
 }

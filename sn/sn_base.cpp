@@ -36,12 +36,12 @@ namespace SN
 
 	SNI::SNI_Expression* SN_Base::GetSNI_Expression()
 	{
-		return static_cast<SNI::SNI_Expression*>(m_Expression);
+		return dynamic_cast<SNI::SNI_Expression*>(m_Expression);
 	}
 
 	SNI::SNI_Expression* SN_Base::GetSNI_Expression() const
 	{
-		return static_cast<SNI::SNI_Expression*>(const_cast<SNI::SNI_Base*>(m_Expression));
+		return dynamic_cast<SNI::SNI_Expression*>(const_cast<SNI::SNI_Base*>(m_Expression));
 	}
 
 	SNI::SNI_Base* SN_Base::GetSNI_Base()

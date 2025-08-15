@@ -349,7 +349,7 @@ namespace SNI
 		return world;
 	}
 
-	SNI_World * SNI_WorldSet::CreateWorldForValue(SN::SN_Expression& p_Value)
+	SNI_World * SNI_WorldSet::CreateWorldForValue(const SN::SN_Expression& p_Value)
 	{
 		if (!SN::SN_Transaction::InWebServer())
 		{

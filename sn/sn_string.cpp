@@ -66,18 +66,18 @@ namespace SN
 
 	SNI::SNI_String* SN_String::GetSNI_String()
 	{
-		return static_cast<SNI::SNI_String*>(m_Expression);
+		return dynamic_cast<SNI::SNI_String*>(m_Expression);
 	}
 
 	// Members
 	SNI::SNI_String * SN_String::GetSNI_String() const
 	{
-		return static_cast<SNI::SNI_String*>(m_Expression);
+		return dynamic_cast<SNI::SNI_String*>(m_Expression);
 	}
 
 	SNI::SNI_StringRef * SN_String::GetSNI_StringRef() const
 	{
-		return static_cast<SNI::SNI_StringRef*>(m_Expression);
+		return dynamic_cast<SNI::SNI_StringRef*>(m_Expression);
 	}
 
 	std::string SN_String::GetString() const

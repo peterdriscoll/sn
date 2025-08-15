@@ -67,8 +67,8 @@ namespace SNI
 		virtual	std::string GetString() const;
 		virtual	size_t Length() const;
 
-		virtual SN::SN_Expression SNI_StringRef::DoEvaluate(long p_MetaLevel /* = 0 */) const;
-		virtual SN::SN_Expression SNI_StringRef::DoPartialEvaluate(long p_MetaLevel /* = 0 */) const;
+		virtual SN::SN_Expression DoEvaluate(long p_MetaLevel /* = 0 */) const;
+		virtual SN::SN_Expression DoPartialEvaluate(long p_MetaLevel /* = 0 */) const;
 
 		virtual bool Equivalent(SNI_Object * p_Other) const;
 		virtual size_t Hash() const;

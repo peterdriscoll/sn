@@ -84,12 +84,12 @@ namespace SN
 	}
 	SNI::SNI_ValueSet * SN_ValueSet::GetSNI_ValueSet()
 	{
-		return static_cast<SNI::SNI_ValueSet *>(m_Expression);
+		return dynamic_cast<SNI::SNI_ValueSet *>(m_Expression);
 	}
 
 	SNI::SNI_ValueSet* SN_ValueSet::GetSNI_ValueSet() const
 	{
-		return static_cast<SNI::SNI_ValueSet*>(m_Expression);
+		return dynamic_cast<SNI::SNI_ValueSet*>(m_Expression);
 	}
 
 	SN_ValueSet SN_ValueSet::DoRemove(const SN_Value & p_Other)

@@ -187,7 +187,10 @@
 #include <thread>
 #include <utility>
 #include <signal.h>
+#include <string_view>
+#include <cstdlib> // strtol
 
-using namespace std;
+#include "httphandlersimple.h"
+#include "requestadapter.h"
 
 #endif // !defined(SN_PCH_H_INCLUDED)

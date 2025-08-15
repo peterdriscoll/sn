@@ -46,12 +46,12 @@ namespace SN
 
 	SNI::SNI_StateValue *SN_StateValue::GetSNI_StateValue() const
 	{
-		return static_cast<SNI::SNI_StateValue *>(m_Expression);
+		return dynamic_cast<SNI::SNI_StateValue *>(m_Expression);
 	}
 
 	SNI::SNI_Expression *SN_StateValue::GetSNI_Expression() const
 	{
-		return static_cast<SNI::SNI_Expression *>(m_Expression);
+		return dynamic_cast<SNI::SNI_Expression *>(m_Expression);
 	}
 
 	SN_Expression SN_StateValue::Assert() const

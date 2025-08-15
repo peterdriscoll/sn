@@ -84,11 +84,11 @@ namespace SN
 
 	SNI::SNI_Set* SN_Set::GetSNI_Set()
 	{
-		return static_cast<SNI::SNI_Set*>(m_Expression);
+		return dynamic_cast<SNI::SNI_Set*>(m_Expression);
 	}
 
 	SNI::SNI_Set * SN_Set::GetSNI_Set() const
 	{
-		return static_cast<SNI::SNI_Set *>(m_Expression);
+		return dynamic_cast<SNI::SNI_Set *>(m_Expression);
 	}
 }

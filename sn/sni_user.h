@@ -42,9 +42,16 @@ namespace SNI
 
 		SNI_DelayedProcessor* GetDelayedProcessor();
 
+		void AddThread(SNI_Thread* p_Thread);
+
 		SN::SN_OperatorVariables& GetOperators();
 		void LogicSetup();
 
+		SNI_Thread* GetThreadByNumber(size_t p_ThreadNum);
+		size_t GetNumThreads();
+		void WriteStepCounts(ostream& p_Stream);
+		std::string StepCountJS();
+		void WriteStepCountListJS(ostream& p_Stream);
 	private:
 		SNI_Transaction* m_Transaction;
 		SNI_DelayedProcessor* m_DelayedProcessor;
@@ -54,6 +61,7 @@ namespace SNI
 		SN::SN_OperatorVariables *m_Operators;
 
 		SNI_Thread* m_MainThread;
-		std::vector<SNI_Thread*> m_WorkerList;
+
+		vector<SNI_Thread*> m_ThreadList;
 	};
 }

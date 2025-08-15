@@ -50,7 +50,7 @@ namespace SN
 	// Members
 	SNI::SNI_StringRef * SN_StringRef::GetSNI_StringRef() const
 	{
-		return static_cast<SNI::SNI_StringRef *>(m_Expression);
+		return dynamic_cast<SNI::SNI_StringRef *>(m_Expression);
 	}
 
 	std::string SN_StringRef::GetString() const

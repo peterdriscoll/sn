@@ -20,9 +20,6 @@ namespace SNI
 {
 	thread_local SNI_Thread *t_Thread = nullptr;
 
-	/*static*/ vector<SNI_Thread *> SNI_Thread::m_ThreadList;
-	/*static*/ mutex SNI_Thread::m_ThreadListMutex;
-
 	/*static*/ long SNI_Thread::m_GotoThreadNum;
 	/*static*/ long SNI_Thread::m_StepCount;
 	/*static*/ bool SNI_Thread::m_Running = false;
@@ -42,19 +39,7 @@ namespace SNI
 	/*static*/ void SNI_Thread::ClearThread() {
 		t_Thread = nullptr;
 	}
-	/*static*/ SNI_Thread *SNI_Thread::GetThreadByNumber(size_t p_ThreadNum)
-	{
-		if (p_ThreadNum < m_ThreadList.size())
-		{
-			return m_ThreadList[p_ThreadNum];
-		}
-		return NULL;
-	}
 
-	/*static*/ size_t SNI_Thread::GetNumThreads()
-	{
-		return m_ThreadList.size();
-	}
 	/*static*/ SNI_Manager *SNI_Thread::TopManager()
 	{
 		return GetThread()->GetTopManager();
@@ -95,22 +80,11 @@ namespace SNI
 		p_Stream << "</p></div>\n";
 	}
 
-	void SNI_Thread::ThreadListLock()
-	{
-		m_ThreadListMutex.lock();
-	}
-
-	void SNI_Thread::ThreadListUnlock()
-	{
-		m_ThreadListMutex.unlock();
-	}
-
 	SNI_Thread::SNI_Thread()
 		: m_ThreadStepCount(0)
 		, m_LastThreadStepCount(0)
 		, m_WebServerThreadUsed(false)
 		, m_TopManager(NULL)
-		, m_ThreadNum(m_ThreadList.size())
 		, m_MaxStackFrames(-1)
 		, m_Closing(false)
 		, m_DebugAction(skynet::StepInto)
@@ -138,15 +112,12 @@ namespace SNI
 
 	void SNI_Thread::Clear()
 	{
-		ThreadListLock();
 		m_Processor = NULL;
 		m_FrameList.clear();
 		m_WorldSetProcessMap = NULL;
 		SNI_Log::GetLog()->ClearLogExpressions();
 		m_Error = NULL;
-		ThreadListUnlock();
 	}
-
 
 	size_t SNI_Thread::GetThreadNum()
 	{
@@ -230,24 +201,6 @@ namespace SNI
 	void SNI_Thread::DisplayStepCounts()
 	{
 		cout << "Step count: " << to_string(m_ThreadNum) << ':' << to_string(m_ThreadStepCount) << '*' << "\n";
-	}
-
-	void SNI_Thread::WriteStepCounts(ostream &p_Stream)
-	{
-		p_Stream << "<div><table class='thread'>\n";
-		p_Stream << "<caption>Threads</caption>\n";
-		p_Stream << "<tr>\n";
-		std::string separator;
-		for (size_t k = 0; k < m_ThreadList.size(); k++)
-		{
-			SNI_Thread *l_thread = m_ThreadList[k];
-			if (l_thread)
-			{
-				l_thread->WriteStepCount(p_Stream);
-			}
-		}
-		p_Stream << "</tr>\n";
-		p_Stream << "</table></div>\n";
 	}
 
 	void SNI_Thread::WriteStepCount(ostream &p_Stream)
@@ -347,14 +300,6 @@ namespace SNI
 		{
 			ss << "{\"records\":[]}\n";
 		}
-		return ss.str();
-	}
-
-	std::string SNI_Thread::StepCountJS()
-	{
-		stringstream ss;
-		cout << "StepPointJS\n";
-		WriteStepCountListJS(ss);
 		return ss.str();
 	}
 
@@ -616,6 +561,7 @@ namespace SNI
 	void SNI_Thread::SetUser(SNI_User* p_User)
 	{
 		m_User = p_User;
+		p_User->AddThread(this);
 	}
 
 	std::string SNI_Thread::StartCommand(enum skynet::DebugAction p_DebugAction, const std::string &p_Description, enum DisplayOptionType p_OptionType)
@@ -876,7 +822,7 @@ namespace SNI
 		}
 		p_Stream << "</h1>\n";
 		WriteCommands(p_Stream);
-		WriteStepCounts(p_Stream);
+		SNI::SNI_User::GetCurrentUser()->WriteStepCounts(p_Stream);
 		if (manager)
 		{
 			SNI_DisplayOptions l_DisplayOptions(p_OptionType);
@@ -1227,24 +1173,6 @@ namespace SNI
 					value->WriteJSON(p_Stream, prefix + "\t", p_DebugFieldWidth, p_DisplayOptions);
 				}
 				p_Stream << "\n" << prefix << "}";
-				delimeter = ",\n";
-			}
-		}
-		p_Stream << "\n]}\n";
-	}
-
-	void SNI_Thread::WriteStepCountListJS(ostream &p_Stream)
-	{
-		p_Stream << "{\"records\":[\n";
-		std::string delimeter = " ";
-		for (size_t k = 0; k < m_ThreadList.size(); k++)
-		{
-			SNI_Thread *l_thread = m_ThreadList[k];
-			if (l_thread)
-			{
-				p_Stream << delimeter;
-
-				l_thread->WriteStepCountJS(p_Stream, delimeter);
 				delimeter = ",\n";
 			}
 		}

@@ -652,7 +652,7 @@ namespace SNI
 
 	SN::SN_Value SNI_FunctionDef::CallElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, SN::SN_ValueSet p_Result) const
 	{
-		return false;
+		return SN::SN_Error(false, false, GetTypeName() + "CallElement not implemented");
 	}
 
 	/*static*/size_t SNI_FunctionDef::MultiplyCardinality(size_t p_Left, size_t p_Right)

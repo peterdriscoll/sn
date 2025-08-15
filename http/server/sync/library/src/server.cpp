@@ -32,8 +32,17 @@ namespace skynet::http::server::sync
         m_address = boost::asio::ip::make_address(address);
         m_port = static_cast<unsigned short>(std::atoi(port.c_str()));
         m_doc_root = std::make_shared<std::string>(doc_root);
-	}
-	void Server::run()
+
+        //m_handler = SN::SN_Factory<IHTTP_Handler>::CreateObject();
+        //m_handler->setup(doc_root);
+    }
+
+    void Server::start()
+    {
+        run();
+    }
+
+	int Server::run()
 	{
         try
         {
@@ -62,6 +71,7 @@ namespace skynet::http::server::sync
         {
             std::cerr << "Error: " << e.what() << std::endl;
         }
+        return 0;
     }
 	void Server::stop()
 	{

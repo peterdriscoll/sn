@@ -43,11 +43,11 @@ namespace SN
 
 	SNI::SNI_Lambda* SN_Lambda::GetSNI_Lambda()
 	{
-		return static_cast<SNI::SNI_Lambda*>(m_Expression);
+		return dynamic_cast<SNI::SNI_Lambda*>(m_Expression);
 	}
 
 	SNI::SNI_Lambda* SN_Lambda::GetSNI_Lambda() const
 	{
-		return static_cast<SNI::SNI_Lambda*>(m_Expression);
+		return dynamic_cast<SNI::SNI_Lambda*>(m_Expression);
 	}
 }

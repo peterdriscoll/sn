@@ -31,15 +31,11 @@ namespace SNI
 		static SNI_Thread *GetThread();
 		static void ResetThread();
 		static void ClearThread();
-		static SNI_Thread *GetThreadByNumber(size_t p_ThreadNum);
-		static size_t GetNumThreads();
+
 		static SNI_Manager *TopManager();
 
 		static std::string ThreadEnded(long p_ThreadNum);
 		static void WriteThreadEnded(ostream & p_Stream, long p_ThreadNum);
-
-		static void ThreadListLock();
-		static void ThreadListUnlock();
 
 		SNI_Thread();
 
@@ -94,7 +90,6 @@ namespace SNI
 		std::string StackJS(long p_MaxStackFrame, long p_StartStackFrame, long p_StartStepCount, enum DisplayOptionType p_OptionType);
 		std::string CallStackJS(long p_MaxCallStackFrame, long p_StartCallStackFrame, long p_StartStepCount, enum DisplayOptionType p_OptionType);
 		std::string WatchListJS(long p_StartStepCount, enum DisplayOptionType p_OptionType);
-		std::string StepCountJS();
 		std::string LogJS(long p_MaxLogEntries, long p_StartLogEntries, long p_StartStepCount);
 		std::string DerivationJS(long p_MaxLogEntries);
 		std::string CodeJS(long p_MaxLogEntries, long p_StartCode, long p_StepCount, enum DisplayOptionType p_OptionType);
@@ -129,7 +124,6 @@ namespace SNI
 		SNI_Variable * LookupVariable(const std::string & p_Name);
 		void DisplayFrameStack(size_t p_Depth);
 		void DisplayStepCounts();
-		void WriteStepCounts(ostream & p_Stream);
 		void WriteStepCount(ostream & p_Stream);
 
 		ostream * CreateLogFile(SN::LoggingLevel p_LoggingLevel);
@@ -151,6 +145,7 @@ namespace SNI
 		void RegisterChange(SNI_Variable *p_NewValue);
 		std::string ChangeHistoryJS(enum DisplayOptionType p_OptionType, size_t p_ColumnWidth, size_t p_FromStep, size_t p_ToStep);
 		void WriteChangeHistoryJS(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions, size_t p_ColumnWidth, size_t p_FromStep, size_t p_ToStep);
+		void WriteStepCountJS(ostream& p_Stream, const std::string& p_Delimeter);
 
 		SNI_User* GetUser();
 		void SetUser(SNI_User* p_User);
@@ -175,8 +170,6 @@ namespace SNI
 		void WriteLogJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartLog);
 		void WriteDerivationJS(ostream & p_Stream, long p_MaxLogEntries);
 		void WriteCodeJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartCode, SNI_DisplayOptions &p_DisplayOptions);
-		void WriteStepCountListJS(ostream & p_Stream);
-		void WriteStepCountJS(ostream & p_Stream, const std::string &p_Delimeter);
 		void WriteWorldSetsJS(ostream & p_Stream, SNI_DisplayOptions &p_DisplayOptions);
 
 		size_t CountDelayedCalls();
@@ -201,8 +194,6 @@ namespace SNI
 
 		SNI_Error *m_Error;
 
-		static vector<SNI_Thread *> m_ThreadList;
-		static mutex m_ThreadListMutex;
 		enum skynet::DebugAction m_DebugAction;
 		std::string m_BreakPoint;
 		std::string m_BreakPointJS;

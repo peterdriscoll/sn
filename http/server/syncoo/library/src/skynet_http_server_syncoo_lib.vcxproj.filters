@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="skynet_http_server_syncoo_lib_pch.cpp" />
+    <ClCompile Include="sn_factory.cpp" />
+    <ClCompile Include="request_handler.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="server.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="session.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\inc\exp_ctrl_skynet_http_server_syncoo_lib.h" />
+    <ClInclude Include="..\..\..\..\..\inc\ihttp_handler.h" />
+    <ClInclude Include="..\..\..\..\..\inc\sn_factory.h" />
+    <ClInclude Include="include\skynet_http_server_syncoo_lib_pch.h" />
+    <ClInclude Include="include\skynet\http\server\syncoo\request_handler.hpp">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\skynet\http\server\syncoo\server.hpp">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\skynet\http\server\syncoo\session.hpp">
+      <Filter>Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{31fe238f-07c8-4306-9102-d07a7a815283}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{7be03825-ce40-4732-82ce-ac5b8ca0b163}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

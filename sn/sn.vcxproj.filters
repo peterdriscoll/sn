@@ -576,6 +576,12 @@
     <ClInclude Include="..\inc\sn_user.h">
       <Filter>Interface Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="requestadapter.h">
+      <Filter>General Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="httphandlersimple.h">
+      <Filter>General Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -1081,6 +1087,12 @@
     </ClCompile>
     <ClCompile Include="sn_char.cpp">
       <Filter>Interface Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="requestadapter.cpp">
+      <Filter>General Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="httphandlersimple.cpp">
+      <Filter>General Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

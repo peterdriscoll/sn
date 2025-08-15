@@ -352,10 +352,10 @@ namespace SNI
 				{
 				case VK_F3:
 				{
-					cout << "F3 - Select thread 0.." << SNI_Thread::GetNumThreads() - 1 << "\nEnter thread num  >> ";
+					cout << "F3 - Select thread 0.." << SNI_User::GetCurrentUser()->GetNumThreads() - 1 << "\nEnter thread num  >> ";
 					char buffer[MAX_DEPTH_CHARS];
 					cin.getline(buffer, MAX_DEPTH_CHARS);
-					l_thread = SNI_Thread::GetThreadByNumber(atol(buffer));
+					l_thread = SNI_User::GetCurrentUser()->GetThreadByNumber(atol(buffer));
 					break;
 				}
 				case VK_F4:
@@ -467,7 +467,7 @@ namespace SNI
 			m_WebServer = SN::SN_Factory<IHTTP_Server>::CreateObject();
 			m_WebServer->setup(p_Address.data(), p_Port.data(), p_DocRoot.data());
 			// Run the server until stopped.
-			m_WebServer->run();
+			m_WebServer->start();
 		}
 		catch (std::exception& e)
 		{

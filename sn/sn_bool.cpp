@@ -47,12 +47,12 @@ namespace SN
 
 	SNI::SNI_Bool* SN_Bool::GetSNI_Bool()
 	{
-		return static_cast<SNI::SNI_Bool*>(GetSNI_Bool());
+		return dynamic_cast<SNI::SNI_Bool*>(GetSNI_Expression());
 	}
 
 	SNI::SNI_Bool* SN_Bool::GetSNI_Bool() const
 	{
-		return static_cast<SNI::SNI_Bool*>(GetSNI_Base());
+		return dynamic_cast<SNI::SNI_Bool*>(GetSNI_Base());
 	}
 
 	SN_Expression SN_Bool::operator==(const SN_Expression &p_Other) const

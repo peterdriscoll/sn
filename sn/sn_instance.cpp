@@ -32,6 +32,6 @@ namespace SN
 
 	SNI::SNI_Instance *SN_Instance::GetSNI_Instance() const
 	{
-		return static_cast<SNI::SNI_Instance *>(m_Expression);
+		return dynamic_cast<SNI::SNI_Instance *>(m_Expression);
 	}
 }

@@ -666,7 +666,7 @@ namespace SNI
 	{
 		if (dynamic_cast<SNI_StringRef *>(p_Other))
 		{
-			SN::SN_StringRef other = p_Other;
+			SN::SN_StringRef other = dynamic_cast<SNI_StringRef*>(p_Other);
 			if (GetSource().GetSNI_String() == other.GetSource().GetSNI_String())
 			{
 				SN::SN_Expression start = other.GetStart().DoPartialEvaluate();

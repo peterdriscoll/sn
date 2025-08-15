@@ -245,22 +245,22 @@ namespace SN
 
 	SNI::SNI_Expression* SN_Expression::GetSNI_Expression()
 	{
-		return static_cast<SNI::SNI_Expression *>(m_Expression);
+		return dynamic_cast<SNI::SNI_Expression *>(m_Expression);
 	}
 
 	SNI::SNI_Expression* SN_Expression::GetSNI_Expression() const
 	{
-		return static_cast<SNI::SNI_Expression*>(const_cast<SNI::SNI_Base*>(m_Expression));
+		return dynamic_cast<SNI::SNI_Expression*>(m_Expression);
 	}
 
 	SNI::SNI_Char* SN_Expression::GetSNI_Char() const
 	{
-		return static_cast<SNI::SNI_Char*>(m_Expression);
+		return dynamic_cast<SNI::SNI_Char*>(m_Expression);
 	}
 
 	SNI::SNI_Value * SN_Expression::GetSNI_Value() const
 	{
-		return static_cast<SNI::SNI_Value*>(m_Expression);
+		return dynamic_cast<SNI::SNI_Value*>(m_Expression);
 	}
 
 	SNI::SNI_Error * SN_Expression::GetSNI_Error() const

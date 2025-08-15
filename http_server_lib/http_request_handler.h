@@ -33,7 +33,7 @@ namespace HTTP {
 			void setup(const std::string& doc_root);
 
 			/// Handle a request and produce a reply.
-			void handle_request(const request& req, reply& rep);
+			void handle_request(const request& req, reply& rep, IHTTP_Handler p_Handler);
 
 		private:
 			/// The directory containing the files to be served.

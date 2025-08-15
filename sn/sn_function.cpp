@@ -45,12 +45,12 @@ namespace SN
 
 	SNI::SNI_Function* SN_Function::GetSNI_Function()
 	{
-		return static_cast<SNI::SNI_Function*>(m_Expression);
+		return dynamic_cast<SNI::SNI_Function*>(m_Expression);
 	}
 
 	SNI::SNI_Function* SN_Function::GetSNI_Function() const
 	{
-		return static_cast<SNI::SNI_Function*>(m_Expression);
+		return dynamic_cast<SNI::SNI_Function*>(m_Expression);
 	}
 
 	SN_Expression SN_Function::GetFunction() const

@@ -28,6 +28,6 @@ namespace SN
 
 	SNI::SNI_Define * SN_Define::GetSNI_Define() const
 	{
-		return static_cast<SNI::SNI_Define *>(m_Expression);
+		return dynamic_cast<SNI::SNI_Define *>(m_Expression);
 	}
 }

@@ -51,7 +51,7 @@ namespace SNI
 
 	/*static*/ void SNI_Frame::DisplayFrameStack(long p_ThreadNum, long p_Depth)
 	{
-		return SNI_Thread::GetThreadByNumber(p_ThreadNum)->DisplayFrameStack(p_Depth);
+		return SNI_User::GetCurrentUser()->GetThreadByNumber(p_ThreadNum)->DisplayFrameStack(p_Depth);
 	}
 
 	/*static*/ void SNI_Frame::DisplayName(long p_ThreadNum, const std::string &p_Name)
@@ -62,7 +62,7 @@ namespace SNI
 
 	/*static*/ SNI_Variable *SNI_Frame::LookupVariable(long p_ThreadNum, const std::string &p_Name)
 	{
-		return SNI_Thread::GetThreadByNumber(p_ThreadNum)->LookupVariable(p_Name);
+		return SNI_User::GetCurrentUser()->GetThreadByNumber(p_ThreadNum)->LookupVariable(p_Name);
 	}
 
 	SNI_Variable *SNI_Frame::LookupVariableInFrame(const std::string & p_Name)
@@ -665,7 +665,7 @@ namespace SNI
 	{
 		for (SNI_Variable *(&v) : m_VariableList)
 		{
-			PGC::PGC_TypeCheck* base = static_cast<PGC::PGC_TypeCheck*>(v);
+			PGC::PGC_TypeCheck* base = dynamic_cast<PGC::PGC_TypeCheck*>(v);
 			PGC::PGC_Promotion::CheckRequestPromotion(&base, base->GetTransaction(), p_Transaction, PGC::PromotionStrategy::Backstabbing);
 			v = dynamic_cast<SNI_Variable *>(base);
 		}

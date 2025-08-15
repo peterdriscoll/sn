@@ -31,8 +31,8 @@ namespace SNI
 		DisplayOptionType debugJS = doDebugPointsJS;
 		DisplayOptionType debugText = doTextOnly;
 		bool result = true;
-
-		SNI::SNI_Thread *l_thread = SNI::SNI_Thread::GetThreadByNumber(threadNum);
+		SNI_User *l_user = SNI_User::GetCurrentUser();
+		SNI_Thread *l_thread = l_user->GetThreadByNumber(threadNum);
 		if (l_thread)
 		{
 			if (path == "/skynet")
@@ -202,7 +202,7 @@ namespace SNI
 			}
 			else if (path == "/stepcount.json")
 			{
-				m_response_data = l_thread->StepCountJS();
+				m_response_data = l_user->StepCountJS();
 			}
 			else if (path == "/error.json")
 			{

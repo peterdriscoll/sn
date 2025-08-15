@@ -19,8 +19,11 @@ public:
 		const std::string& port,
 		const std::string& doc_root) = 0;
 	
+	//Start the server in a new thread.
+	virtual void start() = 0;
+
 	// Run the server until stopped.
-	virtual void run() = 0;
+	virtual int run() = 0;
 	virtual void stop() = 0;
 
 };

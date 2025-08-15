@@ -17,7 +17,9 @@ namespace skynet::http::server::sync
 
         void setup(const std::string& address, const std::string& port, const std::string& doc_root) override;
 
-        void run() override;
+        int run() override;
+
+        void start() override;
 
         void stop() override;
 

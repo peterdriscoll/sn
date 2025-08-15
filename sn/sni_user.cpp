@@ -55,6 +55,31 @@ namespace SNI
 		return m_DelayedProcessor;
 	}
 
+	SNI_Thread* SNI_User::GetThreadByNumber(size_t p_ThreadNum)
+	{
+		if (p_ThreadNum < m_ThreadList.size())
+		{
+			return m_ThreadList[p_ThreadNum];
+		}
+		return NULL;
+	}
+
+	size_t SNI_User::GetNumThreads()
+	{
+		return m_ThreadList.size();
+	}
+
+	void SNI_User::AddThread(SNI_Thread* p_Thread)
+	{
+		if (p_Thread)
+		{
+			m_ThreadList.push_back(p_Thread);
+		}
+		else
+		{
+			ASSERTM(false, "SNI_User::AddThread: Null thread pointer");
+		}
+	}
 	SN::SN_OperatorVariables& SNI_User::GetOperators()
 	{
 		ASSERTM(m_Operators != nullptr, "SNI_User::GetOperators: Null &m_Operators");
@@ -113,4 +138,47 @@ namespace SNI
 		LongDouble::Class().GetSNI_Class()->Fix();
 	}
 
+	std::string SNI_User::StepCountJS()
+	{
+		stringstream ss;
+		cout << "StepPointJS\n";
+		WriteStepCountListJS(ss);
+		return ss.str();
+	}
+
+	void SNI_User::WriteStepCounts(ostream& p_Stream)
+	{
+		p_Stream << "<div><table class='thread'>\n";
+		p_Stream << "<caption>Threads</caption>\n";
+		p_Stream << "<tr>\n";
+		std::string separator;
+		for (size_t k = 0; k < m_ThreadList.size(); k++)
+		{
+			SNI_Thread* l_thread = m_ThreadList[k];
+			if (l_thread)
+			{
+				l_thread->WriteStepCount(p_Stream);
+			}
+		}
+		p_Stream << "</tr>\n";
+		p_Stream << "</table></div>\n";
+	}
+
+	void SNI_User::WriteStepCountListJS(ostream& p_Stream)
+	{
+		p_Stream << "{\"records\":[\n";
+		std::string delimeter = " ";
+		for (size_t k = 0; k < m_ThreadList.size(); k++)
+		{
+			SNI_Thread* l_thread = m_ThreadList[k];
+			if (l_thread)
+			{
+				p_Stream << delimeter;
+
+				l_thread->WriteStepCountJS(p_Stream, delimeter);
+				delimeter = ",\n";
+			}
+		}
+		p_Stream << "\n]}\n";
+	}
 }

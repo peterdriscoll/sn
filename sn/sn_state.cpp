@@ -32,12 +32,12 @@ namespace SN
 
 	SNI::SNI_State *SN_State::GetSNI_State() const
 	{
-		return static_cast<SNI::SNI_State *>(m_Expression);
+		return dynamic_cast<SNI::SNI_State *>(m_Expression);
 	}
 
 	SNI::SNI_Expression *SN_State::GetSNI_Expression() const
 	{
-		return const_cast<SNI::SNI_Expression *>(dynamic_cast<const SNI::SNI_Expression *>(m_Expression));
+		return dynamic_cast<SNI::SNI_Expression *>(m_Expression);
 	}
 
 	SN_Expression SN_State::IsA(const SN_Expression &p_Parent) const
