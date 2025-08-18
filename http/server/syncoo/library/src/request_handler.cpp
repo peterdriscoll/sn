@@ -13,10 +13,11 @@
 
 namespace skynet::http::server::syncoo
 {
-    request_handler::request_handler(const std::string& doc_root)
+    request_handler::request_handler(const std::string& doc_root, IHTTP_Handler* HTTP_Handler, IUser* guest)
     : m_doc_root(doc_root)
+	, m_HTTP_Handler(HTTP_Handler)
+	, m_guest(guest)    
 {
-    m_plugin.reset(SN::SN_Factory<IHTTP_Handler>::CreateObject());
 }
 
 const char* request_handler::extension_to_type(const std::string& ext)
@@ -71,20 +72,28 @@ void request_handler::normalize_target(const boost::beast::string_view& target_s
 boost::beast::http::message_generator
 request_handler::handle(boost::beast::http::request<boost::beast::http::string_body>&& req)
 {
-    namespace http  = boost::beast::http;
-    namespace beast = boost::beast;
-
     std::string path, query, ext;
     normalize_target(req.target(), path, query, ext);
 
+	// Is the server running?
+    if (path == "/healthz" && req.method() == boost::beast::http::verb::get)
+    {
+        boost::beast::http::response<boost::beast::http::string_body> res{ boost::beast::http::status::ok, req.version() };
+        res.set(boost::beast::http::field::cache_control, "no-store");                 // avoid caches
+        res.set(boost::beast::http::field::content_type, "text/plain; charset=utf-8");
+        res.body() = "OK";
+        res.prepare_payload();                                           // sets Content-Length
+        res.keep_alive(req.keep_alive());                                 // or false while debugging
+        return res;  // if your handler returns message_generator, this will convert implicitly
+    }
+
     // 1) Your plugin first (exact port of your old behavior)
-    if (m_plugin &&
-        m_plugin->handle_response(path.c_str(), query.c_str(), ext.c_str()))
+    if (m_HTTP_Handler &&
+        m_HTTP_Handler->handle_response(path.c_str(), query.c_str(), ext.c_str(), m_guest))
     {
         // Prefer the plugin's declared extension; fall back to the URL's ext if empty.
-        std::string plugin_ext = m_plugin->extension();
+        std::string plugin_ext = m_HTTP_Handler->extension();
         if (plugin_ext.empty()) plugin_ext = ext;
-
         boost::beast::http::response<boost::beast::http::string_body> res{
             boost::beast::http::status::ok, req.version()
         };
@@ -92,18 +101,17 @@ request_handler::handle(boost::beast::http::request<boost::beast::http::string_b
         res.set(boost::beast::http::field::content_type, extension_to_type(plugin_ext));
         res.set(boost::beast::http::field::access_control_allow_origin, "*");
         res.keep_alive(req.keep_alive());
-        res.body() = m_plugin->response_data();
+        res.body() = m_HTTP_Handler->response_data();
         res.prepare_payload();
         return res; // implicit to message_generator
     }
 
-
     // 2) Static files: allow only GET/HEAD
-    if (req.method() != http::verb::get && req.method() != http::verb::head) {
-        http::response<http::string_body> bad{ http::status::bad_request, req.version() };
-        bad.set(http::field::server, BOOST_BEAST_VERSION_STRING);
-        bad.set(http::field::content_type, "text/plain; charset=utf-8");
-        bad.set(http::field::access_control_allow_origin, "*");
+    if (req.method() != boost::beast::http::verb::get && req.method() != boost::beast::http::verb::head) {
+        boost::beast::http::response<boost::beast::http::string_body> bad{ boost::beast::http::status::bad_request, req.version() };
+        bad.set(boost::beast::http::field::server, BOOST_BEAST_VERSION_STRING);
+        bad.set(boost::beast::http::field::content_type, "text/plain; charset=utf-8");
+        bad.set(boost::beast::http::field::access_control_allow_origin, "*");
         bad.keep_alive(req.keep_alive());
         bad.body() = "Unsupported method";
         bad.prepare_payload();
@@ -113,25 +121,25 @@ request_handler::handle(boost::beast::http::request<boost::beast::http::string_b
     std::string full_path(m_doc_root.data(), m_doc_root.size());
     full_path += path;
 
-    beast::error_code ec;
-    http::file_body::value_type body;
-    body.open(full_path.c_str(), beast::file_mode::scan, ec);
+    boost::beast::error_code ec;
+    boost::beast::http::file_body::value_type body;
+    body.open(full_path.c_str(), boost::beast::file_mode::scan, ec);
 
-    if (ec == beast::errc::no_such_file_or_directory) {
-        http::response<http::string_body> not_found{ http::status::not_found, req.version() };
-        not_found.set(http::field::server, BOOST_BEAST_VERSION_STRING);
-        not_found.set(http::field::content_type, "text/plain; charset=utf-8");
-        not_found.set(http::field::access_control_allow_origin, "*");
+    if (ec == boost::beast::errc::no_such_file_or_directory) {
+        boost::beast::http::response<boost::beast::http::string_body> not_found{ boost::beast::http::status::not_found, req.version() };
+        not_found.set(boost::beast::http::field::server, BOOST_BEAST_VERSION_STRING);
+        not_found.set(boost::beast::http::field::content_type, "text/plain; charset=utf-8");
+        not_found.set(boost::beast::http::field::access_control_allow_origin, "*");
         not_found.keep_alive(req.keep_alive());
         not_found.body() = "File not found";
         not_found.prepare_payload();
         return not_found;
     }
     if (ec) {
-        http::response<http::string_body> bad{ http::status::internal_server_error, req.version() };
-        bad.set(http::field::server, BOOST_BEAST_VERSION_STRING);
-        bad.set(http::field::content_type, "text/plain; charset=utf-8");
-        bad.set(http::field::access_control_allow_origin, "*");
+        boost::beast::http::response<boost::beast::http::string_body> bad{ boost::beast::http::status::internal_server_error, req.version() };
+        bad.set(boost::beast::http::field::server, BOOST_BEAST_VERSION_STRING);
+        bad.set(boost::beast::http::field::content_type, "text/plain; charset=utf-8");
+        bad.set(boost::beast::http::field::access_control_allow_origin, "*");
         bad.keep_alive(req.keep_alive());
         bad.body() = "Error opening file";
         bad.prepare_payload();
@@ -140,21 +148,21 @@ request_handler::handle(boost::beast::http::request<boost::beast::http::string_b
 
     std::uint64_t size = body.size();
 
-    if (req.method() == http::verb::head) {
-        http::response<http::empty_body> res{ http::status::ok, req.version() };
-        res.set(http::field::server, BOOST_BEAST_VERSION_STRING);
-        res.set(http::field::content_type, extension_to_type(ext));
-        res.set(http::field::access_control_allow_origin, "*");
+    if (req.method() == boost::beast::http::verb::head) {
+        boost::beast::http::response<boost::beast::http::empty_body> res{ boost::beast::http::status::ok, req.version() };
+        res.set(boost::beast::http::field::server, BOOST_BEAST_VERSION_STRING);
+        res.set(boost::beast::http::field::content_type, extension_to_type(ext));
+        res.set(boost::beast::http::field::access_control_allow_origin, "*");
         res.keep_alive(req.keep_alive());
         res.content_length(size);
         return res;
     }
 
-    http::response<http::file_body> res{ http::status::ok, req.version() };
-    res.set(http::field::server, BOOST_BEAST_VERSION_STRING);
-    res.set(http::field::content_type, extension_to_type(ext));
-    res.set(http::field::access_control_allow_origin, "*");
-    res.keep_alive(req.keep_alive());
+    boost::beast::http::response<boost::beast::http::file_body> res{ boost::beast::http::status::ok, req.version() };
+    res.set(boost::beast::http::field::server, BOOST_BEAST_VERSION_STRING);
+    res.set(boost::beast::http::field::content_type, extension_to_type(ext));
+    res.set(boost::beast::http::field::access_control_allow_origin, "*");
+    res.keep_alive(false /*req.keep_alive()*/);
     res.content_length(size);
     res.body() = std::move(body);
     return res;

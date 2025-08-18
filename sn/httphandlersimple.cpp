@@ -15,26 +15,29 @@ namespace SNI
 
     bool HttpHandlerSimple::handle_response(const char* pathC,
         const char* queryC,
-        const char* /*url_ext*/)
+        const char* /*url_ext*/,
+        IUser* iuser)
     {
         SN::SN_Transaction::RegisterInWebServer();
 
         std::string_view path = pathC ? std::string_view{ pathC } : std::string_view{};
 
+		SNI_User* user = dynamic_cast<SNI_User*>(iuser);
         RequestAdapter adapter(queryC);
-        SNI_User* user = SNI_User::GetCurrentUser();
         if (!user) return false;
 
-        const long tnum = adapter.threadnum(-1);
+        const long tnum = adapter.threadnum(0);
         SNI_Thread* thr = (tnum >= 0) ? user->GetThreadByNumber(tnum) : nullptr;
         if (!thr) return false;
 
         RequestAdapter::Reply r;
-        if (!adapter.dispatch(path, *user, *thr, r)) return false;
-
-        m_response = std::move(r.body);
-        m_ext = r.ext;
-        return true;
+        if (adapter.dispatch(path, *user, *thr, r))
+        {
+            m_response = std::move(r.body);
+            m_ext = r.ext;
+            return true;
+        }
+        return false;
     }
 
     const char* HttpHandlerSimple::response_data()

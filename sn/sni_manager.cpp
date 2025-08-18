@@ -3,6 +3,12 @@
 #include "sn_error.h"
 #include "sn_manager.h"
 
+#include "../inc/ihttp_server.h"
+#include "../inc/ihttp_handler.h"
+#include "../inc/iuser.h"
+#include "httphandlersimple.h"
+#include "requestadapter.h"
+
 #ifdef USE_LOGGING
 #include "logcontext.h"
 #endif
@@ -12,7 +18,6 @@
 
 #include "sn_pch.h"
 
-#include "../inc/ihttp_server.h"
 
 #define VK_F1             0x70
 #define VK_F2             0x71
@@ -73,6 +78,7 @@ namespace SNI
 	
 	SNI_Manager::SNI_Manager()
 		: m_ErrorHandler(ThrowErrorHandler)
+		, m_HTTP_Handler(nullptr)	
 		, m_User(nullptr)
 		, m_DelayOnEvaluate(false)
 		, m_MaxCardinalityCall(10)
@@ -102,6 +108,7 @@ namespace SNI
 
 	SNI_Manager::SNI_Manager(SNI_Manager *p_Manager)
 		: m_User(nullptr)
+		, m_HTTP_Handler(nullptr)
 		, m_Description(p_Manager->m_Description)
 		, m_ErrorHandler(p_Manager->m_ErrorHandler)
 		, m_DelayOnEvaluate(p_Manager->m_DelayOnEvaluate)
@@ -132,6 +139,7 @@ namespace SNI
 
 	SNI_Manager::SNI_Manager(std::string p_Description, OnErrorHandler *p_ErrorHandler, bool p_DelayOnEvaluate, size_t p_MaxCardinalityCall, size_t p_MaxCardinalityUnify)
 		: m_User(nullptr)
+		, m_HTTP_Handler(nullptr)
 		, m_Description(p_Description)
 		, m_ErrorHandler(p_ErrorHandler)
 		, m_DelayOnEvaluate(p_DelayOnEvaluate)
@@ -180,21 +188,13 @@ namespace SNI
 				m_CommandServerThread = NULL;
 			}
 		}
-
-		if (m_WebServerThreadUsed)
+		if (m_WebServer)
 		{
-			m_WebServerThreadUsageCount--;
-			if (m_WebServerThreadUsageCount == 0)
-			{
-				// m_WebServer->stop();
-				// m_WebServerThread->join();
-				// delete m_WebServer;
-				// m_WebServer = NULL;
-				// delete m_WebServerThread;
-				// m_WebServerThread = NULL;
-			}
+			m_WebServer->stop();
+			delete m_WebServer;
+			delete m_HTTP_Handler;
+			delete m_User;
 		}
-		delete m_User;
 	}
 
 	SN::SN_Expression SNI_Manager::DelayedCalls()
@@ -462,10 +462,13 @@ namespace SNI
 	{
 		try
 		{
+			m_HTTP_Handler = new HttpHandlerSimple;
+			// m_HTTP_Handler = new SNI::SNI_HTTP_Handler();
+
 			// Initialise the server.
 			// "0.0.0.0", "80", "C:/sn/html"
 			m_WebServer = SN::SN_Factory<IHTTP_Server>::CreateObject();
-			m_WebServer->setup(p_Address.data(), p_Port.data(), p_DocRoot.data());
+			m_WebServer->setup(p_Address.data(), p_Port.data(), p_DocRoot.data(), m_HTTP_Handler, static_cast<IUser*>(m_User));
 			// Run the server until stopped.
 			m_WebServer->start();
 		}
@@ -484,10 +487,13 @@ namespace SNI
 			SNI_Thread::GetThread()->ScheduleCommand(p_DebugAction);
 			SNI_Log::GetLog()->SetLogBuffer(SN::DebugLevel, m_LogBufferCapacity, m_LogExpressionBufferCapacity);
 			LOG(WriteHeading(SN::DebugLevel, "Start - " + m_Description));
-			m_WebServerThread = new thread(RunServer, p_Address, p_Port, p_DocRoot);
-			m_WebServerThreadUsed = true;
+			RunServer(p_Address, p_Port, p_DocRoot);
+			//m_WebServerThread = new thread(RunServer, p_Address, p_Port, p_DocRoot);
+			//m_WebServerThreadUsed = true;
 			//OpenURLInBrowser("http://localhost:4200");
-			OpenURLInBrowser("http://127.0.0.1/skynetjs.html");
+			//OpenURLInBrowser("http://127.0.0.1/skynetjs.html");
+			OpenURLInBrowser("http://127.0.0.1/opener.html?target=http://127.0.0.1/skynetjs.html");
+			//OpenURLInBrowser("http://127.0.0.1/opener.html?target=/skynetjs.html");
 			//OpenURLInBrowser("http://127.0.0.1/skynet");
 		}
 		m_WebServerThreadUsageCount++;

@@ -52,7 +52,7 @@ namespace SNI
 
 		void LogTableToStream(ostream & p_Stream, size_t p_MaxLogEntries);
 		void LogTableJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartLog);
-		void DerivationJS(ostream & p_Stream, long p_MaxLogEntries);
+		void DerivationJS(ostream & p_Stream, long p_MaxLogEntries, SNI_Thread *p_Thread);
 		void CodeTableJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartCode, SNI_DisplayOptions &p_DisplayOptions);
 
 		void WriteExp(SN::SN_Expression p_Expression);

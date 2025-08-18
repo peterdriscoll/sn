@@ -119,7 +119,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level1</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;SN_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>sn_pch.h</PrecompiledHeaderFile>
@@ -179,6 +179,7 @@
     <ClInclude Include="..\inc\exp_ctrl_sn_lib.h" />
     <ClInclude Include="..\inc\ihttp_handler.h" />
     <ClInclude Include="..\inc\ihttp_server.h" />
+    <ClInclude Include="..\inc\iuser.h" />
     <ClInclude Include="..\inc\log.h" />
     <ClInclude Include="..\inc\logcontext.h" />
     <ClInclude Include="..\inc\sn.h" />
@@ -538,6 +539,7 @@
     <None Include="..\html\help_imperative.html" />
     <None Include="..\html\help_index.html" />
     <None Include="..\html\help_start.html" />
+    <None Include="..\html\opener.html" />
     <None Include="..\html\skynetjs.html" />
     <None Include="..\html\skynetjs.js" />
     <None Include="..\html\style.css" />

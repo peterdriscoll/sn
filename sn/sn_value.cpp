@@ -50,7 +50,7 @@ namespace SN
 	}
 
 	SN_Value::SN_Value(const SN_Expression &p_Expression)
-		: SN_Expression(p_Expression.GetSNI_Value())
+		: SN_Expression(p_Expression.GetSNI_Expression())
 	{
 	}
 

@@ -291,7 +291,7 @@ namespace SNI
 	{
 		stringstream ss;
 		SNI_Manager* manager = GetTopManager(false);
-		if (p_StartStepCount == 0 || p_StartStepCount == m_ThreadStepCount)
+		if (manager && (p_StartStepCount == 0 || p_StartStepCount == m_ThreadStepCount))
 		{
 			SNI_DisplayOptions l_DisplayOptions(p_OptionType);
 			WriteWatchListJS(ss, manager->DebugFieldWidth(), l_DisplayOptions);
@@ -562,6 +562,7 @@ namespace SNI
 	{
 		m_User = p_User;
 		p_User->AddThread(this);
+		m_ThreadNum = p_User->GetNumThreads()-1;
 	}
 
 	std::string SNI_Thread::StartCommand(enum skynet::DebugAction p_DebugAction, const std::string &p_Description, enum DisplayOptionType p_OptionType)
@@ -1012,7 +1013,7 @@ namespace SNI
 
 	void SNI_Thread::WriteDerivationJS(ostream &p_Stream, long p_MaxLogEntries)
 	{
-		SNI_Log::GetLog()->DerivationJS(p_Stream, p_MaxLogEntries);
+		SNI_Log::GetLog()->DerivationJS(p_Stream, p_MaxLogEntries, this);
 	}
 
 	void SNI_Thread::WriteCodeJS(ostream &p_Stream, long p_MaxLogEntries, long p_StartCode, SNI_DisplayOptions &p_displayOptions)

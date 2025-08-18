@@ -19,9 +19,9 @@ namespace SNI
 		SNI_HTTP_Handler();
 		virtual ~SNI_HTTP_Handler();
 
-		virtual bool handle_response(const char *p_Path, const char *p_ParamString, const char *p_Extension);
-		virtual const char *response_data();
-		virtual const char *extension();
+		virtual bool handle_response(const char* p_Path, const char* p_ParamString, const char* p_Extension, IUser* user) override;
+		virtual const char *response_data() override;
+		virtual const char *extension() override;
 
 	private:
 		void extract_parameters(const std::string & p_ParamString, string_umap & p_Map);

@@ -1,0 +1,24 @@
+<!doctype html>
+<meta charset="utf-8">
+<script>
+    const target = new URL(location.href).searchParams.get('target') || '/skynetjs.html';
+    const w = window.open(target, 'skynet_dash');   // script-opens the dashboard
+
+    if (w) {
+        try { w.focus(); } catch { }
+        // optional: close the stub shortly after
+        setTimeout(() => { try { window.close(); } catch { } }, 200);
+    } else {
+        // Popup blocked: show one-click fallback (user gesture makes it allowed)
+        document.write(`
+      <style>body{font:14px/1.4 system-ui;padding:24px}</style>
+      <h3>Open dashboard</h3>
+      <p>Pop-up was blocked. Click to continue.</p>
+      <button id="go">Open</button>
+    `);
+        document.getElementById('go').onclick = () => {
+            const w2 = window.open(target, 'skynet_dash');
+            if (w2) { try { w2.focus(); } catch { }; window.close(); }
+        };
+    }
+</script>

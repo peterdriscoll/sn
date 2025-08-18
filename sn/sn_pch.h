@@ -190,6 +190,9 @@
 #include <string_view>
 #include <cstdlib> // strtol
 
+#include "../inc/ihttp_server.h"
+#include "../inc/ihttp_handler.h"
+#include "../inc/iuser.h"
 #include "httphandlersimple.h"
 #include "requestadapter.h"
 

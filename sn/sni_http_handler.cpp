@@ -12,9 +12,8 @@ namespace SNI
 	{
 	}
 
-	bool SNI_HTTP_Handler::handle_response(const char *p_Path, const char *p_ParamString, const char *p_Extension)
+	bool SNI_HTTP_Handler::handle_response(const char* p_Path, const char* p_ParamString, const char* p_Extension, IUser* user)
 	{
-
 		SN::SN_Transaction::RegisterInWebServer();
 
 		std::string path = p_Path;
@@ -31,7 +30,7 @@ namespace SNI
 		DisplayOptionType debugJS = doDebugPointsJS;
 		DisplayOptionType debugText = doTextOnly;
 		bool result = true;
-		SNI_User *l_user = SNI_User::GetCurrentUser();
+		SNI_User *l_user = dynamic_cast<SNI_User*>(user);
 		SNI_Thread *l_thread = l_user->GetThreadByNumber(threadNum);
 		if (l_thread)
 		{

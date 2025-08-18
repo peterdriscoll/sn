@@ -25,7 +25,7 @@ namespace SNI
 		, m_MainThread(SNI_Thread::GetThread())
 		, m_Operators(nullptr)
 	{
-		//SNI::SNI_Thread::ClearThread();
+		SNI::SNI_Thread::ClearThread();
 		SNI::SNI_Thread::GetThread()->SetUser(this);
 		m_Transaction = new SNI_Transaction();
 		m_Operators = new SN::SN_OperatorVariables();
@@ -64,7 +64,7 @@ namespace SNI
 		return NULL;
 	}
 
-	size_t SNI_User::GetNumThreads()
+	size_t SNI_User::GetNumThreads() const
 	{
 		return m_ThreadList.size();
 	}

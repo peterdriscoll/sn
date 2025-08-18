@@ -19,9 +19,11 @@ namespace skynet::http::server::syncoo
         if (m_thread.joinable()) m_thread.join();
     }
 
-    void server::setup(const std::string& address,
-        const std::string& port,
-        const std::string& doc_root)
+    int server::setup(const char* address,
+        const char* port,
+        const char* doc_root,
+        IHTTP_Handler* handler,
+        IUser* guest)
     {
         m_doc_root = doc_root;
         m_acceptor = std::make_unique<boost::asio::ip::tcp::acceptor>(m_io);
@@ -34,11 +36,16 @@ namespace skynet::http::server::syncoo
         m_acceptor->set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
         m_acceptor->bind(ep);
         m_acceptor->listen(boost::asio::socket_base::max_listen_connections);
+
+        m_handler = handler;
+		m_guest = guest;
+        return 0; // success
     }
 
-    void server::start() {
-        if (m_thread.joinable()) return;    // <-- idempotent
+    int server::start() {
+        if (m_thread.joinable()) return 0;    // <-- idempotent
         m_thread = std::thread([this] { this->run(); });
+        return 0; // success
     }
 
     int skynet::http::server::syncoo::server::run()
@@ -68,7 +75,16 @@ namespace skynet::http::server::syncoo
             const bool handle_connection = (!stopping && !ec);
 
             if (handle_connection) {
-                skynet::http::server::syncoo::session(std::move(socket), m_doc_root).run();
+                {
+                    std::lock_guard<std::mutex> lk(mtx);
+                    m_session = std::make_shared<session>(this, std::move(socket), m_doc_root, m_guest, m_handler);
+                }
+                m_session->run();
+                {
+                    std::lock_guard<std::mutex> lk(mtx);
+                    m_session.reset(); // reset the session to allow cleanup
+
+                }
             }
 
             // Decide next-iteration state:
@@ -81,7 +97,7 @@ namespace skynet::http::server::syncoo
         return status;
     }
 
-    void server::stop()
+    int server::stop()
     {
         m_stopping.store(true, std::memory_order_relaxed);
         if (m_acceptor) {
@@ -90,6 +106,26 @@ namespace skynet::http::server::syncoo
             m_acceptor->close(ec);
         }
         m_io.stop();
-    }
 
+        std::shared_ptr<session> s;
+        {std::lock_guard<std::mutex> lk(mtx); s = m_session; }
+
+        // tell the session to stop (idempotent)
+        if (s) s->stop();
+        s.reset();
+        std::unique_lock<std::mutex> lk(m);
+        cv.wait(lk, [&] { return session_cnt.load() == 0; });
+        return 0; // success
+    }
+    void server::on_session_start()
+    {
+        session_cnt.fetch_add(1, std::memory_order_relaxed); 
+    }
+    void server::on_session_end()
+    {
+        if (session_cnt.fetch_sub(1, std::memory_order_acq_rel) == 1) {
+            std::lock_guard<std::mutex> lk(m);
+            cv.notify_all();
+        }
+    }
 } // namespace

@@ -188,11 +188,11 @@ namespace SNI
 		return 0;
 	}
 
-	void SNI_Log::DerivationJS(ostream & p_Stream, long p_MaxLogEntries)
+	void SNI::SNI_Log::DerivationJS(ostream& p_Stream, long p_MaxLogEntries, SNI_Thread* p_Thread)
 	{
 		if (m_LogBuffer)
 		{
-			m_LogBuffer->DerivationJS(p_Stream, p_MaxLogEntries);
+			m_LogBuffer->DerivationJS(p_Stream, p_MaxLogEntries, p_Thread);
 		}
 		else
 		{

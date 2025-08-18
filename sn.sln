@@ -41,8 +41,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sn_lib", "sn_lib\sn_lib.vcx
 		{23B35B77-0EAC-4FEE-BB6F-70B589A30719} = {23B35B77-0EAC-4FEE-BB6F-70B589A30719}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "skynet_http_server_sync_lib", "http\server\sync\library\src\skynet_http_server_sync_lib.vcxproj", "{4CBD2545-CEED-46E8-84F1-0C7C01DC90A1}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "skynet_http_server_syncoo_lib", "http\server\syncoo\library\src\skynet_http_server_syncoo_lib.vcxproj", "{86C9C476-0548-4357-BBC0-948BFBA3C94D}"
 EndProject
 Global
@@ -199,26 +197,6 @@ Global
 		{5BFC083A-9264-4FE7-93E6-8D382C0900DF}.UnitTest|x64.Build.0 = Release|x64
 		{5BFC083A-9264-4FE7-93E6-8D382C0900DF}.UnitTest|x86.ActiveCfg = Release|Win32
 		{5BFC083A-9264-4FE7-93E6-8D382C0900DF}.UnitTest|x86.Build.0 = Release|Win32
-		{4CBD2545-CEED-46E8-84F1-0C7C01DC90A1}.Debug|x64.ActiveCfg = Debug|x64
-		{4CBD2545-CEED-46E8-84F1-0C7C01DC90A1}.Debug|x64.Build.0 = Debug|x64
-		{4CBD2545-CEED-46E8-84F1-0C7C01DC90A1}.Debug|x86.ActiveCfg = Debug|Win32
-		{4CBD2545-CEED-46E8-84F1-0C7C01DC90A1}.Debug|x86.Build.0 = Debug|Win32
-		{4CBD2545-CEED-46E8-84F1-0C7C01DC90A1}.DS|x64.ActiveCfg = Release|x64
-		{4CBD2545-CEED-46E8-84F1-0C7C01DC90A1}.DS|x64.Build.0 = Release|x64
-		{4CBD2545-CEED-46E8-84F1-0C7C01DC90A1}.DS|x86.ActiveCfg = Release|Win32
-		{4CBD2545-CEED-46E8-84F1-0C7C01DC90A1}.DS|x86.Build.0 = Release|Win32
-		{4CBD2545-CEED-46E8-84F1-0C7C01DC90A1}.Release|x64.ActiveCfg = Release|x64
-		{4CBD2545-CEED-46E8-84F1-0C7C01DC90A1}.Release|x64.Build.0 = Release|x64
-		{4CBD2545-CEED-46E8-84F1-0C7C01DC90A1}.Release|x86.ActiveCfg = Release|Win32
-		{4CBD2545-CEED-46E8-84F1-0C7C01DC90A1}.Release|x86.Build.0 = Release|Win32
-		{4CBD2545-CEED-46E8-84F1-0C7C01DC90A1}.Template|x64.ActiveCfg = Debug|x64
-		{4CBD2545-CEED-46E8-84F1-0C7C01DC90A1}.Template|x64.Build.0 = Debug|x64
-		{4CBD2545-CEED-46E8-84F1-0C7C01DC90A1}.Template|x86.ActiveCfg = Debug|Win32
-		{4CBD2545-CEED-46E8-84F1-0C7C01DC90A1}.Template|x86.Build.0 = Debug|Win32
-		{4CBD2545-CEED-46E8-84F1-0C7C01DC90A1}.UnitTest|x64.ActiveCfg = Release|x64
-		{4CBD2545-CEED-46E8-84F1-0C7C01DC90A1}.UnitTest|x64.Build.0 = Release|x64
-		{4CBD2545-CEED-46E8-84F1-0C7C01DC90A1}.UnitTest|x86.ActiveCfg = Release|Win32
-		{4CBD2545-CEED-46E8-84F1-0C7C01DC90A1}.UnitTest|x86.Build.0 = Release|Win32
 		{86C9C476-0548-4357-BBC0-948BFBA3C94D}.Debug|x64.ActiveCfg = Debug|x64
 		{86C9C476-0548-4357-BBC0-948BFBA3C94D}.Debug|x64.Build.0 = Debug|x64
 		{86C9C476-0548-4357-BBC0-948BFBA3C94D}.Debug|x86.ActiveCfg = Debug|Win32

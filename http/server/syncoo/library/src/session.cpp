@@ -11,16 +11,32 @@
 
 namespace skynet::http::server::syncoo
 {
-    session::session(boost::asio::ip::tcp::socket &&socket, const std::string &doc_root)
-        : m_socket(std::move(socket)), m_doc_root(doc_root)
-    {}
+    session::session(
+        server* srv,
+        boost::asio::ip::tcp::socket &&socket,
+        const std::string &doc_root,
+        IUser* guest,
+        IHTTP_Handler* handler)
+        : m_socket(std::move(socket))
+        , m_doc_root(doc_root)
+		, m_guest(guest)
+		, m_HTTP_Handler(handler)
+        , m_server(srv)
+    {
+        m_server->on_session_start();
+    }
+
+    session::~session()
+    {
+        m_server->on_session_end();
+    }
 
     int skynet::http::server::syncoo::session::run()
     {
         boost::beast::error_code ec;
         boost::beast::flat_buffer buffer;
 
-        skynet::http::server::syncoo::request_handler handler(m_doc_root);
+        skynet::http::server::syncoo::request_handler handler(m_doc_root, m_HTTP_Handler, m_guest);
 
         int  status = 0;
         bool running = true;
@@ -59,4 +75,11 @@ namespace skynet::http::server::syncoo
         return status;
     }
 
+    void skynet::http::server::syncoo::session::stop() {
+        bool expected = false;
+        if (!stopping_.compare_exchange_strong(expected, true)) return;
+        boost::system::error_code ec;
+        m_socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both, ec);  // unblocks http::read(...)
+        m_socket.close(ec);
+    }
 } // namespace

@@ -17,7 +17,7 @@ namespace SNI {
         HttpHandlerSimple();
         ~HttpHandlerSimple() override;
 
-        bool        handle_response(const char* path, const char* query, const char* url_ext) override;
+        bool        handle_response(const char* path, const char* query, const char* url_ext, IUser *user) override;
         const char* response_data() override;
         const char* extension()     override;
 

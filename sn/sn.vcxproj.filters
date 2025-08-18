@@ -582,6 +582,9 @@
     <ClInclude Include="httphandlersimple.h">
       <Filter>General Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\inc\iuser.h">
+      <Filter>Interface Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -1115,6 +1118,9 @@
       <Filter>HTML Files</Filter>
     </None>
     <None Include="..\html\skynetjs.js">
+      <Filter>HTML Files</Filter>
+    </None>
+    <None Include="..\html\opener.html">
       <Filter>HTML Files</Filter>
     </None>
   </ItemGroup>

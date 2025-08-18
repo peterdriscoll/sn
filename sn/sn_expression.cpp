@@ -191,7 +191,7 @@ namespace SN
 	}
 
 	SN_Expression::SN_Expression(const SNI::SNI_Expression *p_Expression)
-		: SN_Base(const_cast<SNI::SNI_Expression *>(p_Expression))
+		: SN_Base(dynamic_cast<SNI::SNI_Base *>(const_cast<SNI::SNI_Expression*>(p_Expression)))
 	{
 	}
 

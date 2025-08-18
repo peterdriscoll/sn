@@ -57,6 +57,11 @@ namespace SNI
 
 	}
 
+	SNI::SNI_Variable* SNI_Expression::GetSNI_Variable() const
+	{
+		return dynamic_cast<SNI::SNI_Variable*>(const_cast<SNI_Expression*>(this));
+	}
+
 	//-----------------------------------------------------------------------
 	// Logging
 	//-----------------------------------------------------------------------

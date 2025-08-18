@@ -99,10 +99,10 @@ namespace SNI
 		return m_ExpressionBuffer.size();
 	}
 
-	void SNI_LogBuffer::DerivationJS(ostream & p_Stream, long p_MaxLogEntries)
+	void SNI::SNI_LogBuffer::DerivationJS(ostream & p_Stream, long p_MaxLogEntries, SNI_Thread *p_Thread)
 	{
 		p_Stream << "{\"derivationhtml\": \"";
-		size_t actualDepth = SNI_Thread::GetThread()->GetFrameStackDepth();
+		size_t actualDepth = p_Thread->GetFrameStackDepth();
 		size_t minDepth = LONG_MAX;
 		long entries = 0;
 		m_Mutex.lock();

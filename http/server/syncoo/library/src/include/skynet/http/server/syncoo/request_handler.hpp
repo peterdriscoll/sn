@@ -12,7 +12,7 @@ namespace skynet::http::server::syncoo
     class request_handler
     {
     public:
-        explicit request_handler(const std::string &doc_root);
+        explicit request_handler(const std::string &doc_root, IHTTP_Handler * HTTP_Handler, IUser *guest);
 
         // Central choke point: turn a Request into a message_generator
         boost::beast::http::message_generator
@@ -20,8 +20,8 @@ namespace skynet::http::server::syncoo
 
     private:
         std::string m_doc_root;
-        std::unique_ptr<IHTTP_Handler>     m_plugin;
-
+        IHTTP_Handler* m_HTTP_Handler;
+		IUser* m_guest; 
         static const char* extension_to_type(const std::string& ext);
         static void normalize_target(const boost::beast::string_view& target_sv,
                                      std::string& path_out,

@@ -116,11 +116,12 @@ namespace SNI
 		void Initialize();
 
 		static void DebugCommandLineServer(SNI_Thread * p_Thread, int p_KbHit(), int p_GetCh());
-		static void RunServer(const std::string & p_Address, const std::string & p_Port, const std::string & p_DocRoot);
+		void RunServer(const std::string & p_Address, const std::string & p_Port, const std::string & p_DocRoot);
 
 		void ScheduleWebServerShutdown();
 		static void WebServerShutdown();
-		
+
+		IHTTP_Handler* m_HTTP_Handler;
 		std::string m_Description;
 
 		SNI_Manager *m_LastManager;

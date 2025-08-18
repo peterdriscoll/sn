@@ -58,7 +58,7 @@ namespace SNI
 		void LogTableToStream(ostream & p_Stream, size_t p_MaxLogEntries);
 		void LogExpressionTableToStream(ostream & p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_DisplayOptions);
 		void LogTableJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartLog);
-		void DerivationJS(ostream & p_Stream, long p_MaxLogEntries);
+		void DerivationJS(ostream & p_Stream, long p_MaxLogEntries, SNI_Thread *p_Thread);
 		void LogExpressionTableJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartCode, SNI_DisplayOptions &p_DisplayOptions);
 
 		size_t CountLogEntries();

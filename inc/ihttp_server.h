@@ -1,31 +1,38 @@
-#if !defined(IHTTP_SERVER_H)
-#define IHTTP_SERVER_H
-
 #pragma once
 
 #include "sn_factory.h"
-#include <string>
+
+class IUser;  // forward declare
+class IHTTP_Handler;  // forward declare
 
 class IHTTP_Server
 {
-	DEFINE_INTERFACE(IHTTP_Server);
+    DEFINE_INTERFACE(IHTTP_Server);
 
 public:
-	virtual ~IHTTP_Server() {};
+    virtual ~IHTTP_Server() noexcept = default;
 
-	// Setup the server.
-	virtual void setup(
-		const std::string& address,
-		const std::string& port,
-		const std::string& doc_root) = 0;
-	
-	//Start the server in a new thread.
-	virtual void start() = 0;
+    IHTTP_Server() = default;
+    IHTTP_Server(const IHTTP_Server&) = delete;
+    IHTTP_Server& operator=(const IHTTP_Server&) = delete;
+    IHTTP_Server(IHTTP_Server&&) = delete;
+    IHTTP_Server& operator=(IHTTP_Server&&) = delete;
 
-	// Run the server until stopped.
-	virtual int run() = 0;
-	virtual void stop() = 0;
+    // Setup the server. 
+    // 'guest' is a non-owning pointer: caller retains ownership & lifetime.
+    // nullptr is valid if the server can run without a guest.
+    virtual int setup(const char* address,
+        const char* port,
+        const char* doc_root,
+        IHTTP_Handler* handler,
+        IUser* guest) = 0;
 
+    // Start server asynchronously in a new thread.
+    virtual int start() = 0;
+
+    // Run server synchronously until stopped.
+    virtual int run() = 0;
+
+    // Stop the server (idempotent).
+    virtual int stop() = 0;
 };
-
-#endif // IHTTP_SERVER_H

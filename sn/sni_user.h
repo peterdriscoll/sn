@@ -2,6 +2,8 @@
 
 #include "pgc_user.h"
 #include "sn_operatorvariables.h"
+#include "iuser.h"
+
 #include <vector>
 #include <unordered_map>
 
@@ -14,7 +16,7 @@ namespace SNI
 	class SNI_DelayedProcessor;
 	class SNI_Thread;
 
-	class SNI_User : public PGC::PGC_User
+	class SNI_User : public PGC::PGC_User, public IUser
 	{
 	private:
 		static void UserThreadFunc(SNI_User* p_User);
@@ -48,7 +50,7 @@ namespace SNI
 		void LogicSetup();
 
 		SNI_Thread* GetThreadByNumber(size_t p_ThreadNum);
-		size_t GetNumThreads();
+		size_t GetNumThreads() const override;
 		void WriteStepCounts(ostream& p_Stream);
 		std::string StepCountJS();
 		void WriteStepCountListJS(ostream& p_Stream);

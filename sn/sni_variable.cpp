@@ -201,8 +201,7 @@ namespace SNI
 	{
 		if (m_Value && m_Value->IsVariable())
 		{
-			SN::SN_Variable value = m_Value;
-			return FrameName() + "/" + value.GetSNI_Variable()->FramePathName();
+			return FrameName() + "/" + m_Value->GetSNI_Variable()->FramePathName();
 		}
 		return FrameName();
 	}

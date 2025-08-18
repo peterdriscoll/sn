@@ -74,6 +74,8 @@ namespace SNI
 
 		virtual ~SNI_Expression();
 
+		SNI_Variable* GetSNI_Variable() const;
+
 		//---------------------------------------------------------------
 		// Logging
 		//---------------------------------------------------------------

@@ -8,7 +8,7 @@
 namespace boost { namespace system { class error_code; } }
 namespace boost { namespace asio { namespace ip { class tcp; } } }
 
-namespace skynet::http::server::sync::detail {
+namespace skynet::http::server::syncoo::detail {
     // Own the socket—pass by value so the thread takes ownership.
     int do_session(
         boost::asio::ip::tcp::socket socket,

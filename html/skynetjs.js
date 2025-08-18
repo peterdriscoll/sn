@@ -1,6 +1,33 @@
 ﻿var home = 'http://127.0.0.1/';
 var app = angular.module('skynetApp', ['ngSanitize', 'cfp.hotkeys']);
 
+// in skynetjs.js, after angular.module('skynetApp', [...])
+angular.module('skynetApp')
+    .run(['$http', '$interval', '$window', function ($http, $interval, $window) {
+        var PERIOD_MS = 1000, TIMEOUT_MS = 1500, CLOSE_AFTER_MISSES = 3;
+        var misses = 0;
+
+        function tryClose() {
+            try {
+                if ($window.opener) $window.close();      // works if opened by opener.html
+                else $window.location.replace('about:blank'); // fallback
+            } catch (e) { $window.location.replace('about:blank'); }
+        }
+
+        function ping() {
+            $http.get(home + 'healthz', { cache: false, timeout: TIMEOUT_MS })
+                .then(function () { misses = 0; })
+                .catch(function () {
+                    if (++misses >= CLOSE_AFTER_MISSES) {
+                        $interval.cancel(timer);
+                        tryClose();
+                    }
+                });
+        }
+
+        var timer = $interval(ping, PERIOD_MS);
+    }]);
+
 app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $window, $document, hotkeys) {
     $scope.trustAsHtml = $sce.trustAsHtml;
     $scope.threadnum = 0;
@@ -308,7 +335,12 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
     // Request an action from the server.
     $scope.submit = function (action) {
         $http.get(home + action + '?threadnum=' + $scope.threadnum + '&stackdepth=' + $scope.stackdepth + '&debugstop=' + $scope.debugstop.value + '&breakpoints=' + Array.from($scope.breakpointCol).join(','))
-            .then(function (response) { $scope.loaddata(); });
+            .then(function (response) {
+                $scope.loaddata();
+                if (action === "runtoendjs") {
+                    window.close();
+                }
+            });
     };
 
     hotkeys.add({
