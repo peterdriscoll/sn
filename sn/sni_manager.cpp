@@ -193,8 +193,8 @@ namespace SNI
 			m_WebServer->stop();
 			delete m_WebServer;
 			delete m_HTTP_Handler;
-			delete m_User;
 		}
+		delete m_User;
 	}
 
 	SN::SN_Expression SNI_Manager::DelayedCalls()
@@ -210,6 +210,7 @@ namespace SNI
 		{
 			m_ErrorHandler = ThrowErrorHandler;
 		}
+
 		if (!SNI_User::GetCurrentUser())
 		{
 			m_User = new SNI_User(m_ErrorHandler);
