@@ -144,6 +144,14 @@ namespace PGC
 		virtual PGC_Base *Clone(PGC_Transaction &p_Transaction);
 		virtual PGC_Base* CloneTo(void* memory) const;
 
+		// NEW: move this object into pre-allocated memory (uses move-ctor)
+		// Post-condition: *this is left in a valid-but-unspecified "moved-from" state.
+		virtual PGC_Base* MoveTo(void* memory)
+		{
+			// Fallback to copy; classes that want true move will override via PGC_MOVE_TO(T)
+			return CloneTo(memory);
+		}
+
 		void RequestPromotion(PGC_TypeCheck** p_Base);
 
 		void PromoteNow(PGC_TypeCheck** p_Base);

@@ -33,11 +33,6 @@ namespace SNI
 	{
 	}
 
-	SNI_String::SNI_String(const SNI_String &p_Other)
-		: m_String(p_Other.m_String)
-	{
-	}
-
 	SNI_String::SNI_String(const SNI_StringRef &p_Other)
 		: m_String(p_Other.GetString())
 	{
@@ -425,11 +420,11 @@ namespace SNI
 		std::string other = p_Other->GetString();
 		size_t length = m_String.length();
 		size_t otherLength = other.length();
-		if (m_String.length())
+		if (otherLength <= length)
 		{
 			return SN::SN_Bool(m_String.substr(0, otherLength) == other);
 		}
-		return SN::SN_Error(false, false, "DoLookStringLeft length error");
+		return skynet::False;
 	}
 
 	SN::SN_Value SNI_String::DoLookStringRight(SNI_Value * p_Other) const
@@ -446,9 +441,9 @@ namespace SNI
 
 	SN::SN_Value SNI_String::DoFile() const
 	{
-		// In math, a single expression can only have a single value. Calling the File
-		// method on a std::string can only have one value. So if the file is reread the
-		// same value must be returned.
+		// In math, a single expression (with no free variables) can only have a single 
+		// value. Calling the File method on a std::string can only have one value. So 
+		// if the file is reread thesame value must be returned.
 		// The solution to this to include the time, but I don't yet have a time class
 		// or a branching time object to allow me to safely retrieve it. Later.
 		auto &preventReread = SNI_User::GetCurrentUser()->GetDelayedProcessor()->GetPreventReread();

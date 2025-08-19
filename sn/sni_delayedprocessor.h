@@ -19,10 +19,13 @@ namespace SNI
 	using DelayedCallList = PGCX::vector_ref<SNI_DelayedCall>;
 	using PreventRereadList = PGCX::unordered_map_ref<std::string, SNI_String>;
 
-	#undef PGC_ACTION_OVER_MEMBERS
-	#undef PGC_ACTION_OVER_CONTAINERS
+#undef PGC_ACTION_OVER_VALUES
+#undef PGC_ACTION_OVER_MEMBERS
+#undef PGC_ACTION_OVER_CONTAINERS
 
-	#define PGC_ACTION_OVER_MEMBERS(ACTION) \
+#define PGC_ACTION_OVER_VALUES(ACTION)
+
+#define PGC_ACTION_OVER_MEMBERS(ACTION) \
 		ACTION(Manager SNI_Manager)
 
 	#define PGC_ACTION_OVER_CONTAINERS(ACTION) \

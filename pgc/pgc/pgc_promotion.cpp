@@ -120,6 +120,7 @@ namespace PGC
 
 		// Clone the original object into the new memory block via placement new
 		PGC_Base* newBase = base->CloneTo(newMemory); // TO DO: Constructor not being called on PGC_Base.
+		//PGC_Base* newBase = base->MoveTo(newMemory);   // uses T(T&&) via placement-new
 
 		if (!newBase)
 		{

@@ -824,8 +824,8 @@ namespace SNI
 				LOG(WriteExp(l_clone));
 			}
 
-			LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": Start " + DisplayUnifyExp(p_ParameterList)));
-			LOG(WriteClonedExpression(SN::DebugLevel, "Unify var: ", l_clone));
+			//LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": Start " + DisplayUnifyExp(p_ParameterList)));
+			//LOG(WriteClonedExpression(SN::DebugLevel, "Unify var: ", l_clone));
 
 			SNI_Frame *topFrame = SNI_Frame::Top();
 			for (size_t j = 1; j < p_ParameterList->size(); j++)
@@ -842,7 +842,7 @@ namespace SNI
 				SNI_Variable *param = topFrame->GetVariable(j);
 				topFrame->CreateParameter(j, (*p_ParameterList)[j]);
 			}
-			LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": End " + DisplayUnifyExp(p_ParameterList)));
+			//LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": End " + DisplayUnifyExp(p_ParameterList)));
 
 			SNI_Frame::Pop();
 			if (e.GetSNI_Error())

@@ -20,7 +20,7 @@ angular.module('skynetApp')
                 .catch(function () {
                     if (++misses >= CLOSE_AFTER_MISSES) {
                         $interval.cancel(timer);
-                        tryClose();
+                        //tryClose();
                     }
                 });
         }

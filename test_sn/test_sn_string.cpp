@@ -254,6 +254,9 @@ namespace test_sn
 		{
 			Initialize();
 			{
+				Manager manager("Test File Access", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
 				std::string s_name_1 = "c:/temp/sn_test_testfileaccess_1.txt";
 				std::string s_name_2 = "c:/temp/sn_test_testfileaccess_2.txt";
 				std::string s_contents_1 = "Tora! Tora! Tora!";
@@ -267,8 +270,6 @@ namespace test_sn
 					out.close();
 				}
 
-				Manager manager("Test File Access", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 				{
 					Transaction transaction;
 
@@ -278,8 +279,9 @@ namespace test_sn
 					(name_1.File() == contents_1).Assert().Do();
 
 					{
+						remove(s_name_1.data());
 						std::ofstream out(s_name_1);
-						out << s_contents_1;
+						out << s_contents_2;
 						out.close();
 					}
 
@@ -297,8 +299,9 @@ namespace test_sn
 					std::stringstream strStream;
 					strStream << inFile.rdbuf(); // read the file
 					Assert::IsTrue(strStream.str() == s_contents_2);
-
+					
 					{
+						remove(s_name_2.data());
 						std::ofstream out(s_name_2);
 						out << s_contents_1;
 						out.close();
@@ -314,8 +317,10 @@ namespace test_sn
 					SN_DECLARE_VALUE(name_1, String(s_name_1));
 					SN_DECLARE_VALUE(name_2, String(s_name_2));
 					SN_DECLARE_VALUE(contents_1, String(s_contents_1));
-					(name_1.File() == name_2.File()).Assert().Do();
-					(name_2.File() == contents_1).Assert().Do();
+					SN_DECLARE_VALUE(contents_2, String(s_contents_2));
+
+					(name_1.File() == contents_1).Assert().Do();
+					(name_2.File() == contents_2).Assert().Do();
 				}
 			}
 			Cleanup();

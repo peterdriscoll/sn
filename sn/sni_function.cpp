@@ -255,7 +255,7 @@ namespace SNI
 
 	SN::SN_Error SNI_Function::AssertValue(const SN::SN_Expression &p_Value)
 	{
-		LOG(WriteExpression(SN::DebugLevel, p_Value, this));
+		//LOG(WriteExpression(SN::DebugLevel, p_Value, this));
 		if (p_Value.IsError())
 		{
 			return p_Value.GetError();

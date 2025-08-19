@@ -619,7 +619,7 @@ namespace SNI
 		}
 
 		long end_pos = SN::SN_Long(end).GetNumber();
-		return SN::SN_String(m_Source.GetString().substr(start_pos, end_pos - start_pos + 1));
+		return SN::SN_String(GetSourceString().substr(start_pos, end_pos - start_pos));
 	}
 
 	SN::SN_Expression SNI_StringRef::DoPartialEvaluate(long p_MetaLevel /* = 0 */) const

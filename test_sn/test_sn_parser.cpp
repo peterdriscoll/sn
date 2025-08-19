@@ -749,8 +749,8 @@ namespace test_sn
 				// No closing line feed.
 				(!validate.IsLineComment(String("//D"))).Assert().Do();
 				(!validate.IsLineComment(String("//Escaped // quotes*/"))).Assert().Do();
-
 				(!validate.IsLineComment(String(""))).Assert().Do();
+
 				validate.IsLineComment(String("//\n")).Assert().Do();
 				validate.IsLineComment(String("//Simple string*/\n")).Assert().Do();
 				validate.IsLineComment(String("//Containing /* */ \n")).Assert().Do();
@@ -875,12 +875,13 @@ namespace test_sn
 				(parse.AsValueRef(MyDomain)(String("\"My test \\\"string\\\"\""))(s1)).Assert().Do();
 
 				SN_DECLARE(s2);
-				(s2 == String("My test \"std::string\"")).Assert().Do();
-				(s1 == s2).Evaluate().Do();
+				(s2 == String("My test \"string\"")).Assert().Do();
 
 				std::string s1_string = s1.DisplayValueSN();
 				std::string s2_string = s2.DisplayValueSN();
 				Assert::IsTrue(s1_string == s2_string);
+
+				(s1 == s2).Evaluate().Do();
 			}
 		}
 
@@ -927,31 +928,36 @@ namespace test_sn
 				Manager manager("Test Parse Simple Expression1", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
 				manager.SetAutoExpandNull(autoExpand);
+				{
+					Transaction transaction;
 
-				CharacterSet characterSet;
-				Validate validate(characterSet);
-				Parse parse(characterSet, validate);
+					CharacterSet characterSet;
+					Validate validate(characterSet);
+					Parse parse(characterSet, validate);
 
-				SN_DOMAIN(MyDomain);
+					SN_DOMAIN(MyDomain);
 
-				// Arithmetic Expression.
-				SN_DECLARE(i1);
+					// Arithmetic Expression.
+					SN_DECLARE(i1);
 
-				(parse.AsArithmeticExpression(MyDomain)(String("13+21"))(i1)).Assert().Do();
+					manager.Breakpoint();
 
-				SN_DECLARE(j1);
-				(j1 == Meta(1, Meta(-1, Long(13)) + Meta(-1, Long(21)))).Assert().Do();
+					(parse.AsArithmeticExpression(MyDomain)(String("13+21"))(i1)).Assert().Do();
 
-				std::string i1_string = i1.DoEvaluate(0).DisplayValueSN();
-				std::string i1_value = i1.DoEvaluate(-1).DisplayValueSN();
+					SN_DECLARE(j1);
+					(j1 == Meta(1, Meta(-1, Long(13)) + Meta(-1, Long(21)))).Assert().Do();
 
-				std::string j1_string = j1.DoEvaluate(0).DisplayValueSN();
-				std::string j1_value = j1.DoEvaluate(-1).DisplayValueSN();
+					std::string i1_string = i1.DoEvaluate(0).DisplayValueSN();
+					std::string i1_value = i1.DoEvaluate(-1).DisplayValueSN();
 
-				Assert::IsTrue(i1_string == j1_string);
-				Assert::IsTrue(i1_value == j1_value);
+					std::string j1_string = j1.DoEvaluate(0).DisplayValueSN();
+					std::string j1_value = j1.DoEvaluate(-1).DisplayValueSN();
 
-				(i1 == j1).Evaluate().Do();
+					Assert::IsTrue(i1_string == j1_string);
+					Assert::IsTrue(i1_value == j1_value);
+
+					(i1 == j1).Evaluate().Do();
+				}
 			}
 		}
 

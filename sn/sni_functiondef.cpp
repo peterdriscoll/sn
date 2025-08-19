@@ -547,7 +547,7 @@ namespace SNI
 							inputList[j] = v;
 							p_ParamList[j] = v;
 						}
-						LOG(WriteLine(SN::DebugLevel, "Assert value " + to_string(j) + ": " + inputList[j].DisplaySN() + "/" + inputList[j].DisplayValueSN() + (IsKnownValue(inputList[j], j)?" known":" unknown")));
+						//LOG(WriteLine(SN::DebugLevel, "Assert value " + to_string(j) + ": " + inputList[j].DisplaySN() + "/" + inputList[j].DisplayValueSN() + (IsKnownValue(inputList[j], j)?" known":" unknown")));
 					}
 				}
 			}
@@ -571,7 +571,7 @@ namespace SNI
 				Breakpoint(SN::DetailStop, (SN::BreakId)(SN::ParameterOneId + j), GetTypeName(), "Unify parameter " + to_string(j) + " card " + to_string(card), p_Source, SN::CallPoint);
 			}
 		}
-		LOG(WriteLine(SN::DebugLevel, GetLogDescription(p_ParamList)));
+		//LOG(WriteLine(SN::DebugLevel, GetLogDescription(p_ParamList)));
 		if (e.GetBool())
 		{
 			card = CardinalityOfUnify(depth, inputList, calcPos, totalCalc);

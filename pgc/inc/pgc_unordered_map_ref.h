@@ -38,10 +38,9 @@ namespace PGC
         Transaction* GetTransaction() const { return m_Transaction; }
 
         void Insert(const Key& key, T* value)
-        {
-            MemberRef<T> ref;
-            ref.Set(value, m_Transaction);
-            m_Data[key] = ref;
+        { 
+            auto& slot = m_Data[key];        // default-constructs mapped value if missing
+            slot.Set(value, m_Transaction);  // binds/registers the *in-place* object
         }
 
         void InsertRef(const Key& key, const mapped_type& ref)

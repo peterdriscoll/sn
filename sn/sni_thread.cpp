@@ -320,9 +320,9 @@ namespace SNI
 
 	std::string SNI_Thread::DerivationJS(long p_MaxLogEntries)
 	{
-		stringstream ss;
-		WriteDerivationJS(ss, p_MaxLogEntries);
-		return ss.str();
+		//stringstream ss;
+		//WriteDerivationJS(ss, p_MaxLogEntries);
+		return ""; // ss.str();
 	}
 
 	std::string SNI_Thread::CodeJS(long p_MaxLogEntries, long p_StartCode, long p_StepCount, enum DisplayOptionType p_OptionType)
@@ -1310,7 +1310,10 @@ namespace SNI
 		m_BreakPointJS = p_BreakPointJS;
 
 		SNI_Frame *topFrame = SNI_Frame::Top();
-		topFrame->SetBreakPoint(m_BreakPoint, m_BreakPointJS);
+		if (topFrame)
+		{
+			topFrame->SetBreakPoint(m_BreakPoint, m_BreakPointJS);
+		}
 	}
 
 	SN::SN_Error SNI_Thread::CheckForFails()

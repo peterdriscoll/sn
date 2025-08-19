@@ -862,7 +862,7 @@ namespace SNI
 			SNI_DelayedProcessor* processor = user->GetDelayedProcessor();
 			if (processor)
 			{
-				e = processor->DoAssert();
+				// e = processor->DoAssert();
 			}
 		}
 		if (e.IsError())
