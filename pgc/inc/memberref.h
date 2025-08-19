@@ -63,7 +63,8 @@ namespace PGC
 		}
 		~MemberRef() noexcept
 		{
-			if (m_Pointer && m_Pointer->IsPromotion())
+			//if (m_Pointer && m_Pointer->IsPromotion())
+			if (false)
 			{
 				PGC_Promotion* promotion = static_cast<PGC_Promotion*>(m_Pointer);
 

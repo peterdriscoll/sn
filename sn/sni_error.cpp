@@ -38,43 +38,22 @@ namespace SNI
 		return Class();
 	}
 
-	SNI_Error::SNI_Error()
-		: m_Success(true)
-		, m_Delay(false)
-	{
-	}
-
-	SNI_Error::SNI_Error(const SNI_Error &p_Other)
-		: m_Success(p_Other.m_Success)
-		, m_Delay(p_Other.m_Delay)
-		, m_RequestRerun(false)
-		, m_Description(p_Other.m_Description)
-		, m_CallHistory(p_Other.m_CallHistory)
-	{
-	}
-
-	SNI_Error::SNI_Error(bool p_Success, bool p_Delay, const std::string & p_Description)
+	// --- Primary ctor ---
+	SNI_Error::SNI_Error(bool p_Success, bool p_Delay, const std::string& p_Description)
 		: m_Success(p_Success)
 		, m_Delay(p_Delay)
 		, m_RequestRerun(false)
 		, m_Description(p_Description)
+		, m_CallHistory(GetTransaction())
+		, m_ChildErrorList(GetTransaction())
 	{
-		if (!p_Success)
-		{
-			long dog = 10;
-		}
 		if (!m_Success && !p_Description.empty() && !SNI_Thread::GetThread()->ContextWorld())
 		{
-			LOG(WriteLine(SN::ErrorLevel, GetLogDescription()));
 			if (!ErrorIsHandled())
 			{
 				SNI_Thread::GetThread()->RegisterError(this);
 			}
 		}
-	}
-
-	SNI_Error::~SNI_Error()
-	{
 	}
 
 	SNI_Expression * SNI_Error::Copy() const

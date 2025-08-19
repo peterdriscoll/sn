@@ -36,8 +36,6 @@ namespace SNI
 		const SNI_Expression *m_Expression;
 		std::string m_LogContext;
 	};
-
-	typedef std::vector<SNI_CallRecord *> SNI_CallRecordList;
 }
 
 #endif // !defined(SNI_CALLRECORD_H_INCLUDED)
