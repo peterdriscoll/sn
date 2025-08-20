@@ -15,7 +15,7 @@ namespace SNI
 {
 	SNI_DelayedProcessor::SNI_DelayedProcessor()
 		: m_Processing(false)
-		, m_Manager(SNI_Thread::GetThread()->GetTopManager(), GetTransaction())
+		, m_Manager(SNI_Thread::GetThread()->GetTopManager())
 		, m_DelayedCallList(GetTransaction())
 		, m_FailedList(GetTransaction())
 		, m_PreventReread(GetTransaction())
@@ -24,7 +24,7 @@ namespace SNI
 
 	SNI_DelayedProcessor::SNI_DelayedProcessor(SNI_Manager *p_Manager)
 		: m_Processing(false)
-		, m_Manager(p_Manager, GetTransaction())
+		, m_Manager(p_Manager)
 		, m_DelayedCallList(GetTransaction())
 		, m_FailedList(GetTransaction())
 		, m_PreventReread(GetTransaction())

@@ -38,8 +38,10 @@ namespace PGC
 			full += "\nMessage   : "; full += msg;
 			full += "\nFile      : "; full += file;
 			full += ":" + std::to_string(line) + "\n";
-
-			user->GetErrorHandler()(!expr, full);
+			if (user)
+			{
+				user->GetErrorHandler()(!expr, full);
+			}
 		}
 	}
 
@@ -74,14 +76,12 @@ namespace PGC
 		PGC_Transaction::RegisterLastForDestruction(this);
 	}
 	PGC_Base::PGC_Base(const PGC_Base& other)
-		: m_Transaction(other.m_Transaction)
+		: m_Transaction(PGC_Transaction::RegisterLastForDestruction(this))
 	{
-		PGC_Transaction::RegisterLastForDestruction(this);
 	}
 	PGC_Base::PGC_Base(PGC_Base&& other) noexcept
-		: m_Transaction(other.m_Transaction)
+		: m_Transaction(PGC_Transaction::RegisterLastForDestruction(this))
 	{
-		//PGC_Transaction::RegisterLastForDestruction(this); Maybe
 	}
 	PGC_Base::~PGC_Base()
 	{

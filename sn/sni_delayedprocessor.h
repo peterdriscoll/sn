@@ -14,21 +14,23 @@
 namespace SNI
 {
 	class SNI_DelayedCall;
-	class SNI_String;
+    class SNI_String;
+    class SNI_Manager;
 
 	using DelayedCallList = PGCX::vector_ref<SNI_DelayedCall>;
 	using PreventRereadList = PGCX::unordered_map_ref<std::string, SNI_String>;
 
-#undef PGC_ACTION_OVER_VALUES
-#undef PGC_ACTION_OVER_MEMBERS
-#undef PGC_ACTION_OVER_CONTAINERS
+	#undef PGC_ACTION_OVER_VALUE_MEMBERS
+	#undef PGC_ACTION_OVER_MEMBER_REFS
+	#undef PGC_ACTION_OVER_CONTAINERS
 
-#define PGC_ACTION_OVER_VALUES(ACTION)
+	#define PGC_ACTION_OVER_VALUE_MEMBERS(ACTION) \
+        ACTION(Manager, SNI_Manager*, nullptr) \
+        ACTION(Processing, bool, false)
 
-#define PGC_ACTION_OVER_MEMBERS(ACTION) \
-		ACTION(Manager SNI_Manager)
+	#define PGC_ACTION_OVER_MEMBER_REFS(ACTION)
 
-	#define PGC_ACTION_OVER_CONTAINERS(ACTION) \
+	#define PGC_ACTION_OVER_MEMBER_CONTAINER_REFS(ACTION) \
 		ACTION(DelayedCallList, DelayedCallList, SNI_DelayedCall) \
 		ACTION(FailedList, DelayedCallList, SNI_DelayedCall) \
 		ACTION(PreventReread, PreventRereadList, SNI_String)
@@ -37,48 +39,59 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_DelayedProcessor);
 
-		//PGC_MEMBER_DEFINITIONS(SNI_DelayedProcessor);
-	private:
-		PGCX::MemberRef<SNI_Manager> m_Manager;
-		DelayedCallList m_DelayedCallList;
-		DelayedCallList m_FailedList;
-		PreventRereadList m_PreventReread;
+        // PGC_MEMBER_DEFINITIONS_NOINIT(SNI_DelayedProcessor, SNI_Expression);
+    private:
+        SNI_Manager* m_Manager = nullptr;
+        bool             m_Processing{ false };
+        DelayedCallList  m_DelayedCallList;
+        DelayedCallList  m_FailedList;
+        PreventRereadList m_PreventReread;
 
-	public:
-		SNI_Manager* GetManager()
-		{
-			return m_Manager.Get();
-		}
-		void SetManager(SNI_Manager* p_Pointer)
-		{
-			m_Manager.Set(p_Pointer, GetTransaction());
-		}
+    public:
+        void PromoteMembers() {
+            m_DelayedCallList.PromoteAll();
+            m_FailedList.PromoteAll();
+            m_PreventReread.PromoteAll();
+        }
 
-		void PromoteMembers()
-		{
-			m_Manager.RequestPromotion(GetTransaction());
-			m_DelayedCallList.PromoteAll();
-			m_FailedList.PromoteAll();
-			m_PreventReread.PromoteAll();
-		}
+        void RegisterMembers() {
+            // No PGC-managed members to register.
+        }
 
-		SNI_DelayedProcessor(const SNI_DelayedProcessor& other)
-			: SNI_Expression(other)
-			, m_Manager(other.m_Manager)
-			, m_DelayedCallList(other.m_DelayedCallList)
-			, m_FailedList(other.m_FailedList)
-			, m_PreventReread(other.m_PreventReread)
-		{
-			m_Manager.RequestPromotion(GetTransaction());
-			m_DelayedCallList.PromoteAll();
-			m_FailedList.PromoteAll();
-			m_PreventReread.PromoteAll();
-		}
+        SNI_DelayedProcessor(const SNI_DelayedProcessor& other)
+            : SNI_Expression(other)
+            , m_Manager(other.m_Manager)
+            , m_Processing(other.m_Processing)
+            , m_DelayedCallList(other.m_DelayedCallList)
+            , m_FailedList(other.m_FailedList)
+            , m_PreventReread(other.m_PreventReread)
+        {
+            m_DelayedCallList.PromoteAll();
+            m_FailedList.PromoteAll();
+            m_PreventReread.PromoteAll();
+        }
 
-		virtual PGC::PGC_Base* CloneTo(void* memory) const override
-		{
-			return new (memory) SNI_DelayedProcessor(*this);
-		}
+        SNI_DelayedProcessor(SNI_DelayedProcessor&& other) noexcept
+            : SNI_Expression(std::move(other))
+            , m_Manager(other.m_Manager)
+            , m_Processing(other.m_Processing)
+            , m_DelayedCallList(std::move(other.m_DelayedCallList))
+            , m_FailedList(std::move(other.m_FailedList))
+            , m_PreventReread(std::move(other.m_PreventReread))
+        {
+            m_DelayedCallList.PromoteAll();
+            m_FailedList.PromoteAll();
+            m_PreventReread.PromoteAll();
+        }
+
+        PGC::PGC_Base* CloneTo(void* memory) const override {
+            return ::new (memory) SNI_DelayedProcessor(*this);
+        }
+
+        PGC::PGC_Base* MoveTo(void* memory) override {
+            return ::new (memory) SNI_DelayedProcessor(std::move(*this));
+        }
+		// End to PGC_MEMBER_DEFINITIONS_NOINIT(SNI_DelayedProcessor, SNI_Expression);
 
 	public:
 		SNI_DelayedProcessor();
@@ -109,10 +122,8 @@ namespace SNI
 	private:
 		//SNI_DelayedCallList  m_DelayedCallList;
 		//SNI_DelayedCallList  m_FailedList;
-		bool                 m_Processing;
 		mutex                m_SearchLock;
 		//unordered_map<std::string, SN::SN_String> m_PreventReread;
-		//PGCX::MemberRef<SNI_Manager> m_Manager;
 	};
 }
 

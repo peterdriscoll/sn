@@ -13,93 +13,98 @@ using namespace PGCX;
 class TestPGC_A;
 class TestPGC_C;
 
-#undef PGC_ACTION_OVER_MEMBERS
-#undef PGC_ACTION_OVER_CONTAINERS
+#undef PGC_ACTION_OVER_VALUE_MEMBERS
+#undef PGC_ACTION_OVER_MEMBER_REFS
+#undef PGC_ACTION_OVER_MEMBER_CONTAINER_REFS
 
-#define PGC_ACTION_OVER_MEMBERS(ACTION) \
+#define PGC_ACTION_OVER_VALUE_MEMBERS(ACTION) \
+    ACTION(Length, long, 0)
+
+#define PGC_ACTION_OVER_MEMBER_REFS(ACTION) \
     ACTION(CMember, TestPGC_C) \
     ACTION(AMember, TestPGC_A)
 
-#define PGC_ACTION_OVER_CONTAINERS(ACTION) \
-    ACTION(ACollection, std::vector, TestPGC_A)
+#define PGC_ACTION_OVER_MEMBER_CONTAINER_REFS(ACTION) \
+    ACTION(ACollection, PGC::vector_ref, TestPGC_A)
 
 class TestPGC_C : public Base
 {
 	PGC_CLASS(TestPGC_C);
 
-public:
-	TestPGC_C();
-	virtual ~TestPGC_C();
-
-    long GetLength();
-    void SetLength(long p_Value);
-
-//	PGC_MEMBER_DEFINITIONS(TestPGC_C)
-// Member and container definitions (private)
+    //	PGC_MEMBER_DEFINITIONS(TestPGC_C, Base)
 private:
-    MemberRef<TestPGC_C> m_CMember;
-    MemberRef<TestPGC_A> m_AMember;
-    std::vector<MemberRef<TestPGC_A>> m_ACollection;
+    long                              m_Length{ 0 };
+    PGCX::MemberRef<TestPGC_C>        m_CMember;
+    PGCX::MemberRef<TestPGC_A>        m_AMember;
+    PGCX::vector_ref<TestPGC_A>       m_ACollection;
 
-    // Public accessors and helpers
 public:
-    TestPGC_C* GetCMember()
-    {
+    TestPGC_C* GetCMember() {
         return m_CMember.Get();
     }
-    void SetCMember(TestPGC_C* p_Pointer)
-    {
-        m_CMember.Set(p_Pointer, GetTransaction());
+
+    void SetCMember(TestPGC_C* p_Ptr) {
+        m_CMember.Set(p_Ptr, GetTransaction());
     }
 
-    TestPGC_A* GetAMember()
-    {
+    TestPGC_A* GetAMember() {
         return m_AMember.Get();
     }
-    void SetAMember(TestPGC_A* p_Pointer)
-    {
-        m_AMember.Set(p_Pointer, GetTransaction());
+
+    void SetAMember(TestPGC_A* p_Ptr) {
+        m_AMember.Set(p_Ptr, GetTransaction());
     }
 
-    void RequestPromotionACollection()
-    {
-        for (auto& _ref : m_ACollection)
-            _ref.RequestPromotion(GetTransaction());
+    void PromoteMembers() {
+        m_CMember.PromoteNow(GetTransaction());
+        m_AMember.PromoteNow(GetTransaction());
+        m_ACollection.PromoteAll();
     }
 
-    void PromoteMembers()
-    {
-        m_CMember.RequestPromotion(GetTransaction());
-        m_AMember.RequestPromotion(GetTransaction());
-        for (auto& _ref : m_ACollection)
-            _ref.RequestPromotion(GetTransaction());
-    }
-
-    void RegisterMembers()
-    {
-        RegisterMember((PGC::PGC_Base*)m_CMember.Get());
-        RegisterMember((PGC::PGC_Base*)m_AMember.Get());
+    void RegisterMembers() {
+        RegisterMember(reinterpret_cast<PGC::PGC_Base*>(m_CMember.Get()));
+        RegisterMember(reinterpret_cast<PGC::PGC_Base*>(m_AMember.Get()));
     }
 
     TestPGC_C(const TestPGC_C& other)
-        : Base(other),
-        m_CMember(other.m_CMember),
-        m_AMember(other.m_AMember),
-        m_ACollection(other.m_ACollection),
-        m_Length(other.m_Length)
+        : Base(other)
+        , m_Length(other.m_Length)
+        , m_CMember(other.m_CMember)
+        , m_AMember(other.m_AMember)
+        , m_ACollection(other.m_ACollection)
     {
         m_CMember.RequestPromotion(GetTransaction());
         m_AMember.RequestPromotion(GetTransaction());
-        for (auto& _ref : m_ACollection)
-            _ref.RequestPromotion(GetTransaction());
+        m_ACollection.PromoteAll();
     }
 
-    virtual PGC_Base* CloneTo(void* memory) const override {
-        return new (memory) TestPGC_C(*this);
+    TestPGC_C(TestPGC_C&& other) noexcept
+        : Base(std::move(other))
+        , m_Length(other.m_Length)
+        , m_CMember(std::move(other.m_CMember))
+        , m_AMember(std::move(other.m_AMember))
+        , m_ACollection(std::move(other.m_ACollection))
+    {
+        m_CMember.RequestPromotion(GetTransaction());
+        m_AMember.RequestPromotion(GetTransaction());
+        m_ACollection.PromoteAll();
     }
 
-private:
-	long m_Length;
+    PGC::PGC_Base* CloneTo(void* memory) const override {
+        return ::new (memory) TestPGC_C(*this);
+    }
+
+    PGC::PGC_Base* MoveTo(void* memory) override {
+        return ::new (memory) TestPGC_C(std::move(*this));
+    }
+    //	End of PGC_MEMBER_DEFINITIONS(TestPGC_C, Base)
+
+public:
+    TestPGC_C();
+    virtual ~TestPGC_C();
+
+    long GetLength();
+    void SetLength(long p_Value);
 };
 
 #endif // !defined(TESTPGC_C_H_INCLUDED)

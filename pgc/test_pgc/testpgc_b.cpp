@@ -5,30 +5,17 @@
 
 TestPGC_B::TestPGC_B()
 {
-	++m_ActiveCount;
+	Initialize();
 }
 
-TestPGC_B::TestPGC_B(const TestPGC_B& other)
-	: Base(other)
-	, m_TestA(other.m_TestA)
-	, m_Next(other.m_Next)
-	, m_Description(other.m_Description)	
+void TestPGC_B::Initialize()
 {
 	++m_ActiveCount;
-	//m_TestA.RequestPromotion(GetTransaction());
-	//m_Next.RequestPromotion(GetTransaction());
 }
 
 TestPGC_B::~TestPGC_B()
 {
 	--m_ActiveCount;
-}
-
-TestPGC_B* TestPGC_B::CloneTo(void* mem) const
-{
-//	if (g_ForceMemcpyFallback)
-//		return nullptr;
-	return new (mem) TestPGC_B(*this);
 }
 
 void TestPGC_B::SimulateLegacyPromotionOnA()

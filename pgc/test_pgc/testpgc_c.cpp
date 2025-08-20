@@ -2,6 +2,11 @@
 #include "TestPGC_C.h"
 
 TestPGC_C::TestPGC_C()
+	: Base()
+	, m_Length(0)
+	, m_CMember()
+	, m_AMember()
+	, m_ACollection(GetTransaction())
 {
 }
 
