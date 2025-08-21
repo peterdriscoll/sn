@@ -1,5 +1,8 @@
 #pragma once
 
+#include "ref.h"
+#include "memberref.h"
+#include "sref.h"
 #include "pgc_promotemacros.h"
 #include "pgc_base.h"
 #include "pgc_transaction.h"
@@ -8,9 +11,6 @@
 #include "pgc_user.h"
 #include "pgc_vector_ref.h"
 #include "pgc_unordered_map_ref.h"
-#include "ref.h"
-#include "memberref.h"
-#include "sref.h"
 
 namespace PGCX
 {

@@ -40,16 +40,13 @@ namespace PGC
 
         void push_back(T* value)
         {
-            m_Data.emplace_back();                 // construct the final slot
-            auto& ref = m_Data.back();             // reference to the element's MemberRef
-            ref.Set(value, m_Transaction);
+            // Direct in-place construction -> std::construct_at(ptr, value, txn)
+            m_Data.emplace_back(value, m_Transaction);
         }
 
         void push_back_ref(const value_type& ref)
         {
-            m_Data.emplace_back();                 // construct the final slot
-            auto& newRef = m_Data.back();          // reference to the element's MemberRef
-            newRef.Set(ref.Get(), m_Transaction);
+            m_Data.emplace_back(ref.Get(), m_Transaction);
         }
 
         void push_back_ref(value_type&& ref)

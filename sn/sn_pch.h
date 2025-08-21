@@ -5,6 +5,27 @@
 
 #include "pgc.h"
 
+#include <windows.h>
+#include <string>
+
+#include <time.h> // time_t, tm, time, localtime, strftime
+#include <direct.h>
+#include <string>
+#include <climits>
+#include <math.h>
+#include <vector>
+#include <unordered_map>
+#include <limits>
+#include <fstream>
+#include <sstream>
+#include <chrono>
+#include <thread>
+#include <utility>
+#include <signal.h>
+#include <string_view>
+#include <cstdlib> // strtol
+#include <mutex>
+#include <cassert>
 #include "sn.h"
 
 // Worlds
@@ -172,23 +193,6 @@
 // Attributes
 #include "sni_getstate.h"
 #include "sni_getvalue.h"
-
-#include <time.h> // time_t, tm, time, localtime, strftime
-#include <direct.h>
-#include <string>
-#include <climits>
-#include <math.h>
-#include <vector>
-#include <unordered_map>
-#include <limits>
-#include <fstream>
-#include <sstream>
-#include <chrono>
-#include <thread>
-#include <utility>
-#include <signal.h>
-#include <string_view>
-#include <cstdlib> // strtol
 
 #include "../inc/ihttp_server.h"
 #include "../inc/ihttp_handler.h"
