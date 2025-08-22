@@ -30,6 +30,9 @@
     <ClInclude Include="testpgc_c.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="pin_concept_test.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test_pgc.cpp">

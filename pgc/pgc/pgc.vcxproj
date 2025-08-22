@@ -184,7 +184,9 @@
     <ClInclude Include="..\inc\pgc_transaction.h" />
     <ClInclude Include="..\inc\pgc_typecheck.h" />
     <ClInclude Include="..\inc\pgc_user.h" />
+    <ClInclude Include="..\inc\pinproxy.h" />
     <ClInclude Include="..\inc\ref.h" />
+    <ClInclude Include="..\inc\refcore.h" />
     <ClInclude Include="..\inc\sref.h" />
     <ClInclude Include="..\inc\pgc_unordered_map_ref.h" />
     <ClInclude Include="..\inc\pgc_vector_ref.h" />

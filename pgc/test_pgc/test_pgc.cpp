@@ -13,6 +13,7 @@
 #include "testpgc_a.h"
 #include "testpgc_b.h"
 #include "test_pgc_c.h"
+#include "pin_concept_test.h"
 
 
 bool g_ForceMemcpyFallback = true;
@@ -51,9 +52,9 @@ namespace test_pgc
 
 		void RecursivelyDoThis(PGC::PGC_User &p_User, long p_Depth)
 		{
-			size_t totalNetMemoryUsed = p_User.TotalNetMemoryUsed() - PGC_Transaction::TopTransaction()->NetMemoryUsed();
-			size_t totalGrossMemoryUsed = p_User.TotalGrossMemoryUsed() - PGC_Transaction::TopTransaction()->GrossMemoryUsed();
-			PGC_Transaction::StartStackTransaction(p_User);
+			size_t totalNetMemoryUsed = p_User.TotalNetMemoryUsed() - PGCX::PGC_Transaction::TopTransaction()->NetMemoryUsed();
+			size_t totalGrossMemoryUsed = p_User.TotalGrossMemoryUsed() - PGCX::PGC_Transaction::TopTransaction()->GrossMemoryUsed();
+			PGCX::PGC_Transaction::StartStackTransaction(p_User);
 			if (p_Depth > 0)
 			{
 				SRef<TestPGC_A> x = new TestPGC_A();
@@ -63,17 +64,17 @@ namespace test_pgc
 				RecursivelyDoThat(p_User, 100);
 				RecursivelyDoThis(p_User, p_Depth - 1);
 			}
-			PGC_Transaction::EndStackTransaction();
-			Assert::IsTrue(totalNetMemoryUsed + PGC_Transaction::TopTransaction()->NetMemoryUsed() == p_User.TotalNetMemoryUsed(), L"Sum of net memory = total");
-			Assert::IsTrue(totalGrossMemoryUsed + PGC_Transaction::TopTransaction()->GrossMemoryUsed() == p_User.TotalGrossMemoryUsed(), L"Sum of gross memory = total");
+			PGCX::PGC_Transaction::EndStackTransaction();
+			Assert::IsTrue(totalNetMemoryUsed + PGCX::PGC_Transaction::TopTransaction()->NetMemoryUsed() == p_User.TotalNetMemoryUsed(), L"Sum of net memory = total");
+			Assert::IsTrue(totalGrossMemoryUsed + PGCX::PGC_Transaction::TopTransaction()->GrossMemoryUsed() == p_User.TotalGrossMemoryUsed(), L"Sum of gross memory = total");
 			Assert::IsTrue(p_User.PromotionUsedMemory() == 0, L"No promotions");
 		}
 
 		void RecursivelyDoThat(PGC::PGC_User &p_User, long p_Depth)
 		{
-			size_t totalNetMemoryUsed = p_User.TotalNetMemoryUsed() - PGC_Transaction::TopTransaction()->NetMemoryUsed();
-			size_t totalGrossMemoryUsed = p_User.TotalGrossMemoryUsed() - PGC_Transaction::TopTransaction()->GrossMemoryUsed();
-			PGC_Transaction::StartStackTransaction(p_User);
+			size_t totalNetMemoryUsed = p_User.TotalNetMemoryUsed() - PGCX::PGC_Transaction::TopTransaction()->NetMemoryUsed();
+			size_t totalGrossMemoryUsed = p_User.TotalGrossMemoryUsed() - PGCX::PGC_Transaction::TopTransaction()->GrossMemoryUsed();
+			PGCX::PGC_Transaction::StartStackTransaction(p_User);
 			if (p_Depth > 0)
 			{
 				SRef<TestPGC_A> x = new TestPGC_A();
@@ -82,9 +83,9 @@ namespace test_pgc
 
 				RecursivelyDoThat(p_User, p_Depth - 1);
 			}
-			PGC_Transaction::EndStackTransaction();
-			Assert::IsTrue(totalNetMemoryUsed + PGC_Transaction::TopTransaction()->NetMemoryUsed() == p_User.TotalNetMemoryUsed(), L"Sum of net memory = total");
-			Assert::IsTrue(totalGrossMemoryUsed + PGC_Transaction::TopTransaction()->GrossMemoryUsed() == p_User.TotalGrossMemoryUsed(), L"Sum of gross memory = total");
+			PGCX::PGC_Transaction::EndStackTransaction();
+			Assert::IsTrue(totalNetMemoryUsed + PGCX::PGC_Transaction::TopTransaction()->NetMemoryUsed() == p_User.TotalNetMemoryUsed(), L"Sum of net memory = total");
+			Assert::IsTrue(totalGrossMemoryUsed + PGCX::PGC_Transaction::TopTransaction()->GrossMemoryUsed() == p_User.TotalGrossMemoryUsed(), L"Sum of gross memory = total");
 			Assert::IsTrue(p_User.PromotionUsedMemory() == 0, L"No promotions");
 		}
 
@@ -109,19 +110,24 @@ namespace test_pgc
 
 	public:
 		// TESTS.
+		TEST_METHOD(TestPinConceptTest)
+		{
+			// This test runs the PinConceptTest.
+			run();
+		}
 
 		TEST_METHOD(TestSimplePromotionOnMemberRef)
 		{
 			PGC_User user(AssertErrorHandler);
 
 			{
-				PGC_Transaction outerTransaction(user);
+				PGCX::PGC_Transaction outerTransaction(user);
 
 				SRef<TestPGC_C> outerRef = new TestPGC_C();
 				TestPGC_C* instance = NULL;
 				Base* instanceBase = NULL;
 				{
-					PGC_Transaction innerTransaction(user);
+					PGCX::PGC_Transaction innerTransaction(user);
 
 					instance = new TestPGC_C();
 					instance->SetLength(42);
@@ -146,7 +152,7 @@ namespace test_pgc
 			PGC::PGC_User user(AssertErrorHandler);
 
 			{
-				PGC_Transaction parentTransaction(user);
+				PGCX::PGC_Transaction parentTransaction(user);
 				SRef<TestPGC_B> b = new TestPGC_B();
 
 				Assert::AreEqual(parentTransaction.NetMemoryUsed(), sizeof(TestPGC_B) - PGC_OVERHEAD, L"Memory used by TestPGC_B");
@@ -156,7 +162,7 @@ namespace test_pgc
 				size_t netMemoryUsed = 0;
 				size_t totalMemoryUsed = 0;
 				{
-					PGC_Transaction transaction(user);
+					PGCX::PGC_Transaction transaction(user);
 					SRef<TestPGC_A> a;
 					a = new TestPGC_A();
 					a->SetDescription("a");
@@ -178,7 +184,7 @@ namespace test_pgc
 					Assert::IsTrue(TestPGC_B::m_ActiveCount == 1);
 
 					{
-						PGC_Transaction childTransaction(user);
+						PGCX::PGC_Transaction childTransaction(user);
 
 						SRef<TestPGC_A> c;
 						c = new TestPGC_A();
@@ -250,14 +256,14 @@ namespace test_pgc
 			PGC_User user(AssertErrorHandler);
 
 			{
-				PGC_Transaction transaction(user);
+				PGCX::PGC_Transaction transaction(user);
 				{
-					PGC_Transaction::StartStackTransaction(user);
+					PGCX::PGC_Transaction::StartStackTransaction(user);
 					{
-						PGC_Transaction transaction(user);
+						PGCX::PGC_Transaction transaction(user);
 						RecursivelyDoThis(user, 100);
 					}
-					PGC_Transaction::EndStackTransaction();
+					PGCX::PGC_Transaction::EndStackTransaction();
 				}
 			}
 			Assert::IsTrue(user.TotalNetMemoryUsed() == 0, L"Net memory cleared");
@@ -280,11 +286,11 @@ namespace test_pgc
 			Assert::IsTrue(user.PromotionUsedMemory() == 0, L"Promotional memory cleared");
 			Assert::IsTrue(user.PromotionFreeMemory() == user.TotalGrossMemoryUsed(), L"Promotional free memeory == gross");
 			{
-				PGC_Transaction parentTransaction(user);
+				PGCX::PGC_Transaction parentTransaction(user);
 				long depth = NumberOf_A_B_InBlock;
 				SRef<TestPGC_A> keep = new TestPGC_A();
 				{
-					PGC_Transaction transaction(user);
+					PGCX::PGC_Transaction transaction(user);
 					RecursivelyDoKeep(user, keep, depth);
 					long allocatedInFirstTransaction = depth;
 					long numThatFitsInFirstTransaction = NumberOf_A_B_InBlock;
@@ -319,14 +325,14 @@ namespace test_pgc
 			PGC_User user(AssertErrorHandler);
 
 			{
-				PGC_Transaction parentTransaction(user, false, PGC::PromotionStrategy::DoubleDipping);
+				PGCX::PGC_Transaction parentTransaction(user, false, PGC::PromotionStrategy::DoubleDipping);
 
 				Assert::IsTrue(TestPGC_B::m_ActiveCount == 0, L"TestPGC_B count should be 0");
 
 				SRef<TestPGC_B> a = new TestPGC_B();
 				a->SetDescription("TestPGC_B a");
 				{
-					PGC_Transaction transaction(user, false, PGC::PromotionStrategy::DoubleDipping);
+					PGCX::PGC_Transaction transaction(user, false, PGC::PromotionStrategy::DoubleDipping);
 
 					TestPGC_B* b = new TestPGC_B();
 					b->SetDescription("TestPGC_B b");
@@ -345,14 +351,14 @@ namespace test_pgc
 			Assert::IsTrue(TestPGC_B::m_ActiveCount == 0, L"TestPGC_B count should be 0");
 
 			{
-				PGC_Transaction parentTransaction(user, false, PGC::PromotionStrategy::DoubleDipping);
+				PGCX::PGC_Transaction parentTransaction(user, false, PGC::PromotionStrategy::DoubleDipping);
 
 				Assert::IsTrue(TestPGC_B::m_ActiveCount == 0, L"TestPGC_B count should be 0");
 
 				SRef<TestPGC_B> a = new TestPGC_B();
 				a->SetDescription("TestPGC_B a");
 				{
-					PGC_Transaction transaction(user, false, PGC::PromotionStrategy::DoubleDipping);
+					PGCX::PGC_Transaction transaction(user, false, PGC::PromotionStrategy::DoubleDipping);
 
 					TestPGC_B* b = new TestPGC_B();
 					b->SetDescription("TestPGC_B b");
@@ -388,7 +394,7 @@ namespace test_pgc
 			PGC_User user(AssertErrorHandler);
 
 			{
-				PGC_Transaction parentTransaction(user, false, PGC::PromotionStrategy::DoubleDipping);
+				PGCX::PGC_Transaction parentTransaction(user, false, PGC::PromotionStrategy::DoubleDipping);
 
 				Assert::IsTrue(TestPGC_B::m_ActiveCount == 0, L"TestPGC_B count should be 0");
 
@@ -403,7 +409,7 @@ namespace test_pgc
 				Assert::IsTrue(e.Ptr() == e_raw, L"e identity changed (downward clone?)");
 				Assert::IsTrue(e->GetTransaction() == e_tx, L"e moved tx (downward clone?)");
 				{
-					PGC_Transaction transaction(user, false, PGC::PromotionStrategy::DoubleDipping);
+					PGCX::PGC_Transaction transaction(user, false, PGC::PromotionStrategy::DoubleDipping);
 
 					TestPGC_B* b = new TestPGC_B();
 					b->SetDescription("TestPGC_B b");
@@ -444,11 +450,11 @@ namespace test_pgc
 			Assert::IsTrue(user.PromotionUsedMemory() == 0, L"Promotional memory cleared");
 			Assert::IsTrue(user.PromotionFreeMemory() == user.TotalGrossMemoryUsed(), L"Promotional free memory == gross");
 			{
-				PGC_Transaction parentTransaction(user);
+				PGCX::PGC_Transaction parentTransaction(user);
 				SRef<TestPGC_A> a = new TestPGC_A();
 				a->SetDescription("TestPGC_A a");
 				{
-					PGC_Transaction transaction(user);
+					PGCX::PGC_Transaction transaction(user);
 					TestPGC_A *b = new TestPGC_A();
 					a->SetNext(b);
 					TestPGC_A *c = new TestPGC_A();
@@ -484,10 +490,10 @@ namespace test_pgc
 			PGC_User user(AssertErrorHandler);
 
 			{
-				PGC_Transaction outerTransaction(user);
+				PGCX::PGC_Transaction outerTransaction(user);
 				SRef<TestPGC_B> b = new TestPGC_B();  // b lives in outer transaction
 				{
-					PGC_Transaction innerTransaction(user);
+					PGCX::PGC_Transaction innerTransaction(user);
 					SRef<TestPGC_A> a = new TestPGC_A();  // a lives in inner transaction
 					a->SetDescription("TestPGC_A a");
 					b->SetTestA(a); // First promotion request: b holds a, must promote a
@@ -513,10 +519,10 @@ namespace test_pgc
 			PGC_User user(AssertErrorHandler);
 
 			{
-				PGC_Transaction outerTransaction(user);
+				PGCX::PGC_Transaction outerTransaction(user);
 				SRef<TestPGC_A> a = new TestPGC_A();
 				{
-					PGC_Transaction dyingTransaction(user);
+					PGCX::PGC_Transaction dyingTransaction(user);
 					SRef<TestPGC_A> b = new TestPGC_A();
 
 					b->SetNext(a);
@@ -548,7 +554,7 @@ namespace test_pgc
 			PGC_User user(AssertErrorHandler);
 
 			{
-				PGC_Transaction parent(user);
+				PGCX::PGC_Transaction parent(user);
 				SRef<Misaligner> m = new Misaligner();
 				std::size_t m_size= sizeof(Misaligner);
 
@@ -557,7 +563,7 @@ namespace test_pgc
 
 				Assert::IsTrue(reinterpret_cast<uintptr_t>(b_addr) % alignof(TestPGC_A) == 0, L"b alignment incorrect");
 				{
-					PGC_Transaction child(user);
+					PGCX::PGC_Transaction child(user);
 					TestPGC_A* a = new TestPGC_A();
 
 					void* a_addr = a;
@@ -576,7 +582,7 @@ namespace test_pgc
 			PGC_User user(AssertErrorHandler);
 
 			{
-				PGC_Transaction transaction(user);
+				PGCX::PGC_Transaction transaction(user);
 
 				// Create object 'a' and get a second pointer to it
 				TestPGC_B* b = new TestPGC_B();
@@ -584,7 +590,7 @@ namespace test_pgc
 				TestPGC_A* rawOld = nullptr;
 
 				{
-					PGC_Transaction subTransaction(user);
+					PGCX::PGC_Transaction subTransaction(user);
 					a = new TestPGC_A();
 					rawOld = a; // stale pointer before promotion
 					a->SetDescription("magic value");
@@ -604,7 +610,7 @@ namespace test_pgc
 		{
 			PGC_User user;
 			{
-				PGC_Transaction source(user, false, PGC::PromotionStrategy::DoubleDipping);
+				PGCX::PGC_Transaction source(user, false, PGC::PromotionStrategy::DoubleDipping);
 
 				TestPGC_B* dyingDestination= new TestPGC_B();
 
@@ -615,7 +621,7 @@ namespace test_pgc
 					L"Gross memory error");
 
 				{
-					PGC_Transaction destination(user, false, PGC::PromotionStrategy::DoubleDipping);
+					PGCX::PGC_Transaction destination(user, false, PGC::PromotionStrategy::DoubleDipping);
 					MemberRef<TestPGC_B> ref(dyingDestination, &destination);
 
 					Assert::IsTrue(user.TotalNetMemoryUsed() ==
@@ -646,7 +652,7 @@ namespace test_pgc
 
 			{
 				// SOURCE transaction (outer)
-				PGC_Transaction source(user, false, PGC::PromotionStrategy::Backstabbing);
+				PGCX::PGC_Transaction source(user, false, PGC::PromotionStrategy::Backstabbing);
 
 				// Allocate TestPGC_A in source
 				TestPGC_A* a = new TestPGC_A();
@@ -658,7 +664,7 @@ namespace test_pgc
 
 				{
 					// DESTINATION transaction (inner)
-					PGC_Transaction destination(user, false, PGC::PromotionStrategy::Backstabbing);
+					PGCX::PGC_Transaction destination(user, false, PGC::PromotionStrategy::Backstabbing);
 
 					// Create TestPGC_B in destination
 					SRef<TestPGC_B> sref(new TestPGC_B());
@@ -708,7 +714,7 @@ namespace test_pgc
 
 			{
 				// DESTINATION transaction (must outlive source)
-				PGC_Transaction destination(user, false, PGC::PromotionStrategy::Backstabbing);
+				PGCX::PGC_Transaction destination(user, false, PGC::PromotionStrategy::Backstabbing);
 
 				MemberRef<TestPGC_B> ref;
 
@@ -721,7 +727,7 @@ namespace test_pgc
 
 				{
 					// SOURCE transaction
-					PGC_Transaction source(user, false, PGC::PromotionStrategy::Backstabbing);
+					PGCX::PGC_Transaction source(user, false, PGC::PromotionStrategy::Backstabbing);
 
 					Assert::IsTrue(user.TotalNetMemoryUsed() == 0, L"Net memory after allocation");
 
@@ -773,7 +779,7 @@ namespace test_pgc
 
 			{
 				// DESTINATION transaction (must outlive source)
-				PGC_Transaction destination(user, false, PGC::PromotionStrategy::Backstabbing);
+				PGCX::PGC_Transaction destination(user, false, PGC::PromotionStrategy::Backstabbing);
 
 				TestPGC_A* a = nullptr;
 
@@ -786,7 +792,7 @@ namespace test_pgc
 
 				{
 					// SOURCE transaction
-					PGC_Transaction source(user, false, PGC::PromotionStrategy::Backstabbing);
+					PGCX::PGC_Transaction source(user, false, PGC::PromotionStrategy::Backstabbing);
 
 					Assert::IsTrue(user.TotalNetMemoryUsed() == sizeof(TestPGC_B) - PGC_OVERHEAD, L"Net memory after source started");
 
@@ -846,7 +852,7 @@ namespace test_pgc
 
 			{
 				// DESTINATION transaction (ref lives here)
-				PGC_Transaction destination(user, false, PGC::PromotionStrategy::DoubleDipping);
+				PGCX::PGC_Transaction destination(user, false, PGC::PromotionStrategy::DoubleDipping);
 
 				MemberRef<TestPGC_B> ref;
 
@@ -857,7 +863,7 @@ namespace test_pgc
 
 				{
 					// SOURCE transaction (allocates object)
-					PGC_Transaction source(user, false, PGC::PromotionStrategy::DoubleDipping);
+					PGCX::PGC_Transaction source(user, false, PGC::PromotionStrategy::DoubleDipping);
 
 					Assert::IsTrue(user.TotalNetMemoryUsed() == 0, L"Net memory after source start");
 
@@ -920,7 +926,7 @@ namespace test_pgc
 
 			{
 				// DESTINATION transaction (lives longer)
-				PGC_Transaction destination(user, false, PGC::PromotionStrategy::DoubleDipping);
+				PGCX::PGC_Transaction destination(user, false, PGC::PromotionStrategy::DoubleDipping);
 
 				SRef<TestPGC_B> sref = new TestPGC_B();
 
@@ -931,7 +937,7 @@ namespace test_pgc
 
 				{
 					// SOURCE transaction (where A is created)
-					PGC_Transaction source(user, false, PGC::PromotionStrategy::DoubleDipping);
+					PGCX::PGC_Transaction source(user, false, PGC::PromotionStrategy::DoubleDipping);
 
 					Assert::IsTrue(user.TotalNetMemoryUsed() == (sizeof(TestPGC_B) - PGC_OVERHEAD), L"Net memory after source start");
 					Assert::IsTrue(user.TotalGrossMemoryUsed() ==
@@ -1003,7 +1009,7 @@ namespace test_pgc
 
 			{
 				// DESTINATION transaction (longer-lived)
-				PGC_Transaction destination(user, false, PGC::PromotionStrategy::DoubleDipping);
+				PGCX::PGC_Transaction destination(user, false, PGC::PromotionStrategy::DoubleDipping);
 
 				// Allocate B in destination
 				SRef<TestPGC_B> sref = new TestPGC_B();
@@ -1015,7 +1021,7 @@ namespace test_pgc
 
 				{
 					// SOURCE transaction (where A is created)
-					PGC_Transaction source(user, false, PGC::PromotionStrategy::DoubleDipping);
+					PGCX::PGC_Transaction source(user, false, PGC::PromotionStrategy::DoubleDipping);
 
 					Assert::IsTrue(user.TotalNetMemoryUsed() == sizeof(TestPGC_B) - PGC_OVERHEAD, L"Net after source start");
 
@@ -1043,7 +1049,7 @@ namespace test_pgc
 
 					// Step 1: Trigger PromoteRequests() early via unrelated inner transaction
 					{
-						PGC_Transaction inner(user, false, PGC::PromotionStrategy::DoubleDipping);
+						PGCX::PGC_Transaction inner(user, false, PGC::PromotionStrategy::DoubleDipping);
 						// Inner exits — this calls PromoteRequests()
 					}
 
@@ -1111,7 +1117,7 @@ namespace test_pgc
 				{
 					try
 					{
-						PGC_Transaction txn;
+						PGCX::PGC_Transaction txn;
 
 						// Manually request promotion — simulate contention
 						shared->RequestPromotion((PGC::PGC_TypeCheck**)&shared);
@@ -1164,7 +1170,7 @@ namespace test_pgc
 			// Thread function
 			auto promote_task = [&](int threadId)
 			{
-				PGC_Transaction txn;
+				PGCX::PGC_Transaction txn;
 
 				// Ensure both threads reach this point before proceeding
 				sync_point.arrive_and_wait();  // Lined up for simultaneous promotion

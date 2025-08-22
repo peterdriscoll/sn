@@ -117,8 +117,8 @@ namespace PGC
 	public:
 		PGC_Base();
 		PGC_Base(PGC_Transaction & p_Transaction);
-		PGC_Base(const PGC_Base& other);
-		PGC_Base(PGC_Base&& other) noexcept;
+		PGC_Base(const PGC_Base& p_Other);
+		PGC_Base(PGC_Base&& p_Other) noexcept;
 		virtual ~PGC_Base();
 
 		//	Name:  PromoteMembers
@@ -166,6 +166,19 @@ namespace PGC
 
 		virtual void RetrieveDescriptor(char *&p_Pointer, long &p_Size) = 0;
 		size_t Size();
+
+		virtual PGC_TypeCheck* GetLogicalPointer() override
+		{
+			return this;
+		}
+		virtual PGC_Transaction* GetLogicalOwnerTransaction() override
+		{ 
+			return GetTransaction();
+		}
+		virtual PGC_Promotion* GetLogicalPromotion() override
+		{
+			return nullptr;
+		}
 
 		void* operator new(size_t, void* p) noexcept { return p; };
 		void *operator new(size_t p_size, PGC_Transaction &p_Transaction);

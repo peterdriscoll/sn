@@ -86,7 +86,7 @@ public:
     }
 
     virtual PGC::PGC_Base* MoveTo(void* memory) override {
-        PGC_Transaction* const srcTxn = this->PGC::PGC_Base::GetTransaction();
+        PGC::PGC_Transaction* const srcTxn = this->PGC::PGC_Base::GetTransaction();
         PGC_Base* const srcNext = this->PGC::PGC_Base::GetNext();
 
         auto copy = ::new (memory) TestPGC_B(std::move(*this));

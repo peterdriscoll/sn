@@ -7,10 +7,9 @@
 #include "pgc_stacktransaction.h"
 #include "pgc_task.h"
 #include "pgc_promotion.h"
-#include "ref.h"
 #include "sref.h"
 #include "memberref.h"
-
+#include "ref.h"
 #include <iostream>
 #include <typeinfo>       // operator typeid
 #include <string>

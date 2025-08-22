@@ -27,6 +27,7 @@
 #include "pgc_block.h"
 #include "pgc_promotion.h"
 #include "pgc_promotionstrategy.h"
+#include "pgc_typecheck.h"
 
 #include <vector>
 #include <mutex>
@@ -45,7 +46,7 @@ namespace PGC
 
 	typedef std::vector<PGC_Task *> TaskList;
 
-	class PGC_EXPORT PGC_Transaction
+	class PGC_EXPORT PGC_Transaction : public PGC_TypeCheck
 	{
 	public:
 		PGC_Transaction() = delete; // Disable default constructor
@@ -100,8 +101,15 @@ namespace PGC
 		virtual void PromoteExternals(PGC_Transaction *p_Direction);
 
 		bool IsStatic();
+
+		virtual PGC_TypeCheck* GetLogicalPointer() override;
+		virtual PGC_Transaction* GetLogicalOwnerTransaction() override;
+		virtual PGC_Promotion* GetLogicalPromotion() override;
+
 	private:
 
+		void CallDestructorsForAllBlocks();
+		void DeleteBlocks();
 		void ReleaseBlocks();
 
 		PromotionStrategy m_PromotionStrategy;

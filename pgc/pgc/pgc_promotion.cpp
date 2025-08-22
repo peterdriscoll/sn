@@ -152,6 +152,10 @@ namespace PGC
 	}
 	void PGC_Promotion::Create(PGC_TypeCheck** p_Base, PGC_Transaction* p_Destination, PromotionStrategy p_Strategy)
 	{
+		if (p_Strategy == PromotionStrategy::DoubleDipping)
+		{
+			long dog = 10;
+		}
 		m_Base = p_Base;
 		m_Destination = p_Destination;
 		m_Strategy = p_Strategy;
@@ -203,6 +207,12 @@ namespace PGC
 		m_Base = p_Base;
 	}
 
+	void PGC_Promotion::Rebind(PGC_TypeCheck** p_Base, PGC_Transaction* p_DestinationTransaction)
+	{
+		m_Base = p_Base;
+		m_Destination = p_DestinationTransaction;
+	}
+
 	PGC_Transaction* PGC_Promotion::GetSource()
 	{
 		PGC_TypeCheck* base = *m_Base;
@@ -223,5 +233,20 @@ namespace PGC
 	PromotionStrategy PGC_Promotion::GetStrategy()
 	{
 		return m_Strategy;
+	}
+
+	PGC_TypeCheck* PGC_Promotion::GetLogicalPointer()
+	{
+		return GetFinalCopy();
+	}
+
+	PGC_Transaction* PGC_Promotion::GetLogicalOwnerTransaction()
+	{
+		return GetDestination();
+	}
+
+	PGC_Promotion* PGC_Promotion::GetLogicalPromotion()
+	{
+		return this;
 	}
 }

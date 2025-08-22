@@ -5,6 +5,7 @@
 namespace PGC
 {
 	class PGC_Transaction;
+	class PGC_Promotion;
 
 	class PGC_EXPORT PGC_TypeCheck
 	{
@@ -30,5 +31,8 @@ namespace PGC
 		void RequestPromotion(PGC_TypeCheck** p_Base)
 		{
 		}
+		virtual PGC_TypeCheck* GetLogicalPointer() = 0;
+		virtual PGC_Transaction* GetLogicalOwnerTransaction() = 0;
+		virtual PGC_Promotion* GetLogicalPromotion() = 0;
 	};
 }

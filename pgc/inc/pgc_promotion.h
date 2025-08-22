@@ -39,6 +39,8 @@ namespace PGC
 		PGC_TypeCheck** GetBaseAddress();
 		void SetBase(PGC_TypeCheck** p_Base);
 
+		void Rebind(PGC_TypeCheck** p_Base, PGC_Transaction* p_DestinationTransaction);
+
 		void Free();
 
 		PGC_Transaction* GetSource();
@@ -53,6 +55,10 @@ namespace PGC
 		void MarkPromoted();
 
 		void MarkNoLongerNeeded();
+
+		virtual PGC_TypeCheck* GetLogicalPointer() override;
+		virtual PGC_Transaction* GetLogicalOwnerTransaction() override;
+		virtual PGC_Promotion* GetLogicalPromotion() override;
 
 		PGC_Promotion *m_Next;
 

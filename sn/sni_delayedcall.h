@@ -13,11 +13,31 @@ using namespace std;
 #include "sn_functiondef.h"
 #include "sn_error.h"
 
+#undef PGC_ACTION_OVER_VALUE_MEMBERS
+#undef PGC_ACTION_OVER_MEMBER_REFS
+#undef PGC_ACTION_OVER_CONTAINERS
+
+#define PGC_ACTION_OVER_VALUE_MEMBERS(ACTION) \
+        ACTION(Manager, SNI_Manager*, nullptr) \
+        ACTION(Processing, bool, false)
+
+#define PGC_ACTION_OVER_MEMBER_REFS(ACTION)
+
+#define PGC_ACTION_OVER_MEMBER_CONTAINER_REFS(ACTION) \
+		ACTION(DelayedCallList, DelayedCallList, SNI_DelayedCall) \
+		ACTION(FailedList, DelayedCallList, SNI_DelayedCall) \
+		ACTION(PreventReread, PreventRereadList, SNI_String)
+
+
 namespace SNI
 {
 	class SNI_DelayedCall : public SNI_Expression
 	{
 		PGC_CLASS(SNI_DelayedCall)
+
+		// PGC_MEMBER_DEFINITIONS_NOINIT(SNI_DelayedCall, SNI_Expression);
+		// PGC_MEMBER_DEFINITIONS_NOINIT(SNI_DelayedCall, SNI_Expression);
+		// PGC_MEMBER_DEFINITIONS_NOINIT(SNI_DelayedCall, SNI_Expression);
 	public:
 		SNI_DelayedCall(SN::SN_FunctionDef p_Function, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_Source, SNI_Frame *p_Frame, SNI_World * p_World = NULL);
 		virtual ~SNI_DelayedCall();

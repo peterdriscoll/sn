@@ -96,17 +96,32 @@ namespace PGC
 		m_TopTransaction = m_LastTopTransaction;
 	}
 
-	void PGC_Transaction::ReleaseBlocks()
+	void PGC_Transaction::CallDestructorsForAllBlocks()
+	{
+		PGC_Block* theBlock = m_FirstBlock;
+		while (theBlock)
+		{
+			theBlock->DestroyUncopied();
+			theBlock = theBlock->GetNextBlock();
+		}
+	}
+
+	void PGC_Transaction::DeleteBlocks()
 	{
 		PGC_Block *theBlock = m_FirstBlock;
 		m_FirstBlock = NULL;
 		while (theBlock)
 		{
 			PGC_Block *nextBlock = theBlock->GetNextBlock();
-			theBlock->DestroyUncopied();
 			delete theBlock;
 			theBlock = nextBlock;
 		}
+	}
+
+	void PGC_Transaction::ReleaseBlocks()
+	{
+		CallDestructorsForAllBlocks();
+		DeleteBlocks();
 		*m_LiveTransaction = false;
 	}
 
@@ -338,5 +353,20 @@ namespace PGC
 	bool PGC_Transaction::IsStatic()
 	{
 		return m_IsStatic;
+	}
+
+	PGC_TypeCheck* PGC_Transaction::GetLogicalPointer()
+	{
+		return nullptr;
+	}
+
+	PGC_Transaction* PGC_Transaction::GetLogicalOwnerTransaction()
+	{
+		return this;
+	}
+
+	PGC_Promotion* PGC_Transaction::GetLogicalPromotion()
+	{
+		return nullptr;
 	}
 }

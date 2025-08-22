@@ -169,6 +169,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="pin_concept_test.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="testpgc_a.h" />
     <ClInclude Include="testpgc_b.h" />
