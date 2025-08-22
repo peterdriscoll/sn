@@ -115,7 +115,7 @@ namespace SNI
 		if (!longStart.IsNull())
 		{
 			long startPos = longStart.GetNumber();
-			return "\"" + EscapeStringToCPP(GetSourceString().substr(startPos)) + "\"[0.." + GetEnd().GetSNI_Expression()->DisplayValueSN(GetPriority(), p_DisplayOptions) + "-" + to_string(startPos) + "]";
+			return "\"" + EscapeStringToCPP(GetSourceString().substr(startPos)) + "\"[0.." + GetEnd().GetSNI_Expression()->DisplayValueSN(GetPriority(), p_DisplayOptions) + "-" + std::to_string(startPos) + "]";
 		}
 		SN::SN_Long longEnd = GetEnd().GetVariableValue();
 		if (!longEnd.IsNull())

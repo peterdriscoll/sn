@@ -69,7 +69,7 @@ namespace SNI
 
 	std::string SNI_State::DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const
 	{
-		return GetTypeName() + "_" + to_string(m_StateId);
+		return GetTypeName() + "_" + std::to_string(m_StateId);
 	}
 
 	bool SNI_State::Equivalent(SNI_Object * p_Other) const

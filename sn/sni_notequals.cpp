@@ -260,7 +260,7 @@ namespace SNI
 
 	SN::SN_Error SNI_NotEquals::UnifyElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, long p_CalcPos, long p_TotalCalc, SNI_WorldSet * worldSet, const SNI_Expression *p_Source) const
 	{
-		LOGGING(SN::LogContext context("SNI_NotEquals::UnifyElement(CalcPos " + to_string(p_CalcPos) + " TotalCalc " + to_string(p_TotalCalc) + " " + DisplayValues(p_Depth, p_ParamList, p_WorldList) + ")"));
+		LOGGING(SN::LogContext context("SNI_NotEquals::UnifyElement(CalcPos " + std::to_string(p_CalcPos) + " TotalCalc " + std::to_string(p_TotalCalc) + " " + DisplayValues(p_Depth, p_ParamList, p_WorldList) + ")"));
 		if (worldSet)
 		{
 			LOGGING(context.LogText("World set", worldSet->DisplayLong()));
@@ -372,6 +372,6 @@ namespace SNI
 			}
 		}
 		}
-		return LOG_RETURN(context, SN::SN_Error(false, false, "SNI_NotEquals::UnifyElement: " + to_string(p_TotalCalc) + "option not found."));
+		return LOG_RETURN(context, SN::SN_Error(false, false, "SNI_NotEquals::UnifyElement: " + std::to_string(p_TotalCalc) + "option not found."));
 	}
 }

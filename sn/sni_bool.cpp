@@ -94,7 +94,7 @@ namespace SNI
 
 	size_t SNI_Bool::Hash() const
 	{
-		return _Hash_representation(m_Expression);
+		return std::_Hash_representation(m_Expression);
 	}
 
 	SN::SN_Error SNI_Bool::DoAssert()

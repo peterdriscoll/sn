@@ -281,9 +281,9 @@ namespace SNI
 		return m_MaxCardinalityUnify;
 	}
 
-	void SNI_Manager::StartLogging(SN::LoggingLevel p_LoggingLevel, ostream *p_Stream)
+	void SNI_Manager::StartLogging(SN::LoggingLevel p_LoggingLevel, std::ostream *p_Stream)
 	{
-		ostream *l_Stream = p_Stream;
+		std::ostream *l_Stream = p_Stream;
 		if (!l_Stream)
 		{
 			l_Stream = CreateLogFile(p_LoggingLevel);
@@ -535,7 +535,7 @@ namespace SNI
 		m_DebugTitleWidth = p_DebugTitleWidth;
 	}
 
-	ostream * SNI_Manager::CreateLogFile(SN::LoggingLevel p_LoggingLevel)
+	std::ostream * SNI_Manager::CreateLogFile(SN::LoggingLevel p_LoggingLevel)
 	{
 		std::string currentDirectory = CurrentWorkingDirectory();
 

@@ -86,7 +86,7 @@ namespace SNI
 
 	SN::SN_Error SNI_ReverseSubscript::UnifyElement(long p_Depth, SN::SN_Expression * p_ParamList, SNI_World ** p_WorldList, long p_CalcPos, long p_TotalCalc, SNI_WorldSet * worldSet, const SNI_Expression *p_Source) const
 	{
-		LOGGING(SN::LogContext context("SNI_IsA::UnifyElement(CalcPos " + to_string(p_CalcPos) + " TotalCalc " + to_string(p_TotalCalc) + " " + DisplayValues(p_Depth, p_ParamList, p_WorldList) + ")"));
+		LOGGING(SN::LogContext context("SNI_IsA::UnifyElement(CalcPos " + std::to_string(p_CalcPos) + " TotalCalc " + std::to_string(p_TotalCalc) + " " + DisplayValues(p_Depth, p_ParamList, p_WorldList) + ")"));
 		if (worldSet)
 		{
 			LOGGING(context.LogText("World set", worldSet->DisplayLong()));
@@ -130,6 +130,6 @@ namespace SNI
 			}
 		}
 		}
-		return SN::SN_Error(false, false, GetTypeName() + ": Expression not unified. TotalCalc=" + to_string(p_TotalCalc) + " Calcpos=" + to_string(p_CalcPos));
+		return SN::SN_Error(false, false, GetTypeName() + ": Expression not unified. TotalCalc=" + std::to_string(p_TotalCalc) + " Calcpos=" + std::to_string(p_CalcPos));
 	}
 }

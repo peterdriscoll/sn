@@ -121,7 +121,7 @@ namespace SNI
 
 	void SNI_DebugCommand::LoadBreakPoints(const std::string & p_BreakPointString)
 	{
-		vector<std::string> breakPointList;
+		std::vector<std::string> breakPointList;
 		Split(p_BreakPointString, ",", breakPointList);
 		m_BreakPointSet.clear();
 		for (const std::string &s : breakPointList)

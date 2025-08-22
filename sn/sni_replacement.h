@@ -6,7 +6,6 @@
 #include "sn_variable.h"
 
 #include <vector>
-using namespace std;
 
 namespace SNI
 {

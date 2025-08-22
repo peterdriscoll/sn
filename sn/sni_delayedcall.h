@@ -4,7 +4,6 @@
 #pragma once
 
 #include <list>
-using namespace std;
 
 #include "sni_expression.h"
 
@@ -61,7 +60,7 @@ namespace SNI
 		bool IsScheduled();
 		void MarkScheduled();
 		bool EmptyWorld();
-		void WriteJSON(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions);
+		void WriteJSON(std::ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions);
 
 		virtual void PromoteMembers() override;
 
@@ -82,7 +81,7 @@ namespace SNI
 		void LinkVariable(SN::SN_Expression &p_Parameter);
 	};
 
-	typedef list<SNI_DelayedCall*> SNI_DelayedCallList;
+	typedef std::list<SNI_DelayedCall*> SNI_DelayedCallList;
 }
 
 #endif // !defined(SNI_DELAYEDCALL_H_INCLUDED)

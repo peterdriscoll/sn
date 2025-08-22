@@ -148,7 +148,7 @@ namespace SNI
         void MakeRerunRequest();
         virtual std::string GetDescription();
 
-        void WriteJSON(ostream& p_Stream, SNI::SNI_DisplayOptions& p_DisplayOptions);
+        void WriteJSON(std::ostream& p_Stream, SNI::SNI_DisplayOptions& p_DisplayOptions);
         std::string GetLogDescription();
         virtual void Log();
     };

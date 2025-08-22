@@ -51,9 +51,9 @@ namespace SNI
 
 		SNI_Thread* GetThreadByNumber(size_t p_ThreadNum);
 		size_t GetNumThreads() const override;
-		void WriteStepCounts(ostream& p_Stream);
+		void WriteStepCounts(std::ostream& p_Stream);
 		std::string StepCountJS();
-		void WriteStepCountListJS(ostream& p_Stream);
+		void WriteStepCountListJS(std::ostream& p_Stream);
 	private:
 		SNI_Transaction* m_Transaction;
 		SNI_DelayedProcessor* m_DelayedProcessor;
@@ -64,6 +64,6 @@ namespace SNI
 
 		SNI_Thread* m_MainThread;
 
-		vector<SNI_Thread*> m_ThreadList;
+		std::vector<SNI_Thread*> m_ThreadList;
 	};
 }

@@ -186,7 +186,7 @@ namespace SNI
 		return m_World && m_World->IsEmpty();
 	}
 	
-	void SNI_DelayedCall::WriteJSON(ostream &p_Stream, SNI::SNI_DisplayOptions &p_DisplayOptions)
+	void SNI_DelayedCall::WriteJSON(std::ostream &p_Stream, SNI::SNI_DisplayOptions &p_DisplayOptions)
 	{
 		if (!EmptyWorld())
 		{
@@ -196,7 +196,7 @@ namespace SNI
 			std::string card_string = "&infin;";
 			if (card < CARDINALITY_MAX)
 			{
-				card_string = to_string(card);
+				card_string = std::to_string(card);
 			}
 			p_Stream << "\t\t\"cardinality\" : \"" << card_string << "\",\n";
 			SNI_DisplayOptions displayOptions(doTextOnly);

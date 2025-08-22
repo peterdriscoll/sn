@@ -6,7 +6,6 @@
 #include "ref.h"
 
 #include <string>
-using namespace std;
 
 namespace SNI
 {

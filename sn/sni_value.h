@@ -4,7 +4,6 @@
 #pragma once
 
 #include <string>
-using namespace std;
 
 #include "sni_expression.h"
 
@@ -38,7 +37,7 @@ namespace SNI
 		virtual bool operator<(const SNI_Value& p_Right) const;
 		virtual bool operator==(const SNI_Value& p_Right) const;
 
-		virtual SN::SN_Error ForEach(function<SN::SN_Error(const SN::SN_Expression &p_Param, SNI_World *p_World)> p_Action);
+		virtual SN::SN_Error ForEach(std::function<SN::SN_Error(const SN::SN_Expression &p_Param, SNI_World *p_World)> p_Action);
 		virtual SN::SN_Error ForEachCart(long p_Depth, SNI_Cart * p_Cart);
 		virtual void ForEachSplit(SNI_Splitter * p_Splitter);
 

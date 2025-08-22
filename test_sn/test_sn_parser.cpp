@@ -887,7 +887,7 @@ namespace test_sn
 
 		TEST_METHOD(TestParse_Value_Exponentials)
 		{
-			return; // to_string does not use scientific notation.
+			return; // std::to_string does not use scientific notation.
 
 			Initialize();
 			{

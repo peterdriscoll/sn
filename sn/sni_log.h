@@ -19,8 +19,6 @@
 #define LOG(content)
 #endif
 
-using namespace std;
-
 namespace SNI
 {
 	class SNI_Frame;
@@ -35,7 +33,7 @@ namespace SNI
 		SNI_Log();
 		virtual ~SNI_Log();
 
-		void AddStream(SN::LoggingLevel p_LoggingLevel, ostream *p_Stream);
+		void AddStream(SN::LoggingLevel p_LoggingLevel, std::ostream *p_Stream);
 		void SetLogBuffer(SN::LoggingLevel p_LoggingLevel, size_t p_Capacity, size_t p_ExpressionCapacity);
 
 		void WriteLine(SN::LoggingLevel p_DebugLevel, const std::string & p_line, bool p_Heading = false);
@@ -50,10 +48,10 @@ namespace SNI
 		void WriteFrameStack(SN::LoggingLevel p_DebugLevel, size_t p_Depth);
 		void WriteFrameStack(SN::LoggingLevel p_DebugLevel, size_t p_ThreadNum, size_t p_Depth);
 
-		void LogTableToStream(ostream & p_Stream, size_t p_MaxLogEntries);
-		void LogTableJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartLog);
-		void DerivationJS(ostream & p_Stream, long p_MaxLogEntries, SNI_Thread *p_Thread);
-		void CodeTableJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartCode, SNI_DisplayOptions &p_DisplayOptions);
+		void LogTableToStream(std::ostream & p_Stream, size_t p_MaxLogEntries);
+		void LogTableJS(std::ostream & p_Stream, long p_MaxLogEntries, long p_StartLog);
+		void DerivationJS(std::ostream & p_Stream, long p_MaxLogEntries, SNI_Thread *p_Thread);
+		void CodeTableJS(std::ostream & p_Stream, long p_MaxLogEntries, long p_StartCode, SNI_DisplayOptions &p_DisplayOptions);
 
 		void WriteExp(SN::SN_Expression p_Expression);
 		void ClearLogExpressions();
@@ -63,8 +61,8 @@ namespace SNI
 	private:
 		static SNI_Log *m_Log;
 
-		vector<ostream *> m_StreamList;
-		vector<SN::LoggingLevel> m_LoggingLevelList;
+		std::vector<std::ostream *> m_StreamList;
+		std::vector<SN::LoggingLevel> m_LoggingLevelList;
 
 		SN::LoggingLevel m_LogBufferLoggingLevel;
 		SNI_LogBuffer *m_LogBuffer;

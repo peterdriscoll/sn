@@ -43,7 +43,7 @@ namespace SNI
 	}
 
 	SNI_Variable::SNI_Variable()
-		: SNI_Namable("_t" + to_string(++m_MaxTempNum))
+		: SNI_Namable("_t" + std::to_string(++m_MaxTempNum))
 		, m_Value(NULL)
 		, m_Frame(NULL)
 		, m_Requested(false)

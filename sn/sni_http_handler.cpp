@@ -240,13 +240,13 @@ namespace SNI
 	void SNI_HTTP_Handler::extract_parameters(const std::string &p_ParamString, string_umap &p_Map)
 	{
 		std::string result;
-		vector<std::string> assignmentList;
+		std::vector<std::string> assignmentList;
 		if (!p_ParamString.empty())
 		{
 			Split(p_ParamString, "&", assignmentList);
 			for (const std::string &element : assignmentList)
 			{
-				vector<std::string> tokenList;
+				std::vector<std::string> tokenList;
 				Split(element, "=", tokenList);
 				if (tokenList.size() == 2)
 				{

@@ -162,16 +162,16 @@ namespace SNI
 	{
 		if (m_ThreadNum == 0)
 		{	// Main thread
-			return "_" + to_string(m_FrameNum);
+			return "_" + std::to_string(m_FrameNum);
 		}
-		return "_"+to_string(m_ThreadNum) + "_" + to_string(m_FrameNum);
+		return "_"+std::to_string(m_ThreadNum) + "_" + std::to_string(m_FrameNum);
 	}
 
     std::string SNI_Frame::GetLogDescription(SNI_Manager *p_Manager)
 	{
 		std::string heading;
 		std::string typeLine;
-		vector<std::string> data;
+		std::vector<std::string> data;
 		size_t minFixedWidth = 0;
 		size_t debugFieldWidth = p_Manager->DebugFieldWidth();
 		std::string delimeter = "";
@@ -283,7 +283,7 @@ namespace SNI
 		}
 	}
 
-	void SNI_Frame::WriteWebFrame(ostream &p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
+	void SNI_Frame::WriteWebFrame(std::ostream &p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
 	{
 		p_Stream << "<div style = 'overflow-x:auto;white-space:nowrap;width:900px'>\n";
 		p_Stream << "<table class='frame'>\n";
@@ -325,7 +325,7 @@ namespace SNI
 		p_Stream << "</tr></table></div>\n";
 	}
 
-	void SNI_Frame::WriteJSON(ostream &p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
+	void SNI_Frame::WriteJSON(std::ostream &p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
 	{
 		std::string function;
 		if (HasCode())
@@ -351,7 +351,7 @@ namespace SNI
 		}
 		else if (m_Cardinality < CARDINALITY_MAX)
 		{
-			card_string = to_string(m_Cardinality);
+			card_string = std::to_string(m_Cardinality);
 		}
 		p_Stream << "\t\t\"functioncardinality\" : \"" << card_string << "\",\n";
 		p_Stream << "\t\t\"framepos\" : \"" << p_FrameStackPos << "\",\n";
@@ -359,7 +359,7 @@ namespace SNI
 		p_Stream << "\t\t\"stepcount\" : \"" << m_StepCount << "\",\n";
 		p_Stream << "\t\t\"typename\" : \"" << m_Function.GetValueTypeName() << "\",\n";
 		p_Stream << "\t\t\"breakpoint\" : " << m_BreakPointJS << ",\n";
-		p_Stream << "\t\t\"stackusage\" : " << to_string(m_StackUsage) << ",\n";
+		p_Stream << "\t\t\"stackusage\" : " << std::to_string(m_StackUsage) << ",\n";
 		std::string context;
 		if (m_ContextWorld)
 		{
@@ -475,7 +475,7 @@ namespace SNI
 		callStackNode.put("breakpoint", m_BreakPointJS);
 	}
 	
-	void SNI_Frame::WriteStackJS(ostream &p_Stream, std::string &p_Delimeter, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
+	void SNI_Frame::WriteStackJS(std::ostream &p_Stream, std::string &p_Delimeter, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
 	{
 		if (m_Function.IsVariable())
 		{
@@ -486,7 +486,7 @@ namespace SNI
 		}
 	}
 
-	void SNI_Frame::WriteVariable(ostream &p_Stream, SN::SN_Expression &p_Variable, SN::SN_Expression &p_Value, long j, const std::string &p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
+	void SNI_Frame::WriteVariable(std::ostream &p_Stream, SN::SN_Expression &p_Variable, SN::SN_Expression &p_Value, long j, const std::string &p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
 	{
 		SNI_Variable *v = p_Variable.GetSNI_Variable();
 		if (v)
@@ -505,7 +505,7 @@ namespace SNI
 		}
 	}
 
-	void SNI_Frame::WriteCardinalityJSON(ostream& p_Stream, SN::SN_Expression& p_Value, long p_ParamNum, const std::string& p_Prefix) const
+	void SNI_Frame::WriteCardinalityJSON(std::ostream& p_Stream, SN::SN_Expression& p_Value, long p_ParamNum, const std::string& p_Prefix) const
 	{
 		size_t card = p_Value.Cardinality();
 		SNI_FunctionDef* functionDef = m_Function.GetSNI_FunctionDef();
@@ -520,7 +520,7 @@ namespace SNI
 					context_card = "/&infin;";
 					if (card < CARDINALITY_MAX)
 					{
-						context_card = "/" + to_string(card);
+						context_card = "/" + std::to_string(card);
 					}
 				}
 			}
@@ -528,7 +528,7 @@ namespace SNI
 		std::string card_string = "&infin;";
 		if (card < CARDINALITY_MAX)
 		{
-			card_string = to_string(card);
+			card_string = std::to_string(card);
 		}
 		p_Stream << ",\n" << p_Prefix << "\"cardinality\" : \"" << card_string << context_card << "\",\n";
 	}
@@ -538,9 +538,9 @@ namespace SNI
 		size_t debugTitleWidth = p_Manager->DebugTitleWidth();
 		if (m_ThreadNum == 1)
 		{
-			return "Frame " + to_string(m_FrameNum) + " " + Pad(m_Function.DisplaySN(), debugTitleWidth);
+			return "Frame " + std::to_string(m_FrameNum) + " " + Pad(m_Function.DisplaySN(), debugTitleWidth);
 		}
-		return "Frame " + to_string(m_FrameNum) + " thread " + to_string(m_ThreadNum) + " " + Pad(m_Function.DisplaySN(), debugTitleWidth);
+		return "Frame " + std::to_string(m_FrameNum) + " thread " + std::to_string(m_ThreadNum) + " " + Pad(m_Function.DisplaySN(), debugTitleWidth);
 	}
 
 	SNI_Variable * SNI_Frame::CreateTemporary()
@@ -576,7 +576,7 @@ namespace SNI
 		std::string paramName = "result";
 		if (p_ParamNum > 0)
 		{
-			paramName = "param" + to_string(p_ParamNum);
+			paramName = "param" + std::to_string(p_ParamNum);
 		}
 		else
 		{
@@ -621,7 +621,7 @@ namespace SNI
 		}
 	}
 
-	void SNI_Frame::RecordSavePoint(vector<bool> p_SavePoint)
+	void SNI_Frame::RecordSavePoint(std::vector<bool> p_SavePoint)
 	{
 		for (auto v : m_VariableList)
 		{
@@ -629,7 +629,7 @@ namespace SNI
 		}
 	}
 
-	void SNI_Frame::RestoreSavePoint(vector<bool> p_SavePoint)
+	void SNI_Frame::RestoreSavePoint(std::vector<bool> p_SavePoint)
 	{
 		size_t j = 0;
 		for (auto v : m_VariableList)

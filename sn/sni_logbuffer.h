@@ -11,8 +11,6 @@
 #include <ostream>
 #include <boost/circular_buffer.hpp>
 
-using namespace std;
-
 namespace SNI
 {
 	class SNI_LogLine {
@@ -55,18 +53,18 @@ namespace SNI
 		void WriteLine(const std::string &p_Line, bool p_Heading);
 		void WriteExpression(const SN::SN_Expression & p_Expression);
 		void ClearLogExpressions();
-		void LogTableToStream(ostream & p_Stream, size_t p_MaxLogEntries);
-		void LogExpressionTableToStream(ostream & p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_DisplayOptions);
-		void LogTableJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartLog);
-		void DerivationJS(ostream & p_Stream, long p_MaxLogEntries, SNI_Thread *p_Thread);
-		void LogExpressionTableJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartCode, SNI_DisplayOptions &p_DisplayOptions);
+		void LogTableToStream(std::ostream & p_Stream, size_t p_MaxLogEntries);
+		void LogExpressionTableToStream(std::ostream & p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_DisplayOptions);
+		void LogTableJS(std::ostream & p_Stream, long p_MaxLogEntries, long p_StartLog);
+		void DerivationJS(std::ostream & p_Stream, long p_MaxLogEntries, SNI_Thread *p_Thread);
+		void LogExpressionTableJS(std::ostream & p_Stream, long p_MaxLogEntries, long p_StartCode, SNI_DisplayOptions &p_DisplayOptions);
 
 		size_t CountLogEntries();
 		size_t CountCodeEntries();
 	private:
 		boost::circular_buffer<SNI_LogLine> m_Buffer;
 		boost::circular_buffer<SN::SN_Expression> m_ExpressionBuffer;
-		mutex m_Mutex;
+		std::mutex m_Mutex;
 	};
 }
 

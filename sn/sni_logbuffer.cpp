@@ -1,5 +1,4 @@
 #include "sni_logbuffer.h"
-using namespace std;
 
 #include "sn_pch.h"
 
@@ -42,7 +41,7 @@ namespace SNI
 		m_ExpressionBuffer.clear();
 	}
 
-	void SNI::SNI_LogBuffer::LogTableToStream(ostream & p_Stream, size_t p_MaxLogEntries)
+	void SNI::SNI_LogBuffer::LogTableToStream(std::ostream & p_Stream, size_t p_MaxLogEntries)
 	{
 		p_Stream << "<table class='log'>\n";
 		p_Stream << "<caption>Logging</caption>";
@@ -57,7 +56,7 @@ namespace SNI
 		m_Mutex.unlock();
 	}
 
-	void SNI_LogBuffer::LogExpressionTableToStream(ostream & p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_DisplayOptions)
+	void SNI_LogBuffer::LogExpressionTableToStream(std::ostream & p_Stream, long p_MaxLogEntries, SNI_DisplayOptions &p_DisplayOptions)
 	{
 		p_Stream << "<table class='log'>\n";
 		p_Stream << "<caption>Logging</caption>";
@@ -71,7 +70,7 @@ namespace SNI
 		m_Mutex.unlock();
 	}
 
-	void SNI_LogBuffer::LogTableJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartLog)
+	void SNI_LogBuffer::LogTableJS(std::ostream & p_Stream, long p_MaxLogEntries, long p_StartLog)
 	{
 		m_Mutex.lock();
 		std::string delimeter = " ";
@@ -99,7 +98,7 @@ namespace SNI
 		return m_ExpressionBuffer.size();
 	}
 
-	void SNI::SNI_LogBuffer::DerivationJS(ostream & p_Stream, long p_MaxLogEntries, SNI_Thread *p_Thread)
+	void SNI::SNI_LogBuffer::DerivationJS(std::ostream & p_Stream, long p_MaxLogEntries, SNI_Thread *p_Thread)
 	{
 		p_Stream << "{\"derivationhtml\": \"";
 		size_t actualDepth = p_Thread->GetFrameStackDepth();
@@ -115,7 +114,7 @@ namespace SNI
 		}
 		entries = 0;
 		size_t currentDepth = minDepth-1;
-		vector<SNI_LogLine *> stackLastLines;
+		std::vector<SNI_LogLine *> stackLastLines;
 		for (auto it = m_Buffer.rbegin(); it != m_Buffer.rend() && ((p_MaxLogEntries <= 0 || entries < p_MaxLogEntries) || currentDepth > minDepth); it++, entries++)
 		{
 			for (size_t j = currentDepth; j < it->m_Depth; j++)
@@ -185,7 +184,7 @@ namespace SNI
 		m_Mutex.unlock();
 	}
 
-	void SNI_LogBuffer::LogExpressionTableJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartCode, SNI_DisplayOptions &p_DisplayOptions)
+	void SNI_LogBuffer::LogExpressionTableJS(std::ostream & p_Stream, long p_MaxLogEntries, long p_StartCode, SNI_DisplayOptions &p_DisplayOptions)
 	{
 		m_Mutex.lock();
 		std::string delimeter = " ";

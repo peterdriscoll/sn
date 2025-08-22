@@ -8,7 +8,6 @@
 #include <time.h> // time_t, tm, time, localtime, strftime
 #include <direct.h>
 #include <string>
-using namespace std;
 
 #include "sn_pch.h"
 
@@ -60,7 +59,7 @@ namespace SN
 
 	void Log::WriteLine(const std::string &p_line)
 	{
-		vector<std::string> arrLines;
+		std::vector<std::string> arrLines;
 		SNI::Split(p_line, "\n", arrLines);
 		size_t num_lines = arrLines.size();
 		std::string delimeter;
@@ -104,8 +103,8 @@ namespace SN
 		std::string currentDirectory = current_working_directory();
 		SNI_Thread *l_thread = SNI_Thread::GetThread();
 		std::string timeId = getFormattedTime();
-		std::string logIndex = to_string(p_LogIndex);
-		std::string fileName = l_thread->GetTopManager()->LogFilePath() + to_string(l_thread->GetThreadNum()) + "_" + logIndex + /*"_" + timeId +*/ ".log"; //" + timeId + "
+		std::string logIndex = std::to_string(p_LogIndex);
+		std::string fileName = l_thread->GetTopManager()->LogFilePath() + std::to_string(l_thread->GetThreadNum()) + "_" + logIndex + /*"_" + timeId +*/ ".log"; //" + timeId + "
 		m_LogFile.open(fileName.data(), ios::out | ios::trunc);
 		if (!m_LogFile.is_open())
 		{

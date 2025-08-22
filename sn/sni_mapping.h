@@ -70,7 +70,7 @@ namespace SNI
 		virtual void PromoteMembers();
 
 	private:
-		unordered_map<SN::SN_Expression, SN::SN_Expression, KeyHasher, KeyEqual> m_Map;
+		std::unordered_map<SN::SN_Expression, SN::SN_Expression, KeyHasher, KeyEqual> m_Map;
 		bool m_Fixed;
 		SNI_Expression *m_DefaultValue;
 	};

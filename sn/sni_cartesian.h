@@ -8,7 +8,6 @@
 #include "sn_valueset.h"
 
 #include <functional>
-using namespace std;
 
 namespace SNI
 {

@@ -5,7 +5,6 @@
 
 #include "sni_object.h"
 #include <unordered_map>
-using namespace std;
 
 namespace SN
 {
@@ -51,7 +50,7 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_WorldSet);
 	public:
-		static void WriteChangedJS(ostream &p_Stream, const std::string &tabs, SNI_DisplayOptions &p_DisplayOptions);
+		static void WriteChangedJS(std::ostream &p_Stream, const std::string &tabs, SNI_DisplayOptions &p_DisplayOptions);
 
 		SNI_WorldSet();
 		SNI_WorldSet(const SN::SN_Expression &p_Expression);
@@ -65,8 +64,8 @@ namespace SNI
 		std::string DisplayWorlds(SNI_DisplayOptions & p_DisplayOptions) const;
 		std::string DisplayVariable(SNI_DisplayOptions & p_DisplayOptions) const;
 		std::string DisplayCondition(SNI_DisplayOptions & p_DisplayOptions, const SN::SN_Expression &p_Value) const;
-		void WriteJSON(ostream & p_Stream, const std::string &tabs, SNI_DisplayOptions & p_DisplayOptions) const;
-		void WriteUnmarkedJS(ostream & p_Stream, const std::string &tabs, SNI_DisplayOptions & p_DisplayOptions) const;
+		void WriteJSON(std::ostream & p_Stream, const std::string &tabs, SNI_DisplayOptions & p_DisplayOptions) const;
+		void WriteUnmarkedJS(std::ostream & p_Stream, const std::string &tabs, SNI_DisplayOptions & p_DisplayOptions) const;
 		std::string LogHeading(SN::LogContext &context, long p_Width) const;
 		std::string LogUnderline(SN::LogContext &context, long p_Width) const;
 		void LogSN() const;

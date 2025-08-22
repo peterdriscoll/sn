@@ -7,7 +7,6 @@
 #include "sni_taggedvalue.h"
 
 #include <string>
-using namespace std;
 
 namespace SN
 {

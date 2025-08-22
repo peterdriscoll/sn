@@ -75,7 +75,7 @@ namespace SN
 	{
 	}
 
-	SN_ValueSet::SN_ValueSet(const vector<SNI::SNI_TaggedValue> & /*p_Value*/)
+	SN_ValueSet::SN_ValueSet(const std::vector<SNI::SNI_TaggedValue> & /*p_Value*/)
 	{
 	}
 

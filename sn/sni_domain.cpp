@@ -72,7 +72,7 @@ namespace SNI
 
 	size_t SNI_Domain::Hash() const
 	{
-		return 0; // _Hash_representation(m_Map);
+		return 0; // std::_Hash_representation(m_Map);
 	}
 
 	SN::SN_Error SNI_Domain::AssertSubscriptValue(const SNI_Value * p_Index, SN::SN_Expression p_Result)

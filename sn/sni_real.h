@@ -5,7 +5,6 @@
 
 #include <string>
 #include <limits>
-using namespace std;
 
 #include "sn_valueset.h"
 #include "sn_bool.h"
@@ -136,12 +135,12 @@ namespace SNI
 
 		virtual std::string DisplayCpp() const
         {
-            return to_string(m_Number);
+            return std::to_string(m_Number);
         }
 
         virtual std::string DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
         {
-            return to_string(m_Number);
+            return std::to_string(m_Number);
         }
 
         virtual long GetPriority() const
@@ -159,7 +158,7 @@ namespace SNI
 
 		std::string GetString()
         {
-			return to_string(m_Number);
+			return std::to_string(m_Number);
         }
 
         virtual bool Equivalent(SNI_Object * p_Other) const
@@ -173,7 +172,7 @@ namespace SNI
 
 		size_t Hash() const
 		{
-			return _Hash_representation(m_Number);
+			return std::_Hash_representation(m_Number);
 		}
 
 		template <typename S>
@@ -240,17 +239,17 @@ namespace SNI
 		{
 			if (m_Number < 0)
 			{
-				return SN::SN_Error(false, false, GetTypeName() + " Imaginary numbers not supported. Square root of " + to_string(m_Number));
+				return SN::SN_Error(false, false, GetTypeName() + " Imaginary numbers not supported. Square root of " + std::to_string(m_Number));
 			}
 			else if (0 == m_Number)
 			{
 				return SN::SN_Value(new SNI_Real<T>(m_Number));
 			}
-			if (numeric_limits<T>::is_integer)
+			if (std::numeric_limits<T>::is_integer)
 			{
 				if (m_Number < 0)
 				{
-					return SN::SN_Error(false, false, GetTypeName() + " Imaginary numbers not supported. Square root of " + to_string(m_Number));
+					return SN::SN_Error(false, false, GetTypeName() + " Imaginary numbers not supported. Square root of " + std::to_string(m_Number));
 				}
 				T n, p, low, high;
 				if (m_Number == 0)

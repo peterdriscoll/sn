@@ -25,7 +25,7 @@
 
 namespace SNI
 {
-	map<std::string, unsigned long> SNI_Expression::m_IdMap;
+	std::map<std::string, unsigned long> SNI_Expression::m_IdMap;
 
 	/*static*/ SNI_Class* SNI_Expression::Class()
 	{
@@ -91,7 +91,7 @@ namespace SNI
 		return GetTypeName();
 	}
 
-	void SNI_Expression::WriteJSON(ostream& p_Stream, const std::string& p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions& p_DisplayOptions) const
+	void SNI_Expression::WriteJSON(std::ostream& p_Stream, const std::string& p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions& p_DisplayOptions) const
 	{
 		p_Stream << p_Prefix << "\"typetext\" : \"" << GetTypeName() << "\"";
 		p_Stream << ",\n" << p_Prefix << "\"value\" : [\n";
@@ -143,7 +143,7 @@ namespace SNI
 	
 	std::string SNI_Expression::GetDebugId() const
 	{
-		return GetReferredName() + "_" + to_string(GetId());
+		return GetReferredName() + "_" + std::to_string(GetId());
 	}
 
 	void SNI_Expression::CreateId()
@@ -819,7 +819,7 @@ namespace SNI
 		SNI_Thread *thread = SNI_Thread::GetThread();
 		bool finished = false;
 		SNI_Frame* frame = thread->Top();
-		vector<bool> savePoint;
+		std::vector<bool> savePoint;
 		if (frame)
 		{
 			frame->RecordSavePoint(savePoint);

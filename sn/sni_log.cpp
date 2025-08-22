@@ -8,7 +8,6 @@
 #include <time.h> // time_t, tm, time, localtime, strftime
 #include <direct.h>
 #include <string>
-using namespace std;
 
 #include "sn_pch.h"
 
@@ -35,7 +34,7 @@ namespace SNI
 	{
 	}
 
-	void SNI_Log::AddStream(SN::LoggingLevel p_LoggingLevel, ostream * p_Stream)
+	void SNI_Log::AddStream(SN::LoggingLevel p_LoggingLevel, std::ostream * p_Stream)
 	{
 		m_StreamList.push_back(p_Stream);
 		m_LoggingLevelList.push_back(p_LoggingLevel);
@@ -49,12 +48,12 @@ namespace SNI
 
 	void SNI_Log::WriteLine(SN::LoggingLevel p_DebugLevel, const std::string &p_line, bool p_Heading)
 	{
-		vector<std::string> arrLines;
+		std::vector<std::string> arrLines;
 		SNI::Split(p_line, "\n", arrLines);
 		size_t num_lines = arrLines.size()-1;
 		std::string timestamp = GetFormattedTime();
 		size_t j = 0;
-		for (ostream *stream : m_StreamList)
+		for (std::ostream *stream : m_StreamList)
 		{
 			if (p_DebugLevel <= m_LoggingLevelList[j++])
 			{
@@ -154,7 +153,7 @@ namespace SNI
 		SNI_Frame::DisplayFrameStack(p_Depth);
 	}
 
-	void SNI::SNI_Log::LogTableToStream(ostream& p_Stream, size_t p_MaxLogEntries)
+	void SNI::SNI_Log::LogTableToStream(std::ostream& p_Stream, size_t p_MaxLogEntries)
 	{
 		if (m_LogBuffer)
 		{
@@ -162,7 +161,7 @@ namespace SNI
 		}
 	}
 
-	void SNI_Log::LogTableJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartLog)
+	void SNI_Log::LogTableJS(std::ostream & p_Stream, long p_MaxLogEntries, long p_StartLog)
 	{
 		if (m_LogBuffer)
 		{
@@ -188,7 +187,7 @@ namespace SNI
 		return 0;
 	}
 
-	void SNI::SNI_Log::DerivationJS(ostream& p_Stream, long p_MaxLogEntries, SNI_Thread* p_Thread)
+	void SNI::SNI_Log::DerivationJS(std::ostream& p_Stream, long p_MaxLogEntries, SNI_Thread* p_Thread)
 	{
 		if (m_LogBuffer)
 		{
@@ -200,7 +199,7 @@ namespace SNI
 		}
 	}
 
-	void SNI_Log::CodeTableJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartCode, SNI_DisplayOptions &p_DisplayOptions)
+	void SNI_Log::CodeTableJS(std::ostream & p_Stream, long p_MaxLogEntries, long p_StartCode, SNI_DisplayOptions &p_DisplayOptions)
 	{
 		if (m_LogBuffer)
 		{

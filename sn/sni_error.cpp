@@ -185,7 +185,7 @@ namespace SNI
 		return "Error: " + m_Description;
 	}
 
-	void SNI_Error::WriteJSON(ostream &p_Stream, SNI::SNI_DisplayOptions &p_DisplayOptions)
+	void SNI_Error::WriteJSON(std::ostream &p_Stream, SNI::SNI_DisplayOptions &p_DisplayOptions)
 	{
 		p_Stream << "{\n";
 		p_Stream << "\t\"description\" : \"" << EscapeStringToJSON(m_Description) << "\",";

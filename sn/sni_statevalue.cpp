@@ -102,7 +102,7 @@ namespace SNI
 
 	size_t SNI_StateValue::Hash() const
 	{
-		return _Hash_representation(m_Value);
+		return std::_Hash_representation(m_Value);
 	}
 
 	SNI_Expression* SNI_StateValue::Clone(long p_MetaLevel, SNI_Frame* p_Frame, bool& p_Changed)

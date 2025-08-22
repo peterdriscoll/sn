@@ -54,7 +54,7 @@ namespace SNI
 		virtual void PromoteMembers();
 
 	private:
-		vector<SNI_Expression *> m_Vector;
+		std::vector<SNI_Expression *> m_Vector;
 		long m_DefineId;
 		bool m_Fixed;
 	};

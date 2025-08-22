@@ -12,8 +12,6 @@
 #include <map>
 #include <set>
 
-using namespace std;
-
 namespace SNI
 {
 	class SNI_Value;

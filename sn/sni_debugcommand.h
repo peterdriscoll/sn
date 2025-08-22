@@ -5,7 +5,6 @@
 
 #include <string>
 #include <set>
-using namespace std;
 
 #include "sn_manager.h"
 
@@ -65,7 +64,7 @@ namespace SNI
 		std::string m_Description;
 		SN::DebuggingStop m_DebugStop;
 		set<std::string> m_BreakPointSet;
-		mutex m_Mutex;
+		std::mutex m_Mutex;
 		condition_variable m_ReadyForCommandCond;
 		bool m_ReadyForCommand;
 		condition_variable m_ReadyForProcessingCond;

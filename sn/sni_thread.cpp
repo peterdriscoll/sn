@@ -52,7 +52,7 @@ namespace SNI
 		return ss.str();
 	}
 
-	/*static*/ void SNI_Thread::WriteThreadEnded(ostream & p_Stream, long p_ThreadNum)
+	/*static*/ void SNI_Thread::WriteThreadEnded(std::ostream & p_Stream, long p_ThreadNum)
 	{
 		p_Stream << "<!doctype html>\n";
 		p_Stream << "<html lang = \"en\">\n";
@@ -69,7 +69,7 @@ namespace SNI
 		p_Stream << "</html>\n";
 	}
 
-	/*static*/ void SNI_Thread::WriteW3Credentials(ostream &p_Stream)
+	/*static*/ void SNI_Thread::WriteW3Credentials(std::ostream &p_Stream)
 	{
 		p_Stream << "<div><p>\n";
 		p_Stream << "<a href='http://jigsaw.w3.org/css-validator/check/referer'>\n";
@@ -200,17 +200,17 @@ namespace SNI
 
 	void SNI_Thread::DisplayStepCounts()
 	{
-		cout << "Step count: " << to_string(m_ThreadNum) << ':' << to_string(m_ThreadStepCount) << '*' << "\n";
+		cout << "Step count: " << std::to_string(m_ThreadNum) << ':' << std::to_string(m_ThreadStepCount) << '*' << "\n";
 	}
 
-	void SNI_Thread::WriteStepCount(ostream &p_Stream)
+	void SNI_Thread::WriteStepCount(std::ostream &p_Stream)
 	{
 		p_Stream << "<td><form action = '/thread' method='get'>\n";
 		p_Stream << "<input type = 'submit' name = 'threadnum' value='" << m_ThreadNum << ":" << m_ThreadStepCount << "'/>\n";
 		p_Stream << "</form></td>\n";
 	}
 
-	ostream * SNI_Thread::CreateLogFile(SN::LoggingLevel p_LoggingLevel)
+	std::ostream * SNI_Thread::CreateLogFile(SN::LoggingLevel p_LoggingLevel)
 	{
 		std::string currentDirectory = CurrentWorkingDirectory();
 
@@ -476,11 +476,11 @@ namespace SNI
 		return ss.str();
 	}
 
-	void SNI_Thread::WriteChangeHistoryJS(ostream &p_Stream, SNI::SNI_DisplayOptions &p_DisplayOptions, size_t p_ColumnWidth, size_t p_FromStep, size_t p_ToStep)
+	void SNI_Thread::WriteChangeHistoryJS(std::ostream &p_Stream, SNI::SNI_DisplayOptions &p_DisplayOptions, size_t p_ColumnWidth, size_t p_FromStep, size_t p_ToStep)
 	{
 		p_Stream << "{\"records\":[";
 		set<std::string> rowChanges;
-		vector<std::string> rowVector;
+		std::vector<std::string> rowVector;
 		std::string delimeter1 = "\n";
 		m_ChangeMutex.lock();
 		SNI_DisplayOptions textDisplayOptions(doTextOnly);
@@ -504,7 +504,7 @@ namespace SNI
 			{
 				p_Stream << delimeter1 << "\t{\n";
 				delimeter1 = ",\n";
-				p_Stream << "\t\t\"stepcount\":" << to_string(stepCount) << ",\n";
+				p_Stream << "\t\t\"stepcount\":" << std::to_string(stepCount) << ",\n";
 				p_Stream << "\t\t\"variables\":[";
 				std::string delimeter2 = "\n";
 				for (const std::string &name : rowVector)
@@ -780,7 +780,7 @@ namespace SNI
 		m_Mutex.unlock();
 	}
 
-	void SNI_Thread::WriteWebPage(ostream& p_Stream, bool p_Refresh, DisplayOptionType p_OptionType)
+	void SNI_Thread::WriteWebPage(std::ostream& p_Stream, bool p_Refresh, DisplayOptionType p_OptionType)
 	{
 		m_DebugCommand.SetRunning(p_Refresh);
 		p_Stream << "<!doctype html>\n";
@@ -844,7 +844,7 @@ namespace SNI
 		p_Stream << "</html>\n";
 	}
 
-	void SNI_Thread::WriteShuttingDown(ostream & p_Stream)
+	void SNI_Thread::WriteShuttingDown(std::ostream & p_Stream)
 	{
 		p_Stream << "<!doctype html>\n";
 		p_Stream << "<html lang = \"en\">\n";
@@ -862,7 +862,7 @@ namespace SNI
 		p_Stream << "</html>\n";
 	}
 
-	void SNI_Thread::WriteCommands(ostream & p_Stream)
+	void SNI_Thread::WriteCommands(std::ostream & p_Stream)
 	{
 		p_Stream << "<div><table class='command'><tr>\n";
 		WriteSubmit(p_Stream, "run", "Run", "Run");
@@ -883,7 +883,7 @@ namespace SNI
 		// dog WriteGotoStepCountJS(p_Stream);
 		// dog WriteSetMaxStackFramesJS(p_Stream);
 
-	void SNI_Thread::WriteSubmit(ostream &p_Stream, const std::string &p_Action, const std::string &p_Name, const std::string &p_Description)
+	void SNI_Thread::WriteSubmit(std::ostream &p_Stream, const std::string &p_Action, const std::string &p_Name, const std::string &p_Description)
 	{
 		p_Stream << "<td>\n";
 		p_Stream << p_Description << "<br/>\n";
@@ -895,7 +895,7 @@ namespace SNI
 		p_Stream << "</td>\n";
 	}
 
-	/*static*/ void SNI_Thread::WriteSubmitJS(ostream &p_Stream, const std::string &p_Action, const std::string &p_Name, const std::string &p_Description)
+	/*static*/ void SNI_Thread::WriteSubmitJS(std::ostream &p_Stream, const std::string &p_Action, const std::string &p_Name, const std::string &p_Description)
 	{
 		p_Stream << "<td>\n";
 		p_Stream << "<form ng-submit = 'submit(\"" << p_Action << "\")'>\n";
@@ -905,7 +905,7 @@ namespace SNI
 		p_Stream << "</td>\n";
 	}
 
-	void SNI_Thread::WriteGotoStepCount(ostream &p_Stream)
+	void SNI_Thread::WriteGotoStepCount(std::ostream &p_Stream)
 	{
 		p_Stream << "<td>\n";
 		p_Stream << "<form action = '/gotostepcount' method='get'>\n";
@@ -924,7 +924,7 @@ namespace SNI
 		p_Stream << "</td>\n";
 	}
 
-	/*static*/ void SNI_Thread::WriteGotoStepCountJS(ostream &p_Stream)
+	/*static*/ void SNI_Thread::WriteGotoStepCountJS(std::ostream &p_Stream)
 	{
 		p_Stream << "<td>\n";
 		p_Stream << "<form ng-submit = 'gotostepcount()'>\n";
@@ -940,7 +940,7 @@ namespace SNI
 		p_Stream << "</td>\n";
 	}
 
-	void SNI_Thread::WriteSetMaxStackFrames(ostream &p_Stream)
+	void SNI_Thread::WriteSetMaxStackFrames(std::ostream &p_Stream)
 	{
 		p_Stream << "<td>\n";
 		p_Stream << "<form action = '/maxstackframes' method='get'>\n";
@@ -956,7 +956,7 @@ namespace SNI
 		p_Stream << "</td>\n";
 	}
 
-    /*static*/ void SNI_Thread::WriteSetMaxStackFramesJS(ostream &p_Stream)
+    /*static*/ void SNI_Thread::WriteSetMaxStackFramesJS(std::ostream &p_Stream)
 	{
 		p_Stream << "<td>\n";
 		p_Stream << "<form ng-submit = 'loaddata()'>\n";
@@ -972,7 +972,7 @@ namespace SNI
 		p_Stream << "</td>\n";
 	}
 
-	void SNI_Thread::WriteWebStack(ostream &p_Stream, size_t p_Depth, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
+	void SNI_Thread::WriteWebStack(std::ostream &p_Stream, size_t p_Depth, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
 	{
 		p_Stream << "<table class='stack'>\n";
 		p_Stream << "<caption>Thread " << m_ThreadNum << "</caption>";
@@ -992,7 +992,7 @@ namespace SNI
 		p_Stream << "</table>\n";
 	}
 
-	void SNI_Thread::WriteLogJS(ostream &p_Stream, long p_MaxLogEntries, long p_StartLog)
+	void SNI_Thread::WriteLogJS(std::ostream &p_Stream, long p_MaxLogEntries, long p_StartLog)
 	{
 		p_Stream << "{\n";
 		p_Stream << "\"stepcount\":" << m_ThreadStepCount << ",\n";
@@ -1011,12 +1011,12 @@ namespace SNI
 		return SNI_Log::GetLog()->CountCodeEntries();
 	}
 
-	void SNI_Thread::WriteDerivationJS(ostream &p_Stream, long p_MaxLogEntries)
+	void SNI_Thread::WriteDerivationJS(std::ostream &p_Stream, long p_MaxLogEntries)
 	{
 		SNI_Log::GetLog()->DerivationJS(p_Stream, p_MaxLogEntries, this);
 	}
 
-	void SNI_Thread::WriteCodeJS(ostream &p_Stream, long p_MaxLogEntries, long p_StartCode, SNI_DisplayOptions &p_displayOptions)
+	void SNI_Thread::WriteCodeJS(std::ostream &p_Stream, long p_MaxLogEntries, long p_StartCode, SNI_DisplayOptions &p_displayOptions)
 	{
 		p_Stream << "{\n";
 		p_Stream << "\"stepcount\":" << m_ThreadStepCount << ",\n";
@@ -1025,7 +1025,7 @@ namespace SNI
 		p_Stream << "]}\n";
 	}
 
-	void SNI_Thread::WriteDashboardJS(ostream &p_Stream, SNI::SNI_DisplayOptions &p_DisplayOptions)
+	void SNI_Thread::WriteDashboardJS(std::ostream &p_Stream, SNI::SNI_DisplayOptions &p_DisplayOptions)
 	{
 		p_Stream << "{\n";
 
@@ -1076,7 +1076,7 @@ namespace SNI
 		p_Stream << "}\n";
 	}
 
-	void SNI_Thread::WriteStackJS(ostream &p_Stream, size_t p_Depth, size_t p_Start, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
+	void SNI_Thread::WriteStackJS(std::ostream &p_Stream, size_t p_Depth, size_t p_Start, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
 	{
 		p_Stream << "{\n";
 		p_Stream << "\"stepcount\":" << m_ThreadStepCount << ",\n";
@@ -1104,7 +1104,7 @@ namespace SNI
 		p_Stream << "\n]}\n";
 	}
 
-	void SNI_Thread::WriteCallStackJS(ostream &p_Stream, size_t p_Depth, size_t p_Start, SNI::SNI_DisplayOptions &p_DisplayOptions)
+	void SNI_Thread::WriteCallStackJS(std::ostream &p_Stream, size_t p_Depth, size_t p_Start, SNI::SNI_DisplayOptions &p_DisplayOptions)
 	{
 		namespace pt = boost::property_tree;
 		pt::ptree oroot;
@@ -1141,7 +1141,7 @@ namespace SNI
 		pt::write_json(p_Stream, oroot);
 	}
 
-	void SNI_Thread::WriteWatchListJS(ostream& p_Stream, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions& p_DisplayOptions)
+	void SNI_Thread::WriteWatchListJS(std::ostream& p_Stream, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions& p_DisplayOptions)
 	{
 		Lock();
 		SNI_VariablePointerMap watchList;
@@ -1168,7 +1168,7 @@ namespace SNI
 					size_t card = value->Cardinality();
 					if (card < CARDINALITY_MAX)
 					{
-						card_string = to_string(card);
+						card_string = std::to_string(card);
 					}
 					p_Stream << ",\n" << prefix << "\t\"cardinality\" : \"" << card_string << "\",\n";
 					value->WriteJSON(p_Stream, prefix + "\t", p_DebugFieldWidth, p_DisplayOptions);
@@ -1180,12 +1180,12 @@ namespace SNI
 		p_Stream << "\n]}\n";
 	}
 
-	void SNI_Thread::WriteStepCountJS(ostream &p_Stream, const std::string &p_Delimeter)
+	void SNI_Thread::WriteStepCountJS(std::ostream &p_Stream, const std::string &p_Delimeter)
 	{
 		p_Stream << "{\"threadnum\" : \"" << m_ThreadNum << "\", \"stepcount\" : \"" << m_ThreadStepCount << "\"}";
 	}
 
-	void SNI_Thread::WriteWorldSetsJS(ostream &p_Stream, SNI_DisplayOptions &p_DisplayOptions)
+	void SNI_Thread::WriteWorldSetsJS(std::ostream &p_Stream, SNI_DisplayOptions &p_DisplayOptions)
 	{
 		p_Stream << "{\"records\":[\n";
 		if (m_WorldSetProcessMap)
@@ -1273,7 +1273,7 @@ namespace SNI
 
 	void SNI_Thread::PushFrame(SNI_Frame *p_Frame)
 	{
-		LOG(WriteLine(SN::DebugLevel, "Pushing stack frame " + to_string(m_FrameList.size()+1)));
+		LOG(WriteLine(SN::DebugLevel, "Pushing stack frame " + std::to_string(m_FrameList.size()+1)));
 		Lock();
 		m_FrameList.push_back(p_Frame);
 		Unlock();
@@ -1284,7 +1284,7 @@ namespace SNI
 		Lock();
 		m_FrameList.pop_back();
 		Unlock();
-		LOG(WriteLine(SN::DebugLevel, "Popped stack frame " + to_string(m_FrameList.size() + 1)));
+		LOG(WriteLine(SN::DebugLevel, "Popped stack frame " + std::to_string(m_FrameList.size() + 1)));
 	}
 
 	size_t SNI_Thread::GetFrameStackDepth()

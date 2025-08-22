@@ -166,7 +166,7 @@ namespace SNI
 
 		if (GetNumParameters()-1 != numStackParams)
 		{
-			return SN::SN_Error(false, false, GetTypeName() + ": " + to_string(numStackParams) + " parameters given, " + to_string(GetNumParameters() - 1) + " expected.");
+			return SN::SN_Error(false, false, GetTypeName() + ": " + std::to_string(numStackParams) + " parameters given, " + std::to_string(GetNumParameters() - 1) + " expected.");
 		}
 		numStackParams--;
 		SN::SN_Error e = LOG_RETURN(context, PartialUnifyInternal((*p_ParameterList)[numStackParams-PCA3_Left].GetValue(), (*p_ParameterList)[numStackParams - PCA3_Right].GetValue(), (*p_ParameterList)[numStackParams - PCA3_State].GetValue(), p_Result));
@@ -313,6 +313,6 @@ namespace SNI
 			}
 		}
 		}
-		return SN::SN_Error(false, false, GetTypeName() + ": Expression not unified. TotalCalc=" + to_string(p_TotalCalc) + " Calcpos=" + to_string(p_CalcPos));
+		return SN::SN_Error(false, false, GetTypeName() + ": Expression not unified. TotalCalc=" + std::to_string(p_TotalCalc) + " Calcpos=" + std::to_string(p_CalcPos));
 	}
 }

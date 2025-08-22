@@ -116,14 +116,14 @@ namespace SNI
 
 		void RemoveEmptyCalls();
 
-		void WriteJSON(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions);
+		void WriteJSON(std::ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions);
 		size_t CountDelayedCalls();
 
 	private:
 		//SNI_DelayedCallList  m_DelayedCallList;
 		//SNI_DelayedCallList  m_FailedList;
-		mutex                m_SearchLock;
-		//unordered_map<std::string, SN::SN_String> m_PreventReread;
+		std::mutex                m_SearchLock;
+		//std::unordered_map<std::string, SN::SN_String> m_PreventReread;
 	};
 }
 

@@ -7,7 +7,6 @@
 
 #include <string>
 #include <functional>
-using namespace std;
 
 #include "sni_base.h"
 
@@ -85,7 +84,7 @@ namespace SNI
 		virtual std::string DisplayCpp() const;
 		virtual std::string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual std::string DisplayValueSN(long, SNI_DisplayOptions & p_DisplayOptions) const;
-		virtual void WriteJSON(ostream& p_Stream, const std::string& p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions& p_DisplayOptions) const;
+		virtual void WriteJSON(std::ostream& p_Stream, const std::string& p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions& p_DisplayOptions) const;
 
 		//---------------------------------------------------------------
 		// Debugging
@@ -301,7 +300,7 @@ namespace SNI
 	private:
 		void HandleAction(SN::SN_Expression p_Result, OnErrorHandler * p_ErrorHandler);
 		virtual SN::SN_Error GetError();
-		static map<std::string, unsigned long> m_IdMap;
+		static std::map<std::string, unsigned long> m_IdMap;
 
 	private:
 		static SNI_Class* m_Class;

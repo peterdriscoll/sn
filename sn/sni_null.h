@@ -4,7 +4,6 @@
 #pragma once
 
 #include <string>
-using namespace std;
 
 #include "sni_value.h"
 

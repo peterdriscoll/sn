@@ -51,12 +51,12 @@ namespace SNI
 		SNI_Variable *CreateParameter(size_t p_ParamNum, SN::SN_Expression p_Value);
 		SNI_Variable *CreateParameterByName(const std::string &p_ParamName, SN::SN_Expression p_Value);
 
-		void WriteWebFrame(ostream &p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
-		void WriteJSON(ostream & p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
+		void WriteWebFrame(std::ostream &p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
+		void WriteJSON(std::ostream & p_Stream, size_t p_FrameStackPos, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
 		void WriteCallJS(boost::property_tree::ptree &callStackNode, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions & p_DisplayOptions);
-		void WriteStackJS(ostream & p_Stream, std::string &p_Delimeter, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions & p_DisplayOptions);
-		void WriteCardinalityJSON(ostream& p_Stream, SN::SN_Expression& p_Value, long p_ParamNum, const std::string& p_Prefix) const;
-		void WriteVariable(ostream& p_Stream, SN::SN_Expression& p_Variable, SN::SN_Expression& p_Value, long j, const std::string& p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions& p_DisplayOptions);
+		void WriteStackJS(std::ostream & p_Stream, std::string &p_Delimeter, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions & p_DisplayOptions);
+		void WriteCardinalityJSON(std::ostream& p_Stream, SN::SN_Expression& p_Value, long p_ParamNum, const std::string& p_Prefix) const;
+		void WriteVariable(std::ostream& p_Stream, SN::SN_Expression& p_Variable, SN::SN_Expression& p_Value, long j, const std::string& p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions& p_DisplayOptions);
 
 		void RegisterCardinality(size_t p_Cardinality);
 		void PromoteExternals(PGC::PGC_Transaction * p_Transaction);
@@ -65,8 +65,8 @@ namespace SNI
 
 		void AddVariables(SNI_VariablePointerMap& p_Map);
 
-		void RecordSavePoint(vector<bool> p_SavePoint);
-		void RestoreSavePoint(vector<bool> p_SavePoint);
+		void RecordSavePoint(std::vector<bool> p_SavePoint);
+		void RestoreSavePoint(std::vector<bool> p_SavePoint);
 	private:
 		virtual void PromoteMembers();
 

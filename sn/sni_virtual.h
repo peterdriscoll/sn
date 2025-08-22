@@ -36,7 +36,7 @@ namespace SNI
 
 		SN::SN_Expression BuildCondition(size_t p_Depth, SN::SN_Expression p_Condition, SN::SN_Variable p_ParameterVariable);
 
-		list<ConstructionTree> m_List;
+		std::list<ConstructionTree> m_List;
 		SN::SN_Expression m_Parameter;
 		SN::SN_Variable m_ParameterVariable;
 		SN::SN_Expression m_ImplementationCall;
@@ -92,7 +92,7 @@ namespace SNI
 		SN::SN_Expression CreateImplementation();
 		void BuildImplementation();
 
-		vector<SN::SN_Expression> m_CallList;
+		std::vector<SN::SN_Expression> m_CallList;
 		long m_DefineId;
 
 		bool m_Fixed;

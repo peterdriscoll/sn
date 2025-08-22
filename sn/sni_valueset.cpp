@@ -21,7 +21,6 @@
 #include "utility.h"
 
 #include <vector>
-using namespace std;
 
 #include "sn_pch.h"
 
@@ -508,9 +507,9 @@ namespace SNI
 	{
 		if (m_Variable)
 		{
-			return m_Variable->GetName()+to_string(++m_MaxTempNum);
+			return m_Variable->GetName()+std::to_string(++m_MaxTempNum);
 		}
-		return "temp_" + to_string(++m_MaxTempNum);
+		return "temp_" + std::to_string(++m_MaxTempNum);
 	}
 
 	void SNI_ValueSet::RemoveFailedWorlds()

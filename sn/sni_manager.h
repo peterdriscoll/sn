@@ -5,7 +5,6 @@
 
 #include <string>
 #include <vector>
-using namespace std;
 
 #include "sni_debugcommand.h"
 #include "ihttp_server.h"
@@ -59,7 +58,7 @@ namespace SNI
 		bool DelayOnEvaluate() const;
 		void SetDelayOnEvaluate(bool p_DelayOnEvaluate);
 
-		void StartLogging(SN::LoggingLevel p_LoggingLevel, ostream *p_Stream);
+		void StartLogging(SN::LoggingLevel p_LoggingLevel, std::ostream *p_Stream);
 
 		void StartDebugCommandLineServer(skynet::DebugAction p_DebugAction, int p_KbHit(), int p_GetCh());
 		void StartWebServer(skynet::DebugAction p_DebugAction, const std::string& p_Address, const std::string& p_Port, const std::string& p_DocRoot);
@@ -75,7 +74,7 @@ namespace SNI
 		size_t DebugTitleWidth() const;
 		void SetDebugTitleWidth(size_t p_DebugFieldWidth);
 
-		ostream * CreateLogFile(SN::LoggingLevel);
+		std::ostream * CreateLogFile(SN::LoggingLevel);
 
 		size_t LogBufferCapacity() const;
 		void SetLogBufferCapacity(size_t p_LogBufferCapacity);
@@ -152,7 +151,7 @@ namespace SNI
 
 		int (*m_KbHit)();
 		int (*m_GetCh)();
-		mutex m_Mutex;
+		std::mutex m_Mutex;
 		bool m_WebServerThreadUsed;
 		bool m_CommandServerThreadUsed;
 

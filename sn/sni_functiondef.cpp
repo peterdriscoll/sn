@@ -90,7 +90,7 @@ namespace SNI
 
 	size_t SNI_FunctionDef::Hash() const
 	{
-		return _Hash_representation(this);
+		return std::_Hash_representation(this);
 	}
 
 	bool SNI_FunctionDef::IsKnownValue(const SN::SN_Expression &p_Param, long) const
@@ -404,7 +404,7 @@ namespace SNI
 					v->SetValue(inputList[j]);
 				}
 			}
-			Breakpoint(SN::DetailStop, (SN::BreakId)(SN::ParameterOneId + j), GetTypeName(), "Call parameter:" + to_string(j), p_Source, SN::ParameterPoint);
+			Breakpoint(SN::DetailStop, (SN::BreakId)(SN::ParameterOneId + j), GetTypeName(), "Call parameter:" + std::to_string(j), p_Source, SN::ParameterPoint);
 		}
 		SN::SN_Value result;
 		for (long j = 0; j < depth; j++)
@@ -419,7 +419,7 @@ namespace SNI
 			card = CardinalityOfCall(depth, inputList);
 			if (maxCard < card)
 			{
-				result = SN::SN_Error(false, true, "Cardinality " + to_string(card) + " exceeds max cardinality " + to_string(maxCard));
+				result = SN::SN_Error(false, true, "Cardinality " + std::to_string(card) + " exceeds max cardinality " + std::to_string(maxCard));
 			}
 			else
 			{
@@ -515,26 +515,26 @@ namespace SNI
 			if (!IsKnownValue(p_ParamList[j], j))
 			{
 				card = CardinalityOfUnify(depth, inputList, (long)j, totalCalc);
-//				LOG(WriteLine(SN::DebugLevel, "Parameter " + to_string(j) + " " + "Card: " + to_string(card) + ": " + inputList[j].DisplaySN() + " / " + inputList[j].GetSafeValue().DisplaySN()));
+//				LOG(WriteLine(SN::DebugLevel, "Parameter " + std::to_string(j) + " " + "Card: " + std::to_string(card) + ": " + inputList[j].DisplaySN() + " / " + inputList[j].GetSafeValue().DisplaySN()));
 				topFrame->RegisterCardinality(card);
 				if (p_ParamList[j].IsVariable())
 				{
 					if (allFound || maxCard < card)
 					{
-						LOG(WriteLine(SN::DebugLevel, "Self Assert variable start " + to_string(j) ));
+						LOG(WriteLine(SN::DebugLevel, "Self Assert variable start " + std::to_string(j) ));
 						e = inputList[j].GetSNI_Expression()->SelfAssert();
 						if (e.IsError())
 						{
 							break;
 						}
-						LOG(WriteLine(SN::DebugLevel, "Self Assert variable end " + to_string(j) + ": " + inputList[j].DisplaySN() + " / " + inputList[j].GetSafeValue().DisplaySN()));
+						LOG(WriteLine(SN::DebugLevel, "Self Assert variable end " + std::to_string(j) + ": " + inputList[j].DisplaySN() + " / " + inputList[j].GetSafeValue().DisplaySN()));
 					}
 				}
 				else if (inputList[j].IsComplete())
 				{
 					if (allFound || maxCard < card)
 					{
-						LOG(WriteLine(SN::DebugLevel, "Assert start " + to_string(j) + ": " + inputList[j].DisplayValueSN()));
+						LOG(WriteLine(SN::DebugLevel, "Assert start " + std::to_string(j) + ": " + inputList[j].DisplayValueSN()));
 						SNI_Variable *v = topFrame->GetVariable(j);
 						v->SetValue(SN::SN_Expression());
 						e = inputList[j].AssertValue(v);
@@ -547,7 +547,7 @@ namespace SNI
 							inputList[j] = v;
 							p_ParamList[j] = v;
 						}
-						//LOG(WriteLine(SN::DebugLevel, "Assert value " + to_string(j) + ": " + inputList[j].DisplaySN() + "/" + inputList[j].DisplayValueSN() + (IsKnownValue(inputList[j], j)?" known":" unknown")));
+						//LOG(WriteLine(SN::DebugLevel, "Assert value " + std::to_string(j) + ": " + inputList[j].DisplaySN() + "/" + inputList[j].DisplayValueSN() + (IsKnownValue(inputList[j], j)?" known":" unknown")));
 					}
 				}
 			}
@@ -558,17 +558,17 @@ namespace SNI
 				{
 					output[j] = false;
 					totalCalc--;
-					LOG(WriteLine(SN::DebugLevel, "Value " + to_string(j) + " found. Total calc " + to_string(totalCalc)));
+					LOG(WriteLine(SN::DebugLevel, "Value " + std::to_string(j) + " found. Total calc " + std::to_string(totalCalc)));
 				}
 			}
 			else
 			{
 				calcPos = (long)j;
-				LOG(WriteLine(SN::DebugLevel, "Value " + to_string(j) + " is to be calculated."));
+				LOG(WriteLine(SN::DebugLevel, "Value " + std::to_string(j) + " is to be calculated."));
 			}
 			if (j != 0 && j != depth-1)
 			{
-				Breakpoint(SN::DetailStop, (SN::BreakId)(SN::ParameterOneId + j), GetTypeName(), "Unify parameter " + to_string(j) + " card " + to_string(card), p_Source, SN::CallPoint);
+				Breakpoint(SN::DetailStop, (SN::BreakId)(SN::ParameterOneId + j), GetTypeName(), "Unify parameter " + std::to_string(j) + " card " + std::to_string(card), p_Source, SN::CallPoint);
 			}
 		}
 		//LOG(WriteLine(SN::DebugLevel, GetLogDescription(p_ParamList)));
@@ -576,7 +576,7 @@ namespace SNI
 		{
 			card = CardinalityOfUnify(depth, inputList, calcPos, totalCalc);
 			topFrame->RegisterCardinality(card);
-			Breakpoint(SN::DetailStop, (SN::BreakId)(SN::ParameterOneId + depth - 1), GetTypeName(), "Unify parameter " + to_string(depth-1) + " card " + to_string(card), p_Source, SN::CallPoint);
+			Breakpoint(SN::DetailStop, (SN::BreakId)(SN::ParameterOneId + depth - 1), GetTypeName(), "Unify parameter " + std::to_string(depth-1) + " card " + std::to_string(card), p_Source, SN::CallPoint);
 			if (0 < card)
 			{
 				if (GetBoolResult() && maxCard < card  && !IsKnownValue(inputList[PU2_Result], PU2_Result))
@@ -595,7 +595,7 @@ namespace SNI
 					totalCalc--;
 					card = CardinalityOfUnify(depth, inputList, calcPos, totalCalc);
 				}
-				LOG(WriteLine(SN::DebugLevel, "Cardinality " + to_string(card) + " with total fields " + to_string(totalCalc)));
+				LOG(WriteLine(SN::DebugLevel, "Cardinality " + std::to_string(card) + " with total fields " + std::to_string(totalCalc)));
 				if (maxCard < card)
 				{
 					if (AllowDelay())
@@ -617,7 +617,7 @@ namespace SNI
 					{
 						if (output[j])
 						{
-							LOG(WriteLine(SN::DebugLevel, "Parameter " + to_string(j) + " calculated: " + p_ParamList[j].DisplaySN()));
+							LOG(WriteLine(SN::DebugLevel, "Parameter " + std::to_string(j) + " calculated: " + p_ParamList[j].DisplaySN()));
 						}
 					}
 				}
@@ -690,7 +690,7 @@ namespace SNI
 				{
 					if (!SupportsMultipleOutputs())
 					{
-						Breakpoint(SN::WarningStop, SN::MultipleOutputsId, GetTypeName(), "Multiple outputs" + to_string(j), p_Source, SN::CallPoint);
+						Breakpoint(SN::WarningStop, SN::MultipleOutputsId, GetTypeName(), "Multiple outputs" + std::to_string(j), p_Source, SN::CallPoint);
 					}
 				}
 			}

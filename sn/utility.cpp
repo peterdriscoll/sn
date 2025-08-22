@@ -67,7 +67,7 @@ namespace SNI
 
 	void Split(const std::string& a_buffer,
 		const std::string& a_delimeter,
-		vector<std::string>& a_result)
+		std::vector<std::string>& a_result)
 	{
 		std::string tmp = a_buffer;
 		std::string substring;
@@ -423,11 +423,11 @@ namespace SNI
 
 	std::string MakeBreakPoint(const std::string &p_DebugId, long p_Index)
 	{
-		return p_DebugId + "_" + to_string(p_Index);
+		return p_DebugId + "_" + std::to_string(p_Index);
 	}
 
 	std::string MakeBreakPointJS(const std::string &p_DebugId, long p_Index)
 	{
-		return "[\"" + p_DebugId + "\"," + to_string(p_Index) + "]";
+		return "[\"" + p_DebugId + "\"," + std::to_string(p_Index) + "]";
 	}
 }

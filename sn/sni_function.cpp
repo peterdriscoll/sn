@@ -211,7 +211,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_Function::DoEvaluate(long p_MetaLevel /* = 0 */) const
 	{
-		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Function::DoEvaluate (" + to_string(p_MetaLevel) + ")"));
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Function::DoEvaluate (" + std::to_string(p_MetaLevel) + ")"));
 
 		if (0 < p_MetaLevel)
 		{

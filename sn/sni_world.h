@@ -8,8 +8,6 @@
 
 #include <vector>
 #include <unordered_map>
-using namespace std;
-
 namespace SN
 {
 	class LogContext;
@@ -65,7 +63,7 @@ namespace SNI
 		std::string DisplaySNChildWorlds(SNI_DisplayOptions & p_DisplayOptions) const;
 		std::string SetBreakPoint(const std::string & p_Caption, SNI_DisplayOptions & p_DisplayOptions) const;
 		std::string LogText(SN::LogContext & context, long p_Width) const;
-		void WriteJSON(ostream &p_Stream, const std::string &tabs, SNI_DisplayOptions & p_DisplayOptions) const;
+		void WriteJSON(std::ostream &p_Stream, const std::string &tabs, SNI_DisplayOptions & p_DisplayOptions) const;
 
 		bool IsEmpty() const;
 		bool HasEmptyChild() const;

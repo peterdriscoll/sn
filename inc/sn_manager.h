@@ -6,7 +6,7 @@
 #include "exp_ctrl_sn.h"
 
 #include <string>
-#include <ostream> // Add this include to resolve the 'ostream' identifier
+#include <ostream> // Add this include to resolve the 'std::ostream' identifier
 
 namespace SNI
 {

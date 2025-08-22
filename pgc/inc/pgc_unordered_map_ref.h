@@ -6,7 +6,7 @@
 #include "memberref.h"
 
 // ---------------------------------------------
-// unordered_map_ref: A promotion-aware unordered_map wrapper
+// unordered_map_ref: A promotion-aware std::unordered_map wrapper
 // ---------------------------------------------
 namespace PGC
 {

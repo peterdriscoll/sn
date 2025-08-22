@@ -41,7 +41,7 @@ namespace SNI
 
 	void Split(const std::string& a_buffer,
 		const std::string& a_delimeter,
-		vector<std::string>& a_result);
+		std::vector<std::string>& a_result);
 
 	std::string ReplaceAll(const std::string &source, const std::string &target, const std::string &replace);
 	std::string EscapeStringToCPP(const std::string &p_Unescaped);

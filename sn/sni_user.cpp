@@ -145,7 +145,7 @@ namespace SNI
 		return ss.str();
 	}
 
-	void SNI_User::WriteStepCounts(ostream& p_Stream)
+	void SNI_User::WriteStepCounts(std::ostream& p_Stream)
 	{
 		p_Stream << "<div><table class='thread'>\n";
 		p_Stream << "<caption>Threads</caption>\n";
@@ -163,7 +163,7 @@ namespace SNI
 		p_Stream << "</table></div>\n";
 	}
 
-	void SNI_User::WriteStepCountListJS(ostream& p_Stream)
+	void SNI_User::WriteStepCountListJS(std::ostream& p_Stream)
 	{
 		p_Stream << "{\"records\":[\n";
 		std::string delimeter = " ";

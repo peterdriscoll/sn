@@ -27,7 +27,7 @@ namespace SNI
 	/*static*/ long SNI_WorldSet::m_NextWorldSetNo = 0;
 	/*static*/ SNI_WorldSetList SNI_WorldSet::m_ChangedList;
 
-	/*static*/ void SNI_WorldSet::WriteChangedJS(ostream &p_Stream, const std::string &tabs, SNI_DisplayOptions &p_DisplayOptions)
+	/*static*/ void SNI_WorldSet::WriteChangedJS(std::ostream &p_Stream, const std::string &tabs, SNI_DisplayOptions &p_DisplayOptions)
 	{
 		p_Stream << "\"worldsets\":[\n";
 		std::string delimeter = " ";
@@ -69,18 +69,18 @@ namespace SNI
 
 	std::string SNI_WorldSet::DisplaySN() const
 	{
-		return "S" + to_string(m_WorldSetNo) + (IsEmpty() ? " empty" : "");
+		return "S" + std::to_string(m_WorldSetNo) + (IsEmpty() ? " empty" : "");
 	}
 
 	std::string SNI_WorldSet::DisplayShort() const
 	{
-		return "S" + to_string(m_WorldSetNo);
+		return "S" + std::to_string(m_WorldSetNo);
 	}
 
 	std::string SNI_WorldSet::DisplayLong() const
 	{
 		SNI_DisplayOptions displayOptions(doTextOnly);
-		return "S" + to_string(m_WorldSetNo) + " " + DisplayWorlds(displayOptions);
+		return "S" + std::to_string(m_WorldSetNo) + " " + DisplayWorlds(displayOptions);
 	}
 
 	std::string SNI_WorldSet::DisplayWorlds(SNI_DisplayOptions & p_DisplayOptions) const
@@ -128,7 +128,7 @@ namespace SNI
 		return DisplayShort() + "=" + p_Value.DisplaySN(p_DisplayOptions);
 	}
 
-	void SNI_WorldSet::WriteJSON(ostream &p_Stream, const std::string &tabs, SNI_DisplayOptions & p_DisplayOptions) const
+	void SNI_WorldSet::WriteJSON(std::ostream &p_Stream, const std::string &tabs, SNI_DisplayOptions & p_DisplayOptions) const
 	{
 		p_Stream << tabs << "\"id\" : \"" << DisplayShort() << "\",\n";
 		p_Stream << tabs << "\"expression\" : \"" << EscapeStringToJSON(m_Expression.DisplaySN()) << "\",\n";
@@ -158,7 +158,7 @@ namespace SNI
 		p_Stream <<"\n" << tabs << "]\n";
 	}
 	
-	void SNI_WorldSet::WriteUnmarkedJS(ostream &p_Stream, const std::string &tabs, SNI_DisplayOptions &p_DisplayOptions) const
+	void SNI_WorldSet::WriteUnmarkedJS(std::ostream &p_Stream, const std::string &tabs, SNI_DisplayOptions &p_DisplayOptions) const
 	{
 		p_Stream << tabs << "\"id\" : \"" << DisplayShort() << "\",\n";
 		p_Stream << tabs << "\"expression\" : \"" << EscapeStringToJSON(m_Expression.DisplaySN()) << "\",\n";

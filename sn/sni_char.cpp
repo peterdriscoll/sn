@@ -115,7 +115,7 @@ namespace SNI
 
 	size_t SNI_Char::Hash() const
 	{
-		return _Hash_representation(m_Char);
+		return std::_Hash_representation(m_Char);
 	}
 
 	SN::SN_Value SNI_Char::DoAdd(SNI_Value * p_Other) const

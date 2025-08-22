@@ -6,7 +6,6 @@
 #include "sni_value.h"
 
 #include <string>
-using namespace std;
 
 namespace SNI
 {

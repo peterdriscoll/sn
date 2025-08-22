@@ -44,12 +44,12 @@ namespace SNI
 
 	std::string SNI_Instance::DisplayCpp() const
 	{
-		return to_string(reinterpret_cast<std::uintptr_t>(this));
+		return std::to_string(reinterpret_cast<std::uintptr_t>(this));
 	}
 
 	std::string SNI_Instance::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
-		return to_string(reinterpret_cast<std::uintptr_t>(this));
+		return std::to_string(reinterpret_cast<std::uintptr_t>(this));
 	}
 
 	long SNI_Instance::GetPriority() const

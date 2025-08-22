@@ -53,9 +53,9 @@ namespace SNI
 	{
 		if (m_WorldSet)
 		{
-			return m_WorldSet->DisplayShort() + "_W" + to_string(m_WorldNo);
+			return m_WorldSet->DisplayShort() + "_W" + std::to_string(m_WorldNo);
 		}
-		return "Empty_W" + to_string(m_WorldNo);
+		return "Empty_W" + std::to_string(m_WorldNo);
 	}
 
 	std::string SNI_World::DisplayShortJS() const
@@ -160,7 +160,7 @@ namespace SNI
 		return text;
 	}
 
-	void SNI_World::WriteJSON(ostream & p_Stream, const std::string & tabs, SNI_DisplayOptions &p_DisplayOptions) const
+	void SNI_World::WriteJSON(std::ostream & p_Stream, const std::string & tabs, SNI_DisplayOptions &p_DisplayOptions) const
 	{
 		p_Stream << tabs << "\t\"id\" : \"" << DisplayShort() << "\",\n";
 		p_Stream << tabs << "\t\"breakpoint\" : " << DisplayShortJS() << ",\n";

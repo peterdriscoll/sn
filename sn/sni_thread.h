@@ -6,7 +6,6 @@
 #include "pgc.h"
 #include <string>
 #include <vector>
-using namespace std;
 
 #include "sni_debugcommand.h"
 #include "sni_user.h"
@@ -35,7 +34,7 @@ namespace SNI
 		static SNI_Manager *TopManager();
 
 		static std::string ThreadEnded(long p_ThreadNum);
-		static void WriteThreadEnded(ostream & p_Stream, long p_ThreadNum);
+		static void WriteThreadEnded(std::ostream & p_Stream, long p_ThreadNum);
 
 		SNI_Thread();
 
@@ -118,15 +117,15 @@ namespace SNI
 		void PushContextWorld(SNI_World * p_Context);
 		void PopContextWorld();
 
-		void WriteWebPage(ostream &p_Stream, bool p_Refresh, DisplayOptionType p_OptionType);
-		void WriteShuttingDown(ostream & p_Stream);
+		void WriteWebPage(std::ostream &p_Stream, bool p_Refresh, DisplayOptionType p_OptionType);
+		void WriteShuttingDown(std::ostream & p_Stream);
 
 		SNI_Variable * LookupVariable(const std::string & p_Name);
 		void DisplayFrameStack(size_t p_Depth);
 		void DisplayStepCounts();
-		void WriteStepCount(ostream & p_Stream);
+		void WriteStepCount(std::ostream & p_Stream);
 
-		ostream * CreateLogFile(SN::LoggingLevel p_LoggingLevel);
+		std::ostream * CreateLogFile(SN::LoggingLevel p_LoggingLevel);
 
 		void PromoteExternals(PGC::PGC_Transaction * p_Transaction);
 
@@ -144,33 +143,33 @@ namespace SNI
 
 		void RegisterChange(SNI_Variable *p_NewValue);
 		std::string ChangeHistoryJS(enum DisplayOptionType p_OptionType, size_t p_ColumnWidth, size_t p_FromStep, size_t p_ToStep);
-		void WriteChangeHistoryJS(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions, size_t p_ColumnWidth, size_t p_FromStep, size_t p_ToStep);
-		void WriteStepCountJS(ostream& p_Stream, const std::string& p_Delimeter);
+		void WriteChangeHistoryJS(std::ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions, size_t p_ColumnWidth, size_t p_FromStep, size_t p_ToStep);
+		void WriteStepCountJS(std::ostream& p_Stream, const std::string& p_Delimeter);
 
 		SNI_User* GetUser();
 		void SetUser(SNI_User* p_User);
 	private:
 		std::string StartCommand(enum skynet::DebugAction p_DebugAction, const std::string & p_Description, enum DisplayOptionType p_OptionType);
 
-		static void WriteW3Credentials(ostream & p_Stream);
-		void WriteCommands(ostream & p_Stream);
-		void WriteSubmit(ostream & p_Stream, const std::string & p_Action, const std::string & p_Name, const std::string & p_Description);
-		static void WriteSubmitJS(ostream & p_Stream, const std::string & p_Action, const std::string & p_Name, const std::string & p_Description);
-		void WriteGotoStepCount(ostream &p_Stream);
-		static void WriteGotoStepCountJS(ostream & p_Stream);
-		void WriteSetMaxStackFrames(ostream & p_Stream);
-		static void WriteSetMaxStackFramesJS(ostream & p_Stream);
+		static void WriteW3Credentials(std::ostream & p_Stream);
+		void WriteCommands(std::ostream & p_Stream);
+		void WriteSubmit(std::ostream & p_Stream, const std::string & p_Action, const std::string & p_Name, const std::string & p_Description);
+		static void WriteSubmitJS(std::ostream & p_Stream, const std::string & p_Action, const std::string & p_Name, const std::string & p_Description);
+		void WriteGotoStepCount(std::ostream &p_Stream);
+		static void WriteGotoStepCountJS(std::ostream & p_Stream);
+		void WriteSetMaxStackFrames(std::ostream & p_Stream);
+		static void WriteSetMaxStackFramesJS(std::ostream & p_Stream);
 
-		void WriteWebStack(ostream & p_Stream, size_t  p_Depth, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
+		void WriteWebStack(std::ostream & p_Stream, size_t  p_Depth, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
 
-		void WriteDashboardJS(ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions);
-		void WriteStackJS(ostream & p_Stream, size_t  p_Depth, size_t p_Start, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
-		void WriteCallStackJS(ostream & p_Stream, size_t p_Depth, size_t p_Start, SNI::SNI_DisplayOptions & p_DisplayOptions);
-		void WriteWatchListJS(ostream& p_Stream, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions& p_DisplayOptions);
-		void WriteLogJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartLog);
-		void WriteDerivationJS(ostream & p_Stream, long p_MaxLogEntries);
-		void WriteCodeJS(ostream & p_Stream, long p_MaxLogEntries, long p_StartCode, SNI_DisplayOptions &p_DisplayOptions);
-		void WriteWorldSetsJS(ostream & p_Stream, SNI_DisplayOptions &p_DisplayOptions);
+		void WriteDashboardJS(std::ostream & p_Stream, SNI::SNI_DisplayOptions & p_DisplayOptions);
+		void WriteStackJS(std::ostream & p_Stream, size_t  p_Depth, size_t p_Start, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
+		void WriteCallStackJS(std::ostream & p_Stream, size_t p_Depth, size_t p_Start, SNI::SNI_DisplayOptions & p_DisplayOptions);
+		void WriteWatchListJS(std::ostream& p_Stream, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions& p_DisplayOptions);
+		void WriteLogJS(std::ostream & p_Stream, long p_MaxLogEntries, long p_StartLog);
+		void WriteDerivationJS(std::ostream & p_Stream, long p_MaxLogEntries);
+		void WriteCodeJS(std::ostream & p_Stream, long p_MaxLogEntries, long p_StartCode, SNI_DisplayOptions &p_DisplayOptions);
+		void WriteWorldSetsJS(std::ostream & p_Stream, SNI_DisplayOptions &p_DisplayOptions);
 
 		size_t CountDelayedCalls();
 		size_t CountWorldSets();
@@ -180,8 +179,8 @@ namespace SNI
 
 		SNI_User* m_User;
 		size_t m_ThreadNum;
-		mutex m_Mutex;
-		mutex m_ChangeMutex;
+		std::mutex m_Mutex;
+		std::mutex m_ChangeMutex;
 		SNI_DebugCommand m_DebugCommand;
 		SNI_FrameList m_FrameList;
 		size_t m_ThreadStepCount;

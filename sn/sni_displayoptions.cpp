@@ -35,7 +35,7 @@ namespace SNI
 			id = it->second;
 		}
 		m_TypeMap[p_TypeName] = id+1;
-		return m_VarName + "_" + p_TypeName + "_" + to_string(id);
+		return m_VarName + "_" + p_TypeName + "_" + std::to_string(id);
 	}
 
 	enum DisplayOptionType SNI_DisplayOptions::GetDebugHTML()

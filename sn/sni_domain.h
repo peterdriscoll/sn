@@ -50,7 +50,7 @@ namespace SNI
 	private:
 		
 
-		unordered_map<std::string, SN::SN_Variable> m_Map;
+		std::unordered_map<std::string, SN::SN_Variable> m_Map;
 		std::string m_Name;
 	};
 }

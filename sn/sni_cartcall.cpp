@@ -48,7 +48,7 @@ namespace SNI
 			size_t card = m_FunctionDef->CardinalityOfCall(p_Depth + 1, m_ValueList);
 			if (maxCard < card)
 			{
-				e = SN::SN_Error(true, true, "Cardinality "+ to_string(card)+ " exceeds maximum cardinality "+to_string(maxCard)+".");
+				e = SN::SN_Error(true, true, "Cardinality "+ std::to_string(card)+ " exceeds maximum cardinality "+std::to_string(maxCard)+".");
 			}
 			else
 			{

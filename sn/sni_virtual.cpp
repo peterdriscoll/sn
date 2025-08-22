@@ -63,7 +63,7 @@ namespace SNI
 			++it;
 		}
 		size_t base = p_Base + 1;
-		std::string paramName = "_param_" + to_string(base);
+		std::string paramName = "_param_" + std::to_string(base);
 		SN::SN_Expression l_ImplentationCall = SN::SN_Function(p_ImplementationCall, m_ParameterVariable);
 		if (p_Base == p_FormalParameterList.size() - 1)
 		{
@@ -216,7 +216,7 @@ namespace SNI
 
 	size_t SNI_Virtual::Hash() const
 	{
-		return 0; // _Hash_representation(m_CallList);
+		return 0; // std::_Hash_representation(m_CallList);
 	}
 
 	bool SNI_Virtual::IsValue() const

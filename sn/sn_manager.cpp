@@ -116,7 +116,7 @@ namespace SN
 		return m_Manager->MaxCardinalityUnify();
 	}
 
-	void SN_Manager::StartLogging(SN::LoggingLevel p_LoggingLevel, ostream * p_Stream)
+	void SN_Manager::StartLogging(SN::LoggingLevel p_LoggingLevel, std::ostream * p_Stream)
 	{
 		return m_Manager->StartLogging(p_LoggingLevel, p_Stream);
 	}

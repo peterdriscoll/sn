@@ -7,8 +7,6 @@
 #include <string>
 #include <unordered_map>
 
-using namespace std;
-
 typedef std::unordered_map<std::string, std::string> string_umap;
 
 namespace SNI

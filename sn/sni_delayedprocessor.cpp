@@ -185,7 +185,7 @@ namespace SNI
 					if (thread)
 					{
 						m_SearchLock.unlock();
-						thread->Breakpoint(SN::DebugStop, (SN::BreakId)id++, "Delayed", "Search min cardinality " + to_string(loopCard) + "<" + to_string(card), NULL, SN::DelayedPoint);
+						thread->Breakpoint(SN::DebugStop, (SN::BreakId)id++, "Delayed", "Search min cardinality " + std::to_string(loopCard) + "<" + std::to_string(card), NULL, SN::DelayedPoint);
 						m_SearchLock.lock();
 					}
 					if (loopCard < card)
@@ -246,7 +246,7 @@ namespace SNI
 		return skynet::OK;
 	}
 
-	void SNI_DelayedProcessor::WriteJSON(ostream &p_Stream, SNI::SNI_DisplayOptions &p_DisplayOptions)
+	void SNI_DelayedProcessor::WriteJSON(std::ostream &p_Stream, SNI::SNI_DisplayOptions &p_DisplayOptions)
 	{
 		p_Stream << "{\"records\":[\n";
 		std::string delimeter = "\n";

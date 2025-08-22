@@ -57,7 +57,7 @@ namespace SNI
 	private:
 		
 
-		vector<SN::SN_Expression> m_Vector;
+		std::vector<SN::SN_Expression> m_Vector;
 		bool m_Fixed;
 	};
 }

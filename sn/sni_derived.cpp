@@ -116,7 +116,7 @@ namespace SNI
 
 	size_t SNI_Derived::Hash() const
 	{
-		return 0; // _Hash_representation(m_Vector);
+		return 0; // std::_Hash_representation(m_Vector);
 	}
 
 	bool SNI_Derived::IsValue() const
@@ -163,7 +163,7 @@ namespace SNI
 				SNI_Expression * l_clone = item->Clone(this, NULL);
 				SN::SN_ExpressionList* paramListClone = new SN::SN_ExpressionList(*p_ParameterList);
 				SNI_Frame* topFrame = SNI_Frame::Top();
-				Breakpoint(SN::DebugStop, (SN::BreakId)(SN::DerivedOneId + id++), GetTypeName(), "Call hierarchy " + to_string(id), this, SN::CallPoint);
+				Breakpoint(SN::DebugStop, (SN::BreakId)(SN::DerivedOneId + id++), GetTypeName(), "Call hierarchy " + std::to_string(id), this, SN::CallPoint);
 
 				SN::SN_Expression result = FlattenStackCall(p_MetaLevel, l_clone, paramListClone);
 
@@ -174,7 +174,7 @@ namespace SNI
 
 				SNI_Variable* resultVar = topFrame->GetResult();
 				resultVar->SetValue(result);
-				Breakpoint(SN::DebugStop, (SN::BreakId)(SN::DerivedOneId + id), GetTypeName(), "Call hierarchy " + to_string(id), this, SN::CallPoint);
+				Breakpoint(SN::DebugStop, (SN::BreakId)(SN::DerivedOneId + id), GetTypeName(), "Call hierarchy " + std::to_string(id), this, SN::CallPoint);
 				SNI_Frame::Pop();
 
 				if (result.IsError())
@@ -277,7 +277,7 @@ namespace SNI
 			{
 				if (item && !item->IsNull())
 				{
-					Breakpoint(SN::DebugStop, (SN::BreakId)(SN::DerivedOneId + id), GetTypeName(), "Unify hierarchy " + to_string(id), this, SN::CallPoint);
+					Breakpoint(SN::DebugStop, (SN::BreakId)(SN::DerivedOneId + id), GetTypeName(), "Unify hierarchy " + std::to_string(id), this, SN::CallPoint);
 					++id;
 					SNI_Expression * l_clone = item->Clone(this, NULL);
 					SN::SN_ExpressionList paramListClone = *p_ParameterList;
