@@ -36,17 +36,7 @@ namespace PGC
         private:
             RefCore() = delete;
 
-            RefCore& operator=(RefCore&& p_Other) noexcept
-            {
-                m_InternalPointer = p_Other.m_InternalPointer;
-#ifdef PGC_DEBUG_VERIFY_ENCODING
-                m_LogicalPointer = p_Other.m_LogicalPointer;
-                m_LogicalOwnerTransaction = p_Other.m_LogicalOwnerTransaction;
-                m_LogicalPromotion = p_Other.m_LogicalPromotion;
-#endif
-            }
-
-            // ------------------------------------------------------------------------
+        // ------------------------------------------------------------------------
         // Promotion factory / reuse hook
         // Implement in your PGC layer. This stub just shows intent.
         // ------------------------------------------------------------------------
