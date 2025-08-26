@@ -1,8 +1,5 @@
 #pragma once
 
-#if !defined(TESTPGC_C_H_INCLUDED)
-#define TESTPGC_C_H_INCLUDED
-
 #include "pgc.h"
 #include <string>
 #include <vector>
@@ -30,9 +27,9 @@ public:
 
 //	MEMBER_DEFINITIONS
 private:
-    Ref<TestPGC_C> m_CMember;
-    Ref<TestPGC_A> m_AMember;
-    std::vector<Ref<TestPGC_A>> m_ACollection;
+    MemberRef<TestPGC_C> m_CMember;
+    MemberRef<TestPGC_A> m_AMember;
+    std::vector<MemberRef<TestPGC_A>> m_ACollection;
 
 public:
     TestPGC_C* GetCMember() {
@@ -74,5 +71,3 @@ public:
 private:
 	long m_Length;
 };
-
-#endif // !defined(TESTPGC_C_H_INCLUDED)

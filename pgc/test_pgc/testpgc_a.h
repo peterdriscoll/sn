@@ -9,7 +9,7 @@
 
 using namespace PGCX;
 
-class TestPGC_A : public Base
+class TestPGC_A : public PGC::PGC_Base
 {
     PGC_CLASS(TestPGC_A);
 public:

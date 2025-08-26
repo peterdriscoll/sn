@@ -1,5 +1,9 @@
 #pragma once
 
+#include "pgc_ready.h"
+#include "sref.h"
+#include "memberref.h"
+#include "ref.h"
 #include "pgc_user.h"
 #include "pgc_promotionstrategy.h"
 #include "pgc_base.h"
@@ -8,9 +12,6 @@
 #include "pgc_task.h"
 #include "pgc_promotion.h"
 #include "promotioncapture.h"
-#include "sref.h"
-#include "memberref.h"
-#include "ref.h"
 #include <iostream>
 #include <typeinfo>       // operator typeid
 #include <string>

@@ -92,7 +92,7 @@
     <ClInclude Include="..\inc\pgc_unordered_map_ref.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\inc\pgc_vector_ref.h">
+    <ClInclude Include="..\inc\pgc_vector_member_ref.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\inc\refcore.h">
@@ -102,6 +102,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\inc\promotioncapture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\vector_ref.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\pgc_ready.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

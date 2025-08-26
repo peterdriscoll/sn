@@ -17,8 +17,8 @@ namespace SNI
     class SNI_Error;
 
     // Promotion-aware container aliases
-    using SNI_ErrorList = PGC::vector_ref<SNI_Error>;
-    using SNI_CallRecordList = PGC::vector_ref<SNI_CallRecord>;
+    using SNI_ErrorList = PGC::vector_member_ref<SNI_Error>;
+    using SNI_CallRecordList = PGC::vector_member_ref<SNI_CallRecord>;
 
     // Reset any prior macro sets (mirrors other PGC-ified headers)
 #undef PGC_ACTION_OVER_VALUE_MEMBERS

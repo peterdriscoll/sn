@@ -1,18 +1,17 @@
 #include "pgc.h"
 
+#include "testpgc_a.h"
+#include "testpgc_b.h"
+#include "test_pgc_c.h"
+
 #include "test_pgc_pch.h"
 #include "CppUnitTest.h"
 
 #include <thread>
-//#include <barrier>
 #include <atomic>
 #include <vector>
 #include <chrono>
 #include <string>
-
-#include "testpgc_a.h"
-#include "testpgc_b.h"
-#include "test_pgc_c.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -41,6 +40,8 @@ namespace test_pgc_ref
 		{
 			PGC_User user;
 			{
+				Ref<TestClassUsingRef_B> ref1;
+
 				PGCX::PGC_Transaction source(user, false, PGC::PromotionStrategy::DoubleDipping);
 
 				TestClassUsingRef_B* dyingDestination= new TestClassUsingRef_B();
@@ -86,6 +87,7 @@ namespace test_pgc_ref
 				PGCX::PGC_Transaction destination(user, false, PGC::PromotionStrategy::DoubleDipping);
 
 				Ref<TestClassUsingRef_B> ref;
+				ref.RequestPromotion();
 
 				Assert::IsTrue(user.TotalNetMemoryUsed() == 0, L"Initial net memory");
 				Assert::IsTrue(user.TotalGrossMemoryUsed() ==

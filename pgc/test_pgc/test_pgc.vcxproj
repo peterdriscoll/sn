@@ -171,6 +171,7 @@
   <ItemGroup>
     <ClInclude Include="pin_concept_test.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="testclassusingref_A.h" />
     <ClInclude Include="testclassusingref_B.h" />
     <ClInclude Include="testpgc_a.h" />
     <ClInclude Include="testpgc_b.h" />
@@ -178,6 +179,7 @@
     <ClInclude Include="test_pgc_pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="testclassusingref_A.cpp" />
     <ClCompile Include="testclassusingref_B.cpp" />
     <ClCompile Include="testpgc_a.cpp" />
     <ClCompile Include="testpgc_b.cpp" />

@@ -180,6 +180,7 @@
     <ClInclude Include="..\inc\pgc_promotemacros.h" />
     <ClInclude Include="..\inc\pgc_promotion.h" />
     <ClInclude Include="..\inc\pgc_promotionstrategy.h" />
+    <ClInclude Include="..\inc\pgc_ready.h" />
     <ClInclude Include="..\inc\pgc_stacktransaction.h" />
     <ClInclude Include="..\inc\pgc_task.h" />
     <ClInclude Include="..\inc\pgc_transaction.h" />
@@ -191,7 +192,8 @@
     <ClInclude Include="..\inc\refcore.h" />
     <ClInclude Include="..\inc\sref.h" />
     <ClInclude Include="..\inc\pgc_unordered_map_ref.h" />
-    <ClInclude Include="..\inc\pgc_vector_ref.h" />
+    <ClInclude Include="..\inc\pgc_vector_member_ref.h" />
+    <ClInclude Include="..\inc\vector_ref.h" />
     <ClInclude Include="pgc_pch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

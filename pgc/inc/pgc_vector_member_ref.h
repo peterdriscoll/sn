@@ -14,7 +14,7 @@ namespace PGC
 	class PGC_TypeCheck; // Forward declaration
 
     template <typename T>
-    class vector_ref {
+    class vector_member_ref {
     public:
         using value_type = MemberRef<T>;
         using container_type = std::vector<value_type>; // Now `value_type` is a valid type
@@ -27,11 +27,11 @@ namespace PGC
         Transaction* m_Transaction = nullptr;
 
     public:
-        vector_ref() = delete;
-        explicit vector_ref(Transaction* transaction)
+        vector_member_ref() = delete;
+        explicit vector_member_ref(Transaction* transaction)
             : m_Transaction(transaction) {
         }
-        vector_ref(const vector_ref& other, Transaction* transaction)
+        vector_member_ref(const vector_member_ref& other, Transaction* transaction)
             : m_Transaction(transaction), m_Data(other.m_Data)
         {
         }

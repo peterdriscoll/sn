@@ -1,40 +1,37 @@
 #pragma once
 
 #include "pgc.h"
-#include "testclassusingref_A.h"
 
 using namespace PGCX;
 
-class TestClassUsingRef_A;
+class TestClassUsingRef_B;
 
-class TestClassUsingRef_B
+class TestClassUsingRef_A
     : public PGC::PGC_Base
 {
-    PGC_CLASS(TestClassUsingRef_B)
+    PGC_CLASS(TestClassUsingRef_A)
 
 private:
     std::string                     m_Description = std::string();
     PGCX::Ref<TestClassUsingRef_A>  m_TestA;
     PGCX::Ref<TestClassUsingRef_B>  m_TestB;
-    PGCX::Ref<TestClassUsingRef_B>  m_Next;
+    PGCX::Ref<TestClassUsingRef_A>  m_Next;
 
 public:
     // no copying
-    TestClassUsingRef_B(const TestClassUsingRef_B&) = delete;
-    TestClassUsingRef_B& operator=(const TestClassUsingRef_B&) = delete;
+    TestClassUsingRef_A(const TestClassUsingRef_A&) = delete;
+    TestClassUsingRef_A& operator=(const TestClassUsingRef_A&) = delete;
 
     // yes moving
-    TestClassUsingRef_B(TestClassUsingRef_B&&) noexcept = default;
-    TestClassUsingRef_B& operator=(TestClassUsingRef_B&&) noexcept = default;
+    TestClassUsingRef_A(TestClassUsingRef_A&&) noexcept = default;
+    TestClassUsingRef_A& operator=(TestClassUsingRef_A&&) noexcept = default;
 
     void PromoteMembers() {}
 
-/*
     virtual PGC::PGC_Base* MoveTo(void* memory) override
     {
-        return ::new (memory) TestClassUsingRef_B(std::move(*this));
+        return ::new (memory) TestClassUsingRef_A(std::move(*this));
     }
-*/
 
 public:
     TestClassUsingRef_A* GetTestA() {
@@ -53,17 +50,17 @@ public:
         m_TestB.Set(p_Ptr);
     }
 
-    TestClassUsingRef_B* GetNext() {
+    TestClassUsingRef_A* GetNext() {
         return m_Next.Get();
     }
 
-    void SetNext(TestClassUsingRef_B* p_Ptr) {
+    void SetNext(TestClassUsingRef_A* p_Ptr) {
         m_Next.Set(p_Ptr);
     }
 
-    TestClassUsingRef_B();
+    TestClassUsingRef_A();
     void Initialize();
-    virtual ~TestClassUsingRef_B();
+    virtual ~TestClassUsingRef_A();
 
 	std::string GetDescription() const;
 	void SetDescription(const std::string& p_Description);
@@ -71,3 +68,4 @@ public:
 public:
 	static long m_ActiveCount;
 };
+

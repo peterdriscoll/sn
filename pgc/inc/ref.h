@@ -8,10 +8,11 @@
 #include "pgc_promotion.h"
 #include "pgc_base.h"
 #include "promotioncapture.h"
+#include "pgc_ready.h"
 
 namespace PGC 
 {
-
+    
     template <typename T>
     class Ref : public Promotable 
     {
@@ -167,7 +168,7 @@ namespace PGC
         {
             m_Core.RequestPromotion();
         }
-        void RequestPromotion()
+		void RequestPromotion() requires PGC_Ready<T>
         {
             m_Core.RequestPromotion();
         }

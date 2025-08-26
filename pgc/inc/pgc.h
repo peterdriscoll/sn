@@ -1,5 +1,6 @@
 #pragma once
 
+#include "pgc_ready.h"
 #include "ref.h"
 #include "memberref.h"
 #include "sref.h"
@@ -9,8 +10,10 @@
 #include "pgc_stacktransaction.h"
 #include "pgc_task.h"
 #include "pgc_user.h"
-#include "pgc_vector_ref.h"
+#include "vector_ref.h"
+#include "pgc_vector_member_ref.h"
 #include "pgc_unordered_map_ref.h"
+#include "promotioncapture.h"
 
 namespace PGCX
 {
@@ -36,7 +39,7 @@ namespace PGCX
 namespace PGCX
 {
 	template <typename T>
-	using vector_ref = PGC::vector_ref<T>;
+	using vector_member_ref = PGC::vector_member_ref<T>;
 
 	template <class Key, class T>
 	using unordered_map_ref = PGC::unordered_map_ref<Key, T>;

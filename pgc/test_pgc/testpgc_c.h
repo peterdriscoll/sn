@@ -25,7 +25,7 @@ class TestPGC_C;
     ACTION(AMember, TestPGC_A)
 
 #define PGC_ACTION_OVER_MEMBER_CONTAINER_REFS(ACTION) \
-    ACTION(ACollection, PGC::vector_ref, TestPGC_A)
+    ACTION(ACollection, PGC::vector_member_ref, TestPGC_A)
 
 class TestPGC_C : public Base
 {
@@ -36,7 +36,7 @@ private:
     long                              m_Length{ 0 };
     PGCX::MemberRef<TestPGC_C>        m_CMember;
     PGCX::MemberRef<TestPGC_A>        m_AMember;
-    PGCX::vector_ref<TestPGC_A>       m_ACollection;
+    PGCX::vector_member_ref<TestPGC_A> m_ACollection;
 
 public:
     TestPGC_C* GetCMember() {

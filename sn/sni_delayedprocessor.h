@@ -17,7 +17,7 @@ namespace SNI
     class SNI_String;
     class SNI_Manager;
 
-	using DelayedCallList = PGCX::vector_ref<SNI_DelayedCall>;
+	using DelayedCallList = PGCX::vector_member_ref<SNI_DelayedCall>;
 	using PreventRereadList = PGCX::unordered_map_ref<std::string, SNI_String>;
 
 	#undef PGC_ACTION_OVER_VALUE_MEMBERS
