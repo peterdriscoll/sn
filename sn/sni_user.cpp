@@ -19,7 +19,7 @@ namespace SNI
 	}
 
 	SNI_User::SNI_User(OnErrorHandler *p_ErrorHandler)
-		: PGC::PGC_User(p_ErrorHandler)
+		: PGC::PGC_User(nullptr, p_ErrorHandler)
 		, m_Transaction(nullptr)
 		, m_DelayedProcessor(nullptr)
 		, m_MainThread(SNI_Thread::GetThread())

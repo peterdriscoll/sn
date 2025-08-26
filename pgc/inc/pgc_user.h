@@ -1,9 +1,13 @@
 #pragma once
 
+#include "pgc_registry.h"
 #include "exp_ctrl_pgc.h"
 #include "pgc_base.h"
 #include "pgc_promotion.h"
+
 #include <string>
+#include <unordered_set>
+#include <typeindex>
 
 namespace PGC
 {
@@ -18,7 +22,7 @@ namespace PGC
         static PGC_User* GetCurrentPGC_User();
 
         // Constructor and destructor
-        PGC_User(OnErrorHandler *p_ErrorHandler = DefaultErrorHandler);
+        PGC_User(const RegEntry p_ClassRegistry[] = nullptr, OnErrorHandler *p_ErrorHandler = DefaultErrorHandler);
         virtual ~PGC_User();
 
         // Optional explicit calls (if needed)
@@ -56,7 +60,21 @@ namespace PGC
         bool ShouldRaiseError();
         size_t TotalPromotionMemory();
 
+        template<class T>
+        bool IsRegistered() const
+        {
+            return m_registered.find(std::type_index(typeid(T))) != m_registered.end();
+        }
+
+        template<class T>
+        void RequireRegistered(const char* where) const
+        {
+            ASSERTM(m_registered.size()==0 || IsRegistered<T>(),
+				std::string("Class not registered: ") + typeid(T).name() + " at " + where);
+        }
     private:
+		PGC_User* m_LastPGC_User = nullptr;
+        std::unordered_set<std::type_index> m_registered;
         OnErrorHandler *m_ErrorHandler;
 		bool m_ErrorRaised = false;
     

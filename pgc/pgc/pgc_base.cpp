@@ -30,17 +30,20 @@ namespace PGC
 	// assert with message.
 	void assertm(const char* expr_str, bool expr, const char* file, const int line, const std::string& msg)
 	{
-		PGC_User* user = PGC_User::GetCurrentPGC_User();
-		if (user)
+		if (!expr)
 		{
-			if (!expr && !user->ShouldRaiseError())
+			PGC_User* user = PGC_User::GetCurrentPGC_User();
+			if (user)
 			{
-				std::string full = "PGC ASSERTION FAILED\n";
-				full += "Expression: "; full += expr_str;
-				full += "\nMessage   : "; full += msg;
-				full += "\nFile      : "; full += file;
-				full += ":" + std::to_string(line) + "\n";
-				user->GetErrorHandler()(!expr, full);
+				if (!user->ShouldRaiseError())
+				{
+					std::string full = "PGC ASSERTION FAILED\n";
+					full += "Expression: "; full += expr_str;
+					full += "\nMessage   : "; full += msg;
+					full += "\nFile      : "; full += file;
+					full += ":" + std::to_string(line) + "\n";
+					user->GetErrorHandler()(!expr, full);
+				}
 			}
 		}
 	}

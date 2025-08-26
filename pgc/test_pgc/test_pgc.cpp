@@ -3,13 +3,6 @@
 #include "test_pgc_pch.h"
 #include "CppUnitTest.h"
 
-#include <thread>
-//#include <barrier>
-#include <atomic>
-#include <vector>
-#include <chrono>
-#include <string>
-
 #include "testpgc_a.h"
 #include "testpgc_b.h"
 #include "test_pgc_c.h"
@@ -118,7 +111,7 @@ namespace test_pgc
 
 		TEST_METHOD(TestSimplePromotionOnMemberRef)
 		{
-			PGC_User user(AssertErrorHandler);
+			PGC_User user(nullptr, AssertErrorHandler);
 
 			{
 				PGCX::PGC_Transaction outerTransaction(user);
@@ -149,7 +142,7 @@ namespace test_pgc
 		//  Test multi level promotion.
 		TEST_METHOD(TestBasicPGC)
 		{
-			PGC::PGC_User user(AssertErrorHandler);
+			PGC::PGC_User user(nullptr, AssertErrorHandler);
 
 			{
 				PGCX::PGC_Transaction parentTransaction(user);
@@ -253,7 +246,7 @@ namespace test_pgc
 		//  * EndStackTransaction
 		TEST_METHOD(TestRecursivePGC)
 		{
-			PGC_User user(AssertErrorHandler);
+			PGC_User user(nullptr, AssertErrorHandler);
 
 			{
 				PGCX::PGC_Transaction transaction(user);
@@ -277,7 +270,7 @@ namespace test_pgc
 		//  Test automatic transaction creation with promotion.
 		TEST_METHOD(TestRecursiveKeepPGC)
 		{
-			PGC_User user(AssertErrorHandler);
+			PGC_User user(nullptr, AssertErrorHandler);
 
 			// This test depends on the size of objects and how many fit of TestPGC_A fit in a block.
 			// This varies for 64 bit and debug mode. So ony run this test in 32 bit debug.
@@ -322,7 +315,7 @@ namespace test_pgc
 
 		TEST_METHOD(TestSimpleReferenceCyclePGC)
 		{
-			PGC_User user(AssertErrorHandler);
+			PGC_User user(nullptr, AssertErrorHandler);
 
 			{
 				PGCX::PGC_Transaction parentTransaction(user, false, PGC::PromotionStrategy::DoubleDipping);
@@ -391,7 +384,7 @@ namespace test_pgc
 
 		TEST_METHOD(TestSimpleInOutCyclePGC)
 		{
-			PGC_User user(AssertErrorHandler);
+			PGC_User user(nullptr, AssertErrorHandler);
 
 			{
 				PGCX::PGC_Transaction parentTransaction(user, false, PGC::PromotionStrategy::DoubleDipping);
@@ -442,7 +435,7 @@ namespace test_pgc
 
 		TEST_METHOD(TestReferenceCyclePGC)
 		{
-			PGC_User user(AssertErrorHandler);
+			PGC_User user(nullptr, AssertErrorHandler);
 
 			size_t stackTransactionSize = sizeof(StackTransaction);
 			Assert::IsTrue(stackTransactionSize == 1, L"Stack transaction size is one byte");
@@ -487,7 +480,7 @@ namespace test_pgc
 
 		TEST_METHOD(TestDoublePromotion)
 		{
-			PGC_User user(AssertErrorHandler);
+			PGC_User user(nullptr, AssertErrorHandler);
 
 			{
 				PGCX::PGC_Transaction outerTransaction(user);
@@ -516,7 +509,7 @@ namespace test_pgc
 
 		TEST_METHOD(TestPromotionToDieingTransaction)
 		{
-			PGC_User user(AssertErrorHandler);
+			PGC_User user(nullptr, AssertErrorHandler);
 
 			{
 				PGCX::PGC_Transaction outerTransaction(user);
@@ -551,7 +544,7 @@ namespace test_pgc
 		// misalignment could be exposed. Keep this test as a cross-platform safeguard.
 		TEST_METHOD(TestAlignmentAfterPromotion)
 		{
-			PGC_User user(AssertErrorHandler);
+			PGC_User user(nullptr, AssertErrorHandler);
 
 			{
 				PGCX::PGC_Transaction parent(user);
@@ -579,7 +572,7 @@ namespace test_pgc
 
 		TEST_METHOD(TestStalePointerAfterPromotion)
 		{
-			PGC_User user(AssertErrorHandler);
+			PGC_User user(nullptr, AssertErrorHandler);
 
 			{
 				PGCX::PGC_Transaction transaction(user);

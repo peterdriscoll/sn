@@ -1,4 +1,5 @@
 #pragma once
+
 #include "pgc_base.h"
 
 #include <type_traits>

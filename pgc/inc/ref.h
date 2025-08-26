@@ -21,12 +21,14 @@ namespace PGC
         explicit Ref(PGC_Transaction* p_OwnerTransaction = PGC_Transaction::TopTransaction()) noexcept
             : m_Core(p_OwnerTransaction)
         {
+			PGC_User::GetCurrentPGC_User()->RequireRegistered<T>("Ref<T> constructor");
         }
 
         // Optional convenience: construct with owner + initial pointer.
         Ref(T* ptr, PGC_Transaction* p_OwnerTransaction = PGC_Transaction::TopTransaction()) noexcept
 			: m_Core(p_OwnerTransaction)
         {
+            PGC_User::GetCurrentPGC_User()->RequireRegistered<T>("Ref<T> constructor");
             Set(ptr);
         }
 
@@ -170,6 +172,7 @@ namespace PGC
         }
 		void RequestPromotion() requires PGC_Ready<T>
         {
+            PGC_User::GetCurrentPGC_User()->RequireRegistered<T>("RequestPromotion");
             m_Core.RequestPromotion();
         }
 

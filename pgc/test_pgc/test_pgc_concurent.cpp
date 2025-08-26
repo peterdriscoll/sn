@@ -3,11 +3,6 @@
 #include "test_pgc_pch.h"
 #include "CppUnitTest.h"
 
-#include <thread>
-//#include <barrier>
-#include <atomic>
-#include <vector>
-#include <chrono>
 #include <string>
 
 #include "testpgc_a.h"
@@ -37,7 +32,7 @@ namespace test_pgc_concurrent
 		/*
 		TEST_METHOD(TestConcurrentPromotionStress)
 		{
-			PGC_User user(AssertErrorHandler);
+			PGC_User user(nullptr, AssertErrorHandler);
 
 			Initialize();
 			const int NumThreads = 8;
@@ -94,7 +89,7 @@ namespace test_pgc_concurrent
 
 		TEST_METHOD(TestConcurrentPromotionControlled)
 		{
-			PGC_User user(AssertErrorHandler);
+			PGC_User user(nullptr, AssertErrorHandler);
 
 			std::atomic<bool> failed{ false };
 

@@ -1,44 +1,50 @@
 #include "pgc.h"
 
-#include "testpgc_a.h"
-#include "testpgc_b.h"
-#include "test_pgc_c.h"
+#include "testclassusingref_A.h"
+#include "testclassusingref_A.h"
 
 #include "test_pgc_pch.h"
 #include "CppUnitTest.h"
 
-#include <thread>
-#include <atomic>
-#include <vector>
-#include <chrono>
 #include <string>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace test_pgc_ref
+#define PGC_CLASS_LIST(ACTION) \
+	ACTION(TestClassUsingRef_A) \
+	ACTION(TestClassUsingRef_B)
+
+// PGC_DEFINE_CLASS_REGISTRY(ClassRegistry);
+const ::PGC::RegEntry ClassRegistry[] =
 {
-	void AssertErrorHandler(bool p_Err, const std::string& p_Description)
-	{
-		Assert::IsTrue(!p_Err, std::wstring(p_Description.begin(), p_Description.end()).c_str());
-	};
-	
-	void ThrowErrorHandler(bool p_Err, const std::string& p_Description)
-	{
-		if (p_Err)
-		{
-			throw PGC::PGC_Exception(p_Description);
-		}
-	}
+	::PGC::make_entry<TestClassUsingRef_A>("TestClassUsingRef_A"),
+	::PGC::make_entry<TestClassUsingRef_B>("TestClassUsingRef_B"),
+	::PGC::kEndSentinel
+};
+
+namespace test_pgc
+{
 
 	TEST_CLASS(test_pgc_ref)
 	{
-
 	public:
-		// TESTS.
-
-		TEST_METHOD(TestPromotionResult_Ref_Dropped_DyingDestination)
+		static void AssertErrorHandler(bool p_Err, const std::string& p_Description)
 		{
-			PGC_User user;
+			Assert::IsTrue(!p_Err, std::wstring(p_Description.begin(), p_Description.end()).c_str());
+		};
+
+		static void ThrowErrorHandler(bool p_Err, const std::string& p_Description)
+		{
+			if (p_Err)
+			{
+				throw PGC::PGC_Exception(p_Description);
+			}
+		}
+
+		// TESTS.
+				TEST_METHOD(TestPromotionResult_Ref_Dropped_DyingDestination)
+		{
+			PGC_User user(ClassRegistry, &AssertErrorHandler);
 			{
 				Ref<TestClassUsingRef_B> ref1;
 
@@ -80,7 +86,7 @@ namespace test_pgc_ref
 
 		TEST_METHOD(TestPromotionResult_Ref_PromotedKeep_DoubleDipping)
 		{
-			PGC_User user;
+			PGC_User user(nullptr, &AssertErrorHandler);
 
 			{
 				// DESTINATION transaction (ref lives here)

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pgc_ready.h"
+#include "pgc_registry.h"
 #include "sref.h"
 #include "memberref.h"
 #include "ref.h"

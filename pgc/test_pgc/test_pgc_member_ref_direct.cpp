@@ -3,43 +3,35 @@
 #include "test_pgc_pch.h"
 #include "CppUnitTest.h"
 
-#include <thread>
-//#include <barrier>
-#include <atomic>
-#include <vector>
-#include <chrono>
-#include <string>
-
 #include "testpgc_a.h"
 #include "testpgc_b.h"
 #include "test_pgc_c.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace test_pgc_member_ref_direct
+namespace test_pgc
 {
-	void AssertErrorHandler(bool p_Err, const std::string& p_Description)
-	{
-		Assert::IsTrue(!p_Err, std::wstring(p_Description.begin(), p_Description.end()).c_str());
-	};
-	
-	void ThrowErrorHandler(bool p_Err, const std::string& p_Description)
-	{
-		if (p_Err)
-		{
-			throw PGC::PGC_Exception(p_Description);
-		}
-	}
-
 	TEST_CLASS(test_pgc_member_ref_direct)
 	{
+		static void AssertErrorHandler(bool p_Err, const std::string& p_Description)
+		{
+			Assert::IsTrue(!p_Err, std::wstring(p_Description.begin(), p_Description.end()).c_str());
+		};
+
+		static void ThrowErrorHandler(bool p_Err, const std::string& p_Description)
+		{
+			if (p_Err)
+			{
+				throw PGC::PGC_Exception(p_Description);
+			}
+		}
 
 	public:
 		// TESTS.
 
 		TEST_METHOD(TestPromotionResult_Dropped_DyingDestination)
 		{
-			PGC_User user;
+			PGC_User user(nullptr, AssertErrorHandler);
 			{
 				PGCX::PGC_Transaction source(user, false, PGC::PromotionStrategy::DoubleDipping);
 
@@ -79,7 +71,7 @@ namespace test_pgc_member_ref_direct
 
 		TEST_METHOD(TestPromotionResult_PromotedDone_Backstabbing)
 		{
-			PGC_User user;
+			PGC_User user(nullptr, AssertErrorHandler);
 
 			{
 				// DESTINATION transaction (must outlive source)
@@ -143,7 +135,7 @@ namespace test_pgc_member_ref_direct
 		}
 		TEST_METHOD(TestPromotionResult_PromotedKeep_DoubleDipping)
 		{
-			PGC_User user;
+			PGC_User user(nullptr, AssertErrorHandler);
 
 			{
 				// DESTINATION transaction (ref lives here)

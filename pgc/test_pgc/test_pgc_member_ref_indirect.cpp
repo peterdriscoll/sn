@@ -3,43 +3,34 @@
 #include "test_pgc_pch.h"
 #include "CppUnitTest.h"
 
-#include <thread>
-//#include <barrier>
-#include <atomic>
-#include <vector>
-#include <chrono>
-#include <string>
-
 #include "testpgc_a.h"
 #include "testpgc_b.h"
 #include "test_pgc_c.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace test_pgc_member_ref_indirect
+namespace test_pgc
 {
-	void AssertErrorHandler(bool p_Err, const std::string& p_Description)
-	{
-		Assert::IsTrue(!p_Err, std::wstring(p_Description.begin(), p_Description.end()).c_str());
-	};
-	
-	void ThrowErrorHandler(bool p_Err, const std::string& p_Description)
-	{
-		if (p_Err)
-		{
-			throw PGC::PGC_Exception(p_Description);
-		}
-	}
 	TEST_CLASS(test_pgc_member_ref_indirect)
 	{
 	private:
-		// UTILITY
+		static void AssertErrorHandler(bool p_Err, const std::string& p_Description)
+		{
+			Assert::IsTrue(!p_Err, std::wstring(p_Description.begin(), p_Description.end()).c_str());
+		};
 
+		static void ThrowErrorHandler(bool p_Err, const std::string& p_Description)
+		{
+			if (p_Err)
+			{
+				throw PGC::PGC_Exception(p_Description);
+			}
+		}
 
 	public:
 		TEST_METHOD(TestSimplePromotionOnMemberRef)
 		{
-			PGC_User user(AssertErrorHandler);
+			PGC_User user(nullptr, AssertErrorHandler);
 
 			{
 				PGCX::PGC_Transaction outerTransaction(user);
@@ -70,7 +61,7 @@ namespace test_pgc_member_ref_indirect
 		//  Test multi level promotion.
 		TEST_METHOD(TestPromotionResult_Dropped_DyingDestination)
 		{
-			PGC_User user;
+			PGC_User user(nullptr, AssertErrorHandler);
 			{
 				PGCX::PGC_Transaction source(user, false, PGC::PromotionStrategy::DoubleDipping);
 
@@ -110,7 +101,7 @@ namespace test_pgc_member_ref_indirect
 
 		TEST_METHOD(TestPromotionResult_Nested_Dropped_DyingDestination)
 		{
-			PGC_User user;
+			PGC_User user(nullptr, AssertErrorHandler);
 
 			{
 				// SOURCE transaction (outer)
@@ -172,7 +163,7 @@ namespace test_pgc_member_ref_indirect
 
 		TEST_METHOD(TestPromotionResult_Nested_PromotedDone_Backstabbing_ThroughTestA)
 		{
-			PGC_User user;
+			PGC_User user(nullptr, AssertErrorHandler);
 
 			{
 				// DESTINATION transaction (must outlive source)
@@ -245,7 +236,7 @@ namespace test_pgc_member_ref_indirect
 
 		TEST_METHOD(TestPromotionResult_Nested_PromotedKeep_DoubleDipping_ThroughTestA)
 		{
-			PGC_User user;
+			PGC_User user(nullptr, AssertErrorHandler);
 
 			TestPGC_A* a = nullptr;
 
@@ -328,7 +319,7 @@ namespace test_pgc_member_ref_indirect
 
 		TEST_METHOD(TestPromotionResult_Nested_Keep_ThenPromotedKeep_ThroughTestA)
 		{
-			PGC_User user;
+			PGC_User user(nullptr, AssertErrorHandler);
 
 			TestPGC_A* a = nullptr;
 

@@ -181,6 +181,7 @@
     <ClInclude Include="..\inc\pgc_promotion.h" />
     <ClInclude Include="..\inc\pgc_promotionstrategy.h" />
     <ClInclude Include="..\inc\pgc_ready.h" />
+    <ClInclude Include="..\inc\pgc_registry.h" />
     <ClInclude Include="..\inc\pgc_stacktransaction.h" />
     <ClInclude Include="..\inc\pgc_task.h" />
     <ClInclude Include="..\inc\pgc_transaction.h" />

@@ -29,7 +29,7 @@ namespace PGC
         return t_CurrentPGC_User;
     }
 
-    PGC_User::PGC_User(OnErrorHandler *p_ErrorHandler)
+    PGC_User::PGC_User(const PGC::RegEntry p_ClassRegistry[], OnErrorHandler *p_ErrorHandler)
         : m_ErrorHandler(p_ErrorHandler)
         , m_TotalNetMemoryUsed(0)
         , m_TotalGrossMemoryUsed(0)
@@ -39,15 +39,27 @@ namespace PGC
         , m_PromoteListLast(&m_PromoteList)
     {
         Initialize();
+        if (p_ClassRegistry)
+        {
+            // Build set; stop at sentinel (name == nullptr)
+            for (auto p = p_ClassRegistry; p->name != nullptr; ++p)
+            {
+                // (optional) detect duplicates and mismatched names
+                auto [it, inserted] = m_registered.insert(p->type);
+                ASSERTM(inserted, "Duplicate class registration " + std::string(p->name));
+            }
+        }
     }
 
     PGC_User::~PGC_User()
     {
+		t_CurrentPGC_User = m_LastPGC_User;
         Cleanup();
     }
 
     void PGC_User::Initialize()
     {
+		m_LastPGC_User = t_CurrentPGC_User;
         t_CurrentPGC_User = this;
 
         // reset memory counters
