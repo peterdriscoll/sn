@@ -18,7 +18,7 @@ namespace PGC
     {
     public:
         // Optional convenience: set the destination owner up-front.
-        explicit Ref(PGC_Transaction* p_OwnerTransaction = PGC::PGC_Transaction::TopTransaction()) noexcept
+        explicit Ref(PGC_Transaction* p_OwnerTransaction = PGC_Transaction::TopTransaction()) noexcept
             : m_Core(p_OwnerTransaction)
         {
         }
@@ -135,34 +135,34 @@ namespace PGC
         }
 
         // Accessors with typical pointer ergonomics.
-        PGC::Pin<T*> operator->()
+        Pin<T*> operator->()
         {
-            return PGC::Pin<T>(Get());
+            return Pin<T>(Get());
         }
 
-        PGC::ConstPin<T> operator->() const
+        ConstPin<T> operator->() const
         {
-            return PGC::ConstPin<T>(Get()); 
+            return ConstPin<T>(Get()); 
         }
 
-        PGC::Pin<T*> operator*()
+        Pin<T*> operator*()
         {
-            return PGC::Pin<T>(Get());
+            return Pin<T>(Get());
         }
 
-        PGC::ConstPin<T> operator*()  const 
+        ConstPin<T> operator*()  const 
         {
-            return PGC::ConstPin<T>(Get()); 
+            return ConstPin<T>(Get()); 
         }
 
-        PGC::Pin<T*> Pinned()
+        Pin<T*> Pinned()
         {
-            return PGC::Pin<T>(Get());
+            return Pin<T>(Get());
         }
 
-        PGC::ConstPin<T> Pinned() const 
+        ConstPin<T> Pinned() const 
         { 
-            return PGC::ConstPin<T>(Get());
+            return ConstPin<T>(Get());
         }
         void PromoteNow()
         {

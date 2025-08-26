@@ -64,7 +64,7 @@
 
 #ifndef NDEBUG
 #define ASSERTM(Expr, Msg) \
-    PGC::assertm(#Expr, Expr, __FILE__, __LINE__, Msg)
+    ::PGC::assertm(#Expr, Expr, __FILE__, __LINE__, Msg)
 #else
 #define ASSERTM(Expr, Msg) \
     do { if (!(Expr)) PGC::logwarning("ASSERTM ignored in release build: " Msg); } while (0)
@@ -204,6 +204,6 @@ namespace PGC
 		virtual ~WithPGC() {} // vtable included
 	};
 
-#define PGC_OVERHEAD (sizeof(PGC::WithPGC) - sizeof(PGC::WithoutPGC))
+#define PGC_OVERHEAD (sizeof(::PGC::WithPGC) - sizeof(::PGC::WithoutPGC))
 
 }

@@ -1,5 +1,8 @@
 #include "testclassusingref_B.h"
 #include "test_pgc_pch.h"
+#include <string>
+
+//PGC_CERTIFY(std::string);
 
 /*static*/ long TestClassUsingRef_B::m_ActiveCount = 0;
 

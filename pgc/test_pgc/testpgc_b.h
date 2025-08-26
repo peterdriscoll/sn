@@ -1,9 +1,7 @@
-#if !defined(TESTPGC_B_H_INCLUDED)
-#define TESTPGC_B_H_INCLUDED
-
 #pragma once
 
 #include "pgc.h"
+#include "pgc_base.h"
 
 using namespace PGCX;
 
@@ -22,7 +20,7 @@ class TestPGC_A;
 
 #define PGC_ACTION_OVER_MEMBER_CONTAINER_REFS(ACTION)
 
-class TestPGC_B : public Base
+class TestPGC_B : public PGC::PGC_Base
 {
     PGC_CLASS(TestPGC_B)
 
@@ -106,5 +104,3 @@ public:
 public:
 	static long m_ActiveCount;
 };
-
-#endif // !defined(TESTPGC_B_H_INCLUDED)

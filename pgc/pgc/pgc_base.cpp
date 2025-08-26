@@ -144,7 +144,7 @@ namespace PGC
 		promotion.Create(
 			p_Base,
 			destination,
-			PGC::PromotionStrategy::Backstabbing
+			PromotionStrategy::Backstabbing
 		);
 		promotion.Promote();
 	}

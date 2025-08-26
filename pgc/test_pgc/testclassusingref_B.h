@@ -29,12 +29,10 @@ public:
 
     void PromoteMembers() {}
 
-/*
     virtual PGC::PGC_Base* MoveTo(void* memory) override
     {
         return ::new (memory) TestClassUsingRef_B(std::move(*this));
     }
-*/
 
 public:
     TestClassUsingRef_A* GetTestA() {

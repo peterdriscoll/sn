@@ -186,7 +186,7 @@ namespace PGC
 				promotion.Create(
 					reinterpret_cast<PGC_TypeCheck**>(&m_Pointer),
 					destination,
-					PGC::PromotionStrategy::Backstabbing
+					PromotionStrategy::Backstabbing
 				);
 
 				promotion.Promote();  // Directly promotes and updates pointer via backstabbing
