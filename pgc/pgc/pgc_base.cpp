@@ -31,15 +31,15 @@ namespace PGC
 	void assertm(const char* expr_str, bool expr, const char* file, const int line, const std::string& msg)
 	{
 		PGC_User* user = PGC_User::GetCurrentPGC_User();
-		if (!expr && !user->ShouldRaiseError())
+		if (user)
 		{
-			std::string full = "PGC ASSERTION FAILED\n";
-			full += "Expression: "; full += expr_str;
-			full += "\nMessage   : "; full += msg;
-			full += "\nFile      : "; full += file;
-			full += ":" + std::to_string(line) + "\n";
-			if (user)
+			if (!expr && !user->ShouldRaiseError())
 			{
+				std::string full = "PGC ASSERTION FAILED\n";
+				full += "Expression: "; full += expr_str;
+				full += "\nMessage   : "; full += msg;
+				full += "\nFile      : "; full += file;
+				full += ":" + std::to_string(line) + "\n";
 				user->GetErrorHandler()(!expr, full);
 			}
 		}

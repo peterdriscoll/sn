@@ -15,6 +15,7 @@
 #include "testpgc_a.h"
 #include "testpgc_b.h"
 #include "testpgc_c.h"
+#include "testclassusingref_B.h"
 
 #include <string>
 #include <iostream>

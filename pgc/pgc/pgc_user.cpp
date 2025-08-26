@@ -104,13 +104,13 @@ namespace PGC
             {
             case PromotionResult::Dropped:
                 *last = promotion->m_Next;
-                promotion->Free();
+                FreePromotion(promotion);
                 promotion = *last;
                 break;
 
             case PromotionResult::PromotedDone:
                 *last = promotion->m_Next;
-                promotion->Free();
+                FreePromotion(promotion);
                 promotion = *last;
                 break;
 

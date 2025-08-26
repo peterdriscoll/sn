@@ -6,23 +6,26 @@
 #include "pgc_typecheck.h"
 #include "pgc_transaction.h"
 #include "pgc_promotion.h"
+#include "pgc_base.h"
+#include "promotioncapture.h"
 
-namespace PGC {
+namespace PGC 
+{
 
     template <typename T>
-    class Ref {
+    class Ref : public Promotable 
+    {
     public:
-        Ref() = default;
-
         // Optional convenience: set the destination owner up-front.
-        explicit Ref(PGC_Transaction* p_OwnerTransaction = PGC::PGC_Transaction::TopTransaction())
+        explicit Ref(PGC_Transaction* p_OwnerTransaction = PGC::PGC_Transaction::TopTransaction()) noexcept
+            : m_Core(p_OwnerTransaction)
         {
-            m_Core.SetLogicalTransaction(p_OwnerTransaction);
         }
 
         // Optional convenience: construct with owner + initial pointer.
-        Ref(T* ptr, PGC_Transaction* p_OwnerTransaction = PGC_Transaction::TopTransaction()) {
-            m_Core.SetLogicalTransaction(p_OwnerTransaction);
+        Ref(T* ptr, PGC_Transaction* p_OwnerTransaction = PGC_Transaction::TopTransaction()) noexcept
+			: m_Core(p_OwnerTransaction)
+        {
             Set(ptr);
         }
 
@@ -32,6 +35,8 @@ namespace PGC {
 
         // Move constructor
         Ref(Ref&& p_Other) noexcept
+			: Promotable(std::bind_front(&Ref<T>::RequestPromotion, this))
+            , m_Core(PGC_Transaction::TopTransaction())
         {
             PGC_Transaction* destination = m_Core.GetLogicalOwnerTransaction();
             PGC_Transaction* otherDestination = p_Other.m_Core.GetLogicalOwnerTransaction();
@@ -129,7 +134,7 @@ namespace PGC {
         }
 
         // Accessors with typical pointer ergonomics.
-        PGC::Pin<T> operator->()
+        PGC::Pin<T*> operator->()
         {
             return PGC::Pin<T>(Get());
         }
@@ -139,7 +144,7 @@ namespace PGC {
             return PGC::ConstPin<T>(Get()); 
         }
 
-        PGC::Pin<T> operator*()
+        PGC::Pin<T*> operator*()
         {
             return PGC::Pin<T>(Get());
         }
@@ -149,7 +154,7 @@ namespace PGC {
             return PGC::ConstPin<T>(Get()); 
         }
 
-        PGC::Pin<T> Pinned()
+        PGC::Pin<T*> Pinned()
         {
             return PGC::Pin<T>(Get());
         }
@@ -158,21 +163,14 @@ namespace PGC {
         { 
             return PGC::ConstPin<T>(Get());
         }
-
-        T& operator*()
-        { 
-            T* r = Get(); 
-            ASSERTM(r, "Ref::operator* null"); 
-            return *r;
+        void PromoteNow()
+        {
+            m_Core.RequestPromotion();
         }
-
-        const T& operator*() const 
-        { 
-            const T* r = Get();
-            ASSERTM(r, "Ref::operator* const null");
-            return *r;
+        void RequestPromotion()
+        {
+            m_Core.RequestPromotion();
         }
-
 
     private:
         RefCore m_Core;

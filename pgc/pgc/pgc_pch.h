@@ -7,6 +7,7 @@
 #include "pgc_stacktransaction.h"
 #include "pgc_task.h"
 #include "pgc_promotion.h"
+#include "promotioncapture.h"
 #include "sref.h"
 #include "memberref.h"
 #include "ref.h"
@@ -14,4 +15,4 @@
 #include <typeinfo>       // operator typeid
 #include <string>
 #include <vector>
-#include <unordered_map>>
+#include <unordered_map>

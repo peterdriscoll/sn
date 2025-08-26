@@ -169,6 +169,7 @@
     <ClCompile Include="pgc_transaction.cpp" />
     <ClCompile Include="pgc_typecheck.cpp" />
     <ClCompile Include="pgc_user.cpp" />
+    <ClCompile Include="promotioncapture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\inc\exp_ctrl_pgc.h" />
@@ -185,6 +186,7 @@
     <ClInclude Include="..\inc\pgc_typecheck.h" />
     <ClInclude Include="..\inc\pgc_user.h" />
     <ClInclude Include="..\inc\pinproxy.h" />
+    <ClInclude Include="..\inc\promotioncapture.h" />
     <ClInclude Include="..\inc\ref.h" />
     <ClInclude Include="..\inc\refcore.h" />
     <ClInclude Include="..\inc\sref.h" />

@@ -32,10 +32,14 @@ power with personhood.*
     improve the flaws in our own system of governance.
 
 ------------------------------------------------------------------------
-Postulate X – Sexuality, Tribalism, and Empathy
+## Postulate X – Sexuality, Tribalism, and Empathy
 
 Male sexuality, shaped by ancestral competition for mates and status, narrows empathy by reinforcing tribal boundaries: it favors the in-group, distrusts the out-group, and objectifies partners as symbols of dominance.
 To be humane in a modern world, we must decouple sexuality from tribal rivalry and expand empathy beyond inherited instincts.
+
+## Postulate R
+
+When a system is built to protect revenue first, compassion is taxed and kindness is penalised.
 
 ## Future Postulates (placeholders)
 

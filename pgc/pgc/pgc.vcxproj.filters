@@ -36,6 +36,9 @@
     <ClCompile Include="pgc_user.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="promotioncapture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\inc\exp_ctrl_pgc.h">
@@ -96,6 +99,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\inc\pinproxy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\promotioncapture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -33,6 +33,9 @@
     <ClInclude Include="pin_concept_test.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="testclassusingref_B.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test_pgc.cpp">
@@ -48,6 +51,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="testpgc_c.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test_pgc_member_ref_direct.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test_pgc_member_ref_indirect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test_pgc_concurent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test_pgc_ref.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="testclassusingref_B.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

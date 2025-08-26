@@ -171,16 +171,21 @@
   <ItemGroup>
     <ClInclude Include="pin_concept_test.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="testclassusingref_B.h" />
     <ClInclude Include="testpgc_a.h" />
     <ClInclude Include="testpgc_b.h" />
     <ClInclude Include="testpgc_c.h" />
     <ClInclude Include="test_pgc_pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="testclassusingref_B.cpp" />
     <ClCompile Include="testpgc_a.cpp" />
     <ClCompile Include="testpgc_b.cpp" />
     <ClCompile Include="testpgc_c.cpp" />
     <ClCompile Include="test_pgc.cpp" />
+    <ClCompile Include="test_pgc_concurent.cpp" />
+    <ClCompile Include="test_pgc_member_ref_direct.cpp" />
+    <ClCompile Include="test_pgc_member_ref_indirect.cpp" />
     <ClCompile Include="test_pgc_pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">test_pgc_pch.h</PrecompiledHeaderFile>
@@ -190,6 +195,7 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">test_pgc_pch.h</PrecompiledHeaderFile>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="test_pgc_ref.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

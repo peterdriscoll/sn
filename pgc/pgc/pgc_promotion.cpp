@@ -87,8 +87,6 @@ namespace PGC
 			copy = CopyMemory(*m_Base, m_Destination);
 			(*m_Base)->SetPromotedCopy(copy);
 			newBase = static_cast<PGC_Base*>(copy);
-			newBase->SetTransaction(m_Destination);
-			newBase->PromoteMembers();
 		}
 		switch (m_Strategy)
 		{
@@ -117,12 +115,30 @@ namespace PGC
 		base->RetrieveDescriptor(dataStart, size);
 
 		void* newMemory = p_Destination->CreateNew(size);
+		PGC_Base* newBase = nullptr;
+		                                                                                                                                                                                                                                                                                         
+		FuncVector captureVector;
+		{
+			PromotionCaptureScope scope; // Capture any promotable members constructed during the clone
+ 			newBase = base->MoveTo(newMemory);   // uses T(T&&) via placement-new
+			captureVector = scope.GetCaptures();
+		}
 
-		// Clone the original object into the new memory block via placement new
-		//PGC_Base* newBase = base->CloneTo(newMemory); // TO DO: Constructor not being called on PGC_Base.
-		PGC_Base* newBase = base->MoveTo(newMemory);   // uses T(T&&) via placement-new
+		if (newBase)
+		{
+			newBase->SetTransaction(p_Destination);
+			if (captureVector.size() == 0)
+			{
+				newBase->PromoteMembers();
+			}
 
-		if (!newBase)
+			// Request promotion for captured promotables.
+			for (auto f : captureVector)
+			{
+				f();
+			}	
+		}
+		else
 		{
 			p_Destination->GetUser()->AddTotalNetMemorySize(-static_cast<long>(size - PGC_OVERHEAD));
 			// Fallback to memcpy if CloneTo isn't implemented
@@ -135,10 +151,11 @@ namespace PGC
 				static_cast<char*>(newMemory) + offset);
 			base->SetTransaction(nullptr); // This will stop the destructor being called.
 			p_Destination->RegisterLastForDestruction(newBase);
+			newBase->SetTransaction(p_Destination);
+			newBase->PromoteMembers();
 		}
 		ASSERTM(newBase != nullptr, "Did not expect CloneTo to return a nullptr");
 
-		newBase->SetTransaction(p_Destination);
 		return newBase;
 	}
 
@@ -185,7 +202,14 @@ namespace PGC
 	}
 	void PGC_Promotion::Free()
 	{
-		GetUser()->FreePromotion(this);
+		if (IsPromoted())
+		{
+			GetUser()->FreePromotion(this);
+		}
+		else
+		{
+			MarkNoLongerNeeded();
+		}
 	}
 
 	PGC_TypeCheck* PGC_Promotion::GetBase()

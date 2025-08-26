@@ -65,8 +65,6 @@ public:
         , m_TestA(other.m_TestA)
         , m_Next(other.m_Next)
     {
-        m_TestA.RequestPromotion(GetTransaction());
-        m_Next.RequestPromotion(GetTransaction());
         Initialize();
     }
 
@@ -76,8 +74,6 @@ public:
         , m_TestA(std::move(other.m_TestA))
         , m_Next(std::move(other.m_Next))
     {
-        m_TestA.RequestPromotion(GetTransaction());
-        m_Next.RequestPromotion(GetTransaction());
         Initialize();
     }
 
