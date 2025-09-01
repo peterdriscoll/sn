@@ -23,7 +23,15 @@ public:
     TestClassUsingRef_A& operator=(const TestClassUsingRef_A&) = delete;
 
     // yes moving
-    TestClassUsingRef_A(TestClassUsingRef_A&&) noexcept = default;
+    TestClassUsingRef_A(TestClassUsingRef_A&& p_Other) noexcept
+        : m_Description(std::move(p_Other.m_Description))
+        , m_TestA(std::move(p_Other.m_TestA))
+        , m_TestB(std::move(p_Other.m_TestB))
+        , m_Next(std::move(p_Other.m_Next))
+    {
+        Initialize();
+    };
+
     TestClassUsingRef_A& operator=(TestClassUsingRef_A&&) noexcept = default;
 
     void PromoteMembers() {}

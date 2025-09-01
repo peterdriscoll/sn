@@ -18,7 +18,12 @@ namespace PGC
     {
         if (p_Err)
         {
-            ASSERTM(!p_Err, message);
+            std::fprintf(stderr, message.c_str());
+            std::fflush(stderr);
+#if defined(_MSC_VER) && !defined(NDEBUG)
+            __debugbreak();
+#endif
+            std::abort();
         }
     }
 
@@ -116,7 +121,7 @@ namespace PGC
             {
             case PromotionResult::Dropped:
                 *last = promotion->m_Next;
-                FreePromotion(promotion);
+                promotion->FreeFromProcessingList();
                 promotion = *last;
                 break;
 
@@ -195,7 +200,7 @@ namespace PGC
         {
             p_Promotion->m_Next = m_FreeList;
             m_FreeList = p_Promotion;
-            if (p_Promotion->IsPromoted())
+            if (p_Promotion->IsPromotedOrDropped())
             {
                 AddProcessedDoubleDippingMemory(-static_cast<long>(sizeof(PGC_Promotion)));
             }

@@ -29,7 +29,7 @@ namespace PGC
 		PGC_Base *next = m_DestuctionList;
 		while (next)
 		{
-			PGC_Base *temp = next->GetNext();
+			PGC_Base* temp = next->GetNext((void *)m_current);
 			if (next->GetTransaction() == m_Transaction)
 			{
 				m_Transaction->GetUser()->AddTotalNetMemorySize(-((long)(next->Size() - PGC_OVERHEAD)));
@@ -47,7 +47,7 @@ namespace PGC
 			PGC_Base *next = m_DestuctionList;
 			while (next)
 			{
-				PGC_Base *temp = next->GetNext();
+				PGC_Base *temp = next->GetNext(m_current);
 				if (member < (char *)temp)
 				{
 					return next;
@@ -104,7 +104,7 @@ namespace PGC
 		while (next)
 		{
 			baseClassSize += PGC_OVERHEAD;
-			next = next->GetNext();
+			next = next->GetNext(m_current);
 		}
 		return (m_current - m_Data) - baseClassSize;
 	}

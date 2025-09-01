@@ -39,6 +39,9 @@
     <ClInclude Include="testclassusingref_A.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="something.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test_pgc.cpp">

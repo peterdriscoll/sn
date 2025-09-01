@@ -79,16 +79,9 @@ public:
         return ::new (memory) TestPGC_B(*this);
     }
 
-    virtual PGC::PGC_Base* MoveTo(void* memory) override {
-        PGC::PGC_Transaction* const srcTxn = this->PGC::PGC_Base::GetTransaction();
-        PGC_Base* const srcNext = this->PGC::PGC_Base::GetNext();
-
-        auto copy = ::new (memory) TestPGC_B(std::move(*this));
-
-        // 3) Restore source base links so the old block’s sweep still finds/charges it
-        this->PGC::PGC_Base::SetTransaction(srcTxn);
-        this->PGC::PGC_Base::SetNext(srcNext);
-        return copy;
+    virtual PGC::PGC_Base* MoveTo(void* memory) override
+    {
+        return ::new (memory) TestPGC_B(std::move(*this));
     }
     //End of PGC_MEMBER_DEFINITIONS(TestPGC_B, Base, Initialize())
 public:

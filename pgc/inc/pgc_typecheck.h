@@ -21,6 +21,10 @@ namespace PGC
 		{
 			return nullptr;
 		}
+		virtual const PGC_Transaction* GetTransaction() const
+		{
+			return nullptr;
+		}
 		virtual PGC_TypeCheck* GetPromotedCopy()
 		{
 			return nullptr;

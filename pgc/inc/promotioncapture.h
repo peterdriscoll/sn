@@ -9,7 +9,7 @@
 
 namespace PGC
 {
-    typedef  std::vector<std::function<void()>> FuncVector;
+    typedef  std::vector<std::function<void(PGC_Transaction*)>> FuncVector;
 
 	class Promotable;
 
@@ -26,7 +26,7 @@ namespace PGC
         ~PromotionCaptureScope();
 
         FuncVector& GetCaptures();
-        static void Register(std::function<void()> p_Func);
+        static void Register(std::function<void(PGC_Transaction*)> p_Func);
     };
 
     // promotable.h
@@ -35,9 +35,9 @@ namespace PGC
     public:
         Promotable()
         { }
-        Promotable(std::function<void()> func)
+        Promotable(std::function<void(PGC_Transaction*)> p_Func)
         {
-            PromotionCaptureScope::Register(func);
+            PromotionCaptureScope::Register(p_Func);
         };
         ~Promotable() = default;
     };

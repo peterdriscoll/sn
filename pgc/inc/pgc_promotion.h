@@ -41,7 +41,7 @@ namespace PGC
 
 		void Rebind(PGC_TypeCheck** p_Base, PGC_Transaction* p_DestinationTransaction);
 
-		void Free();
+		void TryFree();
 
 		PGC_Transaction* GetSource();
 		PGC_Transaction* GetDestination();
@@ -51,10 +51,11 @@ namespace PGC
 
 		PGC_User* GetUser() const;
 
-		bool IsPromoted() const;
+		bool IsPromotedOrDropped() const;
 		void MarkPromoted();
+		void FreeFromRefAttached();
 
-		void MarkNoLongerNeeded();
+		void FreeFromProcessingList();
 
 		virtual PGC_TypeCheck* GetLogicalPointer() override;
 		virtual PGC_Transaction* GetLogicalOwnerTransaction() override;
@@ -67,7 +68,9 @@ namespace PGC
 		PGC_Transaction *m_Destination;
 		PGC_TypeCheck* m_FinalCopy;
 		bool m_Promoted = false;
-		bool m_StillNeeded = true;
+		bool m_Dropped = false;
+		bool m_InProcessingList = true;
+		bool m_RefAttached = true;
 		PromotionStrategy m_Strategy;
 	};
 }

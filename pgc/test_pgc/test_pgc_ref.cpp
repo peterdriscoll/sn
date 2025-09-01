@@ -4,6 +4,9 @@
 #include "testclassusingref_A.h"
 
 #include "test_pgc_pch.h"
+
+#include "something.h"
+
 #include "CppUnitTest.h"
 
 #include <string>
@@ -42,18 +45,21 @@ namespace test_pgc
 		}
 
 		// TESTS.
-				TEST_METHOD(TestPromotionResult_Ref_Dropped_DyingDestination)
+		TEST_METHOD(TestPromotionResult_Ref_Dropped_DyingDestination)
 		{
 			PGC_User user(ClassRegistry, &AssertErrorHandler);
 			{
-				Ref<TestClassUsingRef_B> ref1;
-
 				PGCX::PGC_Transaction source(user, false, PGC::PromotionStrategy::DoubleDipping);
 
 				TestClassUsingRef_B* dyingDestination= new TestClassUsingRef_B();
 
 				Assert::IsTrue(user.TotalNetMemoryUsed() == sizeof(TestClassUsingRef_B)- PGC_OVERHEAD);
+				size_t totalGross = user.TotalGrossMemoryUsed();
+				size_t base_gross = sizeof(PGCX::PGC_Transaction);
+				size_t source_gross = source.GrossMemoryUsed();
+				size_t user_promotional = user.TotalPromotionMemory();
 				Assert::IsTrue(user.TotalGrossMemoryUsed() ==
+					//sizeof(PGCX::PGC_Transaction) +
 					source.GrossMemoryUsed() + 
 					user.TotalPromotionMemory(),
 					L"Gross memory error");
@@ -65,6 +71,7 @@ namespace test_pgc
 					Assert::IsTrue(user.TotalNetMemoryUsed() ==
 						sizeof(TestClassUsingRef_B) - PGC_OVERHEAD, L"Net memory error");
 					Assert::IsTrue(user.TotalGrossMemoryUsed() ==
+						//sizeof(PGCX::PGC_Transaction) +
 						source.GrossMemoryUsed() +
 						destination.GrossMemoryUsed() +
 						user.TotalPromotionMemory(),
@@ -73,6 +80,7 @@ namespace test_pgc
 				Assert::IsTrue(user.TotalNetMemoryUsed() ==
 					sizeof(TestClassUsingRef_B) - PGC_OVERHEAD, L"Net memory error");
 				Assert::IsTrue(user.TotalGrossMemoryUsed() ==
+					//sizeof(PGCX::PGC_Transaction) +
 					source.GrossMemoryUsed() +
 					user.TotalPromotionMemory(),
 					L"Gross memory error");
@@ -80,6 +88,7 @@ namespace test_pgc
 			Assert::IsTrue(user.TotalNetMemoryUsed() ==
 				0, L"Net memory error");
 			Assert::IsTrue(user.TotalGrossMemoryUsed() ==
+				//sizeof(PGCX::PGC_Transaction) +
 				user.TotalPromotionMemory(),
 				L"Gross memory error");
 		}
@@ -157,6 +166,105 @@ namespace test_pgc
 				L"Gross memory after cleanup");
 		}
 
+		TEST_METHOD(TestSimpleInOutCyclePGC)
+		{
+			PGC_User user(ClassRegistry, AssertErrorHandler);
+
+			{
+				PGCX::PGC_Transaction parentTransaction(user, false, PGC::PromotionStrategy::DoubleDipping);
+
+				Assert::IsTrue(TestClassUsingRef_B::m_ActiveCount == 0, L"TestClassUsingRef_B count should be 0");
+
+				Ref<TestClassUsingRef_B> a = new TestClassUsingRef_B();
+				a->SetDescription("TestClassUsingRef_B a");
+				Ref<TestClassUsingRef_B> e = new TestClassUsingRef_B();
+				e->SetDescription("TestClassUsingRef_B e");
+
+				auto e_raw = e.Get();
+				Pin<TestClassUsingRef_B> e_pin = e.Pinned();
+				auto e_tx = e_pin->GetTransaction();
+
+				Assert::IsTrue(e.Get() == e_raw, L"e identity changed (downward clone?)");
+				Assert::IsTrue(e->GetTransaction() == e_tx, L"e moved tx (downward clone?)");
+				{
+					PGCX::PGC_Transaction transaction(user, false, PGC::PromotionStrategy::DoubleDipping);
+
+					TestClassUsingRef_B* b = new TestClassUsingRef_B();
+					b->SetDescription("TestClassUsingRef_B b");
+					a->SetNext(b);
+
+					TestClassUsingRef_B* c = new TestClassUsingRef_B();
+					c->SetDescription("TestClassUsingRef_B c");
+					b->SetNext(c);
+
+					TestClassUsingRef_B* d = new TestClassUsingRef_B();
+					d->SetDescription("TestClassUsingRef_B d");
+					c->SetNext(d);
+
+					d->SetNext(e.Get());
+
+					TestClassUsingRef_B* f = new TestClassUsingRef_B();
+					f->SetDescription("TestClassUsingRef_B f");
+					e->SetNext(f);
+
+					f->SetNext(a.Get());
+
+					Assert::IsTrue(TestClassUsingRef_B::m_ActiveCount == 6, L"TestClassUsingRef_B count should be 6");
+					Assert::IsTrue(e.Get() == e_raw, L"e identity changed (downward clone?)");
+					Assert::IsTrue(e->GetTransaction() == e_tx, L"e moved tx (downward clone?)");
+				}
+				Assert::IsTrue(TestClassUsingRef_B::m_ActiveCount == 6, L"TestClassUsingRef_B count should be 6");
+			}
+			Assert::IsTrue(TestClassUsingRef_B::m_ActiveCount == 0, L"TestClassUsingRef_B count should be 0");
+		}
+
+		TEST_METHOD(Test_Ref_ReferenceCyclePGC)
+		{
+			PGC_User user(ClassRegistry, AssertErrorHandler);
+
+			size_t stackTransactionSize = sizeof(StackTransaction);
+			Assert::IsTrue(stackTransactionSize == 1, L"Stack transaction size is one byte");
+
+			Assert::IsTrue(user.PromotionUsedMemory() == 0, L"Promotional memory cleared");
+			Assert::IsTrue(user.PromotionFreeMemory() == user.TotalGrossMemoryUsed(), L"Promotional free memory == gross");
+			{
+				PGCX::PGC_Transaction parentTransaction(user);
+				Ref<TestClassUsingRef_A> a = new TestClassUsingRef_A();
+				a->SetDescription("TestClassUsingRef_A a");
+				{
+					PGCX::PGC_Transaction transaction(user);
+					TestClassUsingRef_A* b = new TestClassUsingRef_A();
+					a->SetNext(b);
+					TestClassUsingRef_A* c = new TestClassUsingRef_A();
+					b->SetNext(c);
+					b->SetDescription("TestClassUsingRef_A b");
+					c->SetNext(a.Get());
+					c->SetDescription("TestClassUsingRef_A c");
+				}
+				Pin<TestClassUsingRef_A> a_pin = a.Pinned();
+				TestClassUsingRef_A* a_next = a_pin->GetNext();
+				auto a_next_next = a_next->GetNext();
+				std::string a_description = a_pin->GetDescription();
+				Assert::IsTrue(a->GetDescription() == "TestClassUsingRef_A a", L"a Correct description");
+				Assert::IsTrue(a->GetNext()->GetDescription() == "TestClassUsingRef_A b", L"b Correct description");
+				Assert::IsTrue(a->GetNext()->GetNext()->GetDescription() == "TestClassUsingRef_A c", L"c Correct description");
+
+				Assert::IsTrue(a->GetNext()->GetNext()->GetNext()->GetDescription() == "TestClassUsingRef_A a", L"a Loop correct description");
+				Assert::IsTrue(a->GetNext()->GetNext()->GetNext()->GetNext()->GetDescription() == "TestClassUsingRef_A b", L"b Loop correct description");
+				Assert::IsTrue(a->GetNext()->GetNext()->GetNext()->GetNext()->GetNext()->GetDescription() == "TestClassUsingRef_A c", L"c Loop correct description");
+
+				Assert::IsTrue(user.TotalNetMemoryUsed() == 3 * (sizeof(TestClassUsingRef_A) - PGC_OVERHEAD));
+
+				Assert::IsTrue(TestClassUsingRef_A::m_ActiveCount == 3, L"Correct active count TestClassUsingRef_A");
+				Assert::IsTrue(TestClassUsingRef_B::m_ActiveCount == 0, L"Correct active count TestClassUsingRef_B");
+			}
+			Assert::IsTrue(user.TotalNetMemoryUsed() == 0, L"Net memory cleared");
+			Assert::IsTrue(user.PromotionUsedMemory() == 0, L"Promotional memory cleared");
+			Assert::IsTrue(user.PromotionFreeMemory() + user.TotalProcessedDoubleDippingMemory() == user.TotalGrossMemoryUsed(), L"Promotional free memory == gross");
+
+			Assert::IsTrue(TestClassUsingRef_A::m_ActiveCount == 0, L"All TestClassUsingRef_A destructors called.");  //  
+			Assert::IsTrue(TestClassUsingRef_B::m_ActiveCount == 0, L"All TestClassUsingRef_B destructors called.");
+		}
 	};
 }
 

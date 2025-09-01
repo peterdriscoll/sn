@@ -29,7 +29,7 @@ namespace PGC
         return m_CaptureVector; 
     }
 
-    /*static*/ void PromotionCaptureScope::Register(std::function<void()> p_Func)
+    /*static*/ void PromotionCaptureScope::Register(std::function<void(PGC_Transaction*)> p_Func)
     { 
         if (t_CaptureVector)
         {

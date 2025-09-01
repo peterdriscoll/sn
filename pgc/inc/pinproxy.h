@@ -12,7 +12,7 @@ namespace PGC {
 		using element_type = std::remove_pointer_t<Ptr>;
 
 		explicit PinProxy(Ptr p) noexcept
-			: m_pointer(p), m_transaction(p ? p->GetTransaction() : nullptr) 
+			: m_pointer(p), m_transaction(const_cast<PGC::PGC_Transaction*>(p->GetTransaction()))
 		{
 			if (m_transaction) m_transaction->Pin();
 		}

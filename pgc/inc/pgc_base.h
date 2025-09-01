@@ -71,10 +71,10 @@
 #endif
 
 #define FORCE_ASSERTM(msg) ASSERTM(false, msg)
-
+#define PGC_DEBUG_NEXT_CALC
 #define PGC_CLASS(T)                                                   \
     public:                                                              \
-		virtual void RetrieveDescriptor(char *&p_Pointer, long &p_Size)  \
+		virtual void RetrieveDescriptor(char *&p_Pointer, long &p_Size) const  \
 		{                                                                \
 			p_Pointer = (char *) this;                                   \
 			p_Size = sizeof(T);                                          \
@@ -156,16 +156,17 @@ namespace PGC
 
 		void PromoteNow(PGC_TypeCheck** p_Base);
 
-		PGC_Transaction * GetTransaction() override;
-		void SetTransaction(PGC_Transaction *);
+		PGC_Transaction* GetTransaction() override;
+		const PGC_Transaction* GetTransaction() const override;
+		void SetTransaction(PGC_Transaction*);
 		PGC_TypeCheck*GetPromotedCopy() override;
 		void SetPromotedCopy(PGC_TypeCheck *p_Base) override;
 
-		PGC_Base *GetNext();
+		PGC_Base* GetNext(const void* p_End) const noexcept;
 		void SetNext(PGC_Base *p_Base);
 
-		virtual void RetrieveDescriptor(char *&p_Pointer, long &p_Size) = 0;
-		size_t Size();
+		virtual void RetrieveDescriptor(char*& p_Pointer, long& p_Size) const = 0;
+		size_t Size() const;
 
 		virtual PGC_TypeCheck* GetLogicalPointer() override
 		{
@@ -189,7 +190,9 @@ namespace PGC
 	private:
 		PGC_Transaction* m_Transaction = nullptr;
 		PGC_TypeCheck* m_PromotedCopy = nullptr;
+	#ifdef PGC_DEBUG_NEXT_CALC
 		PGC_Base* m_Next = nullptr;
+	#endif
 	};
 
 	class WithoutPGC {

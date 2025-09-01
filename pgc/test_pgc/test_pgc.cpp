@@ -108,7 +108,15 @@ namespace test_pgc
 			// This test runs the PinConceptTest.
 			run();
 		}
+		TEST_METHOD(TestDirectDestructor)
+		{
+			struct B { virtual ~B() { std::puts("~B"); } };
+			struct D : B { ~D() override { std::puts("~D"); } };
 
+			B* p = new D;
+			// delete p;         // => calls D::~D then B::~B  (virtual dispatch)
+			p->~B();             // => calls only B::~B        (no virtual dispatch here)
+		}
 		TEST_METHOD(TestSimplePromotionOnMemberRef)
 		{
 			PGC_User user(nullptr, AssertErrorHandler);

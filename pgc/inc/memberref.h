@@ -50,10 +50,10 @@ namespace PGC
 				// The promotion is no longer used at the old location so repurpose it for here.
 				// Could also free it and do a RequestPromotion, as an alternate approach.
 				PGC_Promotion *promotion = static_cast<PGC_Promotion*>(m_Pointer);
-				if (promotion && promotion->IsPromoted())
+				if (promotion && promotion->IsPromotedOrDropped())
 				{
 					m_Pointer = promotion->GetFinalCopy();
-					promotion->Free();  // Put the promotion object back on the free list for reuse.
+					promotion->FreeFromRefAttached();  // Put the promotion object back on the free list for reuse.
 				}
 				else
 				{
@@ -75,14 +75,7 @@ namespace PGC
 					"~MemberRef: promotion base not bound to this address");
 				#endif
 
-				if (promotion->IsPromoted())
-				{
-					promotion->Free();
-				}
-				else
-				{
-					promotion->MarkNoLongerNeeded();
-				}
+				promotion->FreeFromRefAttached();
 			}
 		}
 		T* Get() const
@@ -93,10 +86,10 @@ namespace PGC
 			{
 				auto* promotion = static_cast<PGC_Promotion*>(m_Pointer);
 				ASSERTM(promotion, "IsPromotion returned true but cast to PGC_Promotion failed");
-				if (promotion->IsPromoted())
+				if (promotion->IsPromotedOrDropped())
 				{
 					m_Pointer = promotion->GetFinalCopy();
-					promotion->Free();  // Put the promotion object back on the free list for reuse.
+					promotion->FreeFromRefAttached();  // Put the promotion object back on the free list for reuse.
 				}
 				else
 				{
@@ -115,7 +108,7 @@ namespace PGC
 			// Clean up old promotion if present
 			if (m_Pointer && m_Pointer->IsPromotion())
 			{
-				static_cast<PGC_Promotion*>(m_Pointer)->Free();
+				static_cast<PGC_Promotion*>(m_Pointer)->FreeFromRefAttached();
 			}
 
 			// Handle null pointer case

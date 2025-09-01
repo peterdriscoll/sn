@@ -16,6 +16,7 @@ namespace PGC
    // in one internal pointer. 
     class RefCore
     {
+    private:
         // --- Encoded pointer (the 3-in-1) ---
         PGC_TypeCheck* m_InternalPointer = nullptr;
 
@@ -74,7 +75,7 @@ namespace PGC
 			// Free the promotion if there was one.
             if (promotion)
             {
-                promotion->Free(); // Promotion no longer needed.
+                promotion->FreeFromRefAttached(); // Promotion no longer needed.
             }
 
         #ifdef PGC_DEBUG_VERIFY_ENCODING
@@ -87,8 +88,9 @@ namespace PGC
 			PGC_Promotion* promotion = GetLogicalPromotion();
             if (promotion)
             {
-				SetLogicalPointer(promotion->GetFinalCopy());  
+                m_InternalPointer = promotion->GetFinalCopy();
             #ifdef PGC_DEBUG_VERIFY_ENCODING
+                m_LogicalOwnerTransaction = m_InternalPointer->GetLogicalOwnerTransaction();
                 m_LogicalPromotion = nullptr;  // Clear the shadow reference
             #endif
             }
@@ -133,6 +135,7 @@ namespace PGC
         void SetLogicalPointer(PGC_TypeCheck* p_Pointer) {
 #ifdef PGC_DEBUG_VERIFY_ENCODING
             m_LogicalPointer = p_Pointer;
+            m_LogicalPromotion = nullptr;
 #endif
             if (p_Pointer == nullptr)
             {
@@ -171,6 +174,7 @@ namespace PGC
             m_InternalPointer = p_Promotion;
 
         #ifdef PGC_DEBUG_VERIFY_ENCODING
+            m_LogicalPointer = p_Promotion->GetLogicalPointer();
             Verify();
         #endif
         }
@@ -189,25 +193,31 @@ namespace PGC
         #endif
         }
 
-        void RequestPromotion()
+        void RequestPromotion(PGC_Transaction* p_DestinationTransaction)
         {
             if (!GetLogicalPointer() || GetLogicalPromotion())
             {
-				return;
+                Verify();
+                return;
             }
+
+#ifdef PGC_DEBUG_VERIFY_ENCODING
+            m_LogicalOwnerTransaction = p_DestinationTransaction;
+#endif
 
             PGC_Transaction* sourceTransaction = GetLogicalPointer()->GetTransaction();
-            PGC_Transaction* destinationTransaction = GetLogicalOwnerTransaction();
 
             ASSERTM(sourceTransaction, "Must have a source transaction.");
-            ASSERTM(sourceTransaction, "Must have a destination transaction.");
-
-            PGC_TypeCheck* typeCheck = PGC_Promotion::CheckRequestPromotion(
-                &m_InternalPointer, sourceTransaction, destinationTransaction, PromotionStrategy::DoubleDipping);
-            if (typeCheck != m_InternalPointer)
+            ASSERTM(p_DestinationTransaction, "Must have a destination transaction.");
+            if (GetLogicalPointer() && sourceTransaction != p_DestinationTransaction 
+                //&& sourceTransaction->IsDescendantOf(p_DestinationTransaction)
+                && !sourceTransaction->IsStatic())
             {
-                m_InternalPointer = typeCheck;
+                SetLogicalPromotion(CreatePromotion(m_InternalPointer, p_DestinationTransaction));
             }
+        #ifdef PGC_DEBUG_VERIFY_ENCODING
+            Verify();
+        #endif
         }
     };
 

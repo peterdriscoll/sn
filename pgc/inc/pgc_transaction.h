@@ -105,7 +105,8 @@ namespace PGC
 		virtual PGC_TypeCheck* GetLogicalPointer() override;
 		virtual PGC_Transaction* GetLogicalOwnerTransaction() override;
 		virtual PGC_Promotion* GetLogicalPromotion() override;
-
+		void Pin();
+		void Unpin();
 	private:
 
 		void CallDestructorsForAllBlocks();

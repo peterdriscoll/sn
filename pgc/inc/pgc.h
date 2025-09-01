@@ -30,6 +30,12 @@ namespace PGCX
 	using Ref = PGC::Ref<T>;
 
 	template <class T>
+	using Pin = PGC::Pin<T>;
+
+	template <class T>
+	using ConstPin = PGC::ConstPin<T>;
+
+	template <class T>
 	using SRef = PGC::SRef<T>;
 }
 namespace PGCX

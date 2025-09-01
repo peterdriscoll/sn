@@ -12,7 +12,9 @@ namespace PGC
 		, m_Destination(nullptr)
 		, m_FinalCopy(nullptr)
 		, m_Promoted(false)
-		, m_StillNeeded(true)
+		, m_Dropped(false)
+		, m_InProcessingList(true)
+		, m_RefAttached(true)
 	{
 	}
 
@@ -41,7 +43,7 @@ namespace PGC
 
 	PromotionResult  PGC_Promotion::PromoteOrReject()
 	{
-		if (!m_StillNeeded)
+		if (!m_RefAttached)
 		{
 			return PromotionResult::Dropped;
 		}
@@ -135,7 +137,7 @@ namespace PGC
 			// Request promotion for captured promotables.
 			for (auto f : captureVector)
 			{
-				f();
+				f(p_Destination);
 			}	
 		}
 		else
@@ -177,8 +179,10 @@ namespace PGC
 		m_Destination = p_Destination;
 		m_Strategy = p_Strategy;
 		m_Promoted = false;
+		m_Dropped = false;
 		m_FinalCopy = *p_Base;  // <- capture the original before any overwrite happens
-		m_StillNeeded = true;
+		m_RefAttached = true;
+		m_InProcessingList = true;
 	}
 
 	PGC_User* PGC_Promotion::GetUser() const
@@ -186,29 +190,47 @@ namespace PGC
 		return m_Destination->GetUser();
 	}
 
-	bool PGC_Promotion::IsPromoted() const
+	bool PGC_Promotion::IsPromotedOrDropped() const
 	{
-		return m_Promoted;
+		return m_Promoted || m_Dropped;
 	}
 
 	void PGC_Promotion::MarkPromoted()
 	{
 		m_Promoted = true;
+		m_InProcessingList = false;
 		GetUser()->AddProcessedDoubleDippingMemory(sizeof(PGC_Promotion));
 	}
-	void PGC_Promotion::MarkNoLongerNeeded()
+	void PGC_Promotion::FreeFromRefAttached()
 	{
-		m_StillNeeded = false;
+		m_RefAttached = false;
+		TryFree();
 	}
-	void PGC_Promotion::Free()
+	void PGC_Promotion::FreeFromProcessingList()
 	{
-		if (IsPromoted())
+		m_InProcessingList = false;
+		if (m_Strategy == PromotionStrategy::DoubleDipping && m_RefAttached)
 		{
-			GetUser()->FreePromotion(this);
+			m_Dropped = true;
+			GetUser()->AddProcessedDoubleDippingMemory(sizeof(PGC_Promotion));
 		}
-		else
-		{
-			MarkNoLongerNeeded();
+		TryFree();
+	}
+	void PGC_Promotion::TryFree()
+	{
+		switch (m_Strategy) {
+		case PromotionStrategy::Backstabbing:
+			GetUser()->FreePromotion(this);
+			break;
+		case  PromotionStrategy::DoubleDipping:
+			if (!m_RefAttached && !m_InProcessingList)
+			{
+				GetUser()->FreePromotion(this);
+			}
+			break;
+		default:
+			ASSERTM(false, "Invalid promotion strategy");
+			break;
 		}
 	}
 

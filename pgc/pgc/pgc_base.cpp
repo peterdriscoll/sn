@@ -162,6 +162,11 @@ namespace PGC
 		return m_Transaction;
 	}
 
+	const PGC_Transaction* PGC_Base::GetTransaction() const
+	{
+		return m_Transaction;
+	}
+
 	void PGC_Base::SetTransaction(PGC_Transaction *p_Transaction)
 	{
 		m_Transaction = p_Transaction;
@@ -177,17 +182,38 @@ namespace PGC
 		m_PromotedCopy = p_Base;
 	}
 
-	PGC_Base *PGC_Base::GetNext()
+	static constexpr size_t kAllocAlign = alignof(std::max_align_t);
+	static inline size_t align_up(size_t n, size_t a = kAllocAlign) {
+		return (n + a - 1) & ~(a - 1);
+	}
+
+	PGC_Base* PGC_Base::GetNext(const void* p_end) const noexcept
 	{
-		return m_Next;
+		const std::byte* self = reinterpret_cast<const std::byte*>(this);
+		const size_t span = align_up(Size());            // ensure Size() is total, unshared span
+		const std::byte* nextp = self + span;
+
+		PGC_Base* next = nullptr;
+		if (!p_end || nextp < reinterpret_cast<const std::byte*>(p_end)) {
+			// launder is the standards-correct way when objects are created via placement new
+			next = std::launder(reinterpret_cast<PGC_Base*>(const_cast<std::byte*>(nextp)));
+		}
+
+#ifdef PGC_DEBUG_NEXT_CALC
+		// If you also maintain m_Next in debug, sanity-check agreement.
+		ASSERTM(m_Next == next, "Layout-computed next disagrees with linked next");
+#endif
+		return next;
 	}
 
 	void PGC_Base::SetNext(PGC_Base *p_Base)
 	{
+	#ifdef PGC_DEBUG_NEXT_CALC
 		m_Next = p_Base;
+	#endif
 	}
 
-	size_t PGC_Base::Size()
+	size_t PGC::PGC_Base::Size() const
 	{
 		long l_size;
 		char *l_pointer;

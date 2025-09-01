@@ -369,4 +369,8 @@ namespace PGC
 	{
 		return nullptr;
 	}
+	void PGC_Transaction::Pin()
+	{ }
+	void PGC_Transaction::Unpin()
+	{ }
 }
