@@ -70,21 +70,21 @@ namespace PGC
 
 	PGC_Base::PGC_Base()
 	{
-		m_Transaction = PGC_Transaction::RegisterLastForDestruction(this);
+		SetTransaction(PGC_Transaction::RegisterLastForDestruction(this));
 	}
 
 	PGC_Base::PGC_Base(PGC_Transaction& p_Transaction)
-		: m_Transaction(&p_Transaction)
 	{
+		SetTransaction(&p_Transaction);
 		PGC_Transaction::RegisterLastForDestruction(this);
 	}
 	PGC_Base::PGC_Base(const PGC_Base& other)
-		: m_Transaction(PGC_Transaction::RegisterLastForDestruction(this))
 	{
+		SetTransaction(PGC_Transaction::RegisterLastForDestruction(this));
 	}
 	PGC_Base::PGC_Base(PGC_Base&& other) noexcept
-		: m_Transaction(PGC_Transaction::RegisterLastForDestruction(this))
 	{
+		SetTransaction(PGC_Transaction::RegisterLastForDestruction(this));
 	}
 	PGC_Base::~PGC_Base()
 	{
@@ -154,33 +154,77 @@ namespace PGC
 
 	bool PGC_Base::IsPromotedMarker() const
 	{
-		return m_PromotedCopy != nullptr;
+		return HoldsPromotedCopy();
 	}
 
-	PGC_Transaction * PGC_Base::GetTransaction()
+	bool PGC_Base::GetCallDestructor() const noexcept
 	{
-		return m_Transaction;
+		return m_CallDestructor;
+	}
+	void PGC_Base::SetCallDestructor(bool p_CallDestructor) noexcept
+	{
+		m_CallDestructor = p_CallDestructor;
 	}
 
-	const PGC_Transaction* PGC_Base::GetTransaction() const
+	// Query
+	bool PGC_Base::HoldsPromotedCopy() const noexcept
 	{
-		return m_Transaction;
+		return is_tagged(m_Link);
 	}
 
-	void PGC_Base::SetTransaction(PGC_Transaction *p_Transaction)
+	// Accessors (return nullptr if not holding that variant)
+	PGC_Transaction* PGC_Base::GetTransaction() noexcept
 	{
-		m_Transaction = p_Transaction;
+		return const_cast<const PGC_Base*>(this)->GetTransaction();
 	}
 
-	PGC_TypeCheck* PGC_Base::GetPromotedCopy()
+	PGC_Transaction* PGC_Base::GetTransaction() const noexcept
 	{
-		return m_PromotedCopy;
+		PGC_Transaction* result = HoldsPromotedCopy() 
+			? nullptr
+			: reinterpret_cast<PGC_Transaction*>(m_Link);
+	#ifdef PGC_DEBUG_UNION
+		ASSERTM(result == m_LogicalTransaction, "PGC_Base::GetTransaction(): m_LogicalTransaction out of sync");
+	#endif
+		return result;
+	}
+	PGC_TypeCheck* PGC_Base::GetPromotedCopy() const noexcept
+	{
+		PGC_TypeCheck* result = HoldsPromotedCopy() 
+			? reinterpret_cast<PGC_TypeCheck*>(rm_tag(m_Link))
+			: nullptr;
+	#ifdef PGC_DEBUG_UNION
+		ASSERTM(result == m_LogicalPromotedCopy, "PGC_Base::GetPromotedCopy(): m_LogicalPromotedCopy out of sync");
+	#endif
+		return result;
 	}
 
-	void PGC_Base::SetPromotedCopy(PGC_TypeCheck*p_Base)
+	// Mutators
+	void PGC_Base::SetTransaction(PGC_Transaction* t) noexcept
 	{
-		m_PromotedCopy = p_Base;
+		// Keep logical mirrors
+		m_LogicalTransaction = t;
+		m_LogicalPromotedCopy = nullptr;
+
+		// Store untagged pointer (or 0)
+		m_Link = reinterpret_cast<uintptr_t>(t);
 	}
+
+	void PGC_Base::SetPromotedCopy(PGC_TypeCheck* p) noexcept {
+		m_LogicalTransaction = nullptr;
+		m_LogicalPromotedCopy = p;
+
+		// Null stays null; otherwise tag bit marks “promoted copy”
+		m_Link = p ? add_tag(p) : 0;
+	}
+
+	// Clear to empty
+	void PGC_Base::ResetLink() noexcept {
+		m_Link = 0;
+		m_LogicalTransaction = nullptr;
+		m_LogicalPromotedCopy = nullptr;
+	}
+
 
 	static constexpr size_t kAllocAlign = alignof(std::max_align_t);
 	static inline size_t align_up(size_t n, size_t a = kAllocAlign) {

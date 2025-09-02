@@ -129,6 +129,7 @@ namespace PGC
 		if (newBase)
 		{
 			newBase->SetTransaction(p_Destination);
+			newBase->SetCallDestructor(true);   // Just a precaution. Prevent carrying over a false from source
 			if (captureVector.size() == 0)
 			{
 				newBase->PromoteMembers();
@@ -151,7 +152,7 @@ namespace PGC
 			ptrdiff_t offset = dataStart - oldPointer;
 			newBase = reinterpret_cast<PGC_Base*>(
 				static_cast<char*>(newMemory) + offset);
-			base->SetTransaction(nullptr); // This will stop the destructor being called.
+			base->SetCallDestructor(false); // This will stop the destructor being called.
 			p_Destination->RegisterLastForDestruction(newBase);
 			newBase->SetTransaction(p_Destination);
 			newBase->PromoteMembers();

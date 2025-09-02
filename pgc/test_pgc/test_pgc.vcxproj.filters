@@ -42,6 +42,9 @@
     <ClInclude Include="something.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="facade_data.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test_pgc.cpp">

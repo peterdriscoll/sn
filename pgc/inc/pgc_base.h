@@ -61,7 +61,7 @@
 #include "exp_ctrl_pgc.h"
 #include <string>
 #include "pgc_typecheck.h"
-
+#include "pgc_transaction.h"
 #ifndef NDEBUG
 #define ASSERTM(Expr, Msg) \
     ::PGC::assertm(#Expr, Expr, __FILE__, __LINE__, Msg)
@@ -80,6 +80,8 @@
 			p_Size = sizeof(T);                                          \
 		}
 
+#define PGC_DEBUG_UNION
+ 
 #define REQUESTPROMOTION(member) RequestPromotion((PGC::PGC_TypeCheck **) &member)
 //#define PROMOTENOW(member) RequestPromotion((PGC::PGC_TypeCheck **) &member)
 #define PROMOTENOW(member) PromoteNow((PGC::PGC_TypeCheck **) &member)
@@ -156,12 +158,6 @@ namespace PGC
 
 		void PromoteNow(PGC_TypeCheck** p_Base);
 
-		PGC_Transaction* GetTransaction() override;
-		const PGC_Transaction* GetTransaction() const override;
-		void SetTransaction(PGC_Transaction*);
-		PGC_TypeCheck*GetPromotedCopy() override;
-		void SetPromotedCopy(PGC_TypeCheck *p_Base) override;
-
 		PGC_Base* GetNext(const void* p_End) const noexcept;
 		void SetNext(PGC_Base *p_Base);
 
@@ -181,15 +177,59 @@ namespace PGC
 			return nullptr;
 		}
 
+		bool GetCallDestructor() const noexcept;
+		void SetCallDestructor(bool p_CallDestructor) noexcept;
+
+		// Query
+		bool HoldsPromotedCopy() const noexcept;
+
+		// Accessors (return nullptr if not holding that variant)
+		PGC_Transaction* GetTransaction() noexcept;
+		PGC_Transaction* GetTransaction() const noexcept;
+		PGC_TypeCheck* GetPromotedCopy() const noexcept;
+
+		// Mutators
+		void SetTransaction(PGC_Transaction* t) noexcept;
+		void SetPromotedCopy(PGC_TypeCheck* p) noexcept;
+
+		// Clear to empty
+		void ResetLink() noexcept;
+
 		void* operator new(size_t, void* p) noexcept { return p; };
 		void *operator new(size_t p_size, PGC_Transaction &p_Transaction);
 		void *operator new(size_t p_size);
 		void operator delete(void*, void*) noexcept { /* nothing to do */ }
 		void operator delete(void *p_Object, PGC_Transaction &p_Transaction);
 		void operator delete(void *p_Object);
+		// In PGC_Base (or wherever those members live)
 	private:
-		PGC_Transaction* m_Transaction = nullptr;
-		PGC_TypeCheck* m_PromotedCopy = nullptr;
+		// This can be removed when we get rid of memcopy (in CopyMemory in Promotion)
+		// If using MoveTo, a new object is constructed, and this old 
+		// object still needs to be destroyed.
+		bool m_CallDestructor = true; // Whether to call destructor when transaction ends.
+		// One field to hold either Transaction* or PromotedCopy* with a tag bit.
+		uintptr_t m_Link = 0;
+
+		// Training wheels (debug/telemetry); keep both logically for now.
+#ifdef PGC_DEBUG_UNION
+		PGC_Transaction* m_LogicalTransaction = nullptr;
+		PGC_TypeCheck* m_LogicalPromotedCopy = nullptr;
+#endif
+
+		// We’ll use bit 0 as the tag: 0 = Transaction*, 1 = PromotedCopy*
+		static constexpr uintptr_t TAG = 1;
+
+		// Sanity: make sure we can steal bit 0 (both types at least 2-byte aligned).
+		static_assert((alignof(PGC_Transaction)& TAG) == 0,
+			"PGC_Transaction must be >=2-byte aligned");
+		static_assert((alignof(PGC_TypeCheck)& TAG) == 0,
+			"PGC_TypeCheck must be >=2-byte aligned");
+
+		// Helpers
+		static constexpr bool is_tagged(uintptr_t v) { return (v & TAG) != 0; }
+		static inline uintptr_t add_tag(void* p) { return (reinterpret_cast<uintptr_t>(p) | TAG); }
+		static inline uintptr_t rm_tag(uintptr_t v) { return (v & ~TAG); }
+
 	#ifdef PGC_DEBUG_NEXT_CALC
 		PGC_Base* m_Next = nullptr;
 	#endif

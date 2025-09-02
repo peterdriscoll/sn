@@ -140,8 +140,8 @@ namespace PGC
 				return;
 
 			PGC_Transaction* source = m_Pointer->GetTransaction();
-			PromotionStrategy strategy = source->GetPromotionStrategy();
 			if (!source) return;
+			PromotionStrategy strategy = source->GetPromotionStrategy();
 
 			switch (strategy)
 			{

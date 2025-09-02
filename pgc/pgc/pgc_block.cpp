@@ -30,7 +30,7 @@ namespace PGC
 		while (next)
 		{
 			PGC_Base* temp = next->GetNext((void *)m_current);
-			if (next->GetTransaction() == m_Transaction)
+			if (next->GetCallDestructor())
 			{
 				m_Transaction->GetUser()->AddTotalNetMemorySize(-((long)(next->Size() - PGC_OVERHEAD)));
 				next->~PGC_Base();
