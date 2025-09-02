@@ -38,7 +38,7 @@ namespace PGC
         : m_ErrorHandler(p_ErrorHandler)
         , m_TotalNetMemoryUsed(0)
         , m_TotalGrossMemoryUsed(0)
-		, m_ProcessedDoubleDippingMemory(0) 
+		, m_ProcessedRefAttachedMemory(0) 
         , m_FreeList(nullptr)
         , m_PromoteList(nullptr)
         , m_PromoteListLast(&m_PromoteList)
@@ -70,7 +70,7 @@ namespace PGC
         // reset memory counters
         ResetNetMemoryUsed();
         ResetGrossMemoryUsed();
-        ResetProcessedDoubleDippingMemory();
+        ResetProcessedRefAttachedMemory();
     }
 
     void PGC_User::Cleanup()
@@ -89,7 +89,7 @@ namespace PGC
             "Promotion memory accounting mismatch: "
             + std::to_string(PromotionUsedMemory()) + " (used) + "
             + std::to_string(PromotionFreeMemory()) + " (free) + "
-            + std::to_string(TotalProcessedDoubleDippingMemory()) + " (double dipped) != "
+            + std::to_string(TotalProcessedRefAttachedMemory()) + " (double dipped) != "
             + std::to_string(TotalGrossMemoryUsed()) + " (gross)");
 
         // Clear all promotions (reset the free list)
@@ -101,9 +101,9 @@ namespace PGC
             "Promotional free memory " + std::to_string(PromotionFreeMemory()) + " should be zero after clear");
 
         ASSERTM(
-            TotalGrossMemoryUsed() == TotalProcessedDoubleDippingMemory(),
+            TotalGrossMemoryUsed() == TotalProcessedRefAttachedMemory(),
             "Total gross memory used " + std::to_string(TotalGrossMemoryUsed()) +
-            " should equal processed memory " + std::to_string(TotalProcessedDoubleDippingMemory()) + " after clear");
+            " should equal processed memory " + std::to_string(TotalProcessedRefAttachedMemory()) + " after clear");
     }
 
     //  Process the list
@@ -202,7 +202,7 @@ namespace PGC
             m_FreeList = p_Promotion;
             if (p_Promotion->IsPromotedOrDropped())
             {
-                AddProcessedDoubleDippingMemory(-static_cast<long>(sizeof(PGC_Promotion)));
+                AddProcessedRefAttachedMemory(-static_cast<long>(sizeof(PGC_Promotion)));
             }
         }
     }
@@ -217,9 +217,9 @@ namespace PGC
         return m_TotalGrossMemoryUsed;
     }
 
-    size_t PGC_User::TotalProcessedDoubleDippingMemory() const
+    size_t PGC_User::TotalProcessedRefAttachedMemory() const
     {
-        return m_ProcessedDoubleDippingMemory;
+        return m_ProcessedRefAttachedMemory;
     }
 
     void PGC_User::AddTotalNetMemorySize(long memory)
@@ -252,22 +252,22 @@ namespace PGC
         m_TotalGrossMemoryUsed = PromotionFreeMemory();
     }
 
-    void PGC_User::ResetProcessedDoubleDippingMemory()
+    void PGC_User::ResetProcessedRefAttachedMemory()
     {
-        m_ProcessedDoubleDippingMemory = 0;
+        m_ProcessedRefAttachedMemory = 0;
     }
 
-    void PGC_User::AddProcessedDoubleDippingMemory(long memory)
+    void PGC_User::AddProcessedRefAttachedMemory(long memory)
     {
-        ASSERTM(memory >= 0 || m_ProcessedDoubleDippingMemory >= static_cast<size_t>(-memory),
-            "Processed double-dipping memory would underflow: subtracting " + std::to_string(-memory) +
-            " from " + std::to_string(m_ProcessedDoubleDippingMemory));
-        m_ProcessedDoubleDippingMemory += memory;
+        ASSERTM(memory >= 0 || m_ProcessedRefAttachedMemory >= static_cast<size_t>(-memory),
+            "Processed ref attached memory would underflow: subtracting " + std::to_string(-memory) +
+            " from " + std::to_string(m_ProcessedRefAttachedMemory));
+        m_ProcessedRefAttachedMemory += memory;
     }
 
     size_t PGC_User::TotalPromotionMemory()
     {
-        return PromotionUsedMemory() + PromotionFreeMemory() + TotalProcessedDoubleDippingMemory();
+        return PromotionUsedMemory() + PromotionFreeMemory() + TotalProcessedRefAttachedMemory();
     }
 
     size_t PGC_User::PromotionFreeMemory()

@@ -137,17 +137,17 @@ namespace test_pgc
 
 					Assert::IsNotNull(value, L"ref.Get() returned null");
 
-					Assert::IsTrue(user.TotalProcessedDoubleDippingMemory() == 0,
+					Assert::IsTrue(user.TotalProcessedRefAttachedMemory() == 0,
 						L"Processed double dipping memory should be zero");
 				}
 				// This should have triggered PromotedKeep behavior
-				Assert::IsTrue(user.TotalProcessedDoubleDippingMemory() == sizeof(PGC::PGC_Promotion),
+				Assert::IsTrue(user.TotalProcessedRefAttachedMemory() == sizeof(PGC::PGC_Promotion),
 					L"Processed double dipping memory should be updated");
 
 				// ref.Get() called -> triggers freeing of the double dipped promotion (the second dip).
 				TestClassUsingRef_B* value2 = ref.Get();
 
-				Assert::IsTrue(user.TotalProcessedDoubleDippingMemory() == 0,
+				Assert::IsTrue(user.TotalProcessedRefAttachedMemory() == 0,
 					L"Processed double dipping memory should be zero after free");
 
 				Assert::IsTrue(destination.NetMemoryUsed() == sizeof(TestClassUsingRef_B) - PGC_OVERHEAD, L"Destination owns value");
@@ -260,7 +260,7 @@ namespace test_pgc
 			}
 			Assert::IsTrue(user.TotalNetMemoryUsed() == 0, L"Net memory cleared");
 			Assert::IsTrue(user.PromotionUsedMemory() == 0, L"Promotional memory cleared");
-			Assert::IsTrue(user.PromotionFreeMemory() + user.TotalProcessedDoubleDippingMemory() == user.TotalGrossMemoryUsed(), L"Promotional free memory == gross");
+			Assert::IsTrue(user.PromotionFreeMemory() + user.TotalProcessedRefAttachedMemory() == user.TotalGrossMemoryUsed(), L"Promotional free memory == gross");
 
 			Assert::IsTrue(TestClassUsingRef_A::m_ActiveCount == 0, L"All TestClassUsingRef_A destructors called.");  //  
 			Assert::IsTrue(TestClassUsingRef_B::m_ActiveCount == 0, L"All TestClassUsingRef_B destructors called.");

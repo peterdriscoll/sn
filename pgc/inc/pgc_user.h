@@ -45,15 +45,15 @@ namespace PGC
 
         size_t TotalNetMemoryUsed() const;
         size_t TotalGrossMemoryUsed() const;
-        size_t TotalProcessedDoubleDippingMemory() const;
+        size_t TotalProcessedRefAttachedMemory() const;
 
         void AddTotalNetMemorySize(long memory);
         void AddTotalGrossMemorySize(long memory);
-        void AddProcessedDoubleDippingMemory(long memory);
+        void AddProcessedRefAttachedMemory(long memory);
 
         void ResetNetMemoryUsed();
         void ResetGrossMemoryUsed();
-        void ResetProcessedDoubleDippingMemory();
+        void ResetProcessedRefAttachedMemory();
 
         size_t PromotionFreeMemory();
         size_t PromotionUsedMemory();
@@ -84,6 +84,6 @@ namespace PGC
 
         size_t m_TotalNetMemoryUsed;
         size_t m_TotalGrossMemoryUsed;
-        size_t m_ProcessedDoubleDippingMemory;
+        size_t m_ProcessedRefAttachedMemory;
     };
 }

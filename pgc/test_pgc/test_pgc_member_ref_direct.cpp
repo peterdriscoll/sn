@@ -125,7 +125,7 @@ namespace test_pgc
 					destination.GrossMemoryUsed() + user.TotalPromotionMemory(),
 					L"Gross memory after promotion");
 
-				Assert::IsTrue(user.TotalProcessedDoubleDippingMemory() == 0, L"No processed memory (Backstabbing)");
+				Assert::IsTrue(user.TotalProcessedRefAttachedMemory() == 0, L"No processed memory (Backstabbing)");
 			}
 
 			// --- After destination dies ---
@@ -176,17 +176,17 @@ namespace test_pgc
 
 					Assert::IsNotNull(value, L"ref.Get() returned null");
 
-					Assert::IsTrue(user.TotalProcessedDoubleDippingMemory() == 0,
+					Assert::IsTrue(user.TotalProcessedRefAttachedMemory() == 0,
 						L"Processed double dipping memory should be zero");
 				}
 				// This should have triggered PromotedKeep behavior
-				Assert::IsTrue(user.TotalProcessedDoubleDippingMemory() == sizeof(PGC::PGC_Promotion),
+				Assert::IsTrue(user.TotalProcessedRefAttachedMemory() == sizeof(PGC::PGC_Promotion),
 					L"Processed double dipping memory should be updated");
 
 				// ref.Get() called -> triggers freeing of the double dipped promotion (the second dip).
 				TestPGC_B* value2 = ref.Get();
 
-				Assert::IsTrue(user.TotalProcessedDoubleDippingMemory() == 0,
+				Assert::IsTrue(user.TotalProcessedRefAttachedMemory() == 0,
 					L"Processed double dipping memory should be zero after free");
 
 				Assert::IsTrue(destination.NetMemoryUsed() == sizeof(TestPGC_B) - PGC_OVERHEAD, L"Destination owns value");

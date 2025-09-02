@@ -154,7 +154,7 @@ namespace test_pgc
 				user.TotalPromotionMemory(),
 				L"Gross after promotion");
 
-			Assert::IsTrue(user.TotalProcessedDoubleDippingMemory() == 0, L"No processed memory for Backstabbing");
+			Assert::IsTrue(user.TotalProcessedRefAttachedMemory() == 0, L"No processed memory for Backstabbing");
 
 			// Final cleanup
 			Assert::IsTrue(user.TotalNetMemoryUsed() == 0, L"Final net memory");
@@ -222,7 +222,7 @@ namespace test_pgc
 					(sizeof(TestPGC_B) - PGC_OVERHEAD) + (sizeof(TestPGC_A) - PGC_OVERHEAD),
 					L"Destination owns object");
 
-				Assert::IsTrue(user.TotalProcessedDoubleDippingMemory() == 0,
+				Assert::IsTrue(user.TotalProcessedRefAttachedMemory() == 0,
 					L"No processed memory (Backstabbing)");
 
 				// Check that GetTestA returns the same pointer
@@ -284,19 +284,19 @@ namespace test_pgc
 					TestPGC_A* returnedA = sref->GetTestA();
 
 					Assert::IsTrue(returnedA == a, L"Returned pointer must match A");
-					Assert::IsTrue(user.TotalProcessedDoubleDippingMemory() == 0,
+					Assert::IsTrue(user.TotalProcessedRefAttachedMemory() == 0,
 						L"Processed double dipping memory should be zero before promotion");
 				}
 
 				// Source is now dead -> triggers PromotedKeep
-				Assert::IsTrue(user.TotalProcessedDoubleDippingMemory() == sizeof(PGC::PGC_Promotion),
+				Assert::IsTrue(user.TotalProcessedRefAttachedMemory() == sizeof(PGC::PGC_Promotion),
 					L"Processed memory updated after PromotedKeep");
 
 				// Final access — triggers second dip, accessing the promoted copy.
 				TestPGC_A* returnedAgain = sref->GetTestA();
 
 				Assert::IsTrue(returnedAgain != a, L"Returned pointer is to the promoted copy");
-				Assert::IsTrue(user.TotalProcessedDoubleDippingMemory() == 0,
+				Assert::IsTrue(user.TotalProcessedRefAttachedMemory() == 0,
 					L"Processed memory should be zero after second dip is freed");
 
 				Assert::IsTrue(destination.NetMemoryUsed() ==
@@ -373,7 +373,7 @@ namespace test_pgc
 					Assert::IsTrue(destination.NetMemoryUsed() == sizeof(TestPGC_B) - PGC_OVERHEAD,
 						L"Destination should not own TestPGC_A instance yet");
 
-					Assert::IsTrue(user.TotalProcessedDoubleDippingMemory() == 0,
+					Assert::IsTrue(user.TotalProcessedRefAttachedMemory() == 0,
 						L"No processed double dipping memory yet");
 
 					Assert::IsTrue(user.TotalNetMemoryUsed() ==
@@ -392,7 +392,7 @@ namespace test_pgc
 					sizeof(TestPGC_A) + sizeof(TestPGC_B) - 2 * PGC_OVERHEAD,
 					L"Destination owns object after promotion");
 
-				Assert::IsTrue(user.TotalProcessedDoubleDippingMemory() == sizeof(PGC::PGC_Promotion),
+				Assert::IsTrue(user.TotalProcessedRefAttachedMemory() == sizeof(PGC::PGC_Promotion),
 					L"Processed memory should now include promotion entry");
 
 				Assert::IsTrue(user.TotalNetMemoryUsed() ==

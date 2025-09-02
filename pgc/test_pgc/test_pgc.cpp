@@ -223,6 +223,9 @@ namespace test_pgc
 				size_t newNetMemoryUsed = parentTransaction.NetMemoryUsed();
 				size_t newTotalMemoryUsed = user.TotalNetMemoryUsed();
 				Assert::IsTrue(parentTransaction.NetMemoryUsed() == user.TotalNetMemoryUsed(), L"Parent net == Total net");
+				size_t parentGross = parentTransaction.GrossMemoryUsed();
+				size_t totalPromotion = user.TotalPromotionMemory();
+				size_t totalGross = user.TotalGrossMemoryUsed();
 				Assert::IsTrue(parentTransaction.GrossMemoryUsed() + user.TotalPromotionMemory() == user.TotalGrossMemoryUsed(), L"Gross + promotional = total gross");
 
 				SRef<TestPGC_A> xa = b->GetTestA();

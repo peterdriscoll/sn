@@ -198,22 +198,28 @@ namespace PGC
 
 	void PGC_Promotion::MarkPromoted()
 	{
+		ASSERTM(!m_Promoted, "Promotion should not be marked twice.");
+		ASSERTM(m_InProcessingList, "Must be in processing list to be removed from it.");
 		m_Promoted = true;
 		m_InProcessingList = false;
-		GetUser()->AddProcessedDoubleDippingMemory(sizeof(PGC_Promotion));
+		GetUser()->AddProcessedRefAttachedMemory(sizeof(PGC_Promotion));
 	}
 	void PGC_Promotion::FreeFromRefAttached()
 	{
-		m_RefAttached = false;
-		TryFree();
+		if (m_RefAttached)
+		{
+			m_RefAttached = false;
+			TryFree();
+		}
 	}
 	void PGC_Promotion::FreeFromProcessingList()
 	{
+		ASSERTM(m_InProcessingList, "Must be in the processing list to be freed from it.");
 		m_InProcessingList = false;
 		if (m_Strategy == PromotionStrategy::DoubleDipping && m_RefAttached)
 		{
 			m_Dropped = true;
-			GetUser()->AddProcessedDoubleDippingMemory(sizeof(PGC_Promotion));
+			GetUser()->AddProcessedRefAttachedMemory(sizeof(PGC_Promotion));
 		}
 		TryFree();
 	}
