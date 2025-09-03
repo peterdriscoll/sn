@@ -62,7 +62,10 @@ namespace PGC
 
 		PGC_User* GetUser() const;
 
-		void *Allocate(size_t p_size);
+		inline void* Allocate(std::size_t size) {
+			return Allocate(size, alignof(std::max_align_t));
+		}
+		void* Allocate(size_t p_size, std::size_t align);
 		std::shared_ptr<bool> GetLiveTransactionPointer();
 		bool IsDescendantOf(const PGC_Transaction* other) const noexcept;
 		virtual void EndTransaction();

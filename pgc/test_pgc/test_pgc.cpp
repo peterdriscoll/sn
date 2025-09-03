@@ -38,6 +38,9 @@ namespace test_pgc
 			g_ErrorDescription = desc;
 		}
 	}
+	bool g_D_Destructor_Called = false;
+	bool g_B_Destructor_Called = false;
+
 	TEST_CLASS(test_pgc)
 	{
 	private:
@@ -108,14 +111,22 @@ namespace test_pgc
 			// This test runs the PinConceptTest.
 			run();
 		}
+
 		TEST_METHOD(TestDirectDestructor)
 		{
-			struct B { virtual ~B() { std::puts("~B"); } };
-			struct D : B { ~D() override { std::puts("~D"); } };
+			g_D_Destructor_Called = false;
+			g_B_Destructor_Called = false;
+			struct B { virtual ~B() { std::puts("~B"); g_B_Destructor_Called = true; } };
+			struct D : B {
+				~D() override {
+					std::puts("~D"); g_D_Destructor_Called = true;
+			} };
 
 			B* p = new D;
 			// delete p;         // => calls D::~D then B::~B  (virtual dispatch)
-			p->~B();             // => calls only B::~B        (no virtual dispatch here)
+			p->~B();             // => calls only B::~B -- Apparently not in VC++.       (no virtual dispatch here)
+			Assert::IsTrue(g_D_Destructor_Called, L"Expected D destructor called");
+			Assert::IsTrue(g_B_Destructor_Called, L"Expected B destructor called");
 		}
 		TEST_METHOD(TestSimplePromotionOnMemberRef)
 		{

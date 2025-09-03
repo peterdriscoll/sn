@@ -24,7 +24,6 @@ template<class T> inline constexpr bool IsFacade_v = has_nested_Data<T>::value;
 
 namespace PGC 
 {
-    
     template <typename T>
     class RefA : public Promotable 
     {
@@ -194,7 +193,7 @@ namespace PGC
         struct Proxy {
             Facade f_;
             explicit Proxy(RefA<Facade> &source)
-                : f_(Facade(source)) {
+                : f_(Facade(source, PGC::StackAllocationTag{})) {
             }
             Facade* operator->() { return &f_; }
             const Facade* operator->() const { return &f_; }
@@ -217,7 +216,7 @@ namespace PGC
 
         // ---- const ----
         template<class U = T> requires (IsFacade_v<U>)
-        Proxy<const U> operator->() const {
+            Proxy<const U> operator->() const {
             return Proxy<const U>(this->as_data());
         }
 
@@ -226,6 +225,7 @@ namespace PGC
             return Pin<const Data>(Get());
         }
 
+/*
         // Accessors with typical pointer ergonomics.
         Pin<T> operator->()
         {
@@ -236,7 +236,7 @@ namespace PGC
         {
             return ConstPin<T>(Get()); 
         }
-
+*/
         Pin<T> operator*()
         {
             return Pin<T>(Get());

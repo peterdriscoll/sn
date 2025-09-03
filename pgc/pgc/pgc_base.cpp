@@ -73,10 +73,19 @@ namespace PGC
 		SetTransaction(PGC_Transaction::RegisterLastForDestruction(this));
 	}
 
+	PGC_Base::PGC_Base(StackAllocationTag)
+	{
+		SetTransaction(nullptr);
+	}
+
 	PGC_Base::PGC_Base(PGC_Transaction& p_Transaction)
 	{
 		SetTransaction(&p_Transaction);
 		PGC_Transaction::RegisterLastForDestruction(this);
+	}
+	PGC_Base::PGC_Base(PGC_Transaction& p_Transaction, NoAutoReg)
+	{
+		SetTransaction(&p_Transaction);
 	}
 	PGC_Base::PGC_Base(const PGC_Base& other)
 	{
@@ -155,6 +164,11 @@ namespace PGC
 	bool PGC_Base::IsPromotedMarker() const
 	{
 		return HoldsPromotedCopy();
+	}
+
+	bool PGC_Base::IsStackAllocated() const
+	{
+		return GetTransaction() == nullptr;
 	}
 
 	bool PGC_Base::GetCallDestructor() const noexcept

@@ -173,6 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\inc\exp_ctrl_pgc.h" />
+    <ClInclude Include="..\inc\make_rmd.h" />
     <ClInclude Include="..\inc\memberref.h" />
     <ClInclude Include="..\inc\pair.h" />
     <ClInclude Include="..\inc\pgc.h" />
@@ -194,8 +195,9 @@
     <ClInclude Include="..\inc\refcore.h" />
     <ClInclude Include="..\inc\ref_advanced.h" />
     <ClInclude Include="..\inc\ref_direct.h" />
+    <ClInclude Include="..\inc\rmd.h" />
     <ClInclude Include="..\inc\self_advanced.h" />
-    <ClInclude Include="..\inc\self_tiny.h" />
+    <ClInclude Include="..\inc\self.h" />
     <ClInclude Include="..\inc\sref.h" />
     <ClInclude Include="..\inc\pgc_unordered_map_ref.h" />
     <ClInclude Include="..\inc\pgc_vector_member_ref.h" />

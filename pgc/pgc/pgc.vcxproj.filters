@@ -125,7 +125,13 @@
     <ClInclude Include="..\inc\self_advanced.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\inc\self_tiny.h">
+    <ClInclude Include="..\inc\self.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\make_rmd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\rmd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

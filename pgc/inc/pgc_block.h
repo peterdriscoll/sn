@@ -14,7 +14,7 @@ namespace PGC
 		virtual ~PGC_Block();
 
 		PGC_Block *GetNextBlock();
-		void *Allocate(size_t p_size);
+		void* Allocate(size_t p_size, std::size_t align);
 
 		void RegisterForDestruction(PGC_Base *p_Base);
 		void DestroyUncopied();

@@ -39,10 +39,10 @@
     <ClInclude Include="testclassusingref_A.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="something.h">
+    <ClInclude Include="facade_data.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="facade_data.h">
+    <ClInclude Include="something.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -78,6 +78,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="testclassusingref_A.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test_pgc_rmd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

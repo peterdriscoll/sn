@@ -140,7 +140,7 @@ namespace PGC
 		return m_User;
 	}
 
-	void *PGC_Transaction::Allocate(size_t p_size)
+	void* PGC::PGC_Transaction::Allocate(size_t p_size, std::size_t p_align)
 	{
 		ASSERTM(p_size < BlockSize, "Allocation " + std::to_string(p_size) + " bigger than block size "s + std::to_string(BlockSize));
 		if (m_CurrentBlock == nullptr)
@@ -148,11 +148,11 @@ namespace PGC
 			m_FirstBlock = new PGC_Block(this, nullptr);
 			m_CurrentBlock = m_FirstBlock;
 		}
-		void *mem = m_CurrentBlock->Allocate(p_size);
+		void* mem = m_CurrentBlock->Allocate(p_size, p_align);
 		if (mem == NULL)
 		{
 			m_CurrentBlock = new PGC_Block(this, m_CurrentBlock);
-			mem = m_CurrentBlock->Allocate(p_size);
+			mem = m_CurrentBlock->Allocate(p_size, p_align);
 		}
 		m_AllocatingTransaction = this;
 		m_NetMemoryUsed += p_size - PGC_OVERHEAD;

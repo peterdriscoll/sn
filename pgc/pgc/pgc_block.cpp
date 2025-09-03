@@ -68,16 +68,23 @@ namespace PGC
 		return m_NextBlock;
 	}
 
-	void *PGC_Block::Allocate(size_t p_size)
+	void* PGC::PGC_Block::Allocate(size_t p_size, std::size_t p_align)
 	{
-		char *newCurrent = m_current + p_size;
-		if (newCurrent > m_end)
+		if (p_align < alignof(std::max_align_t))
 		{
-			return (void *)0;
+			p_align = alignof(std::max_align_t);
 		}
-		void *mem = (void *)m_current;
-		m_current = newCurrent;
 
+		uintptr_t cur = reinterpret_cast<uintptr_t>(m_current);
+		uintptr_t aligned = (cur + (p_align - 1)) & ~(uintptr_t)(p_align - 1);
+		std::size_t pad = static_cast<std::size_t>(aligned - cur);
+
+		if (aligned + p_size > reinterpret_cast<uintptr_t>(m_end)) {
+			return nullptr; // not enough space in this block
+		}
+
+		void* mem = reinterpret_cast<void*>(aligned);
+		m_current = reinterpret_cast<char*>(aligned + p_size);
 		m_Transaction->GetUser()->AddTotalNetMemorySize(static_cast<long>(p_size - PGC_OVERHEAD));
 		return mem;
 	}

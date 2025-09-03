@@ -91,6 +91,11 @@
 
 namespace PGC
 {
+	// tags
+	struct NoAutoReg { explicit NoAutoReg() = default; };
+	struct FusedTag { explicit FusedTag() = default; };
+	struct StackAllocationTag { explicit StackAllocationTag() = default; };
+
 	PGC_EXPORT void logwarning(const std::string& msg);
 
 	PGC_EXPORT void assertm(const char* expr_str, bool expr, const char* file, const int line, const std::string &msg);
@@ -118,7 +123,9 @@ namespace PGC
 	{
 	public:
 		PGC_Base();
-		PGC_Base(PGC_Transaction & p_Transaction);
+		PGC_Base(StackAllocationTag);
+		PGC_Base(PGC_Transaction& p_Transaction);
+		PGC_Base(PGC_Transaction& p_Transaction, NoAutoReg);
 		PGC_Base(const PGC_Base& p_Other);
 		PGC_Base(PGC_Base&& p_Other) noexcept;
 		virtual ~PGC_Base();
@@ -142,6 +149,7 @@ namespace PGC
 		//  Request prompotion for p_Base(copying to the same transaction as this object) when the transaction the p_Base object lives in is destroyed.
 
 		bool IsPromotedMarker() const;
+		bool IsStackAllocated() const;
 
 		virtual PGC_Base *Clone(PGC_Transaction &p_Transaction);
 		virtual PGC_Base* CloneTo(void* memory) const;

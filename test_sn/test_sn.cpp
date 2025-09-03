@@ -104,8 +104,8 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Error", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
-
+				//manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				//manager.StartDebugCommandLineServer(skynet::StepInto, _kbhit, _getch);
 				try
 				{
 					SN_DECLARE(a);
