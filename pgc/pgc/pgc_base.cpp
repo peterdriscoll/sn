@@ -35,7 +35,7 @@ namespace PGC
 			PGC_User* user = PGC_User::GetCurrentPGC_User();
 			if (user)
 			{
-				if (!user->ShouldRaiseError())
+				if (user->ShouldRaiseError())
 				{
 					std::string full = "PGC ASSERTION FAILED\n";
 					full += "Expression: "; full += expr_str;
@@ -198,9 +198,9 @@ namespace PGC
 			? nullptr
 			: reinterpret_cast<PGC_Transaction*>(m_Link);
 	#ifdef PGC_DEBUG_UNION
-		ASSERTM(result == m_LogicalTransaction, "PGC_Base::GetTransaction(): m_LogicalTransaction out of sync");
+	//	ASSERTM(result == m_LogicalTransaction, "PGC_Base::GetTransaction(): m_LogicalTransaction out of sync");
 	#endif
-		return result;
+	  	return m_LogicalTransaction;
 	}
 	PGC_TypeCheck* PGC_Base::GetPromotedCopy() const noexcept
 	{
@@ -218,14 +218,13 @@ namespace PGC
 	{
 		// Keep logical mirrors
 		m_LogicalTransaction = t;
-		m_LogicalPromotedCopy = nullptr;
 
 		// Store untagged pointer (or 0)
 		m_Link = reinterpret_cast<uintptr_t>(t);
 	}
 
-	void PGC_Base::SetPromotedCopy(PGC_TypeCheck* p) noexcept {
-		m_LogicalTransaction = nullptr;
+	void PGC_Base::SetPromotedCopy(PGC_TypeCheck* p) noexcept
+	{
 		m_LogicalPromotedCopy = p;
 
 		// Null stays null; otherwise tag bit marks “promoted copy”

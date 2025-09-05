@@ -25,7 +25,7 @@ namespace PGC
 		{
 			return nullptr;
 		}
-		virtual PGC_TypeCheck* GetPromotedCopy()
+		virtual PGC_TypeCheck* GetPromotedCopy() const noexcept
 		{
 			return nullptr;
 		}

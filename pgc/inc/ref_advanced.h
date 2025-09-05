@@ -47,51 +47,36 @@ namespace PGC
 
         RefA(const RefA& p_Other) noexcept
             : Promotable([this](PGC_Transaction* dst) { this->RequestPromotion(dst); })
-            , m_Core(PGC_Transaction::TopTransaction())
+            , m_Core(p_Other.m_Core)
         {
-            PGC_Transaction* destination = m_Core.GetLogicalOwnerTransaction();
-            PGC_Transaction* otherDestination = p_Other.m_Core.GetLogicalOwnerTransaction();
-            ASSERTM(destination, "Reference must have a destination transaction.");
-            ASSERTM(otherDestination, "Other Reference must have a destination transaction.");
-            std::lock_guard<std::mutex> g(destination->m_Mutex);
-
-            // Fix later
-            auto* pointer = p_Other.m_Core.GetLogicalPointer();
-            m_Core.SetLogicalPointer(pointer);
+            m_Core.DetachPromotion(); // detach from other, we get our own copy
+            PGC_Transaction* topTransaction = PGC_Transaction::TopTransaction();
+            if (!topTransaction->Dieing())
+            {
+                m_Core.RequestPromotion(topTransaction);
+            }
         }
 
         // Move constructor
         RefA(RefA&& p_Other) noexcept
-			: Promotable(std::bind_front(&RefA<T>::RequestPromotion, this))
-            , m_Core(PGC_Transaction::TopTransaction())
+            : Promotable([this](PGC_Transaction* dst) { this->RequestPromotion(dst); })
+            , m_Core(p_Other.m_Core)
         {
-            PGC_Transaction* destination = m_Core.GetLogicalOwnerTransaction();
-            PGC_Transaction* otherDestination = p_Other.m_Core.GetLogicalOwnerTransaction();
-            ASSERTM(destination, "Reference must have a destination transaction.");
-            ASSERTM(otherDestination, "Other Reference must have a destination transaction.");
-            std::lock_guard<std::mutex> g(destination->m_Mutex);
-
-            auto* promotion = p_Other.m_Core.DetachPromotion();
-            if (promotion)
-			{   // Since we are moving, we can reuse the promotion, rebind it to the new
-                // address. RefCore will rebind(&m_InternalPointer, GetLogicalOwnerTransaction())
-                // so that the promotion uses the new address.
-                m_Core.SetLogicalPromotion(promotion);
-            }
-            else
+            m_Core.DetachPromotion(); // detach from other, we get our own copy
+            PGC_Transaction* topTransaction = PGC_Transaction::TopTransaction();
+            if (!topTransaction->Dieing())
             {
-                auto* pointer = p_Other.m_Core.GetLogicalPointer();
-                m_Core.SetLogicalPointer(pointer);
+                m_Core.RequestPromotion(topTransaction);
             }
             p_Other.m_Core.Clear();
         }
 
         ~RefA() noexcept
         {
-            auto* destination = m_Core.GetLogicalOwnerTransaction();
-			ASSERTM(destination, "RefA must have a destination transaction.");
-            std::lock_guard<std::mutex> g(destination->m_Mutex);
-            m_Core.Clear(); // Clear frees any promotion and preserves the owner txn
+            if (PGC_Promotion* promotion = m_Core.GetLogicalPromotion())
+            {
+                promotion->FreeFromRefAttached();
+            }
         }
 
         // Move assignment
@@ -152,7 +137,7 @@ namespace PGC
         }
 
         // Return the current logical T* (after any promotion completes).
-        const T* Get() const {
+        T* Get() const {
 			// taking const literally means we cannot modify the core.
             // This may be important for the web server access that reads
             // the state without modifying anything.
@@ -192,7 +177,7 @@ namespace PGC
         template<class Facade>
         struct Proxy {
             Facade f_;
-            explicit Proxy(RefA<Facade> &source)
+            explicit Proxy(RefA<Facade> source)
                 : f_(Facade(source, PGC::StackAllocationTag{})) {
             }
             Facade* operator->() { return &f_; }
@@ -276,7 +261,7 @@ namespace PGC
         // Safe boolean conversion (C++11+)
         explicit operator bool() const noexcept { return !empty(); }
 
-    private:
+    public:
         RefCore m_Core;
     };
 

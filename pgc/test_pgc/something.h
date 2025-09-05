@@ -154,9 +154,14 @@ namespace RMD
             , m_self(DirectA<Data>{ RMD::to_data_ptr<Something, Data>(this) })  // bind to co-allocated Data
         {
         }
+        Something(PGC::PGC_Transaction& txn, PGC::FusedTag)
+            : PGC::PGC_Base(txn)
+            , m_self(DirectA<Data>{ RMD::to_data_ptr<Something, Data>(this) })  // bind to co-allocated Data
+        {
+        }
         Something(PGC::RefA<Something>& p_ref, PGC::StackAllocationTag) noexcept
             : PGC::PGC_Base(PGC::StackAllocationTag{})
-            , m_self{ p_ref.Get()}
+            , m_self(p_ref)
         {}
 
     Something& operator=(const Something&) = default;
@@ -165,13 +170,9 @@ namespace RMD
 
         // Create JSON from the Data reachable via SelfA.
         void MakeJSON(std::ostream& os) const {
-            const auto& name = m_self->m_Name;
-            const auto& desc = m_self->m_Description;
-
             WaitForCommandFair("Type 'go' to process "+ m_self->m_Name, "go");
-
             os << "{ \"name\":\"" << m_self->m_Name
-               << "\", \"description\":\"" << desc << "\"";
+               << "\", \"description\":\"" << m_self->m_Description << "\"";
 
             if (!m_self->m_Stop && m_self->m_Next) {
                 os << ", \"next\": ";
@@ -212,10 +213,10 @@ namespace RMD
             auto* pair = static_cast<PairT*>(memory);
 
             // 1) new facade (txn will be set by the caller per your PGC flow)
-            ::new (&pair->f) Something(*PGC::PGC_Transaction::TopTransaction(), PGC::NoAutoReg{}, PGC::FusedTag{});
+            ::new (&pair->f) Something(*PGC::PGC_Transaction::TopTransaction(), PGC::FusedTag{});
 
-            // 2) new payload (copy/move from old payload)
-            ::new (&pair->d) Data(*m_self);  // or move/copy as appropriate
+            // 2) new payload (move from old payload)
+            ::new (&pair->d) Data(std::move(*m_self));
 
             return &pair->f;
         }

@@ -171,6 +171,7 @@
   <ItemGroup>
     <ClInclude Include="facade_data.h" />
     <ClInclude Include="pin_concept_test.h" />
+    <ClInclude Include="script.h" />
     <ClInclude Include="something.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="testclassusingref_A.h" />

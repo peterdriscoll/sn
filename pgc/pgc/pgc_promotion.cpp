@@ -10,6 +10,7 @@ namespace PGC
 		: m_Base(nullptr)
 		, m_Next(nullptr)
 		, m_Destination(nullptr)
+		, m_Source(nullptr)
 		, m_FinalCopy(nullptr)
 		, m_Promoted(false)
 		, m_Dropped(false)
@@ -78,17 +79,18 @@ namespace PGC
 
 	void PGC_Promotion::Promote()
 	{
-		PGC_Base* newBase = static_cast<PGC_Base*>((*m_Base)->GetPromotedCopy());
+		PGC_TypeCheck* base = (*m_Base)->GetLogicalPointer();
+		ASSERTM(base, "Base pointer should not be null during promotion");
+		PGC_TypeCheck* promotedCopy = base->GetPromotedCopy();
 		PGC_TypeCheck* copy;
-		if (newBase)
+		if (promotedCopy)
 		{
-			copy = newBase;
+			copy = promotedCopy;
 		}
 		else
 		{
-			copy = CopyMemory(*m_Base, m_Destination);
-			(*m_Base)->SetPromotedCopy(copy);
-			newBase = static_cast<PGC_Base*>(copy);
+			copy = CopyMemory(base, m_Destination);
+			base->SetPromotedCopy(copy);
 		}
 		switch (m_Strategy)
 		{
@@ -178,6 +180,7 @@ namespace PGC
 		}
 		m_Base = p_Base;
 		m_Destination = p_Destination;
+		m_Source = (*m_Base)->GetTransaction();
 		m_Strategy = p_Strategy;
 		m_Promoted = false;
 		m_Dropped = false;
@@ -268,14 +271,7 @@ namespace PGC
 
 	PGC_Transaction* PGC_Promotion::GetSource()
 	{
-		PGC_TypeCheck* base = *m_Base;
-
-		// Resolve if base is itself a promotion
-		while (base->IsPromotion()) {
-			base = static_cast<PGC_Promotion*>(base)->GetFinalCopy();
-		}
-
-		return base->GetTransaction();
+		return m_Source;
 	};
 
 	PGC_Transaction* PGC_Promotion::GetDestination()

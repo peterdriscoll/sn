@@ -65,7 +65,8 @@ namespace PGC
 
 	private:
 		PGC_TypeCheck **m_Base;
-		PGC_Transaction *m_Destination;
+		PGC_Transaction* m_Destination;
+		PGC_Transaction* m_Source;
 		PGC_TypeCheck* m_FinalCopy;
 		bool m_Promoted = false;
 		bool m_Dropped = false;

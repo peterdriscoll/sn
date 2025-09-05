@@ -298,7 +298,7 @@ namespace PGC
     {
         if (m_ErrorRaised)
         {
-            return false;
+//            return false;
         }
         m_ErrorRaised = true;
         return true;

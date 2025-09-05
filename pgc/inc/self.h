@@ -33,21 +33,25 @@ namespace RMD
     }
 
     // minimal stand-ins for your handles
-    template<class F> struct RefA { F* f{}; };
     template<class D> struct DirectA { D* d{}; };
 
-    // Self = union of “facade ref” or “direct data”
+    // Self = union of ï¿½facade refï¿½ or ï¿½direct dataï¿½
     template<class F, class D>
     struct Self {
         bool via_facade;   // true ? use f; false ? use d
-        union { F* f; D* d; };
+        PGC::RefA<F> rf;
+        D* d;
 
         // constructors
-        explicit Self(PGC::RefA<F> r) : via_facade(true), f(r.Get()) {}
+        explicit Self(PGC::RefA<F>& r)
+            : via_facade(true), rf(r) 
+        {
+//			rf.RequestPromotion(PGC::PGC_Transaction::TopTransaction());
+        }
         explicit Self(DirectA<D> x) : via_facade(false), d(x.d) {}
 
         // always give me D*
-        D* data() const noexcept { return via_facade ? to_data_ptr<F, D>(f) : d; }
+        D* data() const noexcept { return via_facade ? to_data_ptr<F, D>(rf.Get()) : d; }
 
         // convenience
         D* operator->() const noexcept { return data(); }

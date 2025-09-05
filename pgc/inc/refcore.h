@@ -34,28 +34,24 @@ namespace PGC
         PGC_Promotion* m_LogicalPromotion = nullptr;
     #endif
 
-        private:
-            RefCore() = delete;
-
-        // ------------------------------------------------------------------------
-        // Promotion factory / reuse hook
-        // Implement in your PGC layer. This stub just shows intent.
-        // ------------------------------------------------------------------------
-        PGC_Promotion* CreatePromotion(PGC_TypeCheck* p_Pointer, PGC_Transaction* p_DestinationTransaction)
-        {
-            PGC_User* user = GetLogicalOwnerTransaction()->GetUser();
-            PGC_Promotion* promotion = user->Allocate();
-            promotion->Create(&m_InternalPointer, p_DestinationTransaction, PromotionStrategy::DoubleDipping);
-            user->AppendRequest(promotion);
-            return promotion;
-        }
-
+    public:
+       RefCore() = delete;
     public:
         // If you want "constructor-only transaction", provide a ctor that sets it.
         explicit RefCore(PGC_Transaction* p_OwnerTransaction)
         {
             SetLogicalTransaction(p_OwnerTransaction);
         }
+
+        explicit RefCore(const RefCore& p_other)
+            : m_InternalPointer(p_other.m_InternalPointer)
+        #ifdef PGC_DEBUG_VERIFY_ENCODING
+            , m_LogicalPointer(p_other.m_LogicalPointer)
+            , m_LogicalOwnerTransaction(p_other.m_LogicalOwnerTransaction)
+            , m_LogicalPromotion(p_other.m_LogicalPromotion)
+        #endif
+        {
+		}
 
         void Clear()
         {
@@ -143,7 +139,7 @@ namespace PGC
             }
             else
             { 
-                PGC_Transaction* sourceTransaction = p_Pointer->GetTransaction();
+                PGC_Transaction* sourceTransaction = p_Pointer->GetLogicalOwnerTransaction();
                 PGC_Transaction* destinationTransaction = GetLogicalOwnerTransaction();
                 m_InternalPointer = p_Pointer;
                 if (sourceTransaction != destinationTransaction)
@@ -193,6 +189,22 @@ namespace PGC
         #endif
         }
 
+        PGC_Promotion* CreatePromotion(PGC_TypeCheck* p_Pointer, PGC_Transaction* p_DestinationTransaction)
+        {
+            PGC_Transaction* ownerTransaction = p_Pointer->GetLogicalOwnerTransaction();
+            if (ownerTransaction == nullptr)
+            {
+                long dog = 10;
+            }
+            ASSERTM(ownerTransaction != nullptr, "CreatePromotion: owner transaction is null");
+            PGC_User* user = ownerTransaction->GetUser();
+            PGC_Promotion* promotion = user->Allocate();
+            promotion->Create(&m_InternalPointer, p_DestinationTransaction, PromotionStrategy::DoubleDipping);
+            user->AppendRequest(promotion);
+            return promotion;
+        }
+
+
         void RequestPromotion(PGC_Transaction* p_DestinationTransaction)
         {
             if (!GetLogicalPointer() || GetLogicalPromotion())
@@ -204,21 +216,40 @@ namespace PGC
 #ifdef PGC_DEBUG_VERIFY_ENCODING
             m_LogicalOwnerTransaction = p_DestinationTransaction;
 #endif
-
-            PGC_Transaction* sourceTransaction = GetLogicalPointer()->GetTransaction();
-
+            PGC_TypeCheck* pointer = GetLogicalPointer();
+            if (pointer)
+            {
+                PGC_TypeCheck* promotedCopy = pointer->GetPromotedCopy();
+                if (promotedCopy)
+                {
+                    pointer = promotedCopy;
+                }
+            }
+            PGC_Transaction* sourceTransaction = pointer->GetTransaction();
+            if (!sourceTransaction)
+            {
+                long dog = 10;
+            }
             ASSERTM(sourceTransaction, "Must have a source transaction.");
             ASSERTM(p_DestinationTransaction, "Must have a destination transaction.");
-            if (GetLogicalPointer() && sourceTransaction != p_DestinationTransaction 
+            if (pointer && sourceTransaction != p_DestinationTransaction 
                 //&& sourceTransaction->IsDescendantOf(p_DestinationTransaction)
                 && !sourceTransaction->IsStatic())
             {
-                SetLogicalPromotion(CreatePromotion(m_InternalPointer, p_DestinationTransaction));
+                SetLogicalPromotion(CreatePromotion(pointer, p_DestinationTransaction));
+            }
+            else
+            {
+                m_InternalPointer = pointer;
+            #ifdef PGC_DEBUG_VERIFY_ENCODING
+                m_LogicalPointer = pointer;
+                m_LogicalOwnerTransaction = p_DestinationTransaction;
+                m_LogicalPromotion = nullptr;
+            #endif
             }
         #ifdef PGC_DEBUG_VERIFY_ENCODING
             Verify();
         #endif
         }
     };
-
 }

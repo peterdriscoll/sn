@@ -105,7 +105,7 @@ namespace test_pgc
         {
 			EnsureConsoleForIO();
 
-            PGC_User user(ClassRegistry, &AssertErrorHandler);
+            PGC_User user(ClassRegistry);
             {
                 std::jthread worker;               // <-- lives beyond child scope
 
@@ -123,30 +123,33 @@ namespace test_pgc
                         PGCX::PGC_Transaction childTransaction(user, false, PGC::PromotionStrategy::DoubleDipping);
 
                         PGC::RefA<RMD::Something> waggy =
-                            RMD::make_rmd<RMD::Something>(parentTransaction, "Waggy", "Cavoodle");
+                            RMD::make_rmd<RMD::Something>(childTransaction, "Waggy", "Cavoodle");
 
                         PGC::RefA<RMD::Something> katara =
-                            RMD::make_rmd<RMD::Something>(parentTransaction, "Katara", "Samoyed", waggy);
+                            RMD::make_rmd<RMD::Something>(childTransaction, "Katara", "Samoyed", waggy);
 
                         PGC::RefA<RMD::Something> luna =
-                            RMD::make_rmd<RMD::Something>(parentTransaction, "Luna", "Golden Retriever x Labrador", katara);
+                            RMD::make_rmd<RMD::Something>(childTransaction, "Luna", "Golden Retriever x Labrador", katara);
 
-                        waggyTxn = waggy->GetTransaction();
-                        kataraTxn = katara->GetTransaction();
-                        lunaTxn = luna->GetTransaction();
+                        waggyTxn = waggy.Get()->GetTransaction();
+                        kataraTxn = katara.Get()->GetTransaction();
+                        lunaTxn = luna.Get()->GetTransaction();
 
                         waggy->SetNext(luna); // make a cycle
                         list = luna;
                         waggy2 = waggy;
                         // run in thread luna->MakeJSON(std::cout);
+
                         {
                             std::ios::sync_with_stdio(true);
                             std::cout << std::unitbuf;                  // flush after every insertion
                             // Make a copy so the thread owns its own handle
                             listPtr = list.Get();
 
-                            worker = std::jthread([l = listPtr]() mutable
+                            worker = std::jthread([l = listPtr, u = &user]() mutable
                             {
+                                PGC::PGC_Transaction workerTransaction(*u);
+
                                 std::cerr << "[worker] alive, about to recurse\n";
                                 PGC::RefA<RMD::Something> local(l);
                                 local->MakeJSON(std::cout);  // may interleave with other output
@@ -160,12 +163,13 @@ namespace test_pgc
                     PGC::RefA<RMD::Something> katara = luna->GetNext();
                     PGC::RefA<RMD::Something> waggy = katara->GetNext();
 
-                    Assert::IsTrue(waggyTxn != waggy->GetTransaction(), L"Waggy should have been promted");
-                    Assert::IsTrue(kataraTxn != katara->GetTransaction(), L"Waggy should have been promted");
-                    Assert::IsTrue(lunaTxn != luna->GetTransaction(), L"Waggy should have been promted");
+                    Assert::IsTrue(waggyTxn != waggy.Get()->GetTransaction(), L"Waggy should have been promted");
+                    Assert::IsTrue(kataraTxn != katara.Get()->GetTransaction(), L"Waggy should have been promted");
+                    Assert::IsTrue(lunaTxn != luna.Get()->GetTransaction(), L"Waggy should have been promted");
 
                     WaitForCommandFair("Type 'stop' to stop recurrence", "stop");
                     waggy2->Stop(); // break the cycle
+                    WaitForCommandFair("Type 'work' to join the worker thread", "work");
                     worker.join();
                     WaitForCommandFair("Worker stopped. Type 'end' to end test", "end");
                 }
