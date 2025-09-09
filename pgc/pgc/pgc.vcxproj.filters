@@ -128,10 +128,10 @@
     <ClInclude Include="..\inc\self.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\inc\make_rmd.h">
+    <ClInclude Include="..\inc\dori.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\inc\rmd.h">
+    <ClInclude Include="..\inc\make_dori.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

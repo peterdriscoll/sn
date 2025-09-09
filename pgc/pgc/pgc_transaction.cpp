@@ -96,6 +96,16 @@ namespace PGC
 		m_TopTransaction = m_LastTopTransaction;
 	}
 
+	void PGC_Transaction::CallFinalizersForAllBlocks()
+	{
+		PGC_Block* theBlock = m_FirstBlock;
+		while (theBlock)
+		{
+			theBlock->FinalizeUncopied();
+			theBlock = theBlock->GetNextBlock();
+		}
+	}
+
 	void PGC_Transaction::CallDestructorsForAllBlocks()
 	{
 		PGC_Block* theBlock = m_FirstBlock;
@@ -120,6 +130,7 @@ namespace PGC
 
 	void PGC_Transaction::ReleaseBlocks()
 	{
+		CallFinalizersForAllBlocks();
 		CallDestructorsForAllBlocks();
 		DeleteBlocks();
 		*m_LiveTransaction = false;
@@ -131,7 +142,7 @@ namespace PGC
 	}
 
 
-	bool PGC_Transaction::Dieing()
+	bool PGC_Transaction::IsDying()
 	{
 		return m_Dieing;
 	}

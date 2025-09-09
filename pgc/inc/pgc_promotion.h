@@ -35,6 +35,7 @@ namespace PGC
 		bool IsPromotion() override;
 		PGC_TypeCheck* GetFinalCopy() const;
 
+		bool Verify();
 		PGC_TypeCheck* GetBase();
 		PGC_TypeCheck** GetBaseAddress();
 		void SetBase(PGC_TypeCheck** p_Base);
@@ -45,6 +46,7 @@ namespace PGC
 
 		PGC_Transaction* GetSource();
 		PGC_Transaction* GetDestination();
+		bool GetPromoted();
 		PromotionStrategy GetStrategy();
 
 		void Create(PGC_TypeCheck** p_Base, PGC_Transaction* p_Destination, PromotionStrategy p_Strategy);
@@ -73,5 +75,6 @@ namespace PGC
 		bool m_InProcessingList = true;
 		bool m_RefAttached = true;
 		PromotionStrategy m_Strategy;
+		long m_Id;
 	};
 }

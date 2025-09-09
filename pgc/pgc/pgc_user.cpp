@@ -151,6 +151,7 @@ namespace PGC
 
     void PGC_User::AppendRequest(PGC_Promotion *p_Promotion)
     {
+        ASSERTM(p_Promotion->Verify(), "Invalid promotion.");
         *m_PromoteListLast = p_Promotion;
         m_PromoteListLast = &(p_Promotion->m_Next);
         p_Promotion->m_Next = nullptr;

@@ -7,7 +7,7 @@
         s = static_cast<long>(sizeof(Pair<F, D>));                 \
     }
 
-namespace RMD
+namespace DORI
 {
     // layout-only pair for offsetof
     template<class F, class D>
@@ -49,13 +49,20 @@ namespace RMD
 //			rf.RequestPromotion(PGC::PGC_Transaction::TopTransaction());
         }
         explicit Self(DirectA<D> x) : via_facade(false), d(x.d) {}
+        void Finalize() noexcept
+        {
+            rf.Finalize();
+		}
 
         // always give me D*
-        D* data() const noexcept { return via_facade ? to_data_ptr<F, D>(rf.Get()) : d; }
+        const D* data() const noexcept { return via_facade ? to_data_ptr<F, D>(rf.Get()) : d; }
+        D* data() noexcept { return via_facade ? to_data_ptr<F, D>(rf.Get()) : d; }
 
         // convenience
-        D* operator->() const noexcept { return data(); }
-        D& operator* () const noexcept { return *data(); }
+        const D* operator->() const noexcept { return data(); }
+        D* operator->() noexcept { return data(); }
+        const D& operator* () const noexcept { return *data(); }
+        D& operator* () noexcept { return *data(); }
     };
 }
 

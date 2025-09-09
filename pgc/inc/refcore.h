@@ -55,27 +55,40 @@ namespace PGC
 
         void Clear()
         {
-            // Cache what is needed *before* clobbering
-            auto* promotion = GetLogicalPromotion();
-            PGC_Transaction *ownerTransaction = GetLogicalOwnerTransaction();
-
-            // Make this ref an "empty slot owned by owner"
-            // (your encoding: internal == owner means null)
-            m_InternalPointer = ownerTransaction;
-        #ifdef PGC_DEBUG_VERIFY_ENCODING
-            m_LogicalOwnerTransaction = ownerTransaction;
-            m_LogicalPromotion = nullptr;
-            m_LogicalPointer = nullptr;
-        #endif
-
-			// Free the promotion if there was one.
-            if (promotion)
+            if (m_InternalPointer != nullptr)
             {
-                promotion->FreeFromRefAttached(); // Promotion no longer needed.
+                // Cache what is needed *before* clobbering
+                auto* promotion = GetLogicalPromotion();
+                PGC_Transaction* ownerTransaction = GetLogicalOwnerTransaction();
+
+                // Make this ref an "empty slot owned by owner"
+                // (your encoding: internal == owner means null)
+                m_InternalPointer = ownerTransaction;
+#ifdef PGC_DEBUG_VERIFY_ENCODING
+                m_LogicalOwnerTransaction = ownerTransaction;
+                m_LogicalPromotion = nullptr;
+                m_LogicalPointer = nullptr;
+#endif
+
+                // Free the promotion if there was one.
+                if (promotion)
+                {
+                    promotion->FreeFromRefAttached(); // Promotion no longer needed.
+                }
             }
 
         #ifdef PGC_DEBUG_VERIFY_ENCODING
             Verify();
+        #endif
+        }
+
+        void Finalize()
+        {
+        #ifdef PGC_DEBUG_VERIFY_ENCODING
+            m_InternalPointer = nullptr;
+			m_LogicalPointer = nullptr;
+			m_LogicalOwnerTransaction = nullptr;
+			m_LogicalPromotion = nullptr;
         #endif
         }
 
@@ -86,6 +99,7 @@ namespace PGC
             {
                 m_InternalPointer = promotion->GetFinalCopy();
             #ifdef PGC_DEBUG_VERIFY_ENCODING
+                m_LogicalPointer = m_InternalPointer;
                 m_LogicalOwnerTransaction = m_InternalPointer->GetLogicalOwnerTransaction();
                 m_LogicalPromotion = nullptr;  // Clear the shadow reference
             #endif
@@ -98,26 +112,58 @@ namespace PGC
         // ------------------------------------------------------------------------
         PGC_TypeCheck* GetLogicalPointer() const
         {
-            return m_InternalPointer ? m_InternalPointer->GetLogicalPointer() : nullptr;
+            PGC_TypeCheck* pointer = m_InternalPointer ? m_InternalPointer->GetLogicalPointer() : nullptr;
+        #ifdef PGC_DEBUG_VERIFY_ENCODING
+            if (!(m_LogicalPromotion && m_LogicalPromotion->GetPromoted()))
+            {
+                ASSERTM(pointer == m_LogicalPointer, "Pointer does not match training wheels logical pointer.");
+            }
+        #endif
+            return pointer;
+        }
+
+        PGC_TypeCheck* GetLogicalPointer()
+        {
+            PGC_TypeCheck* pointer = m_InternalPointer ? m_InternalPointer->GetLogicalPointer() : nullptr;
+#ifdef PGC_DEBUG_VERIFY_ENCODING
+            if (m_LogicalPromotion && m_LogicalPromotion->GetPromoted())
+            {
+                m_LogicalPointer = pointer;
+            }
+            ASSERTM(pointer == m_LogicalPointer, "Pointer does not match training wheels logical pointer.");
+#endif
+            return pointer;
         }
 
         PGC_Transaction* GetLogicalOwnerTransaction() const
         {
-            return m_InternalPointer ? m_InternalPointer->GetLogicalOwnerTransaction() : nullptr;
+            PGC_Transaction* transaction = m_InternalPointer ? m_InternalPointer->GetLogicalOwnerTransaction() : nullptr;
+        #ifdef PGC_DEBUG_VERIFY_ENCODING
+            ASSERTM(transaction == m_LogicalOwnerTransaction, "Transaction does not match training wheels logical owner transaction.");
+        #endif
+            return transaction;
         }
 
         PGC_Promotion* GetLogicalPromotion() const
         {
-            return m_InternalPointer ? m_InternalPointer->GetLogicalPromotion() : nullptr;
+            PGC_Promotion *promotion = m_InternalPointer ? m_InternalPointer->GetLogicalPromotion() : nullptr;
+        #ifdef PGC_DEBUG_VERIFY_ENCODING
+            ASSERTM(promotion == m_LogicalPromotion, "Promotion does not match training wheels logical promotion.");
+        #endif
+            return promotion;
         }
 
         // Verify invariants using only the virtual API.
     #ifdef PGC_DEBUG_VERIFY_ENCODING
-        void Verify() const {
-            // Shadows must match recomputation
-            ASSERTM(m_LogicalPointer == GetLogicalPointer(), "Logical pointer mismatch");
-            ASSERTM(m_LogicalOwnerTransaction == GetLogicalOwnerTransaction(), "Logical owner transaction mismatch");
-            ASSERTM(m_LogicalPromotion == GetLogicalPromotion(), "Logical promotion mismatch");
+        void Verify()
+        {
+            if (m_InternalPointer != nullptr)
+            {
+                // Shadows must match recomputation
+                ASSERTM(m_LogicalPointer == GetLogicalPointer(), "Logical pointer mismatch");
+                ASSERTM(m_LogicalOwnerTransaction == GetLogicalOwnerTransaction(), "Logical owner transaction mismatch");
+                ASSERTM(m_LogicalPromotion == GetLogicalPromotion(), "Logical promotion mismatch");
+            }
         }
     #endif
     
@@ -192,10 +238,6 @@ namespace PGC
         PGC_Promotion* CreatePromotion(PGC_TypeCheck* p_Pointer, PGC_Transaction* p_DestinationTransaction)
         {
             PGC_Transaction* ownerTransaction = p_Pointer->GetLogicalOwnerTransaction();
-            if (ownerTransaction == nullptr)
-            {
-                long dog = 10;
-            }
             ASSERTM(ownerTransaction != nullptr, "CreatePromotion: owner transaction is null");
             PGC_User* user = ownerTransaction->GetUser();
             PGC_Promotion* promotion = user->Allocate();

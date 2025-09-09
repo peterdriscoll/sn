@@ -51,7 +51,7 @@ namespace PGC
         {
             m_Core.DetachPromotion(); // detach from other, we get our own copy
             PGC_Transaction* topTransaction = PGC_Transaction::TopTransaction();
-            if (!topTransaction->Dieing())
+            if (!topTransaction->IsDying())
             {
                 m_Core.RequestPromotion(topTransaction);
             }
@@ -62,21 +62,35 @@ namespace PGC
             : Promotable([this](PGC_Transaction* dst) { this->RequestPromotion(dst); })
             , m_Core(p_Other.m_Core)
         {
-            m_Core.DetachPromotion(); // detach from other, we get our own copy
+            PGC_Promotion* promotion = m_Core.DetachPromotion(); // detach from other, we get our own copy
             PGC_Transaction* topTransaction = PGC_Transaction::TopTransaction();
-            if (!topTransaction->Dieing())
+            if (!topTransaction->IsDying())
             {
-                m_Core.RequestPromotion(topTransaction);
+                if (promotion)
+                {
+                    m_Core.SetLogicalPromotion(promotion);
+                }
+                else
+                {
+                    m_Core.RequestPromotion(topTransaction);
+                }
             }
             p_Other.m_Core.Clear();
         }
 
         ~RefA() noexcept
         {
-            if (PGC_Promotion* promotion = m_Core.GetLogicalPromotion())
-            {
-                promotion->FreeFromRefAttached();
-            }
+            m_Core.Clear(); // Free any promotion
+        }
+
+        void Finalize() noexcept
+        {
+            m_Core.Finalize(); // Free any promotion
+		}
+
+        bool operator==(const RefA& p_Other)  const noexcept
+        {
+            return m_Core.GetLogicalPointer() == p_Other.m_Core.GetLogicalPointer();
         }
 
         // Move assignment
@@ -84,14 +98,21 @@ namespace PGC
         {
             if (this == &p_Other) return *this;
 
+            // Lock the destination transaction, so that the assignment
+            // is one atomic operation.
             PGC_Transaction* destination = m_Core.GetLogicalOwnerTransaction();
-            PGC_Transaction* otherDestination = p_Other.m_Core.GetLogicalOwnerTransaction();
             ASSERTM(destination, "RefA must have a destination transaction.");
-            ASSERTM(otherDestination, "Other RefA must have a destination transaction.");
+            std::lock_guard<std::mutex> g1(destination->m_Mutex);
+
+            // Same pointer, can avoid clearing and recreating promotions.
+            if (*this == p_Other)
+            {
+                return *this;
+            }
 
             // Phase 1: under our current destination lock, free any existing promotion.
-            std::lock_guard<std::mutex> g1(destination->m_Mutex);
             m_Core.Clear(); // Clear will free any promotion, but keep the owner transaction
+
             if (auto* promotion = p_Other.m_Core.DetachPromotion())
             {
                 // RefCore will rebind promotion address and destination transaction to this ref and retarget to finalDest
@@ -103,36 +124,38 @@ namespace PGC
                 m_Core.SetLogicalPointer(pointer);
             }
 
-            p_Other.m_Core.Clear(); // This won't free the promotion, as it has been detached.
+            // This won't free the promotion, as it has been detached.
+            // This is not really necessary. It is cosmetic so that when
+            // the destructor is run, it is clear that the data has gone.
+            p_Other.m_Core.Clear();
 
             return *this;
         }
 
-        RefA& operator=(RefA& p_Other) noexcept
+        RefA& operator=(const RefA& p_Other) noexcept
         {
-            if (this == &p_Other) return *this;
+            if (this == &p_Other)
+            {
+                return *this;
+            }
 
+            //Lock, so the assignment is one atomic action.
             PGC_Transaction* destination = m_Core.GetLogicalOwnerTransaction();
-            PGC_Transaction* otherDestination = p_Other.m_Core.GetLogicalOwnerTransaction();
             ASSERTM(destination, "RefA must have a destination transaction.");
-            ASSERTM(otherDestination, "Other RefA must have a destination transaction.");
+            std::lock_guard<std::mutex> g1(destination->m_Mutex);
+
+            // Same pointer, can avoid clearing and recreating promotions
+            // if the pointer is not changing.
+            if (*this == p_Other)
+            {
+                return *this;
+            }
 
             // Phase 1: under our current destination lock, free any existing promotion.
-            std::lock_guard<std::mutex> g1(destination->m_Mutex);
             m_Core.Clear(); // Clear will free any promotion, but keep the owner transaction
-            if (auto* promotion = p_Other.m_Core.DetachPromotion())
-            {
-                // RefCore will rebind promotion address and destination transaction to this ref and retarget to finalDest
-                m_Core.SetLogicalPromotion(promotion);
-            }
-            else if (auto* pointer = p_Other.m_Core.GetLogicalPointer())
-            {
-                // RefCore will direct-encode or create a promotion to finalDest
-                m_Core.SetLogicalPointer(pointer);
-            }
 
-            p_Other.m_Core.Clear(); // This won't free the promotion, as it has been detached.
-
+            // Phase 2: Assign the new pointer value, possibly creating a promotion.
+            m_Core.SetLogicalPointer(p_Other.m_Core.GetLogicalPointer());
             return *this;
         }
 
@@ -201,8 +224,8 @@ namespace PGC
 
         // ---- const ----
         template<class U = T> requires (IsFacade_v<U>)
-            Proxy<const U> operator->() const {
-            return Proxy<const U>(this->as_data());
+        const Proxy<U> operator->() const {
+            return Proxy<U>(*this);
         }
 
         template<class U = T> requires (!IsFacade_v<U>)
@@ -243,7 +266,7 @@ namespace PGC
         }
         void PromoteNow()
         {
-            m_Core.RequestPromotion();
+            m_Core.RequestPromotion(PGC_Transaction::TopTransaction());
         }
 		void RequestPromotion(PGC_Transaction* p_DestinationTransaction = nullptr) requires PGC_Ready<T>
         {

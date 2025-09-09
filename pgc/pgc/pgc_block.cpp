@@ -24,6 +24,20 @@ namespace PGC
 		m_Transaction->GetUser()->AddTotalGrossMemorySize(sizeof(PGC_Block));
 	}
 
+	void PGC_Block::FinalizeUncopied()
+	{
+		PGC_Base* next = m_DestuctionList;
+		while (next)
+		{
+			PGC_Base* temp = next->GetNext((void*)m_current);
+			if (next->GetCallDestructor())
+			{
+				next->Finalize();
+			}
+			next = temp;
+		}
+	}
+
 	void PGC_Block::DestroyUncopied()
 	{
 		PGC_Base *next = m_DestuctionList;

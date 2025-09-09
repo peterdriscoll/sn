@@ -1,13 +1,13 @@
 #pragma once
 
-#include "rmd.h"
+#include "dori.h"
 #include <utility>
 
-namespace RMD {
+namespace DORI {
     template<class F> using FacadeDataT = typename F::Data;
 
     template<class F, class... DArgs>
-    PGC::RefA<F> make_rmd(PGC::PGC_Transaction& txn, DArgs&&... dargs) {
+    PGC::RefA<F> make_dori(PGC::PGC_Transaction& txn, DArgs&&... dargs) {
         using D = FacadeDataT<F>;
         using PairT = Pair<F, D>;
 

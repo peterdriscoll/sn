@@ -83,7 +83,7 @@
     <ClCompile Include="testclassusingref_A.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="test_pgc_rmd.cpp">
+    <ClCompile Include="test_pgc_dori.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

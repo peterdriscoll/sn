@@ -100,6 +100,10 @@ namespace PGC
 
 	}
 
+	void PGC_Base::Finalize() noexcept
+	{
+	}
+
 	PGC_Base* PGC_Base::Clone(PGC_Transaction& /*p_Transaction*/)
 	{
 		return NULL;
@@ -146,7 +150,7 @@ namespace PGC
 			return;
 		if (source == destination)
 			return;
-		if (destination->Dieing())
+		if (destination->IsDying())
 			return;
 		if (source->IsStatic())
 			return;

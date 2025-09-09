@@ -10,7 +10,7 @@
 //   };
 // If your SelfA differs, adjust the two calls to FromFused() below.
 
-#include "rmd.h"
+#include "dori.h"
 
 #include <string>
 #include <iostream>
@@ -87,7 +87,7 @@ inline bool WaitForCommandFair(const std::string& prompt,
 }
 
 
-// Relocatable Member Dispatch (RMD)
+// Relocatable Member Dispatch (DORI)
 // A stable handle (control cell) owns type/txn metadata and DISPATCHES member calls
 // to the object's current final copy, even when the instance relocates (promotion/copy).
 // Not remote; not link-time relocation.
@@ -101,7 +101,7 @@ inline bool WaitForCommandFair(const std::string& prompt,
 // Search keywords (for future readers):
 //  handle–body, handle–payload, relocatable handles (Mac/Win), forwarding pointer, promotion
 
-namespace RMD 
+namespace DORI 
 {
     class Something : public PGC::PGC_Base
     {
@@ -143,7 +143,7 @@ namespace RMD
 
     private:
         // Self points at the co-allocated Data when fused, or in ST may inline it.
-        RMD::Self<Something, Data> m_self;
+        DORI::Self<Something, Data> m_self;
 
     public:
         // --- lifecycle (keep minimal) ---
@@ -151,12 +151,12 @@ namespace RMD
         Something(const Something&) = default;
         Something(PGC::PGC_Transaction& txn, PGC::NoAutoReg noAuto, PGC::FusedTag)
             : PGC::PGC_Base(txn, noAuto)
-            , m_self(DirectA<Data>{ RMD::to_data_ptr<Something, Data>(this) })  // bind to co-allocated Data
+            , m_self(DirectA<Data>{ DORI::to_data_ptr<Something, Data>(this) })  // bind to co-allocated Data
         {
         }
         Something(PGC::PGC_Transaction& txn, PGC::FusedTag)
             : PGC::PGC_Base(txn)
-            , m_self(DirectA<Data>{ RMD::to_data_ptr<Something, Data>(this) })  // bind to co-allocated Data
+            , m_self(DirectA<Data>{ DORI::to_data_ptr<Something, Data>(this) })  // bind to co-allocated Data
         {
         }
         Something(PGC::RefA<Something>& p_ref, PGC::StackAllocationTag) noexcept
@@ -164,13 +164,19 @@ namespace RMD
             , m_self(p_ref)
         {}
 
+        void Finalize() noexcept override
+        {
+            //std::cout << "Finalize Something " << (m_self ? m_self->m_Name : "<null>") << "\n";
+            m_self->m_Next.Finalize();
+            m_self.Finalize();
+        }
     Something& operator=(const Something&) = default;
         Something(Something&&) noexcept = default;
         Something& operator=(Something&&) noexcept = default;
 
         // Create JSON from the Data reachable via SelfA.
         void MakeJSON(std::ostream& os) const {
-            WaitForCommandFair("Type 'go' to process "+ m_self->m_Name, "go");
+            WaitForCommandFair("Type 'go' to process " + m_self->m_Name, "go");
             os << "{ \"name\":\"" << m_self->m_Name
                << "\", \"description\":\"" << m_self->m_Description << "\"";
 
@@ -196,11 +202,11 @@ namespace RMD
         }
 
         // Expose if façade code needs the data view
-        RMD::Self<Something, Data>& Self()
+        DORI::Self<Something, Data>& Self()
         {
             return m_self; 
         }
-        const RMD::Self<Something, Data>& Self() const
+        const DORI::Self<Something, Data>& Self() const
         {
             return m_self; 
         }
@@ -209,7 +215,7 @@ namespace RMD
         // Allocator must provide storage with alignment >= alignof(Pair<Something,Data>).
         virtual PGC::PGC_Base* MoveTo(void* memory) override
         {
-            using PairT = RMD::Pair<Something, Data>;
+            using PairT = DORI::Pair<Something, Data>;
             auto* pair = static_cast<PairT*>(memory);
 
             // 1) new facade (txn will be set by the caller per your PGC flow)
@@ -222,4 +228,4 @@ namespace RMD
         }
     };
 
-} // namespace RMD
+} // namespace DORI

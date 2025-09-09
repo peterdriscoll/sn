@@ -6,6 +6,8 @@
 
 namespace PGC
 {
+	long g_IDCounter = 0;
+
 	PGC_Promotion::PGC_Promotion()
 		: m_Base(nullptr)
 		, m_Next(nullptr)
@@ -16,6 +18,7 @@ namespace PGC
 		, m_Dropped(false)
 		, m_InProcessingList(true)
 		, m_RefAttached(true)
+		, m_Id(++g_IDCounter)
 	{
 	}
 
@@ -49,11 +52,12 @@ namespace PGC
 			return PromotionResult::Dropped;
 		}
 
-		if (!m_Destination || m_Destination->Dieing())
+		if (!m_Destination || m_Destination->IsDying())
 		{
 			return PromotionResult::Dropped;
 		}
 
+ 		ASSERTM(Verify(), "Invalid promotion.");
 		PGC_Transaction* source = GetSource();
 		if (!source)
 		{
@@ -65,7 +69,7 @@ namespace PGC
 			return PromotionResult::Dropped;
 		}
 
-		if (source->Dieing())
+		if (source->IsDying())
 		{
 			// Perform promotion
 			Promote();
@@ -77,8 +81,14 @@ namespace PGC
 		return PromotionResult::Keep;
 	}
 
+	bool PGC_Promotion::Verify()
+	{
+		return m_Base && *m_Base && m_Destination && m_Source && m_FinalCopy;
+	}
+
 	void PGC_Promotion::Promote()
 	{
+		ASSERTM(Verify(), "Invalid promotion.");
 		PGC_TypeCheck* base = (*m_Base)->GetLogicalPointer();
 		ASSERTM(base, "Base pointer should not be null during promotion");
 		PGC_TypeCheck* promotedCopy = base->GetPromotedCopy();
@@ -174,19 +184,20 @@ namespace PGC
 	}
 	void PGC_Promotion::Create(PGC_TypeCheck** p_Base, PGC_Transaction* p_Destination, PromotionStrategy p_Strategy)
 	{
-		if (p_Strategy == PromotionStrategy::DoubleDipping)
-		{
-			long dog = 10;
-		}
+		ASSERTM(p_Base, "No address for promotion");
+		ASSERTM(*p_Base, "No instance for promotion");
 		m_Base = p_Base;
+		ASSERTM(p_Destination, "No destination transaction for promotion");
 		m_Destination = p_Destination;
 		m_Source = (*m_Base)->GetTransaction();
+		ASSERTM(m_Source, "No source transaction for promotion");
 		m_Strategy = p_Strategy;
 		m_Promoted = false;
 		m_Dropped = false;
 		m_FinalCopy = *p_Base;  // <- capture the original before any overwrite happens
 		m_RefAttached = true;
 		m_InProcessingList = true;
+		ASSERTM(Verify(), "Invalid promotion.");
 	}
 
 	PGC_User* PGC_Promotion::GetUser() const
@@ -261,12 +272,14 @@ namespace PGC
 	void PGC_Promotion::SetBase(PGC_TypeCheck** p_Base)
 	{
 		m_Base = p_Base;
+		ASSERTM(Verify(), "Invalid promotion.");
 	}
 
 	void PGC_Promotion::Rebind(PGC_TypeCheck** p_Base, PGC_Transaction* p_DestinationTransaction)
 	{
 		m_Base = p_Base;
 		m_Destination = p_DestinationTransaction;
+		ASSERTM(Verify(), "Invalid promotion.");
 	}
 
 	PGC_Transaction* PGC_Promotion::GetSource()
@@ -277,6 +290,11 @@ namespace PGC
 	PGC_Transaction* PGC_Promotion::GetDestination()
 	{
 		return m_Destination;
+	}
+
+	bool PGC_Promotion::GetPromoted()
+	{
+		return m_Promoted;
 	}
 
 	PromotionStrategy PGC_Promotion::GetStrategy()

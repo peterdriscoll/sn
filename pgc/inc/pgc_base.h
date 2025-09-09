@@ -130,6 +130,8 @@ namespace PGC
 		PGC_Base(PGC_Base&& p_Other) noexcept;
 		virtual ~PGC_Base();
 
+		virtual void Finalize() noexcept;
+
 		//	Name:  PromoteMembers
 		//  Description:
 		//      Traverse each member variable which is a pointer to another object and promote it to the new transaction. 

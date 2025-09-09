@@ -172,7 +172,7 @@ namespace PGC
 			PGC_Transaction* source = m_Pointer->GetTransaction();
 			if (source && destination &&
 				source != destination &&
-				!destination->Dieing() &&
+				!destination->IsDying() &&
 				!source->IsStatic())
 			{
 				PGC_Promotion promotion;

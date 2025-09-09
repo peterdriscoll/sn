@@ -74,7 +74,7 @@ namespace PGC
 		void *CreateNew(size_t p_size);
 		static PGC_Transaction *RegisterLastForDestruction(PGC_Base *p_Base);
 
-		bool Dieing();
+		bool IsDying();
 
 		PGC_Base *FindOwner(void *p_member);
 
@@ -112,6 +112,7 @@ namespace PGC
 		void Unpin();
 	private:
 
+		void CallFinalizersForAllBlocks();
 		void CallDestructorsForAllBlocks();
 		void DeleteBlocks();
 		void ReleaseBlocks();

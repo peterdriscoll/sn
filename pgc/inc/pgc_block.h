@@ -17,6 +17,7 @@ namespace PGC
 		void* Allocate(size_t p_size, std::size_t align);
 
 		void RegisterForDestruction(PGC_Base *p_Base);
+		void FinalizeUncopied();
 		void DestroyUncopied();
 
 		PGC_Base *FindOwner(void *p_member);
