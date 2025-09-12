@@ -76,8 +76,13 @@ namespace test_pgc
 		// TESTS.
 		TEST_METHOD(TestDORI_Something)
 		{
-            return; // Temmporarily disabled because it requires user input.
-			PGC_User user(ClassRegistry, &AssertErrorHandler);
+            EnsureConsoleForIO();
+            stdin_fair::preload({
+                "go", "go", "go",
+                "go", "go", "go",
+                "go", "go", "go"});
+
+            PGC_User user(ClassRegistry, &AssertErrorHandler);
 			{
                 PGCX::PGC_Transaction parentTransaction(user, false, PGC::PromotionStrategy::DoubleDipping);
 
@@ -104,7 +109,6 @@ namespace test_pgc
 
         TEST_METHOD(TestDORI_Something_Promotion)
         {
-			//return; // Temmporarily disabled because it requires user input.
 			EnsureConsoleForIO();
             stdin_fair::reset();
             stdin_fair::preload({
