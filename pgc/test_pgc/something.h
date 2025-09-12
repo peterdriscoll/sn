@@ -113,6 +113,11 @@ namespace DORI
 
             if (!m_self->m_Stop && m_self->m_Next) {
                 os << ", \"next\": ";
+                // m_self->m_Next->MakeJSON(os);
+                // From what I can see, m_self->m_Next creates a LockPin
+                // which is not detroyed and unlocked until the call MakeJSON
+				// returns. Breaking the call into two statements release the 
+                // LockPin before the call.
                 auto next = m_self->m_Next;
                 next->MakeJSON(os);
             }
