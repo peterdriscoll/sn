@@ -1,3 +1,45 @@
+/*------------------------------------------------------------------------------
+  command_input_hybrid.h  —  Hybrid stdin + scripted queue (human+machine)
+
+  What it is:
+    - A convenience adapter that reads tokens from BOTH:
+        (1) an in-memory scripted queue and
+        (2) live stdin (human)
+      Useful for ad-hoc interactive runs.
+
+  Guarantees:
+    - Best-effort ordering; NOT strictly FIFO when human/stdin participates.
+    - May print queue diagnostics like “[pending=…] …”.
+
+  Tradeoffs / Gotchas:
+    - Output can interleave with your program’s own output if you write
+      diagnostics to the same std::ostream (e.g., JSON). Prefer std::cerr.
+    - “Saved” items and expiry windows can cause out-of-front consumption
+      in some timing windows. Do NOT use for deterministic tests.
+
+  When to use:
+    - Manual experiments and live demos with occasional scripted help.
+
+  When NOT to use:
+    - Deterministic CI tests or anything that must enforce exact token order.
+      Use command_input_machine.h instead.
+
+  Minimal API (mirrors other variants):
+    void reset() noexcept;
+    void set_default_fails(int fails) noexcept;                  // per-token retry budget
+    void set_yield_sleep(std::chrono::milliseconds) noexcept;    // cooperative wait
+    void preload(std::initializer_list<const char*> tokens);     // seed the script
+    void push(std::string token);                                // runtime injection
+    void WaitForCommandScript(const char* who, const char* expected); // blocks until match
+    void dump_pending_to_stderr() noexcept;                      // debug; stderr ONLY
+
+  Tips:
+    - Keep diagnostics on std::cerr to avoid corrupting structured output.
+    - If you observe unexpected order, disable stdin for that run or switch
+      to the machine variant.
+
+------------------------------------------------------------------------------*/
+
 #pragma once
 
 #include <deque>

@@ -16,7 +16,7 @@
 #include <iostream>
 #include <new>
 #include <type_traits>
-#include "command_input3.h"
+#include "command_input_machine.h"
 
 // Relocatable Member Dispatch (DORI)
 // A stable handle (control cell) owns type/txn metadata and DISPATCHES member calls

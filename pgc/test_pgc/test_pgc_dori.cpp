@@ -114,7 +114,7 @@ namespace test_pgc
             stdin_fair::preload({
                 "go", "promote",
                 "go", "go", "go", "stop",
-                "go", "go", "work", "end" });
+                "go", "go", "work", "end"});
 
             PGC_User user(ClassRegistry);
             {

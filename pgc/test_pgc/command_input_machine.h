@@ -1,3 +1,43 @@
+/*------------------------------------------------------------------------------
+  command_input_machine.h  —  Strict FIFO scripted command queue (deterministic)
+
+  What it is:
+    - A minimal, deterministic harness for machine-driven tests.
+    - Consumes tokens ONLY when expected == queue.front().
+    - No stdin path; no accidental interleaving.
+
+  Guarantees:
+    - Strict FIFO consumption.
+    - Cooperative waiting with a retry/fail budget per token.
+    - Clean logs (no automatic spew into your data stream).
+
+  Tradeoffs:
+    - No interactive stdin. Pure machine control by design.
+
+  When to use:
+    - CI, reproducible tests, protocol verification, and any run where order
+      must be exact.
+
+  Minimal API:
+    void reset() noexcept;                                        // clear state
+    void set_default_fails(int fails) noexcept;                   // e.g., 1000
+    void set_yield_sleep(std::chrono::milliseconds) noexcept;     // e.g., 0–1ms
+    void preload(std::initializer_list<const char*> tokens);      // seed script
+    void push(std::string token);                                 // inject at tail
+    void WaitForCommandScript(const char* who, const char* expected);
+      // Blocks until queue.front() == expected; otherwise yields and retries.
+      // Decrements per-item fail budget; throws/logs when exhausted.
+
+    void dump_pending_to_stderr() noexcept;  // optional debug; NEVER use main os
+
+  Tips:
+    - Keep JSON/structured output separate from diagnostics (stderr).
+    - If you need human input for a one-off run, switch temporarily to the
+      hybrid variant, but don’t use it in CI.
+
+------------------------------------------------------------------------------*/
+
+
 #pragma once
 
 #include <atomic>

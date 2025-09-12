@@ -1,3 +1,44 @@
+/*------------------------------------------------------------------------------
+  command_input_split.h  —  Split modes (machine vs human), bag-of-tokens store
+
+  What it is:
+    - A two-mode interface intended to separate “machine tokens” from “human”
+      input. The machine side stores tokens in a COUNTING BAG (unordered),
+      not a queue.
+
+  Guarantees:
+    - Ensures presence, NOT position. It may satisfy a wait with ANY matching
+      token present, even if it isn’t “front”.
+
+  Tradeoffs / Gotchas:
+    - NOT FIFO. Not suitable for strict scripts that require front-exact match.
+    - Easy to consume the “wrong” duplicate token if several are queued.
+    - Wrapper logic must be used carefully; ensure you’re invoking the intended
+      mode for each wait.
+
+  When to use:
+    - Robustness / availability checks (e.g., “eventually see X”), where order
+      is irrelevant.
+
+  When NOT to use:
+    - Ordered protocols and deterministic harnesses. Prefer machine variant.
+
+  Minimal API (same surface as others for easy swapping):
+    void reset() noexcept;
+    void set_default_fails(int fails) noexcept;
+    void set_yield_sleep(std::chrono::milliseconds) noexcept;
+    void preload(std::initializer_list<const char*> tokens);
+    void push(std::string token);
+    void WaitForCommandScript(const char* who, const char* expected);
+    void dump_pending_to_stderr() noexcept;   // always log to stderr
+
+  Tips:
+    - If you ever need strict “front == expected”, use command_input_machine.h.
+    - Keep all debug output off your main data stream (stderr only).
+
+------------------------------------------------------------------------------*/
+
+
 #pragma once
 
 #include <atomic>
