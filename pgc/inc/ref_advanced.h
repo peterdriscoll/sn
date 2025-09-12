@@ -49,12 +49,13 @@ namespace PGC
             : Promotable([this](PGC_Transaction* dst) { this->RequestPromotion(dst); })
             , m_Core(p_Other.m_Core)
         {
-            m_Core.DetachPromotion(); // detach from other, we get our own copy
-            PGC_Transaction* topTransaction = PGC_Transaction::TopTransaction();
-            if (!topTransaction->IsDying())
-            {
-                m_Core.RequestPromotion(topTransaction);
-            }
+            auto* user = PGC_User::GetCurrentPGC_User();
+            user->with_lock(WithLock, [&] {
+                m_Core.DetachPromotion();  // detach from other; we get our own copy
+                if (PGC_Transaction* top = PGC_Transaction::TopTransaction(); top && !top->IsDying()) {
+                    m_Core.RequestPromotion(top);
+                }
+            });
         }
 
         // Move constructor
@@ -62,31 +63,40 @@ namespace PGC
             : Promotable([this](PGC_Transaction* dst) { this->RequestPromotion(dst); })
             , m_Core(p_Other.m_Core)
         {
-            PGC_Promotion* promotion = m_Core.DetachPromotion(); // detach from other, we get our own copy
-            PGC_Transaction* topTransaction = PGC_Transaction::TopTransaction();
-            if (!topTransaction->IsDying())
-            {
-                if (promotion)
+            auto* user = PGC_User::GetCurrentPGC_User();
+            user->with_lock(WithLock, [&] {
+                PGC_Promotion* promotion = m_Core.DetachPromotion(); // detach from other, we get our own copy
+                PGC_Transaction* topTransaction = PGC_Transaction::TopTransaction();
+                if (!topTransaction->IsDying())
                 {
-                    m_Core.SetLogicalPromotion(promotion);
+                    if (promotion)
+                    {
+                        m_Core.SetLogicalPromotion(promotion);
+                    }
+                    else
+                    {
+                        m_Core.RequestPromotion(topTransaction);
+                    }
                 }
-                else
-                {
-                    m_Core.RequestPromotion(topTransaction);
-                }
-            }
-            p_Other.m_Core.Clear();
+                p_Other.m_Core.Clear();
+            });
         }
 
         ~RefA() noexcept
         {
-            m_Core.Clear(); // Free any promotion
+            auto* user = PGC_User::GetCurrentPGC_User();
+            user->with_lock(WithLock, [&] {
+                m_Core.Clear(); // Free any promotion
+            });
         }
 
         void Finalize() noexcept
         {
-            m_Core.Finalize(); // Free any promotion
-		}
+            auto* user = PGC_User::GetCurrentPGC_User();
+            user->with_lock(WithLock, [&] {
+                m_Core.Finalize();
+            });
+        }
 
         bool operator==(const RefA& p_Other)  const noexcept
         {
@@ -98,64 +108,36 @@ namespace PGC
         {
             if (this == &p_Other) return *this;
 
-            // Lock the destination transaction, so that the assignment
-            // is one atomic operation.
-            PGC_Transaction* destination = m_Core.GetLogicalOwnerTransaction();
-            ASSERTM(destination, "RefA must have a destination transaction.");
-            std::lock_guard<std::mutex> g1(destination->m_Mutex);
+            auto* user = PGC_User::GetCurrentPGC_User();
+            user->with_lock(WithLock, [&] {
+                if (!(*this == p_Other)) {
+                    m_Core.Clear();  // free existing promotion (keep owner txn)
 
-            // Same pointer, can avoid clearing and recreating promotions.
-            if (*this == p_Other)
-            {
-                return *this;
-            }
+                    if (auto* promotion = p_Other.m_Core.DetachPromotion()) {
+                        m_Core.SetLogicalPromotion(promotion);
+                    }
+                    else if (auto* pointer = p_Other.m_Core.GetLogicalPointer()) {
+                        m_Core.SetLogicalPointer(pointer);
+                    }
 
-            // Phase 1: under our current destination lock, free any existing promotion.
-            m_Core.Clear(); // Clear will free any promotion, but keep the owner transaction
-
-            if (auto* promotion = p_Other.m_Core.DetachPromotion())
-            {
-                // RefCore will rebind promotion address and destination transaction to this ref and retarget to finalDest
-                m_Core.SetLogicalPromotion(promotion);
-            }
-            else if (auto* pointer = p_Other.m_Core.GetLogicalPointer())
-            {
-                // RefCore will direct-encode or create a promotion to finalDest
-                m_Core.SetLogicalPointer(pointer);
-            }
-
-            // This won't free the promotion, as it has been detached.
-            // This is not really necessary. It is cosmetic so that when
-            // the destructor is run, it is clear that the data has gone.
-            p_Other.m_Core.Clear();
-
+                    // cosmetic: make it obvious p_Other no longer refers to anything
+                    p_Other.m_Core.Clear();
+                }
+            });
             return *this;
         }
 
         RefA& operator=(const RefA& p_Other) noexcept
         {
-            if (this == &p_Other)
-            {
-                return *this;
-            }
+            if (this == &p_Other) return *this;
 
-            //Lock, so the assignment is one atomic action.
-            PGC_Transaction* destination = m_Core.GetLogicalOwnerTransaction();
-            ASSERTM(destination, "RefA must have a destination transaction.");
-            std::lock_guard<std::mutex> g1(destination->m_Mutex);
-
-            // Same pointer, can avoid clearing and recreating promotions
-            // if the pointer is not changing.
-            if (*this == p_Other)
-            {
-                return *this;
-            }
-
-            // Phase 1: under our current destination lock, free any existing promotion.
-            m_Core.Clear(); // Clear will free any promotion, but keep the owner transaction
-
-            // Phase 2: Assign the new pointer value, possibly creating a promotion.
-            m_Core.SetLogicalPointer(p_Other.m_Core.GetLogicalPointer());
+            auto* user = PGC_User::GetCurrentPGC_User();
+            user->with_lock(WithLock, [&] {
+                if (!(*this == p_Other)) {
+                    m_Core.Clear();  // free existing promotion (keep owner txn)
+                    m_Core.SetLogicalPointer(p_Other.m_Core.GetLogicalPointer());
+                }
+            });
             return *this;
         }
 
@@ -164,36 +146,48 @@ namespace PGC
 			// taking const literally means we cannot modify the core.
             // This may be important for the web server access that reads
             // the state without modifying anything.
-            return static_cast<T*>(m_Core.GetLogicalPointer());
+            auto* user = PGC_User::GetCurrentPGC_User();
+            return user->with_lock(WithLock, [&]() -> T* {
+                T* pointer = static_cast<T*>(m_Core.GetLogicalPointer());
+                if (T* copy = static_cast<T*>(pointer->GetPromotedCopy()))
+                {
+                    pointer = copy;
+                }
+                return pointer;
+            });
         }
 
-        T* Get() {
+        T* Get() 
+        {
             // Fast path: if we’re under a promotion that’s already promoted,
             // collapse to the final copy and free the promotion now.
-            if (auto* promotion = m_Core.GetLogicalPromotion()) {
-                if (promotion->IsPromotedOrDropped()) {
-                    // Move the core to the final copy so we stop pointing at the promo.
-                    auto* final_copy = promotion->GetFinalCopy(); // PGC_TypeCheck*
-                    m_Core.SetLogicalPointer(final_copy);
-                    promotion->FreeFromRefAttached(); // return the promotion to the pool
+            auto* user = PGC_User::GetCurrentPGC_User();
+            return user->with_lock(WithLock, [&]() -> T* {
+                if (auto* promotion = m_Core.GetLogicalPromotion()) {
+                    if (promotion->IsPromotedOrDropped()) {
+                        auto* final_copy = promotion->GetFinalCopy(); // PGC_TypeCheck*
+                        m_Core.SetLogicalPointer(final_copy);
+                        promotion->FreeFromRefAttached();  // return promo to pool
+                    }
                 }
-            }
-            return dynamic_cast<T*>(m_Core.GetLogicalPointer());
+                T* pointer = static_cast<T*>(m_Core.GetLogicalPointer());
+                if (T* copy = static_cast<T*>(pointer->GetPromotedCopy()))
+                {
+                    pointer = copy;
+                }
+                return pointer;
+            });
         }
 
         // Set a new pointer. RefCore chooses promotion vs direct encode.
         // Atomically guarded by the destination (owner) transaction’s mutex.
-        void Set(T* p_Pointer) {
-            PGC_Transaction* destination = m_Core.GetLogicalOwnerTransaction();
-            ASSERTM(destination, "RefA::Set: destination (owner) transaction is nullptr");
-
-            std::lock_guard<std::mutex> lock(destination->m_Mutex);
-
-			m_Core.Clear(); // Free any existing promotion.
-
-            // Hand off to RefCore; it will encode directly or create a promotion
-            // depending on whether p’s transaction matches dest.
-            m_Core.SetLogicalPointer(static_cast<PGC_TypeCheck*>(p_Pointer));
+        void Set(T* p_Pointer) 
+        {
+            auto* user = PGC_User::GetCurrentPGC_User();
+            user->with_lock(WithLock, [&] {
+                m_Core.Clear(); // free any existing promotion
+                m_Core.SetLogicalPointer(static_cast<PGC_TypeCheck*>(p_Pointer));
+            });
         }
         // A proxy that materializes a façade from a data handle.
         // It contains a façade VALUE; pointer stays valid to end of full expression.
@@ -233,18 +227,6 @@ namespace PGC
             return Pin<const Data>(Get());
         }
 
-/*
-        // Accessors with typical pointer ergonomics.
-        Pin<T> operator->()
-        {
-            return Pin<T>(Get());
-        }
-
-        ConstPin<T> operator->() const
-        {
-            return ConstPin<T>(Get()); 
-        }
-*/
         Pin<T> operator*()
         {
             return Pin<T>(Get());
@@ -264,15 +246,30 @@ namespace PGC
         { 
             return ConstPin<T>(Get());
         }
+
         void PromoteNow()
         {
             m_Core.RequestPromotion(PGC_Transaction::TopTransaction());
         }
-		void RequestPromotion(PGC_Transaction* p_DestinationTransaction = nullptr) requires PGC_Ready<T>
+
+        void RequestPromotion(PGC_Transaction* dst = nullptr) requires PGC_Ready<T>
+        {
+            RequestPromotion(dst, WithLock);
+        }
+
+        /// Tag-dispatched: choose WithLock or NoLock at call site
+        template<class Tag>
+        void RequestPromotion(PGC_Transaction* dst, Tag tag) requires PGC_Ready<T>
         {
             PGC_User::GetCurrentPGC_User()->RequireRegistered<T>("RequestPromotion");
-            m_Core.RequestPromotion(p_DestinationTransaction);
+
+            auto* user = PGC_User::GetCurrentPGC_User();
+            user->with_lock(tag, [&] {
+                // RefCore does no locking; we're in the chosen policy here
+                m_Core.RequestPromotion(dst);
+                });
         }
+
         // Cheap emptiness check (no borrow, no promotion)
         bool empty() const noexcept {
             // Use whatever "is this bound?" check you already have.
@@ -282,7 +279,10 @@ namespace PGC
             return m_Core.GetLogicalPointer() == nullptr;
         }
         // Safe boolean conversion (C++11+)
-        explicit operator bool() const noexcept { return !empty(); }
+        explicit operator bool() const noexcept
+        { 
+            return !empty();
+        }
 
     public:
         RefCore m_Core;

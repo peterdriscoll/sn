@@ -16,76 +16,7 @@
 #include <iostream>
 #include <new>
 #include <type_traits>
-
-inline void WaitForCommand(std::string prompt, std::string command)
-{
-    bool wait = true;
-    while (wait)
-    {
-        static std::mutex g_stdin_mutex;              // one per program
-        std::lock_guard<std::mutex> lk(g_stdin_mutex); // exclusive session
-
-        std::cout << "\n" << prompt << "\n" << std::flush;
-        std::string line;
-        std::getline(std::cin, line);
-        wait = command != line;
-    }
-}
-
-#include <chrono>
-#include <atomic>
-#include <mutex>
-#include <condition_variable>
-#include <string>
-#include <iostream>
-#include <limits>
-
-namespace stdin_fair {
-    struct Gate {
-        std::mutex m;
-        std::condition_variable cv;
-        unsigned long long next_ticket = 0;  // to hand out
-        unsigned long long serving = 0;  // currently served
-    };
-    inline Gate& gate() { static Gate g; return g; }
-} // namespace stdin_fair
-
-inline bool WaitForCommandFair(const std::string& prompt,
-    const std::string& expected,
-    std::atomic<bool>* cancel = nullptr,
-    std::chrono::milliseconds timeout = std::chrono::milliseconds::zero())
-{
-    using namespace std::chrono;
-    bool matched = false, ok = true;
-
-    while (!matched && ok) {
-        auto& g = stdin_fair::gate();
-        unsigned long long my_ticket;
-        std::unique_lock<std::mutex> lk(g.m);
-        my_ticket = g.next_ticket++;
-
-        if (timeout == milliseconds::zero()) {
-            g.cv.wait(lk, [&] { return g.serving == my_ticket || (cancel && cancel->load()); });
-        }
-        else {
-            g.cv.wait_for(lk, timeout, [&] { return g.serving == my_ticket || (cancel && cancel->load()); });
-            if (g.serving != my_ticket) { ok = false; break; } // timed out before our turn
-        }
-        if (cancel && cancel->load()) { ok = false; }
-
-        if (ok && g.serving == my_ticket) {
-            std::cerr << "\n" << prompt << "\n" << std::flush;
-            std::string line;
-            if (!std::getline(std::cin, line)) ok = false;
-            else matched = (line == expected);
-            ++g.serving;
-            lk.unlock();
-            g.cv.notify_one();
-        }
-    }
-    return matched && ok;
-}
-
+#include "command_input3.h"
 
 // Relocatable Member Dispatch (DORI)
 // A stable handle (control cell) owns type/txn metadata and DISPATCHES member calls
@@ -176,13 +107,14 @@ namespace DORI
 
         // Create JSON from the Data reachable via SelfA.
         void MakeJSON(std::ostream& os) const {
-            WaitForCommandFair("Type 'go' to process " + m_self->m_Name, "go");
+            stdin_fair::WaitForCommandScript("Type 'go' to process " + m_self->m_Name, "go");
             os << "{ \"name\":\"" << m_self->m_Name
-               << "\", \"description\":\"" << m_self->m_Description << "\"";
+                << "\", \"description\":\"" << m_self->m_Description << "\"";
 
             if (!m_self->m_Stop && m_self->m_Next) {
                 os << ", \"next\": ";
-                m_self->m_Next->MakeJSON(os);
+                auto next = m_self->m_Next;
+                next->MakeJSON(os);
             }
             os << " }";
         }

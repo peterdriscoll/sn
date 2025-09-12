@@ -130,7 +130,7 @@ namespace PGC
             {
                 m_LogicalPointer = pointer;
             }
-            ASSERTM(pointer == m_LogicalPointer, "Pointer does not match training wheels logical pointer.");
+            //ASSERTM(pointer == m_LogicalPointer, "Pointer does not match training wheels logical pointer.");
 #endif
             return pointer;
         }

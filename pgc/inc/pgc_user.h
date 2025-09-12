@@ -8,9 +8,15 @@
 #include <string>
 #include <unordered_set>
 #include <typeindex>
-
+#include <mutex>
 namespace PGC
 {
+    struct WithLock_t { explicit constexpr WithLock_t() = default; };
+    struct NoLock_t { explicit constexpr NoLock_t() = default; };
+
+    inline constexpr WithLock_t WithLock{};
+    inline constexpr NoLock_t  NoLock{};
+
     // Base class for any session/user that needs automatic promotion cleanup and state checks
     class PGC_EXPORT PGC_User
     {
@@ -20,6 +26,7 @@ namespace PGC
         static void DefaultErrorHandler(bool p_Err, const std::string& message);
         
         static PGC_User* GetCurrentPGC_User();
+        static void SetCurrentPGC_User(PGC_User* p_User);
 
         // Constructor and destructor
         PGC_User(const RegEntry p_ClassRegistry[] = nullptr, OnErrorHandler *p_ErrorHandler = DefaultErrorHandler);
@@ -38,10 +45,10 @@ namespace PGC
         void PromoteRequests();
 
         PGC_Promotion* Allocate();
-        void AppendRequest(PGC_Promotion*);
-
-        bool FindInFreeList(PGC_Promotion* p_Promotion);
         void FreePromotion(PGC_Promotion* p_Promotion);
+        bool FindInFreeList(PGC_Promotion* p_Promotion);
+
+        void AppendRequest(PGC_Promotion*);
 
         size_t TotalNetMemoryUsed() const;
         size_t TotalGrossMemoryUsed() const;
@@ -72,13 +79,31 @@ namespace PGC
             ASSERTM(m_registered.size()==0 || IsRegistered<T>(),
 				std::string("Class not registered: ") + typeid(T).name() + " at " + where);
         }
+
+        template<class F> decltype(auto) with_lock(WithLock_t, F&& f) {
+            std::scoped_lock lk(m_mutex);
+            return std::forward<F>(f)();
+        }
+        template<class F> decltype(auto) with_lock(NoLock_t, F&& f) {
+            return std::forward<F>(f)();
+        }
+
+        using Lock = std::unique_lock<std::recursive_mutex>;
+        Lock Acquire() { return Lock(m_mutex); }
+
     private:
+        std::recursive_mutex  m_mutex;
+        std::mutex m_PromoteRequestsMutex;
+
 		PGC_User* m_LastPGC_User = nullptr;
         std::unordered_set<std::type_index> m_registered;
         OnErrorHandler *m_ErrorHandler;
 		bool m_ErrorRaised = false;
     
+        std::mutex m_FreeListMutex;   // protects promote list only
         PGC_Promotion* m_FreeList;
+
+        std::mutex m_PromoteListMutex;   // protects promote list only
         PGC_Promotion* m_PromoteList;
         PGC_Promotion** m_PromoteListLast;
 

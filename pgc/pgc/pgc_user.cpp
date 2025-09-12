@@ -29,9 +29,14 @@ namespace PGC
 
     thread_local PGC_User* t_CurrentPGC_User = new PGC_User();
 
-    /*static*/ PGC_User *PGC_User::GetCurrentPGC_User()
+    /*static*/ PGC_User* PGC_User::GetCurrentPGC_User()
     {
         return t_CurrentPGC_User;
+    }
+
+    /*static*/ void PGC_User::SetCurrentPGC_User(PGC_User* p_User)
+    {
+        t_CurrentPGC_User = p_User;
     }
 
     PGC_User::PGC_User(const PGC::RegEntry p_ClassRegistry[], OnErrorHandler *p_ErrorHandler)
@@ -112,53 +117,71 @@ namespace PGC
     //  Leave other items in the list for future promotion.
     void PGC_User::PromoteRequests()
     {
-        PGC_Promotion* promotion = m_PromoteList;
-        PGC_Promotion** last = &m_PromoteList;
+        std::scoped_lock lk(m_PromoteRequestsMutex);
+        
+        PGC_Promotion* promotion = nullptr;
+        PGC_Promotion** last = nullptr;
+        {
+            std::scoped_lock lk(m_PromoteListMutex);
+
+            promotion = m_PromoteList;
+            last = &m_PromoteList;
+        }
         while (promotion)
         {
             PromotionResult result = promotion->PromoteOrReject();
+			PGC_Promotion* activePromotion = promotion;
             switch (result)
             {
             case PromotionResult::Dropped:
-                *last = promotion->m_Next;
-                promotion->FreeFromProcessingList();
-                promotion = *last;
+                {
+                    std::scoped_lock lk(m_PromoteListMutex);
+                    *last = promotion->m_Next;
+                    promotion = *last;
+                }
+                activePromotion->FreeFromProcessingList();
                 break;
 
             case PromotionResult::PromotedDone:
-                *last = promotion->m_Next;
-                FreePromotion(promotion);
-                promotion = *last;
+                {
+                    std::scoped_lock lk(m_PromoteListMutex);
+                    *last = promotion->m_Next;
+                    promotion = *last;
+                }
+                FreePromotion(activePromotion);
                 break;
 
             case PromotionResult::PromotedKeep:
-                *last = promotion->m_Next;
-                promotion->MarkPromoted();
-                promotion = *last;
+                {
+                    std::scoped_lock lk(m_PromoteListMutex);
+                    *last = promotion->m_Next;
+                    promotion = *last;
+                }
+                activePromotion->MarkPromoted();
                 break;
 
             case PromotionResult::Keep:
-                last = &promotion->m_Next;
-                promotion = promotion->m_Next;
+                {
+                    std::scoped_lock lk(m_PromoteListMutex);
+                    last = &promotion->m_Next;
+                    promotion = promotion->m_Next;
+                }
                 break;
             default:
                 ASSERTM(false, "Unknown promotion result");
 				break;  
             }
         }
-        m_PromoteListLast = last;
-    }
-
-    void PGC_User::AppendRequest(PGC_Promotion *p_Promotion)
-    {
-        ASSERTM(p_Promotion->Verify(), "Invalid promotion.");
-        *m_PromoteListLast = p_Promotion;
-        m_PromoteListLast = &(p_Promotion->m_Next);
-        p_Promotion->m_Next = nullptr;
+        {
+            std::scoped_lock lk(m_PromoteListMutex);
+            m_PromoteListLast = last;
+        }
     }
 
     PGC_Promotion* PGC_User::Allocate()
     {
+        std::scoped_lock lk(m_FreeListMutex);
+
         PGC_Promotion* result = m_FreeList;
         if (result)
         {
@@ -171,6 +194,26 @@ namespace PGC
         }
         result->m_Next = nullptr;
         return result;
+    }
+
+    void PGC_User::FreePromotion(PGC_Promotion* p_Promotion)
+    {
+        ASSERTM(p_Promotion, "Cannot free a null promotion");
+#ifdef DEBUG_FREE
+        ASSERTM(!FindInFreeList(p_Promotion), "Promotion already in the free list");
+#endif
+        std::scoped_lock lk(m_FreeListMutex);
+
+        // Add to the free list
+        if (p_Promotion) // Ensure p_Promotion is not null
+        {
+            p_Promotion->m_Next = m_FreeList;
+            m_FreeList = p_Promotion;
+            if (p_Promotion->IsPromotedOrDropped())
+            {
+                AddProcessedRefAttachedMemory(-static_cast<long>(sizeof(PGC_Promotion)));
+            }
+        }
     }
 
     // Used to check if an item already in the free list is being re-added.
@@ -189,23 +232,15 @@ namespace PGC
         return false;
     }
 
-    void PGC_User::FreePromotion(PGC_Promotion* p_Promotion)
+    void PGC_User::AppendRequest(PGC_Promotion* p_Promotion)
     {
-        ASSERTM(p_Promotion, "Cannot free a null promotion");
-#ifdef DEBUG_FREE
-        ASSERTM(!FindInFreeList(p_Promotion), "Promotion already in the free list");
-#endif
+        ASSERTM(p_Promotion->Verify(), "Invalid promotion.");
 
-        // Add to the free list
-        if (p_Promotion) // Ensure p_Promotion is not null
-        {
-            p_Promotion->m_Next = m_FreeList;
-            m_FreeList = p_Promotion;
-            if (p_Promotion->IsPromotedOrDropped())
-            {
-                AddProcessedRefAttachedMemory(-static_cast<long>(sizeof(PGC_Promotion)));
-            }
-        }
+        std::scoped_lock lk(m_PromoteListMutex);
+
+        *m_PromoteListLast = p_Promotion;
+        m_PromoteListLast = &(p_Promotion->m_Next);
+        p_Promotion->m_Next = nullptr;
     }
 
     size_t PGC_User::TotalNetMemoryUsed() const

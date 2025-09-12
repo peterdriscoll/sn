@@ -169,6 +169,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="command_input.h" />
+    <ClInclude Include="command_input2.h" />
+    <ClInclude Include="command_input3.h" />
     <ClInclude Include="facade_data.h" />
     <ClInclude Include="pin_concept_test.h" />
     <ClInclude Include="script.h" />

@@ -76,9 +76,9 @@ namespace test_pgc
 		// TESTS.
 		TEST_METHOD(TestDORI_Something)
 		{
+            return; // Temmporarily disabled because it requires user input.
 			PGC_User user(ClassRegistry, &AssertErrorHandler);
 			{
-                return; // Temmporarily disabled because it requires user input.
                 PGCX::PGC_Transaction parentTransaction(user, false, PGC::PromotionStrategy::DoubleDipping);
 
                 PGC::RefA<DORI::Something> waggy =
@@ -104,8 +104,13 @@ namespace test_pgc
 
         TEST_METHOD(TestDORI_Something_Promotion)
         {
-			return; // Temmporarily disabled because it requires user input.
+			//return; // Temmporarily disabled because it requires user input.
 			EnsureConsoleForIO();
+            stdin_fair::reset();
+            stdin_fair::preload({
+                "go", "promote",
+                "go", "go", "go", "stop",
+                "go", "go", "work", "end" });
 
             PGC_User user(ClassRegistry);
             {
@@ -150,6 +155,7 @@ namespace test_pgc
 
                             worker = std::jthread([l = listPtr, u = &user]() mutable
                             {
+                                PGC::PGC_User::SetCurrentPGC_User(u);
                                 PGC::PGC_Transaction workerTransaction(*u);
 
                                 std::cerr << "[worker] alive, about to recurse\n";
@@ -159,7 +165,7 @@ namespace test_pgc
                                 std::cerr << "[worker] completed task, about to end\n";
                             }); // auto-joins at scope end
                         }
-                        WaitForCommandFair("Type 'promote' to move instances mid call", "promote");
+                        stdin_fair::WaitForCommandScript("Type 'promote' to move instances mid call", "promote");
                     }
                     PGC::RefA<DORI::Something> luna = list;
                     PGC::RefA<DORI::Something> katara = luna->GetNext();
@@ -169,11 +175,11 @@ namespace test_pgc
                     Assert::IsTrue(kataraTxn != katara.Get()->GetTransaction(), L"Waggy should have been promted");
                     Assert::IsTrue(lunaTxn != luna.Get()->GetTransaction(), L"Waggy should have been promted");
 
-                    WaitForCommandFair("Type 'stop' to stop recurrence", "stop");
+                    stdin_fair::WaitForCommandScript("Type 'stop' to stop recurrence", "stop");
                     waggy2->Stop(); // break the cycle
-                    WaitForCommandFair("Type 'work' to join the worker thread", "work");
+                    stdin_fair::WaitForCommandScript("Type 'work' to join the worker thread", "work");
                     worker.join();
-                    WaitForCommandFair("Worker stopped. Type 'end' to end test", "end");
+                    stdin_fair::WaitForCommandScript("Worker stopped. Type 'end' to end test", "end");
                 }
             }
         }

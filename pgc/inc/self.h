@@ -44,25 +44,56 @@ namespace DORI
 
         // constructors
         explicit Self(PGC::RefA<F>& r)
-            : via_facade(true), rf(r) 
+            : via_facade(true), rf(r)
         {
-//			rf.RequestPromotion(PGC::PGC_Transaction::TopTransaction());
+            //			rf.RequestPromotion(PGC::PGC_Transaction::TopTransaction());
         }
         explicit Self(DirectA<D> x) : via_facade(false), d(x.d) {}
         void Finalize() noexcept
         {
             rf.Finalize();
-		}
+        }
+
+        struct LockedPin {
+            PGC_User::Lock lk;
+            D* ptr;
+
+            // acquire user lock, then resolve D*
+            LockedPin(PGC_User& user, Self& self)
+                : lk(user.Acquire())
+                , ptr(nullptr)
+            {
+                ptr = self.via_facade
+                    ? to_data_ptr<F, D>(self.rf.Get())   // recursive lock is OK
+                    : self.d;
+            }
+            ~LockedPin()
+            {
+            };
+
+            D* operator->() { return ptr; }
+            const D* operator->() const { return ptr; }
+            D& operator*() { return *ptr; }
+            const D& operator*()  const { return *ptr; }
+            explicit operator bool()const { return ptr != nullptr; }
+        };
+
+        LockedPin operator->() {
+            auto* user = PGC_User::GetCurrentPGC_User();
+            return LockedPin(*user, *this);
+        }
+        const LockedPin operator->() const {
+            auto* user = PGC_User::GetCurrentPGC_User();
+            return LockedPin(*user, const_cast<Self&>(*this));
+        };
 
         // always give me D*
-        const D* data() const noexcept { return via_facade ? to_data_ptr<F, D>(rf.Get()) : d; }
-        D* data() noexcept { return via_facade ? to_data_ptr<F, D>(rf.Get()) : d; }
+        const D* data() const noexcept { return via_facade ? to_data_ptr<F, D>(rf.Get()) : d; };
+        D* data() noexcept { return via_facade ? to_data_ptr<F, D>(rf.Get()) : d; };
 
-        // convenience
-        const D* operator->() const noexcept { return data(); }
-        D* operator->() noexcept { return data(); }
         const D& operator* () const noexcept { return *data(); }
         D& operator* () noexcept { return *data(); }
+        // convenience
     };
 }
 

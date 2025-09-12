@@ -88,33 +88,37 @@ namespace PGC
 
 	void PGC_Promotion::Promote()
 	{
-		ASSERTM(Verify(), "Invalid promotion.");
-		PGC_TypeCheck* base = (*m_Base)->GetLogicalPointer();
-		ASSERTM(base, "Base pointer should not be null during promotion");
-		PGC_TypeCheck* promotedCopy = base->GetPromotedCopy();
-		PGC_TypeCheck* copy;
-		if (promotedCopy)
-		{
-			copy = promotedCopy;
-		}
-		else
-		{
-			copy = CopyMemory(base, m_Destination);
-			base->SetPromotedCopy(copy);
-		}
-		switch (m_Strategy)
-		{
-		case PromotionStrategy::Backstabbing:
-			*m_Base = copy;
-			break;
-		case  PromotionStrategy::DoubleDipping:
-			m_FinalCopy = copy;
-			break;
-		default:
-			ASSERTM(false, "Invalid promotion strategy");
-			break;
-		}
+		auto* user = PGC_User::GetCurrentPGC_User();
+		user->with_lock(WithLock, [&] {
+			ASSERTM(Verify(), "Invalid promotion.");
+			PGC_TypeCheck* base = (*m_Base)->GetLogicalPointer();
+			ASSERTM(base, "Base pointer should not be null during promotion");
+			PGC_TypeCheck* promotedCopy = base->GetPromotedCopy();
+			PGC_TypeCheck* copy;
+			if (promotedCopy)
+			{
+				copy = promotedCopy;
+			}
+			else
+			{
+				copy = CopyMemory(base, m_Destination);
+				base->SetPromotedCopy(copy);
+			}
+			switch (m_Strategy)
+			{
+			case PromotionStrategy::Backstabbing:
+				*m_Base = copy;
+				break;
+			case  PromotionStrategy::DoubleDipping:
+				m_FinalCopy = copy;
+				break;
+			default:
+				ASSERTM(false, "Invalid promotion strategy");
+				break;
+			}
+		});
 	}
+
 	/*static*/PGC_TypeCheck* PGC_Promotion::CopyMemory(PGC_TypeCheck* p_Base, PGC_Transaction* p_Destination)
 	{
 		PGC_TypeCheck* typeCheck = p_Base;
