@@ -170,6 +170,7 @@
     <ClCompile Include="pgc_typecheck.cpp" />
     <ClCompile Include="pgc_user.cpp" />
     <ClCompile Include="promotioncapture.cpp" />
+    <ClCompile Include="thread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\inc\exp_ctrl_pgc.h" />
@@ -196,11 +197,13 @@
     <ClInclude Include="..\inc\ref_advanced.h" />
     <ClInclude Include="..\inc\ref_direct.h" />
     <ClInclude Include="..\inc\dori.h" />
+    <ClInclude Include="..\inc\reversible_guard.h" />
     <ClInclude Include="..\inc\self_advanced.h" />
     <ClInclude Include="..\inc\self.h" />
     <ClInclude Include="..\inc\sref.h" />
     <ClInclude Include="..\inc\pgc_unordered_map_ref.h" />
     <ClInclude Include="..\inc\pgc_vector_member_ref.h" />
+    <ClInclude Include="..\inc\thread.h" />
     <ClInclude Include="..\inc\vector_ref.h" />
     <ClInclude Include="pgc_pch.h" />
   </ItemGroup>

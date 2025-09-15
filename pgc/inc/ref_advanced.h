@@ -194,8 +194,11 @@ namespace PGC
         template<class Facade>
         struct Proxy {
             Facade f_;
+            PGC::UnGuard unguard_;
             explicit Proxy(RefA<Facade> source)
-                : f_(Facade(source, PGC::StackAllocationTag{})) {
+                : f_(Facade(source, PGC::StackAllocationTag{}))
+                , unguard_(PGC::PGC_User::GetCurrentPGC_User()->Unguard()) // drop lock for this expression
+            {
             }
             Facade* operator->() { return &f_; }
             const Facade* operator->() const { return &f_; }

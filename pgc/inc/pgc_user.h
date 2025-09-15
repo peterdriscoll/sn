@@ -4,11 +4,13 @@
 #include "exp_ctrl_pgc.h"
 #include "pgc_base.h"
 #include "pgc_promotion.h"
+#include "reversible_guard.h"
 
 #include <string>
 #include <unordered_set>
 #include <typeindex>
 #include <mutex>
+
 namespace PGC
 {
     struct WithLock_t { explicit constexpr WithLock_t() = default; };
@@ -81,18 +83,25 @@ namespace PGC
         }
 
         template<class F> decltype(auto) with_lock(WithLock_t, F&& f) {
-            std::scoped_lock lk(m_mutex);
+            auto g = m_mutex.lock_token(); // EnGuard
             return std::forward<F>(f)();
         }
         template<class F> decltype(auto) with_lock(NoLock_t, F&& f) {
             return std::forward<F>(f)();
         }
 
-        using Lock = std::unique_lock<std::recursive_mutex>;
-        Lock Acquire() { return Lock(m_mutex); }
+        [[nodiscard]] PGC::EnGuard Acquire() noexcept
+        {
+            return m_mutex.lock_token(); 
+        }
+        // Temporarily *drop* the lock for this thread; restores on dtor.
+        [[nodiscard]] UnGuard Unguard() noexcept
+        {
+            return m_mutex.unlock_token();
+        }
 
     private:
-        std::recursive_mutex  m_mutex;
+        ReversibleMutex m_mutex;
         std::mutex m_PromoteRequestsMutex;
 
 		PGC_User* m_LastPGC_User = nullptr;

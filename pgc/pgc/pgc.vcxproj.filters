@@ -39,6 +39,9 @@
     <ClCompile Include="promotioncapture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="thread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\inc\exp_ctrl_pgc.h">
@@ -132,6 +135,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\inc\make_dori.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\reversible_guard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\thread.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

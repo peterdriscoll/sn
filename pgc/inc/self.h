@@ -55,7 +55,7 @@ namespace DORI
         }
 
         struct LockedPin {
-            PGC_User::Lock lk;
+            PGC::EnGuard lk;
             D* ptr;
 
             // acquire user lock, then resolve D*
