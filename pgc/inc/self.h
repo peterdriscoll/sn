@@ -1,5 +1,6 @@
 #pragma once
 
+//#include "debug.h"
 #define PGC_FUSED_CLASS(F, D)                                      \
     void RetrieveDescriptor(char*& p, long& s) const override      \
     {                                                              \
