@@ -156,6 +156,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="debug.cpp" />
     <ClCompile Include="pgc_base.cpp" />
     <ClCompile Include="pgc_block.cpp" />
     <ClCompile Include="pgc_pch.cpp">
@@ -171,15 +172,21 @@
     <ClCompile Include="pgc_user.cpp" />
     <ClCompile Include="promotioncapture.cpp" />
     <ClCompile Include="thread.cpp" />
+    <ClCompile Include="threadregistry.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\inc\config.h" />
+    <ClInclude Include="..\inc\debug.h" />
+    <ClInclude Include="..\inc\debuglogmeta.h" />
     <ClInclude Include="..\inc\exp_ctrl_pgc.h" />
+    <ClInclude Include="..\inc\Header.h" />
     <ClInclude Include="..\inc\make_dori.h" />
     <ClInclude Include="..\inc\memberref.h" />
     <ClInclude Include="..\inc\pair.h" />
     <ClInclude Include="..\inc\pgc.h" />
     <ClInclude Include="..\inc\pgc_base.h" />
     <ClInclude Include="..\inc\pgc_block.h" />
+    <ClInclude Include="..\inc\pgc_diag_min.h" />
     <ClInclude Include="..\inc\pgc_promotemacros.h" />
     <ClInclude Include="..\inc\pgc_promotion.h" />
     <ClInclude Include="..\inc\pgc_promotionstrategy.h" />
@@ -204,6 +211,7 @@
     <ClInclude Include="..\inc\pgc_unordered_map_ref.h" />
     <ClInclude Include="..\inc\pgc_vector_member_ref.h" />
     <ClInclude Include="..\inc\thread.h" />
+    <ClInclude Include="..\inc\threadregistry.h" />
     <ClInclude Include="..\inc\vector_ref.h" />
     <ClInclude Include="pgc_pch.h" />
   </ItemGroup>

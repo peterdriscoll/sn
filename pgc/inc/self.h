@@ -1,6 +1,9 @@
 #pragma once
 
-//#include "debug.h"
+#include "config.h"
+#include "debug.h"
+
+
 #define PGC_FUSED_CLASS(F, D)                                      \
     void RetrieveDescriptor(char*& p, long& s) const override      \
     {                                                              \
@@ -80,14 +83,25 @@ namespace DORI
         };
 
         LockedPin operator->() {
-            auto* user = PGC_User::GetCurrentPGC_User();
+            auto* user = PGC_User::GetCurrentPGC_UserPtr();
             return LockedPin(*user, *this);
         }
         const LockedPin operator->() const {
-            auto* user = PGC_User::GetCurrentPGC_User();
+            auto* user = PGC_User::GetCurrentPGC_UserPtr();
             return LockedPin(*user, const_cast<Self&>(*this));
         };
-
+    #ifdef PGC_DEBUG
+        Self& Label(const std::string& label) noexcept
+        {
+            PGC::save_debug_label(label);
+            return *this;
+        }
+        const Self& Label(const std::string& label) const noexcept
+        {
+            PGC::save_debug_label(label);
+            return *this;
+        }
+    #endif
         // always give me D*
         const D* data() const noexcept { return via_facade ? to_data_ptr<F, D>(rf.Get()) : d; };
         D* data() noexcept { return via_facade ? to_data_ptr<F, D>(rf.Get()) : d; };

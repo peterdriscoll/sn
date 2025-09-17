@@ -1,0 +1,25 @@
+BasedOnStyle: LLVM
+BreakBeforeBraces: Allman
+BraceWrapping:
+  AfterClass: true
+  AfterControlStatement: true
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: true
+  AfterStruct: true
+  AfterUnion: true
+  BeforeCatch: true
+  BeforeElse: true
+IndentWidth: 4
+UseTab: Never
+IndentPPDirectives: BeforeHash
+PPIndentWidth: 4
+NamespaceIndentation: All
+AllowShortFunctionsOnASingleLine: None   # no 1-line function defs
+AllowShortLambdasOnASingleLine: None     # (optional) same for lambdas
+AllowShortBlocksOnASingleLine: Never     # (optional) no 1-line { ... }
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+BreakConstructorInitializers: BeforeColon
+ConstructorInitializerIndentWidth: 4     # or 4 if you prefer less indent
+PackConstructorInitializers: Never       # optional, keeps each init on its own line

@@ -27,16 +27,19 @@ namespace PGC
         }
     }
 
-    thread_local PGC_User* t_CurrentPGC_User = new PGC_User();
-
-    /*static*/ PGC_User* PGC_User::GetCurrentPGC_User()
+    /*static*/ PGC_User &PGC_User::GetCurrentPGC_User()
     {
-        return t_CurrentPGC_User;
+        return Thread::GetCurrentThread().GetUser();
     }
 
-    /*static*/ void PGC_User::SetCurrentPGC_User(PGC_User* p_User)
+    /*static*/ PGC_User *PGC_User::GetCurrentPGC_UserPtr()
     {
-        t_CurrentPGC_User = p_User;
+        return &(Thread::GetCurrentThread().GetUser());
+    }
+
+    /*static*/ void PGC_User::SetCurrentPGC_User(PGC_User *p_User)
+    {
+        Thread::GetCurrentThread().SetUser(*p_User);
     }
 
     PGC_User::PGC_User(const PGC::RegEntry p_ClassRegistry[], OnErrorHandler *p_ErrorHandler)
@@ -47,6 +50,10 @@ namespace PGC
         , m_FreeList(nullptr)
         , m_PromoteList(nullptr)
         , m_PromoteListLast(&m_PromoteList)
+		, m_ThreadMembership(*this, "Main")
+#ifdef PGC_DEBUG
+        , m_mutex("Main mutex")
+#endif
     {
         Initialize();
         if (p_ClassRegistry)
@@ -63,15 +70,11 @@ namespace PGC
 
     PGC_User::~PGC_User()
     {
-		t_CurrentPGC_User = m_LastPGC_User;
         Cleanup();
     }
 
     void PGC_User::Initialize()
     {
-		m_LastPGC_User = t_CurrentPGC_User;
-        t_CurrentPGC_User = this;
-
         // reset memory counters
         ResetNetMemoryUsed();
         ResetGrossMemoryUsed();
@@ -304,6 +307,11 @@ namespace PGC
     size_t PGC_User::TotalPromotionMemory()
     {
         return PromotionUsedMemory() + PromotionFreeMemory() + TotalProcessedRefAttachedMemory();
+    }
+
+    ThreadRegistry& PGC_User::GetThreadRegistry() noexcept
+    {
+        return m_ThreadRegistry;
     }
 
     size_t PGC_User::PromotionFreeMemory()

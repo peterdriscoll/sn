@@ -113,6 +113,9 @@ namespace DORI
 
             if (!m_self->m_Stop && m_self->m_Next) {
                 os << ", \"next\": ";
+                std::string name = m_self->m_Name;
+                m_self.Label("Guard-" + name)->m_Next.Label("UnGuard-"+name)->MakeJSON(os);
+                // m_self->m_Next->MakeJSON(os);
                 // From what I can see, m_self->m_Next creates a LockPin
                 // which is not detroyed and unlocked until the call MakeJSON
 				// returns. Breaking the call into two statements release the 

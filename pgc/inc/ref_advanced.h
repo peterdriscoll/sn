@@ -11,6 +11,7 @@
 #include "pgc_base.h"
 #include "promotioncapture.h"
 #include "pgc_ready.h"
+#include "debug.h"
 
 // Primary: identity (assume data)
 template<class T> struct DataOf { using type = T; };
@@ -34,14 +35,14 @@ namespace PGC
         explicit RefA(PGC_Transaction* p_OwnerTransaction = PGC_Transaction::TopTransaction()) noexcept
             : m_Core(p_OwnerTransaction)
         {
-			PGC_User::GetCurrentPGC_User()->RequireRegistered<T>("RefA<T> constructor");
+			PGC_User::GetCurrentPGC_User().RequireRegistered<T>("RefA<T> constructor");
         }
 
         // Optional convenience: construct with owner + initial pointer.
         RefA(T* ptr, PGC_Transaction* p_OwnerTransaction = PGC_Transaction::TopTransaction()) noexcept
 			: m_Core(p_OwnerTransaction)
         {
-            PGC_User::GetCurrentPGC_User()->RequireRegistered<T>("RefA<T> constructor");
+            PGC_User::GetCurrentPGC_User().RequireRegistered<T>("RefA<T> constructor");
             Set(ptr);
         }
 
@@ -49,7 +50,7 @@ namespace PGC
             : Promotable([this](PGC_Transaction* dst) { this->RequestPromotion(dst); })
             , m_Core(p_Other.m_Core)
         {
-            auto* user = PGC_User::GetCurrentPGC_User();
+            auto* user = PGC_User::GetCurrentPGC_UserPtr();
             user->with_lock(WithLock, [&] {
                 m_Core.DetachPromotion();  // detach from other; we get our own copy
                 if (PGC_Transaction* top = PGC_Transaction::TopTransaction(); top && !top->IsDying()) {
@@ -63,7 +64,7 @@ namespace PGC
             : Promotable([this](PGC_Transaction* dst) { this->RequestPromotion(dst); })
             , m_Core(p_Other.m_Core)
         {
-            auto* user = PGC_User::GetCurrentPGC_User();
+            auto* user = PGC_User::GetCurrentPGC_UserPtr();
             user->with_lock(WithLock, [&] {
                 PGC_Promotion* promotion = m_Core.DetachPromotion(); // detach from other, we get our own copy
                 PGC_Transaction* topTransaction = PGC_Transaction::TopTransaction();
@@ -84,7 +85,7 @@ namespace PGC
 
         ~RefA() noexcept
         {
-            auto* user = PGC_User::GetCurrentPGC_User();
+            auto* user = PGC_User::GetCurrentPGC_UserPtr();
             user->with_lock(WithLock, [&] {
                 m_Core.Clear(); // Free any promotion
             });
@@ -92,7 +93,7 @@ namespace PGC
 
         void Finalize() noexcept
         {
-            auto* user = PGC_User::GetCurrentPGC_User();
+            auto* user = PGC_User::GetCurrentPGC_UserPtr();
             user->with_lock(WithLock, [&] {
                 m_Core.Finalize();
             });
@@ -108,7 +109,7 @@ namespace PGC
         {
             if (this == &p_Other) return *this;
 
-            auto* user = PGC_User::GetCurrentPGC_User();
+            auto* user = PGC_User::GetCurrentPGC_UserPtr();
             user->with_lock(WithLock, [&] {
                 if (!(*this == p_Other)) {
                     m_Core.Clear();  // free existing promotion (keep owner txn)
@@ -131,7 +132,7 @@ namespace PGC
         {
             if (this == &p_Other) return *this;
 
-            auto* user = PGC_User::GetCurrentPGC_User();
+            auto* user = PGC_User::GetCurrentPGC_UserPtr();
             user->with_lock(WithLock, [&] {
                 if (!(*this == p_Other)) {
                     m_Core.Clear();  // free existing promotion (keep owner txn)
@@ -146,7 +147,7 @@ namespace PGC
 			// taking const literally means we cannot modify the core.
             // This may be important for the web server access that reads
             // the state without modifying anything.
-            auto* user = PGC_User::GetCurrentPGC_User();
+            auto* user = PGC_User::GetCurrentPGC_UserPtr();
             return user->with_lock(WithLock, [&]() -> T* {
                 T* pointer = static_cast<T*>(m_Core.GetLogicalPointer());
                 if (T* copy = static_cast<T*>(pointer->GetPromotedCopy()))
@@ -161,7 +162,7 @@ namespace PGC
         {
             // Fast path: if we’re under a promotion that’s already promoted,
             // collapse to the final copy and free the promotion now.
-            auto* user = PGC_User::GetCurrentPGC_User();
+            auto* user = PGC_User::GetCurrentPGC_UserPtr();
             return user->with_lock(WithLock, [&]() -> T* {
                 if (auto* promotion = m_Core.GetLogicalPromotion()) {
                     if (promotion->IsPromotedOrDropped()) {
@@ -183,7 +184,7 @@ namespace PGC
         // Atomically guarded by the destination (owner) transaction’s mutex.
         void Set(T* p_Pointer) 
         {
-            auto* user = PGC_User::GetCurrentPGC_User();
+            auto* user = PGC_User::GetCurrentPGC_UserPtr();
             user->with_lock(WithLock, [&] {
                 m_Core.Clear(); // free any existing promotion
                 m_Core.SetLogicalPointer(static_cast<PGC_TypeCheck*>(p_Pointer));
@@ -197,7 +198,7 @@ namespace PGC
             PGC::UnGuard unguard_;
             explicit Proxy(RefA<Facade> source)
                 : f_(Facade(source, PGC::StackAllocationTag{}))
-                , unguard_(PGC::PGC_User::GetCurrentPGC_User()->Unguard()) // drop lock for this expression
+                , unguard_(PGC::PGC_User::GetCurrentPGC_User().Unguard()) // drop lock for this expression
             {
             }
             Facade* operator->() { return &f_; }
@@ -264,9 +265,9 @@ namespace PGC
         template<class Tag>
         void RequestPromotion(PGC_Transaction* dst, Tag tag) requires PGC_Ready<T>
         {
-            PGC_User::GetCurrentPGC_User()->RequireRegistered<T>("RequestPromotion");
+            PGC_User::GetCurrentPGC_User().RequireRegistered<T>("RequestPromotion");
 
-            auto* user = PGC_User::GetCurrentPGC_User();
+            auto* user = PGC_User::GetCurrentPGC_UserPtr();
             user->with_lock(tag, [&] {
                 // RefCore does no locking; we're in the chosen policy here
                 m_Core.RequestPromotion(dst);
@@ -286,7 +287,18 @@ namespace PGC
         { 
             return !empty();
         }
-
+    #ifdef PGC_DEBUG
+        RefA<T>& Label(const std::string& label) noexcept
+        {
+            PGC::save_debug_label(label);
+            return *this;
+        }
+        const RefA<T>& Label(const std::string& label) const noexcept
+        {
+            PGC::save_debug_label(label);
+            return *this;
+		}
+	#endif
     public:
         RefCore m_Core;
     };

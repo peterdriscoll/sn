@@ -32,7 +32,7 @@ namespace PGC
 	{
 		if (!expr)
 		{
-			PGC_User* user = PGC_User::GetCurrentPGC_User();
+			PGC_User* user = PGC_User::GetCurrentPGC_UserPtr();
 			if (user)
 			{
 				if (user->ShouldRaiseError())

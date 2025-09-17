@@ -3,7 +3,9 @@
 #include <mutex>
 #include <vector>
 #include <cstddef>
+#include <string>
 #include "thread.h"
+#include "debug.h"
 
 namespace PGC
 {
@@ -37,13 +39,16 @@ namespace PGC
 	class ReversibleGuard
 	{
 	public:
-		explicit ReversibleGuard(ReversibleMutex& mtx, ReversibleState& state)
+		explicit ReversibleGuard(ReversibleMutex& mtx, ReversibleState& state, std::string name="")
 			: m_mtx(mtx)
 			, m_state(state)
-			, m_tid(Thread::get_thread_num())
+			, m_Thread(Thread::GetCurrentThreadPtr())
+		#ifdef PGC_DEBUG
+			, m_label(PGC::consume_debug_label())
+		#endif
 		{
-			m_state.ensure(m_tid);
-			auto& stack = m_state.mode_stack[m_tid];
+			m_state.ensure(m_Thread->GetId());
+			auto& stack = m_state.mode_stack[m_Thread->GetId()];
 
 			const bool prior = stack.empty() ? false /*unlocked*/ : stack.back();
 			constexpr bool want = LockIt;
@@ -58,7 +63,7 @@ namespace PGC
 		~ReversibleGuard()
 		{
 			// Pop current and restore prior mode if different.
-			auto& stack = m_state.mode_stack[m_tid];
+			auto& stack = m_state.mode_stack[m_Thread->GetId()];
 
 			const bool current = (!stack.empty()) ? stack.back() : false;
 			if (!stack.empty()) stack.pop_back();
@@ -79,7 +84,10 @@ namespace PGC
 	private:
 		ReversibleMutex& m_mtx;
 		ReversibleState& m_state;
-		size_t           m_tid;
+		Thread*          m_Thread;
+	#ifdef PGC_DEBUG
+		std::string      m_label;
+	#endif
 	};
 
 	// Friendly aliases for std::mutex
@@ -89,10 +97,20 @@ namespace PGC
 	// A tiny helper wrapper if you want a self-contained
 	// reversible std::mutex-like object.
 	// ----------------------------------------------------
-	struct ReversibleMutex
+	class ReversibleMutex
 	{
+	public:
+		ReversibleMutex(std::string name = "")
+#ifdef PGC_DEBUG
+			: m_label(name)
+#endif
+		{
+		};
 		std::mutex     mtx;
 		ReversibleState state;
+#ifdef PGC_DEBUG
+		std::string      m_label;
+#endif
 
 		void lock() { mtx.lock(); };
 		void unlock() { mtx.unlock(); };

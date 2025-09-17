@@ -5,6 +5,7 @@
 #include "pgc_base.h"
 #include "pgc_promotion.h"
 #include "reversible_guard.h"
+#include "threadregistry.h"
 
 #include <string>
 #include <unordered_set>
@@ -27,8 +28,9 @@ namespace PGC
         // This can be overridden by the user if needed
         static void DefaultErrorHandler(bool p_Err, const std::string& message);
         
-        static PGC_User* GetCurrentPGC_User();
-        static void SetCurrentPGC_User(PGC_User* p_User);
+        static PGC_User *GetCurrentPGC_UserPtr();
+        static PGC_User &GetCurrentPGC_User();
+        static void SetCurrentPGC_User(PGC_User *p_User);
 
         // Constructor and destructor
         PGC_User(const RegEntry p_ClassRegistry[] = nullptr, OnErrorHandler *p_ErrorHandler = DefaultErrorHandler);
@@ -82,11 +84,20 @@ namespace PGC
 				std::string("Class not registered: ") + typeid(T).name() + " at " + where);
         }
 
-        template<class F> decltype(auto) with_lock(WithLock_t, F&& f) {
+        template<class F> decltype(auto) with_lock(WithLock_t, F&& f)
+        {
+        #ifdef PGC_DEBUG
+            std::string save_label = PGC::consume_debug_label();
+            PGC::save_debug_label("with-lock-"+save_label);
+        #endif
             auto g = m_mutex.lock_token(); // EnGuard
+        #ifdef PGC_DEBUG
+            PGC::save_debug_label(save_label);
+        #endif
             return std::forward<F>(f)();
         }
-        template<class F> decltype(auto) with_lock(NoLock_t, F&& f) {
+        template<class F> decltype(auto) with_lock(NoLock_t, F&& f) 
+        {
             return std::forward<F>(f)();
         }
 
@@ -100,11 +111,15 @@ namespace PGC
             return m_mutex.unlock_token();
         }
 
+        ThreadRegistry& GetThreadRegistry() noexcept;
+
     private:
+		ThreadRegistry m_ThreadRegistry;
+        ThreadMembership m_ThreadMembership;
+
         ReversibleMutex m_mutex;
         std::mutex m_PromoteRequestsMutex;
 
-		PGC_User* m_LastPGC_User = nullptr;
         std::unordered_set<std::type_index> m_registered;
         OnErrorHandler *m_ErrorHandler;
 		bool m_ErrorRaised = false;

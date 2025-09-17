@@ -88,7 +88,7 @@ namespace PGC
 
 	void PGC_Promotion::Promote()
 	{
-		auto* user = PGC_User::GetCurrentPGC_User();
+		auto* user = PGC_User::GetCurrentPGC_UserPtr();
 		user->with_lock(WithLock, [&] {
 			ASSERTM(Verify(), "Invalid promotion.");
 			PGC_TypeCheck* base = (*m_Base)->GetLogicalPointer();

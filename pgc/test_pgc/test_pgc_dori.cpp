@@ -116,8 +116,11 @@ namespace test_pgc
                 "go", "go", "go", "stop",
                 "go", "go", "work", "end"});
 
+			PGCX::Thread::GetCurrentThread().SetName("Main");
+
             PGC_User user(ClassRegistry);
             {
+
                 std::jthread worker;               // <-- lives beyond child scope
 
                 PGCX::PGC_Transaction parentTransaction(user, false, PGC::PromotionStrategy::DoubleDipping);
@@ -159,7 +162,7 @@ namespace test_pgc
 
                             worker = std::jthread([l = listPtr, u = &user]() mutable
                             {
-                                PGC::PGC_User::SetCurrentPGC_User(u);
+                                PGCX::ThreadMembership member(*u, "Worker");
                                 PGC::PGC_Transaction workerTransaction(*u);
 
                                 std::cerr << "[worker] alive, about to recurse\n";

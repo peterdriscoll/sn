@@ -231,7 +231,7 @@ namespace PGC
 	{
 		if ((m_TopTransaction == nullptr) && !m_InWebServer)
 		{
-			new PGC_Transaction(*PGC_User::GetCurrentPGC_User(), true);
+			new PGC_Transaction(PGC_User::GetCurrentPGC_User(), true);
 		}
 		return m_TopTransaction;
 	}
