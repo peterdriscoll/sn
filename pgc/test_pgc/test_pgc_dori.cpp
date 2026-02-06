@@ -51,8 +51,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 //PGC_DEFINE_CLASS_REGISTRY(ClassRegistry);
 const ::PGC::RegEntry ClassRegistry[] = { 
-	::PGC::make_entry<DORI::Something>("Something"),
-	::PGC::kEndSentinel };
+    ::PGC::make_entry<DORI::Something>("Something"), ::PGC::kEndSentinel};
 
 namespace test_pgc
 {
