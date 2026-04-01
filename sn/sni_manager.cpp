@@ -202,6 +202,18 @@ namespace SNI
 		return SNI_User::GetCurrentUser()->GetDelayedProcessor();
 	}
 
+	bool SNI_Manager::GetRunSetting(const char *p_Setting) const
+	{
+		char* val = nullptr;
+		size_t sz = 0;
+		_dupenv_s(&val, &sz, p_Setting);
+    
+		// If the variable is "1", TCO is on. Default to off if missing.
+		bool result = (val != nullptr && std::string(val) == "1");
+		if(val) free(val); 
+		return result;
+	}
+
 	void SNI_Manager::Initialize()
 	{
 		m_LastManager = SNI_Thread::GetThread()->GetTopManager(false);
@@ -217,6 +229,8 @@ namespace SNI
 		}
 
 		LOG(WriteHeading(SN::DebugLevel, "Start - " + m_Description));
+		SetTailCallOptimization(GetRunSetting("SN_TCO_ENABLED"));
+		SetEvaluationType(GetRunSetting("SN_LAZY_ENABLED") ? skynet::EvaluationType::Lazy : skynet::EvaluationType::Strict);
 	}
 
 	bool SNI_Manager::HasDebugServer() const

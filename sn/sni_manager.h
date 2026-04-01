@@ -43,6 +43,8 @@ namespace SNI
 
 		SN::SN_Expression DelayedCalls();
 
+        bool GetRunSetting(const char *p_Setting) const;
+
 		std::string Description()  const;
 
 		std::string LogFilePath()  const;

@@ -141,7 +141,7 @@ namespace SN
 
 	void SN_Manager::StartWebServer(skynet::DebugAction p_DebugAction, const std::string & p_Address, const std::string & p_Port, const std::string & p_DocRoot, bool p_DoIt)
 	{
-		if (p_DoIt)
+		if (p_DoIt || m_Manager->GetRunSetting("SN_DASHBOARD_ENABLED"))
 		{
 			m_Manager->StartWebServer(p_DebugAction, p_Address, p_Port, p_DocRoot);
 		}

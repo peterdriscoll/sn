@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  <RunConfiguration>
+    <MaxCpuCount>1</MaxCpuCount>
+    <EnvironmentVariables>
+      <SN_DASHBOARD_ENABLED>1</SN_DASHBOARD_ENABLED>
+      <SN_TCO_ENABLED>1</SN_TCO_ENABLED>
+      <SN_LAZY_ENABLED>1</SN_LAZY_ENABLED>
+    </EnvironmentVariables>
+  </RunConfiguration>
+</RunSettings>
