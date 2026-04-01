@@ -618,6 +618,23 @@ namespace SNI
 		{
 			SNI_User::GetCurrentUser()->GetDelayedProcessor()->Request(call);
 		}
+		if (p_MetaLevel == 0)
+		{
+			if (m_Value && (!m_Value->IsKnownValue() || m_Value->IsKnownTypeValue()))
+			{
+				SN::SN_Expression result = GetValue()->DoEvaluate(p_MetaLevel);
+				if (result.IsError())
+                {
+					return result;
+                }
+				if (result.IsKnownValue() || result.IsKnownTypeValue())
+                {
+				    const_cast<SNI_Variable *>(this)->m_Value = result.GetSNI_Expression();
+				}
+				return result;
+			}
+			return GetValue();
+		}
 		return GetValue()->DoEvaluate(p_MetaLevel);
 	}
 
