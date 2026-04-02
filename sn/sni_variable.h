@@ -23,7 +23,7 @@ namespace SNI
 		PGC_CLASS(SNI_Variable);
 	public:
 		static SNI_Class* Class();
-		virtual SNI_Class* VClass();
+		virtual SN::SN_Expression Type() const;
 
 		SNI_Variable();
 		SNI_Variable(const std::string &p_Name);
@@ -114,10 +114,11 @@ namespace SNI
 	private:
 		static SNI_Class* m_Class;
 
-		SNI_Expression * m_Value;
-		SNI_Frame      * m_Frame;
-		bool           m_Requested;
-		bool           m_Inline;
+		SNI_Expression * m_Value = nullptr;
+		SNI_Expression * m_Type = skynet::All.GetSNI_Expression();
+		SNI_Frame      * m_Frame = nullptr;
+		bool           m_Requested = false;
+		bool           m_Inline = false;
 	};
 
 	typedef std::vector<SNI_Variable> SNI_VariableList;

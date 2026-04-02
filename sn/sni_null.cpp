@@ -9,7 +9,7 @@ namespace SNI
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Null, SNI_Class>("Null");
 	}
 
-	SNI_Class *SNI_Null::VClass()
+	SN::SN_Expression SNI_Null::Type() const
 	{
 		return Class();
 	}

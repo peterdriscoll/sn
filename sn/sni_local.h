@@ -30,7 +30,7 @@ namespace SNI
 		PGC_CLASS(SNI_Local);
 	public:
 		static SNI_Class* Class();
-		virtual SNI_Class* VClass();
+		virtual SNI_Class* Type();
 
 		SNI_Local();
 		SNI_Local(SNI_Variable *p_LocalVariable, SNI_Expression *p_Expression);

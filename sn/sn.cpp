@@ -194,8 +194,9 @@ namespace skynet
 
 	SN::SN_Error RerunRequest(false, false, "Rerun request.");
 
-	SN::SN_Expression Null(dynamic_cast<SNI::SNI_Expression *>(new SNI::SNI_Null()));
+	SN::SN_Expression Null(new SNI::SNI_Null());
 
+	SN::SN_Class All(new SNI::SNI_UniversalClass());
 	// Operator variables
 	SN::SN_OperatorVariables Operators;
 }

@@ -11,6 +11,10 @@ namespace SN
 	{
 	}
 
+    SN_Class::SN_Class(const std::string &p_Name, const std::string &p_DomainName)
+ 		: SN_Base(new SNI_Class(p_Name, p_DomainName))
+    {
+    }
 	SN_Class::SN_Class(const SN_Value &p_Value)
 		: SN_Base(dynamic_cast<SNI::SNI_Class *>(p_Value.GetSNI_Value()))
 	{
@@ -30,6 +34,42 @@ namespace SN
 	{
 	}
 
+	SNI::SNI_Value* SN_Class::GetSNI_Value()
+	{
+		return dynamic_cast<SNI::SNI_Value*>(m_Expression);
+	}
+ 	SNI::SNI_Value* SN_Class::GetSNI_Value() const
+	{
+		return dynamic_cast<SNI::SNI_Value*>(const_cast<SNI::SNI_Base*>(m_Expression));
+    }
+	SN_Expression SN_Class::operator ==(const SN_Expression &p_Other) const
+	{
+		return SN_Operators::operator ==(*this, p_Other);
+	}
+	SN_Expression SN_Class::operator !=(const SN_Expression &p_Other) const
+	{
+		return SN_Operators::operator !=(*this, p_Other);
+	}
+	SN_Expression SN_Class::operator <(const SN_Expression &p_Other) const
+	{
+		return SN_Operators::operator <(*this, p_Other);
+	}
+	SN_Expression SN_Class::operator >(const SN_Expression &p_Other) const
+	{
+		return SN_Operators::operator >(*this, p_Other);
+	}
+	SN_Expression SN_Class::operator <=(const SN_Expression &p_Other) const
+	{
+		return SN_Operators::operator <=(*this, p_Other);
+	}
+	SN_Expression SN_Class::operator >=(const SN_Expression &p_Other) const
+	{
+		return SN_Operators::operator >=(*this, p_Other);
+	}
+    void SN_Class::SetValue(const SNI_Class *pClass)
+    {
+        m_Expression = dynamic_cast<SNI::SNI_Base*>(const_cast<SNI_Class *>(pClass));
+    }
 	SN_Expression SN_Class::IsA(const SN_Expression &p_Parent) const
 	{
 		return SN_Operators::IsA(*this, p_Parent);

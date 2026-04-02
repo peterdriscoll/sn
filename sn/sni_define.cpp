@@ -20,7 +20,7 @@ namespace SNI
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Define, SNI_Class>("Define");
 	}
 
-	SNI_Class* SNI_Define::VClass()
+	SNI_Class* SNI_Define::Type()
 	{
 		return Class();
 	}

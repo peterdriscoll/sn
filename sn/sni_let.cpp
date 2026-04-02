@@ -26,7 +26,7 @@ namespace SNI
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Let, SNI_Class>("Let");
 	}
 
-	SNI_Class* SNI_Let::VClass()
+	SNI_Class* SNI_Let::Type()
 	{
 		return Class();
 	}

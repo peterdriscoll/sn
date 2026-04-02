@@ -15,7 +15,7 @@ namespace SNI
 		PGC_CLASS(SNI_Function);
 	public:
 		static SNI_Class* Class();
-		SNI_Class* VClass();
+		SNI_Class* Type();
 
 		SNI_Function();
 		SNI_Function(SNI_Expression *p_Function);

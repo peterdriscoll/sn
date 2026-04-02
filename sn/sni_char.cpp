@@ -15,7 +15,7 @@ namespace SNI
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Char, SNI_Class>("Char");
 	}
 
-	SNI_Class *SNI_Char::VClass()
+	SN::SN_Expression SNI_Char::Type() const
 	{
 		return Class();
 	}

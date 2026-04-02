@@ -27,7 +27,7 @@ namespace SNI
 		return m_Class;
 	}
 
-	SNI_Class* SNI_FunctionCall::VClass()
+	SNI_Class* SNI_FunctionCall::Type()
 	{
 		return Class();
 	}

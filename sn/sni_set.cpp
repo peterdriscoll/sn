@@ -21,7 +21,7 @@ namespace SNI
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Set, SNI_Class>("Set");
 	}
 
-	SNI_Class *SNI_Set::VClass()
+	SN::SN_Expression SNI_Set::Type() const
 	{
 		return Class();
 	}

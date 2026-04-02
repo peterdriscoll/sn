@@ -25,7 +25,7 @@ namespace SNI
 		return m_Class;
 	}
 
-	SNI_Class *SNI_Derived::VClass()
+	SN::SN_Expression SNI_Derived::Type() const
 	{
 		return Class();
 	}

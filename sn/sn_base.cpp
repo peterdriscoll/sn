@@ -164,6 +164,11 @@ namespace SN
 		return GetSNI_Base() && GetSNI_Base()->IsRightKnownValue();
 	}
 
+	bool SN_Base::IsKnownType() const
+	{
+		return GetSNI_Base() && GetSNI_Base()->IsKnownType();
+	}
+
 	bool SN_Base::IsKnownTypeValue() const
 	{
 		return GetSNI_Base() && GetSNI_Base()->IsKnownTypeValue();

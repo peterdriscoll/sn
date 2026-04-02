@@ -19,7 +19,7 @@ namespace SNI
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Value, SNI_Class>("Value");
 	}
 
-	SNI_Class* SNI_Value::VClass()
+	SN::SN_Expression SNI_Value::Type() const
 	{
 		return Class();
 	}

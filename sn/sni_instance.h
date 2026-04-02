@@ -5,20 +5,21 @@
 
 #include <string>
 
-#include "sni_null.h"
+#include "sni_value.h"
+#include "sni_namable.h"
 
 namespace SNI
 {
-	class SNI_Instance : public SNI_Null
+	class SNI_Instance : public SNI_Value, public SNI_Namable
 	{
 		PGC_CLASS(SNI_Instance);
 
 	public:
-		virtual SNI_Class * Class();
-		virtual SNI_Class *VClass();
+		virtual SN::SN_Expression Type() const;
 
 		SNI_Instance();
 		SNI_Instance(const SNI_Instance &p_Other);
+		SNI_Instance(const std::string &p_Name, const std::string &p_DomainName);
 		virtual ~SNI_Instance();
 
 		SNI_Expression * Copy() const;
@@ -40,7 +41,7 @@ namespace SNI
 	private:
 		virtual void PromoteMembers();
 
-		SNI_Class *m_Class;
+		SN::SN_Class m_Class;
 		bool m_Fixed;
 	};
 

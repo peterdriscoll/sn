@@ -128,7 +128,7 @@ namespace SNI
 			return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Real<T>, SNI_Class>(GetTypeNameStatic());
 		}
 
-		virtual SNI_Class *VClass()
+		virtual SN::SN_Expression Type() const
 		{
 			return Class();
 		}

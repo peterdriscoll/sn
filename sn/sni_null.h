@@ -15,7 +15,7 @@ namespace SNI
 	public:
 		
 		static SNI_Class *Class();
-		virtual SNI_Class *VClass();
+		virtual SN::SN_Expression Type() const;
 
 		SNI_Null();
 		SNI_Null(const SNI_Null &p_Other);

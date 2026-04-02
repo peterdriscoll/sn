@@ -23,7 +23,7 @@ namespace SNI
 	public:
 		static SNI_Class * m_Class;
 		static SNI_Class * Class();
-		SNI_Class *VClass();
+		virtual SN::SN_Expression Type() const;
 
 		SNI_Derived();
 		virtual ~SNI_Derived();

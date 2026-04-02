@@ -20,7 +20,7 @@ namespace SNI
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Meta, SNI_Class>("Meta");
 	}
 
-	SNI_Class *SNI_Meta::VClass()
+	SN::SN_Expression SNI_Meta::Type() const
 	{
 		return Class();
 	}
@@ -104,7 +104,7 @@ namespace SNI
 		{
 			return skynet::True;
 		}
-		if (const_cast<SNI_Meta *>(this)->VClass()->Equivalent(const_cast<SNI_Value*>(p_Parent)))
+		if (const_cast<SNI_Meta *>(this)->Type().Equivalent(const_cast<SNI_Value*>(p_Parent)))
 		{
 			return skynet::True;
 		}

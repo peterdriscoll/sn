@@ -14,7 +14,7 @@ namespace SNI
 		PGC_CLASS(SNI_Lambda);
 	public:
 		static SNI_Class* Class();
-		virtual SNI_Class* VClass();
+		virtual SNI_Class* Type();
 
 		SNI_Lambda();
 		SNI_Lambda(SNI_Expression *p_FormalParameter, SNI_Expression *p_Expresion, SNI_Expression *p_ConstraintValue, unsigned long p_Id);

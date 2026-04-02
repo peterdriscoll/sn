@@ -39,7 +39,7 @@ namespace SNI
 	public:
 		
 		static SNI_Class *Class();
-		virtual SNI_Class *VClass();
+		virtual SN::SN_Expression Type() const;
 
 		SNI_Mapping();
 		virtual ~SNI_Mapping();

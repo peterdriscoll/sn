@@ -35,15 +35,15 @@ namespace SNI
 		p_Base->REQUESTPROMOTION(m_Result);
 	}
 
-	SNI_Class::SNI_Class(const std::string &p_ClassName)
-	    : m_ClassName(p_ClassName)
-		, m_Fixed(false)
+	SNI_Class::SNI_Class(const std::string &p_Name, const std::string &p_DomainName)
+		: m_Fixed(false)
 	{
+		SetName(p_Name);
+ 		SetDomainName(p_DomainName);
 	}
 
 	SNI_Class::~SNI_Class()
 	{
-
 	}
 
 	SNI_Class::SNI_Class(const SNI_Class &p_Other)
@@ -63,12 +63,20 @@ namespace SNI
 
 	std::string SNI_Class::DisplayCpp() const
 	{
-		return m_ClassName+"::Class()";
+		if (GetDomainName().empty())
+		{
+			return GetName();
+		}
+		return GetDomainName() + "::" + GetName();
 	}
 
 	std::string SNI_Class::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
-		return m_ClassName;
+		if (GetDomainName().empty())
+		{
+			return GetName();
+		}
+		return GetDomainName() + "." + GetName();
 	}
 
 	long SNI_Class::GetPriority() const
@@ -76,6 +84,10 @@ namespace SNI
 		return 100;
 	}
 
+	bool SNI_Class::IsClass() const
+	{
+		return true;
+	}
 	bool SNI_Class::IsKnownTypeValue() const
 	{
 		return true;
@@ -86,7 +98,7 @@ namespace SNI
 		SNI_Class* other = dynamic_cast<SNI_Class*>(p_Other);
 		if (other)
 		{
-			return m_ClassName == other->m_ClassName;
+			return GetDomainName() == other->GetDomainName() && GetName() == other->GetName();
 		}
 		return false;
 	}
@@ -127,6 +139,10 @@ namespace SNI
 	// Inheritance
 	SN::SN_Value SNI_Class::DoIsA(const SNI_Value * p_Parent) const
 	{
+		if (dynamic_cast<const SNI_UniversalClass*>(p_Parent))
+		{
+			return skynet::True;
+		}
 		const SNI_Class *instance = dynamic_cast<const SNI_Class *>(p_Parent);
 		if (this == instance)
 		{

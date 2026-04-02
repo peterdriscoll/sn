@@ -25,7 +25,7 @@ namespace SNI
 		return m_Class;
 	}
 
-	SNI_Class* SNI_IncompleteFunction::VClass()
+	SNI_Class* SNI_IncompleteFunction::Type()
 	{
 		return Class();
 	}

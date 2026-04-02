@@ -157,6 +157,16 @@ namespace skynet
 #define SN_DEFINE_REAL(C, B, TYPE, NAME)                       \
      SN_EXTERN template class SN_EXPORT SN::SN_Real<TYPE>;     \
      typedef SN::SN_Real<TYPE> NAME;
+#define SN_CLASS(i) \
+    SN::SN_Class i(std::string(#i))
+#define SN_CLASS_CLASS(i, c) \
+    SN::SN_Class i(std::string(#i)); \
+    i.IsA(c).Assert().Do();
+#define SN_INSTANCE(i) \
+    SN::SN_Instance i(std::string(#i))
+#define SN_INSTANCE_CLASS(i, c) \
+    SN::SN_Instance i(std::string(#i)); \
+    i.IsA(c).Assert().Do();
 
 namespace skynet
 {
@@ -192,6 +202,8 @@ namespace skynet
 	typedef SN::SN_Domain Domain;
 	typedef SN::SN_State State;
 	typedef SN::SN_StateValue StateValue;
+	typedef SN::SN_Class Class;
+	typedef SN::SN_Instance Instance;
 
 	// Expressions
 	typedef SN::SN_Expression Expression;
@@ -305,6 +317,8 @@ namespace skynet
 	extern SN_EXPORT SN::SN_Error RerunRequest;
 
 	extern SN_EXPORT SN::SN_Expression Null;
+
+	extern SN_EXPORT SN::SN_Class All;
 };
 
 #endif // SN_H_INCLUDED

@@ -585,6 +585,9 @@
     <ClInclude Include="..\inc\iuser.h">
       <Filter>Interface Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sni_universalclass.h">
+      <Filter>Type Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -1096,6 +1099,9 @@
     </ClCompile>
     <ClCompile Include="httphandlersimple.cpp">
       <Filter>General Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sni_universalclass.cpp">
+      <Filter>Type Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

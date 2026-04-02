@@ -32,7 +32,7 @@ namespace SNI
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Expression, SNI_Class>("Expression");
 	}
 
-	SNI_Class* SNI_Expression::VClass()
+	SN::SN_Expression SNI_Expression::Type() const
 	{
 		return Class();
 	}
@@ -489,6 +489,11 @@ namespace SNI
 	bool SNI_Expression::IsKnownTypeValue() const
 	{
 		return IsKnownValue();
+	}
+
+	bool SNI_Expression::IsKnownType() const
+	{
+		return Type().Equivalent(skynet::All);
 	}
 
 	bool SNI_Expression::IsLambdaValue() const
@@ -1167,7 +1172,7 @@ namespace SNI
 		{
 			return skynet::True;
 		}
-		return const_cast<SNI_Expression*>(this)->VClass()->DoIsA(p_Parent);
+		return Type().GetSNI_Expression()->DoIsA(p_Parent);
 	}
 
 	SN::SN_Value SNI_Expression::DoHasA(SNI_Value * p_Member, SNI_Value * p_Name) const

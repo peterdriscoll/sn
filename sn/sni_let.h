@@ -26,7 +26,7 @@ namespace SNI
 		PGC_CLASS(SNI_Let);
 	public:
 		static SNI_Class* Class();
-		virtual SNI_Class* VClass();
+		virtual SNI_Class* Type();
 
 		SNI_Let();
 		SNI_Let(SNI_Expression *p_Condition, SNI_Expression *p_Expresion);

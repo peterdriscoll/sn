@@ -17,7 +17,7 @@ namespace SNI
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Domain, SNI_Class>("Domain");
 	}
 
-	SNI_Class *SNI_Domain::VClass()
+	SN::SN_Expression SNI_Domain::Type() const
 	{
 		return Class();
 	}

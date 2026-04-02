@@ -16,7 +16,7 @@ namespace SNI
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Bool, SNI_Class>("Bool");
 	}
 
-	SNI_Class *SNI_Bool::VClass()
+	SN::SN_Expression SNI_Bool::Type() const
 	{
 		return Class();
 	}

@@ -1,22 +1,14 @@
 #include "sni_instance.h"
+#include "sni_class.h"
 
 #include "sn_pch.h"
 #include <cstdint>
 
 namespace SNI
 {
-	/*static*/ SNI_Class *SNI_Instance::Class()
+	SN::SN_Expression SNI_Instance::Type() const
 	{
-		if (!m_Class)
-		{
-			m_Class = new SNI_Class("Instance");
-		}
 		return m_Class;
-	}
-
-	SNI_Class *SNI_Instance::VClass()
-	{
-		return Class();
 	}
 
 	SNI_Instance::SNI_Instance()
@@ -32,6 +24,12 @@ namespace SNI
 	{
 	}
 
+    SNI_Instance::SNI_Instance(const std::string &p_Name, const std::string &p_DomainName)
+    {
+		SetName(p_Name);
+ 		SetDomainName(p_DomainName);
+    }
+
 	SNI_Expression * SNI_Instance::Copy() const
 	{
 		return new SNI_Instance(*this);
@@ -44,12 +42,20 @@ namespace SNI
 
 	std::string SNI_Instance::DisplayCpp() const
 	{
-		return std::to_string(reinterpret_cast<std::uintptr_t>(this));
+		if (GetDomainName().empty())
+        {
+			return GetName();
+        }
+		return GetDomainName()+"."+GetName();
 	}
 
 	std::string SNI_Instance::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
-		return std::to_string(reinterpret_cast<std::uintptr_t>(this));
+		if (GetDomainName().empty())
+        {
+			return GetName();
+        }
+		return GetDomainName()+"."+GetName();
 	}
 
 	long SNI_Instance::GetPriority() const
@@ -64,12 +70,11 @@ namespace SNI
 
 	SN::SN_Error SNI_Instance::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)
 	{
-		const SNI_Instance *instance = dynamic_cast<const SNI_Instance *>(p_Parent);
-		if (DoIsA(instance).GetBool())
+		if (!m_Class.IsKnownValue())
 		{
-			return p_Result.AssertValue(skynet::True);
+			m_Class.SetValue(dynamic_cast<const SNI_Class *>(p_Parent));
 		}
-		return m_Class->AssertValue(p_Result);
+		return m_Class.GetSNI_Class()->AssertIsAValue(p_Parent, p_Result);
 	}
 
 	// Inheritance
@@ -84,9 +89,9 @@ namespace SNI
 		{
 			return skynet::True;
 		}
-		if (m_Class)
+		if (m_Class.IsKnownValue())
 		{
-			if (m_Class->DoIsA(p_Parent).GetBool())
+			if (m_Class.GetSNI_Class()->DoIsA(p_Parent).GetBool())
 			{
 				return skynet::True;
 			}

@@ -123,7 +123,7 @@ namespace SNI
         // RTTI-ish class info
         static SNI_Class* m_Class;
         static SNI_Class* Class();
-        virtual SNI_Class* VClass();
+        virtual SN::SN_Expression Type() const;
 
         // SN interface
         virtual SNI_Expression* Copy() const;

@@ -21,7 +21,7 @@ namespace SNI
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Lambda, SNI_Class>("Lambda");
 	}
 
-	SNI_Class* SNI_Lambda::VClass()
+	SNI_Class* SNI_Lambda::Type()
 	{
 		return Class();
 	}

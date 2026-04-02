@@ -5,7 +5,8 @@
 
 #include <string>
 
-#include "sni_null.h"
+#include "sni_value.h"
+#include "sni_namable.h"
 
 namespace SNI
 {
@@ -29,11 +30,11 @@ namespace SNI
 
 	typedef std::vector<SNI_Inherits> SNI_Inherits_List;
 
-	class SNI_Class : public SNI_Null
+	class SNI_Class : public SNI_Value, public SNI_Namable
 	{
 		PGC_CLASS(SNI_Class);
 	public:
-		SNI_Class(const std::string &p_ClassName);
+        SNI_Class(const std::string &p_Name, const std::string &p_DomainName = "");
 		SNI_Class(const SNI_Class &p_Other);
 		virtual ~SNI_Class();
 
@@ -43,6 +44,7 @@ namespace SNI
 		virtual std::string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual long GetPriority() const;
 
+	    virtual bool IsClass() const;
 		virtual bool IsKnownTypeValue() const;
 
 		virtual bool Equivalent(SNI_Object* p_Other) const;
@@ -57,7 +59,6 @@ namespace SNI
 	private:
 		virtual void PromoteMembers();
 
-		std::string m_ClassName;
 		bool m_Fixed;
 		SNI_Inherits_List m_InheritList;
 	};

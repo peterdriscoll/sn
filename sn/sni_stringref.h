@@ -22,7 +22,7 @@ namespace SNI
 	public:
 		
 		static SNI_Class *Class();
-		virtual SNI_Class *VClass();
+		virtual SN::SN_Expression Type() const;
 
 		SNI_StringRef();
 		SNI_StringRef(const SNI_StringRef & p_Other);

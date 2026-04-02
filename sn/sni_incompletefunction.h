@@ -14,7 +14,7 @@ namespace SNI
 		PGC_CLASS(SNI_IncompleteFunction);
 	public:
 		static SNI_Class* Class();
-		SNI_Class* VClass();
+		SNI_Class* Type();
 
 		SNI_IncompleteFunction();
 		SNI_IncompleteFunction(SNI_Expression *p_Function);

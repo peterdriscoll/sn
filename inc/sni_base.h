@@ -83,6 +83,7 @@ namespace SNI
 		virtual bool IsKnownValue() const = 0;
 		virtual bool IsLeftKnownValue() const = 0;
 		virtual bool IsRightKnownValue() const = 0;
+		virtual bool IsKnownType() const = 0;
 		virtual bool IsKnownTypeValue() const = 0;
 		virtual bool IsReferableValue() const = 0;
 		virtual bool IsLambdaValue() const = 0;

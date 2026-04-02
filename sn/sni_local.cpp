@@ -23,7 +23,7 @@ namespace SNI
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Local, SNI_Class>("Local");
 	}
 
-	SNI_Class* SNI_Local::VClass()
+	SNI_Class* SNI_Local::Type()
 	{
 		return Class();
 	}

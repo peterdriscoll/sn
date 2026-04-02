@@ -20,7 +20,7 @@ namespace SNI
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Mapping, SNI_Class>("Mapping");
 	}
 
-	SNI_Class *SNI_Mapping::VClass()
+	SN::SN_Expression SNI_Mapping::Type() const
 	{
 		return Class();
 	}

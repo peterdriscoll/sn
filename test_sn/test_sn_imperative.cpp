@@ -48,6 +48,7 @@ namespace test_sn
 
 				SN_DECLARE(x);
 
+				manager.Breakpoint();
 				(x == Local(User::GetOperators().FunctionCall, Let(Function(Function(Equals, User::GetOperators().FunctionCall), testCall), Long(4) + Long(5)))).Assert().Do();
 
 				(x == Long(15)).Evaluate().Do();

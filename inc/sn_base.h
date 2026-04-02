@@ -56,6 +56,8 @@ namespace SN
 
 		std::string LogDisplaySN() const;
 
+		SN_Expression Type() const;
+
 		bool IsNull() const;
 
 		bool IsNullValue() const;
@@ -65,6 +67,8 @@ namespace SN
 		bool IsLeftKnownValue() const;
 
 		bool IsRightKnownValue() const;
+
+		bool IsKnownType() const;
 
 		bool IsKnownTypeValue() const;
 
@@ -80,6 +84,7 @@ namespace SN
 
 		bool IsValueHolder() const;
 
+		bool IsClass() const;
 		bool IsValueSet() const;
 
 		bool IsString() const;

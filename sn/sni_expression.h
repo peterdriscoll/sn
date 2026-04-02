@@ -65,7 +65,7 @@ namespace SNI
 
 	public:
 		static SNI_Class* Class();
-		virtual SNI_Class* VClass();
+		virtual SN::SN_Expression Type() const;
 
 		SNI_Expression();
 		SNI_Expression(unsigned long p_Id);
@@ -136,7 +136,8 @@ namespace SNI
 		virtual bool IsKnownValue() const;
 		virtual bool IsLeftKnownValue() const;
 		virtual bool IsRightKnownValue() const;
-		virtual bool IsKnownTypeValue() const;
+        virtual bool IsKnownType() const;
+        virtual bool IsKnownTypeValue() const;
 		virtual bool IsLambdaValue() const;
 		virtual bool IsInteger() const;
 		virtual bool IsInline() const;

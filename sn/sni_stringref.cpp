@@ -28,7 +28,7 @@ namespace SNI
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_StringRef, SNI_Class>("StringRef");
 	}
 
-	SNI_Class *SNI_StringRef::VClass()
+	SN::SN_Expression SNI_StringRef::Type() const
 	{
 		return Class();
 	}

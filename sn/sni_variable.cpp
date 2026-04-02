@@ -37,7 +37,7 @@ namespace SNI
 		return m_Class;
 	}
 
-	SNI_Class* SNI_Variable::VClass()
+	SN::SN_Expression SNI_Variable::Type() const
 	{
 		return Class();
 	}

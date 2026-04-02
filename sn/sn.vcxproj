@@ -346,6 +346,7 @@
     <ClInclude Include="sni_unaryand.h" />
     <ClInclude Include="sni_unaryor.h" />
     <ClInclude Include="sni_unescape.h" />
+    <ClInclude Include="sni_universalclass.h" />
     <ClInclude Include="sni_user.h" />
     <ClInclude Include="sni_value.h" />
     <ClInclude Include="sni_valueset.h" />
@@ -477,6 +478,7 @@
     <ClCompile Include="sni_unaryand.cpp" />
     <ClCompile Include="sni_unaryor.cpp" />
     <ClCompile Include="sni_unescape.cpp" />
+    <ClCompile Include="sni_universalclass.cpp" />
     <ClCompile Include="sni_user.cpp" />
     <ClCompile Include="sni_value.cpp" />
     <ClCompile Include="sni_valueset.cpp" />

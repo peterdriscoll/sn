@@ -15,7 +15,7 @@ namespace SNI
 		virtual ~SNI_FunctionCall();
 
 		static SNI_Class* Class();
-		SNI_Class* VClass();
+		SNI_Class* Type();
 
 		virtual std::string GetTypeName() const;
 		virtual std::string DisplayCpp() const;
