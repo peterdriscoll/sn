@@ -482,11 +482,20 @@ namespace SNI
 
 			// Initialise the server.
 			// "0.0.0.0", "80", "C:/sn/html"
+			const char* bindAddress = p_Address.c_str();
+			const char* checkAddress = nullptr;
+
+			if (p_Address == "0.0.0.0")
+				checkAddress = "127.0.0.1";
+			else
+				checkAddress = p_Address.c_str();
+
+
 			m_WebServer = SN::SN_Factory<IHTTP_Server>::CreateObject();
-			m_WebServer->setup(p_Address.data(), p_Port.data(), p_DocRoot.data(), m_HTTP_Handler, static_cast<IUser*>(m_User));
+			m_WebServer->setup(bindAddress, p_Port.data(), p_DocRoot.data(), m_HTTP_Handler, static_cast<IUser*>(m_User));
 			// Run the server until stopped.
 			m_WebServer->start();
-			m_WebServer->WaitForServer(p_Address.data(), p_Port.data());
+			m_WebServer->WaitForServer(checkAddress, p_Port.data());
 		}
 		catch (std::exception& e)
 		{

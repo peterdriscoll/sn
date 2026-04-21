@@ -54,7 +54,7 @@ namespace skynet::http::server::syncoo
 		boost::asio::ip::tcp::resolver resolver(ioc);
         
 		// Try for about 5 seconds
-		for (int i = 0; i < 50; ++i) {
+		for (int i = 0; i < 100; ++i) {
 			try {
 				// This resolves "127.0.0.1" and "80" (as a string)
 				auto const results = resolver.resolve(address, port);
