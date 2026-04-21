@@ -37,7 +37,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Simple Inherit1", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				skynet::True.IsA(Bool::Class()).Assert().Do();
 				String("woof").IsA(String::Class()).Assert().Do();
@@ -71,7 +71,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Inherit Short", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				Short::Class().IsA(Long::Class()).Evaluate().Do();
 				SN_DECLARE(x1);
@@ -117,7 +117,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Inherit Long", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				Long::Class().IsA(LongLong::Class()).Evaluate().Do();
 				SN_DECLARE(x1);
@@ -149,7 +149,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Inherit LongLong", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				LongLong::Class().IsA(LongDouble::Class()).Evaluate().Do();
 				SN_DECLARE(x1);
@@ -167,7 +167,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Inherit Float", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				Float::Class().IsA(Double::Class()).Evaluate().Do();
 				SN_DECLARE(x1);
@@ -192,7 +192,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Inherit Double", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				Double::Class().IsA(LongDouble::Class()).Evaluate().Do();
 				SN_DECLARE(x1);
@@ -210,7 +210,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Inherit Char", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				Char::Class().IsA(String::Class()).Evaluate().Do();
 				SN_DECLARE(x1);
@@ -228,7 +228,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Inherit Char", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				StringRef::Class().IsA(String::Class()).Evaluate().Do();
 				SN_DECLARE(x1);
@@ -246,7 +246,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Derived", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE_VALUE(fib, Derived());
 				SN_DECLARE(N);
@@ -284,7 +284,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Virtual", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE_VALUE(fib, Virtual());
 				SN_DECLARE(N);
@@ -320,7 +320,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Virtual Polymorphic2", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE_VALUE(typeChecker, Virtual());
 				SN_DECLARE_VALUE(shortType, Short::Class());
@@ -351,7 +351,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Virtual Polymorphic 2", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE_VALUE(typeChecker, Virtual());
 				SN_DECLARE_VALUE(shortType, Short::Class());
@@ -392,7 +392,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Virtual Polymorphic3", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE_VALUE(typeChecker, Virtual());
 				SN_DECLARE_VALUE(shortType, Short::Class());
@@ -441,7 +441,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Virtual Polymorphic Reverse 1", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE_VALUE(typeChecker, Virtual());
 				SN_DECLARE_VALUE(shortType, Short::Class());
@@ -470,7 +470,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Virtual Polymorphic Reverse 2", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE_VALUE(typeChecker, Virtual());
 				SN_DECLARE_VALUE(shortType, Short::Class());
@@ -508,7 +508,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Virtual Polymorphic Reverse3", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE_VALUE(typeChecker, Virtual());
 				SN_DECLARE_VALUE(shortType, Short::Class());

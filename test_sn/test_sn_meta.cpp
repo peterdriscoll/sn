@@ -37,7 +37,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Meta Evaluate", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE_VALUE(dog, String("Vincent "));
 				SN_DECLARE_VALUE(cat, String("Emma "));
@@ -84,7 +84,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Meta Partial Evaluate On Values", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE_VALUE(dog, String("Vincent "));
 				SN_DECLARE_VALUE(cat, String("Emma "));
@@ -131,7 +131,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Meta Partial Evaluate", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(dog);
 				SN_DECLARE(cat);

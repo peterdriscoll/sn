@@ -45,7 +45,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test String Equivalent", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				Assert::IsTrue((String("dog") == String("dog")).Equivalent(Function(Function(FunctionCall, Function(Function(FunctionCall, Equals), String("dog"))), String("dog"))));
 				Assert::IsTrue(!(String("dog") == String("dog")).Equivalent(Function(Function(FunctionCall, Function(Function(FunctionCall, Equals), String("dog"))), String("cat"))));
@@ -101,7 +101,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test String Assert", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 				{
 					Transaction transaction;
 
@@ -153,7 +153,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test String Ref Definition", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(a);
 				SN_DECLARE(b);
@@ -182,7 +182,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test String Ref Definition Errors", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 				{
 					Transaction transaction;
 
@@ -227,7 +227,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Sub Strings", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				(String("catdog").SubtractRight(String("catdog").SubtractLeft(String("cat"))) == String("cat")).Assert().Do();
 				(String("catdog").SubtractLeft(String("catdog").SubtractRight(String("dog"))) == String("dog")).Assert().Do();
@@ -255,7 +255,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test File Access", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				std::string s_name_1 = "c:/temp/sn_test_testfileaccess_1.txt";
 				std::string s_name_2 = "c:/temp/sn_test_testfileaccess_2.txt";
@@ -331,7 +331,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test String Search", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 				{
 					Transaction transaction;
 
@@ -363,7 +363,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test String Search Example 1", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(firstname1);
 				SN_DECLARE(surname1);
@@ -387,7 +387,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test String Search Example 2", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 				{
 					Transaction transaction;
 
@@ -427,7 +427,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test String Ambiguity", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(firstClause);
 				SN_DECLARE(secondClause);
@@ -455,7 +455,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test String Breakup", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				{
 					Transaction transaction;

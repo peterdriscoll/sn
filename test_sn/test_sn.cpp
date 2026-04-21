@@ -37,7 +37,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Set Evaluate", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				Expression a;
 				(((Long(2) || Long(-2))*(Long(3) || Long(-3))).BuildSet() == ((Long(6) || Long(-6)).BuildSet())).Evaluate().Do();
@@ -62,7 +62,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Partial Call", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 				SN_DECLARE(f);
 				SN_DECLARE(g);
 				SN_DECLARE(a);
@@ -86,7 +86,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Simple Transaction", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(X);
 				{
@@ -104,7 +104,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Error", AssertErrorHandler);
-				//manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				//manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 				//manager.StartDebugCommandLineServer(skynet::StepInto, _kbhit, _getch);
 				try
 				{
@@ -139,7 +139,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Assert Throw", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 				{
 					try
 					{
@@ -161,7 +161,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Set Assert", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(x);
 				SN_DECLARE(z);
@@ -188,7 +188,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Pythagoras", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(X);
 				(Double(245.67).Square() + X.Square() == Double(357.56).Square()).Assert().Do();
@@ -203,7 +203,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Virtual Polymorphic Reverse3", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				(Long(5) != Long(6)).Assert().Do();
 				(Long(5) == Long(5)).Assert().Do();

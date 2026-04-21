@@ -1,4 +1,4 @@
-﻿var home = 'http://127.0.0.1/';
+﻿var home = window.location.origin + '/';
 var app = angular.module('skynetApp', ['ngSanitize', 'cfp.hotkeys']);
 
 // in skynetjs.js, after angular.module('skynetApp', [...])

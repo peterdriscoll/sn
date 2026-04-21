@@ -6,12 +6,13 @@
 using namespace PGCX;
 using namespace skynet; // Interface namespace for SN.
 
-std::string doc_root = SOLUTION_DIR "html";
+const std::string doc_root = SOLUTION_DIR "html";
+const std::string port = "80";
 
 void TestValidate_IsString()
 {
 	Manager manager("Test Validate IsString");
-	manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false);
+	manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, false);
 
 	CharacterSet characterSet;
 	Validate validate(characterSet);
@@ -370,7 +371,7 @@ int main(int argc, char *argv[])
 void main2(int argc, char *argv[])
 {
 	Manager manager("Test Church Divide");
-	manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root);
+	manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root);
 	//manager.StartDebugCommandLineServer(skynet::StepInto, _kbhit, _getch);
 	try
 	{

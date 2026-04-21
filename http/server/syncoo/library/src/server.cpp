@@ -47,6 +47,26 @@ namespace skynet::http::server::syncoo
         m_thread = std::thread([this] { this->run(); });
         return 0; // success
     }
+    
+    void server::WaitForServer(const char* address, const char* port)
+    {
+		boost::asio::io_context ioc;
+		boost::asio::ip::tcp::resolver resolver(ioc);
+        
+		// Try for about 5 seconds
+		for (int i = 0; i < 50; ++i) {
+			try {
+				// This resolves "127.0.0.1" and "80" (as a string)
+				auto const results = resolver.resolve(address, port);
+				boost::asio::ip::tcp::socket socket(ioc);
+				boost::asio::connect(socket, results.begin(), results.end());
+                
+				return; 
+			} catch (...) {
+				std::this_thread::sleep_for(std::chrono::milliseconds(100));
+			}
+		}
+    }
 
     int skynet::http::server::syncoo::server::run()
     {

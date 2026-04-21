@@ -37,7 +37,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Double Equivalent", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				((Long(1) + Long(2)) == Long(3)).Evaluate().Do();
 
@@ -103,7 +103,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Double Assert", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(y);
 
@@ -136,7 +136,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Long Assert Simplified", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(c);
 
@@ -152,7 +152,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Long Assert", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 				{
 					Transaction transaction;
 

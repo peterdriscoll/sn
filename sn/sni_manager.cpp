@@ -486,6 +486,7 @@ namespace SNI
 			m_WebServer->setup(p_Address.data(), p_Port.data(), p_DocRoot.data(), m_HTTP_Handler, static_cast<IUser*>(m_User));
 			// Run the server until stopped.
 			m_WebServer->start();
+			m_WebServer->WaitForServer(p_Address.data(), p_Port.data());
 		}
 		catch (std::exception& e)
 		{
@@ -507,8 +508,15 @@ namespace SNI
 			//m_WebServerThreadUsed = true;
 			//OpenURLInBrowser("http://localhost:4200");
 			//OpenURLInBrowser("http://127.0.0.1/skynetjs.html");
-			OpenURLInBrowser("http://127.0.0.1/opener.html?target=http://127.0.0.1/skynetjs.html");
-			//OpenURLInBrowser("http://127.0.0.1/opener.html?target=/skynetjs.html");
+			//OpenURLInBrowser("http://127.0.0.1/opener.html?target=http://127.0.0.1/skynetjs.html");
+			if (p_Port == "80")
+            {
+			    OpenURLInBrowser("http://127.0.0.1:/opener.html?target=/skynetjs.html");
+            }
+            else
+            {
+				OpenURLInBrowser("http://127.0.0.1:"+p_Port+"/opener.html?target=/skynetjs.html");
+            }
 			//OpenURLInBrowser("http://127.0.0.1/skynet");
 		}
 		m_WebServerThreadUsageCount++;

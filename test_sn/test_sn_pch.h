@@ -11,3 +11,4 @@
 #include "snl.h"
 
 const std::string doc_root = SOLUTION_DIR "html";
+const std::string port = "80";

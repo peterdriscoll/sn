@@ -103,6 +103,7 @@ request_handler::handle(boost::beast::http::request<boost::beast::http::string_b
         res.keep_alive(req.keep_alive());
         res.body() = m_HTTP_Handler->response_data();
         res.prepare_payload();
+        res.set(boost::beast::http::field::connection, "close");
         return res; // implicit to message_generator
     }
 

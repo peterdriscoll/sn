@@ -120,7 +120,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Value Set Of Lambda Functions", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(plus);
 				SN_DECLARE(times);
@@ -159,7 +159,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Value Set Of Standard Functions", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(f);
 				(f == (skynet::Add || skynet::Multiply)).Assert().Do();
@@ -183,7 +183,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Value Set Of String Functions", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, false);
 
 				SN_DECLARE(f);
 

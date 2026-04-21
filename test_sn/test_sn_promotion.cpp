@@ -34,7 +34,7 @@ namespace test_sn
             Initialize();
             {
                 Manager manager("Test Mapping Forward", AssertErrorHandler);
-                manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+                manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
                 {
                     Transaction parentTransaction;
                     SN_DECLARE(X);
@@ -59,7 +59,7 @@ namespace test_sn
             Initialize();
             {
                 Manager manager("Test Promotion Shared Object", AssertErrorHandler);
-                manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+                manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
                 SN_DECLARE(X);
                 Expression expr1, expr2;
@@ -82,7 +82,7 @@ namespace test_sn
             Initialize();
             {
                 Manager manager("Test Expression Alias After Promotion", AssertErrorHandler);
-                manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+                manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
                 SN_DECLARE(X);
 
@@ -140,7 +140,7 @@ namespace test_sn
                 Manager manager("Test Promotion Updates Pointers", AssertErrorHandler);
                 // Note that the manager creates a transaction.
 
-                manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+                manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
                 {
                     Transaction outerTransaction;
                     SN_DECLARE(X); // Creates an SNI_Variable instance in the managers transaction

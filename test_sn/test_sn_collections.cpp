@@ -44,7 +44,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Mapping Forward", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(M);
 				SN_DECLARE(I);
@@ -68,7 +68,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Mapping Forward Valueset", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(M);
 				SN_DECLARE(I);
@@ -88,7 +88,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Mapping Reverse", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(age);
 				SN_DECLARE(I);
@@ -123,7 +123,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Mapping Count", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(age);
 				SN_DECLARE(X);
@@ -170,7 +170,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Mapping Fix Errors", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 				{
 					try
 					{
@@ -202,7 +202,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Vector", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE_VALUE(fib, Vector());
 
@@ -261,7 +261,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Set", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(X);
 				SN_DECLARE(Y);
@@ -294,7 +294,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Deferred command(missing Do detection)", MarkMissingErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				g_MissingDoDetected = false;
 

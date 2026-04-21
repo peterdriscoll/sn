@@ -37,7 +37,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Church Succ", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(inc);
 				SN_DECLARE(succ);
@@ -80,7 +80,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Church Plus", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(plus);
 				SN_DECLARE(n);
@@ -123,7 +123,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Church Multiply", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(mult);
 				SN_DECLARE(n);
@@ -166,7 +166,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Church Exp", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(exp);
 				SN_DECLARE(n);
@@ -210,7 +210,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Church Pred", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(pred);
 				SN_DECLARE(n);
@@ -256,7 +256,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Church Minus", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(pred);
 				SN_DECLARE(h);
@@ -309,7 +309,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Church Divide", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				if (manager.GetEvaluationType() == skynet::Strict)
 				{

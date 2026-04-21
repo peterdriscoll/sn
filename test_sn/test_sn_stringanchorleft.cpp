@@ -38,7 +38,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Left-Anchored Positive", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 				{
 					Transaction transaction;
 
@@ -66,7 +66,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Left-Anchored Mismatch", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 				{
 					Transaction transaction;
 
@@ -97,7 +97,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Left-Anchored Negation", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, false /*runWebServer*/);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, false /*runWebServer*/);
 				{
 					Transaction transaction;
 

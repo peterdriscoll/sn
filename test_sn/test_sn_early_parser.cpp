@@ -37,7 +37,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Char In Value Set", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(B_Digit);
 				SN_DECLARE(d);
@@ -83,7 +83,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Char In Set", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(B_Digit2);
 				SN_DECLARE(d);
@@ -126,7 +126,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Is Integer", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(Digit);
 				SN_DECLARE(d);
@@ -214,7 +214,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Parse Integer", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(Digit);
 				SN_DECLARE(d);
@@ -252,7 +252,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Parse Name", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(Digit);
 				SN_DECLARE(d);
@@ -342,7 +342,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Parse String", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(IsString);
 				SN_DECLARE(IsStringContent);
@@ -405,7 +405,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Parse Part", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(Digit);
 				SN_DECLARE(d);
@@ -485,7 +485,7 @@ namespace test_sn
 			Initialize();
 			{
 				Manager manager("Test Parse Part2", AssertErrorHandler);
-				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE(Digit);
 				SN_DECLARE(d);
