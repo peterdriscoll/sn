@@ -39,7 +39,7 @@ namespace SNI
 		{
 			m_ReadyForProcessingCond.wait(mutex_lock);
 		}
-		if (p_InterruptPoint == SN::EndPoint)
+		if (p_InterruptPoint == SN::EndPoint && m_DebugAction != skynet::Close)
 		{
 			breakPoint = (m_DebugAction != skynet::Quit);
 			m_DebugAction = skynet::Run;
@@ -63,6 +63,9 @@ namespace SNI
 				break;
 			case skynet::RunToEnd:
 				breakPoint = p_InterruptPoint == SN::EndPoint || p_InterruptPoint == SN::ErrorPoint;
+				break;
+			case skynet::Close:
+				breakPoint = false;
 				break;
 			case skynet::Debug:
 				breakPoint = baseInterrupt || (m_BreakPointSet.find(p_BreakPoint) != m_BreakPointSet.end());
@@ -172,6 +175,11 @@ namespace SNI
 	void SNI_DebugCommand::RunToEnd()
 	{
 		ScheduleCommand(skynet::RunToEnd);
+	}
+
+	void SNI_DebugCommand::Close()
+	{
+		ScheduleCommand(skynet::Close);
 	}
 
 	void SNI_DebugCommand::Debug()

@@ -585,6 +585,11 @@ namespace SNI
 		m_DebugCommand.RunToEnd();
 	}
 
+	void SNI_Thread::Close()
+	{
+		m_DebugCommand.Close();
+	}
+
 	void SNI_Thread::LoadBreakPoints(const std::string &p_BreakPointString)
 	{
 		m_DebugCommand.LoadBreakPoints(p_BreakPointString);

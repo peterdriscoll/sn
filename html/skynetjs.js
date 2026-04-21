@@ -20,7 +20,7 @@ angular.module('skynetApp')
                 .catch(function () {
                     if (++misses >= CLOSE_AFTER_MISSES) {
                         $interval.cancel(timer);
-                        //tryClose();
+                        tryClose();
                     }
                 });
         }
@@ -337,9 +337,6 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
         $http.get(home + action + '?threadnum=' + $scope.threadnum + '&stackdepth=' + $scope.stackdepth + '&debugstop=' + $scope.debugstop.value + '&breakpoints=' + Array.from($scope.breakpointCol).join(','))
             .then(function (response) {
                 $scope.loaddata();
-                if (action === "runtoendjs") {
-                    window.close();
-                }
             });
     };
 

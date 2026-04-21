@@ -36,6 +36,7 @@ namespace SNI
 		// Debug break actions.
 		void Run();
 		void RunToEnd();
+	    void Close();
 		void Debug();
 		void CodeBreak();
 		void Rerun();

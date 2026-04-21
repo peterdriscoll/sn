@@ -100,6 +100,11 @@ namespace SNI
         m_thr->RunToEnd(); 
         return { R"({"ok":true})", "json" }; 
     }
+    RequestAdapter::Reply RequestAdapter::CloseJS()
+    { 
+        m_thr->Close(); 
+        return { R"({"ok":true})", "json" }; 
+    }
     RequestAdapter::Reply RequestAdapter::DebugJS() 
     {
         auto it = m_q.find("breakpoints");
@@ -238,6 +243,7 @@ namespace SNI
             // JSON actions
             {SV{"/runjs"},           &RequestAdapter::RunJS},
             {SV{"/runtoendjs"},      &RequestAdapter::RunToEndJS},
+            {SV{"/closejs"},         &RequestAdapter::CloseJS},
             {SV{"/debugjs"},         &RequestAdapter::DebugJS},
             {SV{"/codebreakjs"},     &RequestAdapter::CodeBreakJS},
             {SV{"/rerunjs"},         &RequestAdapter::RerunJS},

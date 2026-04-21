@@ -43,6 +43,7 @@ namespace SNI
         // -------- JSON action routes (return tiny ack JSON) --------
         Reply RunJS();
         Reply RunToEndJS();
+        Reply CloseJS();
         Reply DebugJS();
         Reply CodeBreakJS();
         Reply RerunJS();

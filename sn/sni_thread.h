@@ -58,6 +58,7 @@ namespace SNI
 		void RegisterError(SNI_Error *p_Error);
 		void Run();
 		void RunToEnd();
+        void Close();
 		void Debug();
 		void CodeBreak();
 		void Rerun();

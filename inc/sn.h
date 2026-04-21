@@ -35,7 +35,7 @@ namespace skynet
 {
 	enum DebugAction
 	{
-		None, Run, RunToEnd, Rerun, Debug, CodeBreak, StepOver, StepInto, StepParameter, StepOut, GotoStepCount, GoBackToStepCount, Quit, Abort
+		None, Run, RunToEnd, Rerun, Debug, CodeBreak, StepOver, StepInto, StepParameter, StepOut, GotoStepCount, GoBackToStepCount, Quit, Abort, Close
 	};
 
 	enum DirectPassType
