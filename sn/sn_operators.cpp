@@ -353,10 +353,14 @@ namespace SN
 		// Function calls
 		SN::SN_Function FunctionCall(const SN::SN_Expression& p_Function, const SN::SN_Expression& p_Parameter)
 		{
-			SN::SN_OperatorVariables& temp = SNI_User::GetCurrentUser()->GetOperators();
-			SN_Variable tempFunctionCall = temp.FunctionCall;
-			SNI_Expression* tempExpression = tempFunctionCall.GetSNI_Expression();
-			return SN::SN_Function(SN::SN_Function(SNI_User::GetCurrentUser()->GetOperators().FunctionCall, p_Function), p_Parameter);
+			if (SNI_Thread::TopManager()->ApplyOverride())
+			{
+ 			    return SN::SN_Function(SN::SN_Function(SNI_User::GetCurrentUser()->GetOperators().FunctionCall, p_Function), p_Parameter);
+			}
+			else
+			{
+ 			    return SN::SN_Function(p_Function, p_Parameter);
+			}
 		}
 	}
 }

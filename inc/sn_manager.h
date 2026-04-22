@@ -115,6 +115,12 @@ namespace SN
 		bool AutoExpandNull() const;
 		void SetAutoExpandNull(bool p_AutoExpandNull);
 
+		bool BlankDisplayDelayedCall() const;
+		void SetBlankDisplayDelayedCall(bool p_BlankDisplayDelayedCall);
+
+		bool ApplyOverride() const;
+		void SetApplyOverride(bool p_ApplyOverride);
+
 		// Debugging
 		void Breakpoint();
 		void SetDebugAction(enum skynet::DebugAction p_DebugAction);

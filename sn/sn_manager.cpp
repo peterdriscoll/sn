@@ -237,6 +237,25 @@ namespace SN
 		return m_Manager->SetAutoExpandNull(p_AutoExpandNull);
 	}
 
+	bool SN_Manager::BlankDisplayDelayedCall() const
+	{
+		return m_Manager->BlankDisplayDelayedCall();
+	}
+
+	void SN_Manager::SetApplyOverride(bool p_ApplyOverride)
+	{
+		return m_Manager->SetApplyOverride(p_ApplyOverride);
+	}
+
+	bool SN_Manager::ApplyOverride() const
+	{
+		return m_Manager->ApplyOverride();
+	}
+
+	void SN_Manager::SetBlankDisplayDelayedCall(bool p_BlankDisplayDelayedCall)
+	{
+		return m_Manager->SetBlankDisplayDelayedCall(p_BlankDisplayDelayedCall);
+	}
 	void SN_Manager::Breakpoint()
 	{
 		m_Manager->Breakpoint();

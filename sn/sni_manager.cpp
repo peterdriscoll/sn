@@ -672,6 +672,26 @@ namespace SNI
 		return m_AutoExpandNull;
 	}
 
+	bool SNI_Manager::BlankDisplayDelayedCall() const
+	{
+		return m_BlankDisplayDelayedCall;
+	}
+
+	void SNI_Manager::SetBlankDisplayDelayedCall(bool p_BlankDisplayDelayedCall)
+	{
+		m_BlankDisplayDelayedCall = p_BlankDisplayDelayedCall;
+	}
+
+	bool SNI_Manager::ApplyOverride() const
+	{
+		return m_ApplyOverride;
+	}
+
+	void SNI_Manager::SetApplyOverride(bool p_ApplyOverride)
+	{
+		m_ApplyOverride = p_ApplyOverride;
+	}
+
 	void SNI_Manager::SetAutoExpandNull(bool p_AutoExpandNull)
 	{
 		m_AutoExpandNull = p_AutoExpandNull;

@@ -109,6 +109,12 @@ namespace SNI
 		bool AutoExpandNull() const;
 		void SetAutoExpandNull(bool p_AutoExpandNull);
 
+		bool BlankDisplayDelayedCall() const;
+		void SetBlankDisplayDelayedCall(bool p_BlankDisplayDelayedCall);
+
+		bool ApplyOverride() const;
+		void SetApplyOverride(bool p_ApplyOverride);
+
 		// debugging
 		void Breakpoint(std::string p_Description = "User breakpoint");
 		void SetDebugAction(enum skynet::DebugAction p_DebugLevel);
@@ -147,7 +153,9 @@ namespace SNI
 		PGC::PromotionStrategy m_MemoryPromotionStrategy;
 
 		bool m_AutoExpandNull;
-		
+		bool m_BlankDisplayDelayedCall = true;
+        bool m_ApplyOverride = true;
+
 		// Console
 		bool m_HasConsole;
 

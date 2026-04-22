@@ -57,11 +57,18 @@ namespace SNI
 
 	std::string SNI_DelayedCall::DisplaySN(long priority, SNI_DisplayOptions & p_DisplayOptions) const
 	{
+		if (SNI_Thread::TopManager()->BlankDisplayDelayedCall())
+		{
+			return "";
+		}
+        else
+        {
 		return "[["
 			+ m_Function.GetSNI_FunctionDef()->DisplayCall(0, p_DisplayOptions, m_NumParams, m_ParamList + 1, m_Source)
 			+ "="
 			+ m_ParamList[PU1_Result].DisplaySN(p_DisplayOptions)
 			+ "]]";
+		}
 	}
 
 	void SNI_DelayedCall::AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map)
