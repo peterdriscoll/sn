@@ -44,6 +44,15 @@ namespace SNI
 		return 0;
 	}
 
+	bool SNI_Square::MultiValued(long p_CalcPos) const
+    {
+		if (p_CalcPos == PU1_First)
+		{
+			return true;
+        }
+		return false;
+    }
+	
 	SN::SN_Value SNI_Square::PrimaryFunctionValue(const SN::SN_Value &p_Param) const
 	{
 		return p_Param.GetSNI_Value()->DoSquare();

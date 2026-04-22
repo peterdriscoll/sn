@@ -61,6 +61,11 @@ namespace SNI
 		return "|";
 	}
 
+	bool SNI_Or::MultiValued(long p_CalcPos) const
+    {
+		return true;
+    }
+
 	bool SNI_Or::MergeValueSets(SN::SN_Expression* p_ParamList) const
 	{
 		if (p_ParamList[PU2_First].IsKnownValue() && !p_ParamList[PU2_First].AllValuesBoolean())

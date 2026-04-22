@@ -57,6 +57,11 @@ namespace SNI
 		return "&";
 	}
 
+	bool SNI_And::MultiValued(long p_CalcPos) const
+    {
+		return true;
+    }
+
 	SN::SN_Value SNI_And::PrimaryFunctionValue(const SN::SN_Value &p_Left, const SN::SN_Value &p_Right) const
 	{
 		return p_Left.DoAnd(p_Right);

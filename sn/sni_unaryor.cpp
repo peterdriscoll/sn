@@ -42,6 +42,16 @@ namespace SNI
 		return false;
 	}
 
+    bool SNI_UnaryOr::ErrorOnNoDelay() const
+    {
+        return false;
+    }
+
+	bool SNI_UnaryOr::MultiValued(long p_CalcPos) const
+    {
+		return true;
+    }
+
 	SN::SN_Value SNI_UnaryOr::PrimaryFunctionValue(const SN::SN_Value &p_Param) const
 	{
 		return p_Param.GetSNI_Value()->DoUnaryOr();

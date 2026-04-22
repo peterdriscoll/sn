@@ -46,6 +46,15 @@ namespace SNI
 		return 0;
 	}
 
+	bool SNI_SquareRoot::MultiValued(long p_CalcPos) const
+    {
+		if (p_CalcPos == PU1_Result)
+		{
+			return true;
+        }
+		return false;
+    }
+
 	SN::SN_Value SNI_SquareRoot::PrimaryFunctionValue(const SN::SN_Value &p_Param) const
 	{
 		return p_Param.GetSNI_Value()->DoSquareRoot();

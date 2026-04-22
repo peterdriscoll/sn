@@ -19,6 +19,8 @@ namespace SNI
 		virtual std::string DisplaySN(long priority, SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual long GetPriority() const;
 
+		virtual bool MultiValued(long p_CalcPos) const;
+
 		virtual SN::SN_Value PrimaryFunctionValue(const SN::SN_Value &p_Left) const;
 		virtual SN::SN_Value InverseFunctionValue(const SN::SN_Value &p_Param) const;
 		virtual SN::SN_Expression InverseFunctionExpression(const SN::SN_Expression &p_Param) const;

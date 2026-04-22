@@ -42,7 +42,17 @@ namespace SNI
 		return false;
 	}
 
-	SN::SN_Value SNI_UnaryAnd::PrimaryFunctionValue(const SN::SN_Value &p_Param) const
+    bool SNI_UnaryAnd::ErrorOnNoDelay() const
+    {
+        return false;
+    }
+
+	bool SNI_UnaryAnd::MultiValued(long p_CalcPos) const
+    {
+		return true;
+    }
+
+    SN::SN_Value SNI_UnaryAnd::PrimaryFunctionValue(const SN::SN_Value &p_Param) const
 	{
 		return p_Param.GetSNI_Value()->DoUnaryAnd();
 	}

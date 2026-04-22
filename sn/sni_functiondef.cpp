@@ -68,12 +68,21 @@ namespace SNI
 		return true;
 	}
 
+    bool SNI_FunctionDef::ErrorOnNoDelay() const
+    {
+        return true;
+    }
 	bool SNI_FunctionDef::SupportsMultipleOutputs() const
 	{
 		return false;
 	}
 
 	bool SNI_FunctionDef::IgnoreNoConstraint() const
+	{
+		return false;
+	}
+
+	bool SNI_FunctionDef::MultiValued(long p_CalcPos) const
 	{
 		return false;
 	}
@@ -368,8 +377,6 @@ namespace SNI
 	{
 		long depth = GetNumParameters() - 1;
 		SN::SN_Expression *inputList = new SN::SN_Expression[depth];
-		SNI_Frame::Push(this, NULL);
-		SNI_Frame* topFrame = SNI_Frame::Top();
 
 		SNI_DisplayOptions displayOptions(doTextOnly);
 		LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": Start " + DisplayUnify(depth, p_ParamList, p_Source)));
@@ -383,6 +390,8 @@ namespace SNI
 			}
 			return function;
 		}
+		SNI_Frame::Push(this, NULL);
+		SNI_Frame* topFrame = SNI_Frame::Top();
 
 		for (long j = 0; j < depth; j++)
 		{
@@ -602,10 +611,11 @@ namespace SNI
 					{
 						LOG(WriteLine(SN::DebugLevel, "Delayed Call " + GetLogDescription(inputList)));
 						SNI_User::GetCurrentUser()->GetDelayedProcessor()->Delay(SN::SN_FunctionDef(dynamic_cast<SNI_FunctionDef*>(this)), GetNumParameters(), inputList, p_Source);
+						e = SN::SN_Error(true, true, GetTypeName()+": Max cardinality exceeded, and the call has been delayed.");
 					}
 					else
 					{
-						e = SN::SN_Error(true, true, GetTypeName()+": Max cardinality exceeded, and delayed call not allowed.");
+						e = SN::SN_Error(!ErrorOnNoDelay(), true, GetTypeName()+": Max cardinality exceeded, and delayed call not allowed.");
 					}
 				}
 				else

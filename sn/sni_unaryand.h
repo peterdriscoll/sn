@@ -21,6 +21,8 @@ namespace SNI
 
 		virtual bool IgnoreNoConstraint() const;
 		virtual bool AllowDelay() const;
+		virtual bool ErrorOnNoDelay() const;
+	    virtual bool MultiValued(long p_CalcPos) const;
 
 		virtual SN::SN_Value PrimaryFunctionValue(const SN::SN_Value &p_Param) const;
 		virtual SN::SN_Value InverseFunctionValue(const SN::SN_Value & p_Param) const;

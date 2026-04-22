@@ -78,8 +78,10 @@ namespace SNI
 		virtual std::string GetDebugId() const;
 
 		virtual bool AllowDelay() const;
+		virtual bool ErrorOnNoDelay() const;
 		virtual bool SupportsMultipleOutputs() const;
 		virtual bool IgnoreNoConstraint() const;
+        virtual bool MultiValued(long p_CalcPos) const;
 		virtual long GetNumParameters() const;
 
 		virtual bool Equivalent(SNI_Object * p_Other) const;
