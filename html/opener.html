@@ -1,24 +1,64 @@
-<!doctype html>
-<meta charset="utf-8">
-<script>
-    const target = new URL(location.href).searchParams.get('target') || '/skynetjs.html';
-    const w = window.open(target, 'skynet_dash');   // script-opens the dashboard
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Skynet Launcher</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            padding-top: 50px;
+            background: #1a1a1a;
+            color: #ccc;
+        }
 
-    if (w) {
-        try { w.focus(); } catch { }
-        // optional: close the stub shortly after
-        setTimeout(() => { try { window.close(); } catch { } }, 200);
-    } else {
-        // Popup blocked: show one-click fallback (user gesture makes it allowed)
-        document.write(`
-      <style>body{font:14px/1.4 system-ui;padding:24px}</style>
-      <h3>Open dashboard</h3>
-      <p>Pop-up was blocked. Click to continue.</p>
-      <button id="go">Open</button>
-    `);
-        document.getElementById('go').onclick = () => {
-            const w2 = window.open(target, 'skynet_dash');
-            if (w2) { try { w2.focus(); } catch { }; window.close(); }
-        };
-    }
-</script>
+        .btn {
+            padding: 10px 20px;
+            background: #444;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+            .btn:hover {
+                background: #666;
+            }
+    </style>
+</head>
+<body>
+    <div id="status">Launching Skynet Dashboard...</div>
+    <br>
+    <button id="manualBtn" class="btn" style="display:none;" onclick="launch()">Click to Launch Manually</button>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const target = urlParams.get('target') || '/skynetjs.html';
+        let attemptCount = 0;
+
+        function launch() {
+            // Attempt to open the dashboard
+            const dash = window.open(target, 'skynet_dash');
+
+            if (dash) {
+                document.getElementById('status').innerText = "Dashboard opened. Closing launcher...";
+                // Small delay to ensure the browser processes the 'open' before the 'close'
+                setTimeout(() => {
+                    window.open('', '_self', ''); // Chrome trick to "own" the window so it can close
+                    window.close();
+                    // Fallback if window.close() is denied by browser policy
+                    setTimeout(() => {
+                        window.location.replace('about:blank');
+                    }, 500);
+                }, 300);
+            } else {
+                // Popup was blocked
+                document.getElementById('status').innerText = "Popup Blocked! Please click below:";
+                document.getElementById('manualBtn').style.display = "inline-block";
+            }
+        }
+
+        // Try to launch automatically on load
+        window.onload = launch;
+    </script>
+</body>
+</html>
