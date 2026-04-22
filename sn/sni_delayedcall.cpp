@@ -70,6 +70,11 @@ namespace SNI
 			+ "]]";
 		}
 	}
+	
+	bool SNI_DelayedCall::IsComplete() const
+	{
+		return m_Completed;
+	}
 
 	void SNI_DelayedCall::AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map)
 	{
@@ -99,15 +104,12 @@ namespace SNI
 
 	SN::SN_Error SNI_DelayedCall::Run()
 	{
-		if (m_Frame)
-		{
-			SNI_Frame::PushFrame(m_Frame);
-		}
+		if (m_Completed)
+        {
+			return skynet::OK;
+        }
+		m_Completed = true;
 		m_Error = m_Function.GetSNI_FunctionDef()->UnifyArray(m_ParamList, m_Source).GetError();
-		if (m_Frame)
-		{
-			SNI_Frame::Pop();
-		}
 		if (m_Error.IsError())
 		{
 			if (m_World)

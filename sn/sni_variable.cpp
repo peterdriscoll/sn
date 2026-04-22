@@ -703,11 +703,16 @@ namespace SNI
 				m_Value = p_Value.GetSNI_Expression();
 				SNI_Thread::GetThread()->RegisterChange(dynamic_cast<SNI_Variable *>(this));
 				REQUESTPROMOTION(m_Value);
+				SN::SN_Error err;
 				if (call)
 				{
-					SNI_User::GetCurrentUser()->GetDelayedProcessor()->Request(call);
+                    err = call->Run();
+					if (err.IsError())
+					{
+						m_Value = call;
+					}
 				}
-				return skynet::OK;
+				return err;
 			}
 
 			return m_Value->AssertValue(p_Value);

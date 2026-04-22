@@ -43,6 +43,9 @@ namespace SNI
 
 		virtual std::string GetTypeName() const;
 		virtual std::string DisplaySN(long, SNI_DisplayOptions &) const;
+		
+		virtual bool IsComplete() const;
+
 		virtual void AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map);
 
 		virtual size_t CallCardinality() const;
@@ -73,6 +76,7 @@ namespace SNI
 		bool                  m_Locked;
 		SN::SN_Error          m_Error;
 		bool				  m_Scheduled;
+		bool                  m_Completed=false;
 		SNI_Frame             *m_Frame;
 
 	public:

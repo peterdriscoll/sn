@@ -59,7 +59,6 @@ namespace SNI
 		{
 			Request(call);
 		}
-		SNI_Thread::GetThread()->Breakpoint(SN::DebugStop, SN::DelayId, "Delay Processor", "Delayed call", p_Source, SN::WarningPoint);
 	}
 
 	void SNI_DelayedProcessor::DelayCall(SNI_DelayedCall * p_Call, SNI_World * p_World)
@@ -181,13 +180,6 @@ namespace SNI
 				{
 					loopCall->ExpandedBooleanResult();
 					size_t loopCard = loopCall->CallCardinality();
-					SNI_Thread *thread = SNI_Thread::GetThread();
-					if (thread)
-					{
-						m_SearchLock.unlock();
-						thread->Breakpoint(SN::DebugStop, (SN::BreakId)id++, "Delayed", "Search min cardinality " + std::to_string(loopCard) + "<" + std::to_string(card), NULL, SN::DelayedPoint);
-						m_SearchLock.lock();
-					}
 					if (loopCard < card)
 					{
 						call = loopCall;
@@ -210,6 +202,11 @@ namespace SNI
 					// Erase before calling Run(), as call->Run() may modify m_DelayedCallList
 					it = m_DelayedCallList.erase(it);
 					m_SearchLock.unlock();
+				}
+				SNI_Thread *thread = SNI_Thread::GetThread();
+				if (thread)
+				{
+					thread->Breakpoint(SN::DebugStop, (SN::BreakId)id++, "Run delayed", "Min cardinality found is " + std::to_string(card), NULL, SN::DelayedPoint);
 				}
 				e = call->Run();
 				if (e.IsError())
@@ -254,11 +251,14 @@ namespace SNI
 		long id = 0;
 		for (SNI_DelayedCall *call : m_DelayedCallList)
 		{
-			p_Stream << delimeter << "\t{\n";
-			p_Stream << "\t\t\"id\" : \"" << id++ << "\",\n";
-			call->WriteJSON(p_Stream, p_DisplayOptions);
-			p_Stream << "\t}";
-			delimeter = ",\n";
+			if (!call->IsComplete() && !call->EmptyWorld())
+            {
+				p_Stream << delimeter << "\t{\n";
+				p_Stream << "\t\t\"id\" : \"" << id++ << "\",\n";
+				call->WriteJSON(p_Stream, p_DisplayOptions);
+				p_Stream << "\t}";
+				delimeter = ",\n";
+			}
 		}
 		m_SearchLock.unlock();
 		p_Stream << "\n]}\n";
@@ -266,7 +266,15 @@ namespace SNI
 
 	size_t SNI_DelayedProcessor::CountDelayedCalls()
 	{
-		return m_DelayedCallList.size();
+		size_t count = 0;
+		for (SNI_DelayedCall *call : m_DelayedCallList)
+		{
+			if (!call->IsComplete() && !call->EmptyWorld())
+            {
+				++count;
+			}
+		}
+		return count;
 	}
 
 	// Create a delayed call and link it in as the value of the variables..
@@ -289,7 +297,7 @@ namespace SNI
 			m_SearchLock.lock();
 			m_DelayedCallList.push_back(call);
 			m_SearchLock.unlock();
-			if (call->IsCallRequested())
+			if (call && call->IsCallRequested())
 			{
 				Request(call);
 			}
