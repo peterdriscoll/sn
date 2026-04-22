@@ -154,7 +154,7 @@ namespace SNI
 
 		bool m_AutoExpandNull;
 		bool m_BlankDisplayDelayedCall = true;
-        bool m_ApplyOverride = true;
+        bool m_ApplyOverride = false;
 
 		// Console
 		bool m_HasConsole;

@@ -38,6 +38,7 @@ namespace test_sn
 			{
 				Manager manager("Test Override Function Call Operator", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
+				manager.SetApplyOverride(true);
 
 				SN_DECLARE(testCall);
 				{
@@ -65,6 +66,7 @@ namespace test_sn
 				Manager manager("Test Simple State Threading", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 				manager.SetTailCallOptimization(true);
+				manager.SetApplyOverride(true);
 
 				std::string nv1;
 				std::string nw1;
@@ -102,6 +104,7 @@ namespace test_sn
 			{
 				Manager manager("Test Simple State Threading 2", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
+				manager.SetApplyOverride(true);
 
 				std::string s2 = User::GetOperators().ImperativeCall.DisplayValueSN();
 				SN_DECLARE(y);
@@ -122,6 +125,7 @@ namespace test_sn
 			{
 				Manager manager("Test Simple Assignment", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
+				manager.SetApplyOverride(true);
 
 				std::string s2 = User::GetOperators().ImperativeCall.DisplayValueSN();
 				SN_DECLARE(y);
@@ -145,6 +149,7 @@ namespace test_sn
 			{
 				Manager manager("Test Assignment", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
+				manager.SetApplyOverride(true);
 
 				{
 					/*
