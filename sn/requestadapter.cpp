@@ -217,7 +217,7 @@ namespace SNI
     }
     RequestAdapter::Reply RequestAdapter::DelayedJson() 
     { 
-        return { m_thr->DelayedJS(doDebugPointsJS), "json" };
+        return { m_user->DelayedJS(doDebugPointsJS), "json" };
     }
 
     /*static*/ const std::unordered_map<std::string_view, RequestAdapter::Handler>& RequestAdapter::routes()

@@ -95,7 +95,6 @@ namespace SNI
 		std::string CodeJS(long p_MaxLogEntries, long p_StartCode, long p_StepCount, enum DisplayOptionType p_OptionType);
 		std::string ErrorJS(enum DisplayOptionType p_OptionType);
 		std::string WorldSetsJS(DisplayOptionType p_OptionType);
-		std::string DelayedJS(DisplayOptionType p_OptionType);
 
 		void Lock();
 		void Unlock();
@@ -135,6 +134,11 @@ namespace SNI
 
 		long GetDefineId();
 		void UpdateIncrementId();
+
+        void RegisterWorldSet(SNI_WorldSet *p_WorldSet);
+        void RemoveWorldSet(SNI_WorldSet *p_WorldSet);
+
+        SNI_WorldSetMap *GetWorldSetMap();
 
 		SNI_WorldSetList *GetWorldSetChanged();
 		SNI_WorldSetMap * GetWorldSetProcessMap();
@@ -202,6 +206,7 @@ namespace SNI
 
 		SNI_WorldSetList *m_WorldSetChangedList;
 		SNI_WorldSetMap *m_WorldSetProcessMap;
+		SNI_WorldSetMap m_WorldSetMap;
 
 		bool m_CodeBreakScheduled;
 		SNI_DelayedProcessor *m_Processor;

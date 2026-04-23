@@ -74,19 +74,12 @@
                         <li>
                             <button title='Rerun current command' ng-click='submit("rerunjs")'>Rerun</button>
                         </li>
-                        <li class="dropdown">
-                            <button title='Goto step count' ng-click="gotostepcountsetfocus()" data-toggle="dropdown">Goto<b class="caret"></b></button>
-                            <ul class="dropdown-menu">
-                                <li class="command">
-                                    <form ng-submit='gotostepcount()' >
-                                        <label>Step count :</label><br />
-                                        <input id='stepcountid' type='number' ng-change='updatereruncommand()' ng-model='stepcount' name='stepcount'><br />
-                                        <label>Rerun command</label>
-                                        <input type="checkbox" disabled ng-model="reruncommand"><br />
-                                        <input type='submit' value='Run' />
-                                    </form>
-                                </li>
-                            </ul>
+                        <li>
+                            <button type="button"
+                                    title="Jump to specific step"
+                                    ng-click="openGotoDrawer()">
+                                Goto
+                            </button>
                         </li>
                         <li class="dropdown">
                             <button title='Dashboard settings' ng-click='settingssetfocus()' data-toggle="dropdown">Settings<b class="caret"></b></button>
@@ -165,18 +158,49 @@
                     </div>
 
                     <div class='worldsets'>
-                        <details open id='worldsetsid' ng-click='loadworldsets(true)'>
-                            <summary>World Sets - {{ countworldsets }} records</summary>
+                        <details ng-open="isWorldSetsOpen">
+                            <summary ng-click="$event.preventDefault(); loadworldsets(true)">
+                                World Sets - {{ countworldsets }} records
+                                <label style="font-weight: normal; margin-left: 10px;">
+                                    <input type="checkbox" ng-model="worldSetsFilterValueSets" ng-click="$event.stopPropagation()">
+                                    Only Value Sets
+                                    <input type="checkbox" ng-model="worldSetListDisplayAll" ng-click="$event.stopPropagation()">
+                                    Display all
+                                    <button type="button" ng-click="clearAllWorldSets(); $event.stopPropagation()">
+                                        Clear All Flags
+                                    </button>
+                                </label>
+                            </summary>
                             <table class='frame'>
-                                <tr ng-repeat="ws in worldsets">
+                                <tr ng-repeat="ws in worldsets" ng-if="getWorldSetDisplay(ws.id, ws.valueset, ws.worlds)" ng-class="[parentMarkClass(ws.id), childMarkClass(ws.id)]">
+                                    <td>
+                                        {{ws.id}}
+                                    </td>
+                                    <td>
+                                        {{ws.product}}
+                                    </td>
+                                    <td>
+                                        {{ws.contextworld}}
+                                    </td>
+                                    <td>
+                                        <details ng-if="ws.abbreviation">
+                                            <summary>{{ws.abbreviation}}...</summary><p ng-bind-html="trustAsHtml(ws.valueset)" init-bind></p>
+                                        </details>
+                                    </td>
                                     <td>
                                         {{ws.expression}}
                                     </td>
                                     <td>
-                                        <button ng-repeat="w in ws.worlds" ng-title='w.breakpoint' ng-click='setbreakpoint(w.breakpoint)' ng-class='breakpointdefaultclass(w.breakpoint, w.reason)'>{{w.condition}}</button>
+                                        <button ng-repeat="w in ws.worlds" ng-title='w.id' ng-click='toggleWorld(w.id, ws.id)' ng-class='worldClass(w.id)'>{{w.breakpoint}}</button>
                                     </td>
-                                    <td ng-repeat="cws in ws.childsets">
-                                        <button ng-repeat="u in cws.worlds" ng-title='u.breakpoint' ng-click='setbreakpoint(u.breakpoint)' ng-class='breakpointdefaultclass(u.breakpoint, u.reason)'>{{u.condition}}</button>
+                                    <td>
+                                        <button title='Mark Children'
+                                                ng-click="markChildWorldSets(ws.id, ws.childsets)">
+                                            <i class="fa fa-arrow-down"></i> Mark
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" enabled ng-click="toggleWorldSet(ws.id)" ng-checked="getWorldSet(ws.id)">
                                     </td>
                                 </tr>
                             </table>
@@ -184,8 +208,10 @@
                     </div>
 
                     <div class='delayedcalls'>
-                        <details id='delayedcallsid' ng-click='loaddelayedcalls(true)' open>
-                            <summary>Delayed Calls - {{ countdelayedcalls }} records</summary>
+                        <details ng-open='isDelayedCallsOpen'>
+                            <summary ng-click='$event.preventDefault(); loaddelayedcalls(true)'>
+                                Delayed Calls - {{ countdelayedcalls }} records
+                            </summary>
                             <table class='frame'>
                                 <tr ng-repeat="d in delayedcalls">
                                     <td ng-bind-html="trustAsHtml(d.expression)" init-bind></td>
@@ -382,6 +408,29 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="sidebar-overlay" ng-if="isGotoOpen" ng-click="isGotoOpen = false"></div>
+        <div class="sidebar-drawer" ng-class="{'open': isGotoOpen}">
+            <h3>Goto Step</h3>
+            <hr />
+            <form ng-submit='gotostepcount(); isGotoOpen = false'>
+                <label>Target Step Count:</label>
+                <input id='stepcountid' type='number'
+                       ng-model='stepcount'
+                       ng-change='updatereruncommand()'
+                       ng-focus="$event.target.select()">
+
+                <div style="margin: 15px 0; padding: 10px; border: 1px solid #ddd; background: #fff;">
+                    <label>Rerun required?</label>
+                    <input type="checkbox" disabled ng-model="reruncommand">
+                    <p style="font-size: 0.8em; color: #666;">
+                        (Auto-ticked if jumping backwards or into the future)
+                    </p>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width:100%">Execute Jump</button>
+                <button type="button" ng-click="isGotoOpen = false" style="width:100%; margin-top:10px;">Cancel</button>
+            </form>
         </div>
     </div>
 </body>

@@ -54,6 +54,8 @@ namespace SNI
 		void WriteStepCounts(std::ostream& p_Stream);
 		std::string StepCountJS();
 		void WriteStepCountListJS(std::ostream& p_Stream);
+		size_t CountDelayedCalls();
+		std::string DelayedJS(DisplayOptionType p_OptionType);
 	private:
 		SNI_Transaction* m_Transaction;
 		SNI_DelayedProcessor* m_DelayedProcessor;

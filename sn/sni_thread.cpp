@@ -363,21 +363,6 @@ namespace SNI
 		return ss.str();
 	}
 
-	std::string SNI_Thread::DelayedJS(DisplayOptionType p_OptionType)
-	{
-		stringstream ss;
-		SNI_DisplayOptions displayOptions(p_OptionType);
-		if (m_Processor)
-		{
-			m_Processor->WriteJSON(ss, displayOptions);
-		}
-		else
-		{
-			ss << "{\"records\":[]}\n";
-		}
-		return ss.str();
-	}
-
 	std::string SNI_Thread::Skynet(enum DisplayOptionType p_OptionType)
 	{
 		stringstream ss;
@@ -408,6 +393,20 @@ namespace SNI
 	void SNI_Thread::UpdateIncrementId()
 	{
 		m_DefineId++;
+	}
+
+	void SNI_Thread::RegisterWorldSet(SNI_WorldSet *p_WorldSet)
+    {
+		m_WorldSetMap[p_WorldSet->GetWorldSetNo()] = p_WorldSet;
+    }
+	void SNI_Thread::RemoveWorldSet(SNI_WorldSet *p_WorldSet)
+    {
+		m_WorldSetMap.erase(p_WorldSet->GetWorldSetNo());
+    }
+
+	SNI_WorldSetMap *SNI_Thread::GetWorldSetMap()
+	{
+		return &m_WorldSetMap;
 	}
 
 	SNI_WorldSetList *SNI_Thread::GetWorldSetChanged()
@@ -1074,7 +1073,7 @@ namespace SNI
 
 		p_Stream << "\t\"countcalls\" : " << CountCalls() << ",\n";
 		p_Stream << "\t\"countframes\" : " << m_FrameList.size() << ",\n";
-		p_Stream << "\t\"countdelayedcalls\" : " << CountDelayedCalls() << ",\n";
+		p_Stream << "\t\"countdelayedcalls\" : " << m_User->CountDelayedCalls() << ",\n";
 		p_Stream << "\t\"countworldsets\" : " << CountWorldSets() << ",\n";
 		p_Stream << "\t\"countlogentries\" : " << CountLogEntries() << ",\n";
 		p_Stream << "\t\"countcodeentries\" : " << CountCodeEntries() << "\n";
@@ -1154,6 +1153,7 @@ namespace SNI
 		{
 			f->AddVariables(watchList);
 		}
+		GetUser()->GetDelayedProcessor()->AddVariables(0, watchList);
 		Unlock();
 		p_Stream << "{\n";
 		p_Stream << "\"records\":[\n";
@@ -1193,11 +1193,11 @@ namespace SNI
 	void SNI_Thread::WriteWorldSetsJS(std::ostream &p_Stream, SNI_DisplayOptions &p_DisplayOptions)
 	{
 		p_Stream << "{\"records\":[\n";
-		if (m_WorldSetProcessMap)
+		if (&m_WorldSetMap)
 		{
 			std::string delimeter = "";
 			Lock();
-			for (const auto &pair : *m_WorldSetProcessMap)
+			for (const auto &pair : m_WorldSetMap)
 			{
 				SNI_WorldSet *ws = pair.second;
 				p_Stream << delimeter << "\t{\n";
@@ -1221,9 +1221,9 @@ namespace SNI
 	
 	size_t SNI_Thread::CountWorldSets()
 	{
-		if (m_WorldSetProcessMap)
+		if (GetWorldSetMap())
 		{
-			return m_WorldSetProcessMap->size();
+			return GetWorldSetMap()->size();
 		}
 		return 0;
 	}

@@ -397,14 +397,41 @@ namespace test_sn
 				Manager manager("Test Or Reversed 4 With Solve", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
+				SN_DECLARE(v);
+				SN_DECLARE(vs);
+				(Long(6) == v + Long(3) || Long(8) == v + Long(4)).Assert().Do();
+				(vs == (Long(3) || Long(4))).Assert().Do();
+				std::string v_string = v.DisplayValueSN();
+				std::string v_valueset = v.DoEvaluate().DisplaySN();
+				std::string v_buildset = v.BuildSet().DoEvaluate().DisplaySN();
+				std::string vs_buildset = vs.BuildSet().DoEvaluate().DisplaySN();
+				(v.BuildSet() == (Long(3) || Long(4)).BuildSet()).Evaluate().Do().CheckValue();
+				Assert::IsTrue(v_buildset == vs_buildset);
+                manager.Breakpoint();
+
+				SN_DECLARE(w);
+				SN_DECLARE(ws);
+				(Long(6) == w + Long(3) || Long(8) == w + Long(4) || Long(10) == w + Long(5)).Assert().Do();
+				(ws == (Long(3) || Long(4) || Long(5))).Assert().Do();
+				std::string w_string = w.DisplaySN();
+				std::string w_valueset = w.DoEvaluate().DisplaySN();
+				std::string w_buildset = w.BuildSet().DoEvaluate().DisplaySN();
+				std::string ws_buildset = ws.BuildSet().DoEvaluate().DisplaySN();
+				(w.BuildSet() == (Long(3) || Long(4) || Long(5)).BuildSet()).Evaluate().Do().CheckValue();
+				Assert::IsTrue(w_buildset == ws_buildset);
+				manager.Breakpoint();
+
 				SN_DECLARE(x);
+				SN_DECLARE(xs);
 				(Long(6) == x + Long(3) || Long(8) == x + Long(4) || Long(10) == x + Long(5) || Long(12) == x + Long(6)).Assert().Do();
+				(xs == (Long(3) || Long(4) || Long(5) || Long(6))).Assert().Do();
 				std::string x_string = x.DisplaySN();
 				std::string x_valueset = x.DoEvaluate().DisplaySN();
 				std::string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
-
+				std::string xs_buildset = xs.BuildSet().DoEvaluate().DisplaySN();
 				(x.BuildSet() == (Long(3) || Long(4) || Long(5) || Long(6)).BuildSet()).Evaluate().Do().CheckValue();
-				std::cout << x.DisplaySN();
+				Assert::IsTrue(x_buildset == xs_buildset);
+				manager.Breakpoint();
 			}
 			Cleanup();
 		}

@@ -64,6 +64,10 @@ namespace SNI
 		std::string DisplayWorlds(SNI_DisplayOptions & p_DisplayOptions) const;
 		std::string DisplayVariable(SNI_DisplayOptions & p_DisplayOptions) const;
 		std::string DisplayCondition(SNI_DisplayOptions & p_DisplayOptions, const SN::SN_Expression &p_Value) const;
+        std::string DisplayProduct() const;
+        std::string DisplayNameTree() const;
+		std::string DisplayFlattened() const;
+		void GetUniqueLeafNames(std::set<std::string>& leafNames) const;
 		void WriteJSON(std::ostream & p_Stream, const std::string &tabs, SNI_DisplayOptions & p_DisplayOptions) const;
 		void WriteUnmarkedJS(std::ostream & p_Stream, const std::string &tabs, SNI_DisplayOptions & p_DisplayOptions) const;
 		std::string LogHeading(SN::LogContext &context, long p_Width) const;
@@ -128,6 +132,7 @@ namespace SNI
 		long m_NextWorldNo;
 		SN::SN_Expression m_Expression;
 		std::string m_ExpressionString;
+		SN::SN_Expression m_ValueSet;
 	};
 }
 

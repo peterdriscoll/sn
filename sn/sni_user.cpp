@@ -180,4 +180,28 @@ namespace SNI
 		}
 		p_Stream << "\n]}\n";
 	}
+
+	size_t SNI_User::CountDelayedCalls()
+	{
+		if (m_DelayedProcessor)
+		{
+			return m_DelayedProcessor->CountDelayedCalls();
+		}
+		return 0;
+	}
+
+	std::string SNI_User::DelayedJS(DisplayOptionType p_OptionType)
+	{
+		stringstream ss;
+		SNI_DisplayOptions displayOptions(p_OptionType);
+		if (m_DelayedProcessor)
+		{
+			m_DelayedProcessor->WriteJSON(ss, displayOptions);
+		}
+		else
+		{
+			ss << "{\"records\":[]}\n";
+		}
+		return ss.str();
+	}
 }

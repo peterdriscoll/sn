@@ -45,6 +45,7 @@ namespace SNI
 		, m_NextWorldNo(0)
 		, m_ContextWorld(SNI_Thread::GetThread()->ContextWorld())
 	{
+        SNI_Thread::GetThread()->RegisterWorldSet(this);
 	}
 
 	SNI_WorldSet::SNI_WorldSet(const SN::SN_Expression &p_Expression)
@@ -55,11 +56,12 @@ namespace SNI
 		, m_ContextWorld(SNI_Thread::GetThread()->ContextWorld())
 	{
 		AttachExpression(p_Expression);
+        SNI_Thread::GetThread()->RegisterWorldSet(this);
 	}
 
 	SNI_WorldSet::~SNI_WorldSet()
 	{
-
+        SNI_Thread::GetThread()->RemoveWorldSet(this);
 	}
 
 	long SNI_WorldSet::GetWorldSetNo()
@@ -128,10 +130,81 @@ namespace SNI
 		return DisplayShort() + "=" + p_Value.DisplaySN(p_DisplayOptions);
 	}
 
+	std::string SNI_WorldSet::DisplayProduct() const
+	{
+		if (m_ChildSetList.empty())
+        {
+			// For leaves, we still might want the underlying logic (Split Var/Value)
+			return DisplayShort(); 
+		}
+
+		std::string result;
+		std::string divider;
+		for (const SNI_WorldSet* child : m_ChildSetList)
+        {
+			result+= divider + child->DisplayNameTree();
+			divider = "&";
+		}
+		return result;
+	}
+
+	std::string SNI_WorldSet::DisplayNameTree() const
+	{
+		std::string result = DisplayShort();
+		if (!m_ChildSetList.empty())
+        {
+			result += "(" + DisplayProduct() + ")";
+		}
+		return result;
+	}
+
+	// Recursively find unique leaves
+	std::string SNI_WorldSet::DisplayFlattened() const
+	{
+		if (m_ChildSetList.empty())
+        {
+			// For leaves, we still might want the underlying logic (Split Var/Value)
+			return DisplayShort(); 
+		}
+
+		std::set<std::string> uniqueLeaves;
+		GetUniqueLeafNames(uniqueLeaves);
+
+		std::string result;
+		for (auto it = uniqueLeaves.begin(); it != uniqueLeaves.end(); ++it)
+		{
+			if (it != uniqueLeaves.begin())
+			{
+				result += "*";
+			}
+			result += *it;
+		}
+
+		return result;
+	}
+
+	void SNI_WorldSet::GetUniqueLeafNames(std::set<std::string>& leafNames) const
+	{
+		if (m_ChildSetList.empty())
+		{
+			leafNames.insert(this->DisplayShort());
+		}
+		else
+		{
+			for (const SNI_WorldSet* child : m_ChildSetList)
+			{
+				child->GetUniqueLeafNames(leafNames);
+			}
+		}
+	}
 	void SNI_WorldSet::WriteJSON(std::ostream &p_Stream, const std::string &tabs, SNI_DisplayOptions & p_DisplayOptions) const
 	{
 		p_Stream << tabs << "\"id\" : \"" << DisplayShort() << "\",\n";
-		p_Stream << tabs << "\"expression\" : \"" << EscapeStringToJSON(m_Expression.DisplaySN()) << "\",\n";
+		p_Stream << tabs << "\"product\" : \"" << DisplayProduct() << "\",\n";
+		p_Stream << tabs << "\"expression\" : \"" << EscapeStringToJSON(m_Expression.DisplaySN(p_DisplayOptions)) << "\",\n";
+		p_Stream << tabs << "\"valueset\" : \"" << EscapeStringToJSON(m_ValueSet.DisplaySN(p_DisplayOptions)) << "\",\n";
+		p_Stream << tabs << "\"abbreviation\" : \"" << EscapeStringToJSON(m_ValueSet.DisplaySN()).substr(0, 15) << "\",\n";
+		p_Stream << tabs << "\"contextworld\" : \"" << (m_ContextWorld?m_ContextWorld->DisplayFlattened():std::string("")) << "\",\n";
 		p_Stream << tabs << "\"worlds\" : [";
 		std::string delimeter;
 		for (const SNI_World *w : m_WorldList)
@@ -149,6 +222,16 @@ namespace SNI
 		p_Stream << tabs << "\"childsets\" : [";
 		delimeter = "";
 		for (const SNI_WorldSet *ws : m_ChildSetList)
+		{
+			p_Stream << delimeter << "\n" << tabs << "\t{\n";
+			ws->WriteUnmarkedJS(p_Stream, tabs + "\t\t", p_DisplayOptions);
+			p_Stream << tabs << "\t}";
+			delimeter = ",";
+		}
+		p_Stream <<"\n" << tabs << "],\n";
+		p_Stream << tabs << "\"parentsets\" : [";
+		delimeter = "";
+		for (const SNI_WorldSet *ws : m_ParentSetList)
 		{
 			p_Stream << delimeter << "\n" << tabs << "\t{\n";
 			ws->WriteUnmarkedJS(p_Stream, tabs + "\t\t", p_DisplayOptions);
@@ -421,6 +504,7 @@ namespace SNI
 		}
 		return NULL;
 	}
+	
 	bool SNI_WorldSet::IsComplete()
 	{
 		if (!m_Complete)

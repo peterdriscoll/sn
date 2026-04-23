@@ -28,7 +28,7 @@ angular.module('skynetApp')
         var timer = $interval(ping, PERIOD_MS);
     }]);
 
-app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $window, $document, hotkeys) {
+app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $interval, $window, $document, hotkeys) {
     $scope.trustAsHtml = $sce.trustAsHtml;
     $scope.threadnum = 0;
     $scope.currentstepcount = 0;
@@ -47,6 +47,8 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
 
     $scope.debugstop = $scope.debugstopoptions[6];
 
+    $scope.stepcounts = { "threadnum": "0", "stepcount": "1" };
+    
     // Default settings
     $scope.stepcount = 0;
     $scope.maxderivation = 30;
@@ -83,23 +85,34 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
     $scope.countcalls = 0;
     $scope.countframes = 0;
     $scope.countdelayedcalls = 0;
+    $scope.isDelayedCallsOpen = false;
     $scope.countworldsets = 0;
+    $scope.isWorldSetsOpen = false;
     $scope.countlogentries = 0;
     $scope.countcodeentries = 0;
 
     // Protect against requesting data again before data is retrieved.
     $scope.scheduled = 0;
 
+    $scope.isRequestPending = false;
+
+    $scope.worldSetMap = {};
+    $scope.isMapReady = false;
+    $scope.isGotoOpen = false; // Drawer is closed by default
     // Load the error history.
     $scope.loadthreadstepcounts = function () {
-        $http.get(home + "stepcount.json")
-            .then(function (response) { $scope.stepcounts = response.data.records; });
+        $http.get(home + "stepcount.json" + '?time=' + new Date().getTime())
+            .then(function (response) {
+                $scope.stepcounts = response.data.records;
+            }).catch(function (err) {
+                console.error("Stepcount first load failed:", err);
+            }); 
     };
 
     // Load the error history.
     $scope.loaderrors = function () {
         $scope.errorstepcount = $scope.currentstepcount;
-        $http.get(home + 'error.json?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxcode)
+        $http.get(home + 'error.json?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxcode + '&time=' + new Date().getTime())
             .then(function (response) {
                 $scope.error = response.data;
                 if ($scope.errorstepcount === $scope.currentstepcount) {
@@ -109,20 +122,51 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
     };
 
     // Load the world sets, if the detail for it is open.
-    $scope.loadworldsets = function (opening) {
-        var field = $document[0].getElementById('worldsetsid');
-        if (opening && !field.open || !opening && field.open) {
-            $http.get(home + 'worldsets.json?threadnum=' + $scope.threadnum)
-                .then(function (response) { $scope.worldsets = response.data.records; });
+    $scope.loadworldsets = function (isToggle) {
+        // If it's a manual click, flip the state first
+        if (isToggle) {
+            $scope.isWorldSetsOpen = !$scope.isWorldSetsOpen;
+        }
+
+        // Only fetch if it's now open (either from startup or the toggle)
+        if ($scope.isWorldSetsOpen) {
+            $http.get(home + 'worldsets.json?threadnum=' + $scope.threadnum + '&time=' + new Date().getTime())
+                .then(function (response) {
+                    // 1. Get the records safely
+                    var records = (response.data && response.data.records) ? response.data.records : [];
+                    $scope.worldsets = records;
+
+                    // 2. Clear and rebuild the map
+                    $scope.worldSetMap = {};
+
+                    records.forEach(function (ws) {
+                        if (ws && ws.id) {
+                            $scope.worldSetMap[ws.id] = ws;
+                        }
+                    });
+
+                    $scope.isMapReady = true;
+                    console.log("Map Build Complete. Keys found:", Object.keys($scope.worldSetMap).length);
+                })
+                .catch(function (err) {
+                    console.error("Failed to load worldsets:", err);
+                });
         }
     };
 
     // Load the delayed calls, if the detail for it is open.
-    $scope.loaddelayedcalls = function (opening) {
-        var field = $document[0].getElementById('delayedcallsid');
-        if (opening && !field.open || !opening && field.open) {
-            $http.get(home + 'delayed.json?threadnum=' + $scope.threadnum)
-                .then(function (response) { $scope.delayedcalls = response.data.records; });
+    $scope.loaddelayedcalls = function (isToggle) {
+        // 1. Flip the state if it's a user click
+        if (isToggle) {
+            $scope.isDelayedCallsOpen = !$scope.isDelayedCallsOpen;
+        }
+
+        // 2. Only fetch if it's open (handles startup call and manual toggle)
+        if ($scope.isDelayedCallsOpen) {
+            $http.get(home + 'delayed.json?threadnum=' + $scope.threadnum + '&time=' + new Date().getTime())
+                .then(function (response) {
+                    $scope.delayedcalls = response.data.records;
+                });
         }
     };
 
@@ -136,7 +180,7 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
         }
         if (opening && !field.open || !opening && field.open) {
             if ($scope.startstackframes < $scope.maxstackframes && $scope.startstackframes < $scope.countframes) {
-                $http.get(home + 'stack.json?threadnum=' + $scope.threadnum + '&maxstackframes=' + $scope.bufstackframes + '&startstackframes=' + $scope.startstackframes + "&stepcount=" + $scope.stackstepcount)
+                $http.get(home + 'stack.json?threadnum=' + $scope.threadnum + '&maxstackframes=' + $scope.bufstackframes + '&startstackframes=' + $scope.startstackframes + "&stepcount=" + $scope.stackstepcount + '&time=' + new Date().getTime())
                     .then(function (response) {
                         if ($scope.stackstepcount === $scope.currentstepcount && $scope.stackstepcount == response.data.stepcount) {
                             if ($scope.startstackframes === 0) {
@@ -175,7 +219,7 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
             }
             if (opening && !field.open || !opening && field.open) {
                 if ($scope.startcallstackframes < $scope.maxcallstackframes && $scope.startcallstackframes < $scope.countcalls) {
-                    $http.get(home + 'callstack.json?threadnum=' + $scope.threadnum + '&maxcallstackframes=' + $scope.bufcallstackframes + '&startcallstackframes=' + $scope.startcallstackframes + "&stepcount=" + $scope.callstackstepcount)
+                    $http.get(home + 'callstack.json?threadnum=' + $scope.threadnum + '&maxcallstackframes=' + $scope.bufcallstackframes + '&startcallstackframes=' + $scope.startcallstackframes + "&stepcount=" + $scope.callstackstepcount + '&time=' + new Date().getTime())
                         .then(function (response) {
                             if ($scope.callstackstepcount === $scope.currentstepcount && $scope.callstackstepcount == response.data.stepcount) {
                                 if ($scope.startcallstackframes === 0) {
@@ -202,7 +246,7 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
     $scope.loadwatchlist = function (opening) {
         var field = $document[0].getElementById('watchlistid');
         if (opening && !field.open || !opening && field.open) {
-            $http.get(home + 'watchlist.json?threadnum=' + $scope.threadnum)
+            $http.get(home + 'watchlist.json?threadnum=' + $scope.threadnum + '&time=' + new Date().getTime())
                 .then(function (response) { $scope.watchlist = response.data.records; });
         }
     };
@@ -211,7 +255,7 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
     $scope.loadderivations = function (opening) {
         var field = $document[0].getElementById('derivationsid');
         if (opening && !field.open || !opening && field.open) {
-            $http.get(home + 'derivation.json?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxderivation)
+            $http.get(home + 'derivation.json?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.maxderivation + '&time=' + new Date().getTime())
                 .then(function (response) { $scope.derivationhtml = response.data.derivationhtml; });
         }
     };
@@ -226,7 +270,7 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
         }
         if (opening && !field.open || !opening && field.open) {
             if ($scope.startcode < $scope.maxcode && $scope.startcode < $scope.countcodeentries) {
-                $http.get(home + 'code.json?threadnum=' + $scope.threadnum + '&maxcode=' + $scope.bufcode + '&startcode=' + $scope.startcode + "&stepcount=" + $scope.codestepcount)
+                $http.get(home + 'code.json?threadnum=' + $scope.threadnum + '&maxcode=' + $scope.bufcode + '&startcode=' + $scope.startcode + "&stepcount=" + $scope.codestepcount + '&time=' + new Date().getTime())
                     .then(function (response) {
                         if ($scope.codestepcount === $scope.currentstepcount && $scope.codestepcount === response.data.stepcount) {
                             if ($scope.startcode === 0) {
@@ -258,7 +302,7 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
         }
         if (opening && !field.open || !opening && field.open) {
             if ($scope.startlog < $scope.maxlog && $scope.startlog < $scope.countlogentries) {
-                $http.get(home + 'log.json?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.buflog + '&startlog=' + $scope.startlog + "&stepcount=" + $scope.logstepcount)
+                $http.get(home + 'log.json?threadnum=' + $scope.threadnum + '&maxlogentries=' + $scope.buflog + '&startlog=' + $scope.startlog + "&stepcount=" + $scope.logstepcount + '&time=' + new Date().getTime())
                     .then(function (response) {
                         if ($scope.logstepcount === $scope.currentstepcount && $scope.logstepcount === response.data.stepcount) {
                             if ($scope.startlog === 0) {
@@ -282,9 +326,8 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
 
     // Request JSON data sets from the server.
     $scope.loaddata = function () {
-        if (!$scope.closing && !$scope.scheduled) {
-            $scope.scheduled = $scope.scheduled + 1;
-            $http.get(home + 'dashboard.json?threadnum=' + $scope.threadnum)
+        if (!$scope.closing) {
+            $http.get(home + 'dashboard.json?threadnum=' + $scope.threadnum + '&time=' + new Date().getTime())
                 .then(function (response) {
                     $scope.threadnum = response.data.threadnum;
                     $scope.breakpoint = response.data.breakpoint;
@@ -310,11 +353,13 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
 
                     $scope.loaderrors();
                     $scope.loadcallstack(false);
-
-                    if ($scope.closing) {
-                        $timeout(function () { $scope.loaddata(); }, 5000);
-                    } else if ($scope.running) {
-                        $timeout(function () { $scope.loaddata(); }, 2000);
+                    $scope.loadthreadstepcounts();
+                }).catch(function (err) {
+                    $log.error("Main load failed", err);
+                }).finally(function () {
+                    // 4. Schedule the next heartbeat
+                    if ($scope.isrunning) {
+                        $timeout($scope.loaddata, 2000);
                     }
                 });
         }
@@ -326,7 +371,6 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
         $scope.loadderivations(false);
         $scope.loadcode(false);
         $scope.loadlog(false);
-        $scope.loadthreadstepcounts();
         $scope.loaddelayedcalls(false);
         $scope.loadworldsets(false);
         $scope.loadwatchlist(false);
@@ -334,11 +378,46 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
 
     // Request an action from the server.
     $scope.submit = function (action) {
-        $http.get(home + action + '?threadnum=' + $scope.threadnum + '&stackdepth=' + $scope.stackdepth + '&debugstop=' + $scope.debugstop.value + '&breakpoints=' + Array.from($scope.breakpointCol).join(','))
+        $http.get(home + action + '?threadnum=' + $scope.threadnum + '&stackdepth=' + $scope.stackdepth + '&debugstop=' + $scope.debugstop.value + '&breakpoints=' + Array.from($scope.breakpointCol).join(',') + '&time=' + new Date().getTime())
             .then(function (response) {
-                $scope.loaddata();
+                if (action === "runtoendjs") {
+                    $timeout(function () {
+                    window.close();
+                    }, 1000);
+                } else {
+                    $scope.loaddata();
+                }
             });
     };
+
+    $scope.openGotoDrawer = function () {
+        $scope.isGotoOpen = true;
+
+        // We use a small timeout (350ms) to wait for the CSS slide 
+        // animation to finish before grabbing focus.
+        setTimeout(function () {
+            var input = document.getElementById('stepcountid');
+            if (input) {
+                input.focus();
+                input.select();
+            }
+        }, 350);
+    };
+
+    $scope.closeGotoDrawer = function () {
+        $scope.isGotoOpen = false;
+    };
+
+    $scope.heartbeat = function () {
+        if ($scope.isRequestPending || !$scope.isrunning) return;
+
+        $scope.isRequestPending = true;
+
+        $scope.loaddata();
+    };
+
+    // 3. Start a steady 2-second interval
+    $interval($scope.heartbeat, 2000);
 
     hotkeys.add({
         combo: 'd',
@@ -462,12 +541,19 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
 
     // Open/close the goto drop down. On closing, request the server to run to the step count.
     $scope.gotostepcount = function () {
-        $http.get(home + 'gotostepcountjs?threadnum=' + $scope.threadnum + '&stepcount=' + $scope.stepcount)
-            .then(function (response) { $scope.loaddata(); });
+        $http.get(home + 'gotostepcountjs?threadnum=' + $scope.threadnum + '&stepcount=' + $scope.stepcount + '&time=' + new Date().getTime())
+            .then(function (response) { $scope.loaddata(); $scope.loadthreadstepcounts(); });
     };
 
-    $scope.updatereruncommand = function () {
-        $scope.reruncommand = $scope.laststepcount < $scope.stepcount && $scope.stepcount < $scope.currentstepcount;
+    $scope.gotostepcountsetfocus = function () {
+        // Use $timeout to ensure the dropdown has actually rendered before focusing
+        $timeout(function () {
+            var stepCountField = $document[0].getElementById('stepcountid');
+            if (stepCountField) {
+                stepCountField.focus();
+                stepCountField.select(); // This highlights the "0"
+            }
+        }, 100); // 100ms is usually enough for the dropdown transition
     };
 
     // Open/close the settings drop down.
@@ -612,7 +698,144 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $wi
     $scope.getWatchDisplay = function (id) {
         return $scope.watchListDisplayAll || $scope.watchList.has(id);
     }
- 
+    $scope.worldSetListDisplayAll = false;
+    $scope.worldSetList = new Set();
+
+    $scope.toggleWorldSet = function (id) {
+        if ($scope.worldSetList.has(id)) {
+            $scope.worldSetList.delete(id);
+        }
+        else {
+            $scope.worldSetList.add(id);
+        }
+    }
+
+    $scope.setWorldSet = function (id) {
+        if (!$scope.worldSetList.has(id)) {
+            $scope.worldSetList.add(id);
+        }
+    }
+
+    $scope.getWorldSet = function (id) {
+        return $scope.worldSetList.has(id);
+    }
+
+    $scope.getWorldSetDisplay = function (id, valueset, childWorldList) {
+        return ($scope.worldSetListDisplayAll || $scope.getWorldSet(id)) && (!$scope.worldSetsFilterValueSets || valueset);
+    }
+
+    $scope.clearAllWorldSets = function (id) {
+        return $scope.worldSetList.clear();
+    }
+
+    $scope.worldList = new Set();
+
+    $scope.toggleWorld = function (id, setId) {
+        if ($scope.worldList.has(id)) {
+            $scope.worldList.delete(id);
+        }
+        else {
+            $scope.worldList.add(id);
+            $scope.worldSetList.add(setId);
+            if ($scope.isMapReady)
+            {
+                $scope.clearParentMarks();
+                $scope.clearChildMarks();
+
+                var parentSetList = $scope.worldSetMap[setId].parentsets;
+
+                console.log("Parent set", setId, Object.keys(parentSetList).length);
+                parentSetList.forEach(function (worldSet) {
+                    console.log("Parent set id:", worldSet.id);
+
+                    $scope.worldSetList.add(worldSet.id);
+                    $scope.setParentMark(worldSet.id);
+
+                    var childSetList = $scope.worldSetMap[worldSet.id].childsets;
+                    childSetList.forEach(function (worldSet) {
+                        $scope.worldSetList.add(worldSet.id);
+                    });
+                });
+                console.log("Current Parent Marks:", [...$scope.parentMarkSet]);
+            }
+        }
+    }
+
+    $scope.setWorld = function (id) {
+        if (!$scope.worldList.has(id)) {
+            $scope.worldList.add(id);
+        }
+    }
+
+    $scope.getWorld = function (id) {
+        return $scope.worldList.has(id);
+    }
+
+    $scope.worldClass = function (id) {
+        if ($scope.getWorld(id)) {
+            return 'worldset'
+        }
+        return 'worldclear';
+    };
+
+    $scope.parentMarkSet = new Set();
+
+    $scope.setParentMark = function (id) {
+        $scope.parentMarkSet.add(id);
+    }
+
+    $scope.clearParentMarks = function () {
+        $scope.activeParentId = '';
+        $scope.parentMarkSet.clear();
+    }
+
+    $scope.activeParentId = '';
+
+    $scope.parentMarkClass = function (id) {
+        if (id === $scope.activeParentId)
+        {
+            return 'activeparentmark';
+        }
+        if ($scope.parentMarkSet.has(id)) {
+            return 'parentmark';
+        }
+        return '';
+    };
+
+    $scope.childMarkSet = new Set();
+
+    $scope.setChildMark = function (id) {
+        $scope.childMarkSet.add(id);
+    }
+
+    $scope.clearChildMarks = function () {
+        $scope.childMarkSet.clear();
+    }
+
+    $scope.childMarkClass = function (id) {
+        if ($scope.childMarkSet.has(id)) {
+            return 'childmark';
+        }
+        return '';
+    };
+
+    $scope.markChildWorldSets = function (id, childsets) {
+        $scope.worldSetList.add(id);
+        $scope.activeParentId = id;
+
+        // 1. Clear the old state (The "No-Undo" reset)
+        $scope.clearChildMarks();
+
+        // 2. Apply the new state
+        if (childsets && childsets.length > 0) {
+            childsets.forEach(function (childSet) {
+                $scope.setChildMark(childSet.id);
+                $scope.worldSetList.add(childSet.id);
+            });
+        }
+        console.log("Current Child Marks:", [...$scope.childMarkSet]);
+    };
+
     $scope.selectedvar = '';
     $scope.selectvar = function (name) {
         if ($scope.selectedvar === name) {

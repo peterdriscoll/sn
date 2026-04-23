@@ -60,12 +60,12 @@ namespace SNI
 
 	std::string SNI_World::DisplayShortJS() const
 	{
-		return MakeBreakPointJS(DisplayShort(), SN::ErrorId);
+		return MakeBreakPointJS(DisplayFlattened(), SN::ErrorId);
 	}
 
 	std::string SNI_World::DisplaySN(SNI_DisplayOptions & p_DisplayOptions)
 	{
-		return DisplayConditionSN(p_DisplayOptions);
+		return DisplayFlattenedSN(p_DisplayOptions);
 	}
 
 	std::string SNI_World::DisplayCondition(SNI_DisplayOptions & p_DisplayOptions) const
@@ -82,32 +82,43 @@ namespace SNI
 		{
 			for (SNI_World *w : m_ChildList)
 			{
-				if (!result.empty())
-				{
-					result += "&&";
-				}
-				result += w->DisplayShort();
+				if (!w->IsEmpty())
+                {
+					if (!result.empty())
+					{
+						result += "&";
+					}
+					result += w->DisplayShort();
+                }
 			}
 		}
 		std::string negated;
 		for (SNI_World *w : m_NegatedList)
 		{
-			if (!negated.empty())
-			{
-				negated += "&&";
+			if (!w->IsEmpty())
+            {
+				if (!negated.empty())
+				{
+					negated += "&";
+				}
+				negated += w->DisplayShort();
 			}
-			negated += w->DisplayShort();
 		}
 		if (!negated.empty())
 		{
-			negated = "&& !(" + negated + ")";
+			negated = "& !(" + negated + ")";
 		}
 		return DisplayShort() + "=" + result + negated;
 	}
 
 	std::string SNI_World::DisplayConditionSN(SNI_DisplayOptions & p_DisplayOptions) const
 	{
-		return 	SetBreakPoint(DisplayCondition(p_DisplayOptions), p_DisplayOptions);
+		return 	SetWorldDisplay(DisplayCondition(p_DisplayOptions), p_DisplayOptions);
+	}
+
+	std::string SNI_World::DisplayFlattenedSN(SNI_DisplayOptions & p_DisplayOptions) const
+	{
+		return 	SetWorldDisplay(DisplayFlattened(), p_DisplayOptions);
 	}
 
 	std::string SNI_World::DisplaySNChildWorlds(SNI_DisplayOptions & p_DisplayOptions) const
@@ -127,25 +138,68 @@ namespace SNI
 		return result;
 	}
 
-	std::string SNI_World::SetBreakPoint(const std::string &p_Caption, SNI_DisplayOptions & p_DisplayOptions) const
+	std::string SNI_World::SetWorldDisplay(const std::string& p_Caption, SNI_DisplayOptions& p_DisplayOptions) const
 	{
 		switch (p_DisplayOptions.GetDebugHTML())
 		{
-		case doTextOnly:
-			if (p_Caption == "~" || p_Caption == ";" || p_Caption == "end")
+			case doTextOnly:
+				return p_Caption;
+			case doDebugPointsHTML:
+				return p_Caption;
+			case doDebugPointsJS:
 			{
-				return "";
-			}
-			return p_Caption;
-		case doDebugPointsHTML:
-			return p_Caption;
-		case doDebugPointsJS:
-		{
-			std::string breakPoint = DisplayShortJS();
-			return "<button title='" + breakPoint + "' ng-click='setbreakpoint(" + breakPoint + ")' ng-class='breakpointdefaultclass(" + breakPoint + ", \""+ Reason() + "\")'>" + p_Caption + "</button>";
-		}
+				std::string id = DisplayShort();
+				std::string setId = GetWorldSet()->DisplayShort();
+                return "<button title='" + id + "' ng-click=\"toggleWorld('" + id + "','" + setId + "')\" ng-class=\"worldClass('" + id + "')\">" + p_Caption + "</button>";			}
 		}
 		return "";
+	}
+
+	// Recursively find unique leaves
+	void SNI_World::GetUniqueLeafNames(std::set<std::string>& leafNames) const
+	{
+		if (m_ChildList.empty())
+		{
+            if (!IsEmpty())
+            {
+                leafNames.insert(this->DisplayShort());
+            }
+            else
+            {
+                leafNames.insert(this->DisplayShort()+"*");
+            }
+		}
+		else
+		{
+			for (const SNI_World* child : m_ChildList)
+			{
+				child->GetUniqueLeafNames(leafNames);
+			}
+		}
+	}
+
+	std::string SNI_World::DisplayFlattened() const
+	{
+		if (m_ChildList.empty())
+		{
+			// For leaves, we still might want the underlying logic (Split Var/Value)
+			return DisplayShort(); 
+		}
+
+		std::set<std::string> uniqueLeaves;
+		GetUniqueLeafNames(uniqueLeaves);
+
+		std::string result;
+		for (auto it = uniqueLeaves.begin(); it != uniqueLeaves.end(); ++it)
+		{
+			if (it != uniqueLeaves.begin())
+			{
+				result += "&";
+			}
+			result += *it;
+		}
+
+		return DisplayShort()+"("+result+")";
 	}
 
 	std::string SNI_World::LogText(SN::LogContext &context, long p_Width) const
@@ -163,7 +217,7 @@ namespace SNI
 	void SNI_World::WriteJSON(std::ostream & p_Stream, const std::string & tabs, SNI_DisplayOptions &p_DisplayOptions) const
 	{
 		p_Stream << tabs << "\t\"id\" : \"" << DisplayShort() << "\",\n";
-		p_Stream << tabs << "\t\"breakpoint\" : " << DisplayShortJS() << ",\n";
+		p_Stream << tabs << "\t\"breakpoint\" : \"" << DisplayFlattenedSN(p_DisplayOptions) << "\",\n";
 		p_Stream << tabs << "\t\"expression\" : \"" << EscapeStringToJSON(m_Value.DisplaySN(p_DisplayOptions)) << "\",\n";
 		p_Stream << tabs << "\t\"condition\" : \"" << EscapeStringToJSON(DisplayCondition(p_DisplayOptions)) << "\",\n";
 		p_Stream << tabs << "\t\"empty\" : " << (IsEmpty() ? "true" : "false") << ",\n";
@@ -181,7 +235,7 @@ namespace SNI
 		REQUESTPROMOTION(m_CloneParent);
 	}
 
-	SNI_WorldSet * SNI_World::GetWorldSet()
+	SNI_WorldSet * SNI_World::GetWorldSet() const
 	{
 		return m_WorldSet;
 	}
@@ -368,6 +422,7 @@ namespace SNI
 		}
 
 		MarkEmpty(p_Reason);
+		SNI_Thread::GetThread()->Breakpoint(SN::InfoStop, SN::CallId, "", "Check dependencies", NULL, SN::MirrorPoint);
 		if (m_WorldSet)
 		{
 			return SNI_Thread::GetThread()->CheckForFails();

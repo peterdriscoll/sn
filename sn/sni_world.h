@@ -8,6 +8,8 @@
 
 #include <vector>
 #include <unordered_map>
+#include <set>
+
 namespace SN
 {
 	class LogContext;
@@ -61,7 +63,10 @@ namespace SNI
 		std::string DisplayCondition(SNI_DisplayOptions & p_DisplayOptions) const;
 		std::string DisplayConditionSN(SNI_DisplayOptions & p_DisplayOptions) const;
 		std::string DisplaySNChildWorlds(SNI_DisplayOptions & p_DisplayOptions) const;
-		std::string SetBreakPoint(const std::string & p_Caption, SNI_DisplayOptions & p_DisplayOptions) const;
+        std::string DisplayFlattened() const;
+        std::string DisplayFlattenedSN(SNI_DisplayOptions &p_DisplayOptions) const;
+        std::string SetWorldDisplay(const std::string &p_Caption, SNI_DisplayOptions &p_DisplayOptions) const;
+        void GetUniqueLeafNames(std::set<std::string> &leafNames) const;
 		std::string LogText(SN::LogContext & context, long p_Width) const;
 		void WriteJSON(std::ostream &p_Stream, const std::string &tabs, SNI_DisplayOptions & p_DisplayOptions) const;
 
@@ -93,7 +98,7 @@ namespace SNI
 		void BreakPointIfDeleted();
 		void DeleteEmptyFromNegatedMap();
 
-		SNI_WorldSet *GetWorldSet();
+		SNI_WorldSet *GetWorldSet() const;
 
 	private:
 		std::string Reason() const;

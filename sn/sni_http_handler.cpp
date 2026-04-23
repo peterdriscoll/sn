@@ -213,7 +213,7 @@ namespace SNI
 			}
 			else if (path == "/delayed.json")
 			{
-				m_response_data = l_thread->DelayedJS(debugJS);
+				m_response_data = l_user->DelayedJS(debugJS);
 			}
 			else
 			{
