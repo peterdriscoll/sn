@@ -1,0 +1,33 @@
+<html ng-app="testinteligenteditingApp">
+<head>
+    <title>Test Intelligent Editing</title>
+    <link rel='stylesheet' type='text/css' href='testintelligentediting.css'>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.0/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.0/angular-sanitize.js"></script>
+</head>
+<body ng-controller="commandCtrl">
+    <script src="testintelligentediting.js"></script>
+
+    <span class="logic-box assert-box" ng-click="editLogicPiece(assertion, $event)">
+        [
+        <span class="logic-box isa-box" ng-click="editLogicPiece(assertion.content, $event)">
+            [
+            <span class="logic-box leaf-box" ng-click="editLogicPiece(assertion.content.subject, $event)">
+                {{assertion.content.subject.name}}
+            </span>
+            ] .IsA(
+            [<span class="logic-box leaf-box" ng-click="editLogicPiece(assertion.content.predicate, $event)">
+                {{assertion.content.predicate.name}}
+            </span>]
+            )
+        </span>
+        ].Assert()
+    </span>
+
+    <hr>
+    <div class="editor-area" ng-show="activePiece">
+        <label>Editing {{activePiece.type}}:</label>
+        <input type="text" ng-model="editTarget" class="form-control">
+    </div>
+</body>
+</html>

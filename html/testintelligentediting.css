@@ -1,0 +1,33 @@
+body {
+    .logic-box
+
+    {
+        display: inline-block;
+        border: 1px solid #ccc;
+        background-color: #f9f9f9;
+        padding: 2px 6px;
+        margin: 2px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .logic-box:hover {
+        background-color: #e0f0ff; /* Highlights the specific block being hovered */
+        border-color: #007bff;
+    }
+
+    /* Optional: Different colors for different logic types */
+    .assert-box {
+        border-color: #d9534f;
+    }
+
+    .isa-box {
+        border-color: #5bc0de;
+    }
+
+    .leaf-box {
+        border-color: #5cb85c;
+        font-weight: bold;
+    }
+}

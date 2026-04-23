@@ -793,11 +793,6 @@ namespace SNI
 						return e;
 					}
 				}
-				else
-				{
-					p_ParamList[j] = p_InputList[j].SimplifyValue();
-					p_ParamList[j].GetSNI_Expression()->Complete();
-				}
 			}
 			return e;
 		}

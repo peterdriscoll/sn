@@ -223,6 +223,10 @@ namespace SNI
 
 	void SNI_WorldSet::AddChildWorldSet(SNI_WorldSet * p_WorldSet)
 	{
+		if (this==p_WorldSet)
+        {
+			ASSERTM(this!=p_WorldSet, "Can't add a world set to itself.");
+        }
 		for (size_t j = 0; j < m_ChildSetList.size(); j++)
 		{
 			if (m_ChildSetList[j] == p_WorldSet)
@@ -338,11 +342,13 @@ namespace SNI
 
 	void SNI_WorldSet::AddToSetList(SNI_World *p_world)
 	{
+		ASSERTM(!IsComplete(), "Cannot add world to completed world set.");
 		m_WorldList.push_back(p_world);
 	}
 
 	SNI_World * SNI_WorldSet::CreateWorld()
 	{
+		ASSERTM(!IsComplete(), "Cannot create a world in a completed world set.");
 		SNI_World * world = new SNI_World(this);
 		world->Activate();
 		m_WorldList.push_back(world);
@@ -353,6 +359,7 @@ namespace SNI
 	{
 		if (!SN::SN_Transaction::InWebServer())
 		{
+		    ASSERTM(!IsComplete(), "Cannot create a world for a value in a completed world set.");
 			SNI_World * world = new SNI_World(this);
 			world->Activate();
 			world->AttachValue(p_Value);
@@ -364,6 +371,7 @@ namespace SNI
 
 	SNI_WorldSet * SNI_WorldSet::Clone()
 	{
+		ASSERTM(IsComplete(), "Cannot clone an incomplete world set.");
 		return new SNI_WorldSet(m_Expression);
 	}
 
@@ -371,6 +379,7 @@ namespace SNI
 	{
 		if (p_Parentworld)
 		{
+		    ASSERTM(!IsComplete(), "Cannot clone a world for a value in a completed world set.");
 			SNI_World * world = new SNI_World(this, p_Parentworld);
 			m_WorldList.push_back(world);
 			return world;
