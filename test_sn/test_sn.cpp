@@ -40,9 +40,9 @@ namespace test_sn
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				Expression a;
-				(((Long(2) || Long(-2))*(Long(3) || Long(-3))).BuildSet() == ((Long(6) || Long(-6)).BuildSet())).Evaluate().Do();
+				(((Long(2) || Long(-2))*(Long(3) || Long(-3))).BuildSet() == ((Long(6) || Long(-6)).BuildSet())).Evaluate().Do().CheckValue();
 
-				((Long(4).SquareRoot()).BuildSet() == (Long(2) || Long(-2)).BuildSet()).Evaluate().Do();
+				((Long(4).SquareRoot()).BuildSet() == (Long(2) || Long(-2)).BuildSet()).Evaluate().Do().CheckValue();
 				std::string my_exp4 = (Long(4)).BuildSet().DoEvaluate().DisplaySN();
 				std::cout << std::endl << ((Long(4)).BuildSet()).DoEvaluate().DisplaySN() << std::endl;
 				Assert::IsTrue(((Long(4)).BuildSet()).DoEvaluate().DisplaySN() == "{Long(4)}");
@@ -52,7 +52,7 @@ namespace test_sn
 
 				SN_DECLARE_VALUE(x, Long(2) || Long(-2));
 
-				(((x < Long(0)).If(x || Long(5), Long(0))).BuildSet() == (Long(0) || Long(5) || Long(-2)).BuildSet()).Evaluate().Do();
+				(((x < Long(0)).If(x || Long(5), Long(0))).BuildSet() == (Long(0) || Long(5) || Long(-2)).BuildSet()).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}
@@ -166,18 +166,18 @@ namespace test_sn
 				SN_DECLARE(x);
 				SN_DECLARE(z);
 				(x.Square() == Long(4)).Assert().Do();
-				((x.BuildSet()) == (Long(2) || Long(-2)).BuildSet()).Evaluate().Do();
+				((x.BuildSet()) == (Long(2) || Long(-2)).BuildSet()).Evaluate().Do().CheckValue();
 				(z == (Long(2) || Long(-2))).Assert().Do();
 
 				// This is not true. The expression is a value set with true and false in it.
-				//(x == (Long(2) || Long(-2))).Evaluate().Do();
+				//(x == (Long(2) || Long(-2))).Evaluate().Do().CheckValue();
 
 				SN_DECLARE(y);
 				(y*y == Long(4)).Assert().Do();   // recognise that y*y = y.Square() in the * operator in SNI_Expression.
-				((y.BuildSet()) == (Long(2) || Long(-2)).BuildSet()).Evaluate().Do();
+				((y.BuildSet()) == (Long(2) || Long(-2)).BuildSet()).Evaluate().Do().CheckValue();
 
 				//CHATGPT
-				//(x == Long(2) || Long(2)).BuildSet().Evaluate().Do();
+				//(x == Long(2) || Long(2)).BuildSet().Evaluate().Do().CheckValue();
 				//Assert::IsTrue(x.BuildSet().DoEvaluate().DisplaySN() == "{Long(2)}");
 			}
 			Cleanup();

@@ -52,9 +52,9 @@ namespace test_sn
 				manager.Breakpoint();
 				(x == Local(User::GetOperators().FunctionCall, Let(Function(Function(Equals, User::GetOperators().FunctionCall), testCall), Long(4) + Long(5)))).Assert().Do();
 
-				(x == Long(15)).Evaluate().Do();
+				(x == Long(15)).Evaluate().Do().CheckValue();
 
-				(Long(15) == Local(User::GetOperators().FunctionCall, Let(Function(Function(Equals, User::GetOperators().FunctionCall), testCall), Long(4) + Long(5)))).Evaluate().Do();
+				(Long(15) == Local(User::GetOperators().FunctionCall, Let(Function(Function(Equals, User::GetOperators().FunctionCall), testCall), Long(4) + Long(5)))).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}
@@ -91,9 +91,9 @@ namespace test_sn
 				SN_DECLARE(t);
 				(x == Local(User::GetOperators().FunctionCall, Let(Function(Function(Equals, User::GetOperators().FunctionCall), testSimpleImperative), Function(Long(4) + Long(5), t))).Value()).Assert().Do();
 
-				(x == Long(9)).Evaluate().Do();
+				(x == Long(9)).Evaluate().Do().CheckValue();
 
-				(Long(9) == Local(User::GetOperators().FunctionCall, Let(Function(Function(Equals, User::GetOperators().FunctionCall), testSimpleImperative), Function(Long(4) + Long(5), t))).Value()).Evaluate().Do();
+				(Long(9) == Local(User::GetOperators().FunctionCall, Let(Function(Function(Equals, User::GetOperators().FunctionCall), testSimpleImperative), Function(Long(4) + Long(5), t))).Value()).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}
@@ -112,9 +112,9 @@ namespace test_sn
 				(y == Local(User::GetOperators().FunctionCall, Let(Function(Function(Equals, User::GetOperators().FunctionCall), User::GetOperators().ImperativeCall), Function(Long(4) + Long(5), t))).Value()).Assert().Do();
 				std::string y1 = y.DisplayValueSN();
 
-				(y == Long(9)).Evaluate().Do();
+				(y == Long(9)).Evaluate().Do().CheckValue();
 
-				(Long(9) == Local(User::GetOperators().FunctionCall, Let(Function(Function(Equals, User::GetOperators().FunctionCall), User::GetOperators().ImperativeCall), Function(Long(4) + Long(5), t))).Value()).Evaluate().Do();
+				(Long(9) == Local(User::GetOperators().FunctionCall, Let(Function(Function(Equals, User::GetOperators().FunctionCall), User::GetOperators().ImperativeCall), Function(Long(4) + Long(5), t))).Value()).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}
@@ -135,10 +135,10 @@ namespace test_sn
 				(y == Local(User::GetOperators().FunctionCall, Local(User::GetOperators().Assign, Let(Function(Function(Equals, User::GetOperators().FunctionCall), User::GetOperators().ImperativeCall), Let(Function(Function(Equals, User::GetOperators().Assign), User::GetOperators().ImperativeAssign), Function(String("m").Assign(Long(4)) + Long(5), State()))))).Value()).Assert().Do();
 				std::string y1 = y.DisplayValueSN();
 
-				(y == Long(9)).Evaluate().Do();
+				(y == Long(9)).Evaluate().Do().CheckValue();
 
 				SN_DECLARE(m);
-				(Long(9) == Local(User::GetOperators().FunctionCall, Local(User::GetOperators().Assign, Let(Function(Function(Equals, User::GetOperators().FunctionCall), User::GetOperators().ImperativeCall), Let(Function(Function(Equals, User::GetOperators().Assign), User::GetOperators().ImperativeAssign), Function(String("m").Assign(Long(4)) + Long(5), State()))))).Value()).Evaluate().Do();
+				(Long(9) == Local(User::GetOperators().FunctionCall, Local(User::GetOperators().Assign, Let(Function(Function(Equals, User::GetOperators().FunctionCall), User::GetOperators().ImperativeCall), Let(Function(Function(Equals, User::GetOperators().Assign), User::GetOperators().ImperativeAssign), Function(String("m").Assign(Long(4)) + Long(5), State()))))).Value()).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}

@@ -85,7 +85,7 @@ namespace test_sn
 
 				Assert::IsTrue(((Long(2) || Long(-2)) + (Long(2) || Long(-2))).DoEvaluate().DoRemove(Long(4)).DoRemove(Long(0)).DoRemove(Long(-4)).DoIsEmpty());
 
-				(two_or_minus_two + two_or_minus_two).BuildSet().HasMember(Long(-4)).Evaluate().Do();
+				(two_or_minus_two + two_or_minus_two).BuildSet().HasMember(Long(-4)).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}
@@ -96,14 +96,14 @@ namespace test_sn
 			{
 				Manager manager("Test Value Set Equivalency Evaluate", AssertErrorHandler);
 
-				(((String("Dog") || String("Cat")) + String("Food")).BuildSet() == ((String("DogFood") || String("CatFood")).BuildSet())).Evaluate().Do();
+				(((String("Dog") || String("Cat")) + String("Food")).BuildSet() == ((String("DogFood") || String("CatFood")).BuildSet())).Evaluate().Do().CheckValue();
 
-				(((String("Dog") || String("Cat")) + String("Food")).BuildSet() == ((String("CatFood") || String("DogFood")).BuildSet())).Evaluate().Do();
-				(((String("Dog") || String("Pig")) + String("Food")).BuildSet() == ((String("DogFood") || String("PigFood")).BuildSet())).Evaluate().Do();
+				(((String("Dog") || String("Cat")) + String("Food")).BuildSet() == ((String("CatFood") || String("DogFood")).BuildSet())).Evaluate().Do().CheckValue();
+				(((String("Dog") || String("Pig")) + String("Food")).BuildSet() == ((String("DogFood") || String("PigFood")).BuildSet())).Evaluate().Do().CheckValue();
 
-				(((Long(10) || Long(9)) + Long(1)).BuildSet() == (Long(11) || Long(10)).BuildSet()).Evaluate().Do();
+				(((Long(10) || Long(9)) + Long(1)).BuildSet() == (Long(11) || Long(10)).BuildSet()).Evaluate().Do().CheckValue();
 
-				(((Double(10) || Double(9)) + Double(1)).BuildSet() == (Double(11) || Double(10)).BuildSet()).Evaluate().Do();
+				(((Double(10) || Double(9)) + Double(1)).BuildSet() == (Double(11) || Double(10)).BuildSet()).Evaluate().Do().CheckValue();
 
 
 				// mixed value sets

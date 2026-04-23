@@ -73,38 +73,38 @@ namespace test_sn
 				Manager manager("Test Inherit Short", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
-				Short::Class().IsA(Long::Class()).Evaluate().Do();
+				Short::Class().IsA(Long::Class()).Evaluate().Do().CheckValue();
 				SN_DECLARE(x1);
 				(Short::Class().IsA(Long::Class()) == x1).Assert().Do();
-				x1.Evaluate().Do();
+				x1.Evaluate().Do().CheckValue();
 				bool b1 = x1.GetBool();
 				Assert::IsTrue(b1);
 
-				Short::Class().IsA(LongLong::Class()).Evaluate().Do();
+				Short::Class().IsA(LongLong::Class()).Evaluate().Do().CheckValue();
 				SN_DECLARE(x2);
 				(Short::Class().IsA(LongLong::Class()) == x2).Assert().Do();
-				x2.Evaluate().Do();
+				x2.Evaluate().Do().CheckValue();
 				bool b2 = x2.GetBool();
 				Assert::IsTrue(b2);
 
-				Short::Class().IsA(Float::Class()).Evaluate().Do();
+				Short::Class().IsA(Float::Class()).Evaluate().Do().CheckValue();
 				SN_DECLARE(x3);
 				(Short::Class().IsA(Float::Class()) == x3).Assert().Do();
-				x3.Evaluate().Do();
+				x3.Evaluate().Do().CheckValue();
 				bool b3 = x3.GetBool();
 				Assert::IsTrue(b3);
 
-				Short::Class().IsA(Double::Class()).Evaluate().Do();
+				Short::Class().IsA(Double::Class()).Evaluate().Do().CheckValue();
 				SN_DECLARE(x4);
 				(Short::Class().IsA(Double::Class()) == x4).Assert().Do();
-				x4.Evaluate().Do();
+				x4.Evaluate().Do().CheckValue();
 				bool b4 = x4.GetBool();
 				Assert::IsTrue(b4);
 
-				Short::Class().IsA(LongDouble::Class()).Evaluate().Do();
+				Short::Class().IsA(LongDouble::Class()).Evaluate().Do().CheckValue();
 				SN_DECLARE(x5);
 				(Short::Class().IsA(LongDouble::Class()) == x5).Assert().Do();
-				x5.Evaluate().Do();
+				x5.Evaluate().Do().CheckValue();
 				bool b5 = x5.GetBool();
 				Assert::IsTrue(b5);
 
@@ -119,24 +119,24 @@ namespace test_sn
 				Manager manager("Test Inherit Long", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
-				Long::Class().IsA(LongLong::Class()).Evaluate().Do();
+				Long::Class().IsA(LongLong::Class()).Evaluate().Do().CheckValue();
 				SN_DECLARE(x1);
 				(Long::Class().IsA(LongLong::Class()) == x1).Assert().Do();
-				x1.Evaluate().Do();
+				x1.Evaluate().Do().CheckValue();
 				bool b1 = x1.GetBool();
 				Assert::IsTrue(b1);
 
-				Long::Class().IsA(Double::Class()).Evaluate().Do();
+				Long::Class().IsA(Double::Class()).Evaluate().Do().CheckValue();
 				SN_DECLARE(x2);
 				(Long::Class().IsA(Double::Class()) == x2).Assert().Do();
-				x2.Evaluate().Do();
+				x2.Evaluate().Do().CheckValue();
 				bool b2 = x2.GetBool();
 				Assert::IsTrue(b2);
 
-				Long::Class().IsA(LongDouble::Class()).Evaluate().Do();
+				Long::Class().IsA(LongDouble::Class()).Evaluate().Do().CheckValue();
 				SN_DECLARE(x3);
 				(Long::Class().IsA(LongDouble::Class()) == x3).Assert().Do();
-				x3.Evaluate().Do();
+				x3.Evaluate().Do().CheckValue();
 				bool b3 = x3.GetBool();
 				Assert::IsTrue(b3);
 
@@ -151,10 +151,10 @@ namespace test_sn
 				Manager manager("Test Inherit LongLong", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
-				LongLong::Class().IsA(LongDouble::Class()).Evaluate().Do();
+				LongLong::Class().IsA(LongDouble::Class()).Evaluate().Do().CheckValue();
 				SN_DECLARE(x1);
 				(LongLong::Class().IsA(LongDouble::Class()) == x1).Assert().Do();
-				x1.Evaluate().Do();
+				x1.Evaluate().Do().CheckValue();
 				bool b1 = x1.GetBool();
 				Assert::IsTrue(b1);
 
@@ -169,17 +169,17 @@ namespace test_sn
 				Manager manager("Test Inherit Float", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
-				Float::Class().IsA(Double::Class()).Evaluate().Do();
+				Float::Class().IsA(Double::Class()).Evaluate().Do().CheckValue();
 				SN_DECLARE(x1);
 				(Float::Class().IsA(Double::Class()) == x1).Assert().Do();
-				x1.Evaluate().Do();
+				x1.Evaluate().Do().CheckValue();
 				bool b1 = x1.GetBool();
 				Assert::IsTrue(b1);
 
-				Float::Class().IsA(LongDouble::Class()).Evaluate().Do();
+				Float::Class().IsA(LongDouble::Class()).Evaluate().Do().CheckValue();
 				SN_DECLARE(x2);
 				(Float::Class().IsA(LongDouble::Class()) == x2).Assert().Do();
-				x2.Evaluate().Do();
+				x2.Evaluate().Do().CheckValue();
 				bool b2 = x2.GetBool();
 				Assert::IsTrue(b2);
 
@@ -194,10 +194,10 @@ namespace test_sn
 				Manager manager("Test Inherit Double", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
-				Double::Class().IsA(LongDouble::Class()).Evaluate().Do();
+				Double::Class().IsA(LongDouble::Class()).Evaluate().Do().CheckValue();
 				SN_DECLARE(x1);
 				(Double::Class().IsA(LongDouble::Class()) == x1).Assert().Do();
-				x1.Evaluate().Do();
+				x1.Evaluate().Do().CheckValue();
 				bool b1 = x1.GetBool();
 				Assert::IsTrue(b1);
 
@@ -212,10 +212,10 @@ namespace test_sn
 				Manager manager("Test Inherit Char", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
-				Char::Class().IsA(String::Class()).Evaluate().Do();
+				Char::Class().IsA(String::Class()).Evaluate().Do().CheckValue();
 				SN_DECLARE(x1);
 				(Char::Class().IsA(String::Class()) == x1).Assert().Do();
-				x1.Evaluate().Do();
+				x1.Evaluate().Do().CheckValue();
 				bool b1 = x1.GetBool();
 				Assert::IsTrue(b1);
 
@@ -230,10 +230,10 @@ namespace test_sn
 				Manager manager("Test Inherit Char", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
-				StringRef::Class().IsA(String::Class()).Evaluate().Do();
+				StringRef::Class().IsA(String::Class()).Evaluate().Do().CheckValue();
 				SN_DECLARE(x1);
 				(StringRef::Class().IsA(String::Class()) == x1).Assert().Do();
-				x1.Evaluate().Do();
+				x1.Evaluate().Do().CheckValue();
 				bool b1 = x1.GetBool();
 				Assert::IsTrue(b1);
 
@@ -256,14 +256,14 @@ namespace test_sn
 				
 				fib.Fix();
 
-				(fib(Long(0)) == Long(1)).Evaluate().Do();
-				(fib(Long(1)) == Long(1)).Evaluate().Do();
-				(fib(Long(2)) == Long(2)).Evaluate().Do();
+				(fib(Long(0)) == Long(1)).Evaluate().Do().CheckValue();
+				(fib(Long(1)) == Long(1)).Evaluate().Do().CheckValue();
+				(fib(Long(2)) == Long(2)).Evaluate().Do().CheckValue();
 
-				(fib(Long(3)) == Long(3)).Evaluate().Do();
-				(fib(Long(4)) == Long(5)).Evaluate().Do();
-				(fib(Long(5)) == Long(8)).Evaluate().Do();
-				(fib(Long(6)) == Long(13)).Evaluate().Do();
+				(fib(Long(3)) == Long(3)).Evaluate().Do().CheckValue();
+				(fib(Long(4)) == Long(5)).Evaluate().Do().CheckValue();
+				(fib(Long(5)) == Long(8)).Evaluate().Do().CheckValue();
+				(fib(Long(6)) == Long(13)).Evaluate().Do().CheckValue();
 
 				(fib(Long(0)) == Long(1)).Assert().Do();
 				(fib(Long(1)) == Long(1)).Assert().Do();
@@ -294,13 +294,13 @@ namespace test_sn
 
 				fib.Fix();
 
-				(fib(Long(0)) == Long(1)).Evaluate().Do();
-				(fib(Long(1)) == Long(1)).Evaluate().Do();
-				(fib(Long(2)) == Long(2)).Evaluate().Do();
-				(fib(Long(3)) == Long(3)).Evaluate().Do();
-				(fib(Long(4)) == Long(5)).Evaluate().Do();
-				(fib(Long(5)) == Long(8)).Evaluate().Do();
-				(fib(Long(6)) == Long(13)).Evaluate().Do();
+				(fib(Long(0)) == Long(1)).Evaluate().Do().CheckValue();
+				(fib(Long(1)) == Long(1)).Evaluate().Do().CheckValue();
+				(fib(Long(2)) == Long(2)).Evaluate().Do().CheckValue();
+				(fib(Long(3)) == Long(3)).Evaluate().Do().CheckValue();
+				(fib(Long(4)) == Long(5)).Evaluate().Do().CheckValue();
+				(fib(Long(5)) == Long(8)).Evaluate().Do().CheckValue();
+				(fib(Long(6)) == Long(13)).Evaluate().Do().CheckValue();
 
 				(fib(Long(0)) == Long(1)).Assert().Do();
 				(fib(Long(1)) == Long(1)).Assert().Do();
@@ -332,7 +332,7 @@ namespace test_sn
 				std::string sTypeChecker_after = typeChecker.DisplayValueSN();
 
 				// Polymorphic call.
-				(typeChecker(Short(1)) == String("short")).Evaluate().Do();
+				(typeChecker(Short(1)) == String("short")).Evaluate().Do().CheckValue();
 
 				SN_DECLARE(A);
 
@@ -365,8 +365,8 @@ namespace test_sn
 				std::string sTypeChecker_after = typeChecker.DisplayValueSN();
 
 				// Polymorphic call.
-				(typeChecker(Short(1)) == String("short")).Evaluate().Do();
-				(typeChecker(Long(1)) == String("long")).Evaluate().Do();
+				(typeChecker(Short(1)) == String("short")).Evaluate().Do().CheckValue();
+				(typeChecker(Long(1)) == String("long")).Evaluate().Do().CheckValue();
 
 				(typeChecker(Short(1)) == String("short")).Assert().Do();
 				(typeChecker(Long(1)) == String("long")).Assert().Do();
@@ -408,9 +408,9 @@ namespace test_sn
 				std::string sTypeChecker_after = typeChecker.DisplayValueSN();
 
 				// Polymorphic call.
-				(typeChecker(Short(1)) == String("short")).Evaluate().Do();
-				(typeChecker(Long(1)) == String("long")).Evaluate().Do();
-				(typeChecker(LongLong(1)) == String("long long")).Evaluate().Do();
+				(typeChecker(Short(1)) == String("short")).Evaluate().Do().CheckValue();
+				(typeChecker(Long(1)) == String("long")).Evaluate().Do().CheckValue();
+				(typeChecker(LongLong(1)) == String("long long")).Evaluate().Do().CheckValue();
 
 				(typeChecker(Short(1)) == String("short")).Assert().Do();
 				(typeChecker(Long(1)) == String("long")).Assert().Do();
@@ -459,7 +459,7 @@ namespace test_sn
 				(typeChecker(numbers1) == String("short")).Assert().Do();
 				std::string n1_text = numbers1.DoEvaluate().DisplayValueSN();
 				Assert::IsTrue(n1_text == "Short(1)");
-				(numbers1 == Short(1)).Evaluate().Do();
+				(numbers1 == Short(1)).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}
@@ -492,13 +492,13 @@ namespace test_sn
 				(typeChecker(numbers1) == String("short")).Assert().Do();
 				std::string n1_text = numbers1.DoEvaluate().DisplayValueSN();
 				Assert::IsTrue(n1_text == "Short(1)");
-				(numbers1 == Short(1)).Evaluate().Do();
+				(numbers1 == Short(1)).Evaluate().Do().CheckValue();
 
 				SN_DECLARE_VALUE(numbers2, Short(1) || Long(2));
 				(typeChecker(numbers2) == String("long")).Assert().Do();
 				std::string n2_text = numbers2.DoEvaluate().DisplayValueSN();
 				Assert::IsTrue(n2_text == "Long(2)");
-				(numbers2 == Long(2)).Evaluate().Do();
+				(numbers2 == Long(2)).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}
@@ -530,21 +530,21 @@ namespace test_sn
 				(typeChecker(numbers1) == String("short")).Assert().Do();
 				std::string n1_text = numbers1.GetValue().DisplayValueSN();
 				Assert::IsTrue(n1_text == "Short(1)");
-				(numbers1 == Short(1)).Evaluate().Do();
+				(numbers1 == Short(1)).Evaluate().Do().CheckValue();
 
 				SN_DECLARE(numbers2);
 				(numbers2 == (Short(1) || Long(2) || LongLong(3))).PartialAssert().Do();
 				(typeChecker(numbers2) == String("long")).Assert().Do();
 				std::string n2_text = numbers2.GetValue().DisplayValueSN();
 				Assert::IsTrue(n2_text == "Long(2)");
-				(numbers2 == Long(2)).Evaluate().Do();
+				(numbers2 == Long(2)).Evaluate().Do().CheckValue();
 
 				SN_DECLARE(numbers3);
 				(numbers3 == (Short(1) || Long(2) || LongLong(3))).PartialAssert().Do();
 				(typeChecker(numbers3) == String("long long")).Assert().Do();
 				std::string n3_text = numbers3.GetValue().DisplayValueSN();
 				Assert::IsTrue(n3_text == "LongLong(3)");
-				(numbers3 == LongLong(3)).Evaluate().Do();
+				(numbers3 == LongLong(3)).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}

@@ -237,12 +237,6 @@ namespace SN
 	//////////////////////////////////////////////////////////////////////
 	// Queries
 	//////////////////////////////////////////////////////////////////////
-
-	SN_Expression SN_Expression::Debug() const
-	{
-		return SN_Debug(*this);
-	}
-
 	SNI::SNI_Expression* SN_Expression::GetSNI_Expression()
 	{
 		return dynamic_cast<SNI::SNI_Expression *>(m_Expression);
@@ -317,6 +311,25 @@ namespace SN
 		}
 		return exp;
 	}
+
+	SN_Expression SN_Expression::Debug() const
+	{
+		return SN_Debug(*this);
+	}
+
+    void SN_Expression::CheckValue() const
+    {
+        CheckValue(skynet::True);
+    }
+
+	void SN_Expression::CheckValue(const SN::SN_Expression &p_ExpectedResult) const
+    {
+		SNI_Expression *exp = GetSNI_Expression();
+		if (exp)
+		{
+            exp->CheckValue(p_ExpectedResult);
+		}
+    }
 
 	SN::SN_Error SN_Expression::ForEach(std::function<SN::SN_Error(const SN_Expression &p_Param, SNI::SNI_World *p_World)> p_Action)
 	{

@@ -244,6 +244,8 @@ namespace SN
 		size_t Count() const;
 		size_t Length() const;
 		SN_Expression Debug() const;
+        void CheckValue() const;
+        void CheckValue(const SN_Expression &p_ExpectedResult) const;
 
 		SN_Expression GetVariableValue(bool p_IfComplete = true);
 		SN::SN_Error ForEach(std::function<SN::SN_Error(const SN_Expression& p_Param, SNI::SNI_World* p_World)> p_Action);

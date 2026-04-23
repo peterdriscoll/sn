@@ -23,7 +23,7 @@ std::string YourCppFunction()
 		(d == String("rat")).Assert().Do(); // c contines after "rat". "dog ..."
 		(c == String("dog")).Assert().Do(); // b is the remainder of the string. So "cat".
 
-		(b == String("cat")).Evaluate().Do();
+		(b == String("cat")).Evaluate().Do().CheckValue();
 
 		(result == b).Assert().Do();
 	}

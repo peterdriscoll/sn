@@ -790,9 +790,9 @@ namespace SNI
 		DoWithHandler(SNI_Manager::ThrowErrorHandler);
 	}
 
-	void SNI_Expression::Do()
+	SN::SN_Expression SNI_Expression::Do()
 	{
-		DoWithHandler(SNI_Thread::TopManager()->ErrorHandler());
+        return DoWithHandler(SNI_Thread::TopManager()->ErrorHandler());
 	}
 
 	SN::SN_Error SNI_Expression::DoReturnError()
@@ -818,8 +818,10 @@ namespace SNI
 		return resultVariable.GetVariableValue().GetError();
 	}
 
-	void SNI_Expression::DoWithHandler(OnErrorHandler * p_ErrorHandler)
+	SN::SN_Expression SNI_Expression::DoWithHandler(OnErrorHandler *p_ErrorHandler)
 	{
+		SN::SN_Expression result;
+		
 		LOG(WriteExp(this));
 		SNI_Thread *thread = SNI_Thread::GetThread();
 		bool finished = false;
@@ -838,6 +840,7 @@ namespace SNI
 				SN::SN_Error e = AssertValue(resultVariable);
 				HandleAction(e, p_ErrorHandler);
 				HandleAction(resultVariable.GetVariableValue(), p_ErrorHandler);
+				result = resultVariable.GetVariableValue();
 				finished = true;
 			}
 			catch (SN::SN_Error &e)
@@ -856,9 +859,10 @@ namespace SNI
 				}
 			}
 		} while (!finished);
+		return result;
 	}
 
-	void SNI_Expression::HandleAction(SN::SN_Expression p_Result, OnErrorHandler *p_ErrorHandler)
+	void SNI_Expression::HandleAction(SN::SN_Expression p_Result, OnErrorHandler *p_ErrorHandler) const
 	{
 		SNI_User* user = SNI_User::GetCurrentUser();
 		SN::SN_Error e = p_Result.GetError();
@@ -894,6 +898,15 @@ namespace SNI
 		}
 		return SN::SN_Error(false, false, "Bool or error expected.");
 	}
+
+	void SNI_Expression::CheckValue(const SN::SN_Expression &p_ExpectedResult) const
+    {
+		OnErrorHandler *p_ErrorHandler = SNI_Thread::TopManager()->ErrorHandler();
+
+		SNI::SNI_DisplayOptions l_DisplayOptions(SNI::doTextOnly);
+        SN::SN_Error e(Equivalent(p_ExpectedResult.GetSNI_Expression()), false, "Result "+DisplaySN(0, l_DisplayOptions)+" != "+p_ExpectedResult.DisplaySN());
+	    HandleAction(e, p_ErrorHandler);
+    }
 
 	SN::SN_Expression SNI_Expression::Meta(long p_MetaLevel)
 	{

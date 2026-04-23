@@ -55,22 +55,22 @@ namespace test_sn
 				// succ n f x = f (n f x)
 				(Define(succ)(n)(f)(x) == f(n(f)(x))).PartialAssert().Do();
 
-				(succ(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(1)).Evaluate().Do();
+				(succ(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(1)).Evaluate().Do().CheckValue();
 				(succ(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == r0).Assert().Do();
-				(r0 == Long(1)).Evaluate().Do();
+				(r0 == Long(1)).Evaluate().Do().CheckValue();
 
 
-				(succ(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(2)).Evaluate().Do();
+				(succ(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(2)).Evaluate().Do().CheckValue();
 				(succ(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).Assert().Do();
-				(r1 == Long(2)).Evaluate().Do();
+				(r1 == Long(2)).Evaluate().Do().CheckValue();
 
-				(succ(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(3)).Evaluate().Do();
+				(succ(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(3)).Evaluate().Do().CheckValue();
 				(succ(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).Assert().Do();
-				(r2 == Long(3)).Evaluate().Do();
+				(r2 == Long(3)).Evaluate().Do().CheckValue();
 
-				(succ(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(4)).Evaluate().Do();
+				(succ(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(4)).Evaluate().Do().CheckValue();
 				(succ(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).Assert().Do();
-				(r3 == Long(4)).Evaluate().Do();
+				(r3 == Long(4)).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}
@@ -99,21 +99,21 @@ namespace test_sn
 				// plus m n f x = m f (n f x) 
 				(Define(plus) == Lambda(m, Lambda(n, Lambda(f, Lambda(x, m(f)((n(f)(x)))))))).PartialAssert().Do();
 
-				(plus(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(0)).Evaluate().Do();
+				(plus(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(0)).Evaluate().Do().CheckValue();
 				(plus(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == r0).Assert().Do();
-				(r0 == Long(0)).Evaluate().Do();
+				(r0 == Long(0)).Evaluate().Do().CheckValue();
 
-				(plus(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(2)).Evaluate().Do();
+				(plus(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(2)).Evaluate().Do().CheckValue();
 				(plus(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).Assert().Do();
-				(r1 == Long(2)).Evaluate().Do();
+				(r1 == Long(2)).Evaluate().Do().CheckValue();
 
-				(plus(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(4)).Evaluate().Do();
+				(plus(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(4)).Evaluate().Do().CheckValue();
 				(plus(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).Assert().Do();
-				(r2 == Long(4)).Evaluate().Do();
+				(r2 == Long(4)).Evaluate().Do().CheckValue();
 
-				(plus(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(6)).Evaluate().Do();
+				(plus(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(6)).Evaluate().Do().CheckValue();
 				(plus(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).Assert().Do();
-				(r3 == Long(6)).Evaluate().Do();
+				(r3 == Long(6)).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}
@@ -142,21 +142,21 @@ namespace test_sn
 				// multiply m n f x = m (n f) x
 				(Define(mult)(m)(n)(f)(x) == m(n(f))(x)).PartialAssert().Do();
 
-				(mult(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(0)).Evaluate().Do();
+				(mult(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(0)).Evaluate().Do().CheckValue();
 				(mult(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == r0).Assert().Do();
-				(r0 == Long(0)).Evaluate().Do();
+				(r0 == Long(0)).Evaluate().Do().CheckValue();
 
-				(mult(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(1)).Evaluate().Do();
+				(mult(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(1)).Evaluate().Do().CheckValue();
 				(mult(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).Assert().Do();
-				(r1 == Long(1)).Evaluate().Do();
+				(r1 == Long(1)).Evaluate().Do().CheckValue();
 
-				(mult(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(4)).Evaluate().Do();
+				(mult(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(4)).Evaluate().Do().CheckValue();
 				(mult(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).Assert().Do();
-				(r2 == Long(4)).Evaluate().Do();
+				(r2 == Long(4)).Evaluate().Do().CheckValue();
 
-				(mult(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(9)).Evaluate().Do();
+				(mult(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(9)).Evaluate().Do().CheckValue();
 				(mult(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).Assert().Do();
-				(r3 == Long(9)).Evaluate().Do();
+				(r3 == Long(9)).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}
@@ -185,22 +185,22 @@ namespace test_sn
 				// exp m n f x = (n m) f x 
 				(Define(exp)(m)(n)(f)(x) == m(n)(f)(x)).PartialAssert().Do();
 
-				(exp(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(1)).Evaluate().Do();
+				(exp(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(1)).Evaluate().Do().CheckValue();
 				(exp(Lambda(f, Lambda(x, x)))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == r0).Assert().Do();
-				(r0 == Long(1)).Evaluate().Do();
+				(r0 == Long(1)).Evaluate().Do().CheckValue();
 
 
-				(exp(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(1)).Evaluate().Do();
+				(exp(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(1)).Evaluate().Do().CheckValue();
 				(exp(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).Assert().Do();
-				(r1 == Long(1)).Evaluate().Do();
+				(r1 == Long(1)).Evaluate().Do().CheckValue();
 
-				(exp(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(4)).Evaluate().Do();
+				(exp(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(4)).Evaluate().Do().CheckValue();
 				(exp(Lambda(f, Lambda(x, f(f(x)))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).Assert().Do();
-				(r2 == Long(4)).Evaluate().Do();
+				(r2 == Long(4)).Evaluate().Do().CheckValue();
 
-				(exp(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(27)).Evaluate().Do();
+				(exp(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(27)).Evaluate().Do().CheckValue();
 				(exp(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).Assert().Do();
-				(r3 == Long(27)).Evaluate().Do();
+				(r3 == Long(27)).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}
@@ -232,21 +232,21 @@ namespace test_sn
 				// \n.\f.\x.n (\g.\h.h (g f)) (\u.x) (\u.u)
 				(Define(pred) == Lambda(n, Lambda(f, Lambda(x, n(Lambda(g, Lambda(h, h(g(f))))) (Lambda(u, x))(Lambda(u, u)))))).PartialAssert().Do();
 
-				(pred(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(0)).Evaluate().Do();
+				(pred(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(0)).Evaluate().Do().CheckValue();
 				(pred(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == r0).Assert().Do();
-				(r0 == Long(0)).Evaluate().Do();
+				(r0 == Long(0)).Evaluate().Do().CheckValue();
 
-				(pred(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(0)).Evaluate().Do();
+				(pred(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(0)).Evaluate().Do().CheckValue();
 				(pred(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).Assert().Do();
-				(r1 == Long(0)).Evaluate().Do();
+				(r1 == Long(0)).Evaluate().Do().CheckValue();
 
-				(pred(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(1)).Evaluate().Do();
+				(pred(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(1)).Evaluate().Do().CheckValue();
 				(pred(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).Assert().Do();
-				(r2 == Long(1)).Evaluate().Do();
+				(r2 == Long(1)).Evaluate().Do().CheckValue();
 
-				(pred(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(2)).Evaluate().Do();
+				(pred(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(2)).Evaluate().Do().CheckValue();
 				(pred(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).Assert().Do();
-				(r3 == Long(2)).Evaluate().Do();
+				(r3 == Long(2)).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}
@@ -285,21 +285,21 @@ namespace test_sn
 				// This works too.
 				// (Define(minus)(m)(n)(f)(x) == n(pred)(m)(f)(x)).PartialAssert().Do();
 
-				(minus(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(1)).Evaluate().Do();
+				(minus(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == Long(1)).Evaluate().Do().CheckValue();
 				(minus(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, x)))(inc)(Long(0)) == r0).Assert().Do();
-				(r0 == Long(1)).Evaluate().Do();
+				(r0 == Long(1)).Evaluate().Do().CheckValue();
 
-				(minus(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(2)).Evaluate().Do();
+				(minus(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(2)).Evaluate().Do().CheckValue();
 				(minus(Lambda(f, Lambda(x, f(f(f(x))))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).Assert().Do();
-				(r1 == Long(2)).Evaluate().Do();
+				(r1 == Long(2)).Evaluate().Do().CheckValue();
 
-				(minus(Lambda(f, Lambda(x, f(f(f(f(f(x))))))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(3)).Evaluate().Do();
+				(minus(Lambda(f, Lambda(x, f(f(f(f(f(x))))))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(3)).Evaluate().Do().CheckValue();
 				(minus(Lambda(f, Lambda(x, f(f(f(f(f(x))))))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).Assert().Do();
-				(r2 == Long(3)).Evaluate().Do();
+				(r2 == Long(3)).Evaluate().Do().CheckValue();
 
-				(minus(Lambda(f, Lambda(x, f(f(f(f(f(f(f(f(x)))))))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(5)).Evaluate().Do();
+				(minus(Lambda(f, Lambda(x, f(f(f(f(f(f(f(f(x)))))))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(5)).Evaluate().Do().CheckValue();
 				(minus(Lambda(f, Lambda(x, f(f(f(f(f(f(f(f(x)))))))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).Assert().Do();
-				(r3 == Long(5)).Evaluate().Do();
+				(r3 == Long(5)).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}
@@ -383,17 +383,17 @@ namespace test_sn
 				// IsZero = \n.n (\x.false) true
 				(Define(IsZero) == Lambda(n, n(Lambda(x, falseL))(trueL))).PartialAssert().Do();
 
-				(divide(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(1)).Evaluate().Do();
+				(divide(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(1)).Evaluate().Do().CheckValue();
 				(divide(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).Assert().Do();
-				(r1 == Long(1)).Evaluate().Do();
+				(r1 == Long(1)).Evaluate().Do().CheckValue();
 
-				(divide(Lambda(f, Lambda(x, f(f(f(f(x)))))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(2)).Evaluate().Do();
+				(divide(Lambda(f, Lambda(x, f(f(f(f(x)))))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(2)).Evaluate().Do().CheckValue();
 				(divide(Lambda(f, Lambda(x, f(f(f(f(x)))))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).Assert().Do();
-				(r2 == Long(2)).Evaluate().Do();
+				(r2 == Long(2)).Evaluate().Do().CheckValue();
 
-				(divide(Lambda(f, Lambda(x, f(f(f(f(f(f(f(f(f(x))))))))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(3)).Evaluate().Do();
+				(divide(Lambda(f, Lambda(x, f(f(f(f(f(f(f(f(f(x))))))))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(3)).Evaluate().Do().CheckValue();
 				(divide(Lambda(f, Lambda(x, f(f(f(f(f(f(f(f(f(x))))))))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).Assert().Do();
-				(r3 == Long(3)).Evaluate().Do();
+				(r3 == Long(3)).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}

@@ -53,11 +53,11 @@ namespace test_sn
 
 				(M == Mapping()).Assert().Do();
 				(M[String("Name")] == String("Max")).Assert().Do();
-				(M[String("Name")] == String("Max")).Evaluate().Do();
+				(M[String("Name")] == String("Max")).Evaluate().Do().CheckValue();
 				(M[String("Name")] == R).Assert().Do();
 				std::string R_text = R.GetString();
 				Assert::IsTrue(R_text == "Max");
-				(R == String("Max")).Evaluate().Do();
+				(R == String("Max")).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}
@@ -77,8 +77,8 @@ namespace test_sn
 
 				(M == Mapping()).Assert().Do();
 				(M[String("Name") || String("Fullname")] == String("Max")).Assert().Do();
-				(M[String("Name")] == String("Max")).Evaluate().Do();
-				(M[String("Fullname")] == String("Max")).Evaluate().Do();
+				(M[String("Name")] == String("Max")).Evaluate().Do().CheckValue();
+				(M[String("Fullname")] == String("Max")).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}
@@ -113,7 +113,7 @@ namespace test_sn
 				std::string K_text = K.GetVariableValue().DisplaySN();
 				std::string E_text = E.GetVariableValue().DisplaySN();
 				Assert::IsTrue(S_text == "{String(\"Max\"), String(\"Roger\")}");
-				(S == E).Evaluate().Do();
+				(S == E).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}
@@ -147,10 +147,10 @@ namespace test_sn
 				(age.CountAll() == countBoth).Assert().Do();
 				(age.Sum() == sum).Assert().Do();
 
-				(count43 == Long(3)).Evaluate().Do();
-				(count55 == Long(2)).Evaluate().Do();
-				(countBoth == count43 + count55).Evaluate().Do();
-				(sum == Long(239)).Evaluate().Do();
+				(count43 == Long(3)).Evaluate().Do().CheckValue();
+				(count55 == Long(2)).Evaluate().Do().CheckValue();
+				(countBoth == count43 + count55).Evaluate().Do().CheckValue();
+				(sum == Long(239)).Evaluate().Do().CheckValue();
 
 				std::string count43_text = count43.GetVariableValue().DisplaySN();
 				std::string count55_text = count55.GetVariableValue().DisplaySN();
@@ -214,17 +214,17 @@ namespace test_sn
 				(fib[Long(5)] == Long(8)).Assert().Do();
 				(fib[Long(6)] == Long(13)).Assert().Do();
 
-				(fib[Long(0)] == Long(1)).Evaluate().Do();
-				(fib[Long(1)] == Long(1)).Evaluate().Do();
-				(fib[Long(2)] == Long(2)).Evaluate().Do();
-				(fib[Long(3)] == Long(3)).Evaluate().Do();
-				(fib[Long(4)] == Long(5)).Evaluate().Do();
-				(fib[Long(5)] == Long(8)).Evaluate().Do();
-				(fib[Long(6)] == Long(13)).Evaluate().Do();
+				(fib[Long(0)] == Long(1)).Evaluate().Do().CheckValue();
+				(fib[Long(1)] == Long(1)).Evaluate().Do().CheckValue();
+				(fib[Long(2)] == Long(2)).Evaluate().Do().CheckValue();
+				(fib[Long(3)] == Long(3)).Evaluate().Do().CheckValue();
+				(fib[Long(4)] == Long(5)).Evaluate().Do().CheckValue();
+				(fib[Long(5)] == Long(8)).Evaluate().Do().CheckValue();
+				(fib[Long(6)] == Long(13)).Evaluate().Do().CheckValue();
 
 				SN_DECLARE(Z);
 				(fib[Long(6)] == Z).Assert().Do();
-				(Z == Long(13)).Evaluate().Do();
+				(Z == Long(13)).Evaluate().Do().CheckValue();
 				std::string Z_text = Z.GetVariableValue().DisplayValueSN();
 				Assert::IsTrue(Z_text == "Long(13)");
 
@@ -232,7 +232,7 @@ namespace test_sn
 
 				SN_DECLARE(Y);
 				(fib[Y] == Long(1)).Assert().Do();
-				(Y.BuildSet() == (Long(0) || Long(1)).BuildSet()).Evaluate().Do();
+				(Y.BuildSet() == (Long(0) || Long(1)).BuildSet()).Evaluate().Do().CheckValue();
 
 				std::string Y_text = Y.BuildSet().DoEvaluate().DisplaySN();
 				Assert::IsTrue(Y_text == "{Long(0), Long(1)}");
@@ -240,18 +240,18 @@ namespace test_sn
 				SN_DECLARE(countAll);
 
 				(fib.CountAll() == countAll).Assert().Do();
-				(countAll == Long(7)).Evaluate().Do();
+				(countAll == Long(7)).Evaluate().Do().CheckValue();
 
 				SN_DECLARE(countGreater2);
 				SN_DECLARE(X);
 
 				(fib.CountIf(Lambda(X, X > Long(2))) == countGreater2).Assert().Do();
-				(countGreater2 == Long(4)).Evaluate().Do();
+				(countGreater2 == Long(4)).Evaluate().Do().CheckValue();
 
 				SN_DECLARE(sum);
 
 				(fib.Sum() == sum).Assert().Do();
-				(sum == Long(33)).Evaluate().Do();
+				(sum == Long(33)).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}

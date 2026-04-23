@@ -39,7 +39,7 @@ namespace test_sn
 				Manager manager("Test Double Equivalent", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
-				((Long(1) + Long(2)) == Long(3)).Evaluate().Do();
+				((Long(1) + Long(2)) == Long(3)).Evaluate().Do().CheckValue();
 
 				Assert::IsTrue((Double(5.5) == Double(7.8)).Equivalent(Equals(Double(5.5))(Double(7.8))));
 				Assert::IsTrue(!(Double(9.0) == Double(9.5)).Equivalent(Equals(Double(9.0))(Double(9.7))));
@@ -57,18 +57,18 @@ namespace test_sn
 			{
 				Manager manager("Test Double Evaluate", AssertErrorHandler);
 
-				(Double(3.3) == Double(3.3)).Evaluate().Do();
-				(!(Double(5.43) == Double(6))).Evaluate().Do();
+				(Double(3.3) == Double(3.3)).Evaluate().Do().CheckValue();
+				(!(Double(5.43) == Double(6))).Evaluate().Do().CheckValue();
 
 				SN_DECLARE_VALUE(z, Double(2.2));
-				(Double(3.5) + Double(5.6) == Double(9.1)).Evaluate().Do();
-				(Double(2.2) == z).Evaluate().Do();
+				(Double(3.5) + Double(5.6) == Double(9.1)).Evaluate().Do().CheckValue();
+				(Double(2.2) == z).Evaluate().Do().CheckValue();
 
 				SN_DECLARE_VALUE(x, Double(3));
-				(z * x == Double(6.6)).Evaluate().Do();
+				(z * x == Double(6.6)).Evaluate().Do().CheckValue();
 
 				SN_DECLARE_VALUE(y, Double(2));
-				((z * x) / y == Double(3.3)).Evaluate().Do();
+				((z * x) / y == Double(3.3)).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}
@@ -108,13 +108,13 @@ namespace test_sn
 				SN_DECLARE(y);
 
 				(Double(45.6) == y).Assert().Do();
-				(Double(45.6) == y).Evaluate().Do();
+				(Double(45.6) == y).Evaluate().Do().CheckValue();
 
 				SN_DECLARE(z);
 
 				(Double(45.6) + z == 100.0).Assert().Do();
 
-				(Double(54.4) == z).Evaluate().Do();
+				(Double(54.4) == z).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}
@@ -125,8 +125,8 @@ namespace test_sn
 			{
 				Manager manager("Test Long Evaluate", AssertErrorHandler);
 
-				(Long(4) * Double(1.25) == Double(5)).Evaluate().Do();
-				(Double(5) / Long(4) == Double(1.25)).Evaluate().Do();
+				(Long(4) * Double(1.25) == Double(5)).Evaluate().Do().CheckValue();
+				(Double(5) / Long(4) == Double(1.25)).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}

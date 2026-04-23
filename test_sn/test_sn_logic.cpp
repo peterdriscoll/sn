@@ -57,21 +57,21 @@ namespace test_sn
 				{
 					Transaction transaction;
 
-					(Bool(true) == Bool(true)).Evaluate().Do();
-					(!(Bool(true) == Bool(false))).Evaluate().Do();
+					(Bool(true) == Bool(true)).Evaluate().Do().CheckValue();
+					(!(Bool(true) == Bool(false))).Evaluate().Do().CheckValue();
 				}
 				{
 					Transaction transaction;
 
 					SN_DECLARE_VALUE(z, Bool(true));
-					(Bool(true) == z).Evaluate().Do();
+					(Bool(true) == z).Evaluate().Do().CheckValue();
 
 					SN_DECLARE_VALUE(k, True);
 					SN_DECLARE_VALUE(l, False);
 					SN_DECLARE_VALUE(m, True);
-					(k.If(l, m) == False).Evaluate().Do();
-					(True.If("dog", "cat") == "dog").Evaluate().Do();
-					(False.If("dog", "cat") == "cat").Evaluate().Do();
+					(k.If(l, m) == False).Evaluate().Do().CheckValue();
+					(True.If("dog", "cat") == "dog").Evaluate().Do().CheckValue();
+					(False.If("dog", "cat") == "cat").Evaluate().Do().CheckValue();
 				}
 			}
 			Cleanup();
@@ -86,50 +86,50 @@ namespace test_sn
 				{
 					Transaction transaction;
 					//Truth table AND
-					(!(Bool(false) && Bool(false))).Evaluate().Do();
-					(!(Bool(false) && Bool(true))).Evaluate().Do();
-					(!(Bool(true) && Bool(false))).Evaluate().Do();
-					(Bool(true) && Bool(true)).Evaluate().Do();
+					(!(Bool(false) && Bool(false))).Evaluate().Do().CheckValue();
+					(!(Bool(false) && Bool(true))).Evaluate().Do().CheckValue();
+					(!(Bool(true) && Bool(false))).Evaluate().Do().CheckValue();
+					(Bool(true) && Bool(true)).Evaluate().Do().CheckValue();
 				}
 				{
 					Transaction transaction;
 
 					// Truth table OR
-					(!(Bool(false) || Bool(false))).Evaluate().Do();
-					(Bool(false) || Bool(true)).Evaluate().Do();
-					(Bool(true) || Bool(false)).Evaluate().Do();
-					(Bool(true) || Bool(true)).Evaluate().Do();
+					(!(Bool(false) || Bool(false))).Evaluate().Do().CheckValue();
+					(Bool(false) || Bool(true)).Evaluate().Do().CheckValue();
+					(Bool(true) || Bool(false)).Evaluate().Do().CheckValue();
+					(Bool(true) || Bool(true)).Evaluate().Do().CheckValue();
 				}
 				{
 					Transaction transaction;
 
 					// Truth table AND
-					((Bool(false) && Bool(false)) == Bool(false)).Evaluate().Do();
-					((Bool(false) && Bool(true)) == Bool(false)).Evaluate().Do();
-					((Bool(true) && Bool(false)) == Bool(false)).Evaluate().Do();
-					((Bool(true) && Bool(true)) == Bool(true)).Evaluate().Do();
+					((Bool(false) && Bool(false)) == Bool(false)).Evaluate().Do().CheckValue();
+					((Bool(false) && Bool(true)) == Bool(false)).Evaluate().Do().CheckValue();
+					((Bool(true) && Bool(false)) == Bool(false)).Evaluate().Do().CheckValue();
+					((Bool(true) && Bool(true)) == Bool(true)).Evaluate().Do().CheckValue();
 				}
 				{
 					Transaction transaction;
 
 					// Truth table OR
-					((Bool(false) || Bool(false)) == Bool(false)).Evaluate().Do();
-					((Bool(false) || Bool(true)) == Bool(true)).Evaluate().Do();
-					((Bool(true) || Bool(false)) == Bool(true)).Evaluate().Do();
-					((Bool(true) || Bool(true)) == Bool(true)).Evaluate().Do();
+					((Bool(false) || Bool(false)) == Bool(false)).Evaluate().Do().CheckValue();
+					((Bool(false) || Bool(true)) == Bool(true)).Evaluate().Do().CheckValue();
+					((Bool(true) || Bool(false)) == Bool(true)).Evaluate().Do().CheckValue();
+					((Bool(true) || Bool(true)) == Bool(true)).Evaluate().Do().CheckValue();
 				}
 				{
 					Transaction transaction;
 
 					// Truth table if A then B else C
-					(False.If(False, False) == False).Evaluate().Do();
-					(False.If(False, True) == True).Evaluate().Do();
-					(False.If(True, False) == False).Evaluate().Do();
-					(False.If(True, True) == True).Evaluate().Do();
-					(True.If(False, False) == False).Evaluate().Do();
-					(True.If(False, True) == False).Evaluate().Do();
-					(True.If(True, False) == True).Evaluate().Do();
-					(True.If(True, True) == True).Evaluate().Do();
+					(False.If(False, False) == False).Evaluate().Do().CheckValue();
+					(False.If(False, True) == True).Evaluate().Do().CheckValue();
+					(False.If(True, False) == False).Evaluate().Do().CheckValue();
+					(False.If(True, True) == True).Evaluate().Do().CheckValue();
+					(True.If(False, False) == False).Evaluate().Do().CheckValue();
+					(True.If(False, True) == False).Evaluate().Do().CheckValue();
+					(True.If(True, False) == True).Evaluate().Do().CheckValue();
+					(True.If(True, True) == True).Evaluate().Do().CheckValue();
 				}
 			}
 			Cleanup();
@@ -201,7 +201,7 @@ namespace test_sn
 
 				((z || Bool(false)) == Bool(true)).Assert().Do();
 
-				(Bool(true) == z).Evaluate().Do();
+				(Bool(true) == z).Evaluate().Do().CheckValue();
 				(!(Bool(false) && z)).DoPartialEvaluate().Do();
 				(Bool(true) && Bool(true)).DoPartialEvaluate().Do();
 
@@ -209,19 +209,19 @@ namespace test_sn
 				SN_DECLARE(y);
 
 				(Bool(true) == y.Debug()).Assert().Do();
-				(Bool(true) == y).Evaluate().Do();
+				(Bool(true) == y).Evaluate().Do().CheckValue();
 
 				SN_DECLARE(k1);
 				SN_DECLARE_VALUE(l1, False);
 
 				(k1.Debug().If(False, True) == l1).Assert().Do();
-				(k1 == !l1).Evaluate().Do();
+				(k1 == !l1).Evaluate().Do().CheckValue();
 
 				SN_DECLARE(k2);
 				SN_DECLARE_VALUE(l2, True);
 
 				(k2.If(False, True) == l2).Assert().Do();
-				(k2 == !l2).Evaluate().Do();
+				(k2 == !l2).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}
@@ -238,11 +238,11 @@ namespace test_sn
 				SN_DECLARE(o);
 
 				(o.If(False, True) == False).Assert().Do();
-				o.Evaluate().Do();
+				o.Evaluate().Do().CheckValue();
 				(o.If(m, n) == True).Assert().Do();
-				m.Evaluate().Do();
+				m.Evaluate().Do().CheckValue();
 				((!o).If(m, n) == m).Assert().Do();
-				n.Evaluate().Do();
+				n.Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}
@@ -270,7 +270,7 @@ namespace test_sn
 				std::string x_string = x.GetVariableValue().DisplayValueSN();
 
 				Assert::IsTrue(x_string == "Long(3)");
-				(x == Long(3)).Evaluate().Do();
+				(x == Long(3)).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}
@@ -296,8 +296,8 @@ namespace test_sn
 				std::string y_valueset = y.DoEvaluate().DisplaySN();
 				std::string y_buildset = y.BuildSet().DoEvaluate().DisplaySN();
 
-				(x.BuildSet() == y.BuildSet()).Evaluate().Do();
-				(x.BuildSet() == (Long(3) || Long(4)).BuildSet()).Evaluate().Do();
+				(x.BuildSet() == y.BuildSet()).Evaluate().Do().CheckValue();
+				(x.BuildSet() == (Long(3) || Long(4)).BuildSet()).Evaluate().Do().CheckValue();
 				std::cout << x.DisplaySN();
 			}
 			Cleanup();
@@ -325,8 +325,8 @@ namespace test_sn
 				std::string y_valueset = y.DoEvaluate().DisplaySN();
 				std::string y_buildset = y.BuildSet().DoEvaluate().DisplaySN();
 
-				(x.BuildSet() == y.BuildSet()).Evaluate().Do();
-				(x.BuildSet() == (Long(3) || (Long(4) || Long(5))).BuildSet()).Evaluate().Do();
+				(x.BuildSet() == y.BuildSet()).Evaluate().Do().CheckValue();
+				(x.BuildSet() == (Long(3) || (Long(4) || Long(5))).BuildSet()).Evaluate().Do().CheckValue();
 				std::cout << x.DisplaySN();
 			}
 			Cleanup();
@@ -345,7 +345,7 @@ namespace test_sn
 				std::string x_valueset = x.DoEvaluate().DisplaySN();
 				std::string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
 
-				(x.BuildSet() == (Long(3) || Long(4) || Long(5) || Long(6)).BuildSet()).Evaluate().Do();
+				(x.BuildSet() == (Long(3) || Long(4) || Long(5) || Long(6)).BuildSet()).Evaluate().Do().CheckValue();
 				std::cout << x.DisplaySN();
 			}
 
@@ -365,7 +365,7 @@ namespace test_sn
 				std::string x_valueset = x.DoEvaluate().DisplaySN();
 				std::string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
 
-				(x.BuildSet() == (Long(3) + Long(3) || Long(4) + Long(4) || Long(5) + Long(5) || Long(6) + Long(6)).BuildSet()).Evaluate().Do();
+				(x.BuildSet() == (Long(3) + Long(3) || Long(4) + Long(4) || Long(5) + Long(5) || Long(6) + Long(6)).BuildSet()).Evaluate().Do().CheckValue();
 				std::cout << x.DisplaySN();
 			}
 			Cleanup();
@@ -384,7 +384,7 @@ namespace test_sn
 				std::string x_valueset = x.DoEvaluate().DisplaySN();
 				std::string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
 
-				(x.BuildSet() == (Long(3) + Long(3) || Long(4) + Long(4) || Long(5) + Long(5) || Long(6) + Long(6)).BuildSet()).Evaluate().Do();
+				(x.BuildSet() == (Long(3) + Long(3) || Long(4) + Long(4) || Long(5) + Long(5) || Long(6) + Long(6)).BuildSet()).Evaluate().Do().CheckValue();
 				std::cout << x.DisplaySN();
 			}
 			Cleanup();
@@ -403,7 +403,7 @@ namespace test_sn
 				std::string x_valueset = x.DoEvaluate().DisplaySN();
 				std::string x_buildset = x.BuildSet().DoEvaluate().DisplaySN();
 
-				(x.BuildSet() == (Long(3) || Long(4) || Long(5) || Long(6)).BuildSet()).Evaluate().Do();
+				(x.BuildSet() == (Long(3) || Long(4) || Long(5) || Long(6)).BuildSet()).Evaluate().Do().CheckValue();
 				std::cout << x.DisplaySN();
 			}
 			Cleanup();

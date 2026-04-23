@@ -13,7 +13,7 @@ namespace SN {
 
         SNI::SNI_Expression* GetSNI_Expression();
 
-        void Do();
+        SN_Expression Do();
         SN_Error DoReturnError();
         void Throw();
 

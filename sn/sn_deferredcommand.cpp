@@ -11,7 +11,7 @@ namespace SN {
         : m_Expression(expr.GetSNI_Expression()), m_Done(false)
     {}
 
-    __declspec(noinline) void SN_DeferredCommand::Do() noexcept(false)
+    __declspec(noinline) SN::SN_Expression SN_DeferredCommand::Do() noexcept(false)
     {
         m_Done = true;
         return m_Expression->Do();

@@ -197,10 +197,11 @@ namespace SNI
 		virtual SN::SN_Error SelfAssert();
 		virtual SN::SN_Error PartialAssertValue(const SN::SN_Expression &p_Expression, bool p_Define = false);
 
-		virtual void Do();
+		virtual SN::SN_Expression Do();
 		SN::SN_Error DoReturnError();
 		virtual void Throw();
-		virtual void DoWithHandler(OnErrorHandler * p_ErrorHandler);
+		virtual SN::SN_Expression DoWithHandler(OnErrorHandler * p_ErrorHandler);
+		void CheckValue(const SN::SN_Expression &p_ExpectedResult) const;
 
 		virtual SN::SN_Expression Meta(long p_MetaLevel = 0);
 
@@ -299,7 +300,7 @@ namespace SNI
 		SNI_Expression* FlattenStackCall(long p_MetaLevel, SNI_Expression* function, SN::SN_ExpressionList* l_ParameterList) const;
 
 	private:
-		void HandleAction(SN::SN_Expression p_Result, OnErrorHandler * p_ErrorHandler);
+		void HandleAction(SN::SN_Expression p_Result, OnErrorHandler * p_ErrorHandler) const;
 		virtual SN::SN_Error GetError();
 		static std::map<std::string, unsigned long> m_IdMap;
 

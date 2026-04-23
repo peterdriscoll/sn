@@ -128,7 +128,7 @@ namespace test_sn
 					SN_LOCAL(t);
 					(s + t == String("1 dog")).Assert().Do();
 					validate.IsInteger(s).Assert().Do();
-					(t == String(" dog")).Evaluate().Do();
+					(t == String(" dog")).Evaluate().Do().CheckValue();
 					std::string t_string = t.GetString();
 					Assert::IsTrue(t_string == " dog");
 				}
@@ -138,7 +138,7 @@ namespace test_sn
 					SN_LOCAL(t);
 					(s + t == String("45 dog")).Assert().Do();
 					validate.IsInteger(s).Assert().Do();
-					(t == String(" dog")).Evaluate().Do();
+					(t == String(" dog")).Evaluate().Do().CheckValue();
 					std::string s_string = s.GetString();
 					std::string t_string = t.GetString();
 					Assert::IsTrue(s_string == "45");
@@ -150,7 +150,7 @@ namespace test_sn
 					SN_LOCAL(t);
 					(s + t == String("568 dog")).Assert().Do();
 					validate.IsInteger(s).Assert().Do();
-					(t == String(" dog")).Evaluate().Do();
+					(t == String(" dog")).Evaluate().Do().CheckValue();
 					std::string s_string = s.GetString();
 					std::string t_string = t.GetString();
 					Assert::IsTrue(s_string == "568");
@@ -162,7 +162,7 @@ namespace test_sn
 					SN_LOCAL(t);
 					(s + t == String("9678 dog")).Assert().Do();
 					validate.IsInteger(s).Assert().Do();
-					(t == String(" dog")).Evaluate().Do();
+					(t == String(" dog")).Evaluate().Do().CheckValue();
 					std::string s_string = s.GetString();
 					std::string t_string = t.GetString();
 					Assert::IsTrue(s_string == "9678");
@@ -220,7 +220,7 @@ namespace test_sn
 					SN_LOCAL(t);
 					(s + t == String("536. dog")).Assert().Do();
 					(validate.IsFloatingPoint(s)).Assert().Do();
-					(t == String(". dog")).Evaluate().Do();
+					(t == String(". dog")).Evaluate().Do().CheckValue();
 				}
 
 				{
@@ -228,7 +228,7 @@ namespace test_sn
 					SN_LOCAL(t);
 					(s + t == String("3.1415 dog")).Assert().Do();
 					validate.IsFloatingPoint(s).Assert().Do();
-					(t == String(" dog")).Evaluate().Do();
+					(t == String(" dog")).Evaluate().Do().CheckValue();
 					std::string t_string = t.GetString();
 					Assert::IsTrue(t_string == " dog");
 				}
@@ -238,7 +238,7 @@ namespace test_sn
 					SN_LOCAL(t);
 					(s + t == String("45 dog")).Assert().Do();
 					validate.IsFloatingPoint(s).Assert().Do();
-					(t == String(" dog")).Evaluate().Do();
+					(t == String(" dog")).Evaluate().Do().CheckValue();
 					std::string s_string = s.GetString();
 					std::string t_string = t.GetString();
 					Assert::IsTrue(s_string == "45");
@@ -250,7 +250,7 @@ namespace test_sn
 					SN_LOCAL(t);
 					(s + t == String("3.141596 dog")).Assert().Do();
 					validate.IsFloatingPoint(s).Assert().Do();
-					(t == String(" dog")).Evaluate().Do();
+					(t == String(" dog")).Evaluate().Do().CheckValue();
 					std::string s_string = s.GetString();
 					std::string t_string = t.GetString();
 					Assert::IsTrue(s_string == "3.141596");
@@ -262,7 +262,7 @@ namespace test_sn
 					SN_LOCAL(t);
 					(s + t == String("9678.345 dog")).Assert().Do();
 					validate.IsFloatingPoint(s).Assert().Do();
-					(t == String(" dog")).Evaluate().Do();
+					(t == String(" dog")).Evaluate().Do().CheckValue();
 					std::string s_string = s.GetString();
 					std::string t_string = t.GetString();
 					Assert::IsTrue(s_string == "9678.345");
@@ -352,8 +352,8 @@ namespace test_sn
 					SN_LOCAL(t);
 					(s + t == String("3.1415 dog")).Assert().Do();
 					validate.IsExponential(s).Assert().Do();
-					(s == String("3.1415")).Evaluate().Do();
-					(t == String(" dog")).Evaluate().Do();
+					(s == String("3.1415")).Evaluate().Do().CheckValue();
+					(t == String(" dog")).Evaluate().Do().CheckValue();
 					std::string s_string = s.GetString();
 					std::string t_string = t.GetString();
 					Assert::IsTrue(s_string == "3.1415");
@@ -365,7 +365,7 @@ namespace test_sn
 					SN_LOCAL(t);
 					(s + t == String("45 dog")).Assert().Do();
 					validate.IsExponential(s).Assert().Do();
-					(t == String(" dog")).Evaluate().Do();
+					(t == String(" dog")).Evaluate().Do().CheckValue();
 					std::string s_string = s.GetString();
 					std::string t_string = t.GetString();
 					Assert::IsTrue(s_string == "45");
@@ -377,7 +377,7 @@ namespace test_sn
 					SN_LOCAL(t);
 					(s + t == String("3.141596 dog")).Assert().Do();
 					validate.IsExponential(s).Assert().Do();
-					(t == String(" dog")).Evaluate().Do();
+					(t == String(" dog")).Evaluate().Do().CheckValue();
 					std::string s_string = s.GetString();
 					std::string t_string = t.GetString();
 					Assert::IsTrue(s_string == "3.141596");
@@ -454,8 +454,8 @@ namespace test_sn
 					SN_LOCAL(t);
 					(s + t == String("\"\" dog")).Assert().Do();
 					validate.IsString(s).Assert().Do();
-					(s == String("\"\"")).Evaluate().Do();
-					(t == String(" dog")).Evaluate().Do();
+					(s == String("\"\"")).Evaluate().Do().CheckValue();
+					(t == String(" dog")).Evaluate().Do().CheckValue();
 					std::string s_string = s.GetString();
 					std::string t_string = t.GetString();
 					Assert::IsTrue(s_string == "\"\"");
@@ -467,8 +467,8 @@ namespace test_sn
 					SN_LOCAL(t);
 					(s + t == String("\"C \\\"e\\\" quotes\" dog")).Assert().Do();
 					validate.IsString(s).Assert().Do();
-					(s == String("\"C \\\"e\\\" quotes\"")).Evaluate().Do();
-					(t == String(" dog")).Evaluate().Do();
+					(s == String("\"C \\\"e\\\" quotes\"")).Evaluate().Do().CheckValue();
+					(t == String(" dog")).Evaluate().Do().CheckValue();
 					std::string s_string = s.GetString();
 					std::string t_string = t.GetString();
 					Assert::IsTrue(s_string == "\"C \\\"e\\\" quotes\"");
@@ -480,8 +480,8 @@ namespace test_sn
 					SN_LOCAL(t);
 					(s + t == String("\"E \\ quotes\" dog")).Assert().Do();
 					validate.IsString(s).Assert().Do();
-					(s == String("\"E \\ quotes\"")).Evaluate().Do();
-					(t == String(" dog")).Evaluate().Do();
+					(s == String("\"E \\ quotes\"")).Evaluate().Do().CheckValue();
+					(t == String(" dog")).Evaluate().Do().CheckValue();
 					std::string s_string = s.GetString();
 					std::string t_string = t.GetString();
 					Assert::IsTrue(s_string == "\"E \\ quotes\"");
@@ -534,8 +534,8 @@ namespace test_sn
 					SN_LOCAL(t);
 					(s + t == String("_MyVariable65 dog")).Assert().Do();
 					validate.IsName(s).Assert().Do();
-					(s == String("_MyVariable65")).Evaluate().Do();
-					(t == String(" dog")).Evaluate().Do();
+					(s == String("_MyVariable65")).Evaluate().Do().CheckValue();
+					(t == String(" dog")).Evaluate().Do().CheckValue();
 					std::string s_string = s.GetString();
 					std::string t_string = t.GetString();
 					Assert::IsTrue(s_string == "_MyVariable65");
@@ -547,8 +547,8 @@ namespace test_sn
 					SN_LOCAL(t);
 					(s + t == String("My_Variable_65 dog")).Assert().Do();
 					validate.IsName(s).Assert().Do();
-					(s == String("My_Variable_65")).Evaluate().Do();
-					(t == String(" dog")).Evaluate().Do();
+					(s == String("My_Variable_65")).Evaluate().Do().CheckValue();
+					(t == String(" dog")).Evaluate().Do().CheckValue();
 					std::string s_string = s.GetString();
 					std::string t_string = t.GetString();
 					Assert::IsTrue(s_string == "My_Variable_65");
@@ -603,7 +603,7 @@ namespace test_sn
 					SN_LOCAL(t);
 					(s + t == String(" dog")).Assert().Do();
 					validate.IsWhiteSpaceOnly(s).Assert().Do();
-					(t == String("dog")).Evaluate().Do();
+					(t == String("dog")).Evaluate().Do().CheckValue();
 					std::string t_string = t.GetString();
 					Assert::IsTrue(t_string == "dog");
 				}
@@ -613,7 +613,7 @@ namespace test_sn
 					SN_LOCAL(t);
 					(s + t == String(" \tdog")).Assert().Do();
 					validate.IsWhiteSpaceOnly(s).Assert().Do();
-					(t == String("dog")).Evaluate().Do();
+					(t == String("dog")).Evaluate().Do().CheckValue();
 					std::string s_string = s.GetString();
 					std::string t_string = t.GetString();
 					Assert::IsTrue(s_string == " \t");
@@ -625,7 +625,7 @@ namespace test_sn
 					SN_LOCAL(t);
 					(s + t == String("\t\n dog")).Assert().Do();
 					validate.IsWhiteSpaceOnly(s).Assert().Do();
-					(t == String("dog")).Evaluate().Do();
+					(t == String("dog")).Evaluate().Do().CheckValue();
 					std::string s_string = s.GetString();
 					std::string t_string = t.GetString();
 					Assert::IsTrue(s_string == "\t\n ");
@@ -637,7 +637,7 @@ namespace test_sn
 					SN_LOCAL(t);
 					(s + t == String("\t \r\ndog")).Assert().Do();
 					validate.IsWhiteSpaceOnly(s).Assert().Do();
-					(t == String("dog")).Evaluate().Do();
+					(t == String("dog")).Evaluate().Do().CheckValue();
 					std::string s_string = s.GetString();
 					std::string t_string = t.GetString();
 					Assert::IsTrue(s_string == "\t \r\n");
@@ -696,8 +696,8 @@ namespace test_sn
 					SN_LOCAL(t);
 					(s + t == String("/**/ dog")).Assert().Do();
 					validate.IsSimpleComment(s).Assert().Do();
-					(s == String("/**/")).Evaluate().Do();
-					(t == String(" dog")).Evaluate().Do();
+					(s == String("/**/")).Evaluate().Do().CheckValue();
+					(t == String(" dog")).Evaluate().Do().CheckValue();
 					std::string s_string = s.GetString();
 					std::string t_string = t.GetString();
 					Assert::IsTrue(s_string == "/**/");
@@ -709,8 +709,8 @@ namespace test_sn
 					SN_LOCAL(t);
 					(s + t == String("/*Containing included /* in text*/ dog")).Assert().Do();
 					validate.IsSimpleComment(s).Assert().Do();
-					(s == String("/*Containing included /* in text*/")).Evaluate().Do();
-					(t == String(" dog")).Evaluate().Do();
+					(s == String("/*Containing included /* in text*/")).Evaluate().Do().CheckValue();
+					(t == String(" dog")).Evaluate().Do().CheckValue();
 					std::string s_string = s.GetString();
 					std::string t_string = t.GetString();
 					Assert::IsTrue(s_string == "/*Containing included /* in text*/");
@@ -769,8 +769,8 @@ namespace test_sn
 					SN_LOCAL(t);
 					(s + t == String("//\n dog")).Assert().Do();
 					validate.IsLineComment(s).Assert().Do();
-					(s == String("//\n")).Evaluate().Do();
-					(t == String(" dog")).Evaluate().Do();
+					(s == String("//\n")).Evaluate().Do().CheckValue();
+					(t == String(" dog")).Evaluate().Do().CheckValue();
 					std::string s_string = s.GetString();
 					std::string t_string = t.GetString();
 					Assert::IsTrue(s_string == "//\n");
@@ -782,8 +782,8 @@ namespace test_sn
 					SN_LOCAL(t);
 					(s + t == String("//Containing included /* in text\n dog")).Assert().Do();
 					validate.IsLineComment(s).Assert().Do();
-					(s == String("//Containing included /* in text\n")).Evaluate().Do();
-					(t == String(" dog")).Evaluate().Do();
+					(s == String("//Containing included /* in text\n")).Evaluate().Do().CheckValue();
+					(t == String(" dog")).Evaluate().Do().CheckValue();
 					std::string s_string = s.GetString();
 					std::string t_string = t.GetString();
 					Assert::IsTrue(s_string == "//Containing included /* in text\n");
@@ -827,7 +827,7 @@ namespace test_sn
 
 				SN_DECLARE(j1);
 				(j1 == Meta(1, MyDomain["Peter_1"])).Assert().Do();
-				(i1 == j1).Evaluate().Do();
+				(i1 == j1).Evaluate().Do().CheckValue();
 
 				std::string i1_string = i1.DisplayValueSN();
 				std::string j1_string = j1.DisplayValueSN();
@@ -839,7 +839,7 @@ namespace test_sn
 
 				SN_DECLARE(j2);
 				(j2 == Long(543)).Assert().Do();
-				(i2 == j2).Evaluate().Do();
+				(i2 == j2).Evaluate().Do().CheckValue();
 
 				std::string i2_string = i2.DisplayValueSN();
 				std::string j2_string = j2.DisplayValueSN();
@@ -851,7 +851,7 @@ namespace test_sn
 
 				SN_DECLARE(j4);
 				(j4 == Double(3.1415)).Assert().Do();
-				(i4 == j4).Evaluate().Do();
+				(i4 == j4).Evaluate().Do().CheckValue();
 
 				std::string i4_string = i4.DisplayValueSN();
 				std::string j4_string = j4.DisplayValueSN();
@@ -863,7 +863,7 @@ namespace test_sn
 
 				SN_DECLARE(j3);
 				(j3 == String("My test string")).Assert().Do();
-				(i3 == j3).Evaluate().Do();
+				(i3 == j3).Evaluate().Do().CheckValue();
 
 				std::string i3_string = i3.DisplayValueSN();
 				std::string j3_string = j3.DisplayValueSN();
@@ -881,7 +881,7 @@ namespace test_sn
 				std::string s2_string = s2.DisplayValueSN();
 				Assert::IsTrue(s1_string == s2_string);
 
-				(s1 == s2).Evaluate().Do();
+				(s1 == s2).Evaluate().Do().CheckValue();
 			}
 		}
 
@@ -916,8 +916,8 @@ namespace test_sn
 				Assert::IsTrue(i5_string == j5_string);
 				Assert::IsTrue(k5_string == "-" + j5_string);
 
-				(i5 == j5).Evaluate().Do();
-				(k5 == -j5).Evaluate().Do();
+				(i5 == j5).Evaluate().Do().CheckValue();
+				(k5 == -j5).Evaluate().Do().CheckValue();
 			}
 		}
 
@@ -956,7 +956,7 @@ namespace test_sn
 					Assert::IsTrue(i1_string == j1_string);
 					Assert::IsTrue(i1_value == j1_value);
 
-					(i1 == j1).Evaluate().Do();
+					(i1 == j1).Evaluate().Do().CheckValue();
 				}
 			}
 		}
@@ -991,7 +991,7 @@ namespace test_sn
 				Assert::IsTrue(i2_string == j2_string);
 				Assert::IsTrue(i2_value == j2_value);
 
-				(i2 == j2).Evaluate().Do();
+				(i2 == j2).Evaluate().Do().CheckValue();
 
 				if (false)
 				{
@@ -1011,7 +1011,7 @@ namespace test_sn
 					Assert::IsTrue(i3_string == j3_string);
 					Assert::IsTrue(i3_value == j3_value);
 
-					(i3 == j3).Evaluate().Do();
+					(i3 == j3).Evaluate().Do().CheckValue();
 				}
 			}
 		}
@@ -1046,7 +1046,7 @@ namespace test_sn
 				Assert::IsTrue(i3_string == j3_string);
 				Assert::IsTrue(i3_value == j3_value);
 
-				(i3 == j3).Evaluate().Do();
+				(i3 == j3).Evaluate().Do().CheckValue();
 			}
 		}
 	};

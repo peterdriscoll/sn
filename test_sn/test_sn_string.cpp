@@ -63,11 +63,11 @@ namespace test_sn
 			{
 				Manager manager("Test String Evaluate", AssertErrorHandler);
 
-				(String("dog") == String("dog")).Evaluate().Do();
-				(!(String("dog") == String("cat"))).Evaluate().Do();
+				(String("dog") == String("dog")).Evaluate().Do().CheckValue();
+				(!(String("dog") == String("cat"))).Evaluate().Do().CheckValue();
 
 				SN_DECLARE_VALUE(z, String("dog"));
-				(String("dog") == z).Evaluate().Do();
+				(String("dog") == z).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}
@@ -108,7 +108,7 @@ namespace test_sn
 					SN_DECLARE(y);
 
 					(String("dog") == y).Assert().Do();
-					(String("dog") == y).Evaluate().Do();
+					(String("dog") == y).Evaluate().Do().CheckValue();
 
 					SN_DECLARE(z);
 
@@ -116,7 +116,7 @@ namespace test_sn
 					Value cat_value = z.GetValue();
 					std::string s_cat_value = cat_value.GetString();
 					Assert::IsTrue(s_cat_value == "cat");
-					(String("cat") == z).Evaluate().Do();
+					(String("cat") == z).Evaluate().Do().CheckValue();
 				}
 				{
 					Transaction transaction;
@@ -470,7 +470,7 @@ namespace test_sn
 
 					SN_DECLARE(c);
 					(String("") + c == String("dog")).Assert().Do();
-					(c == String("dog")).Evaluate().Do();
+					(c == String("dog")).Evaluate().Do().CheckValue();
 
 					Error e1 = (String("").SubtractLeftChar() == String("")).Evaluate().DoReturnError();
 					std::string d1 = e1.GetDescription();
@@ -488,7 +488,7 @@ namespace test_sn
 					std::string d4 = e4.GetDescription();
 					Assert::IsTrue(d4.find("String too short") != std::string::npos);
 
-					(String("Dog") != String("dog")).Evaluate().Do();
+					(String("Dog") != String("dog")).Evaluate().Do().CheckValue();
 					(String("Dog") != String("dog")).Assert().Do();
 				}
 			}

@@ -381,17 +381,12 @@ namespace SN
 		{
 			return SN_Error(err);
 		}
-		SNI::SNI_Bool *result = dynamic_cast<SNI::SNI_Bool *>(GetSNI_Base());
-		if (result)
-		{
-			return SN_Error(result->GetBool(), false);
-		}
-		return SN_Error(false, false, "Error object expected.");
+		return SN_Error(true, false, "Error object expected.");
 	}
 
-	void SN_Base::Do()
+	SN_Expression SN_Base::Do()
 	{
-		GetSNI_Base()->Do();
+         return GetSNI_Base()->Do();
 	}
 
 	void SN_Base::Fix(const SN_Expression& p_Value)

@@ -62,18 +62,18 @@ namespace test_sn
 
 				// These return a value set of bools.  Should this reduce to a boolean value???
 
-				(B_Digit(String("0"))).Evaluate().Do();
-				(B_Digit(String("1"))).Evaluate().Do();
-				(B_Digit(String("2"))).Evaluate().Do();
-				(B_Digit(String("3"))).Evaluate().Do();
-				(B_Digit(String("4"))).Evaluate().Do();
-				(B_Digit(String("5"))).Evaluate().Do();
-				(B_Digit(String("6"))).Evaluate().Do();
-				(B_Digit(String("7"))).Evaluate().Do();
-				(B_Digit(String("8"))).Evaluate().Do();
-				(B_Digit(String("9"))).Evaluate().Do();
+				(B_Digit(String("0"))).Evaluate().Do().CheckValue();
+				(B_Digit(String("1"))).Evaluate().Do().CheckValue();
+				(B_Digit(String("2"))).Evaluate().Do().CheckValue();
+				(B_Digit(String("3"))).Evaluate().Do().CheckValue();
+				(B_Digit(String("4"))).Evaluate().Do().CheckValue();
+				(B_Digit(String("5"))).Evaluate().Do().CheckValue();
+				(B_Digit(String("6"))).Evaluate().Do().CheckValue();
+				(B_Digit(String("7"))).Evaluate().Do().CheckValue();
+				(B_Digit(String("8"))).Evaluate().Do().CheckValue();
+				(B_Digit(String("9"))).Evaluate().Do().CheckValue();
 
-				(!B_Digit(String("X"))).Evaluate().Do();
+				(!B_Digit(String("X"))).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}
@@ -105,18 +105,18 @@ namespace test_sn
 
 				(!(B_Digit2(String("X")))).Assert().Do();
 
-				(B_Digit2(String("0"))).Evaluate().Do();
-				(B_Digit2(String("1"))).Evaluate().Do();
-				(B_Digit2(String("2"))).Evaluate().Do();
-				(B_Digit2(String("3"))).Evaluate().Do();
-				(B_Digit2(String("4"))).Evaluate().Do();
-				(B_Digit2(String("5"))).Evaluate().Do();
-				(B_Digit2(String("6"))).Evaluate().Do();
-				(B_Digit2(String("7"))).Evaluate().Do();
-				(B_Digit2(String("8"))).Evaluate().Do();
-				(B_Digit2(String("9"))).Evaluate().Do();
+				(B_Digit2(String("0"))).Evaluate().Do().CheckValue();
+				(B_Digit2(String("1"))).Evaluate().Do().CheckValue();
+				(B_Digit2(String("2"))).Evaluate().Do().CheckValue();
+				(B_Digit2(String("3"))).Evaluate().Do().CheckValue();
+				(B_Digit2(String("4"))).Evaluate().Do().CheckValue();
+				(B_Digit2(String("5"))).Evaluate().Do().CheckValue();
+				(B_Digit2(String("6"))).Evaluate().Do().CheckValue();
+				(B_Digit2(String("7"))).Evaluate().Do().CheckValue();
+				(B_Digit2(String("8"))).Evaluate().Do().CheckValue();
+				(B_Digit2(String("9"))).Evaluate().Do().CheckValue();
 
-				(!B_Digit2(String("X"))).Evaluate().Do();
+				(!B_Digit2(String("X"))).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}
@@ -148,15 +148,15 @@ namespace test_sn
 
 				SN_DECLARE(x1);
 				(ConvertInteger(String("1")) == x1).Assert().Do();
-				(x1 == Long(1)).Evaluate().Do();
+				(x1 == Long(1)).Evaluate().Do().CheckValue();
 
 				SN_DECLARE(x2);
 				(ConvertInteger(String("12")) == x2).Assert().Do();
-				(x2 == Long(12)).Evaluate().Do();
+				(x2 == Long(12)).Evaluate().Do().CheckValue();
 
 				SN_DECLARE(x3);
 				(ConvertInteger(String("123456789")) == x3).Assert().Do();
-				(x3 == Long(123456789)).Evaluate().Do();
+				(x3 == Long(123456789)).Evaluate().Do().CheckValue();
 
 				SN_DECLARE(a);
 				SN_DECLARE(b);
@@ -172,7 +172,7 @@ namespace test_sn
 				(c4 + d4 == String("1abc")).Assert().Do();
 				SN_DECLARE(x4);
 				(ConvertInteger(c4) == x4).Assert().Do();
-				(x4 == Long(1)).Evaluate().Do();
+				(x4 == Long(1)).Evaluate().Do().CheckValue();
 
 				SN_DECLARE(a1);
 				SN_DECLARE(b1);
@@ -188,7 +188,7 @@ namespace test_sn
 				(c5 + d5 == String("12abc")).Assert().Do();
 				SN_DECLARE(x5);
 				(ConvertInteger(c5) == x5).Assert().Do();
-				(x5 == Long(12)).Evaluate().Do();
+				(x5 == Long(12)).Evaluate().Do().CheckValue();
 
 				SN_DECLARE(a2);
 				SN_DECLARE(b2);
@@ -204,7 +204,7 @@ namespace test_sn
 				(c6 + d6 == String("123456789abc")).Assert().Do();
 				SN_DECLARE(x6);
 				(ConvertInteger(c6) == x6).Assert().Do();
-				(x6 == Long(123456789)).Evaluate().Do();
+				(x6 == Long(123456789)).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}
@@ -234,11 +234,11 @@ namespace test_sn
 
 				SN_DECLARE(x2);
 				(ParseInteger("13")(x2)).Assert().Do();
-				(x2 == Long(13)).Evaluate().Do();
+				(x2 == Long(13)).Evaluate().Do().CheckValue();
 
 				SN_DECLARE(x3);
 				(ParseInteger("21")(x3)).Assert().Do();
-				(x3 == Long(21)).Evaluate().Do();
+				(x3 == Long(21)).Evaluate().Do().CheckValue();
 
 				long x2_long = Long(x2.GetSafeValue()).GetNumber();
 				long x3_long = Long(x3.GetSafeValue()).GetNumber();
@@ -283,15 +283,15 @@ namespace test_sn
 
 				SN_DECLARE(a1);
 				(Alpha(String("g")) == a1).Assert().Do();
-				a1.Evaluate().Do();
+				a1.Evaluate().Do().CheckValue();
 
 				SN_DECLARE(a2);
 				(Alpha(String("6")) == a2).Assert().Do();
-				(!a2).Evaluate().Do();
+				(!a2).Evaluate().Do().CheckValue();
 
 				SN_DECLARE(a3);
 				(AlphaNumeric(String("6")) == a3).Assert().Do();
-				a3.Evaluate().Do();
+				a3.Evaluate().Do().CheckValue();
 
 				SN_DECLARE(IsInteger);
 				SN_DECLARE(i);
@@ -299,7 +299,7 @@ namespace test_sn
 
 				SN_DECLARE(z1);
 				(IsInteger(String("456666")) == z1).Assert().Do();
-				(z1).Evaluate().Do();
+				(z1).Evaluate().Do().CheckValue();
 
 				SN_DECLARE(IsName);
 				SN_DECLARE(IsNameContinuation);
@@ -310,7 +310,7 @@ namespace test_sn
 
 				SN_DECLARE(z2);
 				(IsName(String("Peter1")) == z2).Assert().Do();
-				(z2).Evaluate().Do();
+				(z2).Evaluate().Do().CheckValue();
 
 				SN_DECLARE(ParseInteger);
 				SN_DECLARE(s);
@@ -321,7 +321,7 @@ namespace test_sn
 
 				SN_DECLARE(x3);
 				(ParseInteger("21")(x3)).Assert().Do();
-				(x3 == Long(21)).Evaluate().Do();
+				(x3 == Long(21)).Evaluate().Do().CheckValue();
 
 				SN_DOMAIN(MyDomain);
 				SN_DECLARE(i3);
@@ -329,7 +329,7 @@ namespace test_sn
 
 				SN_DECLARE(i4);
 				(i4 == Meta(1, MyDomain["Peter1"])).Assert().Do();
-				(i3 == i4).Evaluate().Do();
+				(i3 == i4).Evaluate().Do().CheckValue();
 
 				std::string i3_string = i3.DisplayValueSN();
 				std::string i4_string = i4.DisplayValueSN();
@@ -368,11 +368,11 @@ namespace test_sn
 
 				SN_DECLARE(z1);
 				(IsString(String("\"M\"")) == z1).Assert().Do();
-				(z1).Evaluate().Do();
+				(z1).Evaluate().Do().CheckValue();
 
 				SN_DECLARE(z2);
 				(IsString(String("\"Line 1\\nLine2\"")) == z2).Assert().Do();
-				(z2).Evaluate().Do();
+				(z2).Evaluate().Do().CheckValue();
 
 				SN_DECLARE(ParseString);
 				SN_DECLARE(i);
@@ -380,7 +380,7 @@ namespace test_sn
 
 				SN_DECLARE(x2);
 				(ParseString("\"Line 1\\nLine2\"")(x2)).Assert().Do();
-				(x2 == String("Line 1\nLine2")).Evaluate().Do();
+				(x2 == String("Line 1\nLine2")).Evaluate().Do().CheckValue();
 
 				SN_DECLARE(y2);
 				(y2 == String("Line 1\nLine2")).Assert().Do();
@@ -391,12 +391,12 @@ namespace test_sn
 
 				SN_DECLARE(k1);
 				(IsString(String("Bad string")) == k1).Assert().Do();
-				(!k1).Evaluate().Do();
+				(!k1).Evaluate().Do().CheckValue();
 
 				SN_DECLARE(k2);
 				SN_DECLARE(k3);
 				(ParseString(String("Bad string"))(k2) == k3).Assert().Do();
-				(!k3).Evaluate().Do();
+				(!k3).Evaluate().Do().CheckValue();
 			}
 		}
 
@@ -461,7 +461,7 @@ namespace test_sn
 
 				SN_DECLARE(j1);
 				(j1 == Meta(1, MyDomain["Peter_1"])).Assert().Do();
-				(i1 == j1).Evaluate().Do();
+				(i1 == j1).Evaluate().Do().CheckValue();
 
 				std::string i1_string = i1.DisplayValueSN();
 				std::string j1_string = j1.DisplayValueSN();
@@ -472,7 +472,7 @@ namespace test_sn
 
 				SN_DECLARE(j2);
 				(j2 == Long(543)).Assert().Do();
-				(i2 == j2).Evaluate().Do();
+				(i2 == j2).Evaluate().Do().CheckValue();
 
 				std::string i2_string = i2.DisplayValueSN();
 				std::string j2_string = j2.DisplayValueSN();
@@ -563,7 +563,7 @@ namespace test_sn
 
 				SN_DECLARE(j1);
 				(j1 == Meta(1, MyDomain["Peter_1"])).Assert().Do();
-				(i1 == j1).Evaluate().Do();
+				(i1 == j1).Evaluate().Do().CheckValue();
 
 				std::string i1_string = i1.DisplayValueSN();
 				std::string j1_string = j1.DisplayValueSN();
@@ -574,7 +574,7 @@ namespace test_sn
 
 				SN_DECLARE(j2);
 				(j2 == Long(543)).Assert().Do();
-				(i2 == j2).Evaluate().Do();
+				(i2 == j2).Evaluate().Do().CheckValue();
 
 				std::string i2_string = i2.DisplayValueSN();
 				std::string j2_string = j2.DisplayValueSN();
@@ -585,7 +585,7 @@ namespace test_sn
 
 				SN_DECLARE(j3);
 				(j3 == String("My test string")).Assert().Do();
-				(i3 == j3).Evaluate().Do();
+				(i3 == j3).Evaluate().Do().CheckValue();
 
 				std::string i3_string = i3.DisplayValueSN();
 				std::string j3_string = j3.DisplayValueSN();
@@ -596,7 +596,7 @@ namespace test_sn
 
 				SN_DECLARE(s2);
 				(s2 == String("My test \"string\"")).Assert().Do();
-				(s1 == s2).Evaluate().Do();
+				(s1 == s2).Evaluate().Do().CheckValue();
 
 				std::string s1_string = s1.DisplayValueSN();
 				std::string s2_string = s2.DisplayValueSN();

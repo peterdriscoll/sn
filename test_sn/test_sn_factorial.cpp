@@ -51,7 +51,7 @@ namespace test_sn
 					std::string v_RemovePrefix = Lambda(p, Lambda(x, x.SubtractLeft(p))).DoPartialEvaluate().DisplaySN();
 					Assert::IsTrue(v_RemovePrefix == "@p.@x.SubtractLeft x p");
 					Assert::IsTrue(RemovePrefix.DoPartialEvaluate().Equivalent(Lambda(p, Lambda(x, x.SubtractLeft(p))).DoPartialEvaluate()));
-					(RemovePrefix(String("Atl"))(String("AtlDog")) == String("Dog")).Evaluate().Do();
+					(RemovePrefix(String("Atl"))(String("AtlDog")) == String("Dog")).Evaluate().Do().CheckValue();
 				}
 				{
 					SN_DECLARE(RemovePostfix);
@@ -62,7 +62,7 @@ namespace test_sn
 					Assert::IsTrue(RemovePostfix.GetVariableValue().DisplaySN() == "@p.@x.SubtractRight x p");
 					std::cout << std::endl << "Variable " << RemovePostfix.DisplaySN() << std::endl;
 					Assert::IsTrue(RemovePostfix.DoPartialEvaluate().Equivalent(Lambda(p, Lambda(x, x.SubtractRight(p))).DoPartialEvaluate()));
-					(RemovePostfix(String("Atl"))(String("DogAtl")) == String("Dog")).Evaluate().Do();
+					(RemovePostfix(String("Atl"))(String("DogAtl")) == String("Dog")).Evaluate().Do().CheckValue();
 				}
 			}
 			Cleanup();
@@ -80,18 +80,18 @@ namespace test_sn
 
 				(Define(Factorial) == Lambda(n, (n == Long(0)).If(Long(1), n * Factorial(n - Long(1))))).PartialAssert().Do();
 				std::cout << std::endl << "Function " << Factorial.DisplaySN() << std::endl;
-				(Factorial(Long(3)) == Long(6)).Evaluate().Do();
-				(Factorial(Long(10)) == Long(3628800)).Evaluate().Do();
-				(Factorial(Long(12)) == Long(479001600)).Evaluate().Do();
+				(Factorial(Long(3)) == Long(6)).Evaluate().Do().CheckValue();
+				(Factorial(Long(10)) == Long(3628800)).Evaluate().Do().CheckValue();
+				(Factorial(Long(12)) == Long(479001600)).Evaluate().Do().CheckValue();
 
 				SN_DECLARE(Fact);
 				SN_DECLARE(m);
 
 				(Define(Fact)(m) == (m == Long(0)).If(Long(1), m * Fact(m - Long(1)))).PartialAssert().Do();
 				std::cout << std::endl << "Function " << Fact.DisplaySN() << std::endl;
-				(Fact(Long(3)) == Long(6)).Evaluate().Do();
-				(Fact(Long(10)) == Long(3628800)).Evaluate().Do();
-				(Fact(Long(12)) == Long(479001600)).Evaluate().Do();
+				(Fact(Long(3)) == Long(6)).Evaluate().Do().CheckValue();
+				(Fact(Long(10)) == Long(3628800)).Evaluate().Do().CheckValue();
+				(Fact(Long(12)) == Long(479001600)).Evaluate().Do().CheckValue();
 			}
 			Cleanup();
 		}
@@ -154,11 +154,11 @@ namespace test_sn
 
 				(Define(Fact)(g)(n) == (n == Long(0)).If(Long(1), n * g(n - Long(1)))).PartialAssert().Do();
 
-				(Y(Fact)(Long(0)) == Long(1)).Evaluate().Do();
-				(Y(Fact)(Long(1)) == Long(1)).Evaluate().Do();
-				(Y(Fact)(Long(3)) == Long(6)).Evaluate().Do();
-				(Y(Fact)(Long(10)) == Long(3628800)).Evaluate().Do();
-				(Y(Fact)(Long(12)) == Long(479001600)).Evaluate().Do();
+				(Y(Fact)(Long(0)) == Long(1)).Evaluate().Do().CheckValue();
+				(Y(Fact)(Long(1)) == Long(1)).Evaluate().Do().CheckValue();
+				(Y(Fact)(Long(3)) == Long(6)).Evaluate().Do().CheckValue();
+				(Y(Fact)(Long(10)) == Long(3628800)).Evaluate().Do().CheckValue();
+				(Y(Fact)(Long(12)) == Long(479001600)).Evaluate().Do().CheckValue();
 
 				(Y(Fact)(Long(0)) == Long(1)).Assert().Do();
 				(Y(Fact)(Long(1)) == Long(1)).Assert().Do();

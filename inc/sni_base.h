@@ -122,7 +122,7 @@ namespace SNI
 		virtual bool Equivalent(SNI_Object * p_Other) const = 0;
 
 		virtual void Throw() = 0;
-		virtual void Do() = 0;
+		virtual SN::SN_Expression Do() = 0;
 	};
 }
 

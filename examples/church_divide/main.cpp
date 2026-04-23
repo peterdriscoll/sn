@@ -40,8 +40,8 @@ void TestValidate_IsString()
 		SN_LOCAL(t);
 		(s + t == String("\"\" dog")).Assert().Do();
 		validate.IsString(s).Assert().Do();
-		(s == String("\"\"")).Evaluate().Do();
-		(t == String(" dog")).Evaluate().Do();
+		(s == String("\"\"")).Evaluate().Do().CheckValue();
+		(t == String(" dog")).Evaluate().Do().CheckValue();
 		std::string s_string = s.GetString();
 		std::string t_string = t.GetString();
 		ASSERTM(s_string == "\"\"", "");
@@ -53,8 +53,8 @@ void TestValidate_IsString()
 		SN_LOCAL(t);
 		(s + t == String("\"Contaning \\\"escaped\\\" quotes\" dog")).Assert().Do();
 		validate.IsString(s).Assert().Do();
-		(s == String("\"Contaning \\\"escaped\\\" quotes\"")).Evaluate().Do();
-		(t == String(" dog")).Evaluate().Do();
+		(s == String("\"Contaning \\\"escaped\\\" quotes\"")).Evaluate().Do().CheckValue();
+		(t == String(" dog")).Evaluate().Do().CheckValue();
 		std::string s_string = s.GetString();
 		std::string t_string = t.GetString();
 		ASSERTM(s_string == "\"Contaning \\\"escaped\\\" quotes\"", "");
@@ -66,8 +66,8 @@ void TestValidate_IsString()
 		SN_LOCAL(t);
 		(s + t == String("\"Escaped backslash \\ quotes\" dog")).Assert().Do();
 		validate.IsString(s).Assert().Do();
-		(s == String("\"Escaped backslash \\ quotes\"")).Evaluate().Do();
-		(t == String(" dog")).Evaluate().Do();
+		(s == String("\"Escaped backslash \\ quotes\"")).Evaluate().Do().CheckValue();
+		(t == String(" dog")).Evaluate().Do().CheckValue();
 		std::string s_string = s.GetString();
 		std::string t_string = t.GetString();
 		ASSERTM(s_string == "\"Escaped backslash \\ quotes\"", "");
@@ -164,18 +164,18 @@ void TestCharInValueSet()
 */
 	// These return a value set of bools.  Should this reduce to a boolean value???
 
-	(B_Digit(String("0"))).Evaluate().Do();
-	(B_Digit(String("1"))).Evaluate().Do();
-	(B_Digit(String("2"))).Evaluate().Do();
-	(B_Digit(String("3"))).Evaluate().Do();
-	(B_Digit(String("4"))).Evaluate().Do();
-	(B_Digit(String("5"))).Evaluate().Do();
-	(B_Digit(String("6"))).Evaluate().Do();
-	(B_Digit(String("7"))).Evaluate().Do();
-	(B_Digit(String("8"))).Evaluate().Do();
-	(B_Digit(String("9"))).Evaluate().Do();
+	(B_Digit(String("0"))).Evaluate().Do().CheckValue();
+	(B_Digit(String("1"))).Evaluate().Do().CheckValue();
+	(B_Digit(String("2"))).Evaluate().Do().CheckValue();
+	(B_Digit(String("3"))).Evaluate().Do().CheckValue();
+	(B_Digit(String("4"))).Evaluate().Do().CheckValue();
+	(B_Digit(String("5"))).Evaluate().Do().CheckValue();
+	(B_Digit(String("6"))).Evaluate().Do().CheckValue();
+	(B_Digit(String("7"))).Evaluate().Do().CheckValue();
+	(B_Digit(String("8"))).Evaluate().Do().CheckValue();
+	(B_Digit(String("9"))).Evaluate().Do().CheckValue();
 
-	(!B_Digit(String("X"))).Evaluate().Do();
+	(!B_Digit(String("X"))).Evaluate().Do().CheckValue();
 }
 
 
@@ -269,7 +269,7 @@ void TestSimple()
 {
 	SN_DECLARE(result);
 	(Long(5) + Long(6) == result).Assert().Do();
-	(result > Long(11)).Debug().Evaluate().Do();
+	(result > Long(11)).Debug().Evaluate().Do().CheckValue();
 }
 
 void TestPythagoras()
@@ -349,17 +349,17 @@ void TestChurchDivide()
 	// IsZero = \n.n (\x.false) true
 	(Define(IsZero) == Lambda(n, n(Lambda(x, falseL))(trueL))).PartialAssert().Do();
 
-	//(divide(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(1)).Evaluate().Do();
+	//(divide(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == Long(1)).Evaluate().Do().CheckValue();
 	(divide(Lambda(f, Lambda(x, f(x))))(Lambda(f, Lambda(x, f(x))))(inc)(Long(0)) == r1).Assert().Do();
-	(r1 == Long(1)).Evaluate().Do();
+	(r1 == Long(1)).Evaluate().Do().CheckValue();
 
-	(divide(Lambda(f, Lambda(x, f(f(f(f(x)))))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(2)).Evaluate().Do();
+	(divide(Lambda(f, Lambda(x, f(f(f(f(x)))))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == Long(2)).Evaluate().Do().CheckValue();
 	(divide(Lambda(f, Lambda(x, f(f(f(f(x)))))))(Lambda(f, Lambda(x, f(f(x)))))(inc)(Long(0)) == r2).Assert().Do();
-	(r2 == Long(2)).Evaluate().Do();
+	(r2 == Long(2)).Evaluate().Do().CheckValue();
 
-	(divide(Lambda(f, Lambda(x, f(f(f(f(f(f(f(f(f(x))))))))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(3)).Evaluate().Do();
+	(divide(Lambda(f, Lambda(x, f(f(f(f(f(f(f(f(f(x))))))))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == Long(3)).Evaluate().Do().CheckValue();
 	(divide(Lambda(f, Lambda(x, f(f(f(f(f(f(f(f(f(x))))))))))))(Lambda(f, Lambda(x, f(f(f(x))))))(inc)(Long(0)) == r3).Assert().Do();
-	(r3 == Long(3)).Evaluate().Do();
+	(r3 == Long(3)).Evaluate().Do().CheckValue();
 
 }
 

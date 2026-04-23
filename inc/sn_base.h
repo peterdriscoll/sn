@@ -143,7 +143,7 @@ namespace SN
 
 		SN_Error GetError() const;
 
-		void Do();
+		SN_Expression Do();
 
 		void Fix(const SN_Expression &p_Value);
 
