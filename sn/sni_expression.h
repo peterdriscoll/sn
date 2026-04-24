@@ -127,6 +127,7 @@ namespace SNI
 		virtual SN::SN_Expression SimplifyValue();
 		virtual void AttachDelayedCall(SNI_DelayedCall * p_Call);
 		virtual void AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map);
+		virtual void AssignToVariable(SNI_Variable * p_Variable);
 		virtual bool IsRequested() const;
 		virtual void Request();
 		virtual SNI_WorldSet *GetWorldSet();
@@ -145,7 +146,9 @@ namespace SNI
 		virtual void Complete();
 		virtual bool IsVariable() const;
 		virtual bool IsValueHolder() const;
+		virtual bool IsClass() const;
 		virtual bool IsValueSet() const;
+		virtual bool IsBound() const;
 		virtual bool IsString() const;
 		virtual bool IsStringValue() const;
 		virtual bool IsMeta() const;

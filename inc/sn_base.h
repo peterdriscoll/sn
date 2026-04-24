@@ -86,6 +86,7 @@ namespace SN
 
 		bool IsClass() const;
 		bool IsValueSet() const;
+        bool IsBound() const;
 
 		bool IsString() const;
 

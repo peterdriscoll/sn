@@ -114,16 +114,19 @@ namespace SNI
 			value->ForEach(
 				[&p_Stream, &delimeter, p_DebugFieldWidth, &p_DisplayOptions, &prefix](const SN::SN_Expression& p_Expression, SNI_World* p_World)->SN::SN_Error
 				{
-					SNI::SNI_DisplayOptions plainText(doTextOnly);
-					std::string valueText;
-					std::string valueTextHTML;
-					if (p_Expression.GetSNI_Expression())
+					if (!p_World || !p_World->IsEmpty())
 					{
-						valueText = p_Expression.DisplaySN(plainText) + std::string(p_World ? "::" + p_World->DisplaySN(plainText) : "");
-						valueTextHTML = p_Expression.DisplaySN(p_DisplayOptions) + std::string(p_World ? "::" + p_World->DisplaySN(p_DisplayOptions) : "");
+						SNI::SNI_DisplayOptions plainText(doTextOnly);
+						std::string valueText;
+						std::string valueTextHTML;
+						if (p_Expression.GetSNI_Expression())
+						{
+							valueText = p_Expression.DisplaySN(plainText) + std::string(p_World ? "@" + p_World->DisplaySN(plainText) : "");
+							valueTextHTML = p_Expression.DisplaySN(p_DisplayOptions) + std::string(p_World ? "@" + p_World->DisplayFlattenedSN(p_DisplayOptions) : "");
+						}
+						p_Stream << delimeter << prefix << "\t" << DetailsFS(valueText, valueTextHTML, p_DebugFieldWidth);
+						delimeter = ",\n";
 					}
-					p_Stream << delimeter << prefix << "\t" << DetailsFS(valueText, valueTextHTML, p_DebugFieldWidth);
-					delimeter = ",\n";
 					return skynet::OK;
 				});
 		}
@@ -401,6 +404,10 @@ namespace SNI
 	{
 	}
 
+	void SNI_Expression::AssignToVariable(SNI_Variable *p_Variable)
+	{
+	}
+
 	std::string SNI_Expression::DisplaySN0() const
 	{
 		SNI_DisplayOptions l_DisplayOptions(doTextOnly);
@@ -530,7 +537,17 @@ namespace SNI
 		return false;
 	}
 
+	bool SNI_Expression::IsClass() const
+	{
+		return false;
+	}
+
 	bool SNI_Expression::IsValueSet() const
+	{
+		return false;
+	}
+
+	bool SNI_Expression::IsBound() const
 	{
 		return false;
 	}

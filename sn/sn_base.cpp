@@ -139,6 +139,15 @@ namespace SN
 		return "";
 	}
 
+	SN_Expression SN_Base::Type() const
+	{
+		if (GetSNI_Base())
+        {
+			return GetSNI_Base()->Type();
+        }
+		return skynet::Null;
+	}
+	
 	bool SN_Base::IsNull() const
 	{
 		return !GetSNI_Base() || GetSNI_Base()->IsNull();
@@ -203,10 +212,20 @@ namespace SN
 	{
 		return GetSNI_Base() && GetSNI_Base()->IsValueHolder();
 	}
+	
+	bool SN_Base::IsClass() const
+	{
+		return GetSNI_Base() && GetSNI_Base()->IsClass();
+	}
 
 	bool SN_Base::IsValueSet() const
 	{
 		return GetSNI_Base() && GetSNI_Base()->IsValueSet();
+	}
+
+	bool SN_Base::IsBound() const
+	{
+		return GetSNI_Base() && GetSNI_Base()->IsBound();
 	}
 
 	bool SN_Base::IsString() const

@@ -65,6 +65,7 @@ namespace SNI
 		virtual std::string GetOperator() const = 0;
 		virtual const SNI_Expression* GetSafeValue() const = 0;
 		virtual SNI_Expression* GetValue(bool p_Request = true) const = 0;
+		virtual void AssignToVariable(SNI_Variable * p_Variable) = 0;
 
 		//---------------------------------------------------------------
 		// Cardinality
@@ -74,6 +75,7 @@ namespace SNI
 		virtual size_t RightCardinality(size_t p_MaxCardinality = CARDINALITY_MAX) const = 0;
 		virtual SN::SN_Error ForEach(std::function<SN::SN_Error(const SN::SN_Expression &p_Param, SNI_World *p_World)> p_Action) = 0;
 		virtual SN::SN_Cartesian CartProd(long p_Index, SNI_FunctionDef *p_FunctionDef = NULL) = 0;
+		virtual SN::SN_Expression Type() const = 0;
 
 		//---------------------------------------------------------------
 		// Status
@@ -91,7 +93,9 @@ namespace SNI
 		virtual bool IsInline() const = 0;
 		virtual bool IsVariable() const = 0;
 		virtual bool IsValueHolder() const = 0;
+		virtual bool IsClass() const = 0;
 		virtual bool IsValueSet() const = 0;
+        virtual bool IsBound() const = 0;
 		virtual bool IsString() const = 0;
 		virtual bool IsStringValue() const = 0;
 		virtual bool IsComplete() const = 0;
