@@ -172,7 +172,7 @@ namespace SNI
 			DelayedCallList::iterator it = m_DelayedCallList.end();
 			long id = 0;
 			m_SearchLock.lock();
-			RemoveEmptyCalls();
+			// RemoveEmptyCalls(); Remove for now waiting switch to double dipping.
 			for (DelayedCallList::iterator loopIt = m_DelayedCallList.begin(); loopIt != m_DelayedCallList.end(); loopIt++)
 			{
 				SNI_DelayedCall *loopCall = *loopIt;
