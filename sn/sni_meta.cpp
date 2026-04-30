@@ -167,10 +167,6 @@ namespace SNI
 				SNI_Meta* meta_result = result.GetSNI_Meta();
 				return meta_result->CombineMetaValues(m_DeltaMetaLevel);
 			}
-			if (!result.IsVariable() && result.IsKnownValue())
-			{ // Meta wraps an expression so that it can be treated as a value. But if the result is already a value, no need for the Meta.
-				return result;
-			}
 			if (0 < p_MetaLevel || 0 < thisLevel)
 			{
 				return SN::SN_Meta(m_DeltaMetaLevel, result);
@@ -189,10 +185,6 @@ namespace SNI
 			{ // If the result is a meta, then combine this meta with it, simplifying one Meta within a Meta to a single one. 
 				SNI_Meta *meta_result = result.GetSNI_Meta();
 				return meta_result->CombineMetaValues(m_DeltaMetaLevel);
-			}
-			if (!result.IsVariable() && result.IsKnownValue())
-			{ // Meta wraps an expression so that it can be treated as a value. But if the result is already a value, no need for the Meta.
-				return result;
 			}
 			if (0 < p_MetaLevel || 0 < thisLevel)
 			{

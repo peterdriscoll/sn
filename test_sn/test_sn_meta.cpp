@@ -47,7 +47,7 @@ namespace test_sn
 
 				std::string s1 = Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoEvaluate().DisplaySN();
 
-				Assert::IsTrue(Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoEvaluate().Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
+				Assert::IsTrue(Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoEvaluate().Equivalent(Meta(1, Meta(-1, String("Vincent ")) + Meta(-1, String("Emma ")))));
 
 				std::string s2 = Meta(-1, Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoEvaluate()).DoEvaluate().DisplaySN();
 
@@ -66,8 +66,8 @@ namespace test_sn
 				std::string s5 = Meta(-1, e).DoEvaluate().DisplaySN();
 
 
-				Assert::IsTrue(Meta(-1, e).DoEvaluate().Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
-				Assert::IsTrue(e.DoQuery(-1).Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
+				Assert::IsTrue(Meta(-1, e).DoEvaluate().Equivalent(Meta(1, Meta(-1, String("Vincent ")) + Meta(-1, String("Emma ")))));
+				Assert::IsTrue(e.DoQuery(-1).Equivalent(Meta(1, Meta(-1, String("Vincent ")) + Meta(-1, String("Emma ")))));
 
 				std::string s6 = Meta(-1, Meta(-1, e).DoEvaluate()).DoEvaluate().DisplaySN();
 
@@ -97,7 +97,7 @@ namespace test_sn
 
 				std::string s2 = Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoPartialEvaluate().DisplaySN();
 
-				Assert::IsTrue(Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoPartialEvaluate().Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
+				Assert::IsTrue(Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoPartialEvaluate().Equivalent(Meta(1, Meta(-1, String("Vincent ")) + Meta(-1, String("Emma ")))));
 
 				std::string s3 = Meta(-1, Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoPartialEvaluate()).DoPartialEvaluate().DisplaySN();
 
@@ -115,8 +115,8 @@ namespace test_sn
 
 				std::string s6 = Meta(-1, e).DoPartialEvaluate().DisplaySN();
 
-				Assert::IsTrue(Meta(-1, e).DoPartialEvaluate().Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
-				Assert::IsTrue(e.DoReduce(-1).Equivalent(Meta(1, String("Vincent ") + String("Emma "))));
+				Assert::IsTrue(Meta(-1, e).DoPartialEvaluate().Equivalent(Meta(1, Meta(-1, String("Vincent ")) + Meta(-1, String("Emma ")))));
+				Assert::IsTrue(e.DoReduce(-1).Equivalent(Meta(1, Meta(-1, String("Vincent ")) + Meta(-1, String("Emma ")))));
 
 				std::string s7 = Meta(-1, Meta(-1, e).DoPartialEvaluate()).DoPartialEvaluate().DisplaySN();
 
@@ -146,7 +146,7 @@ namespace test_sn
 
 				std::string s1 = Meta(1, Meta(-1, maxDog) + Meta(-1, chiChiCat)).DoPartialEvaluate().DisplaySN();
 
-				Assert::IsTrue(Meta(1, Meta(-1, maxDog) + Meta(-1, chiChiCat)).DoPartialEvaluate().Equivalent(Meta(1, String("Max ") + String("Chi Chi"))));
+				Assert::IsTrue(Meta(1, Meta(-1, maxDog) + Meta(-1, chiChiCat)).DoPartialEvaluate().Equivalent(Meta(1, Meta(-1, String("Max ")) + Meta(-1, String("Chi Chi")))));
 
 				std::string s2 = Meta(1, Meta(-1, dog) + Meta(-1, cat)).DoPartialEvaluate().DisplaySN();
 
@@ -172,7 +172,7 @@ namespace test_sn
 
 				std::string s7 = e.DoReduce(-1).DisplaySN();
 
-				Assert::IsTrue(e.DoReduce(-1).Equivalent(Meta(1, String("Max ") + String("Chi Chi"))));
+				Assert::IsTrue(e.DoReduce(-1).Equivalent(Meta(1, Meta(-1, String("Max ")) + Meta(-1, String("Chi Chi")))));
 
 				std::string s8 = Meta(-1, Meta(-1, e).DoPartialEvaluate()).DoPartialEvaluate().DisplaySN();
 				std::string s9 = e.DoPartialEvaluate(-2).DoPartialEvaluate().DisplaySN();
