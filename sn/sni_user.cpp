@@ -89,15 +89,16 @@ namespace SNI
 	{
 		skynet::RerunRequest.GetSNI_Error()->MakeRerunRequest();
 
-		// Expression
-		Value::Class().GetSNI_Class()->AssertIsAValue(Expression::Class().GetSNI_Class(), skynet::True);
-		Define::Class().GetSNI_Class()->AssertIsAValue(Expression::Class().GetSNI_Class(), skynet::True);
-		Function::Class().GetSNI_Class()->AssertIsAValue(Expression::Class().GetSNI_Class(), skynet::True);
-		Let::Class().GetSNI_Class()->AssertIsAValue(Expression::Class().GetSNI_Class(), skynet::True);
-		Local::Class().GetSNI_Class()->AssertIsAValue(Expression::Class().GetSNI_Class(), skynet::True);
-		Variable::Class().GetSNI_Class()->AssertIsAValue(Expression::Class().GetSNI_Class(), skynet::True);
+		// Meta
+		// - Expression
+		Function::ExprClass().GetSNI_Class()->AssertIsAValue(Expression::ExprClass().GetSNI_Class(), skynet::True);
+		Lambda::ExprClass().GetSNI_Class()->AssertIsAValue(Expression::ExprClass().GetSNI_Class(), skynet::True);
+		Let::ExprClass().GetSNI_Class()->AssertIsAValue(Expression::ExprClass().GetSNI_Class(), skynet::True);
+		Local::ExprClass().GetSNI_Class()->AssertIsAValue(Expression::ExprClass().GetSNI_Class(), skynet::True);
+		Variable::ExprClass().GetSNI_Class()->AssertIsAValue(Expression::ExprClass().GetSNI_Class(), skynet::True);
 
-		// Value
+		// Data
+		// - Value
 		Bool::Class().GetSNI_Class()->AssertIsAValue(Value::Class().GetSNI_Class(), skynet::True);
 		Char::Class().GetSNI_Class()->AssertIsAValue(Value::Class().GetSNI_Class(), skynet::True);
 		String::Class().GetSNI_Class()->AssertIsAValue(Value::Class().GetSNI_Class(), skynet::True);
@@ -112,12 +113,6 @@ namespace SNI
 		Vector::Class().GetSNI_Class()->AssertIsAValue(Value::Class().GetSNI_Class(), skynet::True);
 		Mapping::Class().GetSNI_Class()->AssertIsAValue(Value::Class().GetSNI_Class(), skynet::True);
 		Domain::Class().GetSNI_Class()->AssertIsAValue(Value::Class().GetSNI_Class(), skynet::True);
-		Lambda::Class().GetSNI_Class()->AssertIsAValue(Value::Class().GetSNI_Class(), skynet::True);
-		Meta::Class().GetSNI_Class()->AssertIsAValue(Value::Class().GetSNI_Class(), skynet::True);
-		//FunctionCall::Class().GetSNI_Class()->AssertIsAValue(Value::Class().GetSNI_Class(), skynet::True);
-
-		Char::Class().GetSNI_Class()->AssertIsAValue(String::Class().GetSNI_Class(), skynet::True);
-		StringRef::Class().GetSNI_Class()->AssertIsAValue(String::Class().GetSNI_Class(), skynet::True);
 
 		Short::Class().GetSNI_Class()->AssertIsAValue(Long::Class().GetSNI_Class(), skynet::True);
 		Long::Class().GetSNI_Class()->AssertIsAValue(LongLong::Class().GetSNI_Class(), skynet::True);
@@ -128,6 +123,9 @@ namespace SNI
 		Short::Class().GetSNI_Class()->AssertIsAValue(Float::Class().GetSNI_Class(), skynet::True);
 		Long::Class().GetSNI_Class()->AssertIsAValue(Double::Class().GetSNI_Class(), skynet::True);
 		LongLong::Class().GetSNI_Class()->AssertIsAValue(LongDouble::Class().GetSNI_Class(), skynet::True);
+
+		StringRef::Class().GetSNI_Class()->AssertIsAValue(String::Class().GetSNI_Class(), skynet::True);
+		Char::Class().GetSNI_Class()->AssertIsAValue(String::Class().GetSNI_Class(), skynet::True);
 
 		Short::Class().GetSNI_Class()->Fix();
 		Long::Class().GetSNI_Class()->Fix();

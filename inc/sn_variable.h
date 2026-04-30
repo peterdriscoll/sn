@@ -27,6 +27,8 @@ namespace SN
 	class SN_EXPORT SN_Variable : public SN_Expression
 	{
 	public:
+        static SN_Class ExprClass(); 
+		static SN_Class Class();
 
 		SN_Variable();
 		SN_Variable(const SN_Variable &p_other);

@@ -16,14 +16,14 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class* SNI_Lambda::Class()
+	/*static*/ SNI_Class* SNI_Lambda::ExprClass()
 	{
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Lambda, SNI_Class>("Lambda");
 	}
 
-	SNI_Class* SNI_Lambda::Type()
+	SN::SN_Expression SNI_Lambda::ExprType() const
 	{
-		return Class();
+		return ExprClass();
 	}
 
 	SNI_Lambda::SNI_Lambda()

@@ -27,19 +27,19 @@
 namespace SNI
 {
 	long m_MaxTempNum = 0;
-	/*static*/ SNI_Class* SNI_Variable::m_Class = NULL;
-	/*static*/ SNI_Class* SNI_Variable::Class()
+	/*static*/ SNI_Class* SNI_Variable::ExprClass()
 	{
-		if (!m_Class)
-		{
-			m_Class = new SNI_Class("Variable");
-		}
-		return m_Class;
+		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Variable, SNI_Class>("Variable");
+	}
+
+	SN::SN_Expression SNI_Variable::ExprType() const
+	{
+		return ExprClass();
 	}
 
 	SN::SN_Expression SNI_Variable::Type() const
 	{
-		return Class();
+		return m_Class;
 	}
 
 	SNI_Variable::SNI_Variable()
@@ -939,7 +939,6 @@ namespace SNI
 
 	SN::SN_Expression SNI_Variable::DoBuildMeta(long p_MetaLevel)
 	{
-		SN::SN_Expression expression(this);
-		return SN::SN_Meta(p_MetaLevel, expression);
+		return SN::SN_Meta(p_MetaLevel, m_Value);
 	}
 }

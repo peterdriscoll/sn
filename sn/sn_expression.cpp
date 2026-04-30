@@ -38,7 +38,12 @@
 
 namespace SN
 {
-	/*static*/ SN_Class SN_Expression::Class()
+	/*static*/ SN_Class SN_Expression::ExprClass()
+	{
+		return SNI_Expression::ExprClass();
+	}
+
+    /*static*/ SN_Class SN_Expression::Class()
 	{
 		return SNI_Expression::Class();
 	}
@@ -300,6 +305,11 @@ namespace SN
 	SNI::SNI_Meta* SN_Expression::GetSNI_Meta() const
 	{
 		return dynamic_cast<SNI::SNI_Meta*>(m_Expression);
+	}
+
+	SNI::SNI_MetaType* SN_Expression::GetSNI_MetaType() const
+	{
+		return dynamic_cast<SNI::SNI_MetaType*>(m_Expression);
 	}
 
 	SN_Expression SN_Expression::GetVariableValue(bool p_IfComplete)

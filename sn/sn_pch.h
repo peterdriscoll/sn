@@ -42,7 +42,6 @@
 #include "sni_http_handler.h"
 
 // Language elements
-#include "sni_meta.h"
 #include "sni_lambda.h"
 #include "sni_function.h"
 #include "sni_incompletefunction.h"
@@ -59,6 +58,8 @@
 #include "sni_real.h"
 #include "sni_number.h"
 #include "sni_mapping.h"
+#include "sni_meta.h"
+#include "sni_metatype.h"
 #include "sni_vector.h"
 #include "sni_class.h"
 #include "sni_universalclass.h"

@@ -1,5 +1,5 @@
-#if !defined(SNI_META_H_INCLUDED)
-#define SNI_META_H_INCLUDED
+#if !defined(SNI_METATYPE_H_INCLUDED)
+#define SNI_METATYPE_H_INCLUDED
 
 #pragma once
 
@@ -9,16 +9,17 @@
 
 namespace SNI
 {
-	class SNI_Meta : public SNI_Value
+
+	class SNI_MetaType : public SNI_Value
 	{
-		PGC_CLASS(SNI_Meta);
+		PGC_CLASS(SNI_MetaType);
 	public:
 	    static SNI_Class* Class();
 		virtual SN::SN_Expression Type() const;
 
-		SNI_Meta();
-		SNI_Meta(long p_DeltaMetaLevel, SNI_Expression *p_Expression);
-		virtual ~SNI_Meta();
+		SNI_MetaType();
+		SNI_MetaType(long p_DeltaMetaLevel, SNI_Expression *p_Expression);
+		virtual ~SNI_MetaType();
 
 		SNI_Expression * GetExpression();
 
@@ -28,7 +29,7 @@ namespace SNI
 		virtual void AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map);
 		virtual long GetPriority() const;
 
-		virtual bool IsMeta() const;
+		virtual bool IsMetaType() const;
 
 		virtual bool IsKnownValue() const;
 		virtual SN::SN_Value DoIsA(const SNI_Value* p_Parent) const;
@@ -54,4 +55,4 @@ namespace SNI
 	};
 }
 
-#endif // !defined(SNI_META_H_INCLUDED)
+#endif // !defined(SNI_METATYPE_H_INCLUDED)

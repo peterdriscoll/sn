@@ -18,15 +18,16 @@ namespace SNI
 {
 	/*static*/ long SNI_Local::m_Id = 0;
 
-	/*static*/ SNI_Class* SNI_Local::Class()
+	/*static*/ SNI_Class* SNI_Local::ExprClass()
 	{
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Local, SNI_Class>("Local");
 	}
 
-	SNI_Class* SNI_Local::Type()
+	SN::SN_Expression SNI_Local::ExprType() const
 	{
-		return Class();
+		return ExprClass();
 	}
+
 
 	SNI_Local::SNI_Local()
 		: m_LocalVariable(NULL)

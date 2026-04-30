@@ -16,17 +16,17 @@ namespace SNI
 
 	std::string SNI_MetaLevel::GetTypeName() const
 	{
-		return "Meta";
+		return "BuildMeta";
 	}
 
 	std::string SNI_MetaLevel::DisplayCpp() const
 	{
-		return "Meta";
+		return "BuildMeta";
 	}
 
 	std::string SNI_MetaLevel::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
 	{
-		return "Meta";
+		return "BuildMeta";
 	}
 
 	long SNI_MetaLevel::GetPriority() const
@@ -125,7 +125,7 @@ namespace SNI
 		}
 		topFrame->GetVariable(PU2_Second)->SetValue(SN::SN_Long(metaLevel));
 
-		SN::SN_Expression result = p_ParamList[PU2_First].GetVariableValue().DoBuildMeta(metaLevel);
+		SN::SN_Expression result = p_ParamList[PU2_First].DoBuildMeta(metaLevel);
 
 		SN::SN_Error err = p_ParamList[PU2_Result].AssertValue(result);
 

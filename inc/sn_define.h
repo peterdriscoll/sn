@@ -19,6 +19,7 @@ namespace SN
 	class SN_EXPORT SN_Define : public SN_Expression
 	{
 	public:
+        static SN_Class ExprClass(); 
 		static SN_Class Class();
 
 		SN_Define();

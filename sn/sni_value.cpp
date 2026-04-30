@@ -19,6 +19,11 @@ namespace SNI
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Value, SNI_Class>("Value");
 	}
 
+	SN::SN_Expression SNI_Value::ExprType() const
+	{
+		return Type();
+	}
+
 	SN::SN_Expression SNI_Value::Type() const
 	{
 		return Class();

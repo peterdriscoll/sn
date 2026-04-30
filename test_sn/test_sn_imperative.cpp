@@ -49,7 +49,6 @@ namespace test_sn
 
 				SN_DECLARE(x);
 
-				manager.Breakpoint();
 				(x == Local(User::GetOperators().FunctionCall, Let(Function(Function(Equals, User::GetOperators().FunctionCall), testCall), Long(4) + Long(5)))).Assert().Do();
 
 				(x == Long(15)).Evaluate().Do().CheckValue();
@@ -81,12 +80,14 @@ namespace test_sn
 					nv1 = v.DisplaySN();
 					nw1 = w.DisplaySN();
 					(testSimpleImperative(f)(p)(s) == Local(v, Local(w, Let(
-						v == f.BuildMeta(Short(1)).IsA(Value::Class()).If(StateValue(f, s), f(s))
-					&&	w == p.BuildMeta(Short(1)).IsA(Value::Class()).If(StateValue(p, v.State()), p(v.State()))
+						v == f.BuildMeta(Short(1)).IsA(MetaType(1, Value::Class())).If(StateValue(f, s), f(s))
+					&&	w == p.BuildMeta(Short(1)).IsA(MetaType(1, Value::Class())).If(StateValue(p, v.State()), p(v.State()))
 					,	StateValue(v.Value()(w.Value()), w.State()))))).PartialAssert().Do();
 				}
 				std::string s2 = testSimpleImperative.DisplayValueSN();
-
+				std::string s2_expected = "Lambda(@f.@p.@s.#v.#w.(let v=if f.Meta(1) is a {Value} then StateValue(f, s) else f s &w=if p.Meta(1) is a {Value} then StateValue(p, v.State()) else p v.State()  in StateValue(v.Value() w.Value(), w.State())))";
+			    Assert::IsTrue(s2 == s2_expected, L"Expected value for testSimpleImperative not found.");
+				
 				SN_DECLARE(x);
 				SN_DECLARE(t);
 				(x == Local(User::GetOperators().FunctionCall, Let(Function(Function(Equals, User::GetOperators().FunctionCall), testSimpleImperative), Function(Long(4) + Long(5), t))).Value()).Assert().Do();
@@ -98,6 +99,54 @@ namespace test_sn
 			Cleanup();
 		}
 
+		TEST_METHOD(TestBuildMetaTypeInheritance)
+		{
+			Initialize();
+			{
+				Manager manager("Test Meta Inheritance", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
+
+				SN_DECLARE_VALUE(v, Long(5));
+                Meta(1, v).IsA(Meta::Class()).Assert().Do();
+                Meta(1, v).IsA(MetaType(1, Variable::ExprClass())).Assert().Do();
+
+                v.BuildMeta(Short(1)).IsA(Meta::Class()).Assert().Do();
+                v.BuildMeta(Short(1)).IsA(MetaType(1, Long::Class())).Assert().Do();
+
+				SN_DECLARE(n);
+				n.SetValue(v);
+                n.BuildMeta(Short(1)).IsA(Meta::Class()).Assert().Do();
+				n.BuildMeta(Short(1)).IsA(MetaType(1, Variable::ExprClass())).Assert().Do();
+
+				SN_DECLARE(l);
+				l.SetValue(Let(skynet::True, skynet::True));
+                l.BuildMeta(Short(1)).IsA(Meta::Class()).Assert().Do();
+                l.BuildMeta(Short(1)).IsA(MetaType(1, Let::ExprClass())).Assert().Do();
+
+				SN_DECLARE(o);
+				o.SetValue(Local(v, skynet::True));
+                o.BuildMeta(Short(1)).IsA(Meta::Class()).Assert().Do();
+                o.BuildMeta(Short(1)).IsA(MetaType(1, Local::ExprClass())).Assert().Do();
+
+				SN_DECLARE(p);
+				p.SetValue(Define(v));
+                p.BuildMeta(Short(1)).IsA(Meta::Class()).Assert().Do();
+                p.BuildMeta(Short(1)).IsA(MetaType(1, Define::ExprClass())).Assert().Do();
+
+				SN_DECLARE(f);
+				SN_DECLARE(q);
+				q.SetValue(Function(f, Long(5)));
+                q.BuildMeta(Short(1)).IsA(Meta::Class()).Assert().Do();
+                q.BuildMeta(Short(1)).IsA(MetaType(1, Function::ExprClass())).Assert().Do();
+
+				SN_DECLARE(x);
+				SN_DECLARE_VALUE(r, Lambda(x, Long(5)));
+                r.BuildMeta(Short(1)).IsA(Meta::Class()).Assert().Do();
+                r.BuildMeta(Short(1)).IsA(MetaType(1, Lambda::ExprClass())).Assert().Do();
+			}
+			Cleanup();
+		}
+		
 		TEST_METHOD(TestSimpleStateThreading2)
 		{
 			Initialize();
@@ -131,7 +180,7 @@ namespace test_sn
 				SN_DECLARE(y);
 				SN_DECLARE(t);
 				SN_DECLARE(l);
-				manager.Breakpoint();
+
 				(y == Local(User::GetOperators().FunctionCall, Local(User::GetOperators().Assign, Let(Function(Function(Equals, User::GetOperators().FunctionCall), User::GetOperators().ImperativeCall), Let(Function(Function(Equals, User::GetOperators().Assign), User::GetOperators().ImperativeAssign), Function(String("m").Assign(Long(4)) + Long(5), State()))))).Value()).Assert().Do();
 				std::string y1 = y.DisplayValueSN();
 

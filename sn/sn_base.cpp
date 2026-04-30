@@ -139,6 +139,15 @@ namespace SN
 		return "";
 	}
 
+	SN_Expression SN_Base::ExprType() const
+	{
+		if (GetSNI_Base())
+        {
+			return GetSNI_Base()->ExprType();
+        }
+		return skynet::Null;
+	}
+	
 	SN_Expression SN_Base::Type() const
 	{
 		if (GetSNI_Base())
@@ -246,6 +255,11 @@ namespace SN
 	bool SN_Base::IsMeta() const
 	{
 		return GetSNI_Base() && GetSNI_Base()->IsMeta();
+	}
+
+	bool SN_Base::IsMetaType() const
+	{
+		return GetSNI_Base() && GetSNI_Base()->IsMetaType();
 	}
 
 	bool SN_Base::IsError() const

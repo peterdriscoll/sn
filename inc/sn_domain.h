@@ -20,6 +20,7 @@ namespace SN
 	class SN_EXPORT SN_Domain : public SN_Base
 	{
 	public:
+        static SN_Class ExprClass(); 
 		static SN_Class Class();
 
 		SN_Domain(const std::string &p_Name);

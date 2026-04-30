@@ -13,8 +13,8 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_IncompleteFunction);
 	public:
-		static SNI_Class* Class();
-		SNI_Class* Type();
+		static SNI_Class* ExprClass();
+		virtual SN::SN_Expression ExprType() const;
 
 		SNI_IncompleteFunction();
 		SNI_IncompleteFunction(SNI_Expression *p_Function);

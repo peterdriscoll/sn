@@ -13,7 +13,12 @@
 
 namespace SN
 {
-	/*static*/ SN_Class SN_StringRef::Class()
+	/*static*/ SN_Class SN_StringRef::ExprClass()
+    {
+        return SNI_StringRef::ExprClass();
+    }
+
+    /*static*/ SN_Class SN_StringRef::Class()
 	{
 		return SNI_StringRef::Class();
 	}

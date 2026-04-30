@@ -10,9 +10,9 @@
 
 namespace SN
 {
-	/*static*/ SN_Class SN_Lambda::Class()
+	/*static*/ SN_Class SN_Lambda::ExprClass()
 	{
-		return SNI_Lambda::Class();
+		return SNI_Lambda::ExprClass();
 	}
 
 	SN_Lambda::SN_Lambda()

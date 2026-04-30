@@ -21,6 +21,7 @@ namespace SN
 	class SN_EXPORT SN_Mapping : public SN_Base
 	{
 	public:
+        static SN_Class ExprClass(); 
 		static SN_Class Class();
 
 		SN_Mapping();

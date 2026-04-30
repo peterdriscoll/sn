@@ -429,7 +429,6 @@ namespace test_sn
 				CharacterSet characterSet;
 				Validate validate(characterSet);
 
-				//manager.Breakpoint();
 				(!validate.IsString(String("\"\"D"))).Assert().Do();
 
 				(!validate.IsString(String("\"D"))).Assert().Do();
@@ -939,8 +938,6 @@ namespace test_sn
 
 					// Arithmetic Expression.
 					SN_DECLARE(i1);
-
-					manager.Breakpoint();
 
 					(parse.AsArithmeticExpression(MyDomain)(String("13+21"))(i1)).Assert().Do();
 

@@ -9,7 +9,12 @@
 
 namespace SN
 {
-	/*static*/ SN_Class SN_Meta::Class()
+	/*static*/ SN_Class SN_Meta::ExprClass()
+    {
+        return SNI_Meta::ExprClass();
+    }
+
+    /*static*/ SN_Class SN_Meta::Class()
 	{
 		return SNI_Meta::Class();
 	}

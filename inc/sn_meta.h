@@ -4,7 +4,7 @@
 #pragma once
 
 #include "exp_ctrl_sn.h"
-#include "sn_expression.h"
+#include "sn_value.h"
 
 namespace SNI
 {
@@ -16,6 +16,7 @@ namespace SN
 	class SN_EXPORT SN_Meta : public SN_Expression
 	{
 	public:
+        static SN_Class ExprClass(); 
 		static SN_Class Class();
 
 		SN_Meta(long p_MetaLevel, const SN_Expression &p_Expression);

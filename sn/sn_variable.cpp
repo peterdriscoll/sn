@@ -14,6 +14,16 @@
 
 namespace SN
 {
+	/*static*/ SN_Class SN_Variable::ExprClass()
+	{
+		return SNI_Variable::ExprClass();
+	}
+
+    /*static*/ SN_Class SN_Variable::Class()
+	{
+		return SNI_Variable::Class();
+	}
+
 	SN_Variable::SN_Variable()
 		: SN_Expression(new SNI::SNI_Variable())
 	{

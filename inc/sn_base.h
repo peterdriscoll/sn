@@ -56,6 +56,7 @@ namespace SN
 
 		std::string LogDisplaySN() const;
 
+		SN_Expression ExprType() const;
 		SN_Expression Type() const;
 
 		bool IsNull() const;
@@ -95,6 +96,8 @@ namespace SN
 		bool IsComplete() const;
 
 		bool IsMeta() const;
+
+		bool IsMetaType() const;
 
 		bool IsError() const;
 

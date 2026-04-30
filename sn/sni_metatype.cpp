@@ -1,4 +1,4 @@
-#include "sni_meta.h"
+#include "sni_metatype.h"
 
 #ifdef USE_LOGGING
 #include "logcontext.h"
@@ -10,54 +10,56 @@
 
 #include "sni_helpers.h"
 #include "utility.h"
+#include "sni_user.h"
 
 #include "sn_pch.h"
 
 namespace SNI
 {
-	/*static*/ SNI_Class* SNI_Meta::Class()
+	/*static*/ SNI_Class* SNI_MetaType::Class()
 	{
-		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Meta, SNI_Class>("Meta");
+		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_MetaType, SNI_Class>("MetaType");
 	}
 
-	SN::SN_Expression SNI_Meta::Type() const
+	SN::SN_Expression SNI_MetaType::Type() const
 	{
-		return SN::SN_MetaType(m_DeltaMetaLevel, m_Expression->ExprType());
+		return Class();
 	}
 
-	SNI_Meta::SNI_Meta()
+	SNI_MetaType::SNI_MetaType()
 		: m_DeltaMetaLevel(0)
 		, m_Expression(NULL)
 	{
 	}
 
-	SNI_Meta::SNI_Meta(long p_DeltaMetaLevel, SNI_Expression *p_Expression)
+	SNI_MetaType::SNI_MetaType(long p_DeltaMetaLevel, SNI_Expression *p_Expression)
 		: m_DeltaMetaLevel(p_DeltaMetaLevel)
 		, m_Expression(p_Expression)
 	{
 	}
 
-	SNI_Meta::~SNI_Meta()
+	SNI_MetaType::~SNI_MetaType()
 	{
 	}
 
-	std::string SNI_Meta::GetTypeName() const
+	std::string SNI_MetaType::GetTypeName() const
 	{
-		return "Meta";
+		return "MetaType";
 	}
 
-	std::string SNI_Meta::DisplayCpp() const
+	std::string SNI_MetaType::DisplayCpp() const
 	{
 		return GetTypeName() + "(" + m_Expression->DisplayCpp() + ")";
 	}
 
-	std::string SNI_Meta::DisplaySN(long /*priority*/, SNI_DisplayOptions &p_DisplayOptions) const
+	std::string SNI_MetaType::DisplaySN(long /*priority*/, SNI_DisplayOptions &p_DisplayOptions) const
 	{
-		if (!m_Expression)
+		std::string value = "null";
+		if (m_Expression)
 		{
-			return "{null}";
-		}
-		std::string value = m_Expression->DisplaySN(GetPriority(), p_DisplayOptions);
+			value = m_Expression->DisplaySN(GetPriority(), p_DisplayOptions);
+        }
+
 		if (m_DeltaMetaLevel < 0)
 		{
 			return std::string(-m_DeltaMetaLevel, '}') + value + std::string(-m_DeltaMetaLevel, '{');
@@ -74,7 +76,7 @@ namespace SNI
 		return "";
 	}
 
-	void SNI_Meta::AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map)
+	void SNI_MetaType::AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map)
 	{
 		SNI_Expression* expression = m_Expression;
 		if (expression)
@@ -83,36 +85,35 @@ namespace SNI
 		}
 	}
 
-	long SNI_Meta::GetPriority() const
+	long SNI_MetaType::GetPriority() const
 	{
 		return 0;
 	}
 
-	bool SNI_Meta::IsMeta() const
+	bool SNI_MetaType::IsMetaType() const
 	{
 		return true;
 	}
 
-	bool SNI_Meta::IsKnownValue() const
+	bool SNI_MetaType::IsKnownValue() const
 	{
 		return 0 < m_DeltaMetaLevel;
 	}
 
-	SN::SN_Value SNI_Meta::DoIsA(const SNI_Value* p_Parent) const
+	SN::SN_Value SNI_MetaType::DoIsA(const SNI_Value* p_Parent) const
 	{
 		if (Class()->DoIsA(p_Parent).GetBool())
 		{
 			return skynet::True;
 		}
-		SNI_Expression *exp = m_Expression->ExprType().GetSNI_Expression();
-		if (exp->DoIsA(p_Parent->DoEvaluate(-m_DeltaMetaLevel).GetSNI_Value()).GetBool())
+		if (m_Expression->DoIsA(p_Parent->DoEvaluate(-m_DeltaMetaLevel).GetSNI_Value()).GetBool())
 		{
 			return skynet::True;
 		}
 		return skynet::False;
 	}
 
-	size_t SNI_Meta::Cardinality(size_t p_MaxCardinality) const
+	size_t SNI_MetaType::Cardinality(size_t p_MaxCardinality) const
 	{
 		if (0 < m_DeltaMetaLevel)
 		{
@@ -121,65 +122,61 @@ namespace SNI
 		return p_MaxCardinality;
 	}
 
-	SNI_Expression * SNI_Meta::GetExpression()
+	SNI_Expression * SNI_MetaType::GetExpression()
 	{
 		return m_Expression;
 	}
 
-	bool SNI_Meta::Equivalent(SNI_Object * p_Other) const
+	bool SNI_MetaType::Equivalent(SNI_Object * p_Other) const
 	{
-		if (dynamic_cast<SNI_Meta *>(p_Other))
+		if (dynamic_cast<SNI_MetaType *>(p_Other))
 		{
-			SNI_Meta * other = dynamic_cast<SNI_Meta *>(p_Other);
+			SNI_MetaType * other = dynamic_cast<SNI_MetaType *>(p_Other);
 
 			return m_DeltaMetaLevel == other->m_DeltaMetaLevel && m_Expression->Equivalent(dynamic_cast<SNI_Object *>(other->m_Expression));
 		}
 		return false;
 	}
 
-	size_t SNI_Meta::Hash() const
+	size_t SNI_MetaType::Hash() const
 	{
 		std::string data = DisplaySN0();
 		return _Hash_array_representation(data.c_str(), data.size());
 	}
 
-	SNI_Expression *SNI_Meta::Clone(long p_MetaLevel, SNI_Frame *p_Frame, bool &p_Changed)
+	SNI_Expression *SNI_MetaType::Clone(long p_MetaLevel, SNI_Frame *p_Frame, bool &p_Changed)
 	{
 		bool changed = false;
 		SNI_Expression * l_Meta = m_Expression->Clone(p_MetaLevel+ m_DeltaMetaLevel, p_Frame, changed);
 		if (changed)
 		{
 			p_Changed = true;
-			return new SNI_Meta(m_DeltaMetaLevel, l_Meta);
+			return new SNI_MetaType(m_DeltaMetaLevel, l_Meta);
 		}
 		return this;
 	}
 
 
-	SN::SN_Expression SNI_Meta::DoEvaluate(long p_MetaLevel /* = 0 */) const
+	SN::SN_Expression SNI_MetaType::DoEvaluate(long p_MetaLevel /* = 0 */) const
 	{
 		long thisLevel = p_MetaLevel + m_DeltaMetaLevel;
 		SN::SN_Expression result = m_Expression->DoEvaluate(thisLevel);
 		if (m_DeltaMetaLevel)
 		{
-			if (result.IsMeta())
+			if (result.IsMetaType())
 			{ // If the result is a meta, then combine this meta with it, simplifying one Meta within a Meta to a single one. 
-				SNI_Meta* meta_result = result.GetSNI_Meta();
+				SNI_MetaType* meta_result = result.GetSNI_MetaType();
 				return meta_result->CombineMetaValues(m_DeltaMetaLevel);
-			}
-			if (!result.IsVariable() && result.IsKnownValue())
-			{ // Meta wraps an expression so that it can be treated as a value. But if the result is already a value, no need for the Meta.
-				return result;
 			}
 			if (0 < p_MetaLevel || 0 < thisLevel)
 			{
-				return SN::SN_Meta(m_DeltaMetaLevel, result);
+				return SN::SN_MetaType(m_DeltaMetaLevel, result);
 			}
 		}
 		return result;
 	}
 
-	SN::SN_Expression SNI_Meta::DoPartialEvaluate(long p_MetaLevel /* = 0 */) const
+	SN::SN_Expression SNI_MetaType::DoPartialEvaluate(long p_MetaLevel /* = 0 */) const
 	{
 		long thisLevel = p_MetaLevel + m_DeltaMetaLevel;
 		SN::SN_Expression result = m_Expression->DoPartialEvaluate(thisLevel);
@@ -187,51 +184,47 @@ namespace SNI
 		{
 			if (result.IsMeta())
 			{ // If the result is a meta, then combine this meta with it, simplifying one Meta within a Meta to a single one. 
-				SNI_Meta *meta_result = result.GetSNI_Meta();
+				SNI_MetaType *meta_result = result.GetSNI_MetaType();
 				return meta_result->CombineMetaValues(m_DeltaMetaLevel);
-			}
-			if (!result.IsVariable() && result.IsKnownValue())
-			{ // Meta wraps an expression so that it can be treated as a value. But if the result is already a value, no need for the Meta.
-				return result;
 			}
 			if (0 < p_MetaLevel || 0 < thisLevel)
 			{
-				return SN::SN_Meta(m_DeltaMetaLevel, result);
+				return SN::SN_MetaType(m_DeltaMetaLevel, result);
 			}
 		}
 		return result;
 	}
 
-	SN::SN_Expression SNI_Meta::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
+	SN::SN_Expression SNI_MetaType::Call(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Meta::Call ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_MetaType::Call ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
 
 		return LOG_RETURN(context, m_Expression->Call(p_ParameterList, p_MetaLevel + m_DeltaMetaLevel));
 	}
 
-	SN::SN_Expression SNI_Meta::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
+	SN::SN_Expression SNI_MetaType::PartialCall(SN::SN_ExpressionList * p_ParameterList, long p_MetaLevel /* = 0 */) const
 	{
-		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_Meta::PartialCall ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
+		LOGGING(SN::LogContext context(DisplaySN0() + ".SNI_MetaType::PartialCall ( " + DisplaySnExpressionList(p_ParameterList) + " )"));
 
 		return LOG_RETURN(context, m_Expression->PartialCall(p_ParameterList, p_MetaLevel + m_DeltaMetaLevel));
 	}
 
-	SN::SN_Error SNI_Meta::PartialAssertValue(const SN::SN_Expression &p_Expression, bool /* p_Define = false */)
+	SN::SN_Error SNI_MetaType::PartialAssertValue(const SN::SN_Expression &p_Expression, bool /* p_Define = false */)
 	{
 		return m_Expression->PartialAssertValue(p_Expression, true);
 	}
 
-	SN::SN_Expression SNI_Meta::Unify(SN::SN_ExpressionList * p_ParameterList)
+	SN::SN_Expression SNI_MetaType::Unify(SN::SN_ExpressionList * p_ParameterList)
 	{
 		return m_Expression->Unify(p_ParameterList);
 	}
 
-	SN::SN_Error SNI_Meta::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
+	SN::SN_Error SNI_MetaType::PartialUnify(SN::SN_ParameterList * p_ParameterList, SN::SN_Expression p_Result, bool p_Define)
 	{
 		return m_Expression->PartialUnify(p_ParameterList, p_Result);
 	}
 
-	SN::SN_Expression SNI_Meta::CombineMetaValues(long p_DeltaMetaLevel)
+	SN::SN_Expression SNI_MetaType::CombineMetaValues(long p_DeltaMetaLevel)
 	{
 		m_DeltaMetaLevel += p_DeltaMetaLevel;
 		if (m_DeltaMetaLevel)

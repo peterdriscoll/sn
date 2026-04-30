@@ -208,6 +208,7 @@
     <ClInclude Include="..\inc\sn_manager.h" />
     <ClInclude Include="..\inc\sn_mapping.h" />
     <ClInclude Include="..\inc\sn_meta.h" />
+    <ClInclude Include="..\inc\sn_metatype.h" />
     <ClInclude Include="..\inc\sn_null.h" />
     <ClInclude Include="..\inc\sn_number.h" />
     <ClInclude Include="..\inc\sn_object.h" />
@@ -289,6 +290,7 @@
     <ClInclude Include="sni_lookstringright.h" />
     <ClInclude Include="sni_mapping.h" />
     <ClInclude Include="sni_metalevel.h" />
+    <ClInclude Include="sni_metatype.h" />
     <ClInclude Include="sni_notequals.h" />
     <ClInclude Include="sni_partialassert.h" />
     <ClInclude Include="sni_partialevaluate.h" />
@@ -423,6 +425,7 @@
     <ClCompile Include="sni_lookstringright.cpp" />
     <ClCompile Include="sni_mapping.cpp" />
     <ClCompile Include="sni_metalevel.cpp" />
+    <ClCompile Include="sni_metatype.cpp" />
     <ClCompile Include="sni_notequals.cpp" />
     <ClCompile Include="sni_partialassert.cpp" />
     <ClCompile Include="sni_partialevaluate.cpp" />
@@ -510,6 +513,7 @@
     <ClCompile Include="sn_manager.cpp" />
     <ClCompile Include="sn_mapping.cpp" />
     <ClCompile Include="sn_meta.cpp" />
+    <ClCompile Include="sn_metatype.cpp" />
     <ClCompile Include="sn_null.cpp" />
     <ClCompile Include="sn_number.cpp" />
     <ClCompile Include="sn_object.cpp" />

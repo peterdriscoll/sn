@@ -34,7 +34,12 @@
 
 namespace SN
 {
-	/*static*/ SN_Class SN_Value::Class()
+	/*static*/ SN_Class SN_Value::ExprClass()
+    {
+        return SNI_Value::ExprClass();
+    }
+
+    /*static*/ SN_Class SN_Value::Class()
 	{
 		return SNI_Value::Class();
 	}

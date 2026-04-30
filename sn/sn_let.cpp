@@ -6,9 +6,9 @@
 
 namespace SN
 {
-	/*static*/ SN_Class SN_Let::Class()
+	/*static*/ SN_Class SN_Let::ExprClass()
 	{
-		return SNI_Let::Class();
+		return SNI_Let::ExprClass();
 	}
 
 	SN_Let::SN_Let(SNI::SNI_Let *p_Let)

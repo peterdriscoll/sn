@@ -15,14 +15,14 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class* SNI_Function::Class()
+	/*static*/ SNI_Class* SNI_Function::ExprClass()
 	{
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Function, SNI_Class>("Function");
 	}
 
-	SNI_Class* SNI_Function::Type()
+	SN::SN_Expression SNI_Function::ExprType() const
 	{
-		return Class();
+		return ExprClass();
 	}
 
 	SNI_Function::SNI_Function()

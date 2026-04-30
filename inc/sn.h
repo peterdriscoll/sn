@@ -78,6 +78,7 @@ namespace skynet
 #include "sn_null.h"
 #include "sn_define.h"
 #include "sn_meta.h"
+#include "sn_metaType.h"
 #include "sn_object.h"
 #include "sn_string.h"
 #include "sn_bool.h"
@@ -212,6 +213,7 @@ namespace skynet
 	typedef SN::SN_Lambda Lambda;
 	typedef SN::SN_Define Define;
 	typedef SN::SN_Meta Meta;
+	typedef SN::SN_MetaType MetaType;
 	typedef SN::SN_Variable Variable;
 	typedef SN::SN_Local Local;
 	typedef SN::SN_Let Let;

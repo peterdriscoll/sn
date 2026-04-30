@@ -40,8 +40,8 @@ namespace SN
 			SN_LOCAL_INLINE(w);
 
 			(ImperativeCall(f)(p)(s) == Local(v, Local(w, Let(
-				v == f.BuildMeta(Short(1)).IsA(Value::Class()).If(StateValue(f, s), Function(f, s))
-				&& w == p.BuildMeta(Short(1)).IsA(Value::Class()).If(StateValue(p, v.State()), Function(p, v.State()))
+				v == f.BuildMeta(Short(1)).IsA(MetaType(1, Value::Class())).If(StateValue(f, s), Function(f, s))
+				&& w == p.BuildMeta(Short(1)).IsA(MetaType(1, Value::Class())).If(StateValue(p, v.State()), Function(p, v.State()))
 				, StateValue(Function(v.Value(), w.Value()), w.State()))))).PartialAssert().Do();
 /*
 			SN_LOCAL_INLINE(f);

@@ -11,7 +11,12 @@
 
 namespace SN
 {
-	/*static*/ SN_Class SN_Bool::Class()
+	/*static*/ SN_Class SN_Bool::ExprClass()
+    {
+        return SNI_Bool::ExprClass();
+    }
+
+    /*static*/ SN_Class SN_Bool::Class()
 	{
 		return SNI_Bool::Class();
 	}

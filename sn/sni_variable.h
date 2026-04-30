@@ -22,7 +22,8 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Variable);
 	public:
-		static SNI_Class* Class();
+		static SNI_Class* ExprClass();
+		virtual SN::SN_Expression ExprType() const;
 		virtual SN::SN_Expression Type() const;
 
 		SNI_Variable();
@@ -112,7 +113,7 @@ namespace SNI
 		virtual void PromoteMembers();
 
 	private:
-		static SNI_Class* m_Class;
+		SNI_Class* m_Class = skynet::All.GetSNI_Class();
 
 		SNI_Expression * m_Value = nullptr;
 		SNI_Expression * m_Type = skynet::All.GetSNI_Expression();

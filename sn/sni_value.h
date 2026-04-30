@@ -14,6 +14,7 @@ namespace SNI
 		PGC_CLASS(SNI_Value);
 	public:
 		static SNI_Class* Class();
+		virtual SN::SN_Expression ExprType() const;
 		virtual SN::SN_Expression Type() const;
 
 		SNI_Value();

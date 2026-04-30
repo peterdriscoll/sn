@@ -10,7 +10,12 @@
 
 namespace SN
 {
-	/*static*/ SN_Class SN_String::Class()
+	/*static*/ SN_Class SN_String::ExprClass()
+    {
+        return SNI_String::ExprClass();
+    }
+
+    /*static*/ SN_Class SN_String::Class()
 	{
 		return SNI_String::Class();
 	}

@@ -19,7 +19,7 @@ namespace SN
 	class SN_EXPORT SN_Let : public SN_Expression
 	{
 	public:
-		static SN_Class Class();
+		static SN_Class ExprClass();
 
 		SN_Let(SNI::SNI_Let *p_Let);
 		SN_Let(const SN_Expression &p_Condition, const SN_Expression &p_Expression);

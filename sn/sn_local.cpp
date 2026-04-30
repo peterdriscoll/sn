@@ -8,9 +8,9 @@
 
 namespace SN
 {
-	/*static*/ SN_Class SN_Local::Class()
+	/*static*/ SN_Class SN_Local::ExprClass()
 	{
-		return SNI_Local::Class();
+		return SNI_Local::ExprClass();
 	}
 
 	SN_Local::SN_Local(SNI::SNI_Local * p_Local)

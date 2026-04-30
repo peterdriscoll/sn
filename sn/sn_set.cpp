@@ -8,7 +8,12 @@
 
 namespace SN
 {
-	/*static*/ SN_Class SN_Set::Class()
+	/*static*/ SN_Class SN_Set::ExprClass()
+    {
+        return SNI_Set::ExprClass();
+    }
+
+    /*static*/ SN_Class SN_Set::Class()
 	{
 		return SNI_Set::Class();
 	}

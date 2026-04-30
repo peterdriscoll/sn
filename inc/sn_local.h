@@ -18,7 +18,7 @@ namespace SN
 	class SN_EXPORT SN_Local : public SN_Expression
 	{
 	public:
-		static SN_Class Class();
+		static SN_Class ExprClass();
 
 		SN_Local(SNI::SNI_Local * p_Local);
 		SN_Local(const SN_Variable &p_LocalVariable, const SN_Expression &p_Expression);

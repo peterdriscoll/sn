@@ -27,9 +27,19 @@ namespace SNI
 {
 	std::map<std::string, unsigned long> SNI_Expression::m_IdMap;
 
-	/*static*/ SNI_Class* SNI_Expression::Class()
+	/*static*/ SNI_Class* SNI_Expression::ExprClass()
 	{
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Expression, SNI_Class>("Expression");
+	}
+
+	/*static*/ SNI_Class* SNI_Expression::Class()
+	{
+		return skynet::All.GetSNI_Class();
+	}
+
+	SN::SN_Expression SNI_Expression::ExprType() const
+	{
+		return ExprClass();
 	}
 
 	SN::SN_Expression SNI_Expression::Type() const
@@ -563,6 +573,11 @@ namespace SNI
 	}
 
 	bool SNI_Expression::IsMeta() const
+	{
+		return false;
+	}
+
+	bool SNI_Expression::IsMetaType() const
 	{
 		return false;
 	}

@@ -17,19 +17,14 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class* SNI_FunctionCall::m_Class = NULL;
-	/*static*/ SNI_Class* SNI_FunctionCall::Class()
+	/*static*/ SNI_Class* SNI_FunctionCall::ExprClass()
 	{
-		if (!m_Class)
-		{
-			m_Class = new SNI_Class("FunctionCall");
-		}
-		return m_Class;
+		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_FunctionCall, SNI_Class>("FunctionCall");
 	}
 
-	SNI_Class* SNI_FunctionCall::Type()
+	SN::SN_Expression SNI_FunctionCall::ExprType() const
 	{
-		return Class();
+		return ExprClass();
 	}
 
 	SNI_FunctionCall::SNI_FunctionCall()

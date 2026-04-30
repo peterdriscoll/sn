@@ -21,14 +21,14 @@ namespace SNI
 {
 	/*static*/ long SNI_Let::m_Id = 0;
 
-	/*static*/ SNI_Class* SNI_Let::Class()
+	/*static*/ SNI_Class* SNI_Let::ExprClass()
 	{
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Let, SNI_Class>("Let");
 	}
 
-	SNI_Class* SNI_Let::Type()
+	SN::SN_Expression SNI_Let::ExprType() const
 	{
-		return Class();
+		return ExprClass();
 	}
 
 	SNI_Let::SNI_Let()

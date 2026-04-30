@@ -17,7 +17,7 @@ namespace SN
 	class SN_EXPORT SN_Lambda : public SN_Expression
 	{
 	public:
-		static SN_Class Class();
+		static SN_Class ExprClass();
 
 		SN_Lambda();
 		SN_Lambda(SNI::SNI_Lambda *p_Lambda);

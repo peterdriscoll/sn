@@ -125,7 +125,6 @@ namespace test_sn
 					// Asserting end == 2 forces:
 					//   String("ab") == StringRef(String("abcdef"), Long(0), end)
 					// This must fail because the delayed inequality will be violated.
-					manager.Breakpoint();
 					Error err = (end == Long(2)).Assert().DoReturnError();
 
 					std::string errDescription = err.GetDescription();

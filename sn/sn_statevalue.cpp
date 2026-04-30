@@ -10,7 +10,12 @@
 
 namespace SN
 {
-	/*static*/ SN_Class SN_StateValue::Class()
+	/*static*/ SN_Class SN_StateValue::ExprClass()
+    {
+        return SNI_StateValue::ExprClass();
+    }
+
+    /*static*/ SN_Class SN_StateValue::Class()
 	{
 		return SNI_StateValue::Class();
 	}

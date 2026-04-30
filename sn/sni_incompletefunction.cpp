@@ -15,19 +15,14 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class* SNI_IncompleteFunction::m_Class = NULL;
-	/*static*/ SNI_Class* SNI_IncompleteFunction::Class()
+	/*static*/ SNI_Class* SNI_IncompleteFunction::ExprClass()
 	{
-		if (!m_Class)
-		{
-			m_Class = new SNI_Class("IncompleteFunction");
-		}
-		return m_Class;
+		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_IncompleteFunction, SNI_Class>("IncompleteFunction");
 	}
 
-	SNI_Class* SNI_IncompleteFunction::Type()
+	SN::SN_Expression SNI_IncompleteFunction::ExprType() const
 	{
-		return Class();
+		return ExprClass();
 	}
 
 	SNI_IncompleteFunction::SNI_IncompleteFunction()

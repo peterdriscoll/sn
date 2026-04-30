@@ -9,7 +9,12 @@
 
 namespace SN
 {
-	/*static*/ SN_Class SN_Char::Class()
+	/*static*/ SN_Class SN_Char::ExprClass()
+	{
+		return SNI_Char::ExprClass();
+	}
+
+    /*static*/ SN_Class SN_Char::Class()
 	{
 		return SNI_Char::Class();
 	}

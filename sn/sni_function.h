@@ -13,9 +13,10 @@ namespace SNI
 	class SNI_Function : public SNI_VarDef
 	{
 		PGC_CLASS(SNI_Function);
+
 	public:
-		static SNI_Class* Class();
-		SNI_Class* Type();
+		static SNI_Class* ExprClass();
+		virtual SN::SN_Expression ExprType() const;
 
 		SNI_Function();
 		SNI_Function(SNI_Expression *p_Function);

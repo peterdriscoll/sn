@@ -19,7 +19,7 @@ namespace SN
 	class SN_EXPORT SN_Function : public SN_Expression
 	{
 	public:
-		static SN_Class Class();
+		static SN_Class ExprClass();
 		
 		SN_Function(const SN_Function &p_Function);
 		SN_Function(const SN_Expression  &p_Function);

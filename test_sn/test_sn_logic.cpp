@@ -407,7 +407,6 @@ namespace test_sn
 				std::string vs_buildset = vs.BuildSet().DoEvaluate().DisplaySN();
 				(v.BuildSet() == (Long(3) || Long(4)).BuildSet()).Evaluate().Do().CheckValue();
 				Assert::IsTrue(v_buildset == vs_buildset);
-                manager.Breakpoint();
 
 				SN_DECLARE(w);
 				SN_DECLARE(ws);
@@ -419,7 +418,6 @@ namespace test_sn
 				std::string ws_buildset = ws.BuildSet().DoEvaluate().DisplaySN();
 				(w.BuildSet() == (Long(3) || Long(4) || Long(5)).BuildSet()).Evaluate().Do().CheckValue();
 				Assert::IsTrue(w_buildset == ws_buildset);
-				manager.Breakpoint();
 
 				SN_DECLARE(x);
 				SN_DECLARE(xs);
@@ -431,7 +429,6 @@ namespace test_sn
 				std::string xs_buildset = xs.BuildSet().DoEvaluate().DisplaySN();
 				(x.BuildSet() == (Long(3) || Long(4) || Long(5) || Long(6)).BuildSet()).Evaluate().Do().CheckValue();
 				Assert::IsTrue(x_buildset == xs_buildset);
-				manager.Breakpoint();
 			}
 			Cleanup();
 		}

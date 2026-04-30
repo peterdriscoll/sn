@@ -26,6 +26,7 @@ namespace SNI
 	class SNI_Cartesian;
 	class SNI_Lambda;
 	class SNI_Meta;
+	class SNI_MetaType;
 	class SNI_Null;
 }
 
@@ -76,6 +77,7 @@ namespace SN
 	class SN_EXPORT SN_Expression : public SN_Base
 	{
 	public:
+		static SN_Class ExprClass();
 		static SN_Class Class();
 
 		// Constructors
@@ -264,6 +266,7 @@ namespace SN
 		SNI::SNI_Variable * GetSNI_Variable() const;
 		SNI::SNI_FunctionDef * GetSNI_FunctionDef() const;
 		SNI::SNI_Meta* GetSNI_Meta() const;
+		SNI::SNI_MetaType* GetSNI_MetaType() const;
 		
 	};
 

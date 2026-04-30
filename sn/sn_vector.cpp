@@ -6,7 +6,12 @@
 
 namespace SN
 {
-	/*static*/ SN_Class SN_Vector::Class()
+	/*static*/ SN_Class SN_Vector::ExprClass()
+    {
+        return SNI_Vector::ExprClass();
+    }
+
+    /*static*/ SN_Class SN_Vector::Class()
 	{
 		return SNI_Vector::Class();
 	}
