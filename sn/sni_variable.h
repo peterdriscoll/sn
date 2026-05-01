@@ -113,8 +113,6 @@ namespace SNI
 		virtual void PromoteMembers();
 
 	private:
-		SNI_Class* m_Class = skynet::All.GetSNI_Class();
-
 		SNI_Expression * m_Value = nullptr;
 		SNI_Expression * m_Type = skynet::All.GetSNI_Expression();
 		SNI_Frame      * m_Frame = nullptr;

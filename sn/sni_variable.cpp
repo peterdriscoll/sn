@@ -39,7 +39,7 @@ namespace SNI
 
 	SN::SN_Expression SNI_Variable::Type() const
 	{
-		return m_Class;
+		return m_Type;
 	}
 
 	SNI_Variable::SNI_Variable()
