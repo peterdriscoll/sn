@@ -270,10 +270,10 @@ namespace test_sn
 				(X == Y).Assert().Do();
 
 				std::string X_text = X.DisplayValueSN();
-				Assert::IsTrue(X_text == "Set({Long(3), Long(4), Long(5)})");
-
+				Assert::IsTrue(X_text == "X:=Set({Long(3), Long(4), Long(5)})");
+				
 				std::string Y_text = Y.DisplayValueSN();
-				Assert::IsTrue(Y_text == "Set({Long(3), Long(4), Long(5)})");
+				Assert::IsTrue(Y_text == "Y:=Set({Long(3), Long(4), Long(5)})");
 				
 				(X.HasMember(Long(3))).Assert().Do();
 				(X.HasMember(Long(4))).Assert().Do();

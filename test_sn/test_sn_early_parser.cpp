@@ -234,6 +234,7 @@ namespace test_sn
 
 				SN_DECLARE(x2);
 				(ParseInteger("13")(x2)).Assert().Do();
+				std::string x2_string = x2.DisplayValueSN();
 				(x2 == Long(13)).Evaluate().Do().CheckValue();
 
 				SN_DECLARE(x3);
@@ -331,8 +332,8 @@ namespace test_sn
 				(i4 == Meta(1, MyDomain["Peter1"])).Assert().Do();
 				(i3 == i4).Evaluate().Do().CheckValue();
 
-				std::string i3_string = i3.DisplayValueSN();
-				std::string i4_string = i4.DisplayValueSN();
+				std::string i3_string = i3.GetValue().DisplaySN();
+				std::string i4_string = i4.GetValue().DisplaySN();
 				Assert::IsTrue(i3_string == i4_string);
 			}
 		}
@@ -385,8 +386,8 @@ namespace test_sn
 				SN_DECLARE(y2);
 				(y2 == String("Line 1\nLine2")).Assert().Do();
 
-				std::string x2_string = x2.DisplayValueSN();
-				std::string y2_string = y2.DisplayValueSN();
+				std::string x2_string = x2.GetValue().DisplaySN();
+				std::string y2_string = y2.GetValue().DisplaySN();
 				Assert::IsTrue(x2_string == y2_string);
 
 				SN_DECLARE(k1);
@@ -463,8 +464,8 @@ namespace test_sn
 				(j1 == Meta(1, MyDomain["Peter_1"])).Assert().Do();
 				(i1 == j1).Evaluate().Do().CheckValue();
 
-				std::string i1_string = i1.DisplayValueSN();
-				std::string j1_string = j1.DisplayValueSN();
+				std::string i1_string = i1.GetValue().DisplaySN();
+				std::string j1_string = j1.GetValue().DisplaySN();
 				Assert::IsTrue(i1_string == j1_string);
 
 				SN_DECLARE(i2);
@@ -474,8 +475,8 @@ namespace test_sn
 				(j2 == Long(543)).Assert().Do();
 				(i2 == j2).Evaluate().Do().CheckValue();
 
-				std::string i2_string = i2.DisplayValueSN();
-				std::string j2_string = j2.DisplayValueSN();
+				std::string i2_string = i2.GetValue().DisplaySN();
+				std::string j2_string = j2.GetValue().DisplaySN();
 				Assert::IsTrue(i2_string == j2_string);
 			}
 		}
@@ -565,8 +566,8 @@ namespace test_sn
 				(j1 == Meta(1, MyDomain["Peter_1"])).Assert().Do();
 				(i1 == j1).Evaluate().Do().CheckValue();
 
-				std::string i1_string = i1.DisplayValueSN();
-				std::string j1_string = j1.DisplayValueSN();
+				std::string i1_string = i1.GetValue().DisplayValueSN();
+				std::string j1_string = j1.GetValue().DisplayValueSN();
 				Assert::IsTrue(i1_string == j1_string);
 
 				SN_DECLARE(i2);
@@ -576,8 +577,8 @@ namespace test_sn
 				(j2 == Long(543)).Assert().Do();
 				(i2 == j2).Evaluate().Do().CheckValue();
 
-				std::string i2_string = i2.DisplayValueSN();
-				std::string j2_string = j2.DisplayValueSN();
+				std::string i2_string = i2.GetValue().DisplayValueSN();
+				std::string j2_string = j2.GetValue().DisplayValueSN();
 				Assert::IsTrue(i2_string == j2_string);
 
 				SN_DECLARE(i3);
@@ -587,8 +588,8 @@ namespace test_sn
 				(j3 == String("My test string")).Assert().Do();
 				(i3 == j3).Evaluate().Do().CheckValue();
 
-				std::string i3_string = i3.DisplayValueSN();
-				std::string j3_string = j3.DisplayValueSN();
+				std::string i3_string = i3.GetValue().DisplaySN();
+				std::string j3_string = j3.GetValue().DisplaySN();
 				Assert::IsTrue(i3_string == j3_string);
 
 				SN_DECLARE(s1);
@@ -598,8 +599,8 @@ namespace test_sn
 				(s2 == String("My test \"string\"")).Assert().Do();
 				(s1 == s2).Evaluate().Do().CheckValue();
 
-				std::string s1_string = s1.DisplayValueSN();
-				std::string s2_string = s2.DisplayValueSN();
+				std::string s1_string = s1.GetValue().DisplayValueSN();
+				std::string s2_string = s2.GetValue().DisplayValueSN();
 				Assert::IsTrue(s1_string == s2_string);
 			}
 		}

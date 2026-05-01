@@ -390,15 +390,34 @@ namespace SNI
 
 	std::string SNI_Variable::DisplayValueSN(long priority, SNI_DisplayOptions & p_DisplayOptions) const
 	{
-		if (m_Value)
+		std::string result = FrameName();
+
+		if (m_Value && !dynamic_cast<SNI_DelayedCall *>(m_Value))
 		{
-			if (dynamic_cast<SNI_DelayedCall *>(m_Value))
+			bool showAsKnownValue = false;
+
+			if (m_Value->IsKnownValue() && m_Type)
 			{
-				return FrameName();
+				SN::SN_Expression valueType = m_Value->Type();
+				showAsKnownValue = m_Type->Equivalent(valueType.GetSNI_Expression());
 			}
-			return m_Value->DisplayValueSN(priority, p_DisplayOptions);
+
+			if (showAsKnownValue)
+			{
+				result += ":=" + m_Value->DisplaySN(priority, p_DisplayOptions);
+			}
+			else
+			{
+				result += ":=" + m_Value->DisplayValueSN(priority, p_DisplayOptions);
+			}
 		}
-		return FrameName();
+
+		if (m_Type && !m_Type->Equivalent(skynet::All.GetSNI_Expression()))
+		{
+			result += ":" + m_Type->DisplaySN(priority, p_DisplayOptions);
+		}
+
+		return result;
 	}
 
 	std::string SNI_Variable::DisplayCall(long p_Priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const

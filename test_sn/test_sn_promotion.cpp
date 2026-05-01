@@ -47,7 +47,7 @@ namespace test_sn
                     }
 
                     const SNI_Expression* after = X.GetSafeValue().GetSNI_Expression();
-                    Assert::IsTrue(X.DisplayValueSN() == "Long(2)");
+                    Assert::IsTrue(X.GetValue().DisplayValueSN() == "Long(2)");
                     Assert::IsTrue(before != after, L"Object was promoted");
                 }
             }
@@ -72,7 +72,7 @@ namespace test_sn
                     expr2.Assert().Do();
                 }
 
-                Assert::IsTrue(X.DisplayValueSN() == "Long(2)");
+                Assert::IsTrue(X.GetValue().DisplayValueSN() == "Long(2)");
             }
             Cleanup();
         }
@@ -102,7 +102,7 @@ namespace test_sn
                 // At this point, the inner transaction has completed.
                 // The value assigned to X (Long(2)) should have been promoted to the parent transaction.
 
-                Assert::IsTrue(X.DisplayValueSN() == "Long(2)");
+                Assert::IsTrue(X.GetValue().DisplayValueSN() == "Long(2)");
 
                 // This test confirms that 'alias' still tracks the promoted value of X.
                 // It verifies that symbolic aliases do not go stale after promotion:

@@ -22,12 +22,17 @@ namespace SNI
 		static void UserThreadFunc(SNI_User* p_User);
 	public:
 		template <typename T, typename R, typename... Args>
-		R* GetOrCreatePointer(Args&&... args) {
+		R* GetOrCreatePointer(Args&&... args)
+		{
+            std::lock_guard<std::mutex> lock(m_PointersMutex);
+
 			size_t key = typeid(T).hash_code();
 			auto it = m_Pointers.find(key);
-			if (it != m_Pointers.end()) {
+			if (it != m_Pointers.end())
+			{
 				return static_cast<R*>(it->second);
 			}
+
 			// Create, store, and return
 			R* instance = new R(std::forward<Args>(args)...);
 			m_Pointers[key] = instance;
@@ -36,6 +41,8 @@ namespace SNI
 
 	private:
 		std::unordered_map<size_t, void*> m_Pointers;
+        std::mutex m_PointersMutex;
+
 	public:
 		static SNI_User* GetCurrentUser();
 

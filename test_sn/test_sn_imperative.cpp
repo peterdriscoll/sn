@@ -85,7 +85,7 @@ namespace test_sn
 					,	StateValue(v.Value()(w.Value()), w.State()))))).PartialAssert().Do();
 				}
 				std::string s2 = testSimpleImperative.DisplayValueSN();
-				std::string s2_expected = "Lambda(@f.@p.@s.#v.#w.(let v=if f.Meta(1) is a {Value} then StateValue(f, s) else f s &w=if p.Meta(1) is a {Value} then StateValue(p, v.State()) else p v.State()  in StateValue(v.Value() w.Value(), w.State())))";
+				std::string s2_expected = "testSimpleImperative:=Lambda(@f.@p.@s.#v.#w.(let v=if f.Meta(1) is a {Value} then StateValue(f, s) else f s &w=if p.Meta(1) is a {Value} then StateValue(p, v.State()) else p v.State()  in StateValue(v.Value() w.Value(), w.State())))";
 			    Assert::IsTrue(s2 == s2_expected, L"Expected value for testSimpleImperative not found.");
 				
 				SN_DECLARE(x);
