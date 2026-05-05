@@ -105,12 +105,12 @@ namespace test_sn
 				{
 					Transaction transaction;
 
-					SN_DECLARE(y);
+					SN_LOCAL(y);
 
 					(String("dog") == y).Assert().Do();
 					(String("dog") == y).Evaluate().Do().CheckValue();
 
-					SN_DECLARE(z);
+					SN_LOCAL(z);
 
 					(String("dog") + z == String("dogcat")).Assert().Do();
 					Value cat_value = z.GetValue();
@@ -121,26 +121,26 @@ namespace test_sn
 				{
 					Transaction transaction;
 
-					SN_DECLARE(a);
+					SN_LOCAL(a);
 					(String("dog") + a == String("dogcat")).Assert().Do();
 					(a == String("cat")).Assert().Do();
-					SN_DECLARE(b);
+					SN_LOCAL(b);
 					(b + String("cat") == String("dogcat")).Assert().Do();
 					(b == String("dog")).Assert().Do();
-					SN_DECLARE(c);
+					SN_LOCAL(c);
 					(String("dog") + String("cat") == c).Assert().Do();
 					(c == String("dogcat")).Assert().Do();
 				}
 				{
 					Transaction transaction;
 
-					SN_DECLARE(a);
+					SN_LOCAL(a);
 					(String("dogcat").SubtractRight(String("cat")) == a).Assert().Do();
 					(a == String("dog")).Assert().Do();
-					SN_DECLARE(b);
+					SN_LOCAL(b);
 					(String("dogcat").SubtractRight(b) == String("dog")).Assert().Do();
 					(b == String("cat")).Assert().Do();
-					SN_DECLARE(c);
+					SN_LOCAL(c);
 					(c.SubtractRight(String("cat")) == String("dog")).Assert().Do();
 					(c == String("dogcat")).Assert().Do();
 				}
@@ -186,8 +186,8 @@ namespace test_sn
 				{
 					Transaction transaction;
 
-					SN_DECLARE(a);
-					SN_DECLARE(b);
+					SN_LOCAL(a);
+					SN_LOCAL(b);
 
 					// Impossible: trying to force b to something inconsistent
 					(String("ratdogcat") == a + b).Assert().Do();
@@ -203,9 +203,9 @@ namespace test_sn
 				{
 					Transaction transaction;
 
-					SN_DECLARE(a);
-					SN_DECLARE(b);
-					SN_DECLARE(c);
+					SN_LOCAL(a);
+					SN_LOCAL(b);
+					SN_LOCAL(c);
 
 					// Impossible: trying to force b to something inconsistent
 					(String("ratdogcat") == a + b + c).Assert().Do();
@@ -273,8 +273,8 @@ namespace test_sn
 				{
 					Transaction transaction;
 
-					SN_DECLARE_VALUE(name_1, String(s_name_1));
-					SN_DECLARE_VALUE(contents_1, String(s_contents_1));
+					SN_LOCAL_VALUE(name_1, String(s_name_1));
+					SN_LOCAL_VALUE(contents_1, String(s_contents_1));
 
 					(name_1.File() == contents_1).Assert().Do();
 
@@ -287,8 +287,8 @@ namespace test_sn
 
 					(name_1.File() == contents_1).Assert().Do();
 
-					SN_DECLARE_VALUE(name_2, String(s_name_2));
-					SN_DECLARE_VALUE(contents_2, String(s_contents_2));
+					SN_LOCAL_VALUE(name_2, String(s_name_2));
+					SN_LOCAL_VALUE(contents_2, String(s_contents_2));
 
 					(name_2.File() == contents_2).Assert().Do();
 
@@ -314,10 +314,10 @@ namespace test_sn
 				{
 					Transaction transaction;
 
-					SN_DECLARE_VALUE(name_1, String(s_name_1));
-					SN_DECLARE_VALUE(name_2, String(s_name_2));
-					SN_DECLARE_VALUE(contents_1, String(s_contents_1));
-					SN_DECLARE_VALUE(contents_2, String(s_contents_2));
+					SN_LOCAL_VALUE(name_1, String(s_name_1));
+					SN_LOCAL_VALUE(name_2, String(s_name_2));
+					SN_LOCAL_VALUE(contents_1, String(s_contents_1));
+					SN_LOCAL_VALUE(contents_2, String(s_contents_2));
 
 					(name_1.File() == contents_1).Assert().Do();
 					(name_2.File() == contents_2).Assert().Do();
@@ -335,8 +335,8 @@ namespace test_sn
 				{
 					Transaction transaction;
 
-					SN_DECLARE(money);
-					SN_DECLARE(evil);
+					SN_LOCAL(money);
+					SN_LOCAL(evil);
 					(money + (String(" is the root of all ") + evil) == String("Money is the root of all evil")).Assert().Do();
 					std::string money_string = money.GetString();
 					std::string evil_string = evil.GetString();
@@ -346,8 +346,8 @@ namespace test_sn
 				{
 					Transaction transaction;
 
-					SN_DECLARE(money);
-					SN_DECLARE(evil);
+					SN_LOCAL(money);
+					SN_LOCAL(evil);
 					(money + String(" is the root of all ") + evil == String("Money is the root of all evil")).Assert().Do();
 					std::string money_string = money.GetString();
 					std::string evil_string = evil.GetString();
@@ -391,8 +391,8 @@ namespace test_sn
 				{
 					Transaction transaction;
 
-					SN_DECLARE(firstname);
-					SN_DECLARE(surname);
+					SN_LOCAL(firstname);
+					SN_LOCAL(surname);
 
 					(String("My first name is ") + (firstname + (String(" and my surname is ") + (surname + String(".")))) == String("My first name is Bobby and my surname is Fischer.")).Assert().Do();
 
@@ -407,8 +407,8 @@ namespace test_sn
 				{
 					Transaction transaction;
 
-					SN_DECLARE(firstname);
-					SN_DECLARE(surname);
+					SN_LOCAL(firstname);
+					SN_LOCAL(surname);
 
 					(String("My first name is ") + firstname + String(" and my surname is ") + (surname + String(".")) == String("My first name is Bobby and my surname is Fischer.")).Assert().Do();
 					(firstname == String("Bobby")).Assert().Do();

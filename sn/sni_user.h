@@ -49,6 +49,8 @@ namespace SNI
 		explicit SNI_User(OnErrorHandler *p_ErrorHandler = &PGC_User::DefaultErrorHandler);
 		virtual ~SNI_User();
 
+		SNI_Domain* Domain();
+
 		SNI_DelayedProcessor* GetDelayedProcessor();
 
 		void AddThread(SNI_Thread* p_Thread);
@@ -64,6 +66,7 @@ namespace SNI
 		size_t CountDelayedCalls();
 		std::string DelayedJS(DisplayOptionType p_OptionType);
 	private:
+		SNI_Domain *m_Domain = nullptr;
 		SNI_Transaction* m_Transaction;
 		SNI_DelayedProcessor* m_DelayedProcessor;
 

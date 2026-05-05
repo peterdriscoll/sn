@@ -23,11 +23,24 @@ namespace SN
         static SN_Class ExprClass(); 
 		static SN_Class Class();
 
-		SN_Domain(const std::string &p_Name);
-		virtual ~SN_Domain();
+        static SN_Domain GetCurrent();
 
+        SN_Domain(SNI::SNI_Domain *p_Domain);
+		SN_Domain(SNI::SNI_Domain *p_Domain, const std::string &p_Name);
+
+		SN_Domain(const std::string &p_Name);
+        virtual ~SN_Domain();
+
+        SN_Domain DeclareDomain(const std::string &p_Name);
+        SN_Domain LocalDomain(const std::string &p_Name);
+
+	    SN_Variable DeclareVariable(const std::string &p_Name);
+        SN_Variable LocalVariable(const std::string &p_Name);
+		
 		SN_Expression operator [](const std::string &p_Index);
 		SN_Expression CreateMetaVariable(const SN_Expression &p_Index);
+        SN_Variable LookupVariable(const std::string &p_Index);
+        SN_Domain LookupDomain(const std::string &p_Index);
 		SN_Expression IsA(const SN_Expression &p_Parent) const;
 
 		SNI::SNI_Domain* GetSNI_Domain();

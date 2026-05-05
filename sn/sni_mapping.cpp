@@ -166,7 +166,7 @@ namespace SNI
 		{
 			return SN::SN_Error(false, false, GetTypeName() + " CountIf - Number of values in map may change. Fix the map before counting.");
 		}
-		SN_DECLARE_VALUE(countCondition, p_Value);
+		SN_LOCAL_VALUE(countCondition, p_Value);
 		long count = 0;
 		for (auto &pair : m_Map)
 		{

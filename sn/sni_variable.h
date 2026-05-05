@@ -17,6 +17,7 @@ namespace SNI
 	class SNI_Value;
 	class SNI_DelayedCall;
 	class SNI_Frame;
+	class SNI_Domain;
 
 	class SNI_Variable : public SNI_VarDef, public SNI_Namable
 	{
@@ -27,10 +28,15 @@ namespace SNI
 		virtual SN::SN_Expression Type() const;
 
 		SNI_Variable();
+		SNI_Variable(SNI_Domain *p_Domain, const std::string &p_Name);
 		SNI_Variable(const std::string &p_Name);
 		SNI_Variable(const std::string & p_Name, const std::string & p_DomainName, skynet::DefineType p_DefineType = skynet::DefineType::Inname);
 		SNI_Variable(const SN::SN_Expression &p_other);
 		virtual ~SNI_Variable();
+
+		void InitValue(SNI_Expression* p_Value);
+        void InitType(SNI_Expression* p_Type);
+		void InitDefineType(enum skynet::DefineType p_DefineType);
 
 		virtual std::string GetTypeName() const;
 		virtual std::string GetValueTypeName() const;
@@ -113,6 +119,7 @@ namespace SNI
 		virtual void PromoteMembers();
 
 	private:
+		SNI_Domain     * m_Domain = nullptr;
 		SNI_Expression * m_Value = nullptr;
 		SNI_Expression * m_Type = skynet::All.GetSNI_Expression();
 		SNI_Frame      * m_Frame = nullptr;

@@ -31,7 +31,9 @@ namespace SN
 		static SN_Class Class();
 
 		SN_Variable();
-		SN_Variable(const SN_Variable &p_other);
+        SN_Variable(const SN_Variable &p_other);
+        SN_Variable(const SN_Domain &p_Domain,
+                    const std::string &p_Name);
 		SN_Variable(SNI::SNI_Variable* p_other);
 		SN_Variable(const SN_Expression &p_other, bool);
 		SN_Variable(const SN_Expression &p_other);
@@ -44,6 +46,10 @@ namespace SN
 		SN_APPLY_TYPES(SN_Variable, DUMMY, SN_CONSTRUCTOR)
 
 		virtual ~SN_Variable();
+
+		SN_Variable& InitValue(const SN_Expression& p_Value);
+        SN_Variable& InitType(const SN_Expression &p_Type);
+		SN_Variable& InitDefineType(enum skynet::DefineType p_DefineType);
 
 		bool GetBool() const;
 		std::string GetString() const;

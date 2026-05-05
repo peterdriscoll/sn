@@ -305,8 +305,9 @@ namespace SNI
 
 		SNI_Expression* FlattenStackCall(long p_MetaLevel, SNI_Expression* function, SN::SN_ExpressionList* l_ParameterList) const;
 
-	private:
 		void HandleAction(SN::SN_Expression p_Result, OnErrorHandler * p_ErrorHandler) const;
+
+	private:
 		virtual SN::SN_Error GetError();
 		static std::map<std::string, unsigned long> m_IdMap;
 

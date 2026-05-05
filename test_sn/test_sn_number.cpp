@@ -156,9 +156,9 @@ namespace test_sn
 				{
 					Transaction transaction;
 
-					SN_DECLARE(a);
-					SN_DECLARE(b);
-					SN_DECLARE(c);
+					SN_LOCAL(a);
+					SN_LOCAL(b);
+					SN_LOCAL(c);
 
 					(a + Long(3) == Long(5)).Assert().Do();
 					(Long(2) + b == Long(5)).Assert().Do();
@@ -172,9 +172,9 @@ namespace test_sn
 				{
 					Transaction transaction;
 
-					SN_DECLARE(x);
-					SN_DECLARE(y);
-					SN_DECLARE(z);
+					SN_LOCAL(x);
+					SN_LOCAL(y);
+					SN_LOCAL(z);
 
 					(x - Long(3) == Long(2)).Assert().Do();
 					(Long(5) - y == Long(2)).Assert().Do();
@@ -188,9 +188,9 @@ namespace test_sn
 				{
 					Transaction transaction;
 
-					SN_DECLARE(a);
-					SN_DECLARE(b);
-					SN_DECLARE(c);
+					SN_LOCAL(a);
+					SN_LOCAL(b);
+					SN_LOCAL(c);
 
 					(a * Double(1.25) == Long(5)).Assert().Do();
 					(Long(4) * b == Double(5)).Assert().Do();
@@ -204,9 +204,9 @@ namespace test_sn
 				{
 					Transaction transaction;
 
-					SN_DECLARE(x);
-					SN_DECLARE(y);
-					SN_DECLARE(z);
+					SN_LOCAL(x);
+					SN_LOCAL(y);
+					SN_LOCAL(z);
 
 					(x / Long(4) == Double(1.25)).Assert().Do();
 					(Long(5) / y == Double(1.25)).Assert().Do();

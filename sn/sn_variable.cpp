@@ -32,6 +32,11 @@ namespace SN
 	SN_Variable::SN_Variable(const SN_Variable &p_Variable)
 		: SN_Expression(p_Variable.GetSNI_Variable())
 	{
+    }
+
+	SN_Variable::SN_Variable(const SN_Domain &p_Domain, const std::string &p_Name)
+		: SN_Expression(new SNI::SNI_Variable(p_Domain.GetSNI_Domain(),p_Name))
+	{
 	}
 
 	SN_Variable::SN_Variable(const SN_Expression &p_Value, bool)
@@ -92,6 +97,24 @@ namespace SN
 	SN_Variable::~SN_Variable()
 	{
 	}
+
+	SN_Variable& SN_Variable::InitValue(const SN_Expression& p_Value)
+    {
+		GetSNI_Variable()->InitValue(p_Value.GetSNI_Expression());
+		return *this;
+    }
+
+	SN_Variable& SN_Variable::InitType(const SN_Expression &p_Type)
+    {
+		GetSNI_Variable()->InitType(p_Type.GetSNI_Expression());
+		return *this;
+    }
+
+	SN_Variable& SN_Variable::InitDefineType(enum skynet::DefineType p_DefineType)
+    {
+		GetSNI_Variable()->InitDefineType(p_DefineType);
+		return *this;
+    }
 
 	bool SN_Variable::GetBool() const
 	{

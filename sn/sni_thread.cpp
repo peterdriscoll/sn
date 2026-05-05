@@ -564,6 +564,16 @@ namespace SNI
 		m_ThreadNum = p_User->GetNumThreads()-1;
 	}
 
+	SNI_Domain * SNI_Thread::GetDomain()
+	{
+		return m_Domain;
+    }
+
+    void SNI_Thread::SetDomain(SNI_Domain *p_Domain)
+    {
+		m_Domain = p_Domain;
+    }
+
 	std::string SNI_Thread::StartCommand(enum skynet::DebugAction p_DebugAction, const std::string &p_Description, enum DisplayOptionType p_OptionType)
 	{
 		stringstream ss;

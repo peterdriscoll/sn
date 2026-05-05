@@ -14,6 +14,7 @@ namespace SNI
 	class SNI_Expression;
 	class SNI_Error;
 	class SNI_Variable;
+	class SNI_Domain;
 	class SNI_Value;
 	class SNI_ValueSet;
 	class SNI_String;
@@ -264,6 +265,7 @@ namespace SN
 		SNI::SNI_Bool * GetSNI_Bool() const;
 		SNI::SNI_Lambda * GetSNI_Lambda() const;
 		SNI::SNI_Variable * GetSNI_Variable() const;
+		SNI::SNI_Domain * GetSNI_Domain() const;
 		SNI::SNI_FunctionDef * GetSNI_FunctionDef() const;
 		SNI::SNI_Meta* GetSNI_Meta() const;
 		SNI::SNI_MetaType* GetSNI_MetaType() const;

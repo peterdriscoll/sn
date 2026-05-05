@@ -153,6 +153,10 @@ namespace SNI
 
 		SNI_User* GetUser();
 		void SetUser(SNI_User* p_User);
+
+        SNI_Domain *GetDomain();
+        void SetDomain(SNI_Domain *p_Domain);
+
 	private:
 		std::string StartCommand(enum skynet::DebugAction p_DebugAction, const std::string & p_Description, enum DisplayOptionType p_OptionType);
 
@@ -182,19 +186,20 @@ namespace SNI
 		size_t CountLogEntries();
 		size_t CountCodeEntries();
 
-		SNI_User* m_User;
-		size_t m_ThreadNum;
+		SNI_User* m_User = nullptr;
+        SNI_Domain *m_Domain = nullptr;
+		size_t m_ThreadNum = 0;
 		std::mutex m_Mutex;
 		std::mutex m_ChangeMutex;
 		SNI_DebugCommand m_DebugCommand;
 		SNI_FrameList m_FrameList;
-		size_t m_ThreadStepCount;
-		size_t m_LastThreadStepCount;
-		bool m_WebServerThreadUsed;
-		SNI_Manager *m_TopManager;
-		bool m_Ended;
-		bool m_Closing;
-		long m_DefineId;
+		size_t m_ThreadStepCount = 0;
+		size_t m_LastThreadStepCount = 0;
+		bool m_WebServerThreadUsed = false;
+		SNI_Manager *m_TopManager = nullptr;
+		bool m_Ended = false;
+		bool m_Closing = false;
+		long m_DefineId = 0;
 
 		SNI_Error *m_Error;
 

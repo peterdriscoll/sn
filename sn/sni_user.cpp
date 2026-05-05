@@ -12,6 +12,7 @@ namespace SNI
 	{
 		return SNI_Thread::GetThread()->GetUser();
 	}
+
 	// Static function to be used as the thread entry point
 	void SNI_User::UserThreadFunc(SNI_User* p_User)
 	{
@@ -28,6 +29,7 @@ namespace SNI
 		SNI::SNI_Thread::GetThread()->SetUser(this);
 		m_Transaction = new SNI_Transaction();
 		m_Operators = new SN::SN_OperatorVariables();
+		m_Domain = new SNI_Domain("User");
 
 		LogicSetup();
 		m_Operators->Setup();
@@ -42,7 +44,12 @@ namespace SNI
 		delete m_Operators;
 		delete m_Transaction;
 		SNI::SNI_Thread::ResetThread();
-	}
+        }
+
+    SNI_Domain *SNI_User::Domain()
+    {
+        return m_Domain;
+    }
 
 	SNI_DelayedProcessor* SNI_User::GetDelayedProcessor()
 	{

@@ -22,13 +22,27 @@ namespace SNI
 		return Class();
 	}
 
+	/*static*/ SNI_Domain* SNI_Domain::GetCurrent()
+	{
+		return SNI_Thread::GetThread()->GetDomain();
+	}
+
 	SNI_Domain::SNI_Domain(const std::string &p_Name)
 		: m_Name(p_Name)
 	{
-	}
+		m_LastDomain = SNI_Thread::GetThread()->GetDomain();
+		SNI_Thread::GetThread()->SetDomain(this);
+    }
+
+    SNI_Domain::SNI_Domain(SNI_Domain *p_ParentDomain, const std::string &p_Name)
+		: m_Name(p_Name)
+        , m_ParentDomain(p_ParentDomain)
+    {
+    }
 
 	SNI_Domain::~SNI_Domain()
 	{
+		SNI_Thread::GetThread()->SetDomain(m_LastDomain);
 	}
 
 	void SNI_Domain::Clear()
@@ -44,6 +58,14 @@ namespace SNI
 			REQUESTPROMOTION(pair.second);
 		}
 	}
+
+	void SNI_Domain::WriteJSON(std::ostream &p_Stream, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions)
+    {
+		for (auto &pair : m_Map)
+		{
+            pair.second.GetSNI_Variable()->WriteJSON(p_Stream, "\t", p_DebugFieldWidth, p_DisplayOptions);
+		}
+    }
 
 	std::string SNI_Domain::GetTypeName() const
 	{
@@ -85,13 +107,82 @@ namespace SNI
 		auto it = m_Map.find(p_Index);
 		if (it == m_Map.end())
 		{
-			SN::SN_Variable v;
-			v.SetName(p_Index);
-			v.SetDomainName(m_Name);
+			SN::SN_Variable v(SN::SN_Domain(this), p_Index);
 			const_cast<SNI_Domain *>(this)->m_Map.emplace(p_Index, v);
 			return v;
 		}
 		return m_Map.at(p_Index);
+	}
+
+	SN::SN_Variable SNI_Domain::LookupVariable(const std::string & p_Name)
+	{
+		auto it = m_Map.find(p_Name);
+		if (it == m_Map.end())
+		{
+			SN::SN_Variable v(SN::SN_Domain(this), p_Name);
+			m_Map.emplace(p_Name, v);
+			return v;
+		}
+		return SN::SN_Variable(m_Map.at(p_Name).GetSNI_Variable());
+	}
+
+	SN::SN_Domain SNI_Domain::LookupDomain(const std::string & p_Name)
+	{
+		auto it = m_Map.find(p_Name);
+		if (it == m_Map.end())
+		{
+			SN::SN_Domain d(this, p_Name);
+			m_Map.emplace(p_Name, d);
+			return d;
+		}
+		return SN::SN_Domain(m_Map.at(p_Name).GetSNI_Domain());
+	}
+
+	SN::SN_Domain SNI_Domain::DeclareDomain(const std::string & p_Name)
+    {
+		auto it = m_Map.find(p_Name);
+		bool alreadyDeclared  = it != m_Map.end();
+		if (alreadyDeclared )
+        {
+			HandleAction(
+				SN::SN_Error(false, false, "Sub-domain '" + p_Name + "' is already declared in domain '" + m_Name + "'. Use SN_LOCAL_SUBDOMAIN for a domain not added to the current domain in this scope."),
+				SNI_Thread::TopManager()->ErrorHandler());
+
+			ASSERTM(false, "Shouldn't be here.");
+		}
+
+		SN::SN_Domain d(this, p_Name);
+		m_Map.emplace(p_Name, d);
+		return d;
+	}
+
+	SN::SN_Domain SNI_Domain::LocalDomain(const std::string & p_Name)
+    {
+		return SN::SN_Domain(this, p_Name);
+	}
+
+
+	SN::SN_Variable SNI_Domain::DeclareVariable(const std::string & p_Name)
+    {
+		auto it = m_Map.find(p_Name);
+		bool alreadyDeclared  = it != m_Map.end();
+		if (alreadyDeclared)
+        {
+			HandleAction(
+				SN::SN_Error(false, false, "Variable '" + p_Name + "' is already declared in domain '" + m_Name + "'. Use SN_LOCAL for a variable not added to the current domain in this scope."),
+				SNI_Thread::TopManager()->ErrorHandler());
+
+			ASSERTM(false, "Shouldn't be here.");
+		}
+
+		SN::SN_Variable v(this, p_Name);
+		m_Map.emplace(p_Name, v);
+		return v;
+	}
+
+	SN::SN_Variable SNI_Domain::LocalVariable(const std::string & p_Name)
+    {
+		return SN::SN_Variable(this, p_Name);
 	}
 
 	// Functions

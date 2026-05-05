@@ -109,34 +109,104 @@ namespace skynet
 #include "sn_deferredcommand.h"
 #include "sn_user.h"
 
-// Declare a variable, and tell the variable its variable name.
-// When the program and the program model generated the variable will know its human readable name.
-// Use on things that can be declared
-//   SNI_Variable
-//   SNI_Function
+// Create or reference a variable within a domain.
+// Usage:
+//     myDomain.SN_VAR(Katara);
+#define SN_VAR(n)         \
+    LookupVariable(#n)
+
+// Create or reference a subdomain within a domain.
+// Usage:
+//     myDomain.SN_DOM(FarnarklingDomain);
+#define SN_DOM(n)         \
+    LookupDomain(#n)
+
+// Declare a domain at the global level, with the name of the variable as the
+// domain name.
+// Usage:
+//     SN_DOMAIN(GlobalDomain); // GlobalDomain does not belong to any other domain and cant be traced back to a user.
+#define SN_DOMAIN(d) \
+    SN::SN_Domain d(std::string(#d))
+
+// Declare a sub domain of the current scoped domain. Register the sub domain with the domain.
+// Usage:
+//     {
+//         User user; // The user has a domain.
+//		   SN_DECLARE_SUBDOMAIN(MyDomain); // MyDomain Belongs to the user domain and is registered with it.
+//		   SN_DECLARE_SUBDOMAIN(FarnarklingDomain); // FarnarklingDomain belongs to MyDomain and is registered.
+//         ...
+//         SN_DECLARE(Katara); // Katara belongs to FarnarklingDomain and is registered with it.
+//         (user.Domain().SN_DOM(MyDomain).SN_DOM(FarnarklingDomain).SN_VAR(Katara) == String("Good dog")).Assert().Do()
+//         // The same as (Katara == String("Good dog")).Assert().Do()
+//     }
+#define SN_DECLARE_SUBDOMAIN(d) \
+    SN::SN_Domain d = SN::SN_Domain::GetCurrent().DeclareDomain(#d)
+
+// Declare a sub domain of the current scoped domain. Do not register the sub domain.
+// Usage:
+//     {
+//         User user; // The user has a domain.
+//		   SN_LOCAL_SUBDOMAIN(LocalDomain); // LocalDomain Belongs to the user domain but is not registered with it.
+//         ...
+//         SN_DECLARE(Waggy); // Waggy belongs to LocalDomain and is registered with it.
+//         (LocalDomain.SN_DOM(FarnarklingDomain).SN_VAR(Waggy) == String("Velcro dog")).Assert().Do()
+//         // The same as (Waggy == String("Velcro dog")).Assert().Do()
+//         // user.SN_DOM(LocalDomain) does not find LocalDomain.
+//     }
+#define SN_LOCAL_SUBDOMAIN(d) \
+    SN::SN_Domain d = SN::SN_Domain::GetCurrent().LocalDomain(#d)
+
+// Declare a variable within the current scoped domain. Register the variable
+// with the domain.
+// Usage:
+//     {
+//         User user;
+//         SN_DECLARE(firstName);
+//         // user.Domain().SN_VAR(firstName) finds firstName.
+//     }
 #define SN_DECLARE(n) \
-    SN::SN_Variable n(std::string(#n), skynet::Inname, false)
+    SN::SN_Variable n = SN::SN_Domain::GetCurrent().DeclareVariable(#n)
 
+// Inline.
 #define SN_DECLARE_INLINE(n) \
-	SN::SN_Variable n(std::string(#n), skynet::Inline, false)
+    SN_DECLARE(n).InitDefineType(skynet::Inline)
 
-#define SN_LOCAL(n) \
-	SN::SN_Variable n(std::string(#n), skynet::Inname, true)
-
-#define SN_LOCAL_INLINE(n) \
-	SN::SN_Variable n(std::string(#n), skynet::Inline, true)
-
+// The same as SN_DECLARE but also initialize the variable with a value.
 #define SN_DECLARE_VALUE(n, v) \
-    SN::SN_Variable n(std::string(#n), v, skynet::Inname, false)
+    SN_DECLARE(n).InitValue(v)
 
+// Inline.
 #define SN_DECLARE_VALUE_INLINE(n, v) \
-	SN::SN_Variable n(std::string(#n), v, skynet::Inline, false)
+    SN_DECLARE_VALUE(n, v).InitDefineType(skynet::Inline);
 
+// Declare a variable within the current scoped domain but do not register the variable
+// with the domain. This is useful with variables in a local scope.
+// Usage:
+//     {
+//         User user;
+//         {
+//             SN_LOCAL(firstName);
+//             // user.Domain().SN_VAR(firstName) does not find firstName
+//         }
+//         {
+//             SN_LOCAL(firstName);
+//             // There is no error here as user.Domain().SN_VAR(firstName) does not refer to firstName.
+//         }
+//     }
+#define SN_LOCAL(n)   \
+    SN::SN_Variable n = SN::SN_Domain::GetCurrent().LocalVariable(#n)
+
+// Inline.
+#define SN_LOCAL_INLINE(n) \
+    SN_LOCAL(n).InitDefineType(skynet::Inline)
+
+// The same as SN_LOCAL but also initialize the variable with a value.
 #define SN_LOCAL_VALUE(n, v) \
-	SN::SN_Variable n(std::string(#n), v, skynet::Inname, true)
+    SN_LOCAL(n).InitValue(v)
 
+// Inline.
 #define SN_LOCAL_VALUE_INLINE(n, v) \
-	SN::SN_Variable n(std::string(#n), v, skynet::Inline, true)
+    SN_LOCAL_VALUE(n, v).InitDefineType(skynet::Inline);
 
 #define SN_LINK(n) \
 	(*this)[#n] = n; \
@@ -151,9 +221,6 @@ namespace skynet
 	(*this)[#n] = n; \
 	n.SetName(#n); \
 	n.SetValue(r, i)
-
-#define SN_DOMAIN(n) \
-    SN::SN_Domain n(std::string(#n))
 
 #define SN_DEFINE_REAL(C, B, TYPE, NAME)                       \
      SN_EXTERN template class SN_EXPORT SN::SN_Real<TYPE>;     \

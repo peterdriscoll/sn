@@ -49,7 +49,14 @@ namespace SNI
 		, m_Requested(false)
 		, m_Inline(false)
 	{
-	}
+    }
+
+    SNI_Variable::SNI_Variable(SNI_Domain *p_Domain,
+                               const std::string &p_Name)
+        : m_Domain(p_Domain)
+		, SNI_Namable(p_Name)
+    {
+    }
 
 	SNI_Variable::SNI_Variable(const std::string &p_Name)
 		: m_Frame(NULL)
@@ -89,6 +96,20 @@ namespace SNI
 		REQUESTPROMOTION(m_Value);
 		REQUESTPROMOTION(m_Frame);
 	}
+
+	void SNI_Variable::InitValue(SNI_Expression* p_Value)
+    {
+        m_Value = p_Value;
+    }
+    void SNI_Variable::InitType(SNI_Expression* p_Type)
+    {
+        m_Type = p_Type;
+    }
+
+	void SNI_Variable::InitDefineType(enum skynet::DefineType p_DefineType)
+    {
+       m_Inline = (p_DefineType == skynet::Inline);
+    }
 
 	bool SNI_Variable::IsComplete() const
 	{

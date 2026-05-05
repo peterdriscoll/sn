@@ -40,9 +40,9 @@ namespace test_sn
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				{
-					SN_DECLARE(RemovePrefix);
-					SN_DECLARE(p);
-					SN_DECLARE(x);
+					SN_LOCAL(RemovePrefix);
+					SN_LOCAL(p);
+					SN_LOCAL(x);
 
 					(Define(RemovePrefix) == Lambda(p, Lambda(x, x.SubtractLeft(p)))).PartialAssert().Do();
 					std::cout << std::endl << "Variable " << RemovePrefix.DisplaySN() << std::endl;
@@ -54,9 +54,9 @@ namespace test_sn
 					(RemovePrefix(String("Atl"))(String("AtlDog")) == String("Dog")).Evaluate().Do().CheckValue();
 				}
 				{
-					SN_DECLARE(RemovePostfix);
-					SN_DECLARE(p);
-					SN_DECLARE(x);
+					SN_LOCAL(RemovePostfix);
+					SN_LOCAL(p);
+					SN_LOCAL(x);
 
 					(Define(RemovePostfix) == Lambda(p, Lambda(x, x.SubtractRight(p)))).PartialAssert().Do();
 					Assert::IsTrue(RemovePostfix.GetVariableValue().DisplaySN() == "@p.@x.SubtractRight x p");
@@ -105,8 +105,8 @@ namespace test_sn
 				{
 					Transaction transaction;
 
-					SN_DECLARE(Fact);
-					SN_DECLARE(m);
+					SN_LOCAL(Fact);
+					SN_LOCAL(m);
 
 					(Define(Fact)(m) == (m == Long(0)).If(Long(1), m * Fact(m - Long(1)))).PartialAssert().Do();
 
@@ -119,9 +119,9 @@ namespace test_sn
 				{
 					Transaction transaction;
 
-					SN_DECLARE(Fact);
-					SN_DECLARE(k);
-					SN_DECLARE(n);
+					SN_LOCAL(Fact);
+					SN_LOCAL(k);
+					SN_LOCAL(n);
 					// Fact 0 == 1 && Fact k : > 0 == k * Fact k-1 : < 0
 					((Fact(Long(0)) == Long(1)) && (Fact(k).Condition(Lambda(n, n > Long(0))) == k * Fact(k - Long(1)).Condition(Lambda(n, n < Long(0))))).PartialAssert().Do();
 				}

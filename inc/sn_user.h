@@ -14,10 +14,14 @@ namespace SN
 	class SN_EXPORT SN_User
 	{
 	public:
+        static SN_User GetCurrentUser();
+
 		SN_User();
+		SN_User(SNI_User *p_User);
 		virtual ~SN_User();
 
 		void Init();
+        SN_Domain Domain();
 
 		static SN::SN_OperatorVariables& GetOperators();
 
