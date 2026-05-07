@@ -54,7 +54,7 @@ namespace SNI
 
 	SN::SN_Value SNI_Subtract::RightInverseFunctionValue(const SN::SN_Value &p_Result, const SN::SN_Value &p_Right) const
 	{
-		return p_Result.GetSNI_Value()->DoAdd(p_Right.GetSNI_Value());;
+		return p_Result.GetSNI_Value()->DoAdd(p_Right.GetSNI_Value());
 	}
 
 	SN::SN_Expression SNI_Subtract::RightInverseFunctionExpression(const SN::SN_Expression &p_Result, const SN::SN_Expression &p_Right) const

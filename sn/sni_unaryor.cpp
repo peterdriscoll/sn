@@ -77,7 +77,7 @@ namespace SNI
 				{
 					if (!p_ParamList[PU1_First].IsKnownValue())
 					{
-						return p_ParamList[PU1_Result].Cardinality();;
+						return p_ParamList[PU1_Result].Cardinality();
 					}
 				}
 				if (p_ParamList[PU1_Result].AllValuesEqual(skynet::True))

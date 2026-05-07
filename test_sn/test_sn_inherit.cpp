@@ -36,7 +36,7 @@ namespace test_sn
 		{
 			Initialize();
 			{
-				Manager manager("Test Simple Inherit1", AssertErrorHandler);
+				Manager manager("Test Inherit Instance", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				skynet::True.IsA(Bool::Class()).Assert().Do();

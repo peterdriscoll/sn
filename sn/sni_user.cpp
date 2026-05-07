@@ -209,4 +209,22 @@ namespace SNI
 		}
 		return ss.str();
 	}
+
+	std::string SNI_User::DomainJS(DisplayOptionType p_OptionType)
+	{
+		SNI::SNI_DisplayOptions displayOptions(p_OptionType);
+		nlohmann::json j;
+
+		domain_to_json(j, 20, displayOptions);
+		return j.dump(4);
+	}
+
+
+	void SNI_User::domain_to_json(
+		nlohmann::json &j,
+		size_t p_DebugFieldWidth,
+        SNI::SNI_DisplayOptions &p_DisplayOptions)
+    {
+		Domain()->to_json(j["user"]["domain"]["variable"], p_DebugFieldWidth, p_DisplayOptions);
+    }
 }

@@ -13,12 +13,22 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class* SNI_StateValue::Class()
+	/*static*/ SNI_Class* SNI_StateValue::PeekClass()
+    {
+        return SNI_User::GetCurrentUser()->GetPointer<SNI_StateValue, SNI_Class>();
+    }
+
+    /*static*/ SNI_Class* SNI_StateValue::Class()
 	{
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_StateValue, SNI_Class>("StateValue");
 	}
 
 	SN::SN_Expression SNI_StateValue::Type() const
+    {
+        return PeekClass();
+    }
+
+    SN::SN_Expression SNI_StateValue::Type()
 	{
 		return Class();
 	}

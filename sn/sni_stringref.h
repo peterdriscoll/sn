@@ -21,8 +21,10 @@ namespace SNI
 		PGC_CLASS(SNI_StringRef);
 	public:
 		
+		static SNI_Class *PeekClass();
 		static SNI_Class *Class();
-		virtual SN::SN_Expression Type() const;
+		virtual SN::SN_Expression Type();
+        virtual SN::SN_Expression Type() const;
 
 		SNI_StringRef();
 		SNI_StringRef(const SNI_StringRef & p_Other);

@@ -23,9 +23,12 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Variable);
 	public:
-		static SNI_Class* ExprClass();
-		virtual SN::SN_Expression ExprType() const;
-		virtual SN::SN_Expression Type() const;
+		static SNI_Class* PeekExprClass();
+        static SNI_Class* ExprClass();
+		virtual SN::SN_Expression ExprType();
+        virtual SN::SN_Expression ExprType() const;
+		virtual SN::SN_Expression Type();
+        virtual SN::SN_Expression Type() const;
 
 		SNI_Variable();
 		SNI_Variable(SNI_Domain *p_Domain, const std::string &p_Name);
@@ -46,7 +49,14 @@ namespace SNI
 		virtual std::string DisplayValueSN(long priority, SNI_DisplayOptions & p_DisplayOptions) const;
 		virtual std::string DisplayCall(long p_Priority, SNI_DisplayOptions & p_DisplayOptions, size_t p_NumParams, SN::SN_Expression *p_ParamList, const SNI_Expression *p_DebugSource) const;
 		virtual std::string SetWatch(const std::string& p_Caption, SNI_DisplayOptions& p_DisplayOptions) const;
-		void WriteJSON(std::ostream& p_Stream, const std::string& p_Prefix, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions& p_DisplayOptions) const;
+        void WriteJSON(std::ostream &p_Stream,
+            const std::string &p_Prefix,
+            size_t p_DebugFieldWidth,
+            SNI::SNI_DisplayOptions &p_DisplayOptions) const;
+        void to_json(
+			nlohmann::json &j,
+			size_t p_DebugFieldWidth,
+            SNI::SNI_DisplayOptions &p_DisplayOptions) const;
 		virtual void AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map);
 		virtual long GetPriority() const;
 

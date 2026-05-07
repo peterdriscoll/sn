@@ -14,8 +14,10 @@ namespace SNI
 		PGC_CLASS(SNI_Define);
 
 	public:
-		static SNI_Class* ExprClass();
-		virtual SN::SN_Expression ExprType() const;
+		static SNI_Class* PeekExprClass();
+        static SNI_Class* ExprClass();
+		virtual SN::SN_Expression ExprType();
+        virtual SN::SN_Expression ExprType() const;
 
 		SNI_Define(SNI_Variable *p_Variable, enum skynet::DefineType p_DefineType);
 		SNI_Define();

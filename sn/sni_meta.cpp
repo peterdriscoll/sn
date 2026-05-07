@@ -15,12 +15,22 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class* SNI_Meta::Class()
+	/*static*/ SNI_Class* SNI_Meta::PeekClass()
+    {
+            return SNI_User::GetCurrentUser()->GetPointer<SNI_Meta, SNI_Class>();
+    }
+
+    /*static*/ SNI_Class* SNI_Meta::Class()
 	{
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Meta, SNI_Class>("Meta");
 	}
 
 	SN::SN_Expression SNI_Meta::Type() const
+    {
+        return PeekClass();
+    }
+
+    SN::SN_Expression SNI_Meta::Type()
 	{
 		return SN::SN_MetaType(m_DeltaMetaLevel, m_Expression->ExprType());
 	}

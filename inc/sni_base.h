@@ -75,8 +75,10 @@ namespace SNI
 		virtual size_t RightCardinality(size_t p_MaxCardinality = CARDINALITY_MAX) const = 0;
 		virtual SN::SN_Error ForEach(std::function<SN::SN_Error(const SN::SN_Expression &p_Param, SNI_World *p_World)> p_Action) = 0;
 		virtual SN::SN_Cartesian CartProd(long p_Index, SNI_FunctionDef *p_FunctionDef = NULL) = 0;
-		virtual SN::SN_Expression ExprType() const = 0;
-		virtual SN::SN_Expression Type() const = 0;
+		virtual SN::SN_Expression ExprType() = 0;
+        virtual SN::SN_Expression ExprType() const = 0;
+		virtual SN::SN_Expression Type() = 0;
+        virtual SN::SN_Expression Type() const = 0;
 
 		//---------------------------------------------------------------
 		// Status

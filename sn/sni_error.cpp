@@ -23,13 +23,23 @@ namespace SNI
 		g_ErrorHandledDepth--;
 	}
 
-	/*static*/ SNI_Class* SNI_Error::Class()
+	/*static*/ SNI_Class* SNI_Error::PeekClass()
+    {
+            return SNI_User::GetCurrentUser()->GetPointer<SNI_Error, SNI_Class>();
+    }
+
+    /*static*/ SNI_Class* SNI_Error::Class()
 	{
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Error, SNI_Class>("Error");
 	}
 
 
 	SN::SN_Expression SNI_Error::Type() const
+    {
+        return PeekClass();
+    }
+
+    SN::SN_Expression SNI_Error::Type()
 	{
 		return Class();
 	}

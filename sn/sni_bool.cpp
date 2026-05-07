@@ -11,12 +11,22 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class* SNI_Bool::Class()
+	/*static*/ SNI_Class* SNI_Bool::PeekClass()
+    {
+        return SNI_User::GetCurrentUser()->GetPointer<SNI_Bool, SNI_Class>();
+    }
+
+    /*static*/ SNI_Class* SNI_Bool::Class()
 	{
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Bool, SNI_Class>("Bool");
 	}
 
 	SN::SN_Expression SNI_Bool::Type() const
+    {
+        return PeekClass();
+    }
+
+    SN::SN_Expression SNI_Bool::Type()
 	{
 		return Class();
 	}

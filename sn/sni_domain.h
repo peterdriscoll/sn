@@ -24,7 +24,9 @@ namespace SNI
 		PGC_CLASS(SNI_Domain);
 
 	public:
-		static SNI_Class * Class();
+		static SNI_Class* PeekClass();
+		static SNI_Class* Class();
+        virtual SN::SN_Expression Type();
         virtual SN::SN_Expression Type() const;
 
 		static SNI_Domain* GetCurrent();
@@ -43,6 +45,10 @@ namespace SNI
 		virtual size_t Hash() const;
         void WriteJSON(std::ostream &p_Stream, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
 
+		void to_json(
+			nlohmann::json &j,
+			size_t p_DebugFieldWidth,
+			SNI::SNI_DisplayOptions &p_DisplayOptions) const;
 
 		virtual SN::SN_Error AssertSubscriptValue(const SNI_Value *p_Index, SN::SN_Expression p_Result);
 		virtual SN::SN_Expression operator[](const std::string & p_Index);

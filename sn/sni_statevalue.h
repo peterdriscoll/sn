@@ -18,10 +18,13 @@ namespace SNI
 	class SNI_StateValue : public SNI_Value
 	{
 		PGC_CLASS(SNI_StateValue);
+
 	public:
-		
-		static SNI_Class *Class();
-		virtual SN::SN_Expression Type() const;
+		static SNI_Class* PeekClass();
+		static SNI_Class* Class();
+
+		virtual SN::SN_Expression Type();
+        virtual SN::SN_Expression Type() const;
 
 		SNI_StateValue();
 		SNI_StateValue(SNI_Expression *p_Expression, SNI_Expression *p_State);

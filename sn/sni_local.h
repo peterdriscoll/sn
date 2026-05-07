@@ -29,8 +29,10 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Local);
 	public:
-		static SNI_Class* ExprClass();
-		virtual SN::SN_Expression ExprType() const;
+		static SNI_Class* PeekExprClass();
+        static SNI_Class* ExprClass();
+		virtual SN::SN_Expression ExprType();
+        virtual SN::SN_Expression ExprType() const;
 
 		SNI_Local();
 		SNI_Local(SNI_Variable *p_LocalVariable, SNI_Expression *p_Expression);

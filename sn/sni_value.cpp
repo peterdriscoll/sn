@@ -14,17 +14,32 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class* SNI_Value::Class()
+	/*static*/ SNI_Class* SNI_Value::PeekClass()
+    {
+            return SNI_User::GetCurrentUser()->GetPointer<SNI_Value, SNI_Class>();
+    }
+
+    /*static*/ SNI_Class* SNI_Value::Class()
 	{
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Value, SNI_Class>("Value");
 	}
 
 	SN::SN_Expression SNI_Value::ExprType() const
+    {
+        return PeekExprClass();
+    }
+
+    SN::SN_Expression SNI_Value::ExprType()
 	{
 		return Type();
 	}
 
 	SN::SN_Expression SNI_Value::Type() const
+    {
+        return PeekClass();
+    }
+
+    SN::SN_Expression SNI_Value::Type()
 	{
 		return Class();
 	}

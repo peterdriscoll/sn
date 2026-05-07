@@ -17,12 +17,22 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class* SNI_FunctionCall::ExprClass()
+	/*static*/ SNI_Class* SNI_FunctionCall::PeekExprClass()
+    {
+            return SNI_User::GetCurrentUser()->GetPointer<SNI_Variable, SNI_Class>();
+    }
+
+    /*static*/ SNI_Class* SNI_FunctionCall::ExprClass()  
 	{
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_FunctionCall, SNI_Class>("FunctionCall");
 	}
 
 	SN::SN_Expression SNI_FunctionCall::ExprType() const
+    {
+        return PeekExprClass();
+    }
+
+    SN::SN_Expression SNI_FunctionCall::ExprType()
 	{
 		return ExprClass();
 	}

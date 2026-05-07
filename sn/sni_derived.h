@@ -21,9 +21,10 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Derived);
 	public:
-		static SNI_Class * m_Class;
-		static SNI_Class * Class();
-		virtual SN::SN_Expression Type() const;
+		static SNI_Class* PeekClass();
+		static SNI_Class* Class();
+		virtual SN::SN_Expression Type();
+        virtual SN::SN_Expression Type() const;
 
 		SNI_Derived();
 		virtual ~SNI_Derived();

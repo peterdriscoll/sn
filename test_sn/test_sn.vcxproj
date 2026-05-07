@@ -127,6 +127,7 @@
       <UseFullPaths>true</UseFullPaths>
       <PrecompiledHeaderFile>test_sn_pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <ShowIncludes>false</ShowIncludes>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

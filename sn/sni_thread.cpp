@@ -564,6 +564,11 @@ namespace SNI
 		m_ThreadNum = p_User->GetNumThreads()-1;
 	}
 
+	void SNI_Thread::SetServerUser(SNI_User* p_User)
+	{
+		m_User = p_User;
+	}
+
 	SNI_Domain * SNI_Thread::GetDomain()
 	{
 		return m_Domain;

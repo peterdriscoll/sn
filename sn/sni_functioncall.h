@@ -11,14 +11,14 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_FunctionCall)
 	public:
-		static SNI_Class* ExprClass();
-		virtual SN::SN_Expression ExprType() const;
+		static SNI_Class* PeekExprClass();
+        static SNI_Class* ExprClass();
+		virtual SN::SN_Expression ExprType();
+        virtual SN::SN_Expression ExprType() const;
 
 		SNI_FunctionCall();
 		virtual ~SNI_FunctionCall();
 
-		static SNI_Class* Class();
-		SNI_Class* Type();
 
 		virtual std::string GetTypeName() const;
 		virtual std::string DisplayCpp() const;

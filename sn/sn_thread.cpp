@@ -17,7 +17,7 @@ namespace SN
 
 	bool SN_Thread::HasTopManager()
 	{
-		return m_Thread->GetTopManager(false) != NULL;;
+		return m_Thread->GetTopManager(false) != NULL;
 	}
 
 	SNI::SNI_Thread * SN_Thread::GetSNI_Thread()

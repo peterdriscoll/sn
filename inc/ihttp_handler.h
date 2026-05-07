@@ -4,6 +4,7 @@
 #pragma once
 
 #include "sn_factory.h"
+#include "iuser.h"
 
 class IHTTP_Handler
 {

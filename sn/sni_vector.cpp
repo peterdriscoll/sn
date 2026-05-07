@@ -16,10 +16,26 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class* SNI_Vector::Class()
+	/*static*/ SNI_Class* SNI_Vector::PeekClass()
+    {
+            return SNI_User::GetCurrentUser()->GetPointer<SNI_Vector, SNI_Class>();
+    }
+
+    /*static*/ SNI_Class* SNI_Vector::Class()
 	{
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Vector, SNI_Class>("Vector");
 	}
+
+	SN::SN_Expression SNI_Vector::Type() const
+    {
+        return PeekClass();
+    }
+
+    SN::SN_Expression SNI_Vector::Type()
+	{
+		return Class();
+	}
+
 
 	SNI_Vector::SNI_Vector()
 	: m_Fixed(false)

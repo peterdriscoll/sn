@@ -64,10 +64,14 @@ namespace SNI
 		PGC_CLASS(SNI_Expression);
 
 	public:
-		static SNI_Class* ExprClass();
-		static SNI_Class* Class();
-		virtual SN::SN_Expression ExprType() const;
-		virtual SN::SN_Expression Type() const;
+		static SNI_Class* PeekExprClass();
+        static SNI_Class* ExprClass();
+		static SNI_Class* PeekClass();
+        static SNI_Class* Class();
+		virtual SN::SN_Expression ExprType();
+        virtual SN::SN_Expression ExprType() const;
+		virtual SN::SN_Expression Type();
+        virtual SN::SN_Expression Type() const;
 
 		SNI_Expression();
 		SNI_Expression(unsigned long p_Id);

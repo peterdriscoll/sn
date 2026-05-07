@@ -4,12 +4,22 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class* SNI_Null::Class()
+	/*static*/ SNI_Class* SNI_Null::PeekClass()
+    {
+        return SNI_User::GetCurrentUser()->GetPointer<SNI_Null, SNI_Class>();
+    }
+
+    /*static*/ SNI_Class* SNI_Null::Class()
 	{
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Null, SNI_Class>("Null");
 	}
 
 	SN::SN_Expression SNI_Null::Type() const
+    {
+        return PeekClass();
+    }
+
+    SN::SN_Expression SNI_Null::Type()
 	{
 		return Class();
 	}

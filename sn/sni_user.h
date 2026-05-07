@@ -22,10 +22,20 @@ namespace SNI
 		static void UserThreadFunc(SNI_User* p_User);
 	public:
 		template <typename T, typename R, typename... Args>
+		R* GetPointer()
+		{
+			size_t key = typeid(T).hash_code();
+			auto it = m_Pointers.find(key);
+			if (it != m_Pointers.end())
+			{
+				return static_cast<R*>(it->second);
+			}
+			return nullptr;
+		}
+
+		template <typename T, typename R, typename... Args>
 		R* GetOrCreatePointer(Args&&... args)
 		{
-            std::lock_guard<std::mutex> lock(m_PointersMutex);
-
 			size_t key = typeid(T).hash_code();
 			auto it = m_Pointers.find(key);
 			if (it != m_Pointers.end())
@@ -64,7 +74,9 @@ namespace SNI
 		std::string StepCountJS();
 		void WriteStepCountListJS(std::ostream& p_Stream);
 		size_t CountDelayedCalls();
-		std::string DelayedJS(DisplayOptionType p_OptionType);
+        std::string DelayedJS(DisplayOptionType p_OptionType);
+        std::string DomainJS(DisplayOptionType p_OptionType);
+        void domain_to_json(nlohmann::json &j, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
 	private:
 		SNI_Domain *m_Domain = nullptr;
 		SNI_Transaction* m_Transaction;

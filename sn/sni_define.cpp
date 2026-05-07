@@ -15,12 +15,22 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class* SNI_Define::ExprClass()
+	/*static*/ SNI_Class* SNI_Define::PeekExprClass()
+    {
+            return SNI_User::GetCurrentUser()->GetPointer<SNI_Define, SNI_Class>();
+    }
+
+    /*static*/ SNI_Class* SNI_Define::ExprClass()  
 	{
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Define, SNI_Class>("Define");
 	}
 
 	SN::SN_Expression SNI_Define::ExprType() const
+    {
+        return PeekExprClass();
+    }
+
+    SN::SN_Expression SNI_Define::ExprType()
 	{
 		return ExprClass();
 	}

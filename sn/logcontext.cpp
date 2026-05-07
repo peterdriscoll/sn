@@ -77,7 +77,7 @@ namespace SN
 		{
 			ch = ' ';
 		}
-		std::string pattern = std::string(horizontal_line_interval - 1, ch) + "|";;
+		std::string pattern = std::string(horizontal_line_interval - 1, ch) + "|";
 		if (p_Spacer < prespacer)
 		{
 			return std::string(p_Spacer, ch);

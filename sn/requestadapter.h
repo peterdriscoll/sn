@@ -52,7 +52,7 @@ namespace SNI
         Reply StepOutJS();
         Reply StepOutCallJS();
         Reply StepParamJS();
-        Reply GotoStepCountJS();;
+        Reply GotoStepCountJS();
         Reply QuitJS();
 
         // -------- JSON data routes --------
@@ -68,6 +68,7 @@ namespace SNI
         Reply ErrorJson();
         Reply WorldSetsJson();
         Reply DelayedJson();
+        Reply DomainJson();
 
 
     private:

@@ -16,12 +16,22 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class* SNI_MetaType::Class()
+	/*static*/ SNI_Class* SNI_MetaType::PeekClass()
+    {
+            return SNI_User::GetCurrentUser()->GetPointer<SNI_MetaType, SNI_Class>();
+    }
+
+    /*static*/ SNI_Class* SNI_MetaType::Class()
 	{
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_MetaType, SNI_Class>("MetaType");
 	}
 
 	SN::SN_Expression SNI_MetaType::Type() const
+    {
+        return PeekClass();
+    }
+
+    SN::SN_Expression SNI_MetaType::Type()
 	{
 		return Class();
 	}

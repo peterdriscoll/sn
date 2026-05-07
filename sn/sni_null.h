@@ -13,9 +13,11 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Null);
 	public:
-		
+		static SNI_Class *PeekClass();
 		static SNI_Class *Class();
-		virtual SN::SN_Expression Type() const;
+
+		virtual SN::SN_Expression Type();
+        virtual SN::SN_Expression Type() const;
 
 		SNI_Null();
 		SNI_Null(const SNI_Null &p_Other);

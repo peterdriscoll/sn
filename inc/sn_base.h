@@ -57,7 +57,9 @@ namespace SN
 		std::string LogDisplaySN() const;
 
 		SN_Expression ExprType() const;
+		SN_Expression ExprType();
 		SN_Expression Type() const;
+		SN_Expression Type();
 
 		bool IsNull() const;
 
@@ -103,7 +105,7 @@ namespace SN
 
 		bool IsSignificantError();
 
-		bool IsFixed() const;;
+		bool IsFixed() const;
 
 		bool AllValuesBoolean() const;
 

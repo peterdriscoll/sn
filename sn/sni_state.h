@@ -21,8 +21,10 @@ namespace SNI
 		PGC_CLASS(SNI_State);
 	public:
 		
-		static SNI_Class *Class();
-		virtual SN::SN_Expression Type() const;
+		static SNI_Class* PeekClass();
+		static SNI_Class* Class();
+		virtual SN::SN_Expression Type();
+        virtual SN::SN_Expression Type() const;
 
 		SNI_State();
 		SNI_State(const SNI_State & p_State);

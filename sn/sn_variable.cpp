@@ -54,7 +54,7 @@ namespace SN
 	{
 		if (p_Local)
 		{
-			m_Expression = new SNI_Variable(p_Name, "", p_DefineType);;
+			m_Expression = new SNI_Variable(p_Name, "", p_DefineType);
 		}
 		else
 		{
@@ -66,7 +66,7 @@ namespace SN
 	{
 		if (p_Local)
 		{
-			m_Expression = new SNI_Variable(p_Name, "", p_DefineType);;
+			m_Expression = new SNI_Variable(p_Name, "", p_DefineType);
 		}
 		else
 		{

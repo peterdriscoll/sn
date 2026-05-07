@@ -27,22 +27,42 @@ namespace SNI
 {
 	std::map<std::string, unsigned long> SNI_Expression::m_IdMap;
 
-	/*static*/ SNI_Class* SNI_Expression::ExprClass()
+	/*static*/ SNI_Class* SNI_Expression::PeekExprClass()
+    {
+            return SNI_User::GetCurrentUser()->GetPointer<SNI_Variable, SNI_Class>();
+    }
+
+    /*static*/ SNI_Class* SNI_Expression::ExprClass()  
 	{
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Expression, SNI_Class>("Expression");
 	}
 
-	/*static*/ SNI_Class* SNI_Expression::Class()
+	/*static*/ SNI_Class* SNI_Expression::PeekClass()
+    {
+		return skynet::All.GetSNI_Class();
+    }
+
+    /*static*/ SNI_Class* SNI_Expression::Class()
 	{
 		return skynet::All.GetSNI_Class();
 	}
 
 	SN::SN_Expression SNI_Expression::ExprType() const
+    {
+        return PeekExprClass();
+    }
+
+    SN::SN_Expression SNI_Expression::ExprType()
 	{
 		return ExprClass();
 	}
 
 	SN::SN_Expression SNI_Expression::Type() const
+    {
+        return PeekClass();
+    }
+
+    SN::SN_Expression SNI_Expression::Type()
 	{
 		return Class();
 	}

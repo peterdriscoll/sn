@@ -359,6 +359,7 @@
     <ClInclude Include="sni_world.h" />
     <ClInclude Include="sni_worldset.h" />
     <ClInclude Include="sn_pch.h" />
+    <ClInclude Include="sn_real_impl.h" />
     <ClInclude Include="utility.h" />
   </ItemGroup>
   <ItemGroup>

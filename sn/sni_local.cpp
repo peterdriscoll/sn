@@ -18,12 +18,22 @@ namespace SNI
 {
 	/*static*/ long SNI_Local::m_Id = 0;
 
-	/*static*/ SNI_Class* SNI_Local::ExprClass()
+	/*static*/ SNI_Class* SNI_Local::PeekExprClass()
+    {
+            return SNI_User::GetCurrentUser()->GetPointer<SNI_Local, SNI_Class>();
+    }
+
+    /*static*/ SNI_Class* SNI_Local::ExprClass()  
 	{
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Local, SNI_Class>("Local");
 	}
 
 	SN::SN_Expression SNI_Local::ExprType() const
+    {
+        return PeekExprClass();
+    }
+
+    SN::SN_Expression SNI_Local::ExprType()
 	{
 		return ExprClass();
 	}

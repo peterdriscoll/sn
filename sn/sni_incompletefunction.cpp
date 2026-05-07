@@ -15,12 +15,22 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class* SNI_IncompleteFunction::ExprClass()
+	/*static*/ SNI_Class* SNI_IncompleteFunction::PeekExprClass()
+    {
+            return SNI_User::GetCurrentUser()->GetPointer<SNI_Variable, SNI_Class>();
+    }
+
+    /*static*/ SNI_Class* SNI_IncompleteFunction::ExprClass()  
 	{
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_IncompleteFunction, SNI_Class>("IncompleteFunction");
 	}
 
 	SN::SN_Expression SNI_IncompleteFunction::ExprType() const
+    {
+        return PeekExprClass();
+    }
+
+    SN::SN_Expression SNI_IncompleteFunction::ExprType()
 	{
 		return ExprClass();
 	}

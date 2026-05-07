@@ -16,12 +16,22 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class* SNI_Set::Class()
+	/*static*/ SNI_Class* SNI_Set::PeekClass()
+    {
+            return SNI_User::GetCurrentUser()->GetPointer<SNI_Set, SNI_Class>();
+    }
+
+    /*static*/ SNI_Class* SNI_Set::Class()
 	{
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Set, SNI_Class>("Set");
 	}
 
 	SN::SN_Expression SNI_Set::Type() const
+    {
+        return PeekClass();
+    }
+
+    SN::SN_Expression SNI_Set::Type()
 	{
 		return Class();
 	}

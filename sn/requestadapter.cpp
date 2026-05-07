@@ -25,6 +25,7 @@ namespace SNI
     bool RequestAdapter::dispatch(std::string_view path, SNI_User& u, SNI_Thread& t, RequestAdapter::Reply& out) {
         m_user = &u;
         m_thr = &t;
+
         const auto& R = routes();
         auto it = R.find(path);
         if (it == R.end()) return false;
@@ -219,6 +220,10 @@ namespace SNI
     { 
         return { m_user->DelayedJS(doDebugPointsJS), "json" };
     }
+    RequestAdapter::Reply RequestAdapter::DomainJson() 
+    { 
+        return { m_user->DomainJS(doDebugPointsJS), "json" };
+    }
 
     /*static*/ const std::unordered_map<std::string_view, RequestAdapter::Handler>& RequestAdapter::routes()
     {
@@ -268,6 +273,7 @@ namespace SNI
             {SV{"/error.json"},      &RequestAdapter::ErrorJson},
             {SV{"/worldsets.json"},  &RequestAdapter::WorldSetsJson},
             {SV{"/delayed.json"},    &RequestAdapter::DelayedJson},
+            {SV{"/domain.json"},     &RequestAdapter::DomainJson},
         };
         return R;
     }

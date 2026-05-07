@@ -158,8 +158,8 @@ namespace SNI
 					if (c == 'x')
 					{
 						char hex_string[3];
-						hex_string[0] = *(++i);;
-						hex_string[1] = *(++i);;
+						hex_string[0] = *(++i);
+						hex_string[1] = *(++i);
 						unsigned char hex_value = (unsigned char)std::strtoul(hex_string, 0, 16);
 						out += hex_value;
 					}

@@ -20,8 +20,13 @@ namespace SNI
 	class SNI_Vector : public SNI_Value
 	{
 		PGC_CLASS(SNI_Vector);
+
 	public:
-		static SNI_Class * Class();
+		static SNI_Class* PeekClass();
+		static SNI_Class* Class();
+
+		SN::SN_Expression Type() const;
+		SN::SN_Expression Type();
 
 		SNI_Vector();
 		virtual ~SNI_Vector();

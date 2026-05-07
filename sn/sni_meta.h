@@ -13,8 +13,10 @@ namespace SNI
 	{
 		PGC_CLASS(SNI_Meta);
 	public:
-	    static SNI_Class* Class();
-		virtual SN::SN_Expression Type() const;
+	    static SNI_Class* PeekClass();
+        static SNI_Class* Class();
+		virtual SN::SN_Expression Type();
+        virtual SN::SN_Expression Type() const;
 
 		SNI_Meta();
 		SNI_Meta(long p_DeltaMetaLevel, SNI_Expression *p_Expression);

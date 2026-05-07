@@ -123,14 +123,24 @@ namespace SNI
 			return NameFromType(m_Number);
 		}
 
-		static SNI_Class* Class()
+		static SNI_Class* PeekClass()
+		{
+			return SNI_User::GetCurrentUser()->GetPointer<SNI_Real<T>, SNI_Class>();
+		}
+
+        static SNI_Class* Class()
 		{
 			return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Real<T>, SNI_Class>(GetTypeNameStatic());
 		}
 
-		virtual SN::SN_Expression Type() const
+		virtual SN::SN_Expression Type()
 		{
 			return Class();
+		}
+
+        virtual SN::SN_Expression Type() const
+		{
+			return PeekClass();
 		}
 
 		virtual std::string DisplayCpp() const

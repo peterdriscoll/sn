@@ -7,6 +7,11 @@
 namespace SNI
 {
 	SN::SN_Expression SNI_Instance::Type() const
+    {
+        return m_Class;
+    }
+
+    SN::SN_Expression SNI_Instance::Type()
 	{
 		return m_Class;
 	}

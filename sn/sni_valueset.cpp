@@ -924,7 +924,7 @@ namespace SNI
 								SN::SN_Expression *paramList = new SN::SN_Expression[2];
 								paramList[0] = value;
 								paramList[1] = function;
-								function = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList, this).GetSNI_Expression();;
+								function = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList, this).GetSNI_Expression();
 								delete[] paramList;
 							}
 							else

@@ -52,10 +52,12 @@ namespace SNI
 	class SNI_Virtual : public SNI_Value
 	{
 		PGC_CLASS(SNI_Virtual);
+
 	public:
-		
-		static SNI_Class *Class();
-		virtual SN::SN_Expression Type() const;
+		static SNI_Class* PeekClass();
+		static SNI_Class* Class();
+		virtual SN::SN_Expression Type();
+        virtual SN::SN_Expression Type() const;
 
 		SNI_Virtual();
 		virtual ~SNI_Virtual();

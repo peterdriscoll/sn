@@ -12,12 +12,22 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class* SNI_Domain::Class()
+	/*static*/ SNI_Class* SNI_Domain::PeekClass()
+    {
+        return SNI_User::GetCurrentUser()->GetPointer<SNI_Domain, SNI_Class>();
+    }
+
+    /*static*/ SNI_Class* SNI_Domain::Class()
 	{
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Domain, SNI_Class>("Domain");
 	}
 
 	SN::SN_Expression SNI_Domain::Type() const
+    {
+        return PeekClass();
+    }
+
+    SN::SN_Expression SNI_Domain::Type()
 	{
 		return Class();
 	}
@@ -66,6 +76,17 @@ namespace SNI
             pair.second.GetSNI_Variable()->WriteJSON(p_Stream, "\t", p_DebugFieldWidth, p_DisplayOptions);
 		}
     }
+
+	void SNI_Domain::to_json(
+		nlohmann::json &j,
+		size_t p_DebugFieldWidth,
+        SNI::SNI_DisplayOptions &p_DisplayOptions) const
+	{
+		for (auto const& [name, var] : m_Map) // Using modern structured bindings
+		{
+			var.GetSNI_Variable()->to_json(j[name], p_DebugFieldWidth, p_DisplayOptions);
+        }
+	}
 
 	std::string SNI_Domain::GetTypeName() const
 	{

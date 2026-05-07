@@ -281,7 +281,7 @@ namespace SNI
 			}
 			else
 			{
-				text += p_ParamList[j].DisplayValueSN();;
+				text += p_ParamList[j].DisplayValueSN();
 			}
 		}
 		if (GetOperator().empty())

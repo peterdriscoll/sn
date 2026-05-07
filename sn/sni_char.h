@@ -10,10 +10,12 @@ namespace SNI
 	class SNI_Char : public SNI_Value
 	{
 		PGC_CLASS(SNI_Char);
+
 	public:
-		static SNI_Class * m_Class;
-		static SNI_Class * Class();
-		virtual SN::SN_Expression Type() const;
+		static SNI_Class* PeekClass();
+		static SNI_Class* Class();
+		virtual SN::SN_Expression Type();
+        virtual SN::SN_Expression Type() const;
 
 		SNI_Char();
 		SNI_Char(const SNI_Char &p_Other);

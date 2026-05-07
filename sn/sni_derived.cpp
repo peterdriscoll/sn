@@ -15,17 +15,22 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class *SNI_Derived::m_Class = NULL;
-	/*static*/ SNI_Class *SNI_Derived::Class()
+	/*static*/ SNI_Class* SNI_Derived::PeekClass()
+    {
+        return SNI_User::GetCurrentUser()->GetPointer<SNI_Derived, SNI_Class>();
+    }
+
+    /*static*/ SNI_Class* SNI_Derived::Class()
 	{
-		if (!m_Class)
-		{
-			m_Class = new SNI_Class("Derived");
-		}
-		return m_Class;
+		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Derived, SNI_Class>("Derived");
 	}
 
 	SN::SN_Expression SNI_Derived::Type() const
+    {
+        return PeekClass();
+    }
+
+    SN::SN_Expression SNI_Derived::Type()
 	{
 		return Class();
 	}

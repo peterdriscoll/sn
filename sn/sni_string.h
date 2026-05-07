@@ -66,10 +66,13 @@ namespace SNI
 			return ::new (memory) SNI_String(std::move(*this));
 		}
 		//End PGC_MEMBER_DEFINITIONS_NOINIT(SNI_String, SNI_Value);
+
 	public:
-		
+		static SNI_Class *PeekClass();
 		static SNI_Class *Class();
-		virtual SN::SN_Expression Type() const;
+
+		virtual SN::SN_Expression Type();
+        virtual SN::SN_Expression Type() const;
 
 		SNI_String();
 		SNI_String(const SNI_StringRef &p_Other);

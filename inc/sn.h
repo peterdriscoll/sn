@@ -223,8 +223,11 @@ namespace skynet
 	n.SetValue(r, i)
 
 #define SN_DEFINE_REAL(C, B, TYPE, NAME)                       \
-     SN_EXTERN template class SN_EXPORT SN::SN_Real<TYPE>;     \
-     typedef SN::SN_Real<TYPE> NAME;
+    typedef SN::SN_Real<TYPE> NAME;
+
+#define SN_DEFINE_REAL_IMPL(C, B, TYPE, NAME)                  \
+    SN_EXTERN template class SN_EXPORT SN::SN_Real<TYPE>;
+
 #define SN_CLASS(i) \
     SN::SN_Class i(std::string(#i))
 #define SN_CLASS_CLASS(i, c) \

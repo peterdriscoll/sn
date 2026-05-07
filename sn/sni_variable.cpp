@@ -27,17 +27,32 @@
 namespace SNI
 {
 	long m_MaxTempNum = 0;
-	/*static*/ SNI_Class* SNI_Variable::ExprClass()
+	/*static*/ SNI_Class* SNI_Variable::PeekExprClass()
+    {
+            return SNI_User::GetCurrentUser()->GetPointer<SNI_Variable, SNI_Class>();
+    }
+
+    /*static*/ SNI_Class* SNI_Variable::ExprClass()  
 	{
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Variable, SNI_Class>("Variable");
 	}
 
 	SN::SN_Expression SNI_Variable::ExprType() const
+    {
+        return PeekExprClass();
+    }
+
+    SN::SN_Expression SNI_Variable::ExprType()
 	{
 		return ExprClass();
 	}
 
 	SN::SN_Expression SNI_Variable::Type() const
+    {
+        return m_Type;
+    }
+
+    SN::SN_Expression SNI_Variable::Type()
 	{
 		return m_Type;
 	}
@@ -477,6 +492,18 @@ namespace SNI
 		p_Stream << p_Prefix << "\"id\" : \"" << GetDebugId() << "\",\n";
 		p_Stream << p_Prefix << "\"name\" : \"" << FramePathName() << "\",\n";
 		p_Stream << p_Prefix << "\"typetext\" : \"" << GetValueTypeName() << "\"";
+	}
+
+	void SNI_Variable::to_json(
+		nlohmann::json &j,
+		size_t p_DebugFieldWidth,
+        SNI::SNI_DisplayOptions &p_DisplayOptions) const
+	{
+		j["id"] = GetDebugId();
+		j["name"] = FramePathName();
+		j["ExprType"] = ExprType().DisplaySN(p_DisplayOptions);
+		j["Type"] = Type().DisplaySN(p_DisplayOptions);
+		j["value"] = m_Value ? m_Value->DisplaySN(0, p_DisplayOptions) : nullptr;
 	}
 
 	void SNI_Variable::AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map)

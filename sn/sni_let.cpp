@@ -21,12 +21,22 @@ namespace SNI
 {
 	/*static*/ long SNI_Let::m_Id = 0;
 
-	/*static*/ SNI_Class* SNI_Let::ExprClass()
+	/*static*/ SNI_Class* SNI_Let::PeekExprClass()
+    {
+            return SNI_User::GetCurrentUser()->GetPointer<SNI_Let, SNI_Class>();
+    }
+
+    /*static*/ SNI_Class* SNI_Let::ExprClass()  
 	{
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Let, SNI_Class>("Let");
 	}
 
 	SN::SN_Expression SNI_Let::ExprType() const
+    {
+        return PeekExprClass();
+    }
+
+    SN::SN_Expression SNI_Let::ExprType()
 	{
 		return ExprClass();
 	}

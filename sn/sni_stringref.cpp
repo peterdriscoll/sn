@@ -23,12 +23,22 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class* SNI_StringRef::Class()
+	/*static*/ SNI_Class* SNI_StringRef::PeekClass()
+    {
+            return SNI_User::GetCurrentUser()->GetPointer<SNI_StringRef, SNI_Class>();
+    }
+
+    /*static*/ SNI_Class* SNI_StringRef::Class()
 	{
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_StringRef, SNI_Class>("StringRef");
 	}
 
 	SN::SN_Expression SNI_StringRef::Type() const
+    {
+        return PeekClass();
+    }
+
+    SN::SN_Expression SNI_StringRef::Type()
 	{
 		return Class();
 	}

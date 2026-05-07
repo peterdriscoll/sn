@@ -106,12 +106,22 @@ namespace SNI
 		return p_ParameterVariable.IsA(m_Parameter).If(BuildExpression(p_Depth - 1), p_ElseCondition);
 	}
 
-	/*static*/ SNI_Class* SNI_Virtual::Class()
+	/*static*/ SNI_Class* SNI_Virtual::PeekClass()
+    {
+        return SNI_User::GetCurrentUser()->GetPointer<SNI_Virtual, SNI_Class>();
+    }
+
+    /*static*/ SNI_Class* SNI_Virtual::Class()
 	{
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Virtual, SNI_Class>("Virtual");
 	}
 
 	SN::SN_Expression SNI_Virtual::Type() const
+    {
+        return PeekClass();
+    }
+
+    SN::SN_Expression SNI_Virtual::Type()
 	{
 		return Class();
 	}

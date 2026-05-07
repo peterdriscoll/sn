@@ -26,6 +26,10 @@
 #include <cstdlib> // strtol
 #include <mutex>
 #include <cassert>
+
+// nlohmann/json is a header-only library.
+#include <nlohmann/json.hpp>
+
 #include "sn.h"
 
 // Worlds

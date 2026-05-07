@@ -122,7 +122,9 @@ namespace SNI
 
         // RTTI-ish class info
         static SNI_Class* m_Class;
+        static SNI_Class* PeekClass();
         static SNI_Class* Class();
+        virtual SN::SN_Expression Type();
         virtual SN::SN_Expression Type() const;
 
         // SN interface

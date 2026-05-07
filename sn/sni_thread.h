@@ -152,7 +152,8 @@ namespace SNI
 		void WriteStepCountJS(std::ostream& p_Stream, const std::string& p_Delimeter);
 
 		SNI_User* GetUser();
-		void SetUser(SNI_User* p_User);
+        void SetUser(SNI_User *p_User);
+        void SetServerUser(SNI_User *p_User);
 
         SNI_Domain *GetDomain();
         void SetDomain(SNI_Domain *p_Domain);

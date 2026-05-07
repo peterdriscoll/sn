@@ -148,6 +148,15 @@ namespace SN
 		return skynet::Null;
 	}
 	
+	SN_Expression SN_Base::ExprType()
+	{
+		if (GetSNI_Base())
+        {
+			return GetSNI_Base()->ExprType();
+        }
+		return skynet::Null;
+	}
+		
 	SN_Expression SN_Base::Type() const
 	{
 		if (GetSNI_Base())
@@ -157,6 +166,15 @@ namespace SN
 		return skynet::Null;
 	}
 	
+	SN_Expression SN_Base::Type()
+	{
+		if (GetSNI_Base())
+        {
+			return GetSNI_Base()->Type();
+        }
+		return skynet::Null;
+	}
+
 	bool SN_Base::IsNull() const
 	{
 		return !GetSNI_Base() || GetSNI_Base()->IsNull();

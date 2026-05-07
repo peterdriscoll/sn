@@ -94,8 +94,13 @@
 
 #include "sn_pch.h"
 
+#include "sn_real_impl.h"
+
 namespace skynet
 {
+    // Export the real number types.
+	SN_APPLY_TYPES(DUMMY, DUMMY, SN_DEFINE_REAL_IMPL)
+
 	// Numbers
 	SN::SN_FunctionDef Negative(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Negative()));
 	SN::SN_FunctionDef Add(dynamic_cast<SNI::SNI_FunctionDef *>(new SNI::SNI_Add()));

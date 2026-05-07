@@ -15,12 +15,22 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class* SNI_Mapping::Class()
+	/*static*/ SNI_Class* SNI_Mapping::PeekClass()
+    {
+            return SNI_User::GetCurrentUser()->GetPointer<SNI_Mapping, SNI_Class>();
+    }
+
+    /*static*/ SNI_Class* SNI_Mapping::Class()
 	{
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Mapping, SNI_Class>("Mapping");
 	}
 
 	SN::SN_Expression SNI_Mapping::Type() const
+    {
+        return PeekClass();
+    }
+
+    SN::SN_Expression SNI_Mapping::Type()
 	{
 		return Class();
 	}

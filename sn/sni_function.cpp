@@ -15,12 +15,22 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class* SNI_Function::ExprClass()
+	/*static*/ SNI_Class* SNI_Function::PeekExprClass()
+    {
+            return SNI_User::GetCurrentUser()->GetPointer<SNI_Variable, SNI_Class>();
+    }
+
+    /*static*/ SNI_Class* SNI_Function::ExprClass()  
 	{
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Function, SNI_Class>("Function");
 	}
 
 	SN::SN_Expression SNI_Function::ExprType() const
+    {
+        return PeekExprClass();
+    }
+
+    SN::SN_Expression SNI_Function::ExprType()
 	{
 		return ExprClass();
 	}
@@ -306,7 +316,7 @@ namespace SNI
 					SN::SN_Expression *paramList = new SN::SN_Expression[2];
 					paramList[0] = p_Value;
 					paramList[1] = function;
-					function = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList, this).GetSNI_Expression();;
+					function = skynet::Same.GetSNI_FunctionDef()->UnifyArray(paramList, this).GetSNI_Expression();
 					delete[] paramList;
 				}
 				else
@@ -318,7 +328,7 @@ namespace SNI
 		}
 		if (l_ParameterList)
 		{
-			delete l_ParameterList;;
+			delete l_ParameterList;
 		}
 		SN::SN_Error err(e);
 		ASSERTM(e == err.GetSNI_Error(), "Must be equal.");

@@ -22,13 +22,21 @@ namespace SNI
 
         std::string_view path = pathC ? std::string_view{ pathC } : std::string_view{};
 
+        // Get the user the debugger dashboard is displaying.
 		SNI_User* user = dynamic_cast<SNI_User*>(iuser);
         RequestAdapter adapter(queryC);
         if (!user) return false;
 
+        // Get the thread the debugger dashboard id displaying.
         const long tnum = adapter.threadnum(0);
         SNI_Thread* thr = (tnum >= 0) ? user->GetThreadByNumber(tnum) : nullptr;
         if (!thr) return false;
+
+        // Get the thread for the HTTP server. 
+        SNI_Thread *thread = SNI_Thread::GetThread();
+        if (!thread) return false;
+
+        thread->SetServerUser(user);
 
         RequestAdapter::Reply r;
         if (adapter.dispatch(path, *user, *thr, r))

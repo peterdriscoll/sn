@@ -10,12 +10,22 @@
 
 namespace SNI
 {
-	/*static*/ SNI_Class* SNI_Char::Class()
+	/*static*/ SNI_Class* SNI_Char::PeekClass()
+    {
+        return SNI_User::GetCurrentUser()->GetPointer<SNI_Char, SNI_Class>();
+    }
+
+    /*static*/ SNI_Class* SNI_Char::Class()
 	{
 		return SNI_User::GetCurrentUser()->GetOrCreatePointer<SNI_Char, SNI_Class>("Char");
 	}
 
 	SN::SN_Expression SNI_Char::Type() const
+    {
+        return PeekClass();
+    }
+
+    SN::SN_Expression SNI_Char::Type()
 	{
 		return Class();
 	}
