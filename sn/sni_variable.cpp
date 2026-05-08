@@ -794,8 +794,12 @@ namespace SNI
 				}
 				return err;
 			}
-
-			return m_Value->AssertValue(p_Value);
+			if (m_Value)
+            {
+				return m_Value->AssertValue(p_Value);
+			}
+			m_Value = p_Value.GetSNI_Expression();
+            return skynet::OK;
 		}
 	}
 
