@@ -882,15 +882,12 @@ namespace SNI
 				topFrame->CreateParameter(j+1, (*p_ParameterList)[j]);
 			}
 
-			//Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Call " + GetName(), this, SN::CallPoint);
+			Breakpoint(SN::DebugStop, SN::LeftId, GetTypeName(), "Call " + GetName(), this, SN::CallPoint);
 
 			SN::SN_Expression result = l_clone->Call(p_ParameterList, p_MetaLevel);
 
-			//SNI_Variable* resultVar = topFrame->GetResult();
-			//resultVar->SetValue(result);
-			LOG(WriteHeading(SN::DebugLevel, GetTypeName() + ": End " + DisplayCallExp(result, p_ParameterList)));
-			//Breakpoint(SN::DebugStop, SN::RightId, GetTypeName(), "Return from call " + GetName(), this, SN::CallPoint);
 			SNI_Frame::Pop();
+			Breakpoint(SN::DebugStop, SN::RightId, GetTypeName(), "Return from call " + GetName(), this, SN::CallPoint);
 
 			return LOG_RETURN(context, result);
 		}
