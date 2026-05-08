@@ -465,7 +465,7 @@ namespace SNI
 			SN::SN_Expression &p = p_ParamList[j];
 			std::string del = delimeter;
 			delimeter = " ";
-			text += del + p.GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions);
+			text += del + std::string(p.IsNull() ? "null" : p.GetSNI_Expression()->DisplaySN(GetPriority(), p_DisplayOptions));
 		}
 		return Bracket(p_Priority, SetBreakPoint(FrameName(), p_DisplayOptions, this, SN::LeftId) + " " + text, p_DisplayOptions, this);
 	}
@@ -747,6 +747,23 @@ namespace SNI
 
 	SN::SN_Error SNI_Variable::AssertValue(const SN::SN_Expression &p_Value)
 	{
+		if (m_Type != nullptr && p_Value.IsKnownValue())
+		{
+			SNI_Expression *typeField = m_Type->DoEvaluate().GetSNI_Expression();
+			if (typeField->IsKnownValue())
+            {
+                m_Type = typeField;
+				if (!p_Value.GetSNI_Expression()->DoIsA(dynamic_cast<SNI_Value *>(m_Type)).GetBool())
+				{
+					SNI::SNI_DisplayOptions l_DisplayOptions(SNI::doTextOnly);
+					return SN::SN_Error(false, false, std::string("Type conflict: ") + p_Value.DisplayValueSN() + std::string(" is not a ") + m_Type->DisplaySN(0, l_DisplayOptions));
+				}
+            }
+            else
+            {
+                p_Value.IsA(SN::SN_Expression(typeField)).DoAssert();
+            }
+		}
 		if (SNI_Thread::GetThread()->ContextWorld())
 		{
 			if (!m_Value || m_Value->IsNull())
