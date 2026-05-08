@@ -52,6 +52,11 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $in
     $scope.base = $scope.base || {};
     $scope.base.user = $scope.base.user || {};
     $scope.base.user.domain = $scope.base.user.domain || {};
+    $scope.base.summary = $scope.base.summary || {};
+    $scope.base.summary.user = $scope.base.summary.user || {};
+    $scope.base.summary.user.domain = $scope.base.summary.user.domain || {};
+    $scope.base.summary.user.domain.variables = $scope.base.summary.user.domain.variables || {};
+    $scope.base.summary.user.domain.variables.count = 0;
     $scope.base.user.domain.variables = {"count": 0, "list": []};
 
     // Default settings
@@ -123,6 +128,9 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $in
     $scope.loadall = function () {
         $http.get(home + 'all.json' + $scope.buildparameters())
             .then(function (response) {
+            if (response.data.summary) {
+                $scope.base.summary = response.data.summary;
+            }
             if (response.data.user) {
                 $scope.base.user = response.data.user;
             }
