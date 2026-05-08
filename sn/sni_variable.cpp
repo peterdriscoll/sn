@@ -778,13 +778,7 @@ namespace SNI
 		{
 			if (m_Value == NULL || dynamic_cast<SNI_Null *>(m_Value) || dynamic_cast<SNI_DelayedCall *>(m_Value))
 			{
-				if (SN::Is<SNI_ValueSet *>(p_Value))
-				{
-					SN::SN_ValueSet set(p_Value);
-
-					set.GetSNI_ValueSet()->AssignToVariable(this);
-				}
-
+				p_Value.GetSNI_Expression()->AssignToVariable(this);
 				SNI_DelayedCall *call = dynamic_cast<SNI_DelayedCall *>(m_Value);
 				m_Value = p_Value.GetSNI_Expression();
 				SNI_Thread::GetThread()->RegisterChange(dynamic_cast<SNI_Variable *>(this));
