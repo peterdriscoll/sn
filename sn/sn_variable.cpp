@@ -46,7 +46,7 @@ namespace SN
 	}
 
 	SN_Variable::SN_Variable(const std::string &p_Name, const std::string &p_DomainName)
-		: SN_Expression(SNI_Frame::Top()->CreateVariable(p_Name, p_DomainName))
+		: SN_Expression(SN::SN_Domain::GetCurrent().LocalVariable(p_Name))
 	{
 	}
 

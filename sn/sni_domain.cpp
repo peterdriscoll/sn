@@ -100,6 +100,11 @@ namespace SNI
 		}
 	}
 
+	void SNI_Domain::to_json_count(nlohmann::json &j) const
+	{
+        j["count"] = m_Map.size();
+	}
+
 	std::string SNI_Domain::GetTypeName() const
 	{
 		return "Domain";

@@ -48,7 +48,9 @@ namespace SNI
 		void to_json(
 			nlohmann::json &j,
 			size_t p_DebugFieldWidth,
-			SNI::SNI_DisplayOptions &p_DisplayOptions) const;
+            SNI::SNI_DisplayOptions &p_DisplayOptions) const;
+
+        void to_json_count(nlohmann::json &j) const;
 
 		virtual SN::SN_Error AssertSubscriptValue(const SNI_Value *p_Index, SN::SN_Expression p_Result);
 		virtual SN::SN_Expression operator[](const std::string & p_Index);

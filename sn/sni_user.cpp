@@ -215,16 +215,16 @@ namespace SNI
 		SNI::SNI_DisplayOptions displayOptions(p_OptionType);
 		nlohmann::json j;
 
-		domain_to_json(j, 20, displayOptions);
+		to_json_domain(j, 20, displayOptions);
 		return j.dump(4);
 	}
 
-
-	void SNI_User::domain_to_json(
+	void SNI_User::to_json_domain(
 		nlohmann::json &j,
 		size_t p_DebugFieldWidth,
         SNI::SNI_DisplayOptions &p_DisplayOptions)
     {
+		Domain()->to_json_count(j["summary"]["user"]["domain"]["variables"]);
 		Domain()->to_json(j["user"]["domain"]["variables"], p_DebugFieldWidth, p_DisplayOptions);
     }
 }
