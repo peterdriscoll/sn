@@ -495,7 +495,10 @@ namespace SNI
 			m_WebServer->setup(bindAddress, p_Port.data(), p_DocRoot.data(), m_HTTP_Handler, static_cast<IUser*>(m_User));
 			// Run the server until stopped.
 			m_WebServer->start();
-			m_WebServer->WaitForServer(checkAddress, p_Port.data());
+			if (!m_WebServer->WaitForServer(checkAddress, p_Port.data()))
+            {
+				ASSERTM(false, "Server did not become responsive within the expected time frame.");
+            }
 		}
 		catch (std::exception& e)
 		{
@@ -520,11 +523,13 @@ namespace SNI
 			//OpenURLInBrowser("http://127.0.0.1/opener.html?target=http://127.0.0.1/skynetjs.html");
 			if (p_Port == "80")
             {
-			    OpenURLInBrowser("http://127.0.0.1:/opener.html?target=/skynetjs.html");
+			    //OpenURLInBrowser("http://127.0.0.1:/opener.html?target=/skynetjs.html");
+			    OpenURLInBrowser("http://127.0.0.1:/skynetjs.html");
             }
             else
             {
-				OpenURLInBrowser("http://127.0.0.1:"+p_Port+"/opener.html?target=/skynetjs.html");
+				//OpenURLInBrowser("http://127.0.0.1:"+p_Port+"/opener.html?target=/skynetjs.html");
+				OpenURLInBrowser("http://127.0.0.1:"+p_Port+"/skynetjs.html");
             }
 			//OpenURLInBrowser("http://127.0.0.1/skynet");
 		}

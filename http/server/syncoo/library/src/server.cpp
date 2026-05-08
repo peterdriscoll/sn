@@ -4,6 +4,9 @@
 
 #include <boost/asio.hpp>
 #include <boost/asio/ip/tcp.hpp>
+#include <boost/asio/socket_base.hpp>
+#include <boost/beast/core.hpp>
+#include <boost/beast/http.hpp>
 
 #include "skynet_http_server_syncoo_lib_pch.h"
 
@@ -48,24 +51,56 @@ namespace skynet::http::server::syncoo
         return 0; // success
     }
     
-    void server::WaitForServer(const char* address, const char* port)
+    bool server::WaitForServer(const char* address, const char* port)
     {
-		boost::asio::io_context ioc;
-		boost::asio::ip::tcp::resolver resolver(ioc);
-        
-		// Try for about 5 seconds
-		for (int i = 0; i < 100; ++i) {
-			try {
-				// This resolves "127.0.0.1" and "80" (as a string)
-				auto const results = resolver.resolve(address, port);
-				boost::asio::ip::tcp::socket socket(ioc);
-				boost::asio::connect(socket, results.begin(), results.end());
-                
-				return; 
-			} catch (...) {
-				std::this_thread::sleep_for(std::chrono::milliseconds(100));
-			}
-		}
+        namespace asio = boost::asio;
+        namespace beast = boost::beast;
+        namespace http = beast::http;
+        using tcp = asio::ip::tcp;
+
+        for (int i = 0; i < 100; ++i)
+        {
+            try
+            {
+                asio::io_context ioc;
+
+                tcp::resolver resolver(ioc);
+                auto results = resolver.resolve(address, port);
+
+                beast::tcp_stream stream(ioc);
+                stream.expires_after(std::chrono::milliseconds(200));
+                stream.connect(results);
+
+                http::request<http::empty_body> req{
+                    http::verb::get,
+                    "/healthz",
+                    11
+                };
+
+                req.set(http::field::host, address);
+                req.set(http::field::user_agent, "SN-WaitForServer");
+
+                stream.expires_after(std::chrono::milliseconds(200));
+                http::write(stream, req);
+
+                beast::flat_buffer buffer;
+                http::response<http::string_body> res;
+
+                stream.expires_after(std::chrono::milliseconds(200));
+                http::read(stream, buffer, res);
+
+                if (res.result() == http::status::ok)
+                    return true;
+            }
+            catch (...)
+            {
+                // Server not ready yet.
+            }
+
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
+
+        return false;
     }
 
     int skynet::http::server::syncoo::server::run()

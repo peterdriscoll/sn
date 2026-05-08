@@ -82,10 +82,22 @@ namespace SNI
 		size_t p_DebugFieldWidth,
         SNI::SNI_DisplayOptions &p_DisplayOptions) const
 	{
-		for (auto const& [name, var] : m_Map) // Using modern structured bindings
+        j["count"] = m_Map.size();
+    
+		// Initialize "list" as an empty JSON array explicitly
+		j["list"] = nlohmann::json::array();
+		auto &listRef = j["list"];
+
+		for (auto const& [name, var] : m_Map) 
 		{
-			var.GetSNI_Variable()->to_json(j[name], p_DebugFieldWidth, p_DisplayOptions);
-        }
+			nlohmann::json varJson;
+       
+			// Populate the rest of the variable data
+			var.GetSNI_Variable()->to_json(varJson, p_DebugFieldWidth, p_DisplayOptions);
+        
+			// Push this object into the array
+			listRef.push_back(varJson);
+		}
 	}
 
 	std::string SNI_Domain::GetTypeName() const

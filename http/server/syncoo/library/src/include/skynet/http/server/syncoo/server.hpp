@@ -38,7 +38,7 @@ namespace skynet::http::server::syncoo
         void on_session_start();
         void on_session_end();
 
-        void WaitForServer(const char* address, const char* port);
+        bool WaitForServer(const char* address, const char* port);
 
     private:
         std::atomic<bool>                               m_stopping{ false };

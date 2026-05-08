@@ -474,11 +474,12 @@ body {
 
     grid-template-columns: 2fr 1.3fr;
 
-    grid-template-areas: 
+    grid-template-areas:
         "breakpoints status"
         "errors errors"
         "worldsets delayedcalls"
         "watchlist watchlist"
+        "userdomain userdomain"
         "callstack callstack"
         "stack commandbreakpoints"
         "stack codelog"
@@ -534,4 +535,102 @@ body {
     width: 100%;
     font-size: 1.2em;
     margin: 10px 0;
+}
+
+/* User Domain Variables */
+
+.userdomain {
+    grid-area: userdomain;
+}
+
+.variable-container {
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+    padding: 2px;
+    background-color: #7d8a68;
+    overflow-x: auto;
+    overflow-y: visible;
+    align-items: flex-start;
+}
+
+.variable-card {
+    display: block;
+    min-width: 220px;
+    max-width: 600px;
+    flex: 0 0 auto;
+    background-color: #fcfdf2;
+    border: 1px solid #d1d9c0;
+}
+
+.var-header,
+.var-sub {
+    padding: 5px;
+    text-align: center;
+    border-bottom: 1px solid #d1d9c0;
+    font-family: sans-serif;
+}
+
+.var-header {
+    font-weight: bold;
+}
+
+.var-detail-wrapper {
+    display: block;
+    padding: 5px;
+    background: #ffffff;
+    min-height: 50px;
+    overflow: visible;
+}
+
+.var-detail-wrapper details {
+    display: block;
+    overflow: visible;
+}
+
+.value-summary {
+    cursor: pointer;
+    font-family: monospace;
+    font-size: 0.9em;
+}
+
+.full-value {
+    display: block;
+    margin-top: 10px;
+    padding: 5px;
+    min-height: 30px;
+    max-width: 560px;
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    overflow-x: auto;
+    overflow-y: visible;
+    white-space: normal;
+    word-break: normal;
+}
+
+.full-value button {
+    display: inline-block;
+    margin: 1px;
+    padding: 1px 4px;
+    font-family: monospace;
+    line-height: normal;
+    vertical-align: baseline;
+}
+
+.full-value {
+    white-space: nowrap;
+    word-break: normal;
+    overflow-x: auto;
+}
+
+    .full-value button {
+        min-width: 22px;
+        height: 26px;
+        padding: 1px 4px;
+        margin: 1px;
+        text-align: center;
+    }
+
+.variable-card {
+    min-width: 300px;
 }

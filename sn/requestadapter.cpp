@@ -220,9 +220,9 @@ namespace SNI
     { 
         return { m_user->DelayedJS(doDebugPointsJS), "json" };
     }
-    RequestAdapter::Reply RequestAdapter::DomainJson() 
+    RequestAdapter::Reply RequestAdapter::AllJson() 
     { 
-        return { m_user->DomainJS(doDebugPointsJS), "json" };
+        return { m_user->AllJS(doDebugPointsJS), "json" };
     }
 
     /*static*/ const std::unordered_map<std::string_view, RequestAdapter::Handler>& RequestAdapter::routes()
@@ -273,7 +273,7 @@ namespace SNI
             {SV{"/error.json"},      &RequestAdapter::ErrorJson},
             {SV{"/worldsets.json"},  &RequestAdapter::WorldSetsJson},
             {SV{"/delayed.json"},    &RequestAdapter::DelayedJson},
-            {SV{"/domain.json"},     &RequestAdapter::DomainJson},
+            {SV{"/all.json"},        &RequestAdapter::AllJson},
         };
         return R;
     }

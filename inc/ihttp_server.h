@@ -36,5 +36,5 @@ public:
     // Stop the server (idempotent).
     virtual int stop() = 0;
 
-    virtual void WaitForServer(const char* address, const char* port) = 0;
+    virtual bool WaitForServer(const char* address, const char* port) = 0;
 };

@@ -49,6 +49,11 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $in
 
     $scope.stepcounts = { "threadnum": "0", "stepcount": "1" };
     
+    $scope.base = $scope.base || {};
+    $scope.base.user = $scope.base.user || {};
+    $scope.base.user.domain = $scope.base.user.domain || {};
+    $scope.base.user.domain.variables = {"count": 0, "list": []};
+
     // Default settings
     $scope.stepcount = 0;
     $scope.maxderivation = 30;
@@ -107,6 +112,21 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $in
             }).catch(function (err) {
                 console.error("Stepcount first load failed:", err);
             }); 
+    };
+
+    $scope.buildparameters = function () {
+        return '?threadnum=' + $scope.threadnum +
+               '&time=' + new Date().getTime();
+    }
+
+    // Load all data.
+    $scope.loadall = function () {
+        $http.get(home + 'all.json' + $scope.buildparameters())
+            .then(function (response) {
+            if (response.data.user) {
+                $scope.base.user = response.data.user;
+            }
+        });
     };
 
     // Load the error history.
@@ -374,6 +394,7 @@ app.controller('commandCtrl', function ($scope, $log, $sce, $http, $timeout, $in
         $scope.loaddelayedcalls(false);
         $scope.loadworldsets(false);
         $scope.loadwatchlist(false);
+        $scope.loadall();
     };
 
     // Request an action from the server.

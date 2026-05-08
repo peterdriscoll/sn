@@ -351,6 +351,30 @@
                         </details>
                     </div>
 
+                    <div class='userdomain'>
+                        <details id='userdomainid'>
+                            <summary>User Domain Variables - {{ base.user.domain.variables.count }}</summary>
+        
+                            <div class="variable-container">
+                                <div class="variable-card" ng-repeat="v in base.user.domain.variables.list">
+                                    <div class="var-header">{{ v.name }}</div>
+                                    <div class="var-sub">{{ v.ExprType }} : {{ v.Type }}</div>
+                
+                                    <div class="var-detail-wrapper">
+                                        <details>
+                                            <summary class="value-summary">
+                                               {{ v.ValueText | limitTo: 20 }}{{ v.ValueText.length > 20 ? '...' : '' }}
+                                            </summary>
+                                            <div class="full-value">
+                                                <div ng-bind-html="trustAsHtml(v.ValueHTML)" init-bind></div>
+                                            </div>
+                                        </details>
+                                    </div>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+
                     <div class="commandbreakpoints">
                         <table class='noborder'>
                             <tr>

@@ -75,7 +75,7 @@ namespace SNI
 		void WriteStepCountListJS(std::ostream& p_Stream);
 		size_t CountDelayedCalls();
         std::string DelayedJS(DisplayOptionType p_OptionType);
-        std::string DomainJS(DisplayOptionType p_OptionType);
+        std::string AllJS(DisplayOptionType p_OptionType);
         void domain_to_json(nlohmann::json &j, size_t p_DebugFieldWidth, SNI::SNI_DisplayOptions &p_DisplayOptions);
 	private:
 		SNI_Domain *m_Domain = nullptr;

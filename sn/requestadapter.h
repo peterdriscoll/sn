@@ -68,7 +68,7 @@ namespace SNI
         Reply ErrorJson();
         Reply WorldSetsJson();
         Reply DelayedJson();
-        Reply DomainJson();
+        Reply AllJson();
 
 
     private:

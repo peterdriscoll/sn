@@ -210,7 +210,7 @@ namespace SNI
 		return ss.str();
 	}
 
-	std::string SNI_User::DomainJS(DisplayOptionType p_OptionType)
+	std::string SNI_User::AllJS(DisplayOptionType p_OptionType)
 	{
 		SNI::SNI_DisplayOptions displayOptions(p_OptionType);
 		nlohmann::json j;
@@ -225,6 +225,6 @@ namespace SNI
 		size_t p_DebugFieldWidth,
         SNI::SNI_DisplayOptions &p_DisplayOptions)
     {
-		Domain()->to_json(j["user"]["domain"]["variable"], p_DebugFieldWidth, p_DisplayOptions);
+		Domain()->to_json(j["user"]["domain"]["variables"], p_DebugFieldWidth, p_DisplayOptions);
     }
 }

@@ -503,7 +503,9 @@ namespace SNI
 		j["name"] = FramePathName();
 		j["ExprType"] = ExprType().DisplaySN(p_DisplayOptions);
 		j["Type"] = Type().DisplaySN(p_DisplayOptions);
-		j["value"] = m_Value ? m_Value->DisplaySN(0, p_DisplayOptions) : nullptr;
+		SNI_DisplayOptions plainText(doTextOnly);
+		j["ValueText"] = m_Value ? m_Value->DisplaySN(0, plainText) : "";
+		j["ValueHTML"] = m_Value ? m_Value->DisplaySN(0, p_DisplayOptions) : "";
 	}
 
 	void SNI_Variable::AddVariables(long p_MetaLevel, SNI_VariablePointerMap& p_Map)
