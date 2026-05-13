@@ -175,6 +175,10 @@ namespace skynet
 #define SN_DECLARE_VALUE(n, v) \
     SN_DECLARE(n).InitValue(v)
 
+// The same as SN_DECLARE but also sets the type.
+#define SN_DECLARE_TYPE(n, t) \
+    SN_DECLARE(n).InitType(t)
+
 // Inline.
 #define SN_DECLARE_VALUE_INLINE(n, v) \
     SN_DECLARE_VALUE(n, v).InitDefineType(skynet::Inline);
@@ -204,6 +208,10 @@ namespace skynet
 #define SN_LOCAL_VALUE(n, v) \
     SN_LOCAL(n).InitValue(v)
 
+// The same as SN_DECLARE but also sets the type.
+#define SN_LOCAL_TYPE(n, t) \
+    SN_LOCAL(n).InitType(t)
+
 // Inline.
 #define SN_LOCAL_VALUE_INLINE(n, v) \
     SN_LOCAL_VALUE(n, v).InitDefineType(skynet::Inline);
@@ -228,16 +236,29 @@ namespace skynet
 #define SN_DEFINE_REAL_IMPL(C, B, TYPE, NAME)                  \
     SN_EXTERN template class SN_EXPORT SN::SN_Real<TYPE>;
 
-#define SN_CLASS(i) \
-    SN::SN_Class i(std::string(#i))
-#define SN_CLASS_CLASS(i, c) \
-    SN::SN_Class i(std::string(#i)); \
-    i.IsA(c).Assert().Do();
-#define SN_INSTANCE(i) \
-    SN::SN_Instance i(std::string(#i))
-#define SN_INSTANCE_CLASS(i, c) \
-    SN::SN_Instance i(std::string(#i)); \
-    i.IsA(c).Assert().Do();
+#define SN_DECLARE_CLASS(c) \
+    SN::SN_Class c = SN::SN_Domain::GetCurrent().DeclareClass(#c)
+
+#define SN_DECLARE_CLASS_CLASS(s, c) \
+    SN_DECLARE_CLASS(s).InitClass(c)
+
+#define SN_LOCAL_CLASS(c) \
+    SN::SN_Class c = SN::SN_Domain::GetCurrent().LocalClass(#c)
+
+#define SN_LOCAL_CLASS_CLASS(s, c) \
+    SN_LOCAL_CLASS(s).InitClass(c)
+
+#define SN_DECLARE_INSTANCE(i) \
+    SN::SN_Instance i = SN::SN_Domain::GetCurrent().DeclareInstance(#i)
+
+#define SN_DECLARE_INSTANCE_CLASS(i, c) \
+    SN_DECLARE_INSTANCE(i).InitClass(c)
+
+#define SN_LOCAL_INSTANCE(i) \
+    SN::SN_Instance i = SN::SN_Domain::GetCurrent().LocalInstance(#i)
+
+#define SN_LOCAL_INSTANCE_CLASS(i, c) \
+    SN_LOCAL_INSTANCE(i).InitClass(c)
 
 namespace skynet
 {

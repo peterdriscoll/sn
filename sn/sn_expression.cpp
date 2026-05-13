@@ -302,6 +302,16 @@ namespace SN
 		return dynamic_cast<SNI::SNI_Domain *>(m_Expression);
 	}
 
+	SNI::SNI_Class * SN_Expression::GetSNI_Class() const
+	{
+		return dynamic_cast<SNI::SNI_Class *>(m_Expression);
+	}
+
+	SNI::SNI_Instance * SN_Expression::GetSNI_Instance() const
+	{
+		return dynamic_cast<SNI::SNI_Instance *>(m_Expression);
+	}
+
 	SNI::SNI_FunctionDef* SN_Expression::GetSNI_FunctionDef() const
 	{
 		return dynamic_cast<SNI::SNI_FunctionDef*>(m_Expression);

@@ -42,6 +42,13 @@ namespace SNI
  		SetDomainName(p_DomainName);
 	}
 
+	SNI_Class::SNI_Class(SNI_Domain *p_Domain, const std::string &p_Name)
+		: m_Domain(p_Domain)
+		, m_Fixed(false)
+	{
+		SetName(p_Name);
+	}
+
 	SNI_Class::~SNI_Class()
 	{
 	}
@@ -49,6 +56,11 @@ namespace SNI
 	SNI_Class::SNI_Class(const SNI_Class &p_Other)
 		: m_Fixed(false)
 	{
+	}
+
+	void SNI_Class::InitClass(SNI_Class *p_Parent)
+    {
+		m_InheritList.push_back(SNI_Inherits(p_Parent, skynet::True.GetSNI_Bool()));
 	}
 
 	SNI_Expression * SNI_Class::Copy() const
@@ -90,7 +102,7 @@ namespace SNI
 	}
 	bool SNI_Class::IsKnownTypeValue() const
 	{
-		return true;
+		return false;
 	}
 
 	bool SNI_Class::Equivalent(SNI_Object* p_Other) const

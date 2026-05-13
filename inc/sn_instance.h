@@ -9,6 +9,7 @@
 namespace SNI
 {
 	class SNI_Instance;
+	class SNI_Domain;
 }
 
 namespace SN
@@ -19,7 +20,10 @@ namespace SN
 		SN_Instance();
 		SN_Instance(const SN_Instance &p_Other);
 		SN_Instance(const SN_Value &p_Other);
+		SN_Instance(SNI::SNI_Domain *p_Domain, const std::string &p_Name);
 		virtual ~SN_Instance();
+
+	    SN_Instance &InitClass(const SN_Expression &p_Type);
 
 		SN_Expression IsA(const SN_Expression & p_Parent) const;
 

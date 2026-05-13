@@ -254,7 +254,9 @@ namespace test_sn
 				(fib(Long(1)) == Long(1)).PartialAssert().Do();
 				(Define(fib)(N) == (N >Long(1)).If(fib(N - Long(1)) + fib(N - Long(2)))).PartialAssert().Do();
 				
+				std::string sfib_before = fib.DisplayValueSN();
 				fib.Fix();
+				std::string sfib_after = fib.DisplayValueSN();
 
 				(fib(Long(0)) == Long(1)).Evaluate().Do().CheckValue();
 				(fib(Long(1)) == Long(1)).Evaluate().Do().CheckValue();
@@ -292,7 +294,9 @@ namespace test_sn
 				(fib(Long(1)) == Long(1)).PartialAssert().Do();
 				(Define(fib)(N) == fib(N - Long(1)) + fib(N - Long(2))).PartialAssert().Do();
 
+				std::string sfib_before = fib.DisplayValueSN();
 				fib.Fix();
+				std::string sfib_after = fib.DisplayValueSN();
 
 				(fib(Long(0)) == Long(1)).Evaluate().Do().CheckValue();
 				(fib(Long(1)) == Long(1)).Evaluate().Do().CheckValue();
@@ -316,14 +320,13 @@ namespace test_sn
 
 		TEST_METHOD(TestVirtualPolymorphic1)
 		{
-			return; // Reimplementing
 			Initialize();
 			{
 				Manager manager("Test Virtual Polymorphic2", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE_VALUE(typeChecker, Virtual());
-				SN_DECLARE_VALUE(shortType, Short::Class());
+				SN_DECLARE_TYPE(shortType, Short::Class());
 
 				(typeChecker(shortType) == String("short")).PartialAssert().Do();
 
@@ -347,57 +350,62 @@ namespace test_sn
 
 		TEST_METHOD(TestVirtualPolymorphic2)
 		{
-			return; // Reimplementing
 			Initialize();
 			{
 				Manager manager("Test Virtual Polymorphic 2", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE_VALUE(typeChecker, Virtual());
-				SN_DECLARE_VALUE(shortType, Short::Class());
-				SN_DECLARE_VALUE(longType, Long::Class());
+				SN_DECLARE_TYPE(shortType, Short::Class());
+				SN_DECLARE_TYPE(longType, Long::Class());
+				SN_DECLARE(v);
 
-				(typeChecker(shortType) == String("short")).PartialAssert().Do();
 				(typeChecker(longType) == String("long")).PartialAssert().Do();
+				(typeChecker(shortType) == String("short")).PartialAssert().Do();
+				(typeChecker(v) == String("unknown")).PartialAssert().Do();
 
 				std::string sTypeChecker_before = typeChecker.DisplayValueSN();
 				typeChecker.Fix();
 				std::string sTypeChecker_after = typeChecker.DisplayValueSN();
 
-				// Polymorphic call.
-				(typeChecker(Short(1)) == String("short")).Evaluate().Do().CheckValue();
-				(typeChecker(Long(1)) == String("long")).Evaluate().Do().CheckValue();
-
-				(typeChecker(Short(1)) == String("short")).Assert().Do();
-				(typeChecker(Long(1)) == String("long")).Assert().Do();
+				SN_DECLARE_VALUE(u, skynet::False);
 
 				SN_DECLARE(A);
 				SN_DECLARE(B);
+				SN_DECLARE(C);
 
 				(typeChecker(Short(1)) == A).Assert().Do();
 				(typeChecker(Long(1)) == B).Assert().Do();
+				(typeChecker(u) == C).Assert().Do();
 
 				std::string A_text = A.GetString();
 				std::string B_text = B.GetString();
+				std::string C_text = C.GetString();
 
 				Assert::IsTrue(A_text == "short");
 				Assert::IsTrue(B_text == "long");
+				Assert::IsTrue(C_text == "unknown");
+				(typeChecker(Short(1)) == String("short")).Evaluate().Do().CheckValue();
+				(typeChecker(Long(1)) == String("long")).Evaluate().Do().CheckValue();
+				(typeChecker(u) == String("unknown")).Evaluate().Do().CheckValue();
+				(typeChecker(Short(1)) == String("short")).Assert().Do();
+				(typeChecker(Long(1)) == String("long")).Assert().Do();
+				(typeChecker(u) == String("unknown")).Assert().Do();
 			}
 			Cleanup();
 		}
 
 		TEST_METHOD(TestVirtualPolymorphic3)
 		{
-			return; // Reimplementing
 			Initialize();
 			{
 				Manager manager("Test Virtual Polymorphic3", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE_VALUE(typeChecker, Virtual());
-				SN_DECLARE_VALUE(shortType, Short::Class());
-				SN_DECLARE_VALUE(longType, Long::Class());
-				SN_DECLARE_VALUE(longLongType, LongLong::Class());
+				SN_DECLARE_TYPE(shortType, Short::Class());
+				SN_DECLARE_TYPE(longType, Long::Class());
+				SN_DECLARE_TYPE(longLongType, LongLong::Class());
 
 				(typeChecker(shortType) == String("short")).PartialAssert().Do();
 				(typeChecker(longType) == String("long")).PartialAssert().Do();
@@ -437,14 +445,13 @@ namespace test_sn
 
 		TEST_METHOD(TestVirtualPolymorphicReverse1)
 		{
-			return; // Reimplementing
 			Initialize();
 			{
 				Manager manager("Test Virtual Polymorphic Reverse 1", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE_VALUE(typeChecker, Virtual());
-				SN_DECLARE_VALUE(shortType, Short::Class());
+				SN_DECLARE_TYPE(shortType, Short::Class());
 
 				(typeChecker(shortType) == String("short")).PartialAssert().Do();
 
@@ -457,7 +464,7 @@ namespace test_sn
 				std::string n1_text_before = numbers1.DoEvaluate().DisplayValueSN();
 
 				(typeChecker(numbers1) == String("short")).Assert().Do();
-				std::string n1_text = numbers1.DoEvaluate().DisplayValueSN();
+				std::string n1_text = numbers1.GetValue().DisplayValueSN();
 				Assert::IsTrue(n1_text == "Short(1)");
 				(numbers1 == Short(1)).Evaluate().Do().CheckValue();
 			}
@@ -466,15 +473,14 @@ namespace test_sn
 
 		TEST_METHOD(TestVirtualPolymorphicReverse2)
 		{
-			return; // Reimplementing
 			Initialize();
 			{
 				Manager manager("Test Virtual Polymorphic Reverse 2", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE_VALUE(typeChecker, Virtual());
-				SN_DECLARE_VALUE(shortType, Short::Class());
-				SN_DECLARE_VALUE(longType, Long::Class());
+				SN_DECLARE_TYPE(shortType, Short::Class());
+				SN_DECLARE_TYPE(longType, Long::Class());
 
 				(typeChecker(shortType) == String("short")).PartialAssert().Do();
 				(typeChecker(longType) == String("long")).PartialAssert().Do();
@@ -488,15 +494,16 @@ namespace test_sn
 				SN_DECLARE(numbers1);
 				(numbers1 == (Short(1) || Long(2))).PartialAssert().Do();
 
-				std::string n1_text_before = numbers1.DoEvaluate().DisplayValueSN();
+				std::string n1_text_before = numbers1.GetValue().DisplayValueSN();
 				(typeChecker(numbers1) == String("short")).Assert().Do();
-				std::string n1_text = numbers1.DoEvaluate().DisplayValueSN();
+				std::string n1_text = numbers1.GetValue().DisplayValueSN();
 				Assert::IsTrue(n1_text == "Short(1)");
 				(numbers1 == Short(1)).Evaluate().Do().CheckValue();
 
-				SN_DECLARE_VALUE(numbers2, Short(1) || Long(2));
+				SN_DECLARE_VALUE(numbers2, (Short(1) || Long(2)).DoEvaluate());
+				std::string n2_text_before = numbers2.GetValue().DisplayValueSN();
 				(typeChecker(numbers2) == String("long")).Assert().Do();
-				std::string n2_text = numbers2.DoEvaluate().DisplayValueSN();
+				std::string n2_text = numbers2.GetValue().DisplayValueSN();
 				Assert::IsTrue(n2_text == "Long(2)");
 				(numbers2 == Long(2)).Evaluate().Do().CheckValue();
 			}
@@ -511,9 +518,9 @@ namespace test_sn
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				SN_DECLARE_VALUE(typeChecker, Virtual());
-				SN_DECLARE_VALUE(shortType, Short::Class());
-				SN_DECLARE_VALUE(longType, Long::Class());
-				SN_DECLARE_VALUE(longLongType, LongLong::Class());
+				SN_DECLARE_TYPE(shortType, Short::Class());
+				SN_DECLARE_TYPE(longType, Long::Class());
+				SN_DECLARE_TYPE(longLongType, LongLong::Class());
 
 				(typeChecker(shortType) == String("short")).PartialAssert().Do();
 				(typeChecker(longType) == String("long")).PartialAssert().Do();
@@ -534,17 +541,173 @@ namespace test_sn
 
 				SN_DECLARE(numbers2);
 				(numbers2 == (Short(1) || Long(2) || LongLong(3))).PartialAssert().Do();
+				std::string numbers2_text = numbers2.DisplayValueSN();
 				(typeChecker(numbers2) == String("long")).Assert().Do();
 				std::string n2_text = numbers2.GetValue().DisplayValueSN();
 				Assert::IsTrue(n2_text == "Long(2)");
 				(numbers2 == Long(2)).Evaluate().Do().CheckValue();
 
 				SN_DECLARE(numbers3);
+				std::string numbers3_text = numbers3.DisplayValueSN();
 				(numbers3 == (Short(1) || Long(2) || LongLong(3))).PartialAssert().Do();
 				(typeChecker(numbers3) == String("long long")).Assert().Do();
 				std::string n3_text = numbers3.GetValue().DisplayValueSN();
 				Assert::IsTrue(n3_text == "LongLong(3)");
 				(numbers3 == LongLong(3)).Evaluate().Do().CheckValue();
+			}
+			Cleanup();
+		}
+		
+		TEST_METHOD(TestSimpleClass)
+		{
+			Initialize();
+			{
+				Manager manager("Test Simple Class", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
+
+				SN_DECLARE_TYPE(n, Long::Class());
+				std::string n_class_text = n.DisplayValueSN();
+				Assert::IsTrue(n_class_text == "n:Long");
+
+                (n == Long(5)).Assert().Do();
+				std::string n_text = n.DisplayValueSN();
+				Assert::IsTrue(n_text == "n:=5:Long");
+
+				SN_DECLARE_TYPE(q, Long::Class());
+				std::string q_class_text = q.DisplayValueSN();
+				Assert::IsTrue(q_class_text == "q:Long");
+				size_t q_card_before = q.Cardinality();
+				Assert::IsTrue(q_card_before == CARDINALITY_MAX);
+                (q == Short(5)).Assert().Do();
+				size_t q_card_after = q.Cardinality();
+				Assert::IsTrue(q_card_after == 1);
+				std::string q_text = q.DisplayValueSN();
+				Assert::IsTrue(q_text == "q:=Short(5):Long");
+                (q == Long(5)).Assert().Do();
+				q_text = q.DisplayValueSN();
+				Assert::IsTrue(q_text == "q:=Short(5):Long");
+
+				SN_DECLARE_TYPE(m, Long::Class());
+				std::string m_class_text = m.DisplayValueSN();
+				Assert::IsTrue(m_class_text == "m:Long");
+				size_t m_card_before = m.Cardinality();
+				Assert::IsTrue(m_card_before == CARDINALITY_MAX);
+				try
+				{
+                    (m == String("5")).Assert().Throw();
+					Assert::IsTrue(false, L"Expected a type conflict");
+				}
+				catch (Error e)
+				{
+					std::string description = e.GetDescription();
+					Assert::IsTrue(description == "Type conflict: String(\"5\") is not a Long", std::wstring(description.begin(), description.end()).c_str());
+				}
+				std::string m_text = m.DisplayValueSN();
+				Assert::IsTrue(m_text != "String(\"5\")");
+				Assert::IsTrue(m_text == "m:Long");
+				size_t m_card_after = m.Cardinality();
+				Assert::IsTrue(m_card_after == CARDINALITY_MAX);
+
+				(m == Long(7)).Assert().Do();
+				m_text = m.DisplayValueSN();
+				Assert::IsTrue(m_text == "m:=7:Long");
+				Assert::IsTrue(m.Cardinality() == 1);
+
+				SN_DECLARE_TYPE(x, Long::Class());
+				(x == Short(5)).Assert().Do();
+				try
+				{
+					(x == Short(6)).Assert().Throw();
+					Assert::IsTrue(false, L"Expected an assertion failure");
+				}
+				catch (Error e)
+				{
+					std::string description = e.GetDescription();
+					Assert::IsTrue(description == "Assertion failure: Expected true for 5==6", std::wstring(description.begin(), description.end()).c_str());
+				}
+
+				SN_DECLARE_TYPE(y, Short::Class());
+				try
+				{
+					(y == Long(5)).Assert().Throw();
+					Assert::IsTrue(false, L"Expected a type conflict");
+				}
+				catch (Error e)
+				{
+					std::string description = e.GetDescription();
+					Assert::IsTrue(description == "Type conflict: Long(5) is not a Short", std::wstring(description.begin(), description.end()).c_str());
+				}
+			}
+		}
+		TEST_METHOD(TestVirtualPolymorphicAnimal2)
+		{
+			Initialize();
+			{
+				Manager manager("Test Virtual Polymorphic Animal2", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE_CLASS(animal);
+				SN_DECLARE_CLASS(cat);
+
+                cat.IsA(animal).Assert().Do();
+				cat.Fix();
+				animal.Fix();
+
+				SN_DECLARE_VALUE(typeChecker, Virtual());
+				SN_DECLARE(v);
+				SN_DECLARE_TYPE(vcat, cat);
+				SN_DECLARE_TYPE(vanimal, animal);
+
+				(typeChecker(vcat) == String("cat")).PartialAssert().Do();
+				(typeChecker(vanimal) == String("animal")).PartialAssert().Do();
+				(typeChecker(v) == String("other")).PartialAssert().Do();
+
+				std::string sTypeChecker_before = typeChecker.DisplayValueSN();
+				typeChecker.Fix();
+				std::string sTypeChecker_after = typeChecker.DisplayValueSN();
+
+				SN_DECLARE_VALUE(u, skynet::False);
+
+				SN_DECLARE(A);
+				SN_DECLARE(B);
+				SN_DECLARE(C);
+
+				SN_DECLARE_INSTANCE_CLASS(emma, cat);
+				SN_DECLARE_INSTANCE_CLASS(waggy, animal);
+
+                Expression emma_cat = emma.IsA(cat).Evaluate().Do();
+                std::string emma_cat_text = emma_cat.DisplayValueSN();
+				Assert::IsTrue(emma_cat_text == "Bool(true)");
+				
+				(typeChecker(emma) == A).Assert().Do();
+				std::string A_text = A.GetString();
+				Assert::IsTrue(A_text == "cat");
+
+				waggy.IsA(cat).Evaluate().Do().CheckValue(skynet::False);
+                Expression waggy_cat = waggy.IsA(cat).Evaluate().Do();
+                std::string waggy_cat_text = waggy_cat.DisplayValueSN();
+
+				waggy.IsA(animal).Evaluate().Do().CheckValue(skynet::True);
+				Expression waggy_animal = waggy.IsA(animal).Evaluate().Do();
+                std::string waggy_animal_text = waggy_animal.DisplayValueSN(); 
+
+ 				manager.Breakpoint();
+                (typeChecker(waggy) == B).Assert().Do();
+				std::string B_text = B.GetString();
+				Assert::IsTrue(B_text == "animal");
+
+                (typeChecker(u) == C).Assert().Do();
+				std::string C_text = C.GetString();
+				Assert::IsTrue(C_text == "other");
+
+				// Polymorphic call.
+				(typeChecker(emma) == String("cat")).Evaluate().Do().CheckValue();
+				(typeChecker(waggy) == String("animal")).Evaluate().Do().CheckValue();
+				(typeChecker(u) == String("other")).Evaluate().Do().CheckValue();
+
+				(typeChecker(emma) == String("cat")).Assert().Do();
+				(typeChecker(waggy) == String("animal")).Assert().Do();
+				(typeChecker(u) == String("other")).Assert().Do();
 			}
 			Cleanup();
 		}

@@ -35,6 +35,17 @@ namespace SNI
  		SetDomainName(p_DomainName);
     }
 
+    SNI_Instance::SNI_Instance(SNI_Domain *p_Domain, const std::string &p_Name)
+        : m_Domain(p_Domain)
+    {
+		SetName(p_Name);
+    }
+
+	void SNI_Instance::InitClass(SNI_Expression* p_Class)
+    {
+        m_Class = SN::SN_Class(p_Class);
+    }
+
 	SNI_Expression * SNI_Instance::Copy() const
 	{
 		return new SNI_Instance(*this);
@@ -70,7 +81,7 @@ namespace SNI
 
 	bool SNI_Instance::IsKnownTypeValue() const
 	{
-		return true;
+		return false;
 	}
 
 	SN::SN_Error SNI_Instance::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)

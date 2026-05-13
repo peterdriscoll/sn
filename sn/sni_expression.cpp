@@ -530,7 +530,7 @@ namespace SNI
 
 	bool SNI_Expression::IsKnownType() const
 	{
-		return Type().Equivalent(skynet::All);
+		return !Type().Equivalent(skynet::All);
 	}
 
 	bool SNI_Expression::IsLambdaValue() const

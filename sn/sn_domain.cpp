@@ -46,6 +46,16 @@ namespace SN
         return GetSNI_Domain()->LookupVariable(p_Name);
     }
 
+	SN_Variable SN_Domain::DeclareVariable(const std::string & p_Name)
+	{
+		return GetSNI_Domain()->DeclareVariable(p_Name);
+    }
+
+	SN_Variable SN_Domain::LocalVariable(const std::string & p_Name)
+	{
+		return GetSNI_Domain()->LocalVariable(p_Name);
+    }
+
 	SN_Domain SN_Domain::LookupDomain(const std::string & p_Name)
 	{
         return GetSNI_Domain()->LookupDomain(p_Name);
@@ -61,15 +71,36 @@ namespace SN
 		return GetSNI_Domain()->LocalDomain(p_Name);
     }
 
-	SN_Variable SN_Domain::DeclareVariable(const std::string & p_Name)
+	SN_Class SN_Domain::LookupClass(const std::string & p_Name)
 	{
-		return GetSNI_Domain()->DeclareVariable(p_Name);
+        return GetSNI_Domain()->LookupClass(p_Name);
     }
 
-	SN_Variable SN_Domain::LocalVariable(const std::string & p_Name)
+	SN_Class SN_Domain::DeclareClass(const std::string & p_Name)
 	{
-		return GetSNI_Domain()->LocalVariable(p_Name);
+		return GetSNI_Domain()->DeclareClass(p_Name);
     }
+
+	SN_Class SN_Domain::LocalClass(const std::string & p_Name)
+	{
+		return GetSNI_Domain()->LocalClass(p_Name);
+    }
+
+	SN_Instance SN_Domain::LookupInstance(const std::string & p_Name)
+	{
+        return GetSNI_Domain()->LookupInstance(p_Name);
+    }
+
+	SN_Instance SN_Domain::DeclareInstance(const std::string & p_Name)
+	{
+		return GetSNI_Domain()->DeclareInstance(p_Name);
+    }
+
+	SN_Instance SN_Domain::LocalInstance(const std::string & p_Name)
+	{
+		return GetSNI_Domain()->LocalInstance(p_Name);
+    }
+
 
 	SN_Expression SN_Domain::operator[](const std::string & p_Index)
 	{

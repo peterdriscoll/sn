@@ -21,6 +21,9 @@ namespace SNI
 		SNI_Instance();
 		SNI_Instance(const SNI_Instance &p_Other);
 		SNI_Instance(const std::string &p_Name, const std::string &p_DomainName);
+        SNI_Instance(SNI_Domain *p_Domain, const std::string &p_Name);
+
+		void InitClass(SNI_Expression *p_Class);
 		virtual ~SNI_Instance();
 
 		SNI_Expression * Copy() const;
@@ -42,6 +45,7 @@ namespace SNI
 	private:
 		virtual void PromoteMembers();
 
+		SNI_Domain *m_Domain = nullptr;
 		SN::SN_Class m_Class;
 		bool m_Fixed;
 	};

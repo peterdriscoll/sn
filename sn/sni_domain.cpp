@@ -164,6 +164,29 @@ namespace SNI
 		return SN::SN_Variable(m_Map.at(p_Name).GetSNI_Variable());
 	}
 
+	SN::SN_Variable SNI_Domain::DeclareVariable(const std::string & p_Name)
+    {
+		auto it = m_Map.find(p_Name);
+		bool alreadyDeclared  = it != m_Map.end();
+		if (alreadyDeclared)
+        {
+			HandleAction(
+				SN::SN_Error(false, false, p_Name + "' is already declared in domain '" + m_Name + "'. Use SN_LOCAL for a variable not added to the current domain in this scope."),
+				SNI_Thread::TopManager()->ErrorHandler());
+
+			ASSERTM(false, "Shouldn't be here.");
+		}
+
+		SN::SN_Variable v(this, p_Name);
+		m_Map.emplace(p_Name, v);
+		return v;
+	}
+
+	SN::SN_Variable SNI_Domain::LocalVariable(const std::string & p_Name)
+    {
+		return SN::SN_Variable(this, p_Name);
+	}
+
 	SN::SN_Domain SNI_Domain::LookupDomain(const std::string & p_Name)
 	{
 		auto it = m_Map.find(p_Name);
@@ -183,7 +206,7 @@ namespace SNI
 		if (alreadyDeclared )
         {
 			HandleAction(
-				SN::SN_Error(false, false, "Sub-domain '" + p_Name + "' is already declared in domain '" + m_Name + "'. Use SN_LOCAL_SUBDOMAIN for a domain not added to the current domain in this scope."),
+				SN::SN_Error(false, false, p_Name + "' is already declared in domain '" + m_Name + "'. Use SN_LOCAL_SUBDOMAIN for a domain not added to the current domain in this scope."),
 				SNI_Thread::TopManager()->ErrorHandler());
 
 			ASSERTM(false, "Shouldn't be here.");
@@ -199,28 +222,74 @@ namespace SNI
 		return SN::SN_Domain(this, p_Name);
 	}
 
+	SN::SN_Class SNI_Domain::LookupClass(const std::string & p_Name)
+	{
+		auto it = m_Map.find(p_Name);
+		if (it == m_Map.end())
+		{
+			SN::SN_Class c(this, p_Name);
+			m_Map.emplace(p_Name, c);
+			return c;
+		}
+		return SN::SN_Class(m_Map.at(p_Name).GetSNI_Class());
+	}
 
-	SN::SN_Variable SNI_Domain::DeclareVariable(const std::string & p_Name)
+	SN::SN_Class SNI_Domain::DeclareClass(const std::string & p_Name)
     {
 		auto it = m_Map.find(p_Name);
 		bool alreadyDeclared  = it != m_Map.end();
-		if (alreadyDeclared)
+		if (alreadyDeclared )
         {
 			HandleAction(
-				SN::SN_Error(false, false, "Variable '" + p_Name + "' is already declared in domain '" + m_Name + "'. Use SN_LOCAL for a variable not added to the current domain in this scope."),
+				SN::SN_Error(false, false, p_Name + "' is already declared in domain '" + m_Name + "'. Use SN_LOCAL_CLASS for a class not added to the current domain in this scope."),
 				SNI_Thread::TopManager()->ErrorHandler());
 
 			ASSERTM(false, "Shouldn't be here.");
 		}
 
-		SN::SN_Variable v(this, p_Name);
-		m_Map.emplace(p_Name, v);
-		return v;
+		SN::SN_Class c(this, p_Name);
+		m_Map.emplace(p_Name, c);
+		return c;
 	}
 
-	SN::SN_Variable SNI_Domain::LocalVariable(const std::string & p_Name)
+	SN::SN_Class SNI_Domain::LocalClass(const std::string & p_Name)
     {
-		return SN::SN_Variable(this, p_Name);
+		return SN::SN_Class(this, p_Name);
+	}
+
+	SN::SN_Instance SNI_Domain::LookupInstance(const std::string & p_Name)
+	{
+		auto it = m_Map.find(p_Name);
+		if (it == m_Map.end())
+		{
+			SN::SN_Instance i(this, p_Name);
+			m_Map.emplace(p_Name, i);
+			return i;
+		}
+		return SN::SN_Instance(m_Map.at(p_Name).GetSNI_Instance());
+	}
+
+	SN::SN_Instance SNI_Domain::DeclareInstance(const std::string & p_Name)
+    {
+		auto it = m_Map.find(p_Name);
+		bool alreadyDeclared  = it != m_Map.end();
+		if (alreadyDeclared )
+        {
+			HandleAction(
+				SN::SN_Error(false, false, p_Name + "' is already declared in domain '" + m_Name + "'. Use SN_LOCAL_CLASS for a class not added to the current domain in this scope."),
+				SNI_Thread::TopManager()->ErrorHandler());
+
+			ASSERTM(false, "Shouldn't be here.");
+		}
+
+		SN::SN_Instance i(this, p_Name);
+		m_Map.emplace(p_Name, i);
+		return i;
+	}
+
+	SN::SN_Instance SNI_Domain::LocalInstance(const std::string & p_Name)
+    {
+		return SN::SN_Instance(this, p_Name);
 	}
 
 	// Functions

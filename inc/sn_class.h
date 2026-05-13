@@ -18,10 +18,14 @@ namespace SN
 	public:
 		SN_Class();
 		SN_Class(const std::string &p_Name, const std::string &p_DomainName = "");
+		SN_Class(SNI::SNI_Domain *p_Domain, const std::string &p_Name);
+		SN_Class(const std::string &p_Name);
 		SN_Class(const SN_Class &p_Other);
 		SN_Class(const SN_Value& p_Other);
 		SN_Class(SNI::SNI_Class* p_Other);
 		virtual ~SN_Class();
+
+		SN_Class &InitClass(SN_Class p_Class);
 
 		SNI::SNI_Value* GetSNI_Value();
 		SNI::SNI_Value* GetSNI_Value() const;

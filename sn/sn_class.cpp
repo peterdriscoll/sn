@@ -15,6 +15,10 @@ namespace SN
  		: SN_Base(new SNI_Class(p_Name, p_DomainName))
     {
     }
+    SN_Class::SN_Class(SNI::SNI_Domain *p_Domain, const std::string &p_Name)
+ 		: SN_Base(new SNI_Class(p_Domain, p_Name))
+    {
+    }
 	SN_Class::SN_Class(const SN_Value &p_Value)
 		: SN_Base(dynamic_cast<SNI::SNI_Class *>(p_Value.GetSNI_Value()))
 	{
@@ -32,7 +36,13 @@ namespace SN
 
 	SN_Class::~SN_Class()
 	{
-	}
+    }
+
+    SN_Class &SN_Class::InitClass(SN_Class p_Class)
+    {
+		GetSNI_Class()->InitClass(p_Class.GetSNI_Class());
+        return *this;
+    }
 
 	SNI::SNI_Value* SN_Class::GetSNI_Value()
 	{

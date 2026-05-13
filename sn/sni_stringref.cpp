@@ -160,7 +160,7 @@ namespace SNI
 
 	bool SNI_StringRef::IsKnownTypeValue() const
 	{
-		return true;
+		return false;
 	}
 
 	size_t SNI_StringRef::Cardinality(size_t p_MaxCardinality) const

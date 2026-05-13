@@ -58,7 +58,7 @@ namespace SNI
 	{
 		SN::SN_Expression l_Expression = p_FormalParameterList[p_Base].GetVariableValue();
 		list<ConstructionTree>::iterator it = m_List.begin();
-		while (it != m_List.end() && !l_Expression.IsA(it->GetParameter()).GetBool())
+		while (it != m_List.end() && !l_Expression.Type().IsA(it->GetParameter().Type()).DoEvaluate().GetBool())
 		{
 			++it;
 		}
@@ -99,11 +99,15 @@ namespace SNI
 
 	SN::SN_Expression ConstructionTree::BuildCondition(size_t p_Depth, SN::SN_Expression p_ElseCondition, SN::SN_Variable p_ParameterVariable)
 	{
-		if (m_Parameter.IsVariable() && !m_Parameter.IsKnownValue())
+		if (m_Parameter.IsKnownValue())
 		{
-			return BuildExpression(p_Depth - 1);
+			return (p_ParameterVariable == m_Parameter).If(BuildExpression(p_Depth - 1), p_ElseCondition);
 		}
-		return p_ParameterVariable.IsA(m_Parameter).If(BuildExpression(p_Depth - 1), p_ElseCondition);
+		if (m_Parameter.IsKnownType())
+		{
+			return p_ParameterVariable.IsA(m_Parameter.Type()).If(BuildExpression(p_Depth - 1), p_ElseCondition);
+        }
+		return BuildExpression(p_Depth - 1);
 	}
 
 	/*static*/ SNI_Class* SNI_Virtual::PeekClass()
@@ -280,6 +284,10 @@ namespace SNI
 
 	SNI_Expression * SNI_Virtual::Clone(long p_MetaLevel, SNI_Frame *p_Frame, bool &p_Changed)
 	{
+		if (m_Fixed)
+        {
+ 	        return m_CallExpression.GetSNI_Expression()->Clone(p_MetaLevel, p_Frame, p_Changed);
+        }
 		return this;
 	}
 

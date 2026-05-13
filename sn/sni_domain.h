@@ -57,14 +57,21 @@ namespace SNI
 		virtual SN::SN_Value DoSubscriptCall(const SN::SN_Value &p_Index) const;
 		virtual SN::SN_Value DoReverseSubscript(const SN::SN_Value & p_Result) const;
 
-		virtual SN::SN_Variable LookupVariable(const std::string & p_Name);
-		virtual SN::SN_Domain LookupDomain(const std::string & p_Name);
+		SN::SN_Variable LookupVariable(const std::string & p_Name);
+		SN::SN_Variable DeclareVariable(const std::string & p_Index);
+		SN::SN_Variable LocalVariable(const std::string & p_Index);
 
+        SN::SN_Domain LookupDomain(const std::string &p_Name);
 		SN::SN_Domain DeclareDomain(const std::string &p_Index);
         SN::SN_Domain LocalDomain(const std::string &p_Name);
 
-		SN::SN_Variable DeclareVariable(const std::string & p_Index);
-		SN::SN_Variable LocalVariable(const std::string & p_Index);
+        SN::SN_Class LookupClass(const std::string &p_Name);
+		SN::SN_Class DeclareClass(const std::string &p_Index);
+        SN::SN_Class LocalClass(const std::string &p_Name);
+
+        SN::SN_Instance LookupInstance(const std::string &p_Name);
+		SN::SN_Instance DeclareInstance(const std::string &p_Index);
+        SN::SN_Instance LocalInstance(const std::string &p_Name);
 
 	protected:
         virtual void PromoteMembers();

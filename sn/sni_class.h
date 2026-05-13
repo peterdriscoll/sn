@@ -35,8 +35,11 @@ namespace SNI
 		PGC_CLASS(SNI_Class);
 	public:
         SNI_Class(const std::string &p_Name, const std::string &p_DomainName = "");
-		SNI_Class(const SNI_Class &p_Other);
+        SNI_Class(SNI_Domain *p_Domain, const std::string &p_Name);
+        SNI_Class(const SNI_Class &p_Other);
 		virtual ~SNI_Class();
+
+        void InitClass(SNI_Class *p_Parent);
 
 		virtual SNI_Expression * Copy() const;
 		virtual std::string GetTypeName() const;
@@ -60,6 +63,7 @@ namespace SNI
 		virtual void PromoteMembers();
 
 		bool m_Fixed;
+		SNI_Domain *m_Domain = nullptr;
 		SNI_Inherits_List m_InheritList;
 	};
 

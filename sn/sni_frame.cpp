@@ -311,7 +311,7 @@ namespace SNI
 				[&p_Stream, &delimeter, p_DebugFieldWidth, &p_DisplayOptions](const SN::SN_Expression &p_Expression, SNI_World *p_World)->SN::SN_Error
 				{
 					std::string valueText;
-					if (!p_Expression.IsNull() || p_Expression.IsKnownTypeValue())
+					if (!p_Expression.IsNull())
 					{
 						valueText = p_Expression.DisplaySN(p_DisplayOptions) + std::string(p_World ? "::" + p_World->DisplaySN(p_DisplayOptions) : "");
 					}

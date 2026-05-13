@@ -14,7 +14,12 @@ namespace SN
 	SN_Instance::SN_Instance(const SN_Value &p_Value)
 		: SN_Base(dynamic_cast<SNI::SNI_Instance *>(p_Value.GetSNI_Value()))
 	{
-	}
+    }
+
+    SN_Instance::SN_Instance(SNI::SNI_Domain *p_Domain, const std::string &p_Name)
+ 		: SN_Base(new SNI::SNI_Instance(p_Domain, p_Name))
+    {
+    }
 
 	SN_Instance::SN_Instance(const SN_Instance &p_Instance)
 		: SN_Base(p_Instance.m_Expression)
@@ -24,6 +29,13 @@ namespace SN
 	SN_Instance::~SN_Instance()
 	{
 	}
+
+	SN_Instance& SN_Instance::InitClass(const SN_Expression &p_Class)
+    {
+		GetSNI_Instance()->InitClass(p_Class.GetSNI_Expression());
+		return *this;
+    }
+
 
 	SN_Expression SN_Instance::IsA(const SN_Expression &p_Parent) const
 	{

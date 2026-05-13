@@ -52,7 +52,7 @@ namespace SNI
 
 	bool SNI_IsA::IsKnownValue(const SN::SN_Expression &p_Param, long) const
 	{
-		return p_Param.IsKnownTypeValue();
+		return p_Param.IsKnownValue();
 	}
 
 	SN::SN_Error SNI_IsA::AssertValue(const SN::SN_Value & p_Left, const SN::SN_Value & p_Right, SN::SN_Expression & p_Result) const
@@ -76,10 +76,6 @@ namespace SNI
 		{
 			card = p_ParamList[PU2_First].Cardinality();
 		}
-		else if (p_ParamList[PU2_First].IsKnownTypeValue())
-		{
-			card = 1;
-		}
 		else
 		{
 			return CARDINALITY_MAX;
@@ -87,10 +83,6 @@ namespace SNI
 		if (p_ParamList[PU2_Second].IsKnownValue())
 		{
 			card = MultiplyCardinality(card, p_ParamList[PU2_Second].Cardinality());
-		}
-		else if (!p_ParamList[PU2_Second].IsKnownTypeValue())
-		{
-			return CARDINALITY_MAX;
 		}
 		if (p_Depth >= 3)
 		{
@@ -156,10 +148,6 @@ namespace SNI
 		{
 			card = p_ParamList[PC2_First].Cardinality();
 		}
-		else if (p_ParamList[PC2_First].IsKnownTypeValue())
-		{
-			card = 1;
-		}
 		else
 		{
 			return CARDINALITY_MAX;
@@ -167,10 +155,6 @@ namespace SNI
 		if (p_ParamList[PC2_Second].IsKnownValue())
 		{
 			card = MultiplyCardinality(card, p_ParamList[PC2_Second].Cardinality());
-		}
-		else if (!p_ParamList[PC2_Second].IsKnownTypeValue())
-		{
-			return CARDINALITY_MAX;
 		}
 		return card;
 	}
