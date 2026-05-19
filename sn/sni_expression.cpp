@@ -67,6 +67,12 @@ namespace SNI
 		return Class();
 	}
 
+    SN::SN_Error  SNI_Expression::SetType(SNI_Class *p_Class)
+	{
+		SN::SN_Error err(false, false, "Type cannot be set");
+		return err;
+	}
+
 	SNI_Expression::SNI_Expression()
 		: m_Id(0)
 	{
@@ -90,6 +96,11 @@ namespace SNI
 	SNI::SNI_Variable* SNI_Expression::GetSNI_Variable() const
 	{
 		return dynamic_cast<SNI::SNI_Variable*>(const_cast<SNI_Expression*>(this));
+	}
+
+	SNI::SNI_Value* SNI_Expression::GetSNI_Value() const
+	{
+		return dynamic_cast<SNI::SNI_Value*>(const_cast<SNI_Expression*>(this));
 	}
 
 	//-----------------------------------------------------------------------
@@ -1222,6 +1233,11 @@ namespace SNI
 	}
 
 	// Inheritance
+	SN::SN_Error  SNI_Expression::AssertHasMemberValue(SNI_Expression* p_Member, SN::SN_Expression p_Result)
+	{
+		return SN::SN_Error(false, false, GetTypeName() + " State expected.");
+	}
+
 	SN::SN_Error  SNI_Expression::AssertIsAValue(const SNI_Value* p_Parent, SN::SN_Expression p_Result)
 	{
 		return p_Result.AssertValue(DoIsA(p_Parent));
@@ -1251,7 +1267,8 @@ namespace SNI
 		return SN::SN_Error(false, false, GetTypeName() + " BuildSet function not implemented.");
 	}
 
-	SN::SN_Value SNI_Expression::DoHasMember(SNI_Value * /*p_Member*/) const
+	SN::SN_Value
+        SNI::SNI_Expression::DoHasMember(SNI_Expression *p_Member) const
 	{
 		return SN::SN_Error(false, false, GetTypeName() + "  HasMember function not implemented.");
 	}

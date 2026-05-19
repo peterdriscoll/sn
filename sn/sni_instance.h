@@ -17,6 +17,7 @@ namespace SNI
 	public:
 		virtual SN::SN_Expression Type();
         virtual SN::SN_Expression Type() const;
+        virtual SN::SN_Error SetType(SNI_Class *p_Class);
 
 		SNI_Instance();
 		SNI_Instance(const SNI_Instance &p_Other);

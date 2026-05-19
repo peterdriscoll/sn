@@ -72,6 +72,7 @@ namespace SNI
         virtual SN::SN_Expression ExprType() const;
 		virtual SN::SN_Expression Type();
         virtual SN::SN_Expression Type() const;
+        virtual SN::SN_Error SetType(SNI_Class *p_Class);
 
 		SNI_Expression();
 		SNI_Expression(unsigned long p_Id);
@@ -80,6 +81,7 @@ namespace SNI
 		virtual ~SNI_Expression();
 
 		SNI_Variable* GetSNI_Variable() const;
+		SNI_Value* GetSNI_Value() const;
 
 		//---------------------------------------------------------------
 		// Logging
@@ -277,13 +279,14 @@ namespace SNI
 		virtual SN::SN_Value DoUpdateState(SNI_Value* p_Left, SNI_Expression* p_Right);
 
 		// Inheritance
+		virtual SN::SN_Error AssertHasMemberValue(SNI_Expression * p_Member, SN::SN_Expression p_Result);
 		virtual SN::SN_Error AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result);
 		virtual SN::SN_Value DoIsA(const SNI_Value * p_Parent) const;
 		virtual SN::SN_Value DoHasA(SNI_Value * p_Member, SNI_Value * p_Name) const;
 
 		// Sets
 		virtual SN::SN_Value DoBuildSet() const;
-		virtual SN::SN_Value DoHasMember(SNI_Value * p_Member) const;
+		virtual SN::SN_Value DoHasMember(SNI_Expression *p_Member) const;
 
 		// Value sets
 		virtual bool DoIsEmpty() const;

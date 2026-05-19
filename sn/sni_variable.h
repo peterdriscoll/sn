@@ -29,6 +29,7 @@ namespace SNI
         virtual SN::SN_Expression ExprType() const;
 		virtual SN::SN_Expression Type();
         virtual SN::SN_Expression Type() const;
+        virtual SN::SN_Error SetType(SNI_Class *p_Class);
 
 		SNI_Variable();
 		SNI_Variable(SNI_Domain *p_Domain, const std::string &p_Name);

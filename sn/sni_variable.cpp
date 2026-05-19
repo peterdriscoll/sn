@@ -57,6 +57,12 @@ namespace SNI
 		return m_Type;
 	}
 
+	SN::SN_Error SNI_Variable::SetType(SNI_Class *p_Class)
+    {
+		m_Type = p_Class;
+		return skynet::OK;
+    }
+
 	SNI_Variable::SNI_Variable()
 		: SNI_Namable("_t" + std::to_string(++m_MaxTempNum))
 		, m_Value(NULL)

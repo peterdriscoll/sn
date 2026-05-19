@@ -19,6 +19,8 @@ namespace SNI
 		const SNI_Expression *GetParent() const;
 		const SNI_Value *GetResult() const;
 
+		SNI_Variable *GetSNI_Variable() const;
+
 		virtual SN::SN_Error AssertValue(SN::SN_Expression p_Result);
 
 		void PromoteMembersExternal(PGC::PGC_Base * p_Base);
@@ -54,8 +56,10 @@ namespace SNI
 
 		// Inheritance
 		virtual SN::SN_Error AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result);
+	    virtual SN::SN_Error AssertHasMemberValue(SNI_Expression* p_Member, SN::SN_Expression p_Result);
 		virtual SN::SN_Value DoIsA(const SNI_Value * p_Parent) const;
 		virtual SN::SN_Value DoHasA(SNI_Value * p_Member, SNI_Value * p_Name) const;
+        virtual SN::SN_Value DoHasMember(SNI_Expression *p_Member) const;
 
 		void Fix();
 

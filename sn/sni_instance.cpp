@@ -16,6 +16,12 @@ namespace SNI
 		return m_Class;
 	}
 
+	SN::SN_Error SNI_Instance::SetType(SNI_Class *p_Class)
+    {
+		m_Class = p_Class;
+ 		return skynet::OK;
+    }
+
 	SNI_Instance::SNI_Instance()
 	: m_Fixed(false)
 	{
@@ -65,13 +71,19 @@ namespace SNI
 		return GetDomainName()+"."+GetName();
 	}
 
-	std::string SNI_Instance::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_Instance::DisplaySN(long priority, SNI_DisplayOptions & p_DisplayOptions) const
 	{
-		if (GetDomainName().empty())
+		std::string name;
+		if (m_Domain)
         {
-			return GetName();
+			name = m_Domain->DisplaySN(priority, p_DisplayOptions) + ".";
         }
-		return GetDomainName()+"."+GetName();
+		name += GetName();
+		if (!m_Class.IsNull())
+		{
+			name += ":" + m_Class.GetSNI_Class()->DisplaySN(priority, p_DisplayOptions);
+        }
+		return name;
 	}
 
 	long SNI_Instance::GetPriority() const

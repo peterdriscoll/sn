@@ -45,7 +45,8 @@ namespace SNI
 
 		bool HasMember(const SN::SN_Expression &p_Value) const;
 
-		virtual SN::SN_Value DoHasMember(SNI_Value *p_Value) const;
+	    virtual SN::SN_Error AssertHasMemberValue(SNI_Expression* p_Member, SN::SN_Expression p_Result);
+		virtual SN::SN_Value DoHasMember(SNI_Expression *p_Member) const;
 		virtual bool DoIsEmpty() const;
 
 		void AddToSet(const SN::SN_Value &p_Value);

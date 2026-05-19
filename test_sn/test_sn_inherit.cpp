@@ -565,10 +565,16 @@ namespace test_sn
 				Manager manager("Test Simple Class", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
+				SN_DECLARE(j);
+				j.In(LongLong::Class()).Assert().Do();
+				std::string j_class_text = j.DisplayValueSN();
+				Assert::IsTrue(j_class_text == "j:LongLong");
+
+
 				SN_DECLARE_TYPE(n, Long::Class());
 				std::string n_class_text = n.DisplayValueSN();
 				Assert::IsTrue(n_class_text == "n:Long");
-
+				
                 (n == Long(5)).Assert().Do();
 				std::string n_text = n.DisplayValueSN();
 				Assert::IsTrue(n_text == "n:=5:Long");
@@ -711,5 +717,48 @@ namespace test_sn
 			}
 			Cleanup();
 		}
+
+		TEST_METHOD(TestInstanceClass_ParentClass)
+		{
+			Initialize();
+			{
+				Manager manager("Test Virtual Polymorphic Animal2", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", "80", doc_root, runWebServer);
+
+				SN_DECLARE_CLASS(Dog);
+                SN_DECLARE_CLASS_CLASS(Samoyed, Dog);
+
+				// 1. Exact direct class
+				SN_DECLARE_INSTANCE_CLASS(Katara, Samoyed);
+
+				(Katara.IsA(Dog)).Evaluate().Do().CheckValue();
+
+				// ParentClass not yet implemented. Need to implement.
+				// (Katara.ParentClass() == Samoyed).Evaluate().Do().CheckValue();
+                std::string Katara_text = Katara.DisplaySN();
+                Assert::IsTrue(Katara_text == "User.Katara:User.Samoyed");
+
+				SN_DECLARE_CLASS(Duck);
+				SN_DECLARE_CLASS(Mallard);
+				SN_DECLARE_INSTANCE(Quacker1);
+				SN_DECLARE_INSTANCE(Quacker2);
+				Quacker1.IsA(Mallard).Assert().Do();
+				Quacker1.IsA(Duck).Assert().Do();
+				// (Quacker1.ParentClass() == Mallard).Assert().Do();
+				Quacker2.IsA(Duck).Assert().Do();
+				Quacker2.IsA(Mallard).Assert().Do();
+				// (Quacker2.ParentClass() == Duck).Assert().Do();
+
+				// Possibly, does this, but it is bad.
+				// (Quacker1.ParentClass() == Mallard).Evaluate().Do().CheckValue();
+				// (Quacker2.ParentClass() == Duck).Evaluate().Do().CheckValue();
+                std::string Quacker1_text = Quacker1.DisplaySN();
+                Assert::IsTrue(Quacker1_text == "User.Quacker1:User.Mallard");
+                std::string Quacker2_text = Quacker2.DisplaySN();
+                Assert::IsTrue(Quacker2_text == "User.Quacker2:User.Duck");
+			}
+			Cleanup();
+		}
+
 	};
 }

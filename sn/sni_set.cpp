@@ -172,9 +172,14 @@ namespace SNI
 		return false;
 	}
 
-	SN::SN_Value SNI_Set::DoHasMember(SNI_Value * p_Value) const
+	SN::SN_Value SNI_Set::DoHasMember(SNI_Expression *p_Member) const
 	{
-		return SN::SN_Bool(HasMember(p_Value));
+		return SN::SN_Bool(HasMember(p_Member));
+	}
+
+	SN::SN_Error SNI_Set::AssertHasMemberValue(SNI_Expression* p_Member, SN::SN_Expression p_Result)
+	{
+		return p_Result.AssertValue(DoHasMember(p_Member));
 	}
 
 	bool SNI_Set::DoIsEmpty() const

@@ -82,13 +82,14 @@ namespace SNI
 		return GetDomainName() + "::" + GetName();
 	}
 
-	std::string SNI_Class::DisplaySN(long /*priority*/, SNI_DisplayOptions & /*p_DisplayOptions*/) const
+	std::string SNI_Class::DisplaySN(long priority, SNI_DisplayOptions & p_DisplayOptions) const
 	{
-		if (GetDomainName().empty())
-		{
-			return GetName();
-		}
-		return GetDomainName() + "." + GetName();
+		std::string name;
+		if (m_Domain)
+        {
+			name = m_Domain->DisplaySN(priority, p_DisplayOptions) + ".";
+        }
+		return name + GetName();
 	}
 
 	long SNI_Class::GetPriority() const
@@ -176,6 +177,47 @@ namespace SNI
 	SN::SN_Value SNI_Class::DoHasA(SNI_Value * p_Member, SNI_Value * p_Name) const
 	{
 		return SN::SN_Error(false, false, GetTypeName() + " HasA function not implemented.");
+	}
+
+	SN::SN_Value SNI_Class::DoHasMember(SNI_Expression *p_Member) const
+	{
+		return p_Member->Type().GetSNI_Expression()->DoIsA(GetSNI_Value());
+	}
+
+	SN::SN_Error SNI_Class::AssertHasMemberValue(SNI_Expression* p_Member, SN::SN_Expression p_Result)
+	{
+		SN::SN_Error err = skynet::OK;
+		if (p_Result.GetBool())
+        {
+			if (DoIsA(p_Member->Type().GetSNI_Class()).GetBool())
+            {
+				// If this is a sub class of the members type, narrow it. 
+				err = p_Member->SetType(this);
+				if (err.IsError())
+				{
+					return err;
+				}
+            }
+            else if (p_Member->Type().GetSNI_Class()->DoIsA(this).GetBool())
+            {
+				// If the members type is a subclass of this class, no narrowing
+			}
+            else
+            {
+				// if the members type and this class are not in the same hierarchy,
+				// create a synthetic class that is a subtype of both narrow the 
+				// members type to it.
+				SNI_Class *synthetic = new SNI_Class(nullptr, "synthetic_" + std::to_string(GetId()));
+				synthetic->AssertIsAValue(p_Member->Type().GetSNI_Value(), skynet::True);
+				synthetic->AssertIsAValue(this, skynet::True);
+				err = p_Member->SetType(synthetic);
+				if (err.IsError())
+				{
+					return err;
+				}
+			}
+        }
+		return skynet::OK;
 	}
 
 	void SNI_Class::Fix()
