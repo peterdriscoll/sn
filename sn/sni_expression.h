@@ -72,7 +72,7 @@ namespace SNI
         virtual SN::SN_Expression ExprType() const;
 		virtual SN::SN_Expression Type();
         virtual SN::SN_Expression Type() const;
-        virtual SN::SN_Error SetType(SNI_Class *p_Class);
+        virtual SN::SN_Error SetType(SNI_Class *p_Class, bool p_Synthetic);
         virtual bool HasSyntheticType() const;
 
 		SNI_Expression();

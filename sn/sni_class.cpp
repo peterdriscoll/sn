@@ -186,9 +186,15 @@ namespace SNI
 
 	SN::SN_Error SNI_Class::AssertHasMemberValue(SNI_Expression* p_Member, SN::SN_Expression p_Result)
 	{
-        ASSERTM(p_Member, "Member must not be null.");
+		if (!p_Member)
+        {
+            return SN::SN_Error(false, false, "Member must not be null.");
+        }
         SNI_Class *memberType = p_Member->Type().GetSNI_Class();
-        ASSERTM(memberType, "Members must have a class type");
+		if (!memberType)
+        {
+            return SN::SN_Error(false, false, "Members must have a class type.");
+        }
 	 	if (p_Member->SupportsTypeNarrowing())
         {
 			SN::SN_Error err = skynet::OK;
@@ -197,7 +203,7 @@ namespace SNI
 				if (DoIsA(memberType).GetBool())
 				{
 					// If this is a sub class of the members type, narrow it. 
-					err = p_Member->SetType(this);
+					err = p_Member->SetType(this, false);
 					if (err.IsError())
 					{
 						return err;
@@ -219,7 +225,7 @@ namespace SNI
 					SNI_Class *synthetic = new SNI_Class(nullptr, "synthetic_" + std::to_string(GetId()));
 					synthetic->AssertIsAValue(p_Member->Type().GetSNI_Value(), skynet::True);
 					synthetic->AssertIsAValue(this, skynet::True);
-					err = p_Member->SetType(synthetic);
+                    err = p_Member->SetType(synthetic, true);
 					if (err.IsError())
 					{
 						return err;
@@ -237,7 +243,7 @@ namespace SNI
 				    SNI_Class *synthetic = new SNI_Class(nullptr, "synthetic_" + std::to_string(GetId()));
 					synthetic->AssertIsAValue(p_Member->Type().GetSNI_Value(), skynet::True);
 					synthetic->AssertIsAValue(this, skynet::False);
-					err = p_Member->SetType(synthetic);
+                    err = p_Member->SetType(synthetic, true);
 					if (err.IsError())
 					{
 						return err;

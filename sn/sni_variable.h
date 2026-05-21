@@ -29,7 +29,7 @@ namespace SNI
         virtual SN::SN_Expression ExprType() const;
 		virtual SN::SN_Expression Type();
         virtual SN::SN_Expression Type() const;
-        virtual SN::SN_Error SetType(SNI_Class *p_Class);
+        virtual SN::SN_Error SetType(SNI_Class *p_Class, bool p_Synthetic);
 
 		SNI_Variable();
 		SNI_Variable(SNI_Domain *p_Domain, const std::string &p_Name);
@@ -89,6 +89,7 @@ namespace SNI
 		virtual bool IsReferableValue() const;
 		virtual bool AllValuesBoolean() const;
 	    virtual bool SupportsTypeNarrowing() const;
+	    virtual bool HasSyntheticType() const;
 		virtual void Request();
 		virtual SNI_Expression *GetValue(bool p_Request = true) const;
 		virtual const SNI_Expression *GetSafeValue() const;
@@ -134,6 +135,7 @@ namespace SNI
 		SNI_Domain     * m_Domain = nullptr;
 		SNI_Expression * m_Value = nullptr;
 		SNI_Expression * m_Type = skynet::All.GetSNI_Expression();
+		bool           m_HasSyntheticType = false;
 		SNI_Frame      * m_Frame = nullptr;
 		bool           m_Requested = false;
 		bool           m_Inline = false;

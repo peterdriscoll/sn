@@ -17,7 +17,7 @@ namespace SNI
 	public:
 		virtual SN::SN_Expression Type();
         virtual SN::SN_Expression Type() const;
-        virtual SN::SN_Error SetType(SNI_Class *p_Class);
+        virtual SN::SN_Error SetType(SNI_Class *p_Class, bool p_Synthetic);
 
 		SNI_Instance();
 		SNI_Instance(const SNI_Instance &p_Other);
@@ -35,8 +35,8 @@ namespace SNI
 		virtual long GetPriority() const;
 
 		virtual bool IsKnownTypeValue() const;
-        virtual bool HasSyntheticType() const;
 		virtual bool SupportsTypeNarrowing() const;
+	    virtual bool HasSyntheticType() const;
 
 		// Inheritance
 		virtual SN::SN_Error AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result);
@@ -49,7 +49,7 @@ namespace SNI
 		virtual void PromoteMembers();
 
 		SNI_Domain *m_Domain = nullptr;
-		SN::SN_Class m_Class;
+		SN::SN_Class m_Class = skynet::All.GetSNI_Class();
 		bool m_HasSyntheticType = false;
 		bool m_Fixed = false;
 	};

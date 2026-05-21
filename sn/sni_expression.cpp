@@ -67,7 +67,7 @@ namespace SNI
 		return Class();
 	}
 
-    SN::SN_Error  SNI_Expression::SetType(SNI_Class *p_Class)
+    SN::SN_Error  SNI::SNI_Expression::SetType(SNI_Class *p_Class, bool p_Synthetic)
 	{
 		SN::SN_Error err(false, false, "Type cannot be set");
 		return err;

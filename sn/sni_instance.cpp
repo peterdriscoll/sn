@@ -16,10 +16,10 @@ namespace SNI
 		return m_Class;
 	}
 
-	SN::SN_Error SNI_Instance::SetType(SNI_Class *p_Class)
+	SN::SN_Error SNI::SNI_Instance::SetType(SNI_Class *p_Class, bool p_Synthetic)
     {
 		m_Class = p_Class;
-        m_HasSyntheticType = true;
+        m_HasSyntheticType = p_Synthetic;
  		return skynet::OK;
     }
 
@@ -97,14 +97,14 @@ namespace SNI
 		return false;
 	}
 	
-	bool SNI_Instance::HasSyntheticType() const
-	{
-		return m_HasSyntheticType;
-    }
-
 	bool SNI_Instance::SupportsTypeNarrowing() const
 	{
 		return true;
+	}
+
+	bool SNI_Instance::HasSyntheticType() const
+    {
+        return m_HasSyntheticType;
 	}
 
 	SN::SN_Error SNI_Instance::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)

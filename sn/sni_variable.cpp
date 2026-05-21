@@ -57,9 +57,10 @@ namespace SNI
 		return m_Type;
 	}
 
-	SN::SN_Error SNI_Variable::SetType(SNI_Class *p_Class)
+	SN::SN_Error SNI::SNI_Variable::SetType(SNI_Class *p_Class, bool p_Synthetic)
     {
 		m_Type = p_Class;
+		m_HasSyntheticType = p_Synthetic;
 		return skynet::OK;
     }
 
@@ -121,6 +122,11 @@ namespace SNI
 	bool SNI_Variable::SupportsTypeNarrowing() const
 	{
 		return true;
+	}
+
+	bool SNI_Variable::HasSyntheticType() const
+    {
+        return m_HasSyntheticType;
 	}
 
 	void SNI_Variable::InitValue(SNI_Expression* p_Value)
