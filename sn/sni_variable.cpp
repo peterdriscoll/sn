@@ -118,6 +118,11 @@ namespace SNI
 		REQUESTPROMOTION(m_Frame);
 	}
 
+	bool SNI_Variable::SupportsTypeNarrowing() const
+	{
+		return true;
+	}
+
 	void SNI_Variable::InitValue(SNI_Expression* p_Value)
     {
         m_Value = p_Value;

@@ -35,6 +35,8 @@ namespace SNI
 		virtual long GetPriority() const;
 
 		virtual bool IsKnownTypeValue() const;
+        virtual bool HasSyntheticType() const;
+		virtual bool SupportsTypeNarrowing() const;
 
 		// Inheritance
 		virtual SN::SN_Error AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result);
@@ -48,7 +50,8 @@ namespace SNI
 
 		SNI_Domain *m_Domain = nullptr;
 		SN::SN_Class m_Class;
-		bool m_Fixed;
+		bool m_HasSyntheticType = false;
+		bool m_Fixed = false;
 	};
 
 	typedef std::vector<SNI_Instance *> SNI_InstanceList;

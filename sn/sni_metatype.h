@@ -3,14 +3,14 @@
 
 #pragma once
 
-#include "sni_value.h"
+#include "sni_class.h"
 
 #include <string>
 
 namespace SNI
 {
 
-	class SNI_MetaType : public SNI_Value
+	class SNI_MetaType : public SNI_Class
 	{
 		PGC_CLASS(SNI_MetaType);
 	public:
@@ -22,6 +22,7 @@ namespace SNI
 		SNI_MetaType();
 		SNI_MetaType(long p_DeltaMetaLevel, SNI_Expression *p_Expression);
 		virtual ~SNI_MetaType();
+
 
 		SNI_Expression * GetExpression();
 

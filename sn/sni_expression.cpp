@@ -72,6 +72,11 @@ namespace SNI
 		SN::SN_Error err(false, false, "Type cannot be set");
 		return err;
 	}
+	
+    bool SNI_Expression::HasSyntheticType() const
+	{
+		return false;
+	}
 
 	SNI_Expression::SNI_Expression()
 		: m_Id(0)
@@ -666,6 +671,11 @@ namespace SNI
 	}
 
 	bool SNI_Expression::IsReferableValue() const
+	{
+		return false;
+	}
+
+	bool SNI_Expression::SupportsTypeNarrowing() const
 	{
 		return false;
 	}
@@ -1267,8 +1277,7 @@ namespace SNI
 		return SN::SN_Error(false, false, GetTypeName() + " BuildSet function not implemented.");
 	}
 
-	SN::SN_Value
-        SNI::SNI_Expression::DoHasMember(SNI_Expression *p_Member) const
+	SN::SN_Value SNI::SNI_Expression::DoHasMember(SNI_Expression *p_Member) const
 	{
 		return SN::SN_Error(false, false, GetTypeName() + "  HasMember function not implemented.");
 	}

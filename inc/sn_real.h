@@ -57,6 +57,7 @@ namespace SN
         SN_Expression operator ||(const SN_Expression &p_Other) const;
 
         // Inheritance
+        SN_Expression In(const SN_Expression &p_Parent) const;
         SN_Expression IsA(const SN_Expression &p_Parent) const;
 
         // Sets

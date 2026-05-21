@@ -20,27 +20,27 @@ namespace SN
 	}
 
 	SN_Char::SN_Char()
-		: m_Char(NULL)
+		: SN_Base(NULL)
 	{
 	}
 
 	SN_Char::SN_Char(const SN_Char &p_Char)
-		: m_Char(p_Char.m_Char)
+		: SN_Base(p_Char.GetSNI_Char())
 	{
 	}
 
 	SN_Char::SN_Char(const SN_Value &p_Value)
-		: m_Char(dynamic_cast<SNI::SNI_Char *>(p_Value.GetSNI_Value()))
+		: SN_Base(dynamic_cast<SNI::SNI_Char *>(p_Value.GetSNI_Value()))
 	{
 	}
 
 	SN_Char::SN_Char(const SN_Expression& p_Expression)
-		: m_Char(p_Expression.GetSNI_Char())
+		: SN_Base(p_Expression.GetSNI_Char())
 	{
 	}
 
 	SN_Char::SN_Char(std::string::value_type p_Char)
-		: m_Char(new SNI::SNI_Char(p_Char))
+		: SN_Base(new SNI::SNI_Char(p_Char))
 	{
 	}
 
@@ -50,7 +50,7 @@ namespace SN
 
 	SNI::SNI_Char *SN_Char::GetSNI_Char() const
 	{
-		return m_Char;
+		return dynamic_cast<SNI::SNI_Char*>(GetSNI_Expression());
 	}
 
 	// Comparison
@@ -97,12 +97,12 @@ namespace SN
 
 	std::string::value_type SN_Char::GetChar() const
 	{
-		return m_Char->GetChar();
+		return GetSNI_Char()->GetChar();
 	}
 
 	std::string SN_Char::GetString() const
 	{
-		return m_Char->GetString();
+		return GetSNI_Char()->GetString();
 	}
 
 

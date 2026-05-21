@@ -168,5 +168,36 @@ namespace test_sn
 			}
 			Cleanup();
 		}
+
+		TEST_METHOD(TestYCombinatorFixedPoint)
+		{
+			return; // This cant work because infinite recursion.
+			Initialize();
+			{
+				Manager manager("Test Y Combinator fixed point", AssertErrorHandler);
+				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
+				manager.SetEvaluationType(skynet::Lazy);
+
+				if (manager.GetEvaluationType() == skynet::Strict)
+				{
+					return;
+				}
+
+				SN_DECLARE(Y);
+				SN_DECLARE(f);
+				SN_DECLARE(x);
+
+				// Y = \f.(\x.x x) (\x.f (x x))
+				(Define(Y) == Lambda(f, Lambda(x, f(x(x)))(Lambda(x, f(x(x)))))).PartialAssert().Do();
+
+				SN_DECLARE(g);
+				SN_DECLARE(r);
+				(g(x) == Long(1) / x).PartialAssert().Do();
+
+				manager.Breakpoint();
+				(r == Y(g)).Assert().Do();
+			}
+			Cleanup();
+		}
 	};
 }

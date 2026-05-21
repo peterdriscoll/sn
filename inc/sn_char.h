@@ -49,9 +49,6 @@ namespace SN
 		std::string GetString() const;
 			
 		SNI::SNI_Char *GetSNI_Char() const;
-
-	private:
-		SNI::SNI_Char *m_Char;
 	};
 }
 

@@ -19,6 +19,7 @@ namespace SNI
 	SN::SN_Error SNI_Instance::SetType(SNI_Class *p_Class)
     {
 		m_Class = p_Class;
+        m_HasSyntheticType = true;
  		return skynet::OK;
     }
 
@@ -94,6 +95,16 @@ namespace SNI
 	bool SNI_Instance::IsKnownTypeValue() const
 	{
 		return false;
+	}
+	
+	bool SNI_Instance::HasSyntheticType() const
+	{
+		return m_HasSyntheticType;
+    }
+
+	bool SNI_Instance::SupportsTypeNarrowing() const
+	{
+		return true;
 	}
 
 	SN::SN_Error SNI_Instance::AssertIsAValue(const SNI_Value * p_Parent, SN::SN_Expression p_Result)

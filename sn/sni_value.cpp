@@ -230,6 +230,11 @@ namespace SNI
 		return SNI_Expression::DoIsA(p_Parent);
 	}
 
+	SN::SN_Error  SNI_Value::AssertHasMemberValue(const SNI_Value* p_Parent, SN::SN_Expression p_Result)
+	{
+		return p_Result.AssertValue(p_Parent->DoHasMember(this));
+	}
+
 	SN::SN_Value SNI_Value::DoAssign(SNI_Value* p_Right, SNI_Value* p_State)
 	{
 		return SN::SN_StateValue(p_Right, p_State->DoUpdateState(this, p_Right));

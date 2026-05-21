@@ -113,6 +113,12 @@ namespace SN
     }
 
     template <typename T>
+    SN_Expression SN_Real<T>::In(const SN_Expression &p_Parent) const
+    {
+        return SN_Operators::HasMember(p_Parent, *this);
+    }
+
+    template <typename T>
     SN_Expression SN_Real<T>::BuildSet() const
     {
         return SN_Operators::BuildSet(*this);

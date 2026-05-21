@@ -120,7 +120,7 @@ namespace SNI
 			{
 				return MultiplyCardinality(p_ParamList[PU2_First].Cardinality(), p_ParamList[PU2_Second].Cardinality());
 			}
-			else if (p_CalcPos == PU2_Second)
+			else if (p_CalcPos == PU2_Second && p_ParamList[PU2_Second].IsVariable() && p_ParamList[PU2_Second].IsNullValue())
 			{
 				return MultiplyCardinality(p_ParamList[PU2_Result].Cardinality(), p_ParamList[PU2_First].Cardinality());
 			}

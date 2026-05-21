@@ -186,37 +186,69 @@ namespace SNI
 
 	SN::SN_Error SNI_Class::AssertHasMemberValue(SNI_Expression* p_Member, SN::SN_Expression p_Result)
 	{
-		SN::SN_Error err = skynet::OK;
-		if (p_Result.GetBool())
+        ASSERTM(p_Member, "Member must not be null.");
+        SNI_Class *memberType = p_Member->Type().GetSNI_Class();
+        ASSERTM(memberType, "Members must have a class type");
+	 	if (p_Member->SupportsTypeNarrowing())
         {
-			if (DoIsA(p_Member->Type().GetSNI_Class()).GetBool())
-            {
-				// If this is a sub class of the members type, narrow it. 
-				err = p_Member->SetType(this);
-				if (err.IsError())
+			SN::SN_Error err = skynet::OK;
+			if (p_Result.GetBool())
+			{
+				if (DoIsA(memberType).GetBool())
 				{
-					return err;
+					// If this is a sub class of the members type, narrow it. 
+					err = p_Member->SetType(this);
+					if (err.IsError())
+					{
+						return err;
+					}
 				}
-            }
-            else if (p_Member->Type().GetSNI_Class()->DoIsA(this).GetBool())
-            {
-				// If the members type is a subclass of this class, no narrowing
+				else if (memberType->DoIsA(this).GetBool())
+				{
+					// If the members type is a subclass of this class, no narrowing
+				}
+                else if (p_Member->HasSyntheticType())
+                {
+                   memberType->AssertIsAValue(this, skynet::True);
+                }
+				else
+				{
+					// if the members type and this class are not in the same hierarchy,
+					// create a synthetic class that is a subtype of both narrow the 
+					// members type to it.
+					SNI_Class *synthetic = new SNI_Class(nullptr, "synthetic_" + std::to_string(GetId()));
+					synthetic->AssertIsAValue(p_Member->Type().GetSNI_Value(), skynet::True);
+					synthetic->AssertIsAValue(this, skynet::True);
+					err = p_Member->SetType(synthetic);
+					if (err.IsError())
+					{
+						return err;
+					}
+				}
 			}
             else
             {
-				// if the members type and this class are not in the same hierarchy,
-				// create a synthetic class that is a subtype of both narrow the 
-				// members type to it.
-				SNI_Class *synthetic = new SNI_Class(nullptr, "synthetic_" + std::to_string(GetId()));
-				synthetic->AssertIsAValue(p_Member->Type().GetSNI_Value(), skynet::True);
-				synthetic->AssertIsAValue(this, skynet::True);
-				err = p_Member->SetType(synthetic);
-				if (err.IsError())
+				if (p_Member->HasSyntheticType())
+                {
+                   memberType->AssertIsAValue(this, skynet::False);
+                }
+				else
 				{
-					return err;
+				    SNI_Class *synthetic = new SNI_Class(nullptr, "synthetic_" + std::to_string(GetId()));
+					synthetic->AssertIsAValue(p_Member->Type().GetSNI_Value(), skynet::True);
+					synthetic->AssertIsAValue(this, skynet::False);
+					err = p_Member->SetType(synthetic);
+					if (err.IsError())
+					{
+						return err;
+					}
 				}
-			}
-        }
+            }
+		}
+        else
+        {
+            return p_Result.AssertValue(memberType->DoIsA(this));
+		}
 		return skynet::OK;
 	}
 

@@ -40,26 +40,26 @@ namespace test_sn
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
 				skynet::True.IsA(Bool::Class()).Assert().Do();
-				String("woof").IsA(String::Class()).Assert().Do();
-				Char('X').IsA(Char::Class()).Assert().Do();
-				(String("DogFood") || String("CatFood")).BuildSet().IsA(Set::Class()).Assert().Do();
+				String("woof").In(String::Class()).Assert().Do();
+				Char('X').In(Char::Class()).Assert().Do();
+				(String("DogFood") || String("CatFood")).BuildSet().In(Set::Class()).Assert().Do();
 
-				Meta(1, String("Vincent ") + String("Emma ")).IsA(Meta::Class()).Assert().Do();
+				Meta(1, String("Vincent ") + String("Emma ")).In(Meta::Class()).Assert().Do();
 
 				Short(5).IsA(Short::Class()).Assert().Do();
-				Int(5).IsA(Int::Class()).Assert().Do();
-				Long(5).IsA(Long::Class()).Assert().Do();
-				LongLong(5).IsA(LongLong::Class()).Assert().Do();
-				Float(5).IsA(Float::Class()).Assert().Do();
-				Double(5).IsA(Double::Class()).Assert().Do();
-				LongDouble(5).IsA(LongDouble::Class()).Assert().Do();
-				Mapping().IsA(Mapping::Class()).Assert().Do();
+				Int(5).In(Int::Class()).Assert().Do();
+				Long(5).In(Long::Class()).Assert().Do();
+				LongLong(5).In(LongLong::Class()).Assert().Do();
+				Float(5).In(Float::Class()).Assert().Do();
+				Double(5).In(Double::Class()).Assert().Do();
+				LongDouble(5).In(LongDouble::Class()).Assert().Do();
+				Mapping().In(Mapping::Class()).Assert().Do();
 
 				SN_DECLARE(a);
 				SN_DECLARE(b);
 				(String("dogcat") == a + b).Assert().Do();
 
-				a.IsA(StringRef::Class()).Assert().Do();
+				a.In(StringRef::Class()).Assert().Do();
 
 				skynet::True.Assert().Do();
 			}

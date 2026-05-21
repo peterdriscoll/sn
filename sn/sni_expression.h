@@ -73,6 +73,7 @@ namespace SNI
 		virtual SN::SN_Expression Type();
         virtual SN::SN_Expression Type() const;
         virtual SN::SN_Error SetType(SNI_Class *p_Class);
+        virtual bool HasSyntheticType() const;
 
 		SNI_Expression();
 		SNI_Expression(unsigned long p_Id);
@@ -162,7 +163,8 @@ namespace SNI
 		virtual bool IsMeta() const;
 		virtual bool IsMetaType() const;
 		virtual bool IsNullValue() const;
-		virtual bool IsReferableValue() const;
+        virtual bool IsReferableValue() const;
+        virtual bool SupportsTypeNarrowing() const;
 		virtual SN::SN_Expression GetVariableValue(bool p_IfComplete);
 		virtual SNI_Expression* GetValue(bool p_Request) const;
 		virtual const SNI_Expression *GetSafeValue() const;
@@ -322,7 +324,7 @@ namespace SNI
 		static SNI_Class* m_Class;
 
 		unsigned long m_Id;
-	};
+    };
 }
 
 #endif // !defined(SNI_EXPRESSION_H_INCLUDED)

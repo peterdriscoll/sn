@@ -37,13 +37,15 @@ namespace SNI
 	}
 
 	SNI_MetaType::SNI_MetaType()
-		: m_DeltaMetaLevel(0)
+		: SNI_Class(nullptr, "metatype(null)")
+		, m_DeltaMetaLevel(0)
 		, m_Expression(NULL)
 	{
 	}
 
 	SNI_MetaType::SNI_MetaType(long p_DeltaMetaLevel, SNI_Expression *p_Expression)
-		: m_DeltaMetaLevel(p_DeltaMetaLevel)
+		: SNI_Class(nullptr, "metatype(" + (p_Expression ? p_Expression->DisplaySN0() : "null") + ")")
+		, m_DeltaMetaLevel(p_DeltaMetaLevel)
 		, m_Expression(p_Expression)
 	{
 	}
@@ -112,7 +114,7 @@ namespace SNI
 
 	SN::SN_Value SNI_MetaType::DoIsA(const SNI_Value* p_Parent) const
 	{
-		if (Class()->DoIsA(p_Parent).GetBool())
+        if (SNI_Meta::Class()->DoIsA(p_Parent).GetBool())
 		{
 			return skynet::True;
 		}
