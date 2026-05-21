@@ -39,14 +39,14 @@ namespace test_sn
 				Manager manager("Test Inherit Instance", AssertErrorHandler);
 				manager.StartWebServer(skynet::StepInto, "0.0.0.0", port, doc_root, runWebServer);
 
-				skynet::True.IsA(Bool::Class()).Assert().Do();
+				skynet::True.In(Bool::Class()).Assert().Do();
 				String("woof").In(String::Class()).Assert().Do();
 				Char('X').In(Char::Class()).Assert().Do();
 				(String("DogFood") || String("CatFood")).BuildSet().In(Set::Class()).Assert().Do();
 
 				Meta(1, String("Vincent ") + String("Emma ")).In(Meta::Class()).Assert().Do();
 
-				Short(5).IsA(Short::Class()).Assert().Do();
+				Short(5).In(Short::Class()).Assert().Do();
 				Int(5).In(Int::Class()).Assert().Do();
 				Long(5).In(Long::Class()).Assert().Do();
 				LongLong(5).In(LongLong::Class()).Assert().Do();
@@ -680,8 +680,8 @@ namespace test_sn
 
 				SN_DECLARE_INSTANCE_CLASS(emma, cat);
 				SN_DECLARE_INSTANCE_CLASS(waggy, animal);
-
-                Expression emma_cat = emma.IsA(cat).Evaluate().Do();
+				
+                Expression emma_cat = emma.In(cat).Evaluate().Do();
                 std::string emma_cat_text = emma_cat.DisplayValueSN();
 				Assert::IsTrue(emma_cat_text == "Bool(true)");
 				
@@ -689,12 +689,12 @@ namespace test_sn
 				std::string A_text = A.GetString();
 				Assert::IsTrue(A_text == "cat");
 
-				waggy.IsA(cat).Evaluate().Do().CheckValue(skynet::False);
-                Expression waggy_cat = waggy.IsA(cat).Evaluate().Do();
+				waggy.In(cat).Evaluate().Do().CheckValue(skynet::False);
+                Expression waggy_cat = waggy.In(cat).Evaluate().Do();
                 std::string waggy_cat_text = waggy_cat.DisplayValueSN();
 
-				waggy.IsA(animal).Evaluate().Do().CheckValue(skynet::True);
-				Expression waggy_animal = waggy.IsA(animal).Evaluate().Do();
+				waggy.In(animal).Evaluate().Do().CheckValue(skynet::True);
+				Expression waggy_animal = waggy.In(animal).Evaluate().Do();
                 std::string waggy_animal_text = waggy_animal.DisplayValueSN(); 
 
  				manager.Breakpoint();
